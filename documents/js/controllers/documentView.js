@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents) {
         $scope.annots = [];
         $scope.signatureprocessing = false;
 
@@ -91,6 +91,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
             if (!docId || $scope.annotated) return;
             $scope.docId = docId;
+            $scope.doc = Documents.getDoc(docId); // gets blank doc for now ...
             $scope.invq = invq;
             $scope.library = library;
             $scope.pageQueryString = pageQueryString;
@@ -406,6 +407,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {...}
              */
             SWBrijj.tblmm($scope.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
+                $scope.doc.pages = data;
                 $scope.docLength = data.length;
                 $scope.length_digits = data.length.toString().length * 8;
                 $scope.annotated = new Array(data.length);
@@ -606,6 +608,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                         return;
                     }
                     $scope.lib = data;
+                    // TODO: migrate all uses of $scope.lib to $scope.doc
+                    $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
                     $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
 
                     if ($scope.lib.annotations) {

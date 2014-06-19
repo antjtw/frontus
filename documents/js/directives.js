@@ -138,21 +138,17 @@ app.directive('annotationList', function() {
             docId: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "$rootScope", "Annotations",
-            function($scope, $element, $rootScope, Annotations) {
+        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents",
+            function($scope, $element, $rootScope, Annotations, Documents) {
                 $scope.annotations = [];
                 $scope.$watch("docId", function(new_doc_id, old_doc_id) {
                     $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
+                    $scope.doc = Documents.getDoc(new_doc_id);
                 });
 
-                // weird hack to set a property on the annotation marking it as the first on the page ...
-                var currentPage = -1;
-                $scope.newPage = function(annotation) {
-                    if (annotation.first || currentPage != annotation.page) {
-                        annotation.first = true;
-                    }
-                    currentPage = annotation.page;
-                    return annotation.first;
+                $scope.annotated = function(page) {
+                    var ret = $scope.doc.pageAnnotated(page.page);
+                    return ret;
                 };
             }
         ],

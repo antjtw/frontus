@@ -49,6 +49,50 @@ docs.service('basics', function () {
 
 });
 
+// DOCUMENTS
+Document = function() {
+};
+
+Document.prototype = {
+    pageAnnotated: function(pageNum) {
+        return this.annotations.some(function(annot) {
+            return annot.page == pageNum;
+        });
+    }
+};
+
+docs.service('Documents', ["Annotations", function(Annotations) {
+    // TODO: probably need to distinguish between originals and investor versions
+    var docs = {};
+
+    this.getDoc = function(doc_id) {
+        if (doc_id === void(0)) {
+            // we're probably uninitialized
+            d = new Document();
+            return d;
+        }
+        if (!docs[doc_id]) {
+            docs[doc_id] = new Document();
+            docs[doc_id].doc_id = doc_id;
+            docs[doc_id].annotations = Annotations.getDocAnnotations(doc_id);
+        }
+        return docs[doc_id];
+    };
+
+    this.setDoc = function(doc_id, doc) {
+        var oldDoc = this.getDoc(doc_id);
+        // we need to keep the object reference from the docs hash as we may have given to other controllers
+        // extend will keep any other properties on it too. Copy might be better?
+        var realPages = oldDoc.pages;
+        angular.extend(oldDoc, doc);
+        oldDoc.pages = realPages;
+        oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
+        return oldDoc;
+    };
+}]);
+
+// ANNOTATIONS
+
 Annotation = function() {
     this.position = {
         coords: {
