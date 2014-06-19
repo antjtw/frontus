@@ -677,9 +677,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 console.log($scope.hideSharebar)
                 console.log($scope.hideRail)               
             }
-            else if($scope.hideRail && !$scope.hideSharebar && button == undefined){
+            else if($scope.hideRail && !$scope.hideSharebar && button){
                 $scope.hideRail = true;
                 $scope.hideSharebar = true
+            }
+            else if($scope.hideRail && !$scope.hideSharebar && button == undefined){
+                $scope.hideSharebar = true;
+                $scope.sidebarPage = false;
+                console.log($scope.hideSharebar)
             }
            
             else {

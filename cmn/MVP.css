@@ -4396,7 +4396,7 @@ textarea.email-text {
      z-index:1; 
      background-color: white; 
      height: 100%; 
-     width: 330px;
+     width: 350px;
 }
 /*preview modal for email*/
 .modal.preview-modal {
