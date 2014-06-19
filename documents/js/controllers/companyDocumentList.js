@@ -642,10 +642,11 @@ app.controller('CompanyDocumentListController',
                 SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
                     $scope.$emit("notification:success", "Void requested");
                     doc.when_void_requested = new Date.today();
-                    doc.last_event.activity = "void requested";
-                    doc.last_event.event_time = new Date.today();
-                    doc.last_event.timenow = new Date.today();
-                    doc.last_event.person = $rootScope.person.name;
+                    doc.last_event_activity = "void requested";
+                    doc.last_event_time = new Date.today();
+                    doc.last_event_name = $rootScope.person.name;
+                    // TODO: determine if doc.doc was archived, if so, decrement doc.doc.archive_complete_count
+                    //doc.doc.complete_count -= 1; // current db logic counts documents in void requested status as complete ...
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                         console.log(x);

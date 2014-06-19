@@ -32,7 +32,6 @@ app.controller('CompanyDocumentStatusController', ['$scope', '$routeParams', '$r
         SWBrijj.tblm("document.my_company_library_doc", ['doc_id', 'company', 'docname', 'last_updated', 'uploaded_by', 'pages', 'tags', 'lastedit', 'lastsent'], "doc_id", docId).then(function(data) {
             if (data.tags !== null) data.tags = JSON.parse(data.tags);
             $scope.document = data;
-            console.log($scope.document);
         });
 
         SWBrijj.tblmm("document.my_counterparty_library", "original", docId).then(function(data) {
