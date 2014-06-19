@@ -46,6 +46,14 @@
     margin: 2px 0 0 0;
 }
 
+h2.company-name-box {
+    display: inline-block;
+    width: 153px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .home-top-row > div.issuer-profile > div:last-child > ul {
     margin: 30px 0 0 0;
 }
