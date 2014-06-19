@@ -128,12 +128,13 @@ m.directive('addPerson', function(){
             
             $scope.toggleRole = function() {
                 $scope.newRole = !$scope.newRole;
-                console.log("this makes someone an admin or not")
+                console.log("this makes someone an admin or not");
             };
 
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             $scope.fieldCheck = function() {
                 return re.test($scope.newEmail);
+                console.log($scope.newEmail)
 
             };
 
