@@ -18,7 +18,7 @@
                  <!--    email button -->
                     <div class="box-button pull-right"
                          ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide('email'); clearRecipient()"
+                         ng-click="companyIsZombie() || toggleSide('email'); clearRecipient();"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
@@ -106,12 +106,12 @@
 
         <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
-                slidingcss25:oldSafari()}" class="span4 capright button-offset">
+                slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-switch on="sidebarPage">
                <!--  <message-side></message-side> -->
-                <message-side></message-side>
+                <message-side ng-switch-default="rail"></message-side-when="rail">
                       
         </div>
-        <div style="position:absolute; right:0; z-index:1" ng-show="hidesharebar = !hideSharebar" ng-switch on="sidebarPage" ng-class="overBar">
+        <div style="position:absolute; right:0; z-index:1; background-color: white; height: 100%" ng-show="hidesharebar = !hideSharebar" ng-switch on="sidebarPage" ng-class="{selected: sidebarPage == 'email', showsharebar: !hideSharebar}">
             <compose-message  recipients="messageData.recipients" ng-switch-when="email">
             </compose-message>
         </div>
@@ -122,7 +122,7 @@
     </section>
 
 <!--     rail toggle -->
-<button class="right-rail-button" ng-click="toggleSide()">
+<button class="right-rail-button" ng-click="toggleSide('rail')">
  <!--    hide button -->
     <span data-icon="&#xe033;" aria-hidden="true" ng-class="{'arrow-flip': hideSharebar}"></span>
 </button>
