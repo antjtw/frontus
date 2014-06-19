@@ -2278,8 +2278,15 @@ tr.preparedDoc {
     background-color: #15A085 !important;
 }
 .standard-button.btn-group.darkgray > .btn.on{
-    background-color: white !important;
-    color: #A6A6A6;
+    background-color: #8D8D8D !important;
+    color: #F1F1F1;
+}
+.standard-button.btn-group.darkgray > .btn {
+    background-color: #F1F1F1;
+    border: 1px solid #8D8D8D;
+}
+.standard-button.btn-group.darkgray:hover > .btn {
+    background-color: #E3E3E3;
 }
 .box-button {
     width: 76px;
@@ -4345,6 +4352,7 @@ textarea.email-text {
 }
 .linkedDocuments > div > ul {
     padding-bottom: 14px;
+    width: 240px;
 }
 .linkedDocuments ul > li:first-child > span {
     color: #3498DB;

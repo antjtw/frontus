@@ -1517,13 +1517,24 @@
 <!-- Transactions Side Bar when UnEditable -->
                       <span ng-switch-when="4">
                         <accordion ng-class="{'lessmargin': (activeTran.length == 1)}" class="transaction-accordion" close-others="true">
-                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-repeat="tran in activeTran | orderBy:'date' track by $index">
+                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);"
+                                         ng-repeat="tran in activeTran | orderBy:'date' track by $index" ng-switch on="currentTab">
                             <accordion-heading>
                                 <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && activeTran.length > 1"></span>
                                 <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1"></span>
                                 <span>{{tran.date | date:settings.shortdate}} Transaction</span>
                             </accordion-heading>
+                            
+                            <div class="standard-button btn-group darkgray">
+                                <button class="btn" ng-click="switchCapTab('details');" ng-class="{on:currentTab=='details'}">
+                                    <span data-icon="&#xe01e;" aria-hidden="true">Details</span>
+                                </button>
+                                <button class="btn" ng-click="switchCapTab('documents');" ng-class="{on:currentTab=='documents'}">
+                                    <span data-icon="&#xe01f;" aria-hidden="true">Documents</span>
+                                </button>
+                            </div>
 
+                            <div class="capTab" ng-switch-when="details">
                                 <!-- Global Tab -->
                                 <div class="capGuide cap-overflow global">
                                     <p ng-show="tran.investor" class="belowTitle"><span ng-bind="tran.investor"></span><span>Investor</span></p>
@@ -1609,6 +1620,21 @@
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
+                            <div class="capTab" ng-switch-when="documents">
+                                <div ng-if="tran.evidence_data.length==0" class="linkedDocuments">
+                                    To get more out of your cap-table, link your documents by clicking the link below.
+                                </div>
+                                <div ng-if="tran.evidence_data.length>0" class="linkedDocuments">
+                                    <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
+                                        <ul class="pull-left">
+                                            <li><span ng-click="viewEvidence(doc)">{{doc.docname}}</span></li>
+                                            <li ng-if="doc.name||doc.investor"><span>Shared with {{doc.name || doc.investor}}</span></li>
+                                            <li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                             </accordion-group>
                         </accordion>
                       </span>
@@ -1709,7 +1735,8 @@
 </div>
 </div>
 <button class="right-rail-button" ng-click="complexSideToggleButton()" ng-class="{showRightTab:windowToggle}">
-    <span ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
+    <span ng-if="!windowToggle" ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
+    <span ng-if="windowToggle" data-icon="&#xe00f;" aria-hidden="true"></span>
 </button>
 </div>
 <div class="rightTabWindow" ng-if="windowToggle" ng-class="{showRightTab:windowToggle}" ng-style="viewportheight">
