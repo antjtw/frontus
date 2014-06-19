@@ -680,6 +680,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                // opens sidebar with email
             };
         };
+
    
 
         $scope.toggleRail = function(){
@@ -703,14 +704,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else if($scope.hideRail){
                 $scope.hideRail = false;
             }
-            // else
-            //     $scope.hideRail = false;
-            //     $scope.hideSharebar = false;
-            //     // console.log($scope.hideRail)
-            //     console.log($scope.hideSharebar)
-            
-        }
-
+        };
 
     }
 ]);
