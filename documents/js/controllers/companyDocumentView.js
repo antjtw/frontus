@@ -54,6 +54,14 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             dialogFade: true,
             dialogClass: 'helpModal modal'
         };
+        
+        $scope.processedopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'processedImageModal modal',
+            backdropClick: false,
+            backdrop: 'static'
+        };
 
         $scope.docKey = parseInt($routeParams.doc, 10);
         $scope.templateKey = parseInt($routeParams.template, 10);
@@ -144,15 +152,75 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             z.page = 1;
             $location.search(z);
             $scope.initDocView();
+            
+            $scope.checkProcessing();
         };
+        
+        $scope.checkProcessing = function() {
+            SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
+            {
+                console.log(data);
+                var approved = data.processing_approved;
+                if (!approved)
+                {
+                    $scope.imageProcessedModal = true;
+                    $scope.getProcessedPage();
+                }
+            });
+        }
 
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
-
-
+        
+        $scope.processedClose = function(erase) {
+            $scope.imageProcessedModal = false;
+            if (erase)
+            {
+                SWBrijj.procm("document.undo_processing", $scope.docId).then(function(data)
+                {
+                    $scope.$broadcast('refreshDocImage');
+                }).except(function(data)
+                {
+                    console.log(data);
+                });
+            }
+            else
+            {
+                SWBrijj.procm("document.approve_processing", $scope.docId).then(function(data)
+                {;}).except(function(data)
+                {
+                    console.log(data);
+                });
+            }
+        };
+        
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
+        };
+        
+        $scope.getProcessedPage = function() {
+            SWBrijj.procm("document.get_first_processed", $scope.docId).then(function(data) {
+                var d = data[0].get_first_processed;
+                if (!d)
+                {
+                    $scope.processedClose(false);
+                }
+                else
+                {
+                    $scope.pageForModal = d;
+                    $scope.setProcessedImages();
+                }
+            });
+        };
+        
+        $scope.setProcessedImages = function() {
+            var original = document.getElementById("processedModalOriginalImage");
+            var adjusted = document.getElementById("processedModalAdjustedImage");
+            original.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true&original=true";
+            original.width = 115;
+            adjusted.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true";
+            adjusted.width = "115";
         };
 
         $scope.fakeSign = function(cd) {
