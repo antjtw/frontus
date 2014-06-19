@@ -104,17 +104,18 @@
             </div>
         </div>
 
-        <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
+        <div ng-style="viewportheight" ng-show="!hideSharebar && !sidebarPage" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
                <!--  <message-side></message-side> -->
                 <message-side></message-side>
                       
         </div>
-        <div style="position:absolute; right:0; z-index:1; background-color: white; height: 100%" ng-if="!hideSharebar && sidebarPage=='email' || sidebarPage == 'people'">
+        <div style="position:absolute; right:0; z-index:1; background-color: white; height: 100%" ng-if="!hideSharebar && sidebarPage">
             <div ng-switch on="sidebarPage">
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                 </compose-message>
+                <add-person ng-switch-when="people"></add-person>
             </div>
         </div>
 
