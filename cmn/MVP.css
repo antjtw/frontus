@@ -4421,6 +4421,7 @@ textarea.email-text {
 
 .messages .activity-feed2 {
     height: 100%;
+    padding-right: 10px;
 }
 
 .secondbar {
