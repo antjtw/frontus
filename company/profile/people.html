@@ -111,7 +111,7 @@
                 <message-side></message-side>
                       
         </div>
-        <div style="position:absolute; right:0; z-index:1" ng-show="hidesharebar = !hideSharebar" ng-switch on="sidebarPage">
+        <div style="position:absolute; right:0; z-index:1" ng-show="hidesharebar = !hideSharebar" ng-switch on="sidebarPage" ng-class="overBar">
             <compose-message  recipients="messageData.recipients" ng-switch-when="email">
             </compose-message>
         </div>
