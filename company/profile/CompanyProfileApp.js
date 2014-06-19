@@ -654,21 +654,24 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         // email sidebar
         $scope.toggleSide = function(button) {
-            if (!$scope.hideSharebar && (button == $scope.sidebarPage) ) {
-                $scope.hideSharebar = false;
-                $scope.sidebarPage = button
-                console.log(1)
+            if (!$scope.hideSharebar && (button == $scope.sidebarPage) && !$scope.hideRail) {
+                $scope.sidebarPage = false;
+                console.log("1")
                 console.log($scope.hideSharebar)
                 console.log($scope.hideRail)
                 
             } 
+            else if(!$scope.hideSharebar && (button == $scope.sidebarPage) && $scope.hideRail){
+                $scope.sidebarPage = false;
+                $scope.hideSharebar = true;
+            }
+            
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
                 $scope.hideSharebar = false;
-                console.log(2)
+                console.log("2")
                 console.log($scope.hideSharebar)
-                console.log($scope.hideRail)
-              
+                console.log($scope.hideRail)      
                 // $scope.clearRecipient(); 
             }
             else if($scope.hideSharebar && button == undefined){
