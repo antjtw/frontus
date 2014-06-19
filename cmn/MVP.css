@@ -4415,10 +4415,8 @@ textarea.email-text {
 }
 
 /*message sidebar*/
-.span4.capright.showSharebar .message-side{
-   /* margin-left: -20px;*/
-    margin-right: -42px;
-
+.message-side {
+    margin-right: -40px;
 }
 
 .messages .activity-feed2 {
