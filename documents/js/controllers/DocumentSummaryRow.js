@@ -132,6 +132,22 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
+    $scope.titleClick = function() {
+        if ($scope.doc.uploading) {
+            return;
+        }
+        if ($scope.doc.type != 'doc') {
+            return;
+        }
+        if (!$scope.viewState.hideSharebar) {
+            $scope.prepareDocument($scope.doc);
+        } else {
+            if ($scope.doc.doc_id) { // can only view templates
+                $scope.viewOriginal($scope.doc);
+            }
+        }
+    };
+
     // dropdown list functions
     $scope.viewProfile = function(investor) {
         document.location.href = "/app/company/profile/view?id=" + investor.email;
