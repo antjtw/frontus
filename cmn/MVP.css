@@ -638,13 +638,18 @@ ul.nav-logo > li > a > img {
 .topnav .nav.nav-logo > li > a {
     margin: 0 0 0 10px;
     padding: 0 0 0 0;
-    width: 140px;
+    width: 90px;
     text-align: left;
 }
 
+.navbar .nav.nav-logo {
+    margin: 0;
+}
+
 .topnav .nav.nav-logo a > img.small-logo {
-    width: 100px;
-    height: 17px;
+    width: 90px;
+    height: 16px;
+    margin-top: -3px;
 }
 
 .topnav .nav.nav-item > li > a:hover {
