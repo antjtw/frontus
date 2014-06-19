@@ -68,25 +68,26 @@
                 <ul class="nav pull-left nav-logo">
                     <li>
                         <a ng-click="gotohome();">
-                            <img ng-show="navState.userid" src="/img/logo.png" />
+                            <img class="small-logo" ng-show="navState.userid" src="/img/logo-wht.png" />
                             <img ng-hide="navState.userid" src="/img/logo-large.png" />
                         </a>
                     </li>
                 </ul>
+                <span ng-show="navState.userid" class='nav-company-name'><span>/</span>   {{navState.name}}</span>
                 <ul class="nav pull-right nav-item dropdown-list">
                     <li class="dropdown standard menu-drop" ng-show="navState.userid">
                         <a class="dropdown-toggle nav-photo">
-                            <img ng-show="userURL" ng-src="{{userURL}}"> <span>{{person.name  | caplength:25}}</span>
- <span class="fauxcaret" data-icon="&#xe031;"
+                            <img ng-show="userURL" ng-src="{{userURL}}">
+                            <span class="fauxcaret" data-icon="&#xe031;"
                             aria-hidden="true"></span>
  <span class="closecaret" data-icon="&#xe034;" aria-hidden="true"></span>
 
                         </a>
                         <ul class="dropdown-menu">
-                            <li> <a class="menuProfileText button" href="/app/account/profile">My Account</a>
+                            <li> <a class="button" href="/app/account/profile">My Account</a>
 
                             </li>
-                            <li> <a class="menuProfileText button" ng-click="doLogout();">Log Out</a>
+                            <li> <a class="button" ng-click="doLogout();">Log Out</a>
 
                             </li>
                         </ul>
@@ -134,55 +135,53 @@
 </div>
 
 
-<div ng-show="navState.userid" class="new-nav" ng-mouseenter="navhover=true" ng-mouseleave="navhover=false">
-    <div class="rail-menu show-hide-animation" ng-hide="navhover">
-        <span data-icon="&#xe609;" aria-hidden="true"></span>
-    </div>
-    <accordion close-others="true" class="nav-content show-hide-animation" ng-hide="!navhover">
-        <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'issuer'}).length > 0"><span data-icon="&#xe011;" aria-hidden="true"></span>Admin</span>
-        <accordion-group ng-class="{'opencomp': navState.company == company.company && navState.role == company.role, 'manycomp': companies.length > 1}" is-open="company.current" ng-repeat="company in companies | filter: {role:'issuer'}">
-            <accordion-heading>
-                <span data-icon="&#xe031;" aria-hidden="true" ng-show="company.current && companies.length > 1"></span>
-                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!company.current && companies.length > 1"></span>
-                <span ng-show="companies.length > 1">{{company.name}}</span>
-            </accordion-heading>
-            <ul>
-                <li ng-class="{activepage: navState.path.indexOf('/home/company') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/home/company')">Company Home</a>
-                </li>
-                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/ownership/company-captable') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-captable')">Cap Table</a>
-                </li>
-                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/ownership/company-grants') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/company-grants')">Grants Table</a>
-                </li>
-                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/documents/company-list') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/documents/company-list')">Documents</a>
-                </li>
-                <li ng-show="company.reasondic.rol" ng-class="{activepage: navState.path.indexOf('/company/profile/people') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/company/profile/people')">People</a>
-                </li>
-                <li ng-class="{activepage: navState.path.indexOf('/company/profile/') != -1 && navState.path.indexOf('people') == -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/company/profile/')">Company Account</a>
-                </li>
-            </ul>
-        </accordion-group>
-        <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'investor'}).length > 0"><span data-icon="&#xe608;" aria-hidden="true"></span>Investments</span>
-        <accordion-group ng-class="{'opencomp': navState.company == company.company && navState.role == company.role, 'manycomp': companies.length > 1}" is-open="company.current" ng-repeat="company in companies | filter: {role:'investor'}">
-            <accordion-heading>
-                <span data-icon="&#xe031;" aria-hidden="true" ng-show="company.current && companies.length > 1"></span>
-                <span data-icon="&#xe034;" aria-hidden="true" ng-show="!company.current && companies.length > 1"></span>
-                <span ng-show="companies.length > 1">{{company.name}}</span>
-            </accordion-heading>
-            <ul>
-                <li ng-class="{activepage: navState.path.indexOf('/home/investor') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/home/investor')">Company Home</a>
-                </li>
-                <li ng-show="company.reasondic.own" ng-class="{activepage: navState.path.indexOf('/ownership/investor-captable') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-captable')">Cap Table</a>
-                </li>
-                <li ng-show="company.reasondic.own" ng-class="{activepage: navState.path.indexOf('/ownership/investor-grants') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/ownership/investor-grants')">Grants Table</a>
-                </li>
-                <li ng-show="company.reasondic.doc" ng-class="{activepage: navState.path.indexOf('/documents/investor-list') != -1 && navState.company == company.company}"><a class="button" ng-click="switchCandP(company, '/app/documents/investor-list')">Documents</a>
-                </li>
-            </ul>
-        </accordion-group>
-    </accordion>
-    <div class="nav-bottom-buttons show-hide-animation" ng-hide="!navhover">
+<div ng-show="navState.userid" ng-class="{'navopened': navhover}" class="new-nav">
+        <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'issuer'}).length > 0"><span data-icon="&#xe020;" aria-hidden="true"></span>Admin</span>
         <ul>
-            <li class="button" ng-click="gotoPage('/app/new-company')"><span data-icon="&#xe053;" aria-hidden="true" ></span>Add company</li>
+            <li ng-class="{activecompany: navState.company == company.company && navState.role == 'issuer'}" ng-repeat="company in companies | filter: {role:'issuer'}">
+                <span ng-click="switchCandP(company, '/app/home/company')">{{company.name}}</span>
+            </li>
+        </ul>
+        <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'investor'}).length > 0"><span data-icon="&#xe608;" aria-hidden="true"></span>Investments</span>
+        <ul>
+            <li ng-class="{activecompany: navState.company == company.company && navState.role == 'investor'}" ng-repeat="company in companies | filter: {role:'investor'}">
+                <span ng-click="switchCandP(company, '/app/home/investor')">{{company.name}}</span>
+            </li>
+        </ul>
+    <div class="nav-bottom-buttons">
+        <ul>
+            <li class="button" ng-click="gotoPage('/app/new-company'); navhover=false"><span data-icon="&#xe053;" aria-hidden="true" ></span>Add company</li>
         </ul>
     </div>
+</div>
+
+<div ng-show="navState.userid" class="blue-nav">
+    <ul>
+        <li ng-show="companies.length > 1" ng-click="navhover=!navhover" ng-class="{activepage: navhover}"><span class="nav-icon companies-icon"></span>Companies
+        </li>
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/home/company'); navhover=false" ng-class="{activepage: navState.path.indexOf('/home/company') != -1 && !navhover, 'singlecompany': companies.length == 1}"><span class="nav-icon dashboard-icon"></span>Dashboard
+        </li>
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/ownership/company-captable'); navhover=false" ng-class="{activepage: navState.path.indexOf('/ownership/company-captable') != -1 && !navhover}"><span class="nav-icon ownership-icon"></span>Ownership
+        </li>
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/ownership/company-grants'); navhover=false" ng-class="{activepage: navState.path.indexOf('/ownership/company-grants') != -1 && !navhover}"><span class="nav-icon grants-icon"></span>Grants
+        </li>
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/documents/company-list'); navhover=false" ng-class="{activepage: navState.path.indexOf('/documents/company-list') != -1 && !navhover}"><span class="nav-icon documents-icon"></span>Documents
+        </li>
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/people'); navhover=false" ng-class="{activepage: navState.path.indexOf('/company/profile/people') != -1 && !navhover}"><span class="nav-icon people-icon"></span>People
+        </li>
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/'); navhover=false" ng-class="{activepage: navState.path.indexOf('/company/profile/') != -1 && navState.path.indexOf('people') == -1 && !navhover}"><span class="nav-icon settings-icon"></span>Settings
+        </li>
+
+        <li ng-show="navState.reasons.own || navState.reasons.doc" ng-click="gotoPage('/app/home/investor'); navhover=false" ng-class="{activepage: navState.path.indexOf('/home/investor') != -1 && !navhover, 'singlecompany': companies.length == 1}"><span class="nav-icon dashboard-icon"></span>Dashboard
+        </li>
+        <li ng-show="navState.reasons.own" ng-click="gotoPage('/app/ownership/investor-captable'); navhover=false" ng-class="{activepage: navState.path.indexOf('/ownership/investor-captable') != -1 && !navhover}"><span class="nav-icon ownership-icon"></span>Ownership
+        </li>
+        <li ng-show="navState.reasons.own" ng-click="gotoPage('/app/ownership/investor-grants'); navhover=false" ng-class="{activepage: navState.path.indexOf('/ownership/investor-grants') != -1 && !navhover}"><span class="nav-icon grants-icon"></span>Grants
+        </li>
+        <li ng-show="navState.reasons.doc" ng-click="gotoPage('/app/documents/investor-list'); navhover=false" ng-class="{activepage: navState.path.indexOf('/documents/investor-list') != -1 && !navhover}"><span class="nav-icon documents-icon"></span>Documents
+        </li>
+
+        <li class="add-second-company" ng-show="companies.length == 1" ng-click="gotoPage('/app/new-company'); navhover=false"><span class="nav-icon add-company-icon"></span>+ Company
+        </li>
+    </ul>
 </div>
