@@ -1482,6 +1482,78 @@ ul.spaced-list > li:nth-child(odd) {
     vertical-align: top;
 }
 
+.activity-feed2 .activity-icon {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background-image:url('../img/icons-activity-sprite.png');
+}
+
+.activity-icon.doc-view-icon {
+    background-position: 0 0;
+}
+
+.activity-icon.doc-sign-icon {
+    background-position: -30px 0;
+}
+
+.activity-icon.doc-share-icon {
+    background-position: -60px 0;
+}
+
+.activity-icon.doc-upload-icon {
+    background-position: -90px 0;
+}
+
+.activity-icon.doc-edit-icon {
+    background-position: -120px 0;
+}
+
+.activity-icon.doc-countersign-icon {
+    background-position: -150px 0;
+}
+
+.activity-icon.view-icon {
+    background-position: -180px 0;
+}
+
+.activity-icon.received-icon {
+    background-position: -210px 0;
+}
+
+.activity-icon.doc-void-request-icon {
+    background-position: -240px 0;
+}
+
+.activity-icon.reminder-icon {
+    background-position: -270px 0;
+}
+
+.activity-icon.doc-rejected-icon {
+    background-position: 0 -90px;
+}
+
+.activity-icon.doc-void-reject-icon {
+    background-position: -90px -90px;
+}
+
+.activity-icon.doc-delete-icon {
+    background-position: -120px -90px;
+}
+
+.activity-icon.doc-final-icon {
+    background-position: 0 -120px;
+}
+
+.activity-icon.doc-retract-icon {
+    background-position: -30px -120px;
+}
+
+.activity-icon.doc-void-accept-icon {
+    background-position: -60px -120px;
+}
+
+
 .activity-feed2 li.event > div:last-of-type {
     display: inline-block;
     min-height: 50px;
