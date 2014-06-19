@@ -620,7 +620,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                 annots = annots.concat(JSON.parse(data.iss_annotations));
                             }
                         }
-                        $scope.annots = Annotations.setDocAnnotations($scope.docId, annots)
+                        $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
@@ -630,7 +630,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                 }
                             }
                         }
-                    } // json struct
+                    } else {
+                        // ensure annotations are linked to the service even if we didn't fetch any
+                        $scope.annots = Annotations.getDocAnnotations($scope.docId);
+                    }
                 }).except(function(err) {
                     $scope.leave();
                 });
@@ -641,8 +644,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             if (document.location.href.indexOf('-view') != -1) {
-                var ndx_inv = Annotations.getInvestorNotesForUpload($scope.docId);
-                var ndx_iss = Annotations.getIssuerNotesForUpload($scope.docId);
+                var ndx_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
+                var ndx_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
                 /** @name $scope#lib#annotations
                  * @type {[Object]}
                  */
@@ -804,6 +807,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
                 var a = new Annotation();
                 a.page = $scope.currentPage;
+                a.position.docPanel = $scope.dp;
                 a.initDrag = event;
                 $scope.annots.push(a);
             }
@@ -949,8 +953,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
         $scope.saveNoteData = function(clicked) {
-            var nd_inv = Annotations.getInvestorNotesForUpload($scope.docId);
-            var nd_iss = Annotations.getIssuerNotesForUpload($scope.docId);
+            var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
+            var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?

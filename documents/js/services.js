@@ -58,6 +58,10 @@ Annotation = function() {
         size: {
             //width: 0,
             //height: 0
+        },
+        docPanel: {
+            // width: 928, (.docViewer, see app.css)
+            // height: 1201ish (calculated)
         }
     };
     this.type = "text";
@@ -80,6 +84,13 @@ Annotation.prototype = {
             size: {
                 width: json[0][2][2],
                 height: json[0][2][3]
+            },
+            docPanel: {
+                // we probably shouldn't trust these numbers
+                // reset them based on current docpanel size,
+                // and let user move annotations if needed
+                width: json[0][3],
+                height: json[0][4]
             }
         };
         this.type = json[1];
@@ -98,8 +109,8 @@ Annotation.prototype = {
         position.push(this.page);
         position.push([this.position.coords.x, this.position.coords.y, 0, 0]);
         position.push([0, 0, this.position.size.width, this.position.size.height]);
-        position.push(700); // document page width
-        position.push(956); // document page height
+        position.push(this.position.docPanel.width); // document page width
+        position.push(this.position.docPanel.height); // document page height
         json.push(position);
         json.push("text");
         json.push([this.val]);
@@ -140,14 +151,14 @@ docs.service('Annotations', function() {
     // [i][0][1][3] ?
     //
     // [i][0][2] size (ibds) -> [_, _, width, height]
-    // [i][0][2][0] ?
-    // [i][0][2][1] ?
+    // [i][0][2][0] ? checkbox horizontal offset
+    // [i][0][2][1] ? checkbox vertical offset
     // [i][0][2][2] width or horizontal offset
     // [i][0][2][3] height or vertical offset
     //
-    // [i][0][3] 700 dp.clientWidth (page width (fixed))
+    // [i][0][3] 928 dp.clientWidth (docpanel width)
     //
-    // [i][0][4] 956 dp.clientHeight (page height (fixed))
+    // [i][0][4] 1201 (usually) dp.clientHeight (docpanel height)
     //
     // [i][1] type -> check or text or canvas (only text seems usable now)
     //
@@ -161,6 +172,7 @@ docs.service('Annotations', function() {
     var doc_annotations = {};
 
     this.hasUnfilled = function(page) {
+        // TODO
         var unfilled = false;
         for (var i = 0; i < $scope.notes.length; i++) {
             var n = $scope.notes[i][0];
@@ -185,6 +197,7 @@ docs.service('Annotations', function() {
     };
 
     this.allFilled = function(page) {
+        // TODO
         var allfilled = true;
         var some = false;
         for (var i = 0; i < $scope.notes.length; i++) {
