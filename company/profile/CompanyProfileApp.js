@@ -668,12 +668,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 // $scope.clearRecipient(); 
             }
             else if($scope.hideSharebar && button == undefined){
-                $scope.hideSharebar = false;
-                console.log(3)
-                
+                console.log(3)                
             }
             else {
-                $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
                 console.log(4)
           
