@@ -103,8 +103,8 @@ active.filter('description', function() {
             }
             var type = ac.type;
             if (type == "ownership") {
-                if (activity == "received") return "Sent to " + person;
-                else if (activity == "viewed") return "Viewed by "+person;
+                if (activity == "received") return "Cap table sent to " + person;
+                else if (activity == "viewed") return "Cap table viewed by "+person;
                 else return "Something with Capitalization Table";
             }
             else {
