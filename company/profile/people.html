@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <div ng-style="viewportheight" ng-show="!hideSharebar && !sidebarPage" ng-class="{rightNoTableBlock:hideSharebar,
+        <div ng-style="viewportheight" ng-show="!hideSRail" && ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
                <!--  <message-side></message-side> -->
@@ -125,9 +125,9 @@
     </section>
 
 <!--     rail toggle -->
-<button class="right-rail-button" ng-click="toggleSide()">
+<button class="right-rail-button" ng-click="toggleRail()">
  <!--    hide button -->
-    <span data-icon="&#xe033;" aria-hidden="true" ng-class="{'arrow-flip': hideSharebar}"></span>
+    <span data-icon="&#xe033;" aria-hidden="true" ng-class="{'arrow-flip': hideRail}"></span>
 </button>
 </div>
 

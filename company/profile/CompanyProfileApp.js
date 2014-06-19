@@ -675,17 +675,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
           
                // opens sidebar with email
             };
-                   };
+        };
 
         $scope.toggleRail = function(){
-            if (!$scope.hideRail){
-                $scope.hideRail = false
-                console.log("show rail")
+            if(!$scope.hideRail){
+                $scope.hideRail = true;
             }
             else
-                $scope.hideRail = true;
-                console.log("hideRail")
+                $scope.hideRail = false;
         }
+
+
 
 
     }
