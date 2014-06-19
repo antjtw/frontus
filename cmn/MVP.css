@@ -4389,6 +4389,15 @@ textarea.email-text {
     margin-left: 40px;
 }
 
+/*container div for side content*/
+.side-content{
+    position:absolute; 
+    right:0;
+     z-index:1; 
+     background-color: white; 
+     height: 100%; 
+     width: 330px;
+}
 /*preview modal for email*/
 .modal.preview-modal {
 /*    text-align: center;*/
