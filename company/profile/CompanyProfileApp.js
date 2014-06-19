@@ -707,20 +707,24 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             if (!$scope.hideRail && !$scope.hideSharebar){
                 $scope.hideRail = true;
                 $scope.hideSharebar = true;
+                console.log($scope.hideSharebar)
 
             }
-            else if (!$scope.hideSharebar){
-                $scope.hideSharebar = true;
+            // else if (!$scope.hideSharebar){
+            //     $scope.hideSharebar = true;
+            //     console.log($scope.hideSharebar)
             
-            }
+            // }
             else if($scope.hideRail && $scope.hideSharebar){
                 $scope.hideSharebar = false;
                 $scope.hideRail = false;
+                console.log($scope.hideSharebar)
 
             }
-            else if($scope.hideRail){
-                $scope.hideRail = false;
-            }
+            // else if($scope.hideRail){
+            //     $scope.hideRail = false;
+            //     console.log($scope.hideSharebar)
+            // }
         };
 
     }
