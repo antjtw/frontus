@@ -150,11 +150,13 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.searchFilter = function(obj) {
-                var items = $scope.state.query.split(" ");
                 var res = [];
-                angular.forEach(items, function(item) {
-                    res.push(new RegExp(item, 'i'))
-                });
+                if ($scope.state.query) {
+                    var items = $scope.state.query.split(" ");
+                    angular.forEach(items, function(item) {
+                        res.push(new RegExp(item, 'i'))
+                    });
+                }
                 /** @name obj#docname
                  * @type { string} */
                 if (!$scope.state.hideSharebar && obj.forShare) {
