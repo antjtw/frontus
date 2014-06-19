@@ -658,24 +658,36 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button
                 console.log(1)
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)
                 
             } 
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
                 $scope.hideSharebar = false;
                 console.log(2)
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)
               
                 // $scope.clearRecipient(); 
             }
             else if($scope.hideSharebar && button == undefined){
                 $scope.hideSharebar = false;
                 console.log(3)
-                
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)               
             }
+            else if($scope.hideRail && !$scope.hideSharebar && button == undefined){
+                $scope.hideRail = true;
+                $scope.hideSharebar = true
+            }
+           
             else {
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
                 console.log(4)
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)
           
                // opens sidebar with email
             };
@@ -687,19 +699,16 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             if (!$scope.hideRail && !$scope.hideSharebar){
                 $scope.hideRail = true;
                 $scope.hideSharebar = true;
-                console.log($scope.hideSharebar)
-                console.log($scope.hideRail)
 
             }
             else if (!$scope.hideSharebar){
                 $scope.hideSharebar = true;
-                console.log($scope.hideRail)
-
+            
             }
             else if($scope.hideRail && $scope.hideSharebar){
                 $scope.hideSharebar = false;
                 $scope.hideRail = false;
-                console.log($scope.hideRail)
+
             }
             else if($scope.hideRail){
                 $scope.hideRail = false;

@@ -104,14 +104,14 @@
             </div>
         </div>
 
-        <div ng-style="viewportheight" ng-show="!hideSharebar && !sidebarPage && !hideRail" ng-class="{rightNoTableBlock:hideSharebar,
+        <div ng-style="viewportheight" ng-show="!hideRail" ng-class="{rightNoTableBlock:hideSharebar,
                 showSharebar:!hideSharebar,
                 slidingcss25:oldSafari()}" class="span4 capright button-offset">
                <!--  <message-side></message-side> -->
                 <message-side></message-side>
                       
         </div>
-        <div ng-if="sidebarPage" class="side-content" ng-if="toggleSide('start')">
+        <div ng-if="!hideSharebar" class="side-content">
             <div ng-switch on="sidebarPage">
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                 </compose-message>
