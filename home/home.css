@@ -1,3 +1,7 @@
+.dashboard-center {
+    margin-left: 80px;
+}
+
 .wrap.background-gray {
     background-color: #E2E2E2;
 }
@@ -145,7 +149,7 @@
 
 .back.info-box > div.head-box > span {
     left: 5px;
-    top: 5px;
+    top: 9px;
 }
 
 .back.info-box > .head-box > h2 {
