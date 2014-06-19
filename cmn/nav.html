@@ -73,7 +73,7 @@
                         </a>
                     </li>
                 </ul>
-                <span class='nav-company-name'><span>/</span>   {{navState.name}}</span>
+                <span ng-show="navState.userid" class='nav-company-name'><span>/</span>   {{navState.name}}</span>
                 <ul class="nav pull-right nav-item dropdown-list">
                     <li class="dropdown standard menu-drop" ng-show="navState.userid">
                         <a class="dropdown-toggle nav-photo">
@@ -136,7 +136,7 @@
 
 
 <div ng-show="navState.userid" ng-class="{'navopened': navhover}" class="new-nav">
-        <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'issuer'}).length > 0"><span data-icon="&#xe011;" aria-hidden="true"></span>Admin</span>
+        <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'issuer'}).length > 0"><span data-icon="&#xe020;" aria-hidden="true"></span>Admin</span>
         <ul>
             <li ng-class="{activecompany: navState.company == company.company && navState.role == 'issuer'}" ng-repeat="company in companies | filter: {role:'issuer'}">
                 <span ng-click="switchCandP(company, '/app/home/company')">{{company.name}}</span>
@@ -148,7 +148,7 @@
                 <span ng-click="switchCandP(company, '/app/home/investor')">{{company.name}}</span>
             </li>
         </ul>
-    <div class="nav-bottom-buttons show-hide-animation" ng-hide="!navhover">
+    <div class="nav-bottom-buttons">
         <ul>
             <li class="button" ng-click="gotoPage('/app/new-company'); navhover=false"><span data-icon="&#xe053;" aria-hidden="true" ></span>Add company</li>
         </ul>
@@ -159,7 +159,7 @@
     <ul>
         <li ng-show="companies.length > 1" ng-click="navhover=!navhover" ng-class="{activepage: navhover}"><span class="nav-icon companies-icon"></span>Companies
         </li>
-        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/home/company'); navhover=false" ng-class="{activepage: navState.path.indexOf('/home/company') != -1 && !navhover}"><span class="nav-icon dashboard-icon"></span>Dashboard
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/home/company'); navhover=false" ng-class="{activepage: navState.path.indexOf('/home/company') != -1 && !navhover, 'singlecompany': companies.length == 1}"><span class="nav-icon dashboard-icon"></span>Dashboard
         </li>
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/ownership/company-captable'); navhover=false" ng-class="{activepage: navState.path.indexOf('/ownership/company-captable') != -1 && !navhover}"><span class="nav-icon ownership-icon"></span>Ownership
         </li>
@@ -172,13 +172,16 @@
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/'); navhover=false" ng-class="{activepage: navState.path.indexOf('/company/profile/') != -1 && navState.path.indexOf('people') == -1 && !navhover}"><span class="nav-icon settings-icon"></span>Settings
         </li>
 
-        <li ng-show="navState.reasons.own || navState.reasons.doc" ng-click="gotoPage('/app/home/investor'); navhover=false" ng-class="{activepage: navState.path.indexOf('/home/investor') != -1 && !navhover}"><span class="nav-icon dashboard-icon"></span>Dashboard
+        <li ng-show="navState.reasons.own || navState.reasons.doc" ng-click="gotoPage('/app/home/investor'); navhover=false" ng-class="{activepage: navState.path.indexOf('/home/investor') != -1 && !navhover, 'singlecompany': companies.length == 1}"><span class="nav-icon dashboard-icon"></span>Dashboard
         </li>
         <li ng-show="navState.reasons.own" ng-click="gotoPage('/app/ownership/investor-captable'); navhover=false" ng-class="{activepage: navState.path.indexOf('/ownership/investor-captable') != -1 && !navhover}"><span class="nav-icon ownership-icon"></span>Ownership
         </li>
         <li ng-show="navState.reasons.own" ng-click="gotoPage('/app/ownership/investor-grants'); navhover=false" ng-class="{activepage: navState.path.indexOf('/ownership/investor-grants') != -1 && !navhover}"><span class="nav-icon grants-icon"></span>Grants
         </li>
         <li ng-show="navState.reasons.doc" ng-click="gotoPage('/app/documents/investor-list'); navhover=false" ng-class="{activepage: navState.path.indexOf('/documents/investor-list') != -1 && !navhover}"><span class="nav-icon documents-icon"></span>Documents
+        </li>
+
+        <li class="add-second-company" ng-show="companies.length == 1" ng-click="gotoPage('/app/new-company'); navhover=false"><span class="nav-icon add-company-icon"></span>+ Company
         </li>
     </ul>
 </div>
