@@ -111,12 +111,10 @@
                 <message-side></message-side>
                       
         </div>
-        <div ng-show="sidebarPage" class="side-content">
-            <div ng-switch on="sidebarPage">
-                <compose-message  recipients="messageData.recipients" ng-switch-when="email">
+        <div ng-show="sidebarPage" class="side-content"ng-switch on="sidebarPage">
+                <compose-message  recipients="messageData.recipients" style="padding: 20px"ng-switch-when="email">
                 </compose-message>
                 <add-person ng-switch-when="people"></add-person>
-            </div>
         </div>
 
     </div>

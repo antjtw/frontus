@@ -4398,6 +4398,9 @@ textarea.email-text {
      height: 100%; 
      width: 350px;
 }
+ .composemessage {
+    padding-left: 30px;
+}
 /*preview modal for email*/
 .modal.preview-modal {
 /*    text-align: center;*/
@@ -4416,5 +4419,6 @@ textarea.email-text {
     margin-left: -20px;
     margin-right: -42px;
 }
+
 
 
