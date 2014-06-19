@@ -58,7 +58,9 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.processedopts = {
             backdropFade: true,
             dialogFade: true,
-            dialogClass: 'processedImageModal modal'
+            dialogClass: 'processedImageModal modal',
+            backdropClick: false,
+            backdrop: 'static'
         };
 
         $scope.docKey = parseInt($routeParams.doc, 10);
