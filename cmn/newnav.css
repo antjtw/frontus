@@ -141,7 +141,6 @@
 }
 
 .new-nav .nav-section-header {
-    text-transform: uppercase;
     font-size: 14px;
     text-shadow: none;
     margin-left: 19px;
@@ -153,7 +152,7 @@
 
 .new-nav .nav-section-header > span {
     margin-right: 8px;
-    vertical-align: -8%;
+    vertical-align: -3%;
 }
 
 .new-nav .opencomp.manycomp {
@@ -183,14 +182,9 @@
     font-size: 22px;
 }
 
-.new-nav.affix-top .nav-bottom-buttons {
+.new-nav .nav-bottom-buttons {
     position: absolute;
     bottom: 40px;
-}
-
-.new-nav.affix .nav-bottom-buttons {
-    position: absolute;
-    bottom: 0;
 }
 
 .new-nav .nav-bottom-buttons > ul {
