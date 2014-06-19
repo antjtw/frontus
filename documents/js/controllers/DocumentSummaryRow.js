@@ -1,15 +1,14 @@
 'use strict';
 
 function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location) {
-    // TODO: need the ordering correct from the server for paging, but statusRank is computed locally ...
     $scope.versionOrder = 'statusRank';
 
     // load the versions
     $scope.versions = [];
-    var loadingVersions = false
+    var loadingVersions = false;
     $scope.loadVersions = function() {
-        if (loadingVersions || $scope.doc.version_count == 0) {
-            return
+        if (loadingVersions || $scope.doc.version_count === 0) {
+            return;
         }
         loadingVersions = true;
         var queryParam = "";
@@ -112,7 +111,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else if (summary.type == "investor") {
             return summary.name || summary.email;
         };
-    }
+    };
 
     $scope.getShareType = function(doc) {
         if (!doc) {return 0;}
