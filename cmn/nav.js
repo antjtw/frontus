@@ -210,7 +210,11 @@ navm.controller('NavCtrl',
         };
         $scope.gotoPage = function(page) {
             sessionStorage.clear();
-            $location.url(page);
+            if (document.URL.indexOf("app") == -1) {
+                document.location.href = page;
+            } else {
+                $location.url(page);
+            }
         };
 
 
