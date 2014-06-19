@@ -58,7 +58,8 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.processedopts = {
             backdropFade: true,
             dialogFade: true,
-            dialogClass: 'processedImageModal modal'
+            dialogClass: 'processedImageModal modal',
+            backdrop: 'static'
         };
 
         $scope.docKey = parseInt($routeParams.doc, 10);
@@ -151,6 +152,10 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             $location.search(z);
             $scope.initDocView();
             
+            $scope.checkProcessing();
+        };
+        
+        $scope.checkProcessing = function() {
             SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
             {
                 console.log(data);
@@ -161,7 +166,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                     $scope.getProcessedPage();
                 }
             });
-        };
+        }
 
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);

@@ -1148,6 +1148,14 @@ input[type='text']:disabled, textarea:disabled {
     margin-left: 0px;
 }
 
+.processedImageModal .arrowSpacer {
+    padding-top: 10%;
+}
+
+.processedImageModal .gray-link {
+    cursor: pointer;
+}
+
 .processedImageModal .rect {
     padding: 3px 3px 3px 3px;
     margin-top: 20px;
