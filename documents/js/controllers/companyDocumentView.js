@@ -41,6 +41,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.tourclose = function () {
             $scope.hideSharebar = false;
             $scope.tourModal = false;
+            $scope.checkProcessing();
         };
 
         $scope.sharinggot = function () {
@@ -80,6 +81,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             SWBrijj.tblm('account.user_settings', ["knows_sharing"]).then(function(data) {
                 if (!data[0].knows_sharing) {
                     $scope.helpModalUp();
+                    $scope.imageProcessedModal = false;
                 }
             });
         }
@@ -157,6 +159,8 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         };
         
         $scope.checkProcessing = function() {
+            if ($scope.tourModal)
+                return; //don't step on other modal's toes
             SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
             {
                 console.log(data);
