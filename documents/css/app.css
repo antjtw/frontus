@@ -1148,8 +1148,8 @@ input[type='text']:disabled, textarea:disabled {
     margin-left: 0px;
 }
 
-.processedImageModal .arrowSpacer {
-    padding-top: 10%;
+.processedImageModal .dataIcon {
+    vertical-align: -10%;
 }
 
 .processedImageModal .gray-link {
