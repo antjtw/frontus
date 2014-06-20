@@ -142,7 +142,6 @@ Annotation.prototype = {
         this.fontsize = json[3][0];
         this.investorfixed = json[4].investorfixed;
         this.whosign = json[4].whosign;
-        // TODO: grab attributelabels logic from documentView.js
         this.whattype = json[4].whattype;
         this.required = json[4].required;
         return this;
@@ -176,13 +175,11 @@ Annotation.prototype = {
                );
     },
     isCountersign: function() {
-        return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature")
+        return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature");
     },
 };
 
-docs.service('Annotations', function() {
-    // TODO: group annotations as Doc > Page > annotation instead of Doc > annotation ?
-
+docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootScope) {
     // data structure contents
     // aa -> [annot0...annotn-1]
     // [i] annoti -> [position, type, value, style]
@@ -321,4 +318,43 @@ docs.service('Annotations', function() {
         }
         return notes;
     };
-});
+
+    // Fetch the investor attributes
+    var investor_attributes = {};
+    var attributelabels = {};
+
+    $rootScope.$watch('person', function(person) {
+        if (person) {
+            SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
+                angular.forEach(inv_attributes, function(attr) {
+                    investor_attributes[attr.attribute] = attr.answer;
+                    attributelabels[attr.attribute] = attr.label;
+                });
+                investor_attributes.investorName = angular.copy(person.name);
+                investor_attributes.investorState = angular.copy(person.state);
+                investor_attributes.investorCountry = angular.copy(person.country);
+                investor_attributes.investorStreet = angular.copy(person.street);
+                investor_attributes.investorPhone = angular.copy(person.phone);
+                investor_attributes.investorEmail = angular.copy(person.email);
+                investor_attributes.investorPostalcode = angular.copy(person.postalcode);
+            });
+        }
+        investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
+        attributelabels.investorName = "Name";
+        attributelabels.investorState = "State";
+        attributelabels.investorCountry = "Country";
+        attributelabels.investorStreet = "Address";
+        attributelabels.investorPhone = "Phone";
+        attributelabels.investorEmail = "Email";
+        attributelabels.investorPostalcode = "Zip code";
+        attributelabels.signatureDate = "Date";
+        attributelabels.ImgSignature = "Signature Image";
+        attributelabels.Signature = "Signature Text";
+    });
+    this.attributeLabel = function(attribute) {
+        return attributelabels[attribute] || attribute;
+    };
+    this.investorAttribute = function(attribute) {
+        return investor_attributes[attribute] || "";
+    };
+}]);

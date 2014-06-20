@@ -8,7 +8,7 @@
     <div>
         <fieldset>
             <div class="textarea-container">
-                <textarea wrap="hard" ng-class="{'roundedcorners': $root.navState.role=='investor'}" ng-trim="false" ng-disabled="countersignable(lib)" placeholder="{{whosignlabel}} {{whattypelabel}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annotext" class="row-fluid" ng-style="annotationSizeStyle"/>
+                <textarea wrap="hard" ng-class="{'roundedcorners': $root.navState.role=='investor'}" ng-trim="false" ng-disabled="countersignable(lib)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
         </fieldset>
         <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="$root.navState.role == 'issuer' && getme">

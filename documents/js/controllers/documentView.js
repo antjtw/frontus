@@ -249,6 +249,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 SWBrijj.smartdoc_render_investor_template($scope.subId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
+                            // TODO: use information from Annotations service for investor_attributes
                             $scope.investor_attributes = {};
                             angular.forEach(inv_attributes, function(attr) {
                                 $scope.investor_attributes[attr.attribute] = attr.answer;
@@ -259,9 +260,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             $scope.investor_attributes.investorPhone = angular.copy($rootScope.person.phone);
                             $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);
                             $scope.investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
-                            $scope.investor_attributes.signatoryTitle = "";
-                            $scope.investor_attributes.signatoryName = "";
-                            $scope.investor_attributes.investorSignature = "";
 
                             //Sort through all the !!! and make the appropriate replacement
                             while (raw_html.match(/!!![^!]+!!!/g)) {
@@ -562,34 +560,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        function createAttributes(inv_attributes) {
-            $scope.investor_attributes = {};
-            $scope.attributelabels = {};
-            angular.forEach(inv_attributes, function(attr) {
-                $scope.investor_attributes[attr.attribute] = attr.answer;
-                $scope.attributelabels[attr.attribute] = attr.label;
-            });
-            $scope.investor_attributes.investorName = angular.copy($rootScope.person.name);
-            $scope.investor_attributes.investorState = angular.copy($rootScope.person.state);
-            $scope.investor_attributes.investorCountry = angular.copy($rootScope.person.country);
-            $scope.investor_attributes.investorStreet = angular.copy($rootScope.person.street);
-            $scope.investor_attributes.investorPhone = angular.copy($rootScope.person.phone);
-            $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);
-            $scope.investor_attributes.investorPostalcode = angular.copy($rootScope.person.postalcode);
-            $scope.investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
-            $scope.attributelabels.investorName = "Name";
-            $scope.attributelabels.investorState = "State";
-            $scope.attributelabels.investorCountry = "Country";
-            $scope.attributelabels.investorStreet = "Address";
-            $scope.attributelabels.investorPhone = "Phone";
-            $scope.attributelabels.investorEmail = "Email";
-            $scope.attributelabels.investorPostalcode = "Zip code";
-            $scope.attributelabels.signatureDate = "Date";
-            $scope.attributelabels.ImgSignature = "Signature Image";
-            $scope.attributelabels.Signature = "Signature Text";
-
-        }
-
         SWBrijj.procm('account.have_signature').then(function(sig) {
             $scope.signaturepresent = sig[0].have_signature;
         });
@@ -600,43 +570,41 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {string}
              * @param {...}
              */
-            SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
-                createAttributes(inv_attributes);
-                SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                    if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
-                        // don't load annotations twice
-                        return;
-                    }
-                    $scope.lib = data;
-                    // TODO: migrate all uses of $scope.lib to $scope.doc
-                    $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
-                    $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
+             SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
+                 if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
+                     // don't load annotations twice
+                     return;
+                 }
+                 $scope.lib = data;
+                 // TODO: migrate all uses of $scope.lib to $scope.doc
+                 $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
+                 $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
 
-                    if ($scope.lib.annotations) {
-                        // restoreNotes
-                        var annots;
-                        if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
-                            // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
-                            annots = JSON.parse($scope.lib.iss_annotations);
-                        } else {
-                            annots = JSON.parse($scope.lib.annotations);
-                            if (data.iss_annotations) {
-                                annots = annots.concat(JSON.parse(data.iss_annotations));
-                            }
-                        }
-                        $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
-                        var sticky;
-                        for (var i = 0; i < annots.length; i++) {
-                            var annot = annots[i];
-                        }
-                    } else {
-                        // ensure annotations are linked to the service even if we didn't fetch any
-                        $scope.annots = Annotations.getDocAnnotations($scope.docId);
-                    }
-                }).except(function(err) {
-                    $scope.leave();
-                });
-            });
+                 if ($scope.lib.annotations) {
+                     // restoreNotes
+                     var annots;
+                     // TODO: should probably load all annotations into $scope.annots, and only display as relevant (probably already works)
+                     if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
+                         // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
+                         annots = JSON.parse($scope.lib.iss_annotations);
+                     } else {
+                         annots = JSON.parse($scope.lib.annotations);
+                         if (data.iss_annotations) {
+                             annots = annots.concat(JSON.parse(data.iss_annotations));
+                         }
+                     }
+                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
+                     var sticky;
+                     for (var i = 0; i < annots.length; i++) {
+                         var annot = annots[i];
+                     }
+                 } else {
+                     // ensure annotations are linked to the service even if we didn't fetch any
+                     $scope.annots = Annotations.getDocAnnotations($scope.docId);
+                 }
+             }).except(function(err) {
+                 $scope.leave();
+             });
         }
 
 
@@ -735,6 +703,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.removeAllNotes = function() {
+            // TODO
             for (var i = 0; i < $scope.notes.length; i++) {
                 document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
             }
@@ -819,14 +788,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     boundBoxByPage(bb); // TODO?
                 }
             });
-
-            var ta = aa.find('textarea');
-            ta.scope().whattype = annot.whattype ? annot.whattype : "Text";
-            ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
-
-            ta.scope().annotext = annot.val.length === 0 && ta.scope().whattype in $scope.investor_attributes && ta.scope().required ? $scope.investor_attributes[annot.whattype] : annot.val;
-
-            return aa;
         }*/
 
         $scope.acceptSign = function(sig) {

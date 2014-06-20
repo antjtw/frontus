@@ -150,6 +150,8 @@ app.directive('annotationList', function() {
                     var ret = $scope.doc.pageAnnotated(page.page);
                     return ret;
                 };
+
+                $scope.attributeLabel = Annotations.attributeLabel;
             }
         ],
     };

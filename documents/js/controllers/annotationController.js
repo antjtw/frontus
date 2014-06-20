@@ -1,9 +1,6 @@
 'use strict';
 
-function annotationController($scope, $element, $rootScope, $document) {
-    $scope.annotext = "";
-    $scope.investor_attributes = []; // TODO
-
+function annotationController($scope, $element, $rootScope, $document, Annotations) {
     function applyLineBreaks(oTextarea) {
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
         if (oTextarea.wrap) {
@@ -298,24 +295,35 @@ function annotationController($scope, $element, $rootScope, $document) {
         }
     };
 
+    function setPlaceholder() {
+        $scope.whosignlabel = ($scope.annot.whosign == "Investor") ? "Recipient" : $rootScope.navState.name;
+        $scope.whattypelabel = Annotations.attributeLabel($scope.annot.whattype);
+        $scope.val_placeholder = $scope.whosignlabel + " " + $scope.whattypelabel;
+    }
+    setPlaceholder();
+
     function setDefaultText() {
-        if (($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Issuer") || $rootScope.navState.role == "investor" && $scope.annot.whosign == "Investor") {
-            $scope.annotext = $scope.annotext.length === 0 && $scope.annot.whattype in $scope.investor_attributes ? $scope.investor_attributes[$scope.annot.whattype] : $scope.annotext;
-        }
-        else {
-            $scope.annotext = $scope.annotext.length === 0 ? "" : $scope.annotext;
+        if ($scope.annot.val.length === 0) {
+            if (($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Issuer") || $rootScope.navState.role == "investor" && $scope.annot.whosign == "Investor") {
+                $scope.annot.val = Annotations.investorAttribute([$scope.annot.whattype]);
+            } else {
+                $scope.annot.val = "";
+            }
         }
     }
 
     $scope.setSign = function($event, value) {
         $scope.annot.whosign = value;
+        $scope.annot.val = "";
         setDefaultText();
+        setPlaceholder();
     };
 
     $scope.setAnnot = function($event, sticky, value) {
         $scope.annot.whattype = value;
-        //sticky.whattypelabel = value in $scope.attributelabels ? $scope.attributelabels[value] : value;
+        $scope.annot.val = ""; // clear out value since the type changed
         setDefaultText();
+        setPlaceholder();
     };
 
     $scope.addLineBreaks = function($event) {
@@ -355,15 +363,6 @@ function annotationController($scope, $element, $rootScope, $document) {
         }
     });
 
-    $scope.$watch('annot.whosign', function(whosign) {
-        $scope.whosignlabel = (whosign == "Investor") ? "Recipient" : $rootScope.navState.name;
-    });
-
-    $scope.$watch('annot.whattype', function(whattype) {
-        // TODO: apply "attributelabels" from documentView.js
-        $scope.whattypelabel = whattype;
-    });
-
     if ($scope.annot.initDrag) {
         $scope.newinitdrag($scope.annot.initDrag);
         delete $scope.annot.initDrag;
@@ -379,4 +378,4 @@ function annotationController($scope, $element, $rootScope, $document) {
     };
 }
 
-annotationController.$inject = ["$scope", "$element", "$rootScope", "$document"];
+annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations"];
