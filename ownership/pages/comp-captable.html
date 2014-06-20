@@ -1407,7 +1407,7 @@
                                             <li ng-if="doc.name||doc.investor"><span>Shared with {{doc.name || doc.investor}}</span></li>
                                             <li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>
                                         </ul>
-                                        <span class="pull-right" data-icon="&#xe00f;" ng-click="toggleForEvidence(doc)"></span>
+                                        <span class="pull-right" data-icon="&#xe00f;" ng-click="removeEvidence(doc, tran)"></span>
                                     </div>
                                 </div>
                                 <span ng-hide="windowToggle" class="blue-link delete-link" ng-click="editEvidence(tran);" data-icon="&#xe008;">Add Documents</span>

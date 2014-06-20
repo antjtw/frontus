@@ -94,8 +94,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     });
 
     SWBrijj.tblm('ownership.my_company_eligible_evidence').then(function(data) {
-        console.log(data);
-        $scope.eligible_evidence = data; //data.filter(function(el) {return !el.investor;});
+        $scope.eligible_evidence = data;
     }).except(function(e) {
         console.log(e);
     });
@@ -157,13 +156,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         });
     });
     $scope.attachEvidence = function(data) {
-        console.log(data);
         angular.forEach($scope.trans, function(tran) {
             var this_tran_evidence = data.filter(function(el) { return el.evidence==tran.evidence; });
             tran.evidence_data = this_tran_evidence;
-            if (this_tran_evidence.length > 0) {
-                console.log(tran.evidence_data);
-            }
         });
         // TODO implement for issues
     };
@@ -1712,20 +1707,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             return false;
         }
     };
-    $scope.removeEvidence = function(ev) {
-        var index = null;
-        if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
-            console.log($scope.evidence_object.evidence_data);
-            angular.forEach($scope.evidence_object.evidence_data,
-            function(el, idx) {
-                if ($scope.evidenceEquals(el, ev)) {
-                    console.log(el);
-                    console.log(ev);
-                    console.log(idx);
-                    index = idx;
-                }
-            });
-            $scope.evidence_object.evidence_data.splice(index);
+    $scope.removeEvidence = function(ev, obj) {
+        if (!obj) {
+            $scope.evidence_object.evidence_data = $scope.evidence_object.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
+            $scope.updateEvidenceInDB($scope.evidence_object, 'removed');
+        } else {
+            obj.evidence_data = obj.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
+            $scope.updateEvidenceInDB(obj, 'removed');
         }
     };
     $scope.addEvidence = function(ev) {
@@ -1744,18 +1732,19 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 $scope.addEvidence(ev);
                 action = "added";
             }
-            console.log(JSON.stringify($scope.evidence_object.evidence_data));
-            // this is throwing an error but claiming success
-            SWBrijj.procm('ownership.upsert_transaction_evidence',
-                          $scope.evidence_object.tran_id,
-                          JSON.stringify($scope.evidence_object.evidence_data)
-            ).then(function(r) {
-                $scope.$emit("notification:success", "Evidence "+action);
-            }).except(function(e) {
-                $scope.$emit("notification:fail", "Something went wrong. Please try again.");
-                console.log(e);
-            });
+            $scope.updateEvidenceInDB($scope.evidence_object, action);
         }
+    };
+    $scope.updateEvidenceInDB = function(obj, action) {
+        SWBrijj.procm('ownership.upsert_transaction_evidence',
+                      obj.tran_id,
+                      JSON.stringify(obj.evidence_data)
+        ).then(function(r) {
+            $scope.$emit("notification:success", "Evidence "+action);
+        }).except(function(e) {
+            $scope.$emit("notification:fail", "Something went wrong. Please try again.");
+            console.log(e);
+        });
     };
     $scope.evidenceFilter = function(obj) {
         if ($scope.state.evidenceQuery && obj) {
