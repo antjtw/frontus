@@ -748,29 +748,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
         };
 
-        // TODO: check against annotations service
-        $scope.allUnfilled = function() {
-            var unfilled = false;
-            for (var i = 0; i < $scope.notes.length; i++) {
-                var n = $scope.notes[i][0];
-                var contents = n.querySelector("textarea");
-                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                    if (!$scope.signaturepresent &&
-                        ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                         (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                        unfilled = true;
-                    }
-                }
-                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
-                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                        (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                        unfilled = true;
-                    }
-                }
-            }
-            return unfilled;
-        };
-
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
                 var a = new Annotation();

@@ -58,7 +58,27 @@ Document.prototype = {
         return this.annotations.some(function(annot) {
             return annot.page == pageNum;
         });
-    }
+    },
+    hasUnfilled: function(signaturepresent, role) {
+        // TODO: use Annotation.filled()
+        var unfilled = false;
+        return this.annotations.some(function(annot) {
+            if (annot.whattype == 'ImgSignature') {
+                if (!signaturepresent &&
+                    ((annot.whosign == 'Investor' && role == 'investor') ||
+                     (annot.whosign == 'Issuer' && role == 'issuer'))) {
+                    return true;
+                }
+            }
+            else if (annot.required && annot.val.length === 0) {
+                if ((annot.whosign == 'Investor' && role == 'investor') ||
+                    (annot.whosign == 'Issuer' && role == 'issuer')) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    },
 };
 
 docs.service('Documents', ["Annotations", function(Annotations) {
@@ -215,59 +235,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
 
     var doc_annotations = {};
 
-    this.hasUnfilled = function(page) {
-        // TODO
-        var unfilled = false;
-        for (var i = 0; i < $scope.notes.length; i++) {
-            var n = $scope.notes[i][0];
-            if (angular.element(n).scope().page == page) {
-                var contents = n.querySelector("textarea");
-                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                    if (!$scope.signaturepresent &&
-                        ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                         (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                        unfilled = true;
-                    }
-                }
-                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
-                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                        (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                        unfilled = true;
-                    }
-                }
-            }
-        }
-        return unfilled;
-    };
-
-    this.allFilled = function(page) {
-        // TODO
-        var allfilled = true;
-        var some = false;
-        for (var i = 0; i < $scope.notes.length; i++) {
-            var n = $scope.notes[i][0];
-            if (angular.element(n).scope().page == page) {
-                var contents = n.querySelector("textarea");
-                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                    if ($scope.signaturepresent &&
-                        ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                         (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                        some = true;
-                        allfilled = false;
-                    }
-                }
-                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length !== 0) {
-                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-                        (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                        allfilled = false;
-                        some = true;
-                    }
-                }
-            }
-        }
-        return some && !allfilled;
-    };
-
     this.getDocAnnotations = function(doc_id) {
         if (doc_id === void(0)) {
             console.log("fetching undefined annotations");
@@ -337,9 +304,9 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 investor_attributes.investorPhone = angular.copy(person.phone);
                 investor_attributes.investorEmail = angular.copy(person.email);
                 investor_attributes.investorPostalcode = angular.copy(person.postalcode);
+                investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
             });
         }
-        investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
         attributelabels.investorName = "Name";
         attributelabels.investorState = "State";
         attributelabels.investorCountry = "Country";

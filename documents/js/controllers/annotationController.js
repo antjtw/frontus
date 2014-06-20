@@ -371,7 +371,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     $scope.signaturepresent = $scope.$parent.signaturepresent;
 
     // MOCKS
-    // TODO: fix these (probably references into parent scope)
+    // TODO: fix these (probably references into parent scope or Documents service)
     $scope.lib = {};
     $scope.countersignable = function() {
         return false;
