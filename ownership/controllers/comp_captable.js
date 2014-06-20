@@ -1691,7 +1691,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.windowToggle = true;
         } else {
             $scope.evidence_object = null;
-            $scope.currentTab = 'details';
             $scope.windowToggle = false;
         }
         return $scope.windowToggle;
@@ -1740,7 +1739,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                       obj.tran_id,
                       JSON.stringify(obj.evidence_data)
         ).then(function(r) {
-            $scope.$emit("notification:success", "Evidence "+action);
+            void(r);
+            //$scope.$emit("notification:success", "Evidence "+action);
         }).except(function(e) {
             $scope.$emit("notification:fail", "Something went wrong. Please try again.");
             console.log(e);

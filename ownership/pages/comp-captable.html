@@ -603,7 +603,7 @@
                     </ul>
                 </div>
 
-                <div class="center" ng-if="windowToggle">
+                <div class="evidenceSearch" ng-if="windowToggle">
                     <span>Search</span>
                     <input type="text" class="search-box" ng-model="state.evidenceQuery">
                 </div>
@@ -1138,7 +1138,7 @@
                                     <span data-icon="&#xe01e;" aria-hidden="true">Details</span>
                                 </button>
                                 <button class="btn" ng-click="switchCapTab('documents');" ng-class="{on:currentTab=='documents'}">
-                                    <span data-icon="&#xe01f;" aria-hidden="true">Documents</span>
+                                    <span data-icon="&#xe01f;" aria-hidden="true">Evidence</span>
                                 </button>
                             </div>
 
@@ -1405,7 +1405,7 @@
                                         <ul class="pull-left">
                                             <li><span ng-click="viewEvidence(doc)">{{doc.docname}}</span></li>
                                             <li ng-if="doc.name||doc.investor"><span>Shared with {{doc.name || doc.investor}}</span></li>
-                                            <li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>
+                                            <!--<li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>-->
                                         </ul>
                                         <span class="pull-right" data-icon="&#xe00f;" ng-click="removeEvidence(doc, tran)"></span>
                                     </div>
@@ -1422,7 +1422,7 @@
                         </accordion>
                           <span class="add-transaction-link"
                                 ng-click="createTrantab()"
-                                ng-if="!windowToggle">
+                                ng-if="currentTab!='documents'">
                               <span data-icon="&#xe053;" aria-hidden="true"></span>
                               <span>Add Transaction</span>
                           </span>
@@ -1535,7 +1535,7 @@
                                     <span data-icon="&#xe01e;" aria-hidden="true">Details</span>
                                 </button>
                                 <button class="btn" ng-click="switchCapTab('documents');" ng-class="{on:currentTab=='documents'}">
-                                    <span data-icon="&#xe01f;" aria-hidden="true">Documents</span>
+                                    <span data-icon="&#xe01f;" aria-hidden="true">Evidence</span>
                                 </button>
                             </div>
 
@@ -1635,7 +1635,7 @@
                                         <ul class="pull-left">
                                             <li><span ng-click="viewEvidence(doc)">{{doc.docname}}</span></li>
                                             <li ng-if="doc.name||doc.investor"><span>Shared with {{doc.name || doc.investor}}</span></li>
-                                            <li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>
+                                            <!--<li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>-->
                                         </ul>
                                     </div>
                                 </div>

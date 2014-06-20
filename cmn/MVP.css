@@ -2189,14 +2189,6 @@ tr.preparedDoc {
     margin-left: -moz-calc(-100% + 350px);
     margin-left: -webkit-calc(-100% + 350px);
 }
-.right-rail-button {
-}
-.right-rail-button.showRightTab {
-    right: inherit;
-    left: 389px;
-    transform: translate(0px);
-    -webkit-transform:translate(0px);
-}
 .leftFullTableBlock {
     width: 1017px !important;
 }
@@ -2207,51 +2199,52 @@ tr.preparedDoc {
     position:absolute;
     left: 0;
     top: 100px;
+    margin-left: 100%;
     width: -moz-calc(100% - 430px);
     width: -webkit-calc(100% - 430px);
     width: calc(100% - 430px);
     padding: 20px 20px 20px 20px;
     box-sizing: border-box;
-    opacity: 0;
-    /*
-    -webkit-transition: margin-left linear 0.25s;
-    -moz-transition: margin-left linear 0.25s;
-    -ms-transition: margin-left linear 0.25s;
-    -o-transition: margin-left linear 0.25s;
-    transition: margin-left linear 0.25s;
-    */
+    -webkit-transition: margin-left 0.25s linear 0s;
+    -moz-transition: margin-left 0.25s linear 0s;
+    -ms-transition: margin-left 0.25s linear 0s;
+    -o-transition: margin-left 0.25s linear 0s;
+    transition: margin-left 0.25s linear 0s;
 }
 .rightTabWindow.showRightTab {
     margin-left: 430px;
-    opacity: 1;
 }
-.rightTabWindow.ng-leave.ng-leave-active {
-    margin-left: 100%;
+.fadeHide {
+    // text should be hidden width height and width transitions
+    // all else can't be squished...i don't think
+    visibility: hidden;
     opacity: 0;
+    transition: opacity 0.25s linear, visibility 0 linear 0.25s;
 }
-.rightTabWindow.ng-enter {
-    //margin-left: 390px;
-    -webkit-transform(100%);
+.fadeShow {
+    visibility: visible;
+    -webkit-animation:fadeShow 0.25s linear;
+    -moz-animation: fadeShow 0.25s linear;
+    -ms-animation: fadeShow 0.25s linear;
+    -o-animation: fadeShow 0.25s linear;
+    animation: fadeShow 0.25s linear;
 }
-.rightTabWindow.ng-leave,
-.rightTabWindow.ng-enter.ng-enter.active {
-    margin-left: 430px;
-    opacity: 1;
+@keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
 }
-.rightTabWindow.ng-leave {
-    -webkit-transition: all 0.25s linear 0;
-    -moz-transition: all 0.25s linear 0;
-    -ms-transition: all 0.25s linear 0;
-    -o-transition: all 0.25s linear 0;
-    transition: all 0.25s linear 0;
+@-webkit-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
 }
-.rightTabWindow.ng-enter {
-    -webkit-transition: all 1s linear 0;
-    -moz-transition: all 1s linear 0;
-    -ms-transition: all 1s linear 0;
-    -o-transition: all 1s linear 0;
-    transition: all 1s linear 0;
-} 
+@-moz-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-o-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color:inherit;}
+}
 /* Company People */
 .tableView.people-table th {
     width: 470px;
@@ -2274,6 +2267,10 @@ tr.preparedDoc {
     padding-right: 5px;
     vertical-align: middle;
 }
+.standard-button.btn-group > .btn:active {
+    box-shadow: none;
+    text-shadow: none;
+}
 .standard-button.btn-group > .btn.on{
     background-color: #15A085 !important;
 }
@@ -2285,7 +2282,7 @@ tr.preparedDoc {
     background-color: #F1F1F1;
     border: 1px solid #8D8D8D;
 }
-.standard-button.btn-group.darkgray:hover > .btn {
+.standard-button.btn-group.darkgray > .btn:hover {
     background-color: #E3E3E3;
 }
 .box-button {
@@ -4383,4 +4380,8 @@ textarea.email-text {
 .capTab > span.blue-link:before {
     padding-right: 5px;
     vertical-align: middle;
+}
+.evidenceSearch {
+    position: absolute !important;
+    left: 450px;
 }

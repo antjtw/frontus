@@ -709,13 +709,7 @@ textarea.email-text {
     -o-transition: all 0.25s; /* Opera */
 }
 
-.fadeHide {
-    // text should be hidden width height and width transitions
-    // all else can't be squished...i don't think
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.25s linear, visibility 0 linear 0.25s;
-}
+
 .shareholder-column.docname-column .fadeHide {
     -webkit-transform: translate3d(0, 10px, 0);
     -moz-transform: translate3d(0, 10px, 0);
@@ -791,30 +785,7 @@ textarea.email-text {
     100% {margin-left: inherit;}
 }
 
-.fadeShow {
-    visibility: visible;
-    -webkit-animation:fadeShow 0.25s linear;
-    -moz-animation: fadeShow 0.25s linear;
-    -ms-animation: fadeShow 0.25s linear;
-    -o-animation: fadeShow 0.25s linear;
-    animation: fadeShow 0.25s linear;
-}
-@keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-webkit-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-moz-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-o-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color:inherit;}
-}
+
 
 /* Template CSS */
 
