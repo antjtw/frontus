@@ -2178,16 +2178,81 @@ tr.preparedDoc {
 .leftTabWindow {
     overflow-x: hidden;
     margin-left: 0;
-    -webkit-transition: margin-left 0.25s linear 0s;
-    -moz-transition: margin-left 0.25s linear 0s;
-    -ms-transition: margin-left 0.25s linear 0s;
-    -o-transition: margin-left 0.25s linear 0s;
-    transition: margin-left 0.25s linear 0s;
+    -webkit-animation: leftTabSlideIn 0.25s linear;
+    -moz-animation: leftTabSlideIn 0.25s linear;
+    -ms-animation: leftTabSlideIn 0.25s linear;
+    -o-animation: leftTabSlideIn 0.25s linear;
+    animation: leftTabSlideIn 0.25s linear;
 }
 .leftTabWindow.showRightTab {
     margin-left: calc(-100% + 350px);
     margin-left: -moz-calc(-100% + 350px);
     margin-left: -webkit-calc(-100% + 350px);
+    -webkit-animation: leftTabSlideOut 0.25s linear;
+    -moz-animation: leftTabSlideOut 0.25s linear;
+    -ms-animation: leftTabSlideOut 0.25s linear;
+    -o-animation: leftTabSlideOut 0.25s linear;
+    animation: leftTabSlideOut 0.25s linear;
+}
+@keyframes leftTabSlideIn {
+    to {
+        margin-left: 0;
+    }
+    from {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@-webkit-keyframes leftTabSlideIn {
+    to {
+        margin-left: 0;
+    }
+    from {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@-webkit-keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@-webkit-keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
 }
 .leftFullTableBlock {
     width: 1017px !important;
@@ -2199,20 +2264,65 @@ tr.preparedDoc {
     position:absolute;
     left: 0;
     top: 100px;
-    margin-left: 100%;
+    margin-left: 1000px;
     width: -moz-calc(100% - 430px);
     width: -webkit-calc(100% - 430px);
     width: calc(100% - 430px);
     padding: 20px 20px 20px 20px;
     box-sizing: border-box;
-    -webkit-transition: margin-left 0.25s linear 0s;
-    -moz-transition: margin-left 0.25s linear 0s;
-    -ms-transition: margin-left 0.25s linear 0s;
-    -o-transition: margin-left 0.25s linear 0s;
-    transition: margin-left 0.25s linear 0s;
+    -webkit-animation: rightTabSlideOut 0.25s linear;
+    -moz-animation: rightTabSlideOut 0.25s linear;
+    -ms-animation: rightTabSlideOut 0.25s linear;
+    -o-animation: rightTabSlideOut 0.25s linear;
+    animation: rightTabSlideOut 0.25s linear;
 }
 .rightTabWindow.showRightTab {
+    -webkit-animation: rightTabSlideIn 0.25s linear;
+    -moz-animation: rightTabSlideIn 0.25s linear;
+    -ms-animation: rightTabSlideIn 0.25s linear;
+    -o-animation: rightTabSlideIn 0.25s linear;
+    animation: rightTabSlideIn 0.25s linear;
     margin-left: 430px;
+}
+.rightTabWindow.ng-leave {
+    -webkit-animation: rightTabSlideOut 0.25s linear;
+    -moz-animation: rightTabSlideOut 0.25s linear;
+    -ms-animation: rightTabSlideOut 0.25s linear;
+    -o-animation: rightTabSlideOut 0.25s linear;
+    animation: rightTabSlideOut 0.25s linear;
+}
+//fixme other browser tags
+@keyframes rightTabSlideIn {
+    from {
+        margin-left: 100%;
+    }
+    to {
+        margin-left: 430px;
+    }
+}
+@-webkit-keyframes rightTabSlideIn {
+    from {
+        margin-left: 100%;
+    }
+    to {
+        margin-left: 430px;
+    }
+}
+@keyframes rightTabSlideOut {
+    to {
+        margin-left: 100%;
+    }
+    from {
+        margin-left: 430px;
+    }
+}
+@-webkit-keyframes rightTabSlideOut {
+    to {
+        margin-left: 100%;
+    }
+    from {
+        margin-left: 430px;
+    }
 }
 .fadeHide {
     // text should be hidden width height and width transitions
