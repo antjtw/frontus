@@ -11,6 +11,12 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             return;
         }
 
+        if ($routeParams.page) {
+            $scope.currentPage = parseInt($routeParams.page, 10);
+        } else if (!$scope.currentPage) {
+            $scope.currentPage = 1;
+        }
+
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });
