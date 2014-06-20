@@ -11,6 +11,21 @@ m.directive('messageSide', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
+     
+            $scope.getPeople = function(){
+                SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                    $scope.people = data
+                    console.log($scope.people);
+                });  
+            };
+            $scope.getPeople();
+            // $scope.getPeople = function(){
+            //     SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
+            //         $scope.myPeople = $scope.name;
+            //         console.log($scope.myPeople)
+            //     }
+            // }
+            // $scope.getPeople();
             $scope.emailStatus = function(){
                 SWBrijj.tblm('mail.sentstatus', ['event', 'tox', 'our_id', 'subject', 'senderemail', 'when_requested', 'category']).then(function(data){
                     $scope.sentmessages = data;

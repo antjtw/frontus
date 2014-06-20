@@ -4455,6 +4455,11 @@ textarea.email-text {
     vertical-align: -9%;
 }
 
+.messages .activity-feed2 li.event:first-of-type {
+    padding-top: 30px;
+}
+
+
 
 
 /*.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type >{

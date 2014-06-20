@@ -507,6 +507,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             });
         });
 
+
+
         $scope.setLastLogins = function() {
             SWBrijj.tblm("global.user_tracker").then(function(logins) {
                 angular.forEach($scope.people, function(person) {
