@@ -421,14 +421,16 @@
     border-top: 20px solid transparent;
     border-bottom: 0 solid transparent;
     border-right: 35px solid #33485d;
-    left: -35px;
+    left: -20px;
     top: 50px;
 }
 
 @media (max-width: 1024px) {
     .question-bubble {
-        width: 100%;
         font-size: 26px;
+        width: -moz-calc(100% - 40px);
+        width: -webkit-calc(100% - 40px);
+        width: calc(100% - 40px);
     }
 
     .question-bubble > span > span {
