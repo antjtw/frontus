@@ -60,7 +60,25 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             }).except(function (x) {
                     $scope.$emit('notification:fail', 'Oops. Something went wrong.');
                 });
+        };
+
+        $('[data-typer-targets]').typer();
+
+        $scope.getpagetarget = function() {
+            var currentValue = $('#targetcontent')[0].innerText;
+            if ("keep track of our investors".startsWith(currentValue) || "model our company value".startsWith(currentValue)) {
+                document.location.href = '/features/cap';
+            } else if ("share documents securely".startsWith(currentValue) || "grant options hassle free".startsWith(currentValue) || "have documents e-signed".startsWith(currentValue)) {
+                document.location.href = '/features/doc';
+            }
         }
 
     }]);
+
+if (typeof String.prototype.startsWith != 'function') {
+    // see below for better implementation!
+    String.prototype.startsWith = function (str){
+        return this.indexOf(str) == 0;
+    };
+}
 
