@@ -4451,6 +4451,9 @@ textarea.email-text {
     padding-top: 14px;
 }
 
+.messages .activity-feed2 span.msgarrow{
+    vertical-align: -9%;
+}
 
 
 
