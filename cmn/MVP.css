@@ -4428,16 +4428,20 @@ textarea.email-text {
     right: -350px;
 }
 
+
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
     font-size: 14px;
 }
 
-.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type > div{
+.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type > div {
     padding-top: 14px;
     padding-bottom: 12px;
-    padding-left: 50px;
-    color: #003045;
-    left: 70%;
+    left: 20%;
+    color: #003045;    
+}
+
+.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type > divspan {
+    color: blue;
 }
 
