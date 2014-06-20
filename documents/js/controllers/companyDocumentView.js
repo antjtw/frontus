@@ -3,6 +3,12 @@
 app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
         'navState', 'Annotations',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations) {
+        if ($routeParams.page) {
+            $scope.currentPage = parseInt($routeParams.page, 10);
+        } else if (!$scope.currentPage) {
+            $scope.currentPage = 1;
+        }
+
         if (navState.role == 'investor') {
             $location.path('/investor-view');
             return;
@@ -55,7 +61,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             dialogFade: true,
             dialogClass: 'helpModal modal'
         };
-        
+
         $scope.processedopts = {
             backdropFade: true,
             dialogFade: true,
@@ -137,10 +143,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             $scope.initDocView();
         };
 
-        $scope.jumpToPage = function(pg) {
-            $rootScope.$broadcast("setPage", pg);
-        };
-
         $scope.getOriginal = function() {
             $scope.counterparty = false;
             $scope.docId = $scope.docKey;
@@ -151,16 +153,15 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             z.page = 1;
             $location.search(z);
             $scope.initDocView();
-            
+
             $scope.checkProcessing();
         };
-        
+
         $scope.checkProcessing = function() {
             if ($scope.tourModal)
                 return; //don't step on other modal's toes
             SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
             {
-                console.log(data);
                 var approved = data.processing_approved;
                 if (!approved)
                 {
@@ -173,7 +174,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
-        
+
         $scope.processedClose = function(erase) {
             $scope.imageProcessedModal = false;
             if (erase)
@@ -195,11 +196,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 });
             }
         };
-        
+
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
         };
-        
+
         $scope.getProcessedPage = function() {
             SWBrijj.procm("document.get_first_processed", $scope.docId).then(function(data) {
                 var d = data[0].get_first_processed;
@@ -214,7 +215,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 }
             });
         };
-        
+
         $scope.setProcessedImages = function() {
             var original = document.getElementById("processedModalOriginalImage");
             var adjusted = document.getElementById("processedModalAdjustedImage");

@@ -1371,13 +1371,12 @@ navbar .navbar + doc-viewer.modal-backdrop {
 }
 
 .docViewerControls {
-    min-height: 60px;
     width: 100%;
     overflow: visible;
     background-color: #F1F1F1;
 }
 
-.docViewerControls .pageTurn > ul > li:first-child {
+.pageTurn > ul > li:first-child {
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 3px;
@@ -1390,7 +1389,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
     box-sizing: border-box;
 }
 
-.docViewerControls .pageTurn > ul > li:last-child {
+.pageTurn > ul > li:last-child {
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 3px;
@@ -1403,11 +1402,11 @@ navbar .navbar + doc-viewer.modal-backdrop {
     box-sizing: border-box;
 }
 
-.docViewerControls > .pageTurn > ul > li:first-child:hover {
+.pageTurn > ul > li:first-child:hover {
     background-color: #C7C7C7;
 }
 
-.docViewerControls > .pageTurn > ul > li:last-child:hover {
+.pageTurn > ul > li:last-child:hover {
     background-color: #C7C7C7;
 }
 
@@ -1417,6 +1416,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
 
 .docActions {
     padding-top: 15px;
+    padding-bottom: 15px;
     margin-right: 20px;
 }
 
@@ -1523,11 +1523,11 @@ navbar .navbar + doc-viewer.modal-backdrop {
     margin-right: 3px;
     width: 30px;
     height: 22px;
-    margin-top: -7px;
+    margin-top: -2px;
     text-align: center;
 }
 
-.page-jumper:focus {
+.page-jumper:focus, .page-jumper:hover {
     background-color: #FFFFFF;
 }
 

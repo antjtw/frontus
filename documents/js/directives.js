@@ -133,7 +133,7 @@ app.directive('documentVersionRow', function() {
 
 app.directive('annotationList', function() {
     return {
-        restrict: "EA",
+        restrict: "E",
         scope: {
             docId: "=",
         },
@@ -161,7 +161,7 @@ app.directive('annotationList', function() {
 
 app.directive('annotation', function() {
     return {
-        restrict: "EA",
+        restrict: "E",
         scope: {
             annot: "=",
             isAnnotable: "=",
@@ -171,5 +171,31 @@ app.directive('annotation', function() {
         },
         templateUrl: "/documents/partials/annotation.html",
         controller: annotationController
+    };
+});
+
+app.directive('pageControls', function() {
+    return {
+        restrict: "E",
+        scope: {
+            docId: "=",
+            currentPage: "=",
+        },
+        templateUrl: "/documents/partials/page-controls.html",
+        controller: ["$scope", "Documents", function($scope, Documents) {
+            $scope.doc = Documents.getDoc($scope.docId);
+            $scope.template_original = false;
+            $scope.doc.currentPage = $scope.currentPage
+            $scope.$watch('doc.currentPage', function(page) {
+                if (page && $scope.doc.pages) {
+                    if (page < 1) {
+                        $scope.doc.currentPage = 1;
+                    } else if (page > $scope.doc.pages.length) {
+                        $scope.doc.currentPage = $scope.doc.pages.length;
+                    }
+                }
+            });
+
+        }],
     };
 });

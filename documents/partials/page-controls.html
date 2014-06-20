@@ -1,0 +1,20 @@
+<div class="pageTurn" ng-hide="template_original">
+    <ul>
+        <li class="button" ng-click="doc.currentPage = doc.currentPage - 1">
+            <span ng-class="{'locked':doc.currentPage <= 1}" data-icon="&#xe005;" aria-hidden="true"></span>
+        </li>
+        <li>
+            <label>
+                <input ng-pattern="/^[0-9]+$/"
+                       ng-model="doc.currentPage"
+                       class="page-jumper">
+            </label>
+        </li>
+        <li>
+            / {{ doc.pages.length || "   "}}
+        </li>
+        <li ng-class="{'locked' : doc.currentPage >= docLength}" class="button" ng-click="doc.currentPage = doc.currentPage + 1">
+            <span data-icon="&#xe004;" aria-hidden="true"></span>
+        </li>
+    </ul>
+</div>

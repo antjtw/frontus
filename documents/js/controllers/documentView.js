@@ -51,13 +51,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         window.onresize = $scope.updateDocPanelSize;
         $window.onkeydown = function(evt) {
             // TODO: evt.which is read-only ("TypeError: setting a property that has only a getter")
-            evt.which = evt.which || e.keyCode;
+            var ev = evt.which || e.keyCode;
             // Need the extra if so that the page change doesn't occur if you are currently focused into a sticky
             if (document.activeElement.tagName.toLowerCase() != 'textarea' ) {
-                if (evt.which === 37) {
-                    $scope.previousPage($scope.currentPage);
-                } else if (evt.which === 39) {
-                    $scope.nextPage($scope.currentPage);
+                if (ev === 37) {
+                    $scope.previousPage($scope.doc.currentPage);
+                } else if (ev === 39) {
+                    $scope.nextPage($scope.doc.currentPage);
                 }
             }
         };
@@ -385,12 +385,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.$emit('docViewerReady');
 
-        if ($routeParams.page) {
-            $scope.currentPage = parseInt($routeParams.page, 10);
-        } else if (!$scope.currentPage) {
-            $scope.currentPage = 1;
-        }
-
         $scope.loadPages = function () {
             /** @name SWBrijj#tblmm * @function
              * @param {string}
@@ -409,8 +403,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.pageImageUrl = function() {
-            if ($scope.pageQueryString && $scope.currentPage) {
-                return "/photo/docpg?" + $scope.pageQueryString + "&page=" + $scope.currentPage;
+            if ($scope.pageQueryString && $scope.doc && $scope.doc.currentPage) {
+                return "/photo/docpg?" + $scope.pageQueryString + "&page=" + $scope.doc.currentPage;
             } else {
                 return '';
             }
@@ -702,8 +696,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.notes = [];
         };
 
-        $rootScope.$on("setPage", function(event, pg) { $scope.setPage(pg); });
-
         $scope.safeApply = function(fn) {
             var phase = this.$root.$$phase;
             if (phase === '$apply' || phase === '$digest') {
@@ -715,35 +707,32 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.setPage = function(n) {
-            $scope.currentPage = n;
-            var s = $location.search();
-            s.page = n;
-            $location.search(s);
-            scroll(0,0);
-            refreshDocImage();
-        };
+        $scope.$watch('doc.currentPage', function(page) {
+            if (page) {
+                var s = $location.search();
+                s.page = page;
+                $location.search(s);
+                scroll(0,0);
+                refreshDocImage();
+            }
+        });
 
         $scope.nextPage = function(value) {
-            if ($scope.currentPage < $scope.docLength) {
-                $scope.jumpPage(value+1);
+            if ($scope.doc.currentPage < $scope.docLength) {
+                $scope.doc.currentPage += 1;
             }
         };
 
         $scope.previousPage = function(value) {
-            if ($scope.currentPage > 1) {
-                $scope.jumpPage(value-1);
+            if ($scope.doc.currentPage > 1) {
+                $scope.doc.currentPage -= 1;
             }
-        };
-
-        $scope.jumpPage = function(value) {
-            $scope.safeApply(function () {$scope.setPage(parseInt(value, 10));});
         };
 
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
                 var a = new Annotation();
-                a.page = $scope.currentPage;
+                a.page = $scope.doc.currentPage;
                 a.position.docPanel = $scope.dp;
                 a.initDrag = event;
                 $scope.annots.push(a);
@@ -808,7 +797,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.clearNotes = function(event) {
             void(event);
             SWBrijj.procm($scope.invq ? "document.delete_investor_page" : "document.delete_counterparty_page",
-                $scope.docId, $scope.currentPage).then(function(x) {
+                $scope.docId, $scope.doc.currentPage).then(function(x) {
                 void(x);
                 refreshDocImage();
             });
@@ -825,7 +814,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  */
                 SWBrijj.deletePage($scope.docId, i).then(function(x) {
                     void(x);
-                    if (z === $scope.currentPage) {
+                    if (z === $scope.doc.currentPage) {
                         refreshDocImage();
                     }
                 });

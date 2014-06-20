@@ -77,28 +77,7 @@
         </div>
         <div class="docViewerControls">
             <!--Annotation Controls-->
-            <div ng-show="stage===0 || stage==-1">
-                <div class="pageTurn pull-left" ng-hide="template_original">
-                    <ul>
-                        <li class="button" ng-click="previousPage(currentPage)">
-                            <span ng-class="{'locked':currentPage<=0}" data-icon="&#xe005;" aria-hidden="true"></span>
-                        </li>
-                        <li>
-                            <label>
-                                <input ng-pattern="/^[0-9]+$/"
-                                       ng-model="currentPage"
-                                       ng-change="jumpPage(currentPage)"
-                                       class="page-jumper">
-                            </label>
-                        </li>
-                        <li>
-                            / {{docLength || "   "}}
-                        </li>
-                        <li ng-class="{'locked' : currentPage>=docLength}" class="button" ng-click="nextPage(currentPage)">
-                            <span data-icon="&#xe004;" aria-hidden="true"></span>
-                        </li>
-                    </ul>
-                </div>
+            <div ng-show="stage===0 || stage==-1" style="overflow: hidden;">
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib) || voidable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
                         <button ng-disabled="notesComplete() || (navState.role == 'issuer' && companyIsZombie())" class="btn" ng-click="setStage(1);">
@@ -175,7 +154,7 @@
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)">
-            <annotation ng-repeat="annotation in annots | filter: {page: currentPage}" ng-if="drawTime() || annotation.isCountersign()" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()"></annotation>
+            <annotation ng-repeat="annotation in annots | filter: {page: doc.currentPage}" ng-if="drawTime() || annotation.isCountersign()" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()"></annotation>
         </div>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
