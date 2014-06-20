@@ -15,7 +15,10 @@ m.directive('messageSide', function(){
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
-                    console.log($scope.people);
+                    console.log($scope.people.length);
+
+                    // $scope.hisname = $scope.people.name
+                    // console.log($scope.hisname)
                 });  
             };
             $scope.getPeople();
@@ -60,6 +63,7 @@ m.directive('messageSide', function(){
                         this.event = []
                         this.tox = []
                         this.category = category
+                        this.to_names = []
                     }
                    
                     // msgstatus is an array
@@ -82,12 +86,23 @@ m.directive('messageSide', function(){
                                 myEvents[i].category = value.event;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
+                                angular.forEach($scope.people, function(thing){
+                                    if(thing.name == value.tox){
+                                        myEvents[i].to_names.push(thing.email);
+                                    }
+                                    else{
+                                        myEvents[i].to_names.push(value.tox)
+                                    }
+                                })
+                                
                             }
                         }
                         
                     })
+                   
                     $scope.message_data = myEvents;
                     console.log($scope.message_data)
+
 
                 }).except(function(data){
                     console.log(data);
