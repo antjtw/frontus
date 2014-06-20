@@ -4428,4 +4428,8 @@ textarea.email-text {
     right: -350px;
 }
 
+.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type{
+    text-transform: none;
+    font-size: 14px;
+}
 
