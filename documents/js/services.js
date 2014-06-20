@@ -175,6 +175,9 @@ Annotation.prototype = {
                    (this.whosign == "Investor" && role == "investor")
                );
     },
+    isCountersign: function() {
+        return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature")
+    },
 };
 
 docs.service('Annotations', function() {

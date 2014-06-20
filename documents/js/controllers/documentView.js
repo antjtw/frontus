@@ -628,11 +628,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                         var sticky;
                         for (var i = 0; i < annots.length; i++) {
                             var annot = annots[i];
-                            if ($scope.isAnnotable) {
-                                if ($scope.countersignable($scope.lib) && (annot.whattype == "Signature" || annot.whattype == "ImgSignature") || !$scope.countersignable($scope.lib)) {
-                                    // TODO: ensure everything in annots meets these criteria (only matters if $scope.countersignable)
-                                }
-                            }
                         }
                     } else {
                         // ensure annotations are linked to the service even if we didn't fetch any
@@ -817,25 +812,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        /*$scope.moveBox = function(aa) {
-            var dp = $('.docPanel')[0];
-            var dpBottom = dp.offsetTop + dp.offsetHeight;
-            var dpRight = dp.offsetLeft + dp.offsetWidth;
-            var boxBottom = parseInt(aa.style.top,10) + aa.offsetHeight;
-            var boxRight = parseInt(aa.style.left,10) + aa.offsetWidth;
-            if (boxBottom > dpBottom && aa.offsetHeight < dp.offsetHeight) {
-                aa.style.setProperty('top', (dpBottom - aa.offsetHeight) + 'px');
-            }
-            if (boxRight > dpRight && aa.offsetHeight < dp.offsetHeight) {
-                aa.style.setProperty('left', (dpRight - aa.offsetWidth)  + 'px');
-            }
-        };
-
+        /*
         function newBoxX(annot) {
-            window.addEventListener('resize', function() {
-                $scope.moveBox(aa[0]); // TODO
-            });
-
             bb.addEventListener('mousemove', function(e) {
                 if (e.which !== 0) {
                     boundBoxByPage(bb); // TODO?
@@ -847,12 +825,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             ta.scope().whattypelabel = ta.scope().whattype in $scope.attributelabels ? $scope.attributelabels[ta.scope().whattype] : ta.scope().whattype;
 
             ta.scope().annotext = annot.val.length === 0 && ta.scope().whattype in $scope.investor_attributes && ta.scope().required ? $scope.investor_attributes[annot.whattype] : annot.val;
-
-            ta.width(ta.width());
-            if (annot.fontsize) {
-                aa.find('textarea').css('fontSize', annot.fontsize);
-            }
-            bb.value = annot.val;
 
             return aa;
         }*/

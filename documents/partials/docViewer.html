@@ -175,14 +175,14 @@
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)">
-            <annotation ng-repeat="annotation in annots | filter: {page: currentPage}" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()"></annotation>
+            <annotation ng-repeat="annotation in annots | filter: {page: currentPage}" ng-if="drawTime() || annotation.isCountersign()" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()"></annotation>
         </div>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
     </div>
     <div ng-show="stage===1" class="confirmPanelContainer row-fluid">
         <div class="confirmPanel" my-loading-spinner="processing">
-            <div ng-show="signable(lib)">
+            <div ng-show="invq && signable(lib)">
                 <div class='confirmBody'>
                     <ul class="checkboxOption">
                         <li class="pull-left">
@@ -199,7 +199,7 @@
                 </div>
             </div>
 
-            <div ng-show="countersignable(lib)">
+            <div ng-show="!invq && countersignable(lib)">
                 <div class='confirmBody'>
                     <div class="upgradeWarning"
                          ng-if="triggerUpgradeDocuments(1)">
