@@ -4441,7 +4441,11 @@ textarea.email-text {
     color: #003045;    
 }
 
-.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type > divspan {
-    color: blue;
+.messages .activity-feed2 span.recipients {
+    color: #3498DB;
 }
 
+/*.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type >{
+    color: blue;
+}
+*/
