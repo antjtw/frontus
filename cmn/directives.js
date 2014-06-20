@@ -16,19 +16,12 @@ m.directive('messageSide', function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
                     console.log($scope.people.length);
-
-                    // $scope.hisname = $scope.people.name
-                    // console.log($scope.hisname)
+                    console.log($scope.people.name)
                 });  
             };
             $scope.getPeople();
-            // $scope.getPeople = function(){
-            //     SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
-            //         $scope.myPeople = $scope.name;
-            //         console.log($scope.myPeople)
-            //     }
-            // }
-            // $scope.getPeople();
+
+ 
             $scope.emailStatus = function(){
                 SWBrijj.tblm('mail.sentstatus', ['event', 'tox', 'our_id', 'subject', 'senderemail', 'when_requested', 'category']).then(function(data){
                     $scope.sentmessages = data;
@@ -55,6 +48,7 @@ m.directive('messageSide', function(){
             };
             $scope.forView();
 
+
             $scope.getLogs = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'event', 'delivered').then(function(data){
                     $scope.msgstatus = data
@@ -80,36 +74,53 @@ m.directive('messageSide', function(){
                     for (var i = 0; i < msgdata.length; i++){
                        myEvents.push(new Message(msgdata[i]))
                     }
+
+                    // msgstatus is the info
+                    // myEvents is the array of the object
                     angular.forEach($scope.msgstatus, function(value){
                         for (var i = 0; i < myEvents.length; i++){
                             if(value.when_requested == myEvents[i].time){
                                 myEvents[i].category = value.event;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
+                                myEvents[i].to_names.push(myEvents[i].tox.length)
+
+                                // for(r = 0; r++; r < myEvents[i].tox.length){
+                                //     console.log(myEvents[i].tox[r])
+                                // }
+                                // myEvents[i].to_names.push(myEvents[i].length);
 
                                 // angular.forEach($scope.people, function(thing){
                                 //     if(thing.name == value.tox){
-                                //         myEvents[i].to_names.push(thing.email);
+                                //         myEvents[i].to_names.push(value.tox);
                                 //     }
                                 //     else{
                                 //         myEvents[i].to_names.push(value.tox)
                                 //     }
-                                // })
-                                
+                                // })                             
                             }
+                            
                         }
-                        
                     })
+
+
+                    
                    
                     $scope.message_data = myEvents;
-                    console.log($scope.message_data)
+                    console.log($scope.message_data);
 
+                
 
                 }).except(function(data){
                     console.log(data);
                 })
             }
             $scope.getLogs();
+
+
+            // $scope.addReceiver = function(){
+
+            // }
             
         }]
     };
