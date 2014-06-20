@@ -17,14 +17,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return [offx, offy];
         }
 
-        function boundBoxByPage(element) {
-            // TODO: not applicable to new styling
-            var docPanel = document.querySelector('.docPanel');
-            // FIXME does not work in firefox because position:absolute
-            element.style["max-width"] = (docPanel.offsetWidth) + 'px';
-            element.style["max-height"] = (docPanel.offsetHeight) + 'px';
-        }
-
         function topFromBottomLocation(elementHeight, currBottom) {
             var docPanel = document.querySelector('.docPanel');
             var bottomEdge = docPanel.offsetTop + docPanel.offsetHeight;

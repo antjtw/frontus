@@ -152,6 +152,8 @@ app.directive('annotationList', function() {
                 };
 
                 $scope.attributeLabel = Annotations.attributeLabel;
+
+                $scope.signaturepresent = false;
             }
         ],
     };

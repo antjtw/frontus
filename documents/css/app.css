@@ -2109,3 +2109,15 @@ div.imgsig > div > img {
 .standard-button.green.red-needed > button {
     background-color: #E74C3C;
 }
+
+annotation-list .mine {
+    color: #FFBA00; /* should match .sticky .dragger */
+}
+
+annotation-list .mine.complete {
+    color: #1ABC96;
+}
+
+annotation-list .mine.incomplete {
+    color: #E74C3C;
+}

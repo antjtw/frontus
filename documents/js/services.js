@@ -188,14 +188,16 @@ Annotation.prototype = {
     },
     filled: function(signaturepresent, role) {
         // signature present comes from the account
-        return (this.val && this.val.length > 0) ||
-               (this.whattype == "ImgSignature" && signaturepresent &&
-                   (this.whosign == "Issuer" && role == "issuer") ||
-                   (this.whosign == "Investor" && role == "investor")
-               );
+        return (this.forRole(role) &&
+                ((this.val && this.val.length > 0) ||
+                 (this.whattype == "ImgSignature" && signaturepresent)));
     },
     isCountersign: function() {
         return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature");
+    },
+    forRole: function(role) {
+        return ((this.whosign == "Issuer" && role == "issuer") ||
+                (this.whosign == "Investor" && role == "investor"));
     },
 };
 
