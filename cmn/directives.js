@@ -86,14 +86,15 @@ m.directive('messageSide', function(){
                                 myEvents[i].category = value.event;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
-                                angular.forEach($scope.people, function(thing){
-                                    if(thing.name == value.tox){
-                                        myEvents[i].to_names.push(thing.email);
-                                    }
-                                    else{
-                                        myEvents[i].to_names.push(value.tox)
-                                    }
-                                })
+
+                                // angular.forEach($scope.people, function(thing){
+                                //     if(thing.name == value.tox){
+                                //         myEvents[i].to_names.push(thing.email);
+                                //     }
+                                //     else{
+                                //         myEvents[i].to_names.push(value.tox)
+                                //     }
+                                // })
                                 
                             }
                         }
