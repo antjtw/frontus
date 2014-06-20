@@ -602,6 +602,11 @@
                         </li>
                     </ul>
                 </div>
+
+                <div class="center" ng-if="windowToggle">
+                    <span>Search</span>
+                    <input type="text" class="search-box" ng-model="state.evidenceQuery">
+                </div>
             </div>
             <div class="DivHelper"></div>
         </div>
@@ -1393,7 +1398,7 @@
                             </div>
                             <div class="capTab" ng-switch-when="documents">
                                 <div ng-if="tran.evidence_data.length==0" class="linkedDocuments">
-                                    To get more out of your cap-table, link your documents by clicking the link below.
+                                    To get more out of your cap table, link your documents by clicking the link below.
                                 </div>
                                 <div ng-if="tran.evidence_data.length>0" class="linkedDocuments">
                                     <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
@@ -1622,10 +1627,10 @@
                                 </div>
                             </div>
                             <div class="capTab" ng-switch-when="documents">
-                                <div ng-if="tran.evidence_data.length==0" class="linkedDocuments">
-                                    To get more out of your cap-table, link your documents by clicking the link below.
+                                <div ng-if="tran.evidence_data.length==0" class="linkedDocuments viewOnly">
+                                    To get more out of your cap table, link your documents by clicking 'Edit' above.
                                 </div>
-                                <div ng-if="tran.evidence_data.length>0" class="linkedDocuments">
+                                <div ng-if="tran.evidence_data.length>0" class="linkedDocuments viewOnly">
                                     <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
                                         <ul class="pull-left">
                                             <li><span ng-click="viewEvidence(doc)">{{doc.docname}}</span></li>
@@ -1750,7 +1755,7 @@
                 <th></th>
             </tr>
         </tbody>
-        <tbody ng-repeat="doc in eligible_evidence" ng-if="!doc.investor && !doc.doc_id">
+        <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter" ng-if="!doc.investor && !doc.doc_id">
             <tr class="empty-row"/>
             <tr>
                 <td ng-click="toggleShown(doc)" class="pointer">
@@ -1780,7 +1785,7 @@
                 </td>
                 <td/>
             </tr>
-            <tr ng-repeat="invdoc in eligible_evidence"
+            <tr ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter"
                 ng-if="invdoc.original==doc.original && invdoc.doc_id && invdoc.investor"
                 class="version" ng-show="doc.shown">
                 <td/>

@@ -16,6 +16,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
     $scope.currentTab = 'details';
+    $scope.state = {evidenceQuery: ""};
 
     // Tour options
     $scope.tourshow = false;
@@ -1744,18 +1745,26 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 action = "added";
             }
             console.log(JSON.stringify($scope.evidence_object.evidence_data));
+            // this is throwing an error but claiming success
             SWBrijj.procm('ownership.upsert_transaction_evidence',
                           $scope.evidence_object.tran_id,
                           JSON.stringify($scope.evidence_object.evidence_data)
             ).then(function(r) {
                 $scope.$emit("notification:success", "Evidence "+action);
             }).except(function(e) {
-                $scope.$emit("notification:fail", "Evidence "+action);
+                $scope.$emit("notification:fail", "Something went wrong. Please try again.");
                 console.log(e);
             });
         }
     };
-
+    $scope.evidenceFilter = function(obj) {
+        if ($scope.state.evidenceQuery && obj) {
+            var re = new RegExp($scope.state.evidenceQuery, 'i');
+            return re.test(obj.docname);
+        } else {
+            return true;
+        }
+    };
     // Captable Conversion Modal
 
     $scope.convertSharesUp = function(trans) {
