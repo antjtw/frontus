@@ -529,47 +529,38 @@
 
 
 <!-- Captable From Here Down -->
-<div class="row-fluid">
+<subnav>
+    <div class="box-button pull-right"
+         ng-class="{'disabledme': companyIsZombie()}"
+         ng-click="companyIsZombie() || modalUp();"
+         id='a_own_tour_share_subnav'
+         data-placement="bottom" bs-tooltip="zombiemessage">
+        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" data-placement="bottom" bs-tooltip="tourmessages.share"><span>?</span></span>
+        <ul>
+            <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 
-    <div class="row-fluid">
-        <div class="captable-controls subnav-controls">
-            <div>
-                <div class="box-button pull-right"
-                     ng-class="{'disabledme': companyIsZombie()}"
-                     ng-click="companyIsZombie() || modalUp();"
-                     id='a_own_tour_share_subnav'
-                     data-placement="bottom" bs-tooltip="zombiemessage">
-                    <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" data-placement="bottom" bs-tooltip="tourmessages.share"><span>?</span></span>
-                    <ul>
-                        <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+            </li>
+            <li> <span>Share</span>
 
-                        </li>
-                        <li> <span>Share</span>
-
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="box-button pull-right"
-                     ng-class="{'disabledme': companyIsZombie()}"
-                     ng-click="companyIsZombie() || editViewToggle();"
-                     data-placement="bottom" bs-tooltip="zombiemessage">
-                    <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="bottom" bs-tooltip="tourmessages.view"><span>?</span></span>
-                    <ul>
-                        <li> <span ng-show="!toggleView()" data-icon="&#xe001;" aria-hidden="true"></span>
-                             <span ng-show="toggleView()" data-icon="&#xe00e;" aria-hidden="true"></span>
-                        </li>
-                        <li> <span>{{radioModel}}</span>
-
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="DivHelper"></div>
-        </div>
+            </li>
+        </ul>
     </div>
 
-</div>
+    <div class="box-button pull-right"
+         ng-class="{'disabledme': companyIsZombie()}"
+         ng-click="companyIsZombie() || editViewToggle();"
+         data-placement="bottom" bs-tooltip="zombiemessage">
+        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="bottom" bs-tooltip="tourmessages.view"><span>?</span></span>
+        <ul>
+            <li> <span ng-show="!toggleView()" data-icon="&#xe001;" aria-hidden="true"></span>
+                 <span ng-show="toggleView()" data-icon="&#xe00e;" aria-hidden="true"></span>
+            </li>
+            <li> <span>{{radioModel}}</span>
+
+            </li>
+        </ul>
+    </div>
+</subnav>
 
 <div class="row-fluid leftTabWindow">
 <div ng-style="viewportheight" ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
