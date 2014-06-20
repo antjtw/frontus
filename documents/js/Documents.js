@@ -1,6 +1,4 @@
 'use strict';
-//Adds line breaks to the text areas
-
 var docs = angular.module('documents', ['ui.bootstrap', 'brijj'], function() {});
 
 docs.directive('backImg', function() {

@@ -1105,6 +1105,74 @@ input[type='text']:disabled, textarea:disabled {
     padding-top: 20px;
 }
 
+.processedImageModal {
+    margin-left: -360px;
+    width:718px;
+    height: 210px;
+    z-index: 1060;
+    text-align: left;
+}
+
+.processedImageModal .modalText {
+    padding-top: 40px;
+    padding-right: 30px;
+    text-align: left;
+}
+
+.processedImageModal .textBlock {
+    padding-bottom: 10px;
+}
+
+.processedImageModal .subtitle {
+    color: #000;
+    display: block;
+
+}
+
+.processedImageModal ul > li.blue-link {
+    color: #3498DB;
+    height: 30px;
+    margin-left: 0px;
+}
+
+.processedImageModal .dataIcon {
+    vertical-align: -10%;
+}
+
+.processedImageModal .gray-link {
+    cursor: pointer;
+}
+
+.processedImageModal .rect {
+    padding: 3px 3px 3px 3px;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.processedImageModal .centeredText {
+    text-align: center;
+    padding: 1px 1px 1px 1px;
+    margin: 0px 0px 0px 0px;
+}
+
+.processedImageModal .whiteText {
+    color: #FFFFFF;
+}
+
+.processedImageModal .green {
+    background-color: #1ABC96;
+    margin-left: 25px;
+}
+
+.processedImageModal .gray {
+    background-color: #E3E3E3;
+    margin-left: 15px;
+}
+
+.processedImageModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
+}
 
 .helpModal {
     margin-left: -360px;

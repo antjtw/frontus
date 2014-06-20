@@ -26,6 +26,7 @@ window.analytics.page()
     </script>
 <![endif]-->
 
+<script src="https://cdn.optimizely.com/js/1296910003.js"></script>
 <script src="/lib/bootstrap/bootstrap.js"></script>
 <script src="/lib/angular/angular.js"></script>
 <script src="/lib/angular/angular-route.js"></script>
@@ -44,7 +45,6 @@ window.analytics.page()
 <script src="/brijj/aBrijj.js"></script>
 <script src="/lib/moment.min.js"></script>
 <script src="/cmn/nav.js"></script>
-<script src="/lib/usersnap/jquery.usersnap-0.1.0.js"></script>
 <script src="/cmn/services.js"></script>
 <script src="/lib/stripe.js"></script>
 <script type="text/javascript"

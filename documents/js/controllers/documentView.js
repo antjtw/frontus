@@ -680,7 +680,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     $rootScope.lastPage = $rootScope.lastPage + "?share";
                 }
                 if ($rootScope.lastPage.indexOf("company-status") !== -1) {
-                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
+                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docKey;
                 }
                 $location.url($rootScope.lastPage);
             } else if ($scope.invq) {

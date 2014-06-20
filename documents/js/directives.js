@@ -110,7 +110,7 @@ app.directive('documentSummaryRow', function() {
             doc: '=',
             viewState: '=',
             modals: '=',
-            docShareState: '=',
+            docShareState: '='
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController
@@ -124,7 +124,7 @@ app.directive('documentVersionRow', function() {
         scope: {
             version: '=',
             viewState: '=',
-            modals: '=',
+            modals: '='
         },
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController

@@ -204,7 +204,7 @@
 
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
 
     .navBarLoggedOut {
         height: 40px;

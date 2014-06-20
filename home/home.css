@@ -1,3 +1,7 @@
+.dashboard-center {
+    margin-left: 80px;
+}
+
 .wrap.background-gray {
     background-color: #E2E2E2;
 }
@@ -40,6 +44,14 @@
 
 .home-top-row > div.issuer-profile > div:first-child > div:nth-child(2) > h2 {
     margin: 2px 0 0 0;
+}
+
+h2.company-name-box {
+    display: inline-block;
+    width: 153px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .home-top-row > div.issuer-profile > div:last-child > ul {
@@ -145,7 +157,7 @@
 
 .back.info-box > div.head-box > span {
     left: 5px;
-    top: 5px;
+    top: 9px;
 }
 
 .back.info-box > .head-box > h2 {

@@ -14,7 +14,7 @@ app.controller('CompanyDocumentListController',
                 hideSharebar: true,
                 maxRatio: 1000,
                 show_archived: false,
-                query: $routeParams.q || "",
+                query: $routeParams.q || ""
             };
             $scope.modals = {};
 
@@ -150,7 +150,13 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.searchFilter = function(obj) {
-                var re = new RegExp($scope.state.query, 'i');
+                var res = [];
+                if ($scope.state.query) {
+                    var items = $scope.state.query.split(" ");
+                    angular.forEach(items, function(item) {
+                        res.push(new RegExp(item, 'i'))
+                    });
+                }
                 /** @name obj#docname
                  * @type { string} */
                 if (!$scope.state.hideSharebar && obj.forShare) {
@@ -163,9 +169,23 @@ app.controller('CompanyDocumentListController',
                     return false;
                 } else {
                     if (obj.type == "doc") {
-                        return !$scope.state.query || re.test(obj.docname) || re.test(obj.tags);
+                        var truthiness = res.length;
+                        var result = 0;
+                        angular.forEach(res, function(re) {
+                            if (re.test(obj.docname) || re.test(obj.tags)) {
+                                result += 1;
+                            }
+                        });
+                        return !$scope.state.query || truthiness == result;
                     } else {
-                        return !$scope.state.query || re.test(obj.name) || re.test(obj.email);
+                        var truthiness = res.length;
+                        var result = 0;
+                        angular.forEach(res, function(re) {
+                            if (re.test(obj.name) || re.test(obj.email)) {
+                                result += 1;
+                            }
+                        });
+                        return !$scope.state.query ||truthiness == result ;
                     }
                 }
             };
@@ -622,10 +642,11 @@ app.controller('CompanyDocumentListController',
                 SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
                     $scope.$emit("notification:success", "Void requested");
                     doc.when_void_requested = new Date.today();
-                    doc.last_event.activity = "void requested";
-                    doc.last_event.event_time = new Date.today();
-                    doc.last_event.timenow = new Date.today();
-                    doc.last_event.person = $rootScope.person.name;
+                    doc.last_event_activity = "void requested";
+                    doc.last_event_time = new Date.today();
+                    doc.last_event_name = $rootScope.person.name;
+                    // TODO: determine if doc.doc was archived, if so, decrement doc.doc.archive_complete_count
+                    //doc.doc.complete_count -= 1; // current db logic counts documents in void requested status as complete ...
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                         console.log(x);

@@ -28,11 +28,40 @@
             <div class="row-fluid">
                 <doc-viewer page-query-string="pageQueryString()" doc-id="docId" invq="false"></doc-viewer>
             </div>
+            <div internal-right-rail tabarr="tabs" active="activeTab">
+                <annotation-list doc-id="docId"></annotation-list>
+            </div>
         </div>
+    </div>
+</div>
 
-        <div internal-right-rail tabarr="tabs" active="activeTab">
-            <annotation-list doc-id="docId"></annotation-list>
+<div modal="imageProcessedModal" options="processedopts" data-keyboard="false" data-backdrop="static">
+    <div class="row-fluid">
+        <div class="span5">
+            <div class="row-fluid">
+                <div class="rect green">
+                    <img id="processedModalAdjustedImage">
+                    <div class="modalText centeredText whiteText">
+                        <span>Adjusted</span>
+                    </div>
+                </div>
+                <div class="rect gray">
+                    <img id="processedModalOriginalImage">
+                    <div class="modalText centeredText">
+                        <span>Original</span>
+                    </div>
+                </div>
+            </div>
         </div>
-
+        <div class="span7">
+            <div class="modalText">
+                <div class="textBlock">
+                    <span class="subtitle">We fixed it!</span>
+                    <span>Our system detected that the image uploaded was skewed slightly. Do you wish to continue with the adjusted document?</span>
+                </div>
+                <div class='blue-link'><span ng-click="processedClose(false)">Continue with the adjusted document</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
+                <div class='gray-link'><span ng-click="processedClose(true)">Use original</span></div>
+            </div>
+        </div>
     </div>
 </div>

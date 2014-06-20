@@ -34,7 +34,7 @@
                     <tr ng-class="{selectedrow:doc.shown}">
                         <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)">
                             <ul>
-                                <li>{{doc.docname | caplength:40}}</li>
+                                <li title="{{doc.docname}}">{{doc.docname | caplength:40}}</li>
                                 <li>{{docStatusa(doc)}}</li>
                             </ul>
                         </td>
