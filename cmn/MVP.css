@@ -4444,7 +4444,15 @@ textarea.email-text {
 .messages .activity-feed2 span.recipients {
     color: #3498DB;
     padding-left: 19px;
+
 }
+
+.messages .activity-feed2 .testing {
+    padding-top: 14px;
+}
+
+
+
 
 /*.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type >{
     color: blue;

@@ -17,13 +17,11 @@
                                     <div ng-click = "showRecipients = !showRecipients"> 
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showRecipients"></span><span data-icon="&#xe034;"aria-hidden="true" ng-show="showRecipients"></span>
                                         Recipients
-                                        <ul>
-                                            <div>
+                                        <ul ng-class="{'testing':showRecipients}">
                                         <li ng-show="showRecipients" ng-repeat="tox in message_datum.tox track by $index">    <span class="recipients">{{tox}}</span>
                                         </li>
-                                            </div>
-                                        </ul>          
-                                     </div>
+                                    </div>
+                                </ul>                                       
                                 </li>                
                             </ul>
                         </div>
