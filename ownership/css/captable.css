@@ -37,9 +37,8 @@ button.right-rail-button > span {
     line-height: 44px;
 }
 button.right-rail-button.showRightTab {
-    //left: 389px;
     right: -webkit-calc(100% - 430px);
-
+    border-right: 1px solid #C6C6C6;
 }
 .right-rail-button > span.ng-enter,
 .right-rail-button > span.ng-leave.ng-leave-active {
@@ -604,6 +603,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
 }
+.singletab .tabbable .nav-tabs > li > a {
+    border-right: 0;
+}
 
 .delete-link.blue-link {
     display: inline-block;
@@ -629,16 +631,22 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     padding: 11px 12px;
 }
 
-.transaction-accordion .accordion-heading > a > span:not(:last-of-type) {
-    vertical-align: -15%;
+.transaction-accordion .accordion-heading > a > span:not(:last-of-type),
+.transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
+    vertical-align: -10%;
+    color: #1E2D3D;
 }
 
-.transaction-accordion.lessmargin .capGuide {
+.transaction-accordion.lessmargin .capGuide,
+.transaction-accordion.lessmargin .btn-group {
     padding-left: 0;
+}
+.transaction-accordion .btn-group {
+    padding-left: 20px;
 }
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
-    color: #1D2C3C;
+    color: #1E2D3D;
 }
 
 .transaction-accordion .accordion-group {
@@ -674,7 +682,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 .tabbable .tab-content {
     padding-bottom: 0;
 }
-
+.tabBorder .tabbable .tab-content {
+    border-right: 1px solid #C6C6C6;
+}
 .tabbable .info-box {
     margin-bottom: 0;
     border-top: none;
@@ -741,10 +751,16 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-color: #C6C6C6;
 }
 
-.nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus {
+.nav-tabs > li:nth-child(x-1) > a,
+.nav-tabs > li:nth-child(x+1) > a:hover,
+.nav-tabs > li:nth-child(x+1) > a:focus {
     border-right: 0;
 }
-
+.nav-tabs > li:last-child > a,
+.nav-tabs > li:last-child > a:hover,
+.nav-tabs > li:last-child > a:focus {
+    border-right: 0;
+}
 
 div.rightTitle {
     margin: 0 0 10px 0;

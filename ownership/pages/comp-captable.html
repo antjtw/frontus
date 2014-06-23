@@ -759,7 +759,7 @@
     {{sideToggleName}}
 </button>
 <div class="row-fluid">
-    <tabset ng-class="{'singletab': tabnumber() == 1}">
+    <tabset ng-class="{'singletab': tabnumber() == 1, 'tabBorder': windowToggle}">
         <tab ng-repeat="tab in tabs" active="tab.active" ng-show="tabvisible(tab)" heading="{{tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')" ng-style="viewportactivity" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
@@ -1125,7 +1125,7 @@
                       <span ng-switch-when="2">
 
                         <accordion ng-class="{'lessmargin': (activeTran.length == 1)}" class="transaction-accordion" close-others="true">
-                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);"
+                        <accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-hide="windowToggle && !tran.active"
                                          ng-repeat="tran in activeTran | orderBy:'date' track by $index" ng-switch on="currentTab">
                             <accordion-heading>
                                 <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && activeTran.length > 1"></span>
@@ -1394,7 +1394,7 @@
 
                                 </div>
 
-                                <span class="blue-link delete-link" ng-click="tranDeleteUp(tran);">Delete transaction</span>
+                                <span class="blue-link delete-link" data-icon="&#xe00c;" ng-click="tranDeleteUp(tran);">Delete transaction</span>
                             </div>
                             <div class="capTab" ng-switch-when="documents">
                                 <div ng-if="tran.evidence_data.length==0" class="linkedDocuments">
