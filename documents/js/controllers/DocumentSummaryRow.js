@@ -1,15 +1,14 @@
 'use strict';
 
 function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location) {
-    // TODO: need the ordering correct from the server for paging, but statusRank is computed locally ...
     $scope.versionOrder = 'statusRank';
 
     // load the versions
     $scope.versions = [];
-    var loadingVersions = false
+    var loadingVersions = false;
     $scope.loadVersions = function() {
-        if (loadingVersions || $scope.doc.version_count == 0) {
-            return
+        if (loadingVersions || $scope.doc.version_count === 0) {
+            return;
         }
         loadingVersions = true;
         var queryParam = "";
@@ -112,7 +111,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else if (summary.type == "investor") {
             return summary.name || summary.email;
         };
-    }
+    };
 
     $scope.getShareType = function(doc) {
         if (!doc) {return 0;}
@@ -130,6 +129,22 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return 'Prepare for Signature';
         } else if (tp > 0) {
             return 'Request Signature';
+        }
+    };
+
+    $scope.titleClick = function() {
+        if ($scope.doc.uploading) {
+            return;
+        }
+        if ($scope.doc.type != 'doc') {
+            return;
+        }
+        if (!$scope.viewState.hideSharebar) {
+            $scope.prepareDocument($scope.doc);
+        } else {
+            if ($scope.doc.doc_id) { // can only view templates
+                $scope.viewOriginal($scope.doc);
+            }
         }
     };
 

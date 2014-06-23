@@ -30,8 +30,11 @@
                             <button class="btn" ng-click="register()">Sign Up</button>
                         </div>
                     </div>
-                    <div class="span5 home-ike">
-                        <img src="/img/header-image.png" class="hidden-phone">
+                    <div class="span5 home-ike captable-click">
+                        <img ng-click="gotoURL('/features/cap')" src="/img/header-image.png" class="hidden-phone">
+                        <span class="try-me-button" class='hidden-phone'>
+                            <img ng-click="gotoURL('/features/cap')" src="/img/features/tryit-opaque.png">
+                        </span>
                     </div>
                 </div>
             </div>
