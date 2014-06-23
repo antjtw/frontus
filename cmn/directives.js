@@ -16,10 +16,19 @@ m.directive('messageSide', function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
                     console.log($scope.people.length);
-                    console.log($scope.people.name)
-                });  
+                    console.log($scope.people)
+                    var test = []
+                    angular.forEach($scope.people, function(thing){
+                        test.push(thing.email);
+                    })
+                    console.log(test)
+                });
+                
+                
             };
             $scope.getPeople();
+
+
 
  
             $scope.emailStatus = function(){
@@ -60,6 +69,7 @@ m.directive('messageSide', function(){
                         this.to_names = []
                     }
                    
+
                     // msgstatus is an array
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
@@ -83,28 +93,10 @@ m.directive('messageSide', function(){
                                 myEvents[i].category = value.event;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
-                                myEvents[i].to_names.push(myEvents[i].tox.length)
-
-                                // for(r = 0; r++; r < myEvents[i].tox.length){
-                                //     console.log(myEvents[i].tox[r])
-                                // }
-                                // myEvents[i].to_names.push(myEvents[i].length);
-
-                                // angular.forEach($scope.people, function(thing){
-                                //     if(thing.name == value.tox){
-                                //         myEvents[i].to_names.push(value.tox);
-                                //     }
-                                //     else{
-                                //         myEvents[i].to_names.push(value.tox)
-                                //     }
-                                // })                             
+                                myEvents[i].to_names.push(myEvents[i].tox.length);                            
                             }
-                            
                         }
                     })
-
-
-                    
                    
                     $scope.message_data = myEvents;
                     console.log($scope.message_data);
@@ -112,10 +104,20 @@ m.directive('messageSide', function(){
                 
 
                 }).except(function(data){
-                    console.log(data);
+                    // console.log(data);
                 })
             }
             $scope.getLogs();
+
+          
+            // $scope.checkAddress = function(){
+            //     var peoplenames = []
+            //     angular.forEach($scope.people, function(key, value){
+            //         peoplenames.push(value.name)
+            //         alert(peoplenames)
+            //     })
+            // }
+            // $scope.checkAddress();
 
 
             // $scope.addReceiver = function(){
