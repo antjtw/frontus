@@ -28,7 +28,7 @@ m.directive('messageSide', function(){
                 
                     $scope.peopleDict = obj
                     console.log($scope.peopleDict)
-                    console.log($scope.peopleDict['ariel+2@sharewave.com'])
+                    console.log($scope.peopleDict['ariel+3@sharewave.com'])
                 });               
             };
             $scope.getPeople();
@@ -107,8 +107,18 @@ m.directive('messageSide', function(){
                         for (var i = 0; i < myEvents.length; i++){
                             if(value.when_requested == myEvents[i].time){
                                 myEvents[i].category = value.event;
-                                myEvents[i].tox.push(value.tox);
+                                myEvents[i].tox.push(typeof value.tox);
                                 myEvents[i].event.push(value.event);
+                                if($scope.peopleDict[value.tox]==null){
+                                    myEvents[i].to_names.push(value.tox)
+                                }
+                                else if($scope.peopleDict['ariel+3@sharewave.com']){
+                                    myEvents.to_names.push("error")
+                                }
+                                else {
+                                    myEvents[i].to_names.push($scope.peopleDict[value.tox])
+                                }
+                                    
                                 // if(value.tox == )
                                 // console.log($scope.peopleDict[value.tox])
                                 // console.log(Object.keys($scope.peopleDict))
