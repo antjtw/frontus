@@ -66,9 +66,11 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
 
         $scope.getpagetarget = function() {
             var currentValue = $('#targetcontent')[0].innerText;
-            if ("keep track of our investors".startsWith(currentValue) || "model our company value".startsWith(currentValue)) {
+            if ("I want to keep track of our investors".startsWith(currentValue) || "I want to model our company value".startsWith(currentValue)) {
+                console.log("here");
                 document.location.href = '/features/cap';
-            } else if ("share documents securely".startsWith(currentValue) || "grant options hassle free".startsWith(currentValue) || "have documents e-signed".startsWith(currentValue)) {
+            } else if ("I want to share documents securely".startsWith(currentValue) || "I want to grant options hassle free".startsWith(currentValue) || "I want to have documents e-signed".startsWith(currentValue)) {
+                console.log("there");
                 document.location.href = '/features/doc';
             }
         }
