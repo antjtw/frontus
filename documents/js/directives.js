@@ -184,11 +184,12 @@ app.directive('pageControls', function() {
         templateUrl: "/documents/partials/page-controls.html",
         controller: ["$scope", "Documents", function($scope, Documents) {
             $scope.doc = Documents.getDoc($scope.docId);
+            $scope.doc.currentPage = $scope.currentPage
             $scope.$watch('docId', function(new_doc_id) {
                 $scope.doc = Documents.getDoc(new_doc_id);
+                $scope.doc.currentPage = $scope.currentPage
             });
             $scope.template_original = false;
-            $scope.doc.currentPage = $scope.currentPage
             $scope.$watch('doc.currentPage', function(page) {
                 if (page && $scope.doc.pages) {
                     if (page < 1) {
