@@ -33,17 +33,6 @@ m.directive('messageSide', function(){
             };
             $scope.getPeople();
 
-            $scope.comparePeople = function(){
-                // $scope.getLogs()
-                // console.log($scope.message_data)
-                angular.forEach($scope.message_data, function(info){
-                    console.log(info.tox)
-                });
-            };
-            $scope.comparePeople();
-
-
- 
             $scope.emailStatus = function(){
                 SWBrijj.tblm('mail.sentstatus', ['event', 'tox', 'our_id', 'subject', 'senderemail', 'when_requested', 'category']).then(function(data){
                     $scope.sentmessages = data;
@@ -51,7 +40,7 @@ m.directive('messageSide', function(){
                     $scope.predicate = '-when_requested';
                 });
             }
-            $scope.emailStatus();  
+            // $scope.emailStatus();  
 
             $scope.getStatus = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
@@ -61,18 +50,19 @@ m.directive('messageSide', function(){
             }
             $scope.getStatus();
 
-            $scope.forView = function(){
-                SWBrijj.tblm('mail.timedevents', ['when_requested', 'event', 'tox']).then(function(data){
-                    $scope.timedevents = data;
-                }).except(function(data){
-                    console.log(data);
-                });
-            };
-            $scope.forView();
+            // $scope.forView = function(){
+            //     SWBrijj.tblm('mail.timedevents', ['when_requested', 'event', 'tox']).then(function(data){
+            //         $scope.timedevents = data;
+            //     }).except(function(data){
+            //         console.log(data);
+            //     });
+            // };
+            // $scope.forView();
+
+     
 
 
             $scope.getLogs = function(){
-
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'event', 'delivered').then(function(data){
                     $scope.msgstatus = data
                     function Message(time, event, tox, category){
@@ -128,6 +118,7 @@ m.directive('messageSide', function(){
                 })
             }
             $scope.getLogs();
+
 
 
 
