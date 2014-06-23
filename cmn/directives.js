@@ -101,44 +101,22 @@ m.directive('messageSide', function(){
 
                     // msgstatus is the info
                     // myEvents is the array of the object
-      
-                  
                     angular.forEach($scope.msgstatus, function(value){
                         for (var i = 0; i < myEvents.length; i++){
                             if(value.when_requested == myEvents[i].time){
                                 myEvents[i].category = value.event;
-                                myEvents[i].tox.push(typeof value.tox);
+                                myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
                                 else if($scope.peopleDict['ariel+3@sharewave.com']){
-                                    myEvents.to_names.push("error")
+                                    myEvents.to_names.push("error");
                                 }
                                 else {
                                     myEvents[i].to_names.push($scope.peopleDict[value.tox])
                                 }
-                                    
-                                // if(value.tox == )
-                                // console.log($scope.peopleDict[value.tox])
-                                // console.log(Object.keys($scope.peopleDict))
-
-                                // myEvents[i].to_names.push($scope.peopleDict[String(value.tox)]);
-                               
-                                // // else if($scope.peopleDict[value.tox]==)
-                                // else {
-                                //     myEvents[i].to_names.push("not undefined")
-                                // }
-                                // myEvents[i].to_names.push($scope.peopleDict[value.tox])
-                                // for(key in $scope.peopleDict){
-                                //     if(value.tox == key){
-                                //         myEvents[i].to_names.push(value.tox);
-                                //     }
-                                //     else
-                                //         myEvents[i].to_names.push("oops")
-                                // }
-
-                                // myEvents[i].to_names.push(myEvents[i].tox.length);                            
+                                                             
                             }
                         }
                     })
