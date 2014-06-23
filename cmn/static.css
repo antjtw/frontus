@@ -302,7 +302,7 @@ address {
 }
 
 .static .feature-block.feature-permission + .icon-set {
-    margin-top: -4px;
+    margin-top: 0;
     background-color: #FFFFFF;
 }
 
