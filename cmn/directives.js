@@ -11,7 +11,16 @@ m.directive('messageSide', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
-     
+            // $scope.tabnumber = function() {
+            //     var total = 0;
+            //     angular.forEach($scope.tabs, function(tab) {
+            //         if ($scope.tabvisible(tab)) {
+            //             total += 1
+            //         }
+            //     });
+            //     return total;
+            // };
+            
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
@@ -28,6 +37,7 @@ m.directive('messageSide', function(){
                     $scope.peopleDict = obj
                     console.log($scope.peopleDict)
                     console.log($scope.peopleDict['ariel+3@sharewave.com'])
+                    $scope.getLogs();
                 });               
             };
             $scope.getPeople();
@@ -35,8 +45,7 @@ m.directive('messageSide', function(){
             $scope.$watch('peopleDict', function(newdata, olddata){
                 if(newdata){
                     $scope.getLogs();
-                }
-                   
+                }        
             });
 
 
@@ -69,10 +78,6 @@ m.directive('messageSide', function(){
                         })) {
                             msgdata.push(value.when_requested);
                         }
-                        // if(msgdata.indexOf(String(value.when_requested))== -1){
-                        //     var timestamp= String(value.when_requested);
-                        //     msgdata.push(timestamp);
-                        // }
                          
                     });
                     var myEvents = []

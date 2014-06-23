@@ -4459,11 +4459,18 @@ textarea.email-text {
     padding-top: 30px;
 }
 
-.message-side .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus{
+
+/*.message-side .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus{
     border-right: 1px solid #C6C6C6;
+}*/
+
+.message-side .singletab .tabbable .nav-tabs > li{
+    width: calc(100% - 20px);
+    position:fixed;
+  /*  padding-top: 9px;
+    padding-bottom: 10px;*/
+    border-right: 0px;
 }
-
-
 
 
 /*.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type >{
