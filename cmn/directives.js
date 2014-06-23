@@ -11,7 +11,6 @@ m.directive('messageSide', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
-     
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
@@ -31,16 +30,8 @@ m.directive('messageSide', function(){
                     console.log($scope.peopleDict['ariel+3@sharewave.com'])
                 });               
             };
-            $scope.getPeople();
+            // $scope.getPeople();
 
-            $scope.emailStatus = function(){
-                SWBrijj.tblm('mail.sentstatus', ['event', 'tox', 'our_id', 'subject', 'senderemail', 'when_requested', 'category']).then(function(data){
-                    $scope.sentmessages = data;
-                    $scope.message_usage = data.length;
-                    $scope.predicate = '-when_requested';
-                });
-            }
-            // $scope.emailStatus();  
 
             $scope.getStatus = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
@@ -50,19 +41,25 @@ m.directive('messageSide', function(){
             }
             $scope.getStatus();
 
-            // $scope.forView = function(){
-            //     SWBrijj.tblm('mail.timedevents', ['when_requested', 'event', 'tox']).then(function(data){
-            //         $scope.timedevents = data;
-            //     }).except(function(data){
-            //         console.log(data);
-            //     });
-            // };
-            // $scope.forView();
-
-     
-
-
             $scope.getLogs = function(){
+                    SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                    $scope.people = data
+                    console.log($scope.people.length);
+                    console.log($scope.people)
+                    var array = []
+                    var obj = {}
+                    angular.forEach($scope.people, function(info){
+                        array.push(obj[info.email] = info.name)
+                        if(info.name == ""){
+                            array.push(obj[info.email]= null)
+                        }
+                    }) 
+                
+                    $scope.peopleDict = obj
+                    console.log($scope.peopleDict)
+                    console.log($scope.peopleDict['ariel+3@sharewave.com'])
+                }); 
+                
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'event', 'delivered').then(function(data){
                     $scope.msgstatus = data
                     function Message(time, event, tox, category){
