@@ -66,6 +66,9 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
 
         $scope.getpagetarget = function() {
             var currentValue = $('#targetcontent')[0].innerText;
+            if (currentValue == undefined) {
+                currentValue = $('#targetcontent')[0].textContent;
+            }
             if ("I want to keep track of our investors".startsWith(currentValue)) {
                 ga('send', 'event', 'homepage', 'hero-click', 'I want to keep track of our investors');
                 document.location.href = '/features/cap';
