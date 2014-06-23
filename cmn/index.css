@@ -2,7 +2,7 @@
 
 .home #hero{
     background-color: #1E2D3D;
-    min-height: 400px;
+    min-height: 350px;
     position: relative;
 }
 
@@ -21,10 +21,21 @@
     margin-left: -1px;
 }
 
-.home .standard-button.blue.invite {
+.home .standard-button.invite {
     display: inline;
     padding-left: 50px;
     width: 130px;
+}
+
+.home .standard-button.green.invite {
+    padding-left: 20px;
+}
+
+.home .standard-button.green.invite button {
+    width: 260px;
+    font-size: 20px;
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    height: 40px;
 }
 
 .home .standard-button.blue.invite button {
@@ -366,19 +377,110 @@
     padding-left: 5px;
 }
 
-.try-me-button {
+.home-ike {
+    margin-top: 100px;
+    margin-left: 50px;
+    float: left;
+}
+
+.question-bubble {
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    position: relative;
+    display: inline-block;
+    width: 680px;
+    height: 120px;
+    border-radius: 10px;
+    background-color: #33485d;
+    vertical-align: top;
+    margin-top: 55px;
+    font-size: 32px;
+    color: #FFFFFF;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.question-bubble > span {
+    display: inline-block;
+    margin-top: 25px;
+    line-height: 42px;
+    width: 100%;
+}
+
+.question-bubble > span > span {
+    display: inline-block;
+}
+
+.learn-more-button {
     position: absolute;
-    left: -45px;
-    top: -20px;
-    transition: opacity .5s ease-in-out;
-    -moz-transition: opacity .5s ease-in-out;
-    -webkit-transition: opacity .5s ease-in-out;
-}
-
-.captable-click {
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    display: inline-block;
+    float: right;
+    color: #3397da;
+    right: 35px;
+    bottom: 20px;
     cursor: pointer;
+    font-size: 20px;
 }
 
+.learn-more-button > span {
+    vertical-align: -5%;
+}
+
+.question-bubble:before {
+    position: absolute;
+    content: ' ';
+    border-top: 20px solid transparent;
+    border-bottom: 0 solid transparent;
+    border-right: 35px solid #33485d;
+    left: -20px;
+    top: 50px;
+}
+
+@media (max-width: 1024px) {
+    .question-bubble {
+        font-size: 26px;
+        width: -moz-calc(100% - 40px);
+        width: -webkit-calc(100% - 40px);
+        width: calc(100% - 40px);
+    }
+
+    .question-bubble > span > span {
+        width: -moz-calc(100%);
+        width: -webkit-calc(100%);
+        width: calc(100%);
+    }
+
+    .home-ike {
+        margin: 20px auto 0 auto;
+        float: inherit;
+        width: 200px;
+        display: inherit;
+    }
+
+    .question-bubble:before {
+        position: absolute;
+        content: ' ';
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 20px solid #33485d;
+        left: 50%;
+        margin-left: -30px;
+        top: inherit;
+        bottom: -20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .question-bubble {
+        height: 180px;
+    }
+}
+
+@media (max-width: 500px) {
+    .question-bubble {
+        font-size: 18px;
+    }
+}
 
 
 

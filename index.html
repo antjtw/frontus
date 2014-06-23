@@ -12,6 +12,7 @@
         <meta name="description" content="The best way to manage shareholders">
         <script src="index.js"></script>
         <script src="/cmn/register/register.js"></script>
+        <script src="/lib/jquery.typer.js"></script>
     </head>
     
     <body>
@@ -20,30 +21,28 @@
         class="wrap home" ng-controller="IndexCtrl">	<span ng-view=""></span>
 
             <div id="hero">
-                <div class="row-fluid">
-                    <div class="span6 offset1">
-                        <div class="spacer70"></div>
-                        <div class="spacer10"></div>
-                        	<h1>The best way to <br class="hidden-phone">manage shareholders</h1>
-
-                        <div class="CompanyRegister-form large-standard-button standard-button hidden-phone">
-                            <button class="btn" ng-click="register()">Sign Up</button>
+                <div class="container">
+                    <div class="row-fluid">
+                        <div class="question-bubble">
+                            <span><span id="targetcontent" data-typer-targets='
+                                        { "targets" : ["I want to keep track of our investors",
+                                                        "I want to share documents securely",
+                                                        "I want to grant options hassle free",
+                                                        "I want to have documents e-signed",
+                                                        "I want to model our company value"]}'>I want to share documents securely</span>
+                                </span>
+                            <div ng-click="getpagetarget()" class="learn-more-button">Learn More <span data-icon="&#xe016;" aria-hidden="true"></span></div>
                         </div>
-                    </div>
-                    <div class="span5 home-ike captable-click">
-                        <img ng-click="gotoURL('/features/cap')" src="/img/header-image.png" class="hidden-phone">
-                        <span class="try-me-button" class='hidden-phone'>
-                            <img ng-click="gotoURL('/features/cap')" src="/img/features/tryit-opaque.png">
-                        </span>
+                        <img class="home-ike" src='/img/home-ike.png'>
                     </div>
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="inviteRow">
-                    	<h2>Are you a shareholder? Invite your companies to join. </h2>
+                <div class="inviteRow footer">
+                    	<h2>The best way to manage shareholders</h2>
 
-                    <div class="standard-button blue invite">
-                        <button class="btn" id="a_hp_taf_top" ng-click="tellFriendUp()">Invite<span data-icon="&#xe027;" aria-hidden="true"></span>
+                    <div class="standard-button green invite">
+                        <button class="btn" id="a_hp_taf_top" onclick="window.location.href='/pricing'">Get Started <span data-icon="&#xe016;" aria-hidden="true"></span>
                         </button>
                     </div>
                 </div>
@@ -200,7 +199,7 @@
                         <h1 style="margin-top: 60px;">Want more from your shareholder data?</h1>
 
                         <div class="CompanyRegister-form large-standard-button standard-button">
-                            <button class="btn" onclick="window.location.href='/pricing'">Sign Up</button>
+                            <button class="btn" onclick="window.location.href='/pricing'">Get Started</button>
                         </div>
                     </div>
                 </div>
