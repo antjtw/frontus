@@ -1397,9 +1397,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                 }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], calculate.toFloat(transaction['premoney']), calculate.toFloat(transaction['postmoney']), calculate.toFloat(transaction['ppshare']), calculate.toFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], calculate.toFloat(transaction['price']), calculate.toFloat(transaction['terms']), vestcliffdate, calculate.toFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], calculate.toFloat(transaction['interestrate']), transaction['interestratefreq'], calculate.toFloat(transaction['valcap']), calculate.toFloat(transaction['discount']), calculate.toFloat(transaction['term']), dragalong, tagalong).then(function (data) {
-                    if (transaction.evidence_data && !transaction.evidence) {
-                        $scope.updateEvidenceInDB(transaction, 'added');
-                    }
                     var returneddata = data[1][0].split("!!!");
                     $scope.lastsaved = Date.now();
                     var tempunits = 0;
@@ -1409,6 +1406,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (row.name == tran.investor && row.name == returneddata[1]) {
                                 if (transaction.tran_id == '' && !tran.tran_id && (!isNaN(parseFloat(tran.units)) || !isNaN(parseFloat(tran.amount)))) {
                                     tran.tran_id = returneddata[0];
+                                    if (transaction.evidence_data) {
+                                        $scope.updateEvidenceInDB(transaction, 'added');
+                                    }
                                     for (var i=0; i < $scope.trans.length; i++) {
                                         if ($scope.trans[i] == tran) {
                                             $scope.$watch('trans['+i+']', function(newval, oldval) {
