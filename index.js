@@ -60,7 +60,39 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             }).except(function (x) {
                     $scope.$emit('notification:fail', 'Oops. Something went wrong.');
                 });
+        };
+
+        $('[data-typer-targets]').typer();
+
+        $scope.getpagetarget = function() {
+            var currentValue = $('#targetcontent')[0].innerText;
+            if ("I want to keep track of our investors".startsWith(currentValue)) {
+                ga('send', 'event', 'homepage', 'hero-click', 'I want to keep track of our investors');
+                document.location.href = '/features/cap';
+            } else if ("I want to build a cap table".startsWith(currentValue)) {
+                ga('send', 'event', 'homepage', 'hero-click', 'I want to build a cap table');
+                document.location.href = '/features/cap';
+            } else if ("I want to share documents for e-signature".startsWith(currentValue)) {
+                ga('send', 'event', 'homepage', 'hero-click', 'I want to share documents for e-signature');
+                document.location.href = '/features/doc';
+            } else if ("I want to make sense of convertible notes".startsWith(currentValue)) {
+                ga('send', 'event', 'homepage', 'hero-click', 'I want to make sense of convertible notes');
+                document.location.href = '/features/convertible-notes';
+            } else if ("I want to grant options hassle free".startsWith(currentValue)) {
+                ga('send', 'event', 'homepage', 'hero-click', 'I want to grant options hassle free');
+                document.location.href = '/features/#options';
+            } else if ("I want to send updates to my investors".startsWith(currentValue)) {
+                ga('send', 'event', 'homepage', 'hero-click', 'I want to send updates to my investors');
+                document.location.href = '/features/#message';
+            }
         }
 
     }]);
+
+if (typeof String.prototype.startsWith != 'function') {
+    // see below for better implementation!
+    String.prototype.startsWith = function (str){
+        return this.indexOf(str) == 0;
+    };
+}
 
