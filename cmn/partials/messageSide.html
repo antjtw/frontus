@@ -13,7 +13,7 @@
                             <ul>
                                 <li>
                                     <span>
-                                        Message sent at {{message_datum.time | date:'short'}} to {{message_datum.tox.length}} shareholder(s) 
+                                        Message sent at {{message_datum.time | date:'shortDate'}} to {{message_datum.tox.length}} shareholder(s) 
                                     </span><br/>
                                     <div ng-click = "showRecipients = !showRecipients"> 
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showRecipients" class="msgarrow"></span><span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow"></span>
