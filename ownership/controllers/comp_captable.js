@@ -159,6 +159,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach($scope.trans, function(tran) {
             var this_tran_evidence = data.filter(function(el) { return el.evidence==tran.evidence; });
             tran.evidence_data = this_tran_evidence;
+            console.log(tran.evidence_data);
         });
         // TODO implement for issues
     };
@@ -1723,6 +1724,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
     $scope.toggleForEvidence = function(ev) {
+        if (ev && $scope.evidence_object && !$scope.evidence_object.evidence_data) {
+            $scope.evidence_object.evidence_data = [];
+        }
         if (ev && $scope.evidence_object && $scope.evidence_object.evidence_data) {
             var action = "";
             if ($scope.isEvidence(ev)) {
@@ -1736,16 +1740,18 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
     $scope.updateEvidenceInDB = function(obj, action) {
-        SWBrijj.procm('ownership.upsert_transaction_evidence',
-                      obj.tran_id,
-                      JSON.stringify(obj.evidence_data)
-        ).then(function(r) {
-            void(r);
-            //$scope.$emit("notification:success", "Evidence "+action);
-        }).except(function(e) {
-            $scope.$emit("notification:fail", "Something went wrong. Please try again.");
-            console.log(e);
-        });
+        if (obj.tran_id && obj.evidence_data) {
+            SWBrijj.procm('ownership.upsert_transaction_evidence',
+                          parseInt(obj.tran_id, 10),
+                          JSON.stringify(obj.evidence_data)
+            ).then(function(r) {
+                void(r);
+                //$scope.$emit("notification:success", "Evidence "+action);
+            }).except(function(e) {
+                $scope.$emit("notification:fail", "Something went wrong. Please try again.");
+                console.log(e);
+            });
+        }
     };
     $scope.evidenceFilter = function(obj) {
         if ($scope.state.evidenceQuery && obj) {
