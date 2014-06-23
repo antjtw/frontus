@@ -1097,7 +1097,7 @@ input[type='text']:disabled, textarea:disabled {
 }
 
 .processedImageModal .modalText {
-    padding-top: 40px;
+    padding-top: 60px;
     padding-right: 30px;
     text-align: left;
 }
