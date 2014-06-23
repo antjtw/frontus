@@ -1350,7 +1350,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
 }
 
 .pageTurn {
-    padding-top:15px;
     position: absolute;
     left:-webkit-calc(50% - 95px);
     left:-moz-calc(50% - 95px);

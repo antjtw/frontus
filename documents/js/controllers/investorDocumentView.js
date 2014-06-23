@@ -17,6 +17,8 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             $scope.currentPage = 1;
         }
 
+        $scope.toggleSide = false;
+
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });
