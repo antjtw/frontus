@@ -239,11 +239,9 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
 
     this.getDocAnnotations = function(doc_id) {
         if (doc_id === void(0)) {
-            console.log("fetching undefined annotations");
             return [];
         }
         if (!doc_annotations[doc_id]) {
-            console.log("fetched empty doc annotations.");
             doc_annotations[doc_id] = [];
         }
         return doc_annotations[doc_id];

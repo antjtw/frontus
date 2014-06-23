@@ -184,6 +184,9 @@ app.directive('pageControls', function() {
         templateUrl: "/documents/partials/page-controls.html",
         controller: ["$scope", "Documents", function($scope, Documents) {
             $scope.doc = Documents.getDoc($scope.docId);
+            $scope.$watch('docId', function(new_doc_id) {
+                $scope.doc = Documents.getDoc(new_doc_id);
+            });
             $scope.template_original = false;
             $scope.doc.currentPage = $scope.currentPage
             $scope.$watch('doc.currentPage', function(page) {

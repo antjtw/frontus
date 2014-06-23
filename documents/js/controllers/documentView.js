@@ -5,6 +5,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.annots = [];
         $scope.signatureprocessing = false;
 
+        $scope.$watch('docId', function(new_doc_id) {
+            $scope.doc = Documents.getDoc(new_doc_id); // gets blank doc for now ...
+        });
+
         function getCanvasOffset(ev) {
             var offx, offy;
             if (ev.offsetX === undefined) { // Firefox code
@@ -85,7 +89,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
             if (!docId || $scope.annotated) return;
             $scope.docId = docId;
-            $scope.doc = Documents.getDoc(docId); // gets blank doc for now ...
             $scope.invq = invq;
             $scope.library = library;
             $scope.pageQueryString = pageQueryString;
