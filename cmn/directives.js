@@ -11,6 +11,7 @@ m.directive('messageSide', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
+     
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
@@ -24,13 +25,20 @@ m.directive('messageSide', function(){
                             array.push(obj[info.email]= null)
                         }
                     }) 
-                
                     $scope.peopleDict = obj
                     console.log($scope.peopleDict)
                     console.log($scope.peopleDict['ariel+3@sharewave.com'])
                 });               
             };
-            // $scope.getPeople();
+            $scope.getPeople();
+
+            $scope.$watch('peopleDict', function(newdata, olddata){
+                if(newdata){
+                    $scope.getLogs();
+                }
+                   
+            });
+
 
 
             $scope.getStatus = function(){
@@ -42,27 +50,9 @@ m.directive('messageSide', function(){
             $scope.getStatus();
 
             $scope.getLogs = function(){
-                    SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
-                    $scope.people = data
-                    console.log($scope.people.length);
-                    console.log($scope.people)
-                    var array = []
-                    var obj = {}
-                    angular.forEach($scope.people, function(info){
-                        array.push(obj[info.email] = info.name)
-                        if(info.name == ""){
-                            array.push(obj[info.email]= null)
-                        }
-                    }) 
-                
-                    $scope.peopleDict = obj
-                    console.log($scope.peopleDict)
-                    console.log($scope.peopleDict['ariel+3@sharewave.com'])
-                }); 
-                
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'event', 'delivered').then(function(data){
                     $scope.msgstatus = data
-                    function Message(time, event, tox, category){
+                    function Message(time, event, tox, category, to_names){
                         this.time = time
                         this.event = []
                         this.tox = []
@@ -74,10 +64,15 @@ m.directive('messageSide', function(){
                     // msgstatus is an array
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
-                        if(msgdata.indexOf(String(value.when_requested))== -1){
-                            var timestamp= String(value.when_requested);
-                            msgdata.push(timestamp);
+                        if (!msgdata.some(function(timestamp, idx, arr){
+                             return timestamp.equals(value.when_requested);
+                        })) {
+                            msgdata.push(value.when_requested);
                         }
+                        // if(msgdata.indexOf(String(value.when_requested))== -1){
+                        //     var timestamp= String(value.when_requested);
+                        //     msgdata.push(timestamp);
+                        // }
                          
                     });
                     var myEvents = []
@@ -90,16 +85,16 @@ m.directive('messageSide', function(){
                     // myEvents is the array of the object
                     angular.forEach($scope.msgstatus, function(value){
                         for (var i = 0; i < myEvents.length; i++){
-                            if(value.when_requested == myEvents[i].time){
+                            if(value.when_requested.equals(myEvents[i].time)) {
                                 myEvents[i].category = value.event;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
-                                else if($scope.peopleDict['ariel+3@sharewave.com']){
-                                    myEvents.to_names.push("error");
-                                }
+                                // else if($scope.peopleDict['ariel+3@sharewave.com']){
+                                //     myEvents.to_names.push("error");
+                                // }
                                 else {
                                     myEvents[i].to_names.push($scope.peopleDict[value.tox])
                                 }
@@ -114,12 +109,7 @@ m.directive('messageSide', function(){
                     console.log(data);
                 })
             }
-            $scope.getLogs();
-
-
-
-
-            
+        
             
         }]
     };
