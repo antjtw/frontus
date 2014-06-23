@@ -81,8 +81,8 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             } else if ("I want to grant options hassle free".startsWith(currentValue)) {
                 ga('send', 'event', 'homepage', 'hero-click', 'I want to grant options hassle free');
                 document.location.href = '/features/#options';
-            } else if ("send updates to my investors".startsWith(currentValue)) {
-                ga('send', 'event', 'homepage', 'hero-click', 'send updates to my investors');
+            } else if ("I want to send updates to my investors".startsWith(currentValue)) {
+                ga('send', 'event', 'homepage', 'hero-click', 'I want to send updates to my investors');
                 document.location.href = '/features/#message';
             }
         }
