@@ -1404,7 +1404,7 @@
                                     <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
                                         <ul class="pull-left">
                                             <li><span ng-click="viewEvidence(doc)">{{doc.docname}}</span></li>
-                                            <li ng-if="doc.name||doc.investor"><span>Shared with {{doc.name || doc.investor}}</span></li>
+                                            <li ng-if="doc.name||doc.investor"><span>{{doc.name || doc.investor}}'s version</span></li>
                                             <!--<li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>-->
                                         </ul>
                                         <span class="pull-right" data-icon="&#xe00f;" ng-click="removeEvidence(doc, tran)"></span>
@@ -1633,7 +1633,7 @@
                                     <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
                                         <ul class="pull-left">
                                             <li><span ng-click="viewEvidence(doc)">{{doc.docname}}</span></li>
-                                            <li ng-if="doc.name||doc.investor"><span>Shared with {{doc.name || doc.investor}}</span></li>
+                                            <li ng-if="doc.name||doc.investor"><span>{{doc.name || doc.investor}}'s version</span></li>
                                             <!--<li ng-if="!doc.name && !doc.investor"><span>Original upload</span></li>-->
                                         </ul>
                                     </div>
