@@ -167,11 +167,51 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 var approved = data.processing_approved;
                 if (!approved)
                 {
+                    $scope.selectProcessing('adjusted');
+                    //$scope.adjustedColor = "{background-color: #1ABC96;}";
+                    //$scope.originalColor = "{'background-color': #E3E3E3;}";
                     $scope.imageProcessedModal = true;
                     $scope.getProcessedPage();
                 }
             });
         }
+        
+        $scope.getRectStyle = function(image)
+        {
+            if (((image == 'original') && (!$scope.adjustedSelected)) ||
+                ((image != 'original') && ($scope.adjustedSelected)))
+            {
+                return "background-color: #1ABC96;";
+            }
+            else
+            {
+                return "background-color: #E3E3E3;";
+            }
+        }
+        
+        $scope.selectProcessing = function(choice)
+        {
+            if (choice == "original")
+            {
+                //$scope.$apply(function() {
+                    $scope.adjustedSelected = false;
+                    $scope.adjustedColor = "gray";
+                    $scope.adjustedText = "";
+                    $scope.originalColor = "green";
+                    $scope.originalText = "whiteText";
+                //});
+            }
+            else
+            {
+                //$scope.$apply(function() {
+                    $scope.adjustedSelected = true;
+                    $scope.adjustedColor = "green";
+                    $scope.adjustedText = "whiteText";
+                    $scope.originalColor = "gray";
+                    $scope.originalText = "";
+                //});
+            }
+        };
 
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
@@ -222,9 +262,9 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             var original = document.getElementById("processedModalOriginalImage");
             var adjusted = document.getElementById("processedModalAdjustedImage");
             original.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true&original=true";
-            original.width = 115;
+            original.width = 150;
             adjusted.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true";
-            adjusted.width = "115";
+            adjusted.width = "150";
         };
 
         $scope.fakeSign = function(cd) {
