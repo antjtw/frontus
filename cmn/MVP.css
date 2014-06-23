@@ -2291,7 +2291,6 @@ tr.preparedDoc {
     -o-animation: rightTabSlideOut 0.25s linear;
     animation: rightTabSlideOut 0.25s linear;
 }
-//fixme other browser tags
 @keyframes rightTabSlideIn {
     from {
         margin-left: 100%;
@@ -2325,8 +2324,6 @@ tr.preparedDoc {
     }
 }
 .fadeHide {
-    // text should be hidden width height and width transitions
-    // all else can't be squished...i don't think
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.25s linear, visibility 0 linear 0.25s;
