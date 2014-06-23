@@ -159,7 +159,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach($scope.trans, function(tran) {
             var this_tran_evidence = data.filter(function(el) { return el.evidence==tran.evidence; });
             tran.evidence_data = this_tran_evidence;
-            console.log(tran.evidence_data);
         });
         // TODO implement for issues
     };
@@ -170,7 +169,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
 
         angular.forEach($scope.issues, function(issue) {
-            // TODO fix up the evidence attribute
             issue.date = calculate.timezoneOffset(issue.date);
             if (issue.vestingbegins) {
                 issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
@@ -1399,6 +1397,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     }
                 }
                 SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], calculate.toFloat(transaction['premoney']), calculate.toFloat(transaction['postmoney']), calculate.toFloat(transaction['ppshare']), calculate.toFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], calculate.toFloat(transaction['price']), calculate.toFloat(transaction['terms']), vestcliffdate, calculate.toFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], calculate.toFloat(transaction['interestrate']), transaction['interestratefreq'], calculate.toFloat(transaction['valcap']), calculate.toFloat(transaction['discount']), calculate.toFloat(transaction['term']), dragalong, tagalong).then(function (data) {
+                    if (transaction.evidence_data && !transaction.evidence) {
+                        $scope.updateEvidenceInDB(transaction, 'added');
+                    }
                     var returneddata = data[1][0].split("!!!");
                     $scope.lastsaved = Date.now();
                     var tempunits = 0;
