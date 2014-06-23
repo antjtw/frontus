@@ -15,6 +15,12 @@
                                     <span>
                                         Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': 'one shareholder', 'other': '{} shareholders'}">
                                     </span><br/>
+                                    <div ng-if="message_datum.tox.length ==1">
+                                        <span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow"></span>Recipients
+                                        <ul>
+                                            <li ng-repeat="to_name in message_datum.to_names"><span class="recipients">{{to_name}}</span></li>
+                                        </ul>
+                                    </div>
                                     <div ng-click = "showRecipients = !showRecipients"> 
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showRecipients" class="msgarrow"></span><span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow"></span>
                                         Recipients
