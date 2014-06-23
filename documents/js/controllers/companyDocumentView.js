@@ -14,6 +14,8 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             return;
         }
 
+        $scope.toggleSide = false;
+
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
         });

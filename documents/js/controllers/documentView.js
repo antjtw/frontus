@@ -54,11 +54,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             var ev = evt.which || e.keyCode;
             // Need the extra if so that the page change doesn't occur if you are currently focused into a sticky
             if (document.activeElement.tagName.toLowerCase() != 'textarea' ) {
-                if (ev === 37) {
-                    $scope.previousPage($scope.doc.currentPage);
-                } else if (ev === 39) {
-                    $scope.nextPage($scope.doc.currentPage);
-                }
+                $scope.$apply(function() {
+                    if (ev === 37) {
+                        $scope.previousPage($scope.doc.currentPage);
+                    } else if (ev === 39) {
+                        $scope.nextPage($scope.doc.currentPage);
+                    }
+                });
             }
         };
         // Tells JS to update the backgroundImage because the imgurl has changed underneath it.

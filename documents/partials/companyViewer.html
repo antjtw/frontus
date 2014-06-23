@@ -26,13 +26,11 @@
         </div>
     </div>
     <div class="row-fluid">
-        <div class="companyDocViewer">
-            <div class="row-fluid">
-                <doc-viewer page-query-string="pageQueryString()" doc-id="docId"></doc-viewer>
-            </div>
-            <!-- <div internal-right-rail tabarr="tabs" active="activeTab">
+        <div class="companyDocViewer leftTabWindow">
+            <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide}" page-query-string="pageQueryString()" doc-id="docId"></doc-viewer>
+            <div internal-right-rail tabarr="tabs" active="activeTab" class="pull-right" toggle-side="toggleSide" ng-class="{rightNoTableBlock: toggleSide}">
                 <annotation-list doc-id="docId"></annotation-list>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>

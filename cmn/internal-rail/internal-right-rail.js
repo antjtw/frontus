@@ -5,7 +5,8 @@ app.directive('internalRightRail', function() {
         restrict: 'EA',
         scope: {
             tabs: '=tabarr',
-            selected: '='
+            selected: '=',
+            sideToggle: '=toggleSide',
         },
         transclude: true,
         // TODO: can do multiple transcludes (per tab) if done carefully
