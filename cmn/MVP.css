@@ -4290,7 +4290,7 @@ div.upgradeWarning > span {
 }
 
 .tabbable .tab-content {
-    overflow: visible;
+/*    overflow: visible;*/
     padding-bottom: 20px;
 }
 
@@ -4466,9 +4466,9 @@ textarea.email-text {
 
 .message-side .singletab .tabbable .nav-tabs > li{
     width: calc(100% - 20px);
-    position:fixed;
-  /*  padding-top: 9px;
-    padding-bottom: 10px;*/
+/*    position:fixed;*/
+/*    padding-top: 9px;*/
+/*    padding-bottom: 10px;*/
     border-right: 0px;
 }
 
