@@ -17,19 +17,30 @@ m.directive('messageSide', function(){
                     $scope.people = data
                     console.log($scope.people.length);
                     console.log($scope.people)
-                    $scope.getLogs();
                     var array = []
                     var obj = {}
                     angular.forEach($scope.people, function(info){
                         array.push(obj[info.email] = info.name)
+                        if(info.name == ""){
+                            array.push(obj[info.email]= null)
+                        }
                     }) 
-                    console.log(obj)
-                });
                 
-                
+                    $scope.peopleDict = obj
+                    console.log($scope.peopleDict)
+                    console.log($scope.peopleDict['ariel+2@sharewave.com'])
+                });               
             };
             $scope.getPeople();
 
+            $scope.comparePeople = function(){
+                // $scope.getLogs()
+                // console.log($scope.message_data)
+                angular.forEach($scope.message_data, function(info){
+                    console.log(info.tox)
+                });
+            };
+            $scope.comparePeople();
 
 
  
@@ -61,6 +72,7 @@ m.directive('messageSide', function(){
 
 
             $scope.getLogs = function(){
+
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'event', 'delivered').then(function(data){
                     $scope.msgstatus = data
                     function Message(time, event, tox, category){
@@ -89,42 +101,49 @@ m.directive('messageSide', function(){
 
                     // msgstatus is the info
                     // myEvents is the array of the object
+      
+                  
                     angular.forEach($scope.msgstatus, function(value){
                         for (var i = 0; i < myEvents.length; i++){
                             if(value.when_requested == myEvents[i].time){
                                 myEvents[i].category = value.event;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
-                                myEvents[i].to_names.push(myEvents[i].tox.length);                            
+                                // if(value.tox == )
+                                // console.log($scope.peopleDict[value.tox])
+                                // console.log(Object.keys($scope.peopleDict))
+
+                                // myEvents[i].to_names.push($scope.peopleDict[String(value.tox)]);
+                               
+                                // // else if($scope.peopleDict[value.tox]==)
+                                // else {
+                                //     myEvents[i].to_names.push("not undefined")
+                                // }
+                                // myEvents[i].to_names.push($scope.peopleDict[value.tox])
+                                // for(key in $scope.peopleDict){
+                                //     if(value.tox == key){
+                                //         myEvents[i].to_names.push(value.tox);
+                                //     }
+                                //     else
+                                //         myEvents[i].to_names.push("oops")
+                                // }
+
+                                // myEvents[i].to_names.push(myEvents[i].tox.length);                            
                             }
                         }
                     })
-                   
-                    $scope.message_data = myEvents;
+                    $scope.message_data = myEvents;         
                     console.log($scope.message_data);
 
-                
-
                 }).except(function(data){
-                    // console.log(data);
+                    console.log(data);
                 })
             }
             $scope.getLogs();
 
-          
-            $scope.checkAddress = function(){
-                var peoplenames = []
-                angular.forEach($scope.people, function(key, value){
-                    peoplenames.push(value.name)
-                    alert(peoplenames)
-                })
-            }
-            $scope.checkAddress();
 
 
-            $scope.addReceiver = function(){
-
-            }
+            
             
         }]
     };
