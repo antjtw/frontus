@@ -4438,8 +4438,7 @@ textarea.email-text {
     padding-top: 14px;
     padding-bottom: 12px;
     left: 20%;
-    color: #003045; 
-    cursor: pointer;   
+    color: #003045;  
 }
 
 .messages .activity-feed2 span.recipients {
