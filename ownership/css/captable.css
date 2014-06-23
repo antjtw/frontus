@@ -638,10 +638,12 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion.lessmargin .capGuide,
+.transaction-accordion.lessmargin .linkedDocuments,
 .transaction-accordion.lessmargin .btn-group {
     padding-left: 0;
 }
-.transaction-accordion .btn-group {
+.transaction-accordion .btn-group,
+.transaction-accordion .linkedDocuments {
     padding-left: 20px;
 }
 

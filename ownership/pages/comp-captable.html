@@ -1410,13 +1410,12 @@
                                         <span class="pull-right" data-icon="&#xe00f;" ng-click="removeEvidence(doc, tran)"></span>
                                     </div>
                                 </div>
-                                <span ng-hide="windowToggle" class="blue-link delete-link" ng-click="editEvidence(tran);" data-icon="&#xe008;">Add Documents</span>
-                                <div ng-show="windowToggle" class="standard-button">
+                                <span ng-hide="windowToggle" class="blue-link delete-link linkedDocuments" ng-click="editEvidence(tran);" data-icon="&#xe008;">Add Documents</span>
+                                <div ng-show="windowToggle" class="standard-button linkedDocuments">
                                     <button class="btn" ng-click="editEvidence();">
                                         Finished!
                                     </button>
                                 </div>
-
                             </div>
                             </accordion-group>
                         </accordion>

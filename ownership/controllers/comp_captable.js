@@ -492,6 +492,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.getActiveTransaction = function (currenttran, currentcolumn) {
+        $scope.currentTab = 'details';
         $scope.sidebarstart = angular.copy($scope.sideBar);
         $scope.oldActive = angular.copy($scope.activeTran);
         if ($scope.toggleView() && $scope.oldActive && $scope.oldActive[0] && $scope.oldActive[0].investorkey == currenttran && $scope.oldActive[0].key == currentcolumn) {
