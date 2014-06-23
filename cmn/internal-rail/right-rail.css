@@ -226,6 +226,37 @@ button.right-rail-button > span.arrow-flip {
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
 }
+
+.nav-tabs > li > a {
+    border-radius: 0;
+    margin-right: 0px;
+    cursor: pointer;
+    border: 1px solid #C6C6C6;
+    background-color: #E3E3E3;
+    padding-top: 9px;
+    padding-bottom: 10px;
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    background-color: #F1F1F1;
+}
+
+.nav-tabs > li > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+    border-left: transparent;
+    border-top: transparent;
+}
+
+.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+    border-color: #C6C6C6;
+}
+
+.nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus {
+    border-right: 0;
+}
+
 .trantabs .nav.nav-tabs, .tabbable .nav.nav-tabs {
     padding: 0 0 0 0;
     margin: 0 0 0 0;
