@@ -1325,6 +1325,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
     height: 60px;
     line-height: 60px;
     width: 100%;
+    position: relative; /* for the action buttons inside */
 }
 
 .docViewerControls > div > div.tools {
@@ -1700,12 +1701,12 @@ navbar .navbar + doc-viewer.modal-backdrop {
 .confirmButton {
     position: absolute;
     right: 20px;
-    top: 75px;
+    top: 15px;
 }
 .backButton {
     position: absolute;
     left: 20px;
-    top: 75px;
+    top: 15px;
 }
 .backButton > button > span {
     font-size: 16px;

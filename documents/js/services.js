@@ -51,6 +51,7 @@ docs.service('basics', function () {
 
 // DOCUMENTS
 Document = function() {
+    this.annotations = [];
 };
 
 Document.prototype = {
