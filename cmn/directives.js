@@ -17,11 +17,13 @@ m.directive('messageSide', function(){
                     $scope.people = data
                     console.log($scope.people.length);
                     console.log($scope.people)
-                    var test = []
-                    angular.forEach($scope.people, function(thing){
-                        test.push(thing.email);
-                    })
-                    console.log(test)
+                    $scope.getLogs();
+                    var array = []
+                    var obj = {}
+                    angular.forEach($scope.people, function(info){
+                        array.push(obj[info.email] = info.name)
+                    }) 
+                    console.log(obj)
                 });
                 
                 
@@ -110,19 +112,19 @@ m.directive('messageSide', function(){
             $scope.getLogs();
 
           
-            // $scope.checkAddress = function(){
-            //     var peoplenames = []
-            //     angular.forEach($scope.people, function(key, value){
-            //         peoplenames.push(value.name)
-            //         alert(peoplenames)
-            //     })
-            // }
-            // $scope.checkAddress();
+            $scope.checkAddress = function(){
+                var peoplenames = []
+                angular.forEach($scope.people, function(key, value){
+                    peoplenames.push(value.name)
+                    alert(peoplenames)
+                })
+            }
+            $scope.checkAddress();
 
 
-            // $scope.addReceiver = function(){
+            $scope.addReceiver = function(){
 
-            // }
+            }
             
         }]
     };
