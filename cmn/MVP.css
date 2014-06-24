@@ -4456,6 +4456,20 @@ textarea.email-text {
     padding-top: 30px;
 }
 
+.span4.capright.sidecontent{ 
+    padding-right: none;
+}
+
+/*.messages.tabbable .activity-feed2{
+    overflow-y: auto;
+    height: 100%;
+}*/
+
+.messages .activity-feed2 {
+    height: 100%;
+    position: fixed;
+}
+
 
 /*.message-side .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus{
     border-right: 1px solid #C6C6C6;
