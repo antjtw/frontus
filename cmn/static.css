@@ -738,6 +738,14 @@ address {
     display: none;
 }
 
+.clear-strip {
+    height: 40px;
+    background-color: #F1F1F1;
+    color: #666666;
+    line-height: 40px;
+    text-align: center;
+}
+
 @media (max-width: 1024px) {
 
     .features .debt-calculator .try-me-button {
