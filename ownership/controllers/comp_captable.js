@@ -12,8 +12,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Set the view toggles to their defaults
     $scope.radioModel = "Edit";
     $scope.maintoggle = true;
+    $scope.windowToggle = false;
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
+    $scope.currentTab = 'details';
+    $scope.state = {evidenceQuery: ""};
 
     // Tour options
     $scope.tourshow = false;
@@ -52,6 +55,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.captabletips.termwarrant = "The term of the warrant before expiration";
     $scope.captabletips.common = "Indicates that a security is common stock";
     $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
+    $scope.captabletips.evidence = "Tie documents to items in your captable.";
     $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
 
     $scope.activityView = "ownership.company_activity_feed";
@@ -64,6 +68,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None','1X','2X', '3X'];
+    $scope.eligible_evidence = [];
+    $scope.evidence_object = null;
 
     $scope.tourUp = function () {
         $scope.tourModal = true;
@@ -85,6 +91,12 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         angular.forEach(results, function (result) {
             $scope.freqtypes.push(result['get_freqtypes']);
         });
+    });
+
+    SWBrijj.tblm('ownership.my_company_eligible_evidence').then(function(data) {
+        $scope.eligible_evidence = data;
+    }).except(function(e) {
+        console.log(e);
     });
 
     $scope.vInvestors = [];
@@ -143,7 +155,13 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             });
         });
     });
-
+    $scope.attachEvidence = function(data) {
+        angular.forEach($scope.trans, function(tran) {
+            var this_tran_evidence = data.filter(function(el) { return el.evidence==tran.evidence; });
+            tran.evidence_data = this_tran_evidence;
+        });
+        // TODO implement for issues
+    };
     $scope.generateCaptable = function(names) {
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
@@ -454,8 +472,10 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 // Get the company's Grants
                 SWBrijj.tblm('ownership.company_grants').then(function (grants) {
                     $scope.grants = grants;
-                    $scope.generateCaptable(names);
-
+                    SWBrijj.tblm('ownership.my_company_evidence').then(function(evidence_data) {
+                        $scope.attachEvidence(evidence_data);
+                        $scope.generateCaptable(names);
+                    });
                 });
             });
         });
@@ -471,6 +491,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.getActiveTransaction = function (currenttran, currentcolumn) {
+        $scope.currentTab = 'details';
         $scope.sidebarstart = angular.copy($scope.sideBar);
         $scope.oldActive = angular.copy($scope.activeTran);
         if ($scope.toggleView() && $scope.oldActive && $scope.oldActive[0] && $scope.oldActive[0].investorkey == currenttran && $scope.oldActive[0].key == currentcolumn) {
@@ -1385,6 +1406,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (row.name == tran.investor && row.name == returneddata[1]) {
                                 if (transaction.tran_id == '' && !tran.tran_id && (!isNaN(parseFloat(tran.units)) || !isNaN(parseFloat(tran.amount)))) {
                                     tran.tran_id = returneddata[0];
+                                    if (transaction.evidence_data) {
+                                        $scope.updateEvidenceInDB(transaction, 'added');
+                                    }
                                     for (var i=0; i < $scope.trans.length; i++) {
                                         if ($scope.trans[i] == tran) {
                                             $scope.$watch('trans['+i+']', function(newval, oldval) {
@@ -1478,6 +1502,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     });
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Transaction failed to save, please try entering again");
+                        console.log(x);
                     });
             }
         }
@@ -1639,8 +1664,104 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             return true
         }
     };
-
-
+    $scope.complexSideToggleButton = function() {
+        if (!$scope.windowToggle) {
+            $scope.sideToggle = !$scope.sideToggle;
+        } else {
+            $scope.editEvidence();
+        }
+    };
+    $scope.switchCapTab = function(tab) {
+        $scope.currentTab = tab;
+    };
+    $scope.toggleShown = function(obj) {
+        if (obj.shown == undefined) {
+            obj.shown = true;
+        } else {
+            obj.shown = !obj.shown;
+        }
+    };
+    $scope.viewEvidence = function(ev) {
+        if (ev.doc_id != null) {
+            window.open('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+        } else if (ev.original != null) {
+            window.open('/app/documents/company-view?doc='+ev.original+'&page=1');
+        }
+    };
+    $scope.editEvidence = function(obj) {
+        if (obj) {
+            $scope.evidence_object = obj;
+            $scope.windowToggle = true;
+        } else {
+            $scope.evidence_object = null;
+            $scope.windowToggle = false;
+        }
+        return $scope.windowToggle;
+    };
+    $scope.evidenceEquals = function(ev1, ev2) {
+        return (ev1.doc_id && ev2.doc_id && ev1.doc_id==ev2.doc_id && ev1.investor==ev2.investor)
+            || (ev1.original && ev2.original && !ev1.doc_id && !ev2.doc_id && ev1.original==ev2.original);
+    };
+    $scope.isEvidence = function(ev) {
+        if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
+            return $scope.evidence_object.evidence_data.filter(function(x) {return $scope.evidenceEquals(ev, x);}).length>0;
+        } else {
+            return false;
+        }
+    };
+    $scope.removeEvidence = function(ev, obj) {
+        if (!obj) {
+            $scope.evidence_object.evidence_data = $scope.evidence_object.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
+            $scope.updateEvidenceInDB($scope.evidence_object, 'removed');
+        } else {
+            obj.evidence_data = obj.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
+            $scope.updateEvidenceInDB(obj, 'removed');
+        }
+    };
+    $scope.addEvidence = function(ev) {
+        if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
+            // assumes ev is not already in evidence_data
+            $scope.evidence_object.evidence_data.push(ev);
+        }
+    };
+    $scope.toggleForEvidence = function(ev) {
+        if (ev && $scope.evidence_object && !$scope.evidence_object.evidence_data) {
+            $scope.evidence_object.evidence_data = [];
+        }
+        if (ev && $scope.evidence_object && $scope.evidence_object.evidence_data) {
+            var action = "";
+            if ($scope.isEvidence(ev)) {
+                $scope.removeEvidence(ev);
+                action = "removed";
+            } else {
+                $scope.addEvidence(ev);
+                action = "added";
+            }
+            $scope.updateEvidenceInDB($scope.evidence_object, action);
+        }
+    };
+    $scope.updateEvidenceInDB = function(obj, action) {
+        if (obj.tran_id && obj.evidence_data) {
+            SWBrijj.procm('ownership.upsert_transaction_evidence',
+                          parseInt(obj.tran_id, 10),
+                          JSON.stringify(obj.evidence_data)
+            ).then(function(r) {
+                void(r);
+                //$scope.$emit("notification:success", "Evidence "+action);
+            }).except(function(e) {
+                $scope.$emit("notification:fail", "Something went wrong. Please try again.");
+                console.log(e);
+            });
+        }
+    };
+    $scope.evidenceFilter = function(obj) {
+        if ($scope.state.evidenceQuery && obj) {
+            var re = new RegExp($scope.state.evidenceQuery, 'i');
+            return re.test(obj.docname);
+        } else {
+            return true;
+        }
+    };
     // Captable Conversion Modal
 
     $scope.convertSharesUp = function(trans) {

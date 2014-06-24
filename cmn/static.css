@@ -302,7 +302,7 @@ address {
 }
 
 .static .feature-block.feature-permission + .icon-set {
-    margin-top: -4px;
+    margin-top: 0;
     background-color: #FFFFFF;
 }
 
@@ -822,7 +822,6 @@ address {
     }
 
     .features .header-section .header {
-        margin: 0 20px;
     }
 
     .static .feature-block {
@@ -831,7 +830,6 @@ address {
     }
 
     .feature-block .text {
-       margin: 0 20px;     
        padding-right: 0;    
     }
 
@@ -841,7 +839,11 @@ address {
     }
 
     .feature-block .feature-list .feature {
-        max-width: 124px;
+        max-width: 120px;
+    }
+
+    .features .header-section ul > li {
+        margin: 0 10px;
     }
 
 }

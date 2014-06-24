@@ -2177,12 +2177,180 @@ tr.preparedDoc {
 /* Dynamic shifting of spans */
 .leftTabWindow {
     overflow-x: hidden;
+    margin-left: 0;
+    -webkit-animation: leftTabSlideIn 0.25s linear;
+    -moz-animation: leftTabSlideIn 0.25s linear;
+    -ms-animation: leftTabSlideIn 0.25s linear;
+    -o-animation: leftTabSlideIn 0.25s linear;
+    animation: leftTabSlideIn 0.25s linear;
+}
+.leftTabWindow.showRightTab {
+    margin-left: calc(-100% + 350px);
+    margin-left: -moz-calc(-100% + 350px);
+    margin-left: -webkit-calc(-100% + 350px);
+    -webkit-animation: leftTabSlideOut 0.25s linear;
+    -moz-animation: leftTabSlideOut 0.25s linear;
+    -ms-animation: leftTabSlideOut 0.25s linear;
+    -o-animation: leftTabSlideOut 0.25s linear;
+    animation: leftTabSlideOut 0.25s linear;
+}
+@keyframes leftTabSlideIn {
+    to {
+        margin-left: 0;
+    }
+    from {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@-webkit-keyframes leftTabSlideIn {
+    to {
+        margin-left: 0;
+    }
+    from {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@-webkit-keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
+}
+@-webkit-keyframes leftTabSlideOut {
+    from {
+        margin-left: 0;
+    }
+    to {
+        margin-left: calc(-100% + 350px);
+        margin-left: -moz-calc(-100% + 350px);
+        margin-left: -webkit-calc(-100% + 350px);
+    }
 }
 .leftFullTableBlock {
     width: 1017px !important;
 }
 .rightNoTableBlock {
     margin-right:-350px;
+}
+.rightTabWindow {
+    position:absolute;
+    left: 0;
+    top: 100px;
+    margin-left: 1000px;
+    width: -moz-calc(100% - 430px);
+    width: -webkit-calc(100% - 430px);
+    width: calc(100% - 430px);
+    padding: 20px 20px 20px 20px;
+    box-sizing: border-box;
+    -webkit-animation: rightTabSlideOut 0.25s linear;
+    -moz-animation: rightTabSlideOut 0.25s linear;
+    -ms-animation: rightTabSlideOut 0.25s linear;
+    -o-animation: rightTabSlideOut 0.25s linear;
+    animation: rightTabSlideOut 0.25s linear;
+}
+.rightTabWindow.showRightTab {
+    -webkit-animation: rightTabSlideIn 0.25s linear;
+    -moz-animation: rightTabSlideIn 0.25s linear;
+    -ms-animation: rightTabSlideIn 0.25s linear;
+    -o-animation: rightTabSlideIn 0.25s linear;
+    animation: rightTabSlideIn 0.25s linear;
+    margin-left: 430px;
+}
+.rightTabWindow.ng-leave {
+    -webkit-animation: rightTabSlideOut 0.25s linear;
+    -moz-animation: rightTabSlideOut 0.25s linear;
+    -ms-animation: rightTabSlideOut 0.25s linear;
+    -o-animation: rightTabSlideOut 0.25s linear;
+    animation: rightTabSlideOut 0.25s linear;
+}
+@keyframes rightTabSlideIn {
+    from {
+        margin-left: 100%;
+    }
+    to {
+        margin-left: 430px;
+    }
+}
+@-webkit-keyframes rightTabSlideIn {
+    from {
+        margin-left: 100%;
+    }
+    to {
+        margin-left: 430px;
+    }
+}
+@keyframes rightTabSlideOut {
+    to {
+        margin-left: 100%;
+    }
+    from {
+        margin-left: 430px;
+    }
+}
+@-webkit-keyframes rightTabSlideOut {
+    to {
+        margin-left: 100%;
+    }
+    from {
+        margin-left: 430px;
+    }
+}
+.fadeHide {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.25s linear, visibility 0 linear 0.25s;
+}
+.fadeShow {
+    visibility: visible;
+    -webkit-animation:fadeShow 0.25s linear;
+    -moz-animation: fadeShow 0.25s linear;
+    -ms-animation: fadeShow 0.25s linear;
+    -o-animation: fadeShow 0.25s linear;
+    animation: fadeShow 0.25s linear;
+}
+@keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-webkit-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-moz-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color: inherit;}
+}
+@-o-keyframes fadeShow {
+    0% {opacity: 0; color: white;}
+    100% {opacity: 1; color:inherit;}
 }
 /* Company People */
 .tableView.people-table th {
@@ -2202,8 +2370,27 @@ tr.preparedDoc {
     text-shadow: none;
     box-shadow: none;
 }
+.standard-button > button.btn > span:before {
+    padding-right: 5px;
+    vertical-align: middle;
+}
+.standard-button.btn-group > .btn:active {
+    box-shadow: none;
+    text-shadow: none;
+}
 .standard-button.btn-group > .btn.on{
     background-color: #15A085 !important;
+}
+.standard-button.btn-group.darkgray > .btn.on{
+    background-color: #8D8D8D !important;
+    color: #F1F1F1;
+}
+.standard-button.btn-group.darkgray > .btn {
+    background-color: #F1F1F1;
+    border: 1px solid #8D8D8D;
+}
+.standard-button.btn-group.darkgray > .btn:hover {
+    background-color: #E3E3E3;
 }
 .box-button {
     width: 76px;
@@ -4260,5 +4447,48 @@ textarea.email-text {
     left: 40%;
 }
 
+.capTab {
+    margin-top: 20px;
+}
+.linkedDocuments {
+    width: 260px;
+    margin-bottom: 20px;
+}
+.linkedDocuments.viewOnly {
+    width: 280px;
+}
+.linkedDocuments.viewOnly > div > ul {
+    width: 280px;
+}
+.linkedDocuments > div > ul {
+    padding-bottom: 14px;
+    width: 240px;
+}
+.linkedDocuments ul > li:first-child > span {
+    color: #3498DB;
+    font-size: 14px !important;
+    cursor: pointer;
+}
+.linkedDocuments ul > li:nth-child(2) > span {
+    font-size: 12px !important;
+}
+.linkedDocuments ul > li:nth-child(2) {
+    line-height: 12px;
+}
+.linkedDocuments > div > span.pull-right {
+    line-height: 32px;
+    cursor: pointer;
+}
+.capTab span.blue-link.delete-link {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+}
 
-
+.capTab > span.blue-link:before {
+    padding-right: 5px;
+    vertical-align: middle;
+}
+.evidenceSearch {
+    position: absolute !important;
+    left: 450px;
+}
