@@ -739,10 +739,10 @@ address {
 }
 
 .clear-strip {
-    height: 40px;
+    height: 60px;
     background-color: #F1F1F1;
     color: #666666;
-    line-height: 40px;
+    line-height: 60px;
     text-align: center;
     border-bottom: 1px solid #C6C6C6;
 }
@@ -753,7 +753,6 @@ address {
 
 .clear-strip > div.standard-button > button {
     background-color: #a6a6a6;
-    min-height: 20px;
     margin-top: -4px;
     margin-left: 10px;
 }
