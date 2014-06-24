@@ -107,8 +107,10 @@ m.directive('messageSide', function(){
                             }
                         }
                     })
-                    $scope.message_data = myEvents;         
+                    $scope.message_data = myEvents;
+                    $scope.myEvents = $scope.message_data.length         
                     console.log($scope.message_data);
+                    console.log(typeof $scope.myEvents)
 
                 }).except(function(data){
                     console.log("error");
