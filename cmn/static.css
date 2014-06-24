@@ -302,7 +302,7 @@ address {
 }
 
 .static .feature-block.feature-permission + .icon-set {
-    margin-top: -4px;
+    margin-top: 0;
     background-color: #FFFFFF;
 }
 
@@ -738,6 +738,30 @@ address {
     display: none;
 }
 
+.clear-strip {
+    height: 60px;
+    background-color: #F1F1F1;
+    color: #666666;
+    line-height: 60px;
+    text-align: center;
+    border-bottom: 1px solid #C6C6C6;
+}
+
+.clear-strip > div.standard-button {
+    display: inline-block;
+}
+
+.clear-strip > div.standard-button > button {
+    background-color: #a6a6a6;
+    margin-top: -4px;
+    margin-left: 10px;
+    letter-spacing: 0.025em;
+}
+
+.clear-strip > div.standard-button > button:hover {
+    background-color: #8D8D8D;
+}
+
 @media (max-width: 1024px) {
 
     .features .debt-calculator .try-me-button {
@@ -822,7 +846,6 @@ address {
     }
 
     .features .header-section .header {
-        margin: 0 20px;
     }
 
     .static .feature-block {
@@ -831,7 +854,6 @@ address {
     }
 
     .feature-block .text {
-       margin: 0 20px;     
        padding-right: 0;    
     }
 
@@ -841,7 +863,11 @@ address {
     }
 
     .feature-block .feature-list .feature {
-        max-width: 124px;
+        max-width: 120px;
+    }
+
+    .features .header-section ul > li {
+        margin: 0 10px;
     }
 
 }

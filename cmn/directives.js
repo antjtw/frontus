@@ -1,5 +1,126 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
+m.directive('messageSide', function(){
+    return {
+        scope: false,
+        // replace: true,
+        // transclude: false,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/messageSide.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
+
+        function($scope, $rootScope, SWBrijj, $route) {
+
+            // $scope.tabnumber = function() {
+            //     var total = 0;
+            //     angular.forEach($scope.tabs, function(tab) {
+            //         if ($scope.tabvisible(tab)) {
+            //             total += 1
+            //         }
+            //     });
+            //     return total;
+            // };
+            
+            $scope.getPeople = function(){
+                SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                    $scope.people = data
+                    console.log($scope.people.length);
+                    console.log($scope.people)
+                    var array = []
+                    var obj = {}
+                    angular.forEach($scope.people, function(info){
+                        array.push(obj[info.email] = info.name)
+                        if(info.name == ""){
+                            array.push(obj[info.email]= null)
+                        }
+                    }) 
+                    $scope.peopleDict = obj
+                    console.log($scope.peopleDict)
+                    console.log($scope.peopleDict['ariel+3@sharewave.com'])
+                    $scope.getLogs();
+                });               
+            };
+            $scope.getPeople();
+
+            $scope.$watch('peopleDict', function(newdata, olddata){
+                if(newdata){
+                    $scope.getLogs();
+                }        
+            });
+
+
+
+            $scope.getStatus = function(){
+                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
+                    $scope.messages=data;
+                    $scope.message_number = data.length
+                });
+            }
+            $scope.getStatus();
+
+            $scope.getLogs = function(){
+                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'event', 'delivered').then(function(data){
+                    $scope.msgstatus = data
+                    function Message(time, event, tox, category, to_names){
+                        this.time = time
+                        this.event = []
+                        this.tox = []
+                        this.category = category
+                        this.to_names = []
+                    }
+                   
+
+                    // msgstatus is an array
+                    var msgdata = []
+                    angular.forEach($scope.msgstatus, function(value){
+                        if (!msgdata.some(function(timestamp, idx, arr){
+                             return timestamp.equals(value.when_requested);
+                        })) {
+                            msgdata.push(value.when_requested);
+                        }
+                         
+                    });
+                    var myEvents = []
+
+                    for (var i = 0; i < msgdata.length; i++){
+                       myEvents.push(new Message(msgdata[i]))
+                    }
+
+                    // msgstatus is the info
+                    // myEvents is the array of the object
+                    angular.forEach($scope.msgstatus, function(value){
+                        for (var i = 0; i < myEvents.length; i++){
+                            if(value.when_requested.equals(myEvents[i].time)) {
+                                myEvents[i].category = value.event;
+                                myEvents[i].tox.push(value.tox);
+                                myEvents[i].event.push(value.event);
+                                if($scope.peopleDict[value.tox]==null){
+                                    myEvents[i].to_names.push(value.tox)
+                                }
+                                // else if($scope.peopleDict['ariel+3@sharewave.com']){
+                                //     myEvents.to_names.push("error");
+                                // }
+                                else {
+                                    myEvents[i].to_names.push($scope.peopleDict[value.tox])
+                                }
+                                                             
+                            }
+                        }
+                    })
+                    $scope.message_data = myEvents;
+                    $scope.myEvents = $scope.message_data.length         
+                    console.log($scope.message_data);
+                    console.log(typeof $scope.myEvents)
+
+                }).except(function(data){
+                    console.log("error");
+                })
+            }
+        
+            
+        }]
+    };
+});
 m.directive('addPerson', function(){
     return {
         scope: false,
@@ -45,12 +166,13 @@ m.directive('addPerson', function(){
             
             $scope.toggleRole = function() {
                 $scope.newRole = !$scope.newRole;
-                console.log("this makes someone an admin or not")
+                console.log("this makes someone an admin or not");
             };
 
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             $scope.fieldCheck = function() {
                 return re.test($scope.newEmail);
+                console.log($scope.newEmail)
 
             };
 

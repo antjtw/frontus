@@ -37,30 +37,30 @@
 
 <div modal="imageProcessedModal" options="processedopts" data-keyboard="false" data-backdrop="static">
     <div class="row-fluid">
-        <div class="span5">
+        <div class="span7">
             <div class="row-fluid">
-                <div class="rect green">
+                <div class="rect leftOffset" ng-class="adjustedColor" ng-click="selectProcessing('adjusted')">
                     <img id="processedModalAdjustedImage">
-                    <div class="modalText centeredText whiteText">
-                        <span>Adjusted</span>
+                    <div class="modalText centeredText" ng-class="adjustedText">
+                        <span>Enhanced</span>
                     </div>
                 </div>
-                <div class="rect gray">
+                <div class="rect" ng-class="originalColor" ng-click="selectProcessing('original')">
                     <img id="processedModalOriginalImage">
-                    <div class="modalText centeredText">
+                    <div class="modalText centeredText" ng-class="originalText">
                         <span>Original</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="span7">
+        <div class="span5">
             <div class="modalText">
                 <div class="textBlock">
                     <span class="subtitle">We fixed it!</span>
-                    <span>Our system detected that the image uploaded was skewed slightly. Do you wish to continue with the adjusted document?</span>
+                    <span>We've straightened up your document to make it look better!<span>
                 </div>
-                <div class='blue-link'><span ng-click="processedClose(false)">Continue with the adjusted document</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
-                <div class='gray-link'><span ng-click="processedClose(true)">Use original</span></div>
+                <div class='blue-link' ng-if="adjustedSelected"><span ng-click="processedClose(false)">Continue with enhancements</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
+                <div class='blue-link' ng-if="!adjustedSelected"><span ng-click="processedClose(true)">Continue with original</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
             </div>
         </div>
     </div>
