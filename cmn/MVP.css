@@ -4448,12 +4448,20 @@ textarea.email-text {
     padding-top: 14px;
 }
 
+.messages .activity-feed2 .testing:last-of-type {
+    padding-bottom: 14px;
+}
+
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
 }
 
 .messages .activity-feed2 li.event:first-of-type {
     padding-top: 30px;
+}
+
+.messages .activity-feed2 li.event:last-of-type {
+    padding-bottom: 14px;
 }
 
 .noMessages {
