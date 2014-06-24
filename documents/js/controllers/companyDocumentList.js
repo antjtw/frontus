@@ -268,21 +268,22 @@ app.controller('CompanyDocumentListController',
             $scope.checkReady = function() {
                 // Cap at 10 then say error
                 var incrementer = 0;
-                SWBrijj.tblminnerjoin('document.my_company_library', 'document.my_company_codex', 
-                    ['upload_id', 'doc_id'], null, 'doc_id', 'doc_id', 'page', 1, 
-                    'document.my_company_codex').then(function(data) {
+                SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id', 'pages']).then(function(data) {
                     angular.forEach(data, function(doc) {
                         var index = $scope.uploadprogress.indexOf(doc.upload_id);
                         if (index != -1) {
-                            $scope.uploadprogress.splice(index, 1);
-                            angular.forEach($scope.documents, function(document) {
-                                //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
-                                if (document.doc_id == doc.upload_id) {
-                                    document.doc_id = doc.doc_id;
-                                    document.uploading = false;
-                                    $rootScope.billing.usage.documents_total+=1;
-                                }
-                            });
+                            if (doc.pages != null)
+                            {
+                                $scope.uploadprogress.splice(index, 1);
+                                angular.forEach($scope.documents, function(document) {
+                                    //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
+                                    if (document.doc_id == doc.upload_id) {
+                                        document.doc_id = doc.doc_id;
+                                        document.uploading = false;
+                                        $rootScope.billing.usage.documents_total+=1;
+                                    }
+                                });
+                            }
                         }
                     });
                     if ($scope.uploadprogress.length !== 0 && incrementer < 30) {
