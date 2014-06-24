@@ -4470,6 +4470,10 @@ textarea.email-text {
     position: fixed;
 }
 
+.span4.capright.side{
+    padding-right: 0px;
+} 
+
 
 /*.message-side .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus{
     border-right: 1px solid #C6C6C6;
