@@ -159,7 +159,6 @@ m.directive('composeMessage', function() {
                 $scope.messagetext=msg.text
                 $scope.sendername = $rootScope.person.name;
                 $scope.company = $rootScope.navState.name;
-                console.log($scope.messagetext);
             };
 
             $scope.previewModalClose = function(){
@@ -224,5 +223,18 @@ m.directive('meter', function() {
             $scope.$watch('cur', $scope.updateMeter);
             $scope.$watch('tot', $scope.updateMeter);
         }]
+    };
+});
+
+m.directive('docMiniViewer', function() {
+    return {
+        scope: {docid: "="},
+        replace: true,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/docMiniViewer.html',
+        controller: ['$scope', '$rootScope',
+            function($scope, $rootScope, $routeParams) {
+
+            }]
     };
 });
