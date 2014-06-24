@@ -138,7 +138,7 @@
                                         <div ng-class="{'editview': !toggleView()}"
                                              ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                                         <div ng-class="{'editview': !toggleView()}"
-                                             ng-bind="formatDollarAmount(row[key]['a'])"
+                                             ng-bind="formatAmount(row[key]['a'])"
                                              class="output second clickable"></div>
                                     </span>
                 </td>
@@ -160,7 +160,7 @@
                                         <div ng-bind="formatAmount(colTotal(one, rows, 'u'))"
                                              ng-class="{'editview': !toggleView()}" class="output footer"></div>
 
-                                        <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))"
+                                        <div ng-bind="formatAmount(colTotal(one, rows, 'a'))"
                                              ng-class="{'editview': !toggleView()}" class="output second footer"></div>
                                     </span>
                 </td>

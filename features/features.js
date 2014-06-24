@@ -1502,6 +1502,10 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             });
         });
 
+        $scope.colTotal = function(header, rows, type) {
+            return calculate.colTotal(header, rows, type);
+        };
+
         // Generate the Captable from the dummy data.
         $scope.issues = [({"liquidpref":null,"common":true,"issue":"Common A","terms":null,"dragalong":null,"totalauth":null,"type":"Equity","date":new Date(1388552400000),"interestratefreq":null,"debtundersec":null,"created":new Date(1401829586274),"vestingbegins":null,"ppshare":1,"valcap":null,"lastupdated":new Date(1401829593179),"partpref":null,"optundersec":null,"discount":null,"postmoney":null,"vestfreq":null,"price":null,"premoney":null,"term":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"interestrate":null}),({"liquidpref":null,"common":null,"issue":"Options","terms":48,"dragalong":null,"totalauth":20000.0,"type":"Option","date":new Date(1401768000000),"interestratefreq":null,"debtundersec":null,"created":new Date(1401829621182),"vestingbegins":new Date(1433304000000),"ppshare":1,"valcap":null,"lastupdated":new Date(1401829632373),"partpref":null,"optundersec":"Common A","discount":null,"postmoney":null,"vestfreq":"monthly","price":1,"premoney":null,"term":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":25.0,"interestrate":null})];
         var names = [({"name":"Ellen Orford","company":"be7daaf65fcf.sharewave.com"}),({"name":"Peter Quint","company":"be7daaf65fcf.sharewave.com"}),({"name":"Albert Herring","company":"be7daaf65fcf.sharewave.com"}),({"name":"John Claggart","company":"be7daaf65fcf.sharewave.com"}),({"name":"Owen Wingrave","company":"be7daaf65fcf.sharewave.com"})];
