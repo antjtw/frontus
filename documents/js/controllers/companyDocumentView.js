@@ -163,7 +163,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 return; //don't step on other modal's toes
             SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
             {
-                console.log(data);
                 var approved = data.processing_approved;
                 if (!approved)
                 {

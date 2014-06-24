@@ -288,7 +288,9 @@ app.controller('CompanyDocumentListController',
             $scope.checkReady = function() {
                 // Cap at 10 then say error
                 var incrementer = 0;
-                SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id']).then(function(data) {
+                SWBrijj.tblminnerjoin('document.my_company_library', 'document.my_company_codex', 
+                    ['upload_id', 'doc_id'], null, 'doc_id', 'doc_id', 'page', 1, 
+                    'document.my_company_codex').then(function(data) {
                     angular.forEach(data, function(doc) {
                         var index = $scope.uploadprogress.indexOf(doc.upload_id);
                         if (index != -1) {
@@ -307,6 +309,8 @@ app.controller('CompanyDocumentListController',
                         incrementer += 1;
                         $timeout($scope.checkReady, 2000);
                     }
+                }).except(function(data) {
+                    console.log(data);
                 });
             };
 
