@@ -111,7 +111,7 @@ m.directive('messageSide', function(){
                     console.log($scope.message_data);
 
                 }).except(function(data){
-                    console.log(data);
+                    console.log("error");
                 })
             }
         
