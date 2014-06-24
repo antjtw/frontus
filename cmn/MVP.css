@@ -4456,6 +4456,11 @@ textarea.email-text {
     padding-top: 30px;
 }
 
+.noMessages {
+    padding-left: 12px;
+    padding-top: 12px;
+}
+
 .span4.capright.sidecontent{ 
     padding-right: none;
 }

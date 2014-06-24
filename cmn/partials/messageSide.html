@@ -4,9 +4,21 @@
        <tab heading="Activity" class="navbar navbar-default navbar-fixed-top">
  -->
 <div class="messages tabbable" ng-if="myEvents == 0">
-    <ul class="activity-feed2">
-        <li>You haven't sent any messages yet!</li>
-    </ul>
+    <div class= "noMessages">
+        You haven't sent any messages yet!
+    </div>
+
+    <!-- ul class="activity-feed2">
+        <li class="event">
+            <div>
+                <ul>
+                    <li>
+                        <span>You haven't sent any messages yet!</span>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul> -->
 </div>
 
  <div class="messages tabbable" ng-if="myEvents > 1">            
@@ -19,14 +31,15 @@
                                     <span>
                                         Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': 'one shareholder', 'other': '{} shareholders'}">
                                     </span><br/>
-                                    <div ng-if="message_datum.tox.length == 1"> 
-                                        <span data-icon="&#xe034;"aria-hidden="true" ng-show="hideRecipients" class="msgarrow" ng-click = "hideRecipients = !hideRecipients" style="cursor:pointer"></span>
-                                        <span data-icon="&#xe031;"aria-hidden="true" ng-show="!hideRecipients" class="msgarrow"ng-click = "hideRecipients = !hideRecipients" style="cursor:pointer"></span>
-                                        <span ng-click = "hideRecipients = !hideRecipients" style="cursor:pointer">Recipient</span>
-                                        <ul ng-class="{'testing':!hideRecipients}">
-                                            <li ng-show="!hideRecipients" ng-repeat="to_name in message_datum.to_names track by $index">    
-                                                <span class="recipients">{{to_name}}</span>
+                                    <div ng-if="message_datum.tox.length == 1" ng-click = "showRecipients = !showRecipients" >
+                                     <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showRecipients" class="msgarrow" style="cursor:pointer"></span>
+                                        <span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow" style="cursor:pointer"></span>
+                                        <span style="cursor:pointer">Recipients</span>
+                                        <ul ng-class="{'testing':showRecipients}">
+                                            <li ng-show="showRecipients" ng-repeat="to_name in message_datum.to_names track by $index">     <span class="recipients">{{to_name}}</span>
                                             </li>
+                                        </ul>
+                        
                                     </div>
                                     <div ng-if="message_datum.tox.length > 1" ng-click = "showRecipients = !showRecipients" > 
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showRecipients" class="msgarrow" style="cursor:pointer"></span>
@@ -36,8 +49,9 @@
                                             <li ng-show="showRecipients" ng-repeat="to_name in message_datum.to_names track by $index">    
                                                 <span class="recipients">{{to_name}}</span>
                                             </li>
+                                        </ul>
                                     </div>
-                                </ul>
+                              <!--   </ul> -->
                                 </li>                
                             </ul>
                         </div>
