@@ -744,6 +744,7 @@ address {
     color: #666666;
     line-height: 40px;
     text-align: center;
+    border-bottom: 1px solid #C6C6C6;
 }
 
 .clear-strip > div.standard-button {
