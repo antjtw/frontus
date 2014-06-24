@@ -628,6 +628,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                     if (!res) alert('failed to save annotations');
                 }
+                // TODO: should call saveSmartdocData
                 if ($scope.template_original && $scope.prepareable($scope.lib)) {
                     var res2 = SWBrijj._sync('SWBrijj', 'proc',
                         ["account.company_attribute_update",

@@ -2,7 +2,7 @@
 <script src="/cmn/spin.js"></script>
 <div class="container dynamic-page">
     <subnav>
-        <page-controls doc-id="docId" current-page="currentPage"></page-controls>
+        <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
     </subnav>
     <div modal="tourModal" close="tourclose();" options="touropts">
         <div class="modal-title">

@@ -38,8 +38,12 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         });
 
         $scope.$on('docViewerReady', function(event) {
-            if ($scope.docId) $scope.getData();//{$route.reload();}
-            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            if ($scope.docId) {
+                $scope.getData();//{$route.reload();}
+            } else if ($scope.templateKey) {
+                $scope.toggleSide = false;
+                $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            }
         });
 
         $scope.helpModalUp = function () {
