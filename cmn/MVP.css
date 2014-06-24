@@ -4466,7 +4466,7 @@ textarea.email-text {
 }*/
 
 .messages .activity-feed2 {
-    height: 80%;
+    height: 95%;
     /*height: calc(100%-40px);*/
     position: fixed;
 }
@@ -4478,25 +4478,3 @@ textarea.email-text {
 } 
 
 
-/*.message-side .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus{
-    border-right: 1px solid #C6C6C6;
-}*/
-/*
-.message-side .singletab .tabbable .nav-tabs > li{
-    width: calc(100% - 20px);*/
-/*    position:fixed;*/
-/*    padding-top: 9px;*/
-/*    padding-bottom: 10px;*/
-/*    border-right: 0px;
-    float: left;
-    line-height: 20px;
-    display: list-item;
-    text-align: -webkit-match-parent;
-}*/
-
-
-
-/*.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type >{
-    color: blue;
-}
-*/
