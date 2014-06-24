@@ -755,6 +755,7 @@ address {
     background-color: #a6a6a6;
     margin-top: -4px;
     margin-left: 10px;
+    letter-spacing: 0.025em;
 }
 
 .clear-strip > div.standard-button > button:hover {
