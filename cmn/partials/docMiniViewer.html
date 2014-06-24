@@ -1,5 +1,13 @@
-<div modal="docMiniViewer" close="dmvclose();" options="opts">
-    <ul class="scrollable-docs">
-        <li></li>
-    </ul>
+<div modal="docMiniViewer" close="closemodal();" options="opts">
+    <div class="modalHeader">
+        <span>{{document.docname}}</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="closemodal();"></span>
+    </div>
+    <div class="scrollable-docs share-modal-main">
+        <ul infinite-scroll="loadPages()" infinite-scroll-distance="1" infinite-scroll-parent="">
+            <li ng-repeat="page in pages">
+                <img ng-src="{{page}}"/>
+            </li>
+        </ul>
+    </div>
 </div>

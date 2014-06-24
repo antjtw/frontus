@@ -4492,3 +4492,17 @@ textarea.email-text {
     position: absolute !important;
     left: 450px;
 }
+
+.scrollable-docs {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.scrollable-docs li {
+    border-bottom: 2px solid black;
+}
+
+.modal.dmvModal {
+    margin-left: -350px;
+    width: 700px;
+}

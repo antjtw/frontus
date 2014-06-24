@@ -229,12 +229,45 @@ m.directive('meter', function() {
 m.directive('docMiniViewer', function() {
     return {
         scope: {docid: "="},
-        replace: true,
         restrict: 'E',
         templateUrl: '/cmn/partials/docMiniViewer.html',
-        controller: ['$scope', '$rootScope',
-            function($scope, $rootScope, $routeParams) {
+        controller: ['$scope', 'SWBrijj',
+            function($scope, SWBrijj) {
 
+
+                $scope.opts = {
+                    backdropFade: true,
+                    dialogFade: true,
+                    dialogClass: 'dmvModal modal'
+                };
+
+                $scope.openmodal = function () {
+                    $scope.docMiniViewer = true;
+                };
+
+                $scope.closemodal = function () {
+                    $scope.docMiniViewer = false;
+                    $scope.docid = undefined;
+                };
+
+                $scope.loadPages = function() {
+                    $scope.currentblock = $scope.lastpage + 3;
+                    while ($scope.lastpage <= parseInt($scope.document.pages) && $scope.lastpage < $scope.currentblock) {
+                        $scope.pages.push("/photo/docpg?id=" + $scope.docid + "&investor=false&counterparty=false&page=" + ($scope.lastpage) + "");
+                        $scope.lastpage += 1
+                    }
+                };
+
+                $scope.$watch('docid', function() {
+                    if ($scope.docid) {
+                        $scope.lastpage = 1;
+                        SWBrijj.tblm('document.my_company_library', 'doc_id', $scope.docid).then(function(data) {
+                            $scope.document = data;
+                            $scope.pages = [];
+                            $scope.openmodal();
+                        });
+                    }
+                });
             }]
     };
 });
