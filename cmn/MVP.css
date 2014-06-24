@@ -4415,14 +4415,11 @@ textarea.email-text {
 }
 
 /*message sidebar*/
-.message-side {
+/*.message-side {
     margin-right: -40px;
-}
+}*/
 
-.messages .activity-feed2 {
-    height: 100%;
-    padding-right: 10px;
-}
+
 
 .secondbar {
     right: -350px;
@@ -4437,7 +4434,7 @@ textarea.email-text {
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type > div {
     padding-top: 14px;
     padding-bottom: 12px;
-    left: 20%;
+/*    left: 20%;*/
     color: #003045;  
 }
 
@@ -4463,14 +4460,19 @@ textarea.email-text {
 /*.message-side .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus{
     border-right: 1px solid #C6C6C6;
 }*/
-
+/*
 .message-side .singletab .tabbable .nav-tabs > li{
-    width: calc(100% - 20px);
+    width: calc(100% - 20px);*/
 /*    position:fixed;*/
 /*    padding-top: 9px;*/
 /*    padding-bottom: 10px;*/
-    border-right: 0px;
-}
+/*    border-right: 0px;
+    float: left;
+    line-height: 20px;
+    display: list-item;
+    text-align: -webkit-match-parent;
+}*/
+
 
 
 /*.messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type >{

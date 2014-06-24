@@ -106,8 +106,13 @@
 
         <div  ng-class="{rightNoTableBlock:hideSharebar,
                              slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-style="viewportheight">
-               <!--  <message-side></message-side> -->
-                <message-side></message-side>
+
+            <tabset class="singletab">
+                <tab heading = "Activity">
+                <div style="clear: both;">
+                    <message-side style="overflow-y: auto; height: 735px;"></message-side>
+                </div>
+            </tab>
                       
         </div>
         <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
