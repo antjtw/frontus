@@ -56,7 +56,8 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
     $scope.formatDocStatusRatio = function(doc) {
-        if (doc.version_count == 0) return (doc.template_id == null ? "Uploaded" : "Pre-loaded");
+        var uploadState = doc.uploading ? "Uploading" : "Uploaded";
+        if (doc.version_count == 0) return (doc.template_id == null ? uploadState : "Pre-loaded");
 
         var show_archived = $scope.viewState.show_archived;
 
