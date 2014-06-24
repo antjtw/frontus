@@ -4469,7 +4469,9 @@ textarea.email-text {
     height: 100%;
     position: fixed;
 }
-
+.messages .activity-feed2 li.event{
+    margin-right: 20px;
+}
 .span4.capright.side{
     padding-right: 0px;
 } 
