@@ -1859,6 +1859,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     color: #FFFFFF;
 }
 
+.tour-box {
+    z-index: 1000;
+}
+
 .tour-box.affix-top {
     position: fixed;
     right: 0;
@@ -1879,7 +1883,6 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .tour-box.showtour {
     left: 0;
-    z-index: 1000;
 }
 
 .tour-box > .tour-stage {
@@ -1996,7 +1999,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     position: absolute;
     width: 30px;
     height: 30px;
-    bottom: 10px;
+    top: 10px;
 }
 
 .tour-box .tour-finish-button > button.btn {
@@ -2027,7 +2030,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
     position: absolute;
     left: 0;
-    top: -12px;
+    top: -10px;
     z-index: 1;
     content: ' ';
     width: 158px;
@@ -2077,7 +2080,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
     position: absolute;
     left: 0;
-    top: -14px;
+    top: -24px;
     z-index: 10;
     content: ' ';
     width: 152px;
@@ -2236,8 +2239,8 @@ span.tour-icon.tour-view, span.tour-icon.tour-share {
 
 span.tour-icon.intro-icon {
     display: inline-block;
-    top: 140px;
-    left: 380px;
+    top: 158px;
+    left: 379px;
 }
 
 span.tour-icon > span:first-of-type {
