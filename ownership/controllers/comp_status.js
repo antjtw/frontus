@@ -48,19 +48,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         })
     });
 
-    SWBrijj.tblm("ownership.company_activity_feed").then(function (feed) {
-
-        var originalfeed = feed;
-        //Generate the groups for the activity feed
-        $scope.feed = [];
-        angular.forEach(originalfeed, function(event) {
-            if (event.activity != "sent") {
-                event.when = moment(event.event_time).from(event.timenow);
-                event.type = "ownership"
-                $scope.feed.push(event);
-            }
-        });
-    });
+    $scope.activityView = "ownership.company_activity_feed";
 
     $scope.activityOrder = function(card) {
         return -card.event_time;

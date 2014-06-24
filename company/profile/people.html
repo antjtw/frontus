@@ -1,4 +1,5 @@
-<link type="text/css" rel="stylesheet" href="/cmn/profile.css">
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
@@ -7,50 +8,83 @@
             <div class="subnav-controls">
                 <div>
                     <div class="pull-left">
-                        <span>SEARCH</span>
-                        <input type="text" class="search-box" ng-model="filterText">
+                        <div class="pull-left" >
+                            <span>Search</span>
+                            <input type="text" class="search-box" ng-model="filterText">
+                            
+                        </div>
                     </div>
-                    <compose-message/></compose-message>
 
+                 <!--    email button -->
                     <div class="box-button pull-right"
-                         ng-class="{'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || adminModalOpen();"
+                         ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
+                         ng-click="companyIsZombie() || toggleSide('email'); clearRecipient();"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
-                            <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
+                            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
+
                             </li>
-                            <li> <span>Add Person</span>
+                            <li> <span>Message</span>
 
                             </li>
                         </ul>
                     </div>
+
+                    <!-- peoplebutton -->
+                    <div class="box-button pull-right"
+                         ng-class="{'disabledme': companyIsZombie(), selected: sidebarPage == 'people'}"
+                         ng-click="companyIsZombie() || toggleSide('people'); clearRecipient()"
+                         data-placement="bottom" bs-tooltip="zombiemessage">
+                        <ul>
+                            <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
+                            </li>
+                            <li> <span>People</span>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    
                 </div>
                 <div class="DivHelper"></div>
             </div>
         </div>
 
-        <div ng-style="viewportheight" class="row-fluid">
+  <!--   text in the window -->
+    <div class="row-fluid leftTabWindow">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">
                 <table class="status-table people-table">
                     <tbody>
                     <tr>
+                    
                         <th class="button" ng-click="sortBy('name')"><span class="title sortedDown">Name</span></th>
                         <th class="button" ng-click="sortBy('role')"><span class="title sortedDown">Role</span></th>
                         <th></th>
+
                     </tr>
                     </tbody>
                     <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
                     <tr class="empty-row"></tr>
-                    <tr>
-                        <td style="width:400px" class="shareholder-column docname-column" ng-click="gotoPerson(person);">
-                            <ul>
-                                <li>{{person.name}}</li>
-                                <li>{{formatLastLogin(person.lastlogin)}}</li>
-                            </ul>
-                        </td>
+                    
+                      
+                    <td style="width:400px" class="shareholder-column docname-column" ng-click=" sidebarPage || gotoPerson(person)">      
+                        <div ng-if="!hideSharebar && sidebarPage == 'email'" class="check-box-side">
+                            <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
+                             <span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                        </div>
+            
+                        <ul>
+                            <li>{{person.name}}</li>
+                            <li>{{formatLastLogin(person.lastlogin)}}</li>
+                        </ul>
+                    </td>
+
+                        
+                             
                         <td><span ng-show="person.role=='issuer'">Admin</span></td>
                         <td style="width:50px;">
-                            <ul ng-show="person.lastlogin" class="dropdown-list">
+                            <ul ng-show="person.lastlogin" class="dropdown-list" ng-hide="sidebarPage == 'email'">
                                 <li class="dropdown standard menu-drop">
                                     <a class="dropdown-toggle">
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
@@ -69,47 +103,38 @@
                 </table>
             </div>
         </div>
+
+        <div  ng-class="{rightNoTableBlock:hideSharebar,
+                             slidingcss25:oldSafari()}" class="span4 capright side sidecontent button-offset" ng-style="viewportheight">
+
+            <tabset class="singletab">
+                <tab heading = "Activity">
+                <div style="clear: both;">
+                    <message-side style></message-side>
+                </div>
+            </tab>
+                      
+        </div>
+        <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
+                <compose-message  recipients="messageData.recipients" ng-switch-when="email">
+                </compose-message>
+                <add-person ng-switch-when="people"></add-person>
+        </div>
+
+    </div>
+
+
     </section>
+
+<!--     rail toggle -->
+<button class="right-rail-button" ng-click="toggleRail()">
+ <!--    hide button -->
+    <span data-icon="&#xe033;" aria-hidden="true" ng-class="{'arrow-flip': hideRail}"></span>
+</button>
 </div>
 
 
-<div modal="adminModal" close="adminModalClose()" options="profileopts">
-    <div class="modalHeader">
-        <span>Add Person</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="adminModalClose()"></span>
-    </div>
-
-    <div class="modalText">
-        <div class="add-person input-list">
-            <div>
-                <span>Name</span><input type="text" ng-model="newName" />
-            </div>
-            <div>
-                <span>Email</span><input type="text" ng-model="newEmail" />
-            </div>
-            <div>
-                <span>Admin</span>
-                <button ng-click="toggleRole()" ng-class="{'selected':newRole}" ng-model="newRole" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-            </div>
-            <div ng-if="newRole && triggerUpgradeAdmins(1)"
-                 class="upgradeWarning">
-                <span>
-                    Note that making this person an admin will upgrade your subscription plan.
-                </span>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="adminModalClose()">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-disabled="!fieldCheck()" ng-click="create_person(); adminModalClose();">Confirm</button>
-        </div>
-    </div>
-
-</div>
+<!-- admin toolbar -->
 <div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
     <div class="modalHeader">
         <span>Remove administrator</span>
@@ -150,5 +175,7 @@
             </div>
         </div>
     </div>
+<!-- toggle siderail -->
+
 </div>
 </div>

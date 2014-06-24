@@ -422,6 +422,45 @@ button.greyButton {
     text-align: left;
 }
 
+.modalText.linkDropboxModal {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.span.linkDropboxModalSpan {
+    margin-left: 15px;
+}
+
+.span.linkDropboxModalSpan.smaller {
+    margin-top: 12px;
+    width: 300px;
+    padding-left: 75px;
+}
+
+.span.linkDropboxModalSpan.larger {
+    width: 400px;
+}
+
+.modalText.linkDropboxModalText {
+    width: 300px;
+    margin-bottom: 5px;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: left;
+}
+
+.modalText.linkDropboxModalText.header {
+    font-weight: bold;
+    margin-bottom: 1px;
+}
+
+.modalText.linkDropboxModalText.header.greenLabel {
+    color: #1ABC96;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
 .modalText.deleteDocModal.retractModal {
     margin-bottom: 50px;
 }
@@ -653,7 +692,6 @@ textarea.email-text {
     margin-left: 0;
     width: 350px;
     border-left: 6px solid white;
-    padding-top: 14px;
     padding-left: 20px;
     padding-right: 40px;
 }
@@ -671,13 +709,7 @@ textarea.email-text {
     -o-transition: all 0.25s; /* Opera */
 }
 
-.fadeHide {
-    // text should be hidden width height and width transitions
-    // all else can't be squished...i don't think
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.25s linear, visibility 0 linear 0.25s;
-}
+
 .shareholder-column.docname-column .fadeHide {
     -webkit-transform: translate3d(0, 10px, 0);
     -moz-transform: translate3d(0, 10px, 0);
@@ -753,30 +785,7 @@ textarea.email-text {
     100% {margin-left: inherit;}
 }
 
-.fadeShow {
-    visibility: visible;
-    -webkit-animation:fadeShow 0.25s linear;
-    -moz-animation: fadeShow 0.25s linear;
-    -ms-animation: fadeShow 0.25s linear;
-    -o-animation: fadeShow 0.25s linear;
-    animation: fadeShow 0.25s linear;
-}
-@keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-webkit-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-moz-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-o-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color:inherit;}
-}
+
 
 /* Template CSS */
 
@@ -965,6 +974,191 @@ input[type='text']:disabled, textarea:disabled {
 
 .templatePanel .check-box-button:disabled, .check-box-button:disabled:hover {
     background: url("/img/stripe-pattern.png") repeat;
+}
+
+.twoPieceModal .documentUploadText {
+    text-align: left;
+    width: 450px;
+    padding: 0px 0px 0px 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.modalText .documentUploadText {
+    padding-top: 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.modalText .documentUploadText .container {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.twoPieceModal {
+    margin-left: -360px;
+    width:718px;
+    z-index: 1060;
+    background-color: transparent;
+    box-shadow: none;
+    display: inline-block;
+}
+
+.twoPieceModal .modal-title {
+    background-color: #FFFFFF;
+    margin-bottom: 10px;
+    height: 80px;
+}
+
+.twoPieceModal .modal-title > p {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #1D2C3C;
+    line-height: 80px;
+}
+
+.twoPieceModal .modalText {
+    background-color: #FFFFFF;
+}
+
+.twoPieceModal ul > li {
+    text-align: left;
+    margin-left: 20px;
+    height: 100px;
+    overflow: auto;
+    font-size: 14px;
+    color: #666666;
+}
+
+.twoPieceModal ul > li > span {
+    display: inline-block;
+    width: 300px;
+    float: right;
+}
+
+.twoPieceModal .modalText h6 {
+    color: #15A085;
+    text-transform: uppercase;
+    font-size: 10px;
+    text-align: left;
+    margin: 10px 0 10px 0;
+}
+
+.twoPieceModal .body {
+    margin-left: 0px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #FFFFFF;
+}
+
+.twoPieceModal .modalText p {
+    font-size: 14px;
+    text-align: left;
+    margin: 0 0 10px 0;
+}
+
+.twoPieceModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
+}
+
+.twoPieceModal div.modalText.documentUploadText.header {
+    padding-top: 10px;
+    font-weight: bolder;
+}
+
+.twoPieceModal .documentUpload {
+    display: inline-block;
+}
+
+.twoPieceModal div.documentUpload.fakefile{
+    position: absolute;
+    top: 15px;
+    left: 50px;
+}
+
+.twoPieceModal .documentUpload input.file {
+    float: left;
+    width: 135px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.twoPieceModal div.modalText.documentUploadFileInputs {
+    display: inline-block;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+.processedImageModal {
+    margin-left: -360px;
+    width:718px;
+    z-index: 1060;
+    text-align: left;
+}
+
+.processedImageModal .modalText {
+    padding-top: 60px;
+    padding-right: 30px;
+    text-align: left;
+}
+
+.processedImageModal .textBlock {
+    padding-bottom: 40px;
+}
+
+.processedImageModal .subtitle {
+    color: #000;
+    display: block;
+}
+
+.processedImageModal ul > li.blue-link {
+    color: #3498DB;
+    height: 30px;
+    margin-left: 0px;
+}
+
+.processedImageModal .dataIcon {
+    vertical-align: -10%;
+}
+
+.processedImageModal .gray-link {
+    cursor: pointer;
+}
+
+.processedImageModal .rect {
+    padding: 3px 3px 3px 3px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: inline-block;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.processedImageModal .leftOffset {
+    margin-left: 35px;
+}
+
+.processedImageModal .centeredText {
+    text-align: center;
+    padding: 1px 1px 1px 1px;
+    margin: 0px 0px 0px 0px;
+}
+
+.processedImageModal .whiteText {
+    color: #FFFFFF;
+}
+
+.processedImageModal .green {
+    background-color: #1ABC96;
+}
+
+.processedImageModal .gray {
+    background-color: #E3E3E3;
+}
+
+.processedImageModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
 }
 
 .helpModal {
@@ -1391,7 +1585,7 @@ doc-viewer > .modal-backdrop {
     box-shadow: none;
 }
 
-.docViewerTitle div.small-standard-button {
+.docViewerTitle div.standard-button {
     padding-top: 14px;
     padding-right: 20px;
 }
@@ -1459,8 +1653,10 @@ doc-viewer > .modal-backdrop {
     color: #1E2D3D;
 }
 
-.confirmBody > .radioOption > li:last-child > span {
+.confirmBody > .radioOption > li:last-child > span:last-child {
     color: #666666;
+    margin-left: 35px;
+    display: inline-block;
 }
 
 .confirmBody > .radioOption textarea.messageText {
@@ -1472,15 +1668,21 @@ doc-viewer > .modal-backdrop {
 }
 
 .confirmBody > .checkboxOption {
-    width: 320px;
+    width: 360px;
     margin: 0 auto;
 }
 
 .confirmBody > .checkboxOption > li:last-child {
-    padding-left: 20px;
+    padding-left: 30px;
+    float: inherit;
 }
 
-.confirmBody > .checkboxOption > li:last-child > span {
+.confirmBody > .checkboxOption > li:last-child > span:first-child {
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
+.confirmBody > .checkboxOption > li:last-child > span:last-child {
     color: #666666;
 }
 
@@ -1790,8 +1992,8 @@ doc-viewer > .modal-backdrop {
 
 .sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
     color: #FFFFFF;
-    font-size: 10px;
-    text-transform: uppercase;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 
 .sticky-menu ul.required-row > li {

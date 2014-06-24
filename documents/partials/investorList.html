@@ -9,13 +9,13 @@
             <div class="subnav-controls">
                 <div>
                     <div class="pull-left checkboxitem">
-                        <span>HIDE COMPLETED</span>
+                        <span>Hide Completed</span>
                         <button class="check-box-button" ng-class="{'selected':hideCompleted}" ng-click="toggleHideCompleted()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button> 
                     </div>
                     <div class="pull-left">
-                        <span>SEARCH</span>
+                        <span>Search</span>
                         <input type="Text" class="search-box" ng-model="query">
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                     <tr ng-class="{selectedrow:doc.shown}">
                         <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)">
                             <ul>
-                                <li>{{doc.docname | caplength:40}}</li>
+                                <li title="{{doc.docname}}">{{doc.docname | caplength:40}}</li>
                                 <li>{{docStatusa(doc)}}</li>
                             </ul>
                         </td>

@@ -2,21 +2,23 @@
     <div class="head-box">
         <h2>Activity</h2>
     </div>
-    <div class="body-box">
-        <ul class="activity-feed2">
-            <li ng-repeat="event in activity">
-                <div><img ng-src="/img/activity/{{event | icon}}.png"></div>
-                <div>
-                    <ul>
-                        <li>
-                            <span ng-bind-html="event | description:[type, user]"></span>
-                        </li>
-                        <li>
-                            <span>{{event.when}}</span>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+    <div ng-style="height" class="body-box">
+        <ul ng-style="height" class="activity-feed2">
+            <div infinite-scroll="load()" infinite-scroll-distance="2" infinite-scroll-disabled="loading" infinite-scroll-parent>
+                <li class="event" ng-repeat="event in activity">
+                    <div><span class="activity-icon {{event | icon}}-icon"></span></div>
+                    <div>
+                        <ul>
+                            <li>
+                                <span ng-bind-html="event | description:[type, user]"></span>
+                            </li>
+                            <li>
+                                <span>{{event.when}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </div>
         </ul>
     </div>
 </div>

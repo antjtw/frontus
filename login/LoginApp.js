@@ -24,6 +24,7 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
     $scope.password = "";
     if ($routeParams.error) {
       $scope.showError = true;
+      $scope.username = $routeParams.error;
     } else {
       $scope.showError = false;
     }
@@ -150,6 +151,6 @@ app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
 
 app.controller('SentCtrl', ['$scope', function($scope) {
     $scope.gobacklogin = function(){
-        document.location.href = '/login';
+        document.location.href = '/login/';
     };
 }]);

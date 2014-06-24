@@ -83,7 +83,7 @@ app.controller('CompanySelfCtrl', ['$scope', '$location', '$routeParams', 'SWBri
         });
 
         $scope.activate = function() {
-            SWBrijj.doCompanySelfActivate($scope.email, $scope.code, $scope.password, $scope.pname, '', $scope.cname, false).then(function(activated) {
+            SWBrijj.doCompanySelfActivate($scope.email.toLowerCase(), $scope.code, $scope.password, $scope.pname, '', $scope.cname, false).then(function(activated) {
                 if (activated) {
 
                     document.location.href = activated + "?msg=first";
@@ -138,7 +138,7 @@ app.controller('CompanyOneStep',
         };
 
         $scope.register = function() {
-            SWBrijj.doCompanyOneStepRegister($scope.email, $scope.password,
+            SWBrijj.doCompanyOneStepRegister($scope.email.toLowerCase(), $scope.password,
                                              $scope.pname, $scope.cname,
                                              $scope.payment_token,
                                              $scope.selectedPlan,

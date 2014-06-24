@@ -107,17 +107,8 @@
 <div class="row-fluid" ng-click="resetSideBar();">
     <div class="captable-controls subnav-controls">
         <div>
-            <div class="pull-left back-section">
-                <div class="backbutton" ng-click="gotoPage('/app/ownership/company-status')">
-                    <span data-icon="&#xe033;" aria-hidden="true"></span>
-                </div>
-                <div>
-                    <span>View</span>
-                    <span>Status</span>
-                </div>
-            </div>
-            <div class="pull-left" ng-show="maintoggle && issues.length!==0" style="margin-left:10px">
-                <span>VIEW BY</span>
+            <div class="pull-left" ng-show="maintoggle && issues.length!==0">
+                <span>View by</span>
                 <ul class="dropdown-list drop-selector">
                     <li class="dropdown standard">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -191,11 +182,11 @@
                     <span ng-hide="issue.shown || !issue.trans" data-icon="&#xe017;" aria-hidden="true"></span>
                     <span ng-show="issue.shown && issue.trans" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
-                <td>
+                <td ng-class="{'selectablerow': maintoggle}" ng-click="!maintoggle || getActiveIssue(issue, '', 'view')">
                     <input ng-show="!maintoggle" placeholder="Add new security"
                            ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}"
                            ng-model="issue.issue">
-                    <span ng-show="maintoggle" ng-click="getActiveIssue(issue, '', 'view')">{{issue.issue}}</span>
+                    <span ng-show="maintoggle">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
                 <td>{{formatAmount(issueVested(issue))}}</td>
@@ -323,15 +314,12 @@
 <div ng-switch on="sideBar">
 <span ng-switch-when="1">
 
-                <div class="headsection tabbed row-fluid">
-                    <h1>{{activeInvestor}}</h1>
-
-                    <p>Terms from the ownership table</p>
-                </div>
-
               <div class="capGuide global" ng-show="mode == 1 && !maintoggle">
 
-                  <h2>Transaction Information</h2>
+                  <div class="rightTitle security-type">
+                      <span>Investor</span>
+                      <input disabled ng-model="activeTran.investor">
+                  </div>
 
                   <p class="rightTitle"><span>Date</span><input ng-show="mode == 1 && !maintoggle"
                                                                 ng-disabled="toggleView();"
@@ -341,8 +329,6 @@
                                                                 type="text" ng-model="activeTran.date"
                                                                 data-date-format={{settings.lowercasedate}}
                                                                 bs-datepicker>
-                                        <span class="delete-icon" data-icon="&#xe00c;"
-                                              ng-click="tranDeleteUp(activeTran);" aria-hidden="true"></span>
 
                   </p>
 
@@ -411,6 +397,8 @@
                       <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                             bs-tooltip="captabletips.vestfreq"></span>
                   </div>
+
+                  <span class="blue-link delete-link grant-link" ng-click="tranDeleteUp(activeTran);">Delete transaction</span>
               </div>
 
             <div class="capGuide grants" ng-show="mode == 2 && !maintoggle">
@@ -468,28 +456,14 @@
 
         <span ng-switch-when="4">
 
-            <div class="headsection tabbed row-fluid">
-                <h2><input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
-                           ng-model="activeIssue.issue"
-                           onkeydown="testForEnter();">
-
-                    <ul class="dropdown-list transaction-icon pull-right">
-                        <li class="dropdown standard menu-drop">
-                            <a class="dropdown-toggle">
-                                <span data-icon="&#xe011;" aria-hidden="true"></span>
-                            </a>
-                            <ul ng-hide="toggleView();" class="dropdown-menu">
-                                <li ng-click="deleteIssueButton(activeIssue);">Delete</li>
-                            </ul>
-                        </li>
-                    </ul>
-
-                </h2>
-            </div>
-
               <div class="capGuide grants" ng-show="mode == 1 && !maintoggle">
 
-                  <h2>Issue Information</h2>
+                  <div class="rightTitle security-type">
+                      <span>Security name</span>
+                      <input ng-disabled="toggleView();" ui-event="{blur : 'saveIssue(activeIssue, \'issue\')'}"
+                             ng-model="activeIssue.issue"
+                             onkeydown="testForEnter();">
+                  </div>
 
                   <p class="rightTitle"><span>Issue Date</span><input ng-disabled="toggleView();"
                                                                       id="date{{activeIssue.$$hashKey}}"
@@ -577,60 +551,58 @@
                       <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
                             bs-tooltip="captabletips.vestfreq"></span>
                   </div>
+
+                  <span class="blue-link delete-link grant-link" ng-click="deleteIssueButton(activeIssue);">Delete security</span>
               </div>
 
         </span>
 
         <span ng-switch-when="5">
 
-            <div class="headsection tabbed row-fluid">
-                <h1>{{activeIssue.issue}}</h1>
-            </div>
-
               <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
 
-                  <h2>Issue Information</h2>
+                  <p class="belowTitle"><span ng-bind="activeIssue.issue"></span><span>Security Name</span></p>
 
                   <p class="belowTitle"><span
-                          ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>DATE</span></p>
+                          ng-bind="activeIssue.date  | date:settings.shortdate"></span><span>Date</span></p>
 
                   <p ng-show="activeIssue.optundersec" class="belowTitle"><span
                           ng-bind="activeIssue.optundersec"></span><span tooltip-placement="top"
-                                                                         tooltip="The security each granted share will convert to upon exercise">UNDERLYING SECURITY</span>
+                                                                         tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
                   </p>
 
                   <p ng-show="activeIssue.totalauth" class="belowTitle"><span
                           ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="top"
-                                                                                     tooltip="The sum total of shares authorized to be issued">TOTAL AUTHORIZED</span>
+                                                                                     tooltip="The sum total of shares authorized to be issued">Total Authorized</span>
                   </p>
 
                   <p ng-show="totalGranted(activeIssue.issue, trans)" class="belowTitle"><span
                           ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span><span
-                          tooltip-placement="top" tooltip="The sum total of shares granted">TOTAL GRANTED</span>
+                          tooltip-placement="top" tooltip="The sum total of shares granted">Total Granted</span>
                   </p>
 
                   <p ng-show="activeIssue.price" class="belowTitle"><span
                           ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="top"
-                                                                                       tooltip="The price each granted share can be purchased at when vested">STRIKE PRICE</span>
+                                                                                       tooltip="The price each granted share can be purchased at when vested">Strike Price</span>
                   </p>
 
                   <p ng-show="activeIssue.terms" class="belowTitle"><span ng-bind="activeIssue.terms"></span><span
-                          tooltip-placement="top" tooltip="The total number of months until fully vested">VESTING TERM (MONTHS)</span>
+                          tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (Months)</span>
                   </p>
 
                   <p ng-show="activeIssue.vestingbegins" class="belowTitle"><span
                           ng-bind="activeIssue.vestingbeginsdisplay"></span><span
-                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">VESTING CLIFF (Months)</span>
+                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
                   </p>
 
                   <p ng-show="activeIssue.vestcliff" class="belowTitle"><span
                           ng-bind="activeIssue.vestcliff"></span><span tooltip-placement="top"
-                                                                       tooltip="The percentage of granted shares that are considered vested on the cliff date">VESTING CLIFF %</span>
+                                                                       tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
                   </p>
 
                   <p ng-show="activeIssue.vestfreq" class="belowTitle"><span ng-bind="activeIssue.vestfreq"></span><span
                           tooltip-placement="top"
-                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">POST CLIFF FREQUENCY</span>
+                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
                   </p>
 
               </div>
@@ -639,16 +611,9 @@
 
 <!-- Explain -->
         <span ng-switch-when="3">
-
-            <div class="headsection tabbed row-fluid">
-                <h1>{{activeInvestor}}</h1>
-
-                <p>Terms from the ownership table</p>
-            </div>
-
               <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
 
-                  <h2>Transaction Information</h2>
+                  <p ng-show="activeTran.investor" class="belowTitle"><span ng-bind="activeTran.investor"></span><span>Investor</span></p>
 
                   <p ng-show="activeTran.date" class="belowTitle"><span
                           ng-bind="activeTran.date | date:settings.shortdate"></span><span>Date</span></p>

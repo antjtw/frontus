@@ -63,8 +63,11 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <div ng-show="prepareable(lib)" class="small-standard-button standard-button green" ng-class="{'red-needed' : allUnfilled()}">
+                    <div ng-show="prepareable(lib) && !allUnfilled()" class="small-standard-button standard-button green">
                         <button class="btn" ng-click="leave()">Done</button>
+                    </div>
+                    <div ng-show="prepareable(lib) && allUnfilled()" class="small-standard-button standard-button green red-needed">
+                        <button class="btn" ng-click="leave()">Exit</button>
                     </div>
                     <div ng-hide="prepareable(lib)" class="small-standard-button standard-button gray">
                         <button class="btn" ng-click="leave()">Exit</button>
@@ -127,7 +130,7 @@
                     </button>
                 </div>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
-                <span ng-show="countersignable(lib)">Approve Signature</span>
+                <span ng-show="countersignable(lib)">Approve Document</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
@@ -201,7 +204,7 @@
                         <li class="pull-left">
                             <span>Do you want to electronically sign this document?</span>
                             <br>
-                            <span>(This action is irreversible.)</span>
+                            <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.</span>
                         </li>
                     </ul>
                 </div>
@@ -215,12 +218,14 @@
                             Warning: Approving this document will automatically upgrade your payment plan.
                         </span>
                     </div>
-                    <ul class="radioOption">
+                    <ul class="radioOption" style="height:80px;">
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
                         </li>
-                        <li class="pull-left">
-                            <span>Approve Document</span><br>
+                        <li>
+                            <span>Approve Document with Electronic Signature</span>
+                            <br>
+                            <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.</span>
                         </li>
                     </ul>
                     <br>
@@ -255,7 +260,7 @@
                         <li class="pull-left">
                             <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
                         </li>
-                        <li class="pull-left">
+                        <li>
                             <span>Approve Document</span>
                             <br>
                             <span>Approve signature and finalize this document.</span>
@@ -332,7 +337,7 @@
                         <li class="pull-left">
                             <span>Accept Void</span>
                             <br>
-                            <span>Accept the voiding of this document.</span>
+                            <span style="margin-left: 0">Accept the voiding of this document.</span>
                         </li>
                     </ul>
                     <br>
