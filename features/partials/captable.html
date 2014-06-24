@@ -42,7 +42,12 @@
      class="span8 docLibrary leftBlock">
 
     <div class="row-fluid capcontainer">
-        <div class="clear-strip">Want to start afresh?</div>
+        <div class="clear-strip">
+            Want to start afresh?
+            <div class="standard-button">
+                <button class="btn" ng-click="clearData();">Clear Data</button>
+            </div>
+        </div>
         <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
             <!-- Editable headers -->
             <tr ng-if="!toggleView();" class="column-label">

@@ -235,6 +235,21 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             $location.url("/features/" + link);
         };
 
+        $scope.clearData = function() {
+            angular.forEach($scope.rows, function(row) {
+                $scope.deletePerson(row.namekey);
+            });
+            angular.forEach($scope.rows, function(row) {
+                $scope.deletePerson(row.namekey);
+            });
+            angular.forEach($scope.issues, function(issue) {
+                $scope.deleteIssue(issue);
+            });
+            angular.forEach($scope.issues, function(issue) {
+                $scope.deleteIssue(issue);
+            });
+        };
+
 
         $scope.captabletips = {};
         $scope.captabletips.premoneyval = "The valuation before taking in money in this round";

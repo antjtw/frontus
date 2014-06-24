@@ -746,6 +746,21 @@ address {
     text-align: center;
 }
 
+.clear-strip > div.standard-button {
+    display: inline-block;
+}
+
+.clear-strip > div.standard-button > button {
+    background-color: #a6a6a6;
+    min-height: 20px;
+    margin-top: -4px;
+    margin-left: 10px;
+}
+
+.clear-strip > div.standard-button > button:hover {
+    background-color: #8D8D8D;
+}
+
 @media (max-width: 1024px) {
 
     .features .debt-calculator .try-me-button {
