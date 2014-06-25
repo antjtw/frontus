@@ -73,13 +73,18 @@ m.directive('messageSide', function(){
                         for (var i = 0; i < myEvents.length; i++){
                             if(value.when_requested.equals(myEvents[i].time)) {
                                 myEvents[i].category = value.category;
-                                myEvents[i].tox.push(value.tox);
+                                var idxtox = myEvents[i].tox.indexOf(value.tox)
+                                if(idxtox == -1){
+                                    myEvents[i].tox.push(value.tox);
+                                }
+                                
                                 myEvents[i].event.push(value.event);
                                 var idx = myEvents[i].our_id.indexOf(value.our_id)
                                 if(idx == -1){
                                     myEvents[i].our_id.push(value.our_id);
                                 }
                                 // myEvents[i].our_id.push(value.our_id);
+
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
