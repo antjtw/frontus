@@ -1683,11 +1683,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
     $scope.viewEvidence = function(ev) {
         if (ev.doc_id != null) {
-            $scope.viewme = ev.doc_id;
-            //window.open('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+            if (!$scope.toggleView()) {
+                $scope.viewme = ev.doc_id;
+            } else {
+                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1')
+            }
         } else if (ev.original != null) {
+            if (!$scope.toggleView()) {
             $scope.viewme = ev.original;
-            //window.open('/app/documents/company-view?doc='+ev.original+'&page=1');
+            } else {
+                $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
+            }
         }
     };
     $scope.editEvidence = function(obj) {

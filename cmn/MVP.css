@@ -4500,6 +4500,7 @@ textarea.email-text {
 
 .scrollable-docs li {
     border-bottom: 2px solid black;
+    min-height: 300px;
 }
 
 .modal.dmvModal {
