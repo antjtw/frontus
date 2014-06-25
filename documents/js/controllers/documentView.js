@@ -21,26 +21,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return [offx, offy];
         }
 
-        function topFromBottomLocation(elementHeight, currBottom) {
-            var docPanel = document.querySelector('.docPanel');
-            var bottomEdge = docPanel.offsetTop + docPanel.offsetHeight;
-            if (currBottom > bottomEdge) {
-                return bottomEdge - elementHeight;
-            } else {
-                return currBottom - elementHeight;
-            }
-        }
-
-        function leftFromRightLocation(elementWidth, currRight) {
-            var docPanel = document.querySelector('.docPanel');
-            var rightEdge = docPanel.offsetLeft + docPanel.offsetWidth;
-            if (currRight > rightEdge) {
-                return rightEdge - elementWidth;
-            } else {
-                return currRight - elementWidth;
-            }
-        }
-
         $scope.image = {width: 0, height: 0};
         $scope.dp = {width: 0, height: 0};
         $scope.updateDocPanelSize = function() {
@@ -97,7 +77,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             refreshDocImage();
             $scope.reqDocStatus($scope.docId); // sets $scope.doc_status
             $scope.loadPages();
-            $scope.loadpreviousshares();
         });
 
         $scope.get_attribute = function(attribute, type, attributes) {
@@ -110,18 +89,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 }
             }
         };
-
-        $scope.loadpreviousshares = function() {
-            if ($rootScope.navState.role == 'issuer') {
-                SWBrijj.procm('document.unretracted_shares', $scope.docId).then(function(is) {
-                    $scope.alreadyshared = [];
-                    angular.forEach(is, function(i) {
-                        $scope.alreadyshared.push(i.unretracted_shares);
-                    });
-                });
-            }
-        };
-
 
         var regExp = /\(([^)]+)\)/;
         $scope.template_share = function(email, attributes, message, sign, deadline) {
@@ -781,43 +748,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$on('retVersionStatus', function(event, message) {
             $scope.doc_status = message;
         });
-
-        $scope.clearNotes = function(event) {
-            void(event);
-            SWBrijj.procm($scope.invq ? "document.delete_investor_page" : "document.delete_counterparty_page",
-                $scope.docId, $scope.doc.currentPage).then(function(x) {
-                void(x);
-                refreshDocImage();
-            });
-        };
-
-        $scope.clearAllNotes = function(event) {
-            void(event);
-            for (var i = 1; i <= $scope.docLength; i++) {
-                var z = i;
-                // TODO i don't believe SWBrijj.deletePage exists
-                /** @name SWBrijj#deletePage
-                 * @function
-                 * @param {int}
-                 */
-                SWBrijj.deletePage($scope.docId, i).then(function(x) {
-                    void(x);
-                    if (z === $scope.doc.currentPage) {
-                        refreshDocImage();
-                    }
-                });
-            }
-        };
-
-        $scope.maxPadWidth = function(currLeft) {
-            var docPanel = document.querySelector('.docPanel');
-            return docPanel.offsetLeft + docPanel.offsetWidth - currLeft;
-        };
-
-        $scope.maxPadHeight = function(currTop, bottomEdge) {
-            var docPanel = document.querySelector('.docPanel');
-            return docPanel.offsetTop + docPanel.offsetHeight - currTop;
-        };
 
         $scope.saveSmartdocData = function(clicked) {
             if (!$scope.used_attributes || $rootScope.navState.role=='investor') {return;}
