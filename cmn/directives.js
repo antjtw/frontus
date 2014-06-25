@@ -53,6 +53,12 @@ m.directive('messageSide', function(){
                         this.our_id = []
                         this.event_time = []
                     }
+
+                    function Event(our_id, event, event_time){
+                        this.our_id = our_id,
+                        this.event = event,
+                        this.event_time = []
+                    }
                    
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
@@ -79,12 +85,8 @@ m.directive('messageSide', function(){
                                 }
                                 
                                 myEvents[i].event.push(value.event);
-                                var idx = myEvents[i].our_id.indexOf(value.our_id)
-                                if(idx == -1){
-                                    myEvents[i].our_id.push(value.our_id);
-                                }
-                                // myEvents[i].our_id.push(value.our_id);
-
+                                // var idx = myEvents[i].our_id.indexOf(value.our_id)
+                                myEvents[i].our_id.push(new Event(value.our_id));
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
@@ -107,6 +109,10 @@ m.directive('messageSide', function(){
                 }).except(function(data){
                     console.log("error");
                 })
+
+                $scope.idObject = function(){
+
+                }
             }
 
             // $scope.removeDupIds = function(){
