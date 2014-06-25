@@ -46,11 +46,9 @@ m.directive('messageSide', function(){
                         this.time = time
                         this.event = []
                         this.tox = []
-                        // this.category = category
                         this.to_names = []
                         this.unique_names = []
                         this.our_id = []
-                        this.indEvents = []
                         this.foo = []
                     }
 
@@ -60,16 +58,6 @@ m.directive('messageSide', function(){
                         this.person = person
                         this.event = event
                     }
-
-                    function changeName(name){
-                        if($scope.peopleDict[name]==null){
-                            name = name
-                        }
-                        else {
-                            name = $scope.peopleDict[name]
-                        }         
-                    }
-                    // console.log(changeName('ariel+1@sharewave.com'))
                    
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
@@ -122,6 +110,7 @@ m.directive('messageSide', function(){
                         }
                     })
                     $scope.message_data = myEvents;
+                    // $scope.predicate = '-time';
                     var test = []
 
                     console.log(test)
