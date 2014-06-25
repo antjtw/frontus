@@ -42,22 +42,19 @@ m.directive('messageSide', function(){
             $scope.getLogs = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category', 'our_id', 'event_time'], 'category', 'company-message').then(function(data){
                     $scope.msgstatus = data
-                    console.log($scope.msgstatus)
-                    function Message(time, event, tox, category, to_names, our_id, event_time){
+                    function Message(time, event, tox, to_names, our_id){
                         this.time = time
                         this.event = []
                         this.tox = []
-                        this.category = category
+                        // this.category = category
                         this.to_names = []
                         this.unique_names = []
                         this.our_id = []
-                        this.event_time = []
+                        this.indEvents
                     }
 
-                    function Event(our_id, event, event_time){
-                        this.our_id = our_id,
-                        this.event = event,
-                        this.event_time = []
+                    function Event(our_id){
+                        this.our_id = our_id
                     }
                    
                     var msgdata = []
@@ -73,6 +70,7 @@ m.directive('messageSide', function(){
                     for (var i = 0; i < msgdata.length; i++){
                        myEvents.push(new Message(msgdata[i]))
                     }
+                    console.log(myEvents)
 
                
                     angular.forEach($scope.msgstatus, function(value){
@@ -82,27 +80,31 @@ m.directive('messageSide', function(){
                                 var idxtox = myEvents[i].tox.indexOf(value.tox)
                                 if(idxtox == -1){
                                     myEvents[i].tox.push(value.tox);
-                                }
-                                
+                                } 
                                 myEvents[i].event.push(value.event);
-                                // var idx = myEvents[i].our_id.indexOf(value.our_id)
-                                myEvents[i].our_id.push(new Event(value.our_id));
+                                var idx = myEvents[i].our_id.indexOf(value.our_id)
+                                if(idx == -1){
+                                    myEvents[i].our_id.push(value.our_id)
+                                }
+
+                                // myEvents[i].our_id.push(new Event(value.our_id));
+
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
                                 else {
                                     myEvents[i].to_names.push($scope.peopleDict[value.tox])
-                                }
-                                myEvents[i].event_time.push(value.event_time)                                
+                                }                         
                             }
                         }
                     })
+                    $scope.message_data = myEvents;
+                    var test = []
 
-                    $scope.message_data = myEvents;                   
+                    console.log(test)
+                                     
                     $scope.myEvents = $scope.message_data.length         
-                    angular.forEach($scope.message_data, function(items){
-                        console.log(items.our_id)
-                    })
+                    
                     console.log($scope.message_data);
                     console.log(typeof $scope.myEvents)
 
@@ -110,9 +112,19 @@ m.directive('messageSide', function(){
                     console.log("error");
                 })
 
-                $scope.idObject = function(){
+                // $scope.newObject = function(){
+                //     var myTest = {}
+                //     myTest.first_name = "test"
+                //     console.log(myTest)
+                //     angular.forEach($scope.message_data, function(val){
+                //         for(y = 0; y++; y < val.)
 
-                }
+                //     })
+                // }
+                // $scope.newObject();
+
+
+
             }
 
             // $scope.removeDupIds = function(){
