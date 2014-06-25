@@ -884,7 +884,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.notesComplete = function () {
-            console.log(User);
             // TODO: move to document service
             return $scope.annots.every(function(annot) {
                 return annot.filled(User.signaturePresent, $rootScope.navState.role);
