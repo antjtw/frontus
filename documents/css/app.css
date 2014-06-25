@@ -1250,6 +1250,7 @@ input[type='text']:disabled, textarea:disabled {
 }
 
 doc-viewer, [internal-right-rail], [internal-right-rail] > div {
+    background-color: #f1f1f1;
     height: 100%;
     overflow: auto;
 }

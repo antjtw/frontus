@@ -1,7 +1,9 @@
 <div ng-repeat="page in doc.pages | orderBy: 'page'" ng-if="annotated(page)">
-    <h6 data-icon="&#xe009;"> {{page.page}}</h6>
+    <h6 data-icon="&#xe009;" ng-click="page_visible[page.page] = !(page_visible[page.page] == undefined || page_visible[page.page])"> {{page.page}}</h6>
     <div ng-repeat="annotation in annotations | filter: {page: page.page} | orderBy: 'position.coords.y'" data-icon="&#xe60d;"
-     ng-class="{mine: annotation.forRole($root.navState.role), complete: annotation.filled(signaturepresent, $root.navState.role), incomplete: (annotation.required && !annotation.filled(signaturepresent, $root.navState.role))}">
+     ng-class="{mine: annotation.forRole($root.navState.role), complete: annotation.filled(signaturepresent, $root.navState.role), incomplete: (annotation.required && !annotation.filled(signaturepresent, $root.navState.role))}"
+     ng-if="page_visible[page.page] == undefined || page_visible[page.page]"
+     ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
         {{attributeLabel(annotation.whattype)}}
     </div>
 </div>

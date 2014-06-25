@@ -144,6 +144,9 @@ app.directive('annotationList', function() {
                 $scope.$watch("docId", function(new_doc_id, old_doc_id) {
                     $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
                     $scope.doc = Documents.getDoc(new_doc_id);
+
+                    // we want a new page_visible array for every doc
+                    $scope.page_visible = [];
                 });
 
                 $scope.annotated = function(page) {
@@ -191,7 +194,7 @@ app.directive('pageControls', function() {
             });
             $scope.template_original = false;
             $scope.$watch('doc.currentPage', function(page) {
-                if (page && $scope.doc.pages) {
+                if ((page != void(page)) && $scope.doc.pages) {
                     if (page < 1) {
                         $scope.doc.currentPage = 1;
                     } else if (page > $scope.doc.pages.length) {

@@ -13,8 +13,8 @@
         <li>
             / {{ doc.pages.length || "   "}}
         </li>
-        <li ng-class="{'locked' : doc.currentPage >= docLength}" class="button" ng-click="doc.currentPage = doc.currentPage + 1">
-            <span data-icon="&#xe004;" aria-hidden="true"></span>
+        <li class="button" ng-click="doc.currentPage = doc.currentPage + 1">
+            <span ng-class="{'locked' : doc.currentPage >= doc.pages.length}" data-icon="&#xe004;" aria-hidden="true"></span>
         </li>
     </ul>
 </div>

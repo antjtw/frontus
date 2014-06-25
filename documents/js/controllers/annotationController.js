@@ -267,29 +267,12 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
                (role == "investor" && whosign == "Issuer") ? true : false;
     };
 
-    $scope.openBox = function(ev, event) {
+    $scope.openBox = function() {
         if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
             $scope.getme = true;
         }
         if ($scope.annot.whattype == "ImgSignature" && (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') || ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-            var textarea = event.currentTarget;
-            var width = parseInt(textarea.style.width);
-            var height = parseInt(textarea.style.height);
-            var boxwidth = 330;
-            var boxheight = 200;
-            var ratio;
-            if (height > width) {
-                ratio = boxheight / height;
-                height = boxheight;
-                width = width * ratio;
-            }
-            else {
-                ratio = boxwidth / width;
-                width = boxwidth;
-                height = height * ratio;
-            }
-            $scope.signaturestyle = {height: String(180), width: String(330) };
-            $scope.currentsignature = textarea;
+            $scope.signaturestyle = {height: 180, width: 330 };
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.sigModalUp();
         }
@@ -367,6 +350,15 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         $scope.newinitdrag($scope.annot.initDrag);
         delete $scope.annot.initDrag;
     }
+
+    $scope.$watch('annot.focus', function(focus) {
+        // tell if we're supposed to start or become a focused attribute
+        if (focus) {
+            // could call openBox(), but want the actual pointer to be focused on the textarea
+            $element.find('textarea').focus();
+        }
+        delete $scope.annot.focus;
+    });
 
     $scope.signaturepresent = $scope.$parent.signaturepresent;
 
