@@ -685,6 +685,23 @@ textarea.email-text {
     color: #3498DB;
 }
 
+/* doclist specific CSS for the captable style sliding right panel (sharebar) */
+
+.company-list .span4.capright {
+    float: right;
+    margin-left: 0;
+    width: 350px;
+    border-left: 6px solid white;
+    padding-left: 20px;
+    padding-right: 40px;
+}
+.company-list .span4.capright.showSharebar {
+    border-left: 6px solid #E3E3E3;
+}
+.company-list .right-bar-header {
+    letter-spacing: 1px;
+}
+
 .slidingcss25 {
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;
