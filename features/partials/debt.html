@@ -27,30 +27,30 @@
                                 <li>Convertible Note</li>
                                 <li>
                                     <span>Investment Amount</span>
-                                    <input class="money" ng-change="conversion('fromtranamount')" ng-model="fields.fromtranamount">
+                                    <input type="text" class="money" ng-model="fields.fromtranamount" ng-change="conversion('fromtranamount')" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
                                 </li>
                                 <li>
                                     <span>Discount (%)</span>
-                                    <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount">
+                                    <input ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
                                 </li>
                                 <li>
                                     <span>Valuation Cap</span>
-                                    <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap">
+                                    <input class="money" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
                                 </li>
                             </ul>
                             <ul>
                                 <li>Qualified Financing</li>
                                 <li>
                                     <span>Investment Amount</span>
-                                    <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold">
+                                    <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
                                 </li>
                                 <li ng-show="debttab == 'one'">
                                     <span>Percentage of Company Sold</span>
-                                    <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold">
+                                    <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
                                 </li>
                                 <li ng-show="debttab == 'two'">
                                     <span>Pre-money valuation</span>
-                                    <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney">
+                                    <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
                                 </li>
                             </ul>
                         </div>

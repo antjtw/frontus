@@ -1,5 +1,5 @@
 var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'ownerFilters', 'ui.event',
-    'ownerDirectives', 'ownerServices', '$strap.directives', 'd3'], function($routeProvider, $locationProvider){
+    'ownerDirectives', 'ownerServices', '$strap.directives', 'd3', 'ui.jq'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
@@ -38,6 +38,12 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
 app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
     function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
 
+        if (window.innerWidth < 1024) {
+            $scope.variablewidth = window.innerWidth;
+        } else {
+            $scope.variablewidth = 760;
+        }
+
         $scope.addCommas = function(num) {
             var split = num.split('.');
             split[0] = split[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
@@ -48,12 +54,6 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             }
             return num
         };
-
-        if (window.innerWidth < 1024) {
-            $scope.variablewidth = window.innerWidth;
-        } else {
-            $scope.variablewidth = 760;
-        }
 
         $scope.updateWindow = function (){
             if (window.innerWidth < 1024) {
@@ -72,39 +72,21 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
 
         window.onresize = $scope.updateWindow;
 
-        $('input.money').keyup(function(event){
-            if(event.which >= 37 && event.which <= 40){
-                event.preventDefault();
-            }
-            var $this = $(this);
-            var num = $this.val().replace(/[^0-9.]/g,'');
-            num = $scope.addCommas(num);
-            $this.val(num);
-        });
-
         $scope.gotopage = function (link) {
             $location.url("/features/" + link);
         };
 
-        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"500,000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4,000,000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
+        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"500000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4000000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
         $scope.convertTran = {"toissue": {}};
-        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2,000,000", "premoney" : "6,000,000", "postmoney" : "8,000,000", "convertTranpercentsold": "25"};
+        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25"};
         $scope.intervals = 200;
         $scope.fiddled = false;
         $scope.debttab = "one";
 
         $scope.resetDefaults = function() {
-            $scope.fields = {"fromtranamount": "500,000", "fromtranvalcap": "4,000,000", "fromtrandiscount": "20", "convertTranamountsold" : "2,000,000", "premoney" : "6,000,000", "postmoney" : "8,000,000", "convertTranpercentsold": "25"};
+            $scope.fields = {"fromtranamount": "500000", "fromtranvalcap": "4000000", "fromtrandiscount": "20", "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25"};
             $scope.conversion("start");
         };
-
-        $scope.$watch('fields', function(newval, oldval) {
-            if (newval && oldval && (parseFloat(newval.convertTranpercentsold) > 100 || parseFloat(newval.convertTranpercentsold) < 0)) {
-                $scope.fields.convertTranpercentsold = oldval.convertTranpercentsold;
-            } else if (newval && oldval && (parseFloat(newval.fromtrandiscount) > 100 || parseFloat(newval.fromtrandiscount) < 0)) {
-                $scope.fields.convertTranpercentsold = oldval.convertTranpercentsold;
-            }
-        }, true);
 
         $scope.conversion = function(changed) {
             if (changed != "start") {
@@ -148,7 +130,6 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 if (!isNaN(parseFloat($scope.convertTran.percentsold)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "one") {
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) / ($scope.convertTran.percentsold /100);
                     $scope.premoney = parseFloat($scope.postmoney) - parseFloat($scope.convertTran.amountsold);
-                    console.log($scope.premoney);
                     $scope.fields.premoney = $scope.addCommas(String($scope.premoney));
                 } else if (!isNaN(parseFloat($scope.premoney)) && !isNaN(parseFloat($scope.convertTran.amountsold)) && $scope.debttab == "two") {
                     $scope.postmoney = parseFloat($scope.convertTran.amountsold) + parseFloat($scope.premoney);
