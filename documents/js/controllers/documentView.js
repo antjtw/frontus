@@ -903,7 +903,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.drawTime = function() {
             // TODO: check issuerCanAnnotate or investorCanAnnotate depending on role
-            return $scope.isAnnotable && $scope.lib && ((!$scope.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor"));
+            return $scope.isAnnotable && $scope.lib && ((!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor"));
         };
 
         $scope.user = User;
