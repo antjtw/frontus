@@ -87,7 +87,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
-            if (!docId || $scope.annotated) return;
+            if (!docId) return;
             $scope.docId = docId;
             $scope.invq = invq;
             $scope.library = library;
@@ -301,7 +301,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.confirmValue = 0;
         $scope.infoValue = 1;
         if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
-        $scope.notes = [];
         $scope.pageScroll = 0;
         $scope.isAnnotable = true;
         $('.docViewerHeader').affix({
@@ -395,14 +394,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {string}
              * @param {...}
              */
-            SWBrijj.tblmm($scope.pages, 'annotated,page'.split(','), "doc_id", $scope.docId).then(function(data) {
+            SWBrijj.tblmm($scope.pages, ['page'], "doc_id", $scope.docId).then(function(data) {
                 $scope.doc.pages = data;
                 $scope.docLength = data.length;
-                $scope.length_digits = data.length.toString().length * 8;
-                $scope.annotated = new Array(data.length);
-                for (var i = 0; i < data.length; i++) {
-                    $scope.annotated[data[i].page - 1] = data[i].annotated;
-                }
                 loadAnnotations();
             });
         };
@@ -678,24 +672,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.unsaved = function(page) {
-            var nn = $scope.notes;
-            for (var i = 0; i < nn.length; i++) {
-                if (nn[i].scope().page == page) return true;
-            }
-            return false;
-        };
-
-        $scope.isAnnotated = function(page) {
-            return $scope.unsaved(page) || $scope.annotated[page - 1];
-        };
-
         $scope.removeAllNotes = function() {
-            // TODO
-            for (var i = 0; i < $scope.notes.length; i++) {
-                document.querySelector('.docPanel').removeChild($scope.notes[i][0]);
-            }
-            $scope.notes = [];
+            $scope.annots.splice(0);
         };
 
         $scope.safeApply = function(fn) {

@@ -1,6 +1,6 @@
 'use strict';
 
-function annotationController($scope, $element, $rootScope, $document, Annotations, User) {
+function annotationController($scope, $element, $rootScope, $document, Annotations, User, $timeout) {
     function applyLineBreaks(oTextarea) {
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
         if (oTextarea.wrap) {
@@ -354,8 +354,11 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     $scope.$watch('annot.focus', function(focus) {
         // tell if we're supposed to start or become a focused attribute
         if (focus) {
-            // could call openBox(), but want the actual pointer to be focused on the textarea
-            $element.find('textarea').focus();
+            // using $timeout to avoid nested $digests
+            $timeout(function() {
+                // could call openBox(), but want the actual pointer to be focused on the textarea
+                $element.find('textarea').focus();
+            });
         }
         delete $scope.annot.focus;
     });
@@ -370,4 +373,4 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 }
 
-annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User"];
+annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User", "$timeout"];
