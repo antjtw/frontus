@@ -883,13 +883,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
         };
 
-        $scope.notesComplete = function () {
-            // TODO: move to document service
-            return $scope.annots.every(function(annot) {
-                return annot.filled(User.signaturePresent, $rootScope.navState.role);
-            });
-        };
-
         $scope.sigModalUp = function () {
             $scope.signatureModal = true;
         };
@@ -909,6 +902,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         });
 
         $scope.drawTime = function() {
+            // TODO: check issuerCanAnnotate or investorCanAnnotate depending on role
             return $scope.isAnnotable && $scope.lib && ((!$scope.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor"));
         };
 

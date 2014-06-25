@@ -80,7 +80,7 @@
             <div ng-show="stage===0 || stage==-1" style="overflow: hidden;">
                 <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib) || voidable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
-                        <button ng-disabled="notesComplete() || (navState.role == 'issuer' && companyIsZombie())" class="btn" ng-click="setStage(1);">
+                        <button ng-disabled="doc.hasUnfilled(user.signaturePresent, $root.navState.role) || (navState.role == 'issuer' && companyIsZombie())" class="btn" ng-click="setStage(1);">
                             Next
                             <span data-icon="&#xe016;" aria-hidden="true"></span>
                         </button>
