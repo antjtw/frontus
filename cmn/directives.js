@@ -42,7 +42,7 @@ m.directive('messageSide', function(){
             $scope.getLogs = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category', 'our_id', 'event_time'], 'category', 'company-message').then(function(data){
                     $scope.msgstatus = data
-                    function Message(time, event, tox, to_names, our_id){
+                    function Message(time, event, tox, to_names, our_id, indEvents, foo){
                         this.time = time
                         this.event = []
                         this.tox = []
@@ -50,12 +50,26 @@ m.directive('messageSide', function(){
                         this.to_names = []
                         this.unique_names = []
                         this.our_id = []
-                        this.indEvents
+                        this.indEvents = []
+                        this.foo = []
                     }
 
-                    function Event(our_id){
+                    function myEvent(our_id, timestamp, person, event){
                         this.our_id = our_id
+                        this.timestamp = timestamp
+                        this.person = person
+                        this.event = event
                     }
+
+                    function changeName(name){
+                        if($scope.peopleDict[name]==null){
+                            name = name
+                        }
+                        else {
+                            name = $scope.peopleDict[name]
+                        }         
+                    }
+                    // console.log(changeName('ariel+1@sharewave.com'))
                    
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
@@ -81,20 +95,29 @@ m.directive('messageSide', function(){
                                 if(idxtox == -1){
                                     myEvents[i].tox.push(value.tox);
                                 } 
-                                myEvents[i].event.push(value.event);
-                                var idx = myEvents[i].our_id.indexOf(value.our_id)
-                                if(idx == -1){
-                                    myEvents[i].our_id.push(value.our_id)
-                                }
-
-                                // myEvents[i].our_id.push(new Event(value.our_id));
+                                myEvents[i].event.push(value.event)
 
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
                                 else {
                                     myEvents[i].to_names.push($scope.peopleDict[value.tox])
-                                }                         
+                                }
+                                var idx = myEvents[i].our_id.indexOf(value.our_id)
+                                if(idx == -1){
+                                    myEvents[i].our_id.push(value.our_id)
+                                    myEvents[i][value.event] = value.our_id
+                                    myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox, value.event));
+                                }
+                                myEvents[i].foo.forEach(function(item){
+                                    if($scope.peopleDict[item.person]==null){
+                                        item.personName = item.person
+                                    }
+                                    else{
+                                        item.personName = $scope.peopleDict[item.person]
+                                    }
+                                })
+                         
                             }
                         }
                     })

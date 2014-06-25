@@ -19,13 +19,13 @@
                                     <span>
                                         Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': 'one shareholder', 'other': '{} shareholders'}">
                                     </span><br/>
-                                   <!--  <span ng-repeat = "event in message_datum.event track by $index">{{event}}</span> -->
+                                    <span ng-repeat = "event in message_datum.event track by $index">{{event}}</span>
                                     <div ng-if="message_datum.tox.length == 1" ng-click = "showRecipients = !showRecipients" >
                                      <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showRecipients" class="msgarrow" style="cursor:pointer"></span>
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow" style="cursor:pointer"></span>
                                         <span style="cursor:pointer">Recipients</span>
                                         <ul ng-class="{'testing':showRecipients}">
-                                            <li ng-show="showRecipients" ng-repeat="to_name in message_datum.to_names track by $index">    <!-- <div><span class="recipients">{{to_name}}</span> -->
+                                            <li ng-show="showRecipients" ng-repeat="to_name in message_datum.to_names track by $index">    <div><span class="recipients">{{to_name}}</span>
                                                     <span>hi</span>
                                             <!-- </div> -->
                                                
