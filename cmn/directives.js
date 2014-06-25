@@ -10,16 +10,6 @@ m.directive('messageSide', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
 
         function($scope, $rootScope, SWBrijj, $route) {
-
-            // $scope.tabnumber = function() {
-            //     var total = 0;
-            //     angular.forEach($scope.tabs, function(tab) {
-            //         if ($scope.tabvisible(tab)) {
-            //             total += 1
-            //         }
-            //     });
-            //     return total;
-            // };
             
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -50,18 +40,19 @@ m.directive('messageSide', function(){
 
 
             $scope.getLogs = function(){
-                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category'], 'category', 'company-message').then(function(data){
+                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category', 'our_id', 'event_time'], 'category', 'company-message').then(function(data){
                     $scope.msgstatus = data
-                    function Message(time, event, tox, category, to_names){
+                    function Message(time, event, tox, category, to_names, our_id, event_time){
                         this.time = time
                         this.event = []
                         this.tox = []
                         this.category = category
                         this.to_names = []
+                        this.unique_names = []
+                        this.our_id = []
+                        this.event_time = []
                     }
                    
-
-                    
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
                         if (!msgdata.some(function(timestamp, idx, arr){
@@ -72,7 +63,6 @@ m.directive('messageSide', function(){
                          
                     });
                     var myEvents = []
-
                     for (var i = 0; i < msgdata.length; i++){
                        myEvents.push(new Message(msgdata[i]))
                     }
@@ -84,19 +74,25 @@ m.directive('messageSide', function(){
                                 myEvents[i].category = value.category;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
+                                myEvents[i].our_id.push(value.our_id);
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
                                 else {
                                     myEvents[i].to_names.push($scope.peopleDict[value.tox])
                                 }
+                                myEvents[i].event_time.push(value.event_time)
                                                              
                             }
                         }
                     })
-                    $scope.message_data = myEvents;
+
+                    $scope.message_data = myEvents;                   
                     $scope.myEvents = $scope.message_data.length         
                     console.log($scope.message_data);
+                    angular.forEach($scope.message_data, function(items){
+                        console.log(items.to_names)
+                    })
                     console.log(typeof $scope.myEvents)
 
                 }).except(function(data){
