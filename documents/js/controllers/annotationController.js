@@ -1,6 +1,6 @@
 'use strict';
 
-function annotationController($scope, $element, $rootScope, $document, Annotations) {
+function annotationController($scope, $element, $rootScope, $document, Annotations, User) {
     function applyLineBreaks(oTextarea) {
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
         if (oTextarea.wrap) {
@@ -360,7 +360,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         delete $scope.annot.focus;
     });
 
-    $scope.signaturepresent = $scope.$parent.signaturepresent;
+    $scope.user = User;
 
     // MOCKS
     // TODO: fix these (probably references into parent scope or Documents service)
@@ -370,4 +370,4 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 }
 
-annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations"];
+annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User"];

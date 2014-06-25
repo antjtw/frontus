@@ -15,7 +15,7 @@ service.filter('caplength', function () {
 
 service.service('oauth', function($http) {
     var s = {};
-    
+
     s.start_oauth = function(svc, navState)
     {
         if (!(navState.userid && navState.company && navState.role)) {
@@ -31,7 +31,7 @@ service.service('oauth', function($http) {
             'role': navState.role
         });
     }
-    
+
     return s;
 });
 
@@ -170,7 +170,7 @@ service.factory('myPayments', function($q, payments) {
                             }
                             $scope.openModalsFromURL();
                         }
-                        
+
                     });
                         */
         },
@@ -181,7 +181,7 @@ service.factory('myPayments', function($q, payments) {
             this.data = d;
             console.log(this.data);
         };
-        
+
 
     loadPlans()
         //.then( handlePlans )
@@ -194,3 +194,11 @@ service.factory('myPayments', function($q, payments) {
     return d;
 
 });
+
+service.service('User', ['SWBrijj', function(SWBrijj) {
+    this.signaturePresent = false;
+    u = this; // save "this" context for procm callback
+    SWBrijj.procm('account.have_signature').then(function(sig) {
+        u.signaturePresent = sig[0].have_signature;
+    });
+}]);

@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User) {
         $scope.annots = [];
         $scope.signatureprocessing = false;
 
@@ -419,7 +419,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.signatureprocessing = false;
             $scope.progressVisible = false;
-            $scope.signaturepresent = true;
+            User.signaturePresent = true;
             var elements = document.getElementsByClassName('draggable imagesignature mysignature');
             angular.forEach(elements, function(element) {
                 element = element.querySelector("textarea");
@@ -550,10 +550,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.$apply();
             }
         };
-
-        SWBrijj.procm('account.have_signature').then(function(sig) {
-            $scope.signaturepresent = sig[0].have_signature;
-        });
 
         function loadAnnotations() {
             /** @name SWBrijj#tblm
@@ -888,22 +884,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.notesComplete = function () {
-            var returnvalue = false;
-            for (var i = 0; i < $scope.notes.length; i++) {
-                var n = $scope.notes[i][0];
-                var contents = n.querySelector("textarea");
-                if (angular.element(n).scope().$$nextSibling.whattype == 'ImgSignature') {
-                    if (!$scope.signaturepresent && ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
-                        returnvalue = true;
-                    }
-                }
-                else if (angular.element(n).scope().$$nextSibling.required && contents.value.length === 0) {
-                    if ((angular.element(n).scope().$$nextSibling.whosign == 'Investor' && $rootScope.navState.role == 'investor') || (angular.element(n).scope().$$nextSibling.whosign == 'Issuer' && $rootScope.navState.role == 'issuer')) {
-                        returnvalue = true;
-                    }
-                }
-            }
-            return returnvalue;
+            console.log(User);
+            // TODO: move to document service
+            return $scope.annots.every(function(annot) {
+                return annot.filled(User.signaturePresent, $rootScope.navState.role);
+            });
         };
 
         $scope.sigModalUp = function () {
@@ -927,5 +912,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.drawTime = function() {
             return $scope.isAnnotable && $scope.lib && ((!$scope.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor"));
         };
+
+        $scope.user = User;
     }
 ]);

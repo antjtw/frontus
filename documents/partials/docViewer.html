@@ -62,10 +62,10 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <div ng-show="prepareable(lib) && !doc.hasUnfilled(signaturepresent, $root.navState.role)" class="small-standard-button standard-button green">
+                    <div ng-show="prepareable(lib) && !doc.hasUnfilled(user.signaturePresent, $root.navState.role)" class="small-standard-button standard-button green">
                         <button class="btn" ng-click="leave()">Done</button>
                     </div>
-                    <div ng-show="prepareable(lib) && doc.hasUnfilled(signaturepresent, $root.navState.role)" class="small-standard-button standard-button green red-needed">
+                    <div ng-show="prepareable(lib) && doc.hasUnfilled(user.signaturePresent, $root.navState.role)" class="small-standard-button standard-button green red-needed">
                         <button class="btn" ng-click="leave()">Exit</button>
                     </div>
                     <div ng-hide="prepareable(lib)" class="small-standard-button standard-button gray">
