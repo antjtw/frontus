@@ -2109,6 +2109,11 @@ annotation-list > div {
 
 annotation-list h6 {
     margin-bottom: 0;
+    color: rgb(30, 45, 61);
+}
+
+annotation-list [data-icon]:before {
+    vertical-align: sub;
 }
 
 annotation-list .annotmark {
