@@ -567,7 +567,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                      // TODO: should probably load all annotations into $scope.annots, and only display as relevant (probably already works)
                      if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
                          // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
-                         annots = JSON.parse($scope.lib.iss_annotations);
+                         var temp_annots = JSON.parse($scope.lib.iss_annotations);
+                         annots = [];
+                         temp_annots.forEach(function(annot) {
+                             // TODO: we're creating an Annotation object and destroying it for no good reason
+                             var tmp = new Annotation().parseFromJson(annot);
+                             if (tmp.isCountersign()) {
+                                 annots.push(annot);
+                             }
+                         });
                      } else {
                          annots = JSON.parse($scope.lib.annotations);
                          if (data.iss_annotations) {
