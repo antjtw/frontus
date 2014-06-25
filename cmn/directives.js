@@ -75,7 +75,11 @@ m.directive('messageSide', function(){
                                 myEvents[i].category = value.category;
                                 myEvents[i].tox.push(value.tox);
                                 myEvents[i].event.push(value.event);
-                                myEvents[i].our_id.push(value.our_id);
+                                var idx = myEvents[i].our_id.indexOf(value.our_id)
+                                if(idx == -1){
+                                    myEvents[i].our_id.push(value.our_id);
+                                }
+                                // myEvents[i].our_id.push(value.our_id);
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
@@ -99,6 +103,12 @@ m.directive('messageSide', function(){
                     console.log("error");
                 })
             }
+
+            // $scope.removeDupIds = function(){
+
+            // }
+
+
         
             
         }]
