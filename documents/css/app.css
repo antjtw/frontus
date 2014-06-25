@@ -2103,14 +2103,26 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
-annotation-list .mine {
+annotation-list > div {
+    margin: 0 20px;
+}
+
+annotation-list h6 {
+    margin-bottom: 0;
+}
+
+annotation-list .annotmark {
+    margin-left: 20px;
+}
+
+annotation-list .annotmark.mine {
     color: #FFBA00; /* should match .sticky .dragger */
 }
 
-annotation-list .mine.complete {
+annotation-list .annotmark.mine.complete {
     color: #1ABC96;
 }
 
-annotation-list .mine.incomplete {
+annotation-list .annotmark.mine.incomplete {
     color: #E74C3C;
 }
