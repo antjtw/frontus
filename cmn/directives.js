@@ -42,6 +42,7 @@ m.directive('messageSide', function(){
             $scope.getLogs = function(){
                 SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category', 'our_id', 'event_time'], 'category', 'company-message').then(function(data){
                     $scope.msgstatus = data
+                    console.log($scope.msgstatus)
                     function Message(time, event, tox, category, to_names, our_id, event_time){
                         this.time = time
                         this.event = []
@@ -81,18 +82,17 @@ m.directive('messageSide', function(){
                                 else {
                                     myEvents[i].to_names.push($scope.peopleDict[value.tox])
                                 }
-                                myEvents[i].event_time.push(value.event_time)
-                                                             
+                                myEvents[i].event_time.push(value.event_time)                                
                             }
                         }
                     })
 
                     $scope.message_data = myEvents;                   
                     $scope.myEvents = $scope.message_data.length         
-                    console.log($scope.message_data);
                     angular.forEach($scope.message_data, function(items){
-                        console.log(items.to_names)
+                        console.log(items.our_id)
                     })
+                    console.log($scope.message_data);
                     console.log(typeof $scope.myEvents)
 
                 }).except(function(data){
