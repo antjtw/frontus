@@ -40,8 +40,9 @@ m.directive('messageSide', function(){
 
 
             $scope.getLogs = function(){
-                SWBrijj.tblmm('mail.sentstatus', ['event', 'tox', 'subject', 'senderemail', 'when_requested', 'category', 'our_id', 'event_time'], 'category', 'company-message').then(function(data){
+                SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
                     $scope.msgstatus = data
+                    console.log($scope.msgstatus)
                     function Message(time, event, tox, to_names, our_id, indEvents, foo){
                         this.time = time
                         this.event = []
@@ -59,19 +60,6 @@ m.directive('messageSide', function(){
                         this.event = event
                     }
 
-                    function timeConverter(UNIX_timestamp){
-                    var a = new Date(UNIX_timestamp*1000);
-                    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                    var year = a.getFullYear();
-                    var month = months[a.getMonth()];
-                    var date = a.getDate();
-                    var hour = a.getHours();
-                    var min = a.getMinutes();
-                    var sec = a.getSeconds();
-                    var time = date+','+month+' '+year+' '+hour+':'+min+':'+sec ;
-                 return time;
-                    }
-                   
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
                         if (!msgdata.some(function(timestamp, idx, arr){
@@ -110,8 +98,7 @@ m.directive('messageSide', function(){
                                 var idx = myEvents[i].our_id.indexOf(value.our_id)
                                 if(idx == -1){
                                     myEvents[i].our_id.push(value.our_id)
-                                    myEvents[i][value.event] = value.our_id
-                                    myEvents[i].foo.push(new myEvent(value.our_id, new Date(timeConverter(value.event_time)), value.tox, value.event));
+                                    myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox, value.event));
                                 }
                                 myEvents[i].foo.forEach(function(item){
                                     if($scope.peopleDict[item.person]==null){
@@ -125,42 +112,14 @@ m.directive('messageSide', function(){
                             }
                         }
                     })
-                    $scope.message_data = myEvents;
-                    // $scope.predicate = '-time';
-                    var test = []
-
-                    console.log(test)
-                                     
+                    $scope.message_data = myEvents;                                     
                     $scope.myEvents = $scope.message_data.length         
-                    
                     console.log($scope.message_data);
-                    console.log(typeof $scope.myEvents)
-
                 }).except(function(data){
                     console.log("error");
-                })
+                });
 
-                // $scope.newObject = function(){
-                //     var myTest = {}
-                //     myTest.first_name = "test"
-                //     console.log(myTest)
-                //     angular.forEach($scope.message_data, function(val){
-                //         for(y = 0; y++; y < val.)
-
-                //     })
-                // }
-                // $scope.newObject();
-
-
-
-            }
-
-            // $scope.removeDupIds = function(){
-
-            // }
-
-
-        
+            }     
             
         }]
     };
