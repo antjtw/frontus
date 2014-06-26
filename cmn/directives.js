@@ -7,7 +7,7 @@ m.directive('messageSide', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/messageSide.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
 
         function($scope, $rootScope, SWBrijj, $route) {
             
