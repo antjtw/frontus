@@ -1373,23 +1373,11 @@ navbar .navbar + doc-viewer.modal-backdrop {
     background-color: #F1F1F1;
 }
 
-.pageTurn > ul > li:first-child {
-    margin-left: 5px;
-    margin-right: 5px;
+.pageTurn > ul > li:first-child, .pageTurn > ul > li:last-child {
+    margin-left: 3px;
+    margin-right: 3px;
     border-radius: 3px;
-    background-position: top;
-    width: 30px;
-    height: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.pageTurn > ul > li:last-child {
-    margin-left: 5px;
-    margin-right: 5px;
-    border-radius: 3px;
-    background-position: top;
+    padding-top: 7px;
     width: 30px;
     height: 30px;
     -webkit-box-sizing: border-box;
@@ -1409,6 +1397,22 @@ navbar .navbar + doc-viewer.modal-backdrop {
     opacity: 0.3;
 }
 
+.pageTurn input.page-jumper {
+    border: none;
+    height: 12px;
+    margin-bottom: 1px;
+    line-height: 12px;
+    padding: 4px 0 4px 0;
+    border-radius: 3px;
+    border: 1px solid #E3E3E3;
+    margin-right: 8px;
+    width: 30px;
+    height: 22px;
+    margin-top: -6px;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
 .docActions {
     padding-top: 15px;
     padding-bottom: 15px;
@@ -1423,107 +1427,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     text-transform: uppercase;
     font-size: 10px;
     margin-top: 23px;
-}
-
-.page-bar {
-    background-color: white;
-    position: relative;
-    width: 100%;
-    height: 40px;
-    margin-left: 0;
-    margin-bottom: 0;
-    border-bottom: 1px solid #E3E3E3;
-}
-
-.page-bar > ul > li:first-child {
-    padding-left: 20px;
-}
-
-.page-bar > ul > li:last-child {
-    padding-right: 20px;
-}
-
-.page-bar > ul > li {
-    float: left;
-}
-
-.page-bar > ul > li.page-icons {
-    padding-top: 10px;
-}
-
-.page-bar > ul > li.page-icons.button {
-    padding-left: 40px;
-    padding-right: 10px;
-}
-
-.page-bar > ul > li.page-tabs {
-    padding-top: 5px;
-    padding-left: 6px;
-    padding-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 6px;
-    border-radius: 3px;
-    background-color: #E3E3E3;
-    background-position: top;
-    color: #666666;
-    height: 30px;
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.page-bar > ul > li.page-tabs.red-tab, .page-bar > ul > li.page-tabs.red-tab.green-tab {
-    background-color: #E74C3C;
-    color: #FFFFFF;
-}
-
-.page-bar > ul > li.page-tabs.green-tab {
-    background-color: #1ABC96;
-    color: #FFFFFF;
-}
-
-.page-bar > ul > li.page-tabs:hover {
-    background-color: #C7C7C7;
-}
-
-.page-bar > ul > li.page-tabs.cur-page {
-    background-color: #8D8D8D !important;
-    color: #FFFFFF !important;
-}
-
-.page-bar > ul > li.page-tabs.cur-page.green-tab {
-    background-color: #15A085 !important;
-}
-
-.page-bar > ul > li.page-tabs.cur-page.red-tab, .page-bar > ul > li.page-tabs.cur-page.red-tab.green-tab {
-    background-color: #C44032 !important;
-}
-
-.page-bar > ul > li.page-tabs.cur-page:hover {
-    background-color: #666666 !important;
-}
-
-.page-jumper {
-    border: none;
-    text-align: right;
-    height: 12px;
-    margin-bottom: 1px;
-    line-height: 12px;
-    padding: 4px 0 4px 0;
-    background-color: #FFFFFF;
-    border-radius: 3px;
-    border: 1px solid #E3E3E3;
-    margin-right: 3px;
-    width: 30px;
-    height: 22px;
-    margin-top: -2px;
-    text-align: center;
-}
-
-.page-jumper:focus, .page-jumper:hover {
-    background-color: #FFFFFF;
 }
 
 .docViewerTitle {
@@ -2106,6 +2009,7 @@ annotation-list > div {
 }
 
 annotation-list h6 {
+    font-size: 14px;
     margin-top: 10px;
     margin-bottom: 0;
     color: rgb(30, 45, 61);
@@ -2118,6 +2022,7 @@ annotation-list [data-icon]:before {
 }
 
 annotation-list .annotmark {
+    font-size: 13px;
     margin-top: 10px;
     margin-left: 25px;
     cursor: pointer;
