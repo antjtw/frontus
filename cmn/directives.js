@@ -58,6 +58,19 @@ m.directive('messageSide', function(){
                         this.person = person
                         this.event = event
                     }
+
+                    function timeConverter(UNIX_timestamp){
+                    var a = new Date(UNIX_timestamp*1000);
+                    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    var year = a.getFullYear();
+                    var month = months[a.getMonth()];
+                    var date = a.getDate();
+                    var hour = a.getHours();
+                    var min = a.getMinutes();
+                    var sec = a.getSeconds();
+                    var time = date+','+month+' '+year+' '+hour+':'+min+':'+sec ;
+                 return time;
+                    }
                    
                     var msgdata = []
                     angular.forEach($scope.msgstatus, function(value){
@@ -95,7 +108,7 @@ m.directive('messageSide', function(){
                                 if(idx == -1){
                                     myEvents[i].our_id.push(value.our_id)
                                     myEvents[i][value.event] = value.our_id
-                                    myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox, value.event));
+                                    myEvents[i].foo.push(new myEvent(value.our_id, new Date(timeConverter(value.event_time)), value.tox, value.event));
                                 }
                                 myEvents[i].foo.forEach(function(item){
                                     if($scope.peopleDict[item.person]==null){
