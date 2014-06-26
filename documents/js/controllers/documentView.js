@@ -530,12 +530,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
                  if ($scope.lib.annotations) {
                      // restoreNotes
-                     var annots;
+                     var annots = [];
                      // TODO: should probably load all annotations into $scope.annots, and only display as relevant (probably already works)
                      if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
                          // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
                          var temp_annots = JSON.parse($scope.lib.iss_annotations);
-                         annots = [];
                          temp_annots.forEach(function(annot) {
                              // TODO: we're creating an Annotation object and destroying it for no good reason
                              var tmp = new Annotation().parseFromJson(annot);
@@ -544,10 +543,12 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              }
                          });
                      } else {
-                         annots = JSON.parse($scope.lib.annotations);
-                         if (data.iss_annotations) {
-                             annots = annots.concat(JSON.parse(data.iss_annotations));
-                         }
+                         if ($scope.drawTime()) { // if it's not drawTime or counterSigntime, then there should be no annotations anywhere
+                             annots = JSON.parse($scope.lib.annotations);
+                             if (data.iss_annotations) {
+                                 annots = annots.concat(JSON.parse(data.iss_annotations));
+                             }
+                         };
                      }
                      $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
                      var sticky;
