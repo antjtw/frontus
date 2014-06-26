@@ -4526,7 +4526,7 @@ textarea.email-text {
 }
 
 .messages .activity-feed2 span.recipients {
-    color: #3498DB;
+    color: #8D8D8D;
     padding-left: 19px;
 
 }
@@ -4575,5 +4575,7 @@ textarea.email-text {
     padding-left: 1.5em;
     padding-bottom: 1em; 
 }
+
+
 
 

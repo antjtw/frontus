@@ -150,12 +150,13 @@ m.directive('messageSide', function(){
 
             $scope.gotoPerson = function(person) {
                 if(person.login == undefined){
-                    console.log("not a link")
+                    console.log("not a link");
+                    $scope.gotoPerson == false;
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + person.person 
-                    // var link = (person.personName ? ((navState.userid != person.person) ? '/app/company/profile/view?id=' + person.person : '/app/account/profile/') : '');
-                    $location.url(link)
+                    $location.url(link);
+                    $scope.gotoPerson == true;
                 }
                 
             };     
