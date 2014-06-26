@@ -7,9 +7,9 @@ m.directive('messageSide', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/messageSide.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 'navState',
 
-        function($scope, $rootScope, SWBrijj, $route) {
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $navState) {
             
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -56,25 +56,6 @@ m.directive('messageSide', function(){
             }
             $scope.getLogins();
 
-            // $scope.getLogins = function(){
-            //     SWBrijj.tblm("global.user_tracker").then(function(logins){
-            //         $scope.logins = logins
-            //         console.log($scope.logins)
-            //         var array1 = []
-            //         var obj1 = {}
-            //         // angular.forEach($scope.logins, function(info){
-            //         //     array.push(obj[login] = obj.email)
-            //         // })
-            //     }
-            // }
-
-            // angular.forEach($scope.people, function(info){
-            //             array.push(obj[info.email] = info.name)
-            //             if(info.name == ""){
-            //                 array.push(obj[info.email]= null)
-            //             }
-            //         }) 
-
 
             $scope.getLogs = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
@@ -90,10 +71,10 @@ m.directive('messageSide', function(){
                         this.foo = []
                     }
 
-                    function myEvent(our_id, timestamp, person, event){
+                    function myEvent(our_id, timestamp, email, event){
                         this.our_id = our_id
                         this.timestamp = timestamp
-                        this.person = person
+                        this.email = email
                         this.event = event
                         // this.lastlogin = lastlogin
                     }
@@ -139,11 +120,11 @@ m.directive('messageSide', function(){
                                     myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox, value.event));
                                 }
                                 myEvents[i].foo.forEach(function(item){
-                                    if($scope.peopleDict[item.person]==null){
+                                    if($scope.peopleDict[item.email]==null){
                                         item.personName = item.person
                                     }
                                     else{
-                                        item.personName = $scope.peopleDict[item.person]
+                                        item.personName = $scope.peopleDict[item.email]
                                     }
                                 })
                                 angular.forEach($scope.logins, function(login){
@@ -163,10 +144,24 @@ m.directive('messageSide', function(){
                 }).except(function(data){
                     console.log("error");
                 });
-
-                
                
-            }     
+            }
+
+            $scope.gotoPerson = function(person) {
+                if(person.login == undefined){
+                    console.log("not a link")
+                }
+                else{
+                    link = (person.personName ? ((navState.userid != person.person) ? '/app/company/profile/view?id=' + person.person : '/app/account/profile/') : '');
+                }
+                // if (!person.login) return;
+                // var link;
+                // alert("test")
+                // link = (person.personName ? ((navState.userid != person.person) ? '/app/company/profile/view?id=' + person.person : '/app/account/profile/') : '');
+                // if (link) {
+                // $location.url(link);
+                // }
+            };     
             
         }]
     };
