@@ -4442,6 +4442,7 @@ textarea.email-text {
      background-color: white; 
      height: 100%; 
      width: 350px;
+    border-left: 1px solid #C7C7C7;
 }
  .composemessage {
     padding-left: 30px;
@@ -4511,6 +4512,7 @@ textarea.email-text {
     right: -350px;
 }
 
+/*//Message sidebar*/
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
     font-size: 14px;
@@ -4524,7 +4526,7 @@ textarea.email-text {
 }
 
 .messages .activity-feed2 span.recipients {
-    color: #8D8D8D;
+    color: #3498DB;
     padding-left: 19px;
 
 }
@@ -4532,10 +4534,6 @@ textarea.email-text {
 .messages .activity-feed2 .testing {
     padding-top: 14px;
 }
-
-/*.messages .activity-feed2 .testing:last-of-type {
-    padding-bottom: 14px;
-}*/
 
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;

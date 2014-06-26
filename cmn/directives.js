@@ -38,11 +38,42 @@ m.directive('messageSide', function(){
                 }        
             });
 
-            //  $scope.$watch('newMessage', function(newdata, olddata){
-            //     if(newdata){
-            //        $route.reload();
-            //     }        
-            // });
+            $scope.gotoPerson = function(person) {
+                if (!person.lastlogin) return;
+                var link;
+                console.log(person.lastlogin)
+                link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
+                if (link) {
+                $location.url(link);
+                }
+            };
+
+            $scope.getLogins = function(){
+                SWBrijj.tblm('global.user_tracker').then(function(data){
+                    $scope.logins = data
+                    console.log($scope.logins)
+                })
+            }
+            $scope.getLogins();
+
+            // $scope.getLogins = function(){
+            //     SWBrijj.tblm("global.user_tracker").then(function(logins){
+            //         $scope.logins = logins
+            //         console.log($scope.logins)
+            //         var array1 = []
+            //         var obj1 = {}
+            //         // angular.forEach($scope.logins, function(info){
+            //         //     array.push(obj[login] = obj.email)
+            //         // })
+            //     }
+            // }
+
+            // angular.forEach($scope.people, function(info){
+            //             array.push(obj[info.email] = info.name)
+            //             if(info.name == ""){
+            //                 array.push(obj[info.email]= null)
+            //             }
+            //         }) 
 
 
             $scope.getLogs = function(){
@@ -64,6 +95,7 @@ m.directive('messageSide', function(){
                         this.timestamp = timestamp
                         this.person = person
                         this.event = event
+                        // this.lastlogin = lastlogin
                     }
 
                     var msgdata = []
@@ -88,13 +120,13 @@ m.directive('messageSide', function(){
                                 if(value.event == "open"){
                                     value.event = "opened"
                                 }
+                                $scope.myEvent = value.event
                                 myEvents[i].category = value.category;
                                 var idxtox = myEvents[i].tox.indexOf(value.tox)
                                 if(idxtox == -1){
                                     myEvents[i].tox.push(value.tox);
                                 } 
                                 myEvents[i].event.push(value.event)
-
                                 if($scope.peopleDict[value.tox]==null){
                                     myEvents[i].to_names.push(value.tox)
                                 }
@@ -114,17 +146,26 @@ m.directive('messageSide', function(){
                                         item.personName = $scope.peopleDict[item.person]
                                     }
                                 })
+                                angular.forEach($scope.logins, function(login){
+                                    if(login.email == value.tox){
+                                        myEvents[i].foo.forEach(function(elem){
+                                            elem.login = login.logintime;
+                                        })
+                                    }
+                                })
                          
                             }
                         }
                     })
                     $scope.message_data = myEvents;                                     
                     $scope.myEvents = $scope.message_data.length         
-                    console.log($scope.message_data);
+                    // console.log($scope.message_data);
                 }).except(function(data){
                     console.log("error");
                 });
 
+                
+               
             }     
             
         }]
