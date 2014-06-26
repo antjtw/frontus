@@ -1434,6 +1434,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
     height: 60px;
     display: inline-block;
     vertical-align: middle;
+    border-bottom: 1px solid #f1f1f1;
 }
 
 .docViewerTitle .docName {
@@ -2023,19 +2024,35 @@ annotation-list [data-icon]:before {
 
 annotation-list .annotmark {
     font-size: 13px;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-left: 25px;
     cursor: pointer;
 }
 
+annotation-list .annotmark:hover {
+    color: #666;
+}
+
 annotation-list .annotmark.mine {
-    color: #FFBA00; /* should match .sticky .dragger */
+    color: #FFBA00;
+}
+
+annotation-list .annotmark.mine:hover {
+    color: #F78D1E;
 }
 
 annotation-list .annotmark.mine.complete {
     color: #1ABC96;
 }
 
+annotation-list .annotmark.mine.complete:hover {
+    color: #15A085;
+}
+
 annotation-list .annotmark.mine.incomplete {
     color: #E74C3C;
+}
+
+annotation-list .annotmark.mine.incomplete:hover {
+    color: #C44032;
 }
