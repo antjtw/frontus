@@ -4533,9 +4533,9 @@ textarea.email-text {
     padding-top: 14px;
 }
 
-.messages .activity-feed2 .testing:last-of-type {
+/*.messages .activity-feed2 .testing:last-of-type {
     padding-bottom: 14px;
-}
+}*/
 
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
@@ -4571,4 +4571,11 @@ textarea.email-text {
 .span4.capright.side{
     padding-right: 0px;
 } 
+
+.recipients.details{
+    font-size: 12px;
+    padding-left: 3em;
+    padding-bottom: 1em; 
+}
+
 

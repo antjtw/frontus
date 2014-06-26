@@ -42,8 +42,8 @@
                                         <ul ng-class="{'testing':showRecipients}">
                                             <ul ng-show="showRecipients">
                                                 <li  ng-repeat="foo in message_datum.foo track by $index">
-                                                    <span class="recipients">{{foo.personName}}</span></br>
-                                                    <span class="recipients">Message {{foo.event}} on {{foo.timestamp | date:'shortDate'}}</span>
+                                                    <span class="recipients">{{foo.personName}}</span>
+                                                    <div class="recipients details">Message {{foo.event}} on {{foo.timestamp | date:'shortDate'}}</div>
                                                 </li>
                                                
                         
