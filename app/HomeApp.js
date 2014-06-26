@@ -90,6 +90,10 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'InvestorDocumentViewController',
             reloadOnSearch: false
         }).
+        when('/app/modeling/round', {
+            templateUrl: '/modeling/pages/round.html',
+            controller: 'roundController',
+        }).
 
         otherwise({redirectTo:'/app/home/investor'});
 });

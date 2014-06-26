@@ -1,0 +1,19 @@
+ul.visualize-table {
+    margin-top: 30px;
+    height: 120px;
+}
+
+ul.visualize-table > li {
+    display: block;
+    overflow: auto;
+}
+
+
+ul.visualize-table > li > ul {
+
+}
+
+ul.visualize-table > li > ul > li {
+    float: left;
+    width: 150px;
+}

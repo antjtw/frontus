@@ -1,0 +1,52 @@
+<link type="text/css" rel="stylesheet" href="/modeling/css/visualize.css">
+<div class="company-list maincontent">
+    <div class="container dynamic-page">
+        <div>
+            <span>Pre-money valuation</span>
+            <input ng-model="fields.premoney">
+        </div>
+        <div>
+            <span>Investment amount</span>
+            <input ng-model="fields.investment">
+        </div>
+        <div>
+            <span>Post-Money Option Pool %</span>
+            <input ng-model="fields.optionpool">
+        </div>
+        <ul class="visualize-table">
+            <li>
+                <ul>
+                    <li>Issue Name</li>
+                    <li>Units</li>
+                    <li>Percentage</li>
+                </ul>
+            </li>
+            <li ng-repeat='round in rounds'>
+                <ul>
+                    <li>{{round.issue}}</li>
+                    <li>{{formatAmount(round.units)}}</li>
+                    <li>{{formatAmount(round.start_percent)}}%</li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="visualize-table 4-column">
+            <li>
+                <ul>
+                    <li>Issue Name</li>
+                    <li>Units</li>
+                    <li>Percentage
+                    <li>Change</li>
+                </ul>
+            </li>
+            <li ng-repeat='round in finalrounds'>
+                <ul>
+                    <li>{{round.issue}}</li>
+                    <li>{{formatAmount(round.units)}}</li>
+                    <li>{{formatAmount(round.final_percent)}}%</li>
+                    <li>{{formatAmount(round.final_percent - round.start_percent)}}%</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
