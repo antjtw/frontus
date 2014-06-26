@@ -1,7 +1,7 @@
 <div class="pageTurn" ng-hide="template_original">
     <ul>
         <li class="button" ng-click="doc.currentPage = doc.currentPage - 1">
-            <span ng-class="{'locked':doc.currentPage <= 1}" data-icon="&#xe005;" aria-hidden="true"></span>
+            <span ng-class="{'locked':doc.currentPage <= 1}" aria-hidden="true">&lt;</span>
         </li>
         <li>
             <label>
@@ -14,7 +14,7 @@
             / {{ doc.pages.length || "   "}}
         </li>
         <li class="button" ng-click="doc.currentPage = doc.currentPage + 1">
-            <span ng-class="{'locked' : doc.currentPage >= doc.pages.length}" data-icon="&#xe004;" aria-hidden="true"></span>
+            <span ng-class="{'locked' : doc.currentPage >= doc.pages.length}" aria-hidden="true">&gt;</span>
         </li>
     </ul>
 </div>

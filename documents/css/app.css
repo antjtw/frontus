@@ -1344,9 +1344,9 @@ navbar .navbar + doc-viewer.modal-backdrop {
 
 .pageTurn {
     position: absolute;
-    left:-webkit-calc(50% - 95px);
-    left:-moz-calc(50% - 95px);
-    left: calc(50% - 95px);
+    left:-webkit-calc(50% - 68px);
+    left:-moz-calc(50% - 68px);
+    left: calc(50% - 68px);
 }
 
 .pageTurn > ul {
@@ -1359,7 +1359,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
     display: block;
     float: left;
     vertical-align: middle;
-    padding-top: 6px;
+    padding-top: 5px;
 }
 
 .pageTurn > ul > li > span {
@@ -1374,10 +1374,9 @@ navbar .navbar + doc-viewer.modal-backdrop {
 }
 
 .pageTurn > ul > li:first-child {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
     border-radius: 3px;
-    background-color: #E3E3E3;
     background-position: top;
     width: 30px;
     height: 30px;
@@ -1387,10 +1386,9 @@ navbar .navbar + doc-viewer.modal-backdrop {
 }
 
 .pageTurn > ul > li:last-child {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
     border-radius: 3px;
-    background-color: #E3E3E3;
     background-position: top;
     width: 30px;
     height: 30px;
@@ -2111,6 +2109,7 @@ annotation-list h6 {
     margin-top: 10px;
     margin-bottom: 0;
     color: rgb(30, 45, 61);
+    cursor: pointer;
 }
 
 annotation-list [data-icon]:before {
@@ -2121,6 +2120,7 @@ annotation-list [data-icon]:before {
 annotation-list .annotmark {
     margin-top: 10px;
     margin-left: 25px;
+    cursor: pointer;
 }
 
 annotation-list .annotmark.mine {
