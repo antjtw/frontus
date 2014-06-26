@@ -2108,16 +2108,19 @@ annotation-list > div {
 }
 
 annotation-list h6 {
+    margin-top: 10px;
     margin-bottom: 0;
     color: rgb(30, 45, 61);
 }
 
 annotation-list [data-icon]:before {
     vertical-align: sub;
+    padding-right: 2px;
 }
 
 annotation-list .annotmark {
-    margin-left: 20px;
+    margin-top: 10px;
+    margin-left: 25px;
 }
 
 annotation-list .annotmark.mine {
