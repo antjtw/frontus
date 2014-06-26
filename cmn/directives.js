@@ -38,6 +38,12 @@ m.directive('messageSide', function(){
                 }        
             });
 
+            //  $scope.$watch('newMessage', function(newdata, olddata){
+            //     if(newdata){
+            //        $route.reload();
+            //     }        
+            // });
+
 
             $scope.getLogs = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
