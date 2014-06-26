@@ -2018,7 +2018,6 @@ annotation-list h6 {
 }
 
 annotation-list [data-icon]:before {
-    vertical-align: sub;
     padding-right: 2px;
 }
 
