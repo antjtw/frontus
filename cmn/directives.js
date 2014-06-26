@@ -71,10 +71,10 @@ m.directive('messageSide', function(){
                         this.foo = []
                     }
 
-                    function myEvent(our_id, timestamp, email, event){
+                    function myEvent(our_id, timestamp, person, event){
                         this.our_id = our_id
                         this.timestamp = timestamp
-                        this.email = email
+                        this.person = person
                         this.event = event
                         // this.lastlogin = lastlogin
                     }
@@ -120,11 +120,11 @@ m.directive('messageSide', function(){
                                     myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox, value.event));
                                 }
                                 myEvents[i].foo.forEach(function(item){
-                                    if($scope.peopleDict[item.email]==null){
+                                    if($scope.peopleDict[item.person]==null){
                                         item.personName = item.person
                                     }
                                     else{
-                                        item.personName = $scope.peopleDict[item.email]
+                                        item.personName = $scope.peopleDict[item.person]
                                     }
                                 })
                                 angular.forEach($scope.logins, function(login){
@@ -152,15 +152,11 @@ m.directive('messageSide', function(){
                     console.log("not a link")
                 }
                 else{
-                    link = (person.personName ? ((navState.userid != person.person) ? '/app/company/profile/view?id=' + person.person : '/app/account/profile/') : '');
+                    var link = '/app/company/profile/view?id=' + person.person 
+                    console.log(link)
+                    $location.url(link)
                 }
-                // if (!person.login) return;
-                // var link;
-                // alert("test")
-                // link = (person.personName ? ((navState.userid != person.person) ? '/app/company/profile/view?id=' + person.person : '/app/account/profile/') : '');
-                // if (link) {
-                // $location.url(link);
-                // }
+                
             };     
             
         }]
