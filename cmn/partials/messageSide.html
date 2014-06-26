@@ -9,7 +9,7 @@
     </div>
 </div>
 
- <div class="messages tabbable" ng-if="myEvents >= 1">            
+ <div class="messages tabbable">            
     <ul class="activity-feed2">
                     <li class="event" ng-repeat="message_datum in message_data | orderBy:'time':true">
                         <div><img ng-src="/img/activity/message.png"></div>
@@ -28,7 +28,7 @@
                                             <ul ng-show="showRecipients">
                                                 <li  ng-repeat="foo in message_datum.foo track by $index">
                                                     <span class="recipients" ng-click="gotoPerson(foo)">{{foo.personName}}</span>
-                                                    <div class="recipients details">Message {{foo.event}} on {{foo.timestamp | date:'shortDate'}}</p></div>
+                                                    <div class="recipients details">Message {{foo.event}}<span ng-if="foo.event=='opened'"> on {{foo.timestamp | date:'shortDate'}}</span></div>
                                                 </li>                        
                                                 
                                             </ul>

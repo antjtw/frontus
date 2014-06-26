@@ -9,7 +9,7 @@ m.directive('messageSide', function(){
         templateUrl: '/cmn/partials/messageSide.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 'navState',
 
-        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $navState) {
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, navState) {
             
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -102,6 +102,7 @@ m.directive('messageSide', function(){
                                     value.event = "opened"
                                 }
                                 $scope.myEvent = value.event
+                                console.log($scope.myEvent)
                                 myEvents[i].category = value.category;
                                 var idxtox = myEvents[i].tox.indexOf(value.tox)
                                 if(idxtox == -1){
@@ -153,6 +154,7 @@ m.directive('messageSide', function(){
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + person.person 
+                    // var link = (person.personName ? ((navState.userid != person.person) ? '/app/company/profile/view?id=' + person.person : '/app/account/profile/') : '');
                     $location.url(link)
                 }
                 
