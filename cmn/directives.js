@@ -153,7 +153,6 @@ m.directive('messageSide', function(){
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + person.person 
-                    console.log(link)
                     $location.url(link)
                 }
                 
