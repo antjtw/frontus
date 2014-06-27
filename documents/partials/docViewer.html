@@ -78,14 +78,14 @@
         <div class="docViewerControls">
             <!--Annotation Controls-->
             <div ng-show="stage===0 || stage==-1" style="overflow: hidden;">
-                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || countersignable(lib) || finalizable(lib) || voidable(lib))}">
+                <div ng-cloak class="docActions pull-right" ng-class="{hidden: !(signable(lib) || doc.countersignable($root.navState.role) || finalizable(lib) || voidable(lib))}">
                     <div class="pull-right standard-button green forwardButton">
                         <button ng-disabled="doc.hasUnfilled(user.signaturePresent, $root.navState.role) || (navState.role == 'issuer' && companyIsZombie())" class="btn" ng-click="setStage(1);">
                             Next
                             <span data-icon="&#xe016;" aria-hidden="true"></span>
                         </button>
                     </div>
-                    <div class="pull-right tools" ng-class="{hidden: !isAnnotable || countersignable(lib)}">
+                    <div class="pull-right tools" ng-class="{hidden: !isAnnotable || doc.countersignable($root.navState.role)}">
                         <button ng-disabled="navState.role == 'issuer' && companyIsZombie()" ng-click="saveNoteData(true)"><span data-icon="&#xe602;" aria-hidden="true"></span></button>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                     </button>
                 </div>
                 <span ng-show="signable(lib)">Confirm Electronic Signature</span>
-                <span ng-show="countersignable(lib)">Approve Document</span>
+                <span ng-show="doc.countersignable($root.navState.role)">Approve Document</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
                 <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
                 <div class="standard-button green confirmButton">
@@ -119,7 +119,7 @@
                         Confirm
                     </button>
                     <button class="btn"
-                            ng-show="countersignable(lib)"
+                            ng-show="doc.countersignable($root.navState.role)"
                             ng-disabled="processing || confirmValue===0"
                             ng-click="countersignAction(confirmValue, rejectMessage);">
                         Confirm
@@ -154,7 +154,7 @@
     </div>
     <div ng-show="stage===0 || stage===-1" class="docPanelContainer row-fluid">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)">
-            <annotation ng-repeat="annotation in annots | filter: {page: doc.currentPage}" ng-if="annots && drawTime() || (lib.when_signed && !lib.when_countersigned && annotation.isCountersign())" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()"></annotation>
+            <annotation ng-repeat="annotation in annots | filter: {page: doc.currentPage}" ng-if="annots && drawTime() || (lib.when_signed && !lib.when_countersigned && annotation.isCountersign())" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()" doc="doc"></annotation>
         </div>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
@@ -178,7 +178,7 @@
                 </div>
             </div>
 
-            <div ng-show="!invq && countersignable(lib)">
+            <div ng-show="!invq && doc.countersignable($root.navState.role)">
                 <div class='confirmBody'>
                     <div class="upgradeWarning"
                          ng-if="triggerUpgradeDocuments(1)">

@@ -283,7 +283,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             if ($scope.stage === 0) {
                 refreshDocImage();
             }
-            if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
+            if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.doc.countersignable($rootScope.navState.role)) {
                 $scope.saveNoteData();
             }
         };
@@ -533,7 +533,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                      // restoreNotes
                      var annots = [];
                      // TODO: should probably load all annotations into $scope.annots, and only display as relevant (probably already works)
-                     if ($scope.countersignable($scope.lib) && $scope.lib.iss_annotations) {
+                     if ($scope.doc.countersignable($rootScope.navState.role) && $scope.lib.iss_annotations) {
                          // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
                          var temp_annots = JSON.parse($scope.lib.iss_annotations);
                          temp_annots.forEach(function(annot) {
@@ -591,7 +591,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 // This is a synchronous save
                 /** @name $scope#lib#original
                  * @type {int} */
-                if (!$scope.template_original && !$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.countersignable($scope.lib)) {
+                if (!$scope.template_original && !$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.doc.countersignable($rootScope.navState.role)) {
                     var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
                     if (!res) alert('failed to save annotations');
                 }
@@ -733,10 +733,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.rejectable = function(doc) {
             // reject reject signature OR countersignature
             return (!$scope.invq && doc && doc.signature_flow > 0 && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.signature_flow > 0 && doc.when_countersigned && !doc.when_finalized);
-        };
-
-        $scope.countersignable = function(doc) {
-            return !$scope.invq && doc && doc.signature_flow===2 && doc.when_signed && !doc.when_countersigned;
         };
 
         $scope.finalizable = function(doc) {

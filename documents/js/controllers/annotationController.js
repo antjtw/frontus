@@ -268,7 +268,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 
     $scope.openBox = function() {
-        if ($rootScope.navState.role == "issuer" && !$scope.countersignable($scope.lib)) {
+        if ($rootScope.navState.role == "issuer" && !$scope.doc.countersignable($rootScope.navState.role)) {
             $scope.getme = true;
         }
         if ($scope.annot.whattype == "ImgSignature" && (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') || ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
@@ -364,13 +364,6 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     });
 
     $scope.user = User;
-
-    // MOCKS
-    // TODO: fix these (probably references into parent scope or Documents service)
-    $scope.lib = {};
-    $scope.countersignable = function() {
-        return false;
-    };
 }
 
 annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User", "$timeout"];

@@ -80,6 +80,9 @@ Document.prototype = {
             return false;
         });
     },
+    countersignable: function(role) {
+        return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned
+    },
 };
 
 docs.service('Documents', ["Annotations", function(Annotations) {

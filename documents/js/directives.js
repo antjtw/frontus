@@ -169,6 +169,7 @@ app.directive('annotation', function() {
             annot: "=",
             isAnnotable: "=",
             signatureprocessing: "=",
+            doc: "=",
             removeannot: "&",
             sigModalUp: "&",
         },
