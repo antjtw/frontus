@@ -1,8 +1,12 @@
 //'use strict';
 
 app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
-        'navState', 'Annotations',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations) {
+        'navState', 'Annotations', 'Documents',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations, Documents) {
+        $scope.$watch('docId', function(new_doc_id) {
+            $scope.doc = Documents.getDoc(new_doc_id);
+        });
+
         if ($routeParams.page) {
             $scope.currentPage = parseInt($routeParams.page, 10);
         } else if (!$scope.currentPage) {
@@ -144,7 +148,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
 
             var z = $location.search();
             z.investor = doc.investor;
-            z.page = 1;
             $location.search(z);
             $scope.initDocView();
         };
@@ -156,7 +159,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             $scope.pages = "document.my_company_codex";
             var z = $location.search();
             delete z['investor'];
-            z.page = 1;
             $location.search(z);
             $scope.initDocView();
 
@@ -410,10 +412,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 $scope.emit('event:remind');
             });
             */
-        };
-
-        $scope.drawTime = function() {
-            return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"));
         };
     }
 ]);

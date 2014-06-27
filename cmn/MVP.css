@@ -1482,7 +1482,7 @@ ul.spaced-list > li:nth-child(odd) {
     vertical-align: top;
 }
 
-.activity-feed2 .activity-icon {
+.activity-icon {
     width: 30px;
     height: 30px;
     display: inline-block;
@@ -1527,6 +1527,14 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-icon.reminder-icon {
     background-position: -270px 0;
+}
+
+.activity-icon.tags-icon {
+    background-position: 0 -30px;
+}
+
+.activity-icon.page-icon {
+    background-position: -210px -30px;
 }
 
 .activity-icon.doc-rejected-icon {

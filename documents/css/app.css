@@ -2055,3 +2055,7 @@ annotation-list .annotmark.mine.incomplete {
 annotation-list .annotmark.mine.incomplete:hover {
     color: #C44032;
 }
+
+.docinfo {
+    margin 0 20px;
+}
