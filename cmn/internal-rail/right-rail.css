@@ -213,17 +213,27 @@ button.right-rail-button > span.arrow-flip {
     background-color: #FFFFFF;
 }
 
-
-.tabbable .nav-tabs > li {
-    width: -moz-calc(50% - 20px);
-    width: -webkit-calc(50% - 20px);
-    width: calc(50% - 20px);
-}
-
-.singletab .tabbable .nav-tabs > li {
+/* 1 tab */
+.tabbable .nav-tabs > li:first-child:nth-last-child(1) {
     width: -moz-calc(100% - 40px);
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
+}
+
+/* 2 tabs */
+.tabbable .nav-tabs > li:first-child:nth-last-child(2),
+.tabbable .nav-tabs > li:first-child:nth-last-child(2) ~ li {
+    width: -moz-calc((100% - 40px) / 2);
+    width: -webkit-calc((100% - 40px) / 2);
+    width: calc((100% - 40px) / 2);
+}
+
+/* 3 tabs */
+.tabbable .nav-tabs > li:first-child:nth-last-child(3),
+.tabbable .nav-tabs > li:first-child:nth-last-child(3) ~ li {
+    width: -moz-calc((100% - 40px) / 3);
+    width: -webkit-calc((100% - 40px) / 3);
+    width: calc((100% - 40px) / 3);
 }
 
 .nav-tabs > li > a {

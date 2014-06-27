@@ -28,9 +28,13 @@
     <div class="row-fluid">
         <div class="companyDocViewer leftTabWindow" ng-style="viewportheight">
             <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide}" page-query-string="pageQueryString()" doc-id="docId"></doc-viewer>
-            <div internal-right-rail tabarr="tabs" active="activeTab" class="pull-right" toggle-side="toggleSide">
-                <annotation-list doc-id="docId" ng-if="docId"></annotation-list>
-            </div>
+            <internal-right-rail toggle-side="toggleSide">
+                <tabset>
+                    <tab heading="Annotations">
+                        <annotation-list doc-id="docId" ng-if="docId"></annotation-list>
+                    </tab>
+                </tabset>
+            </internal-right-rail>
         </div>
     </div>
 </div>

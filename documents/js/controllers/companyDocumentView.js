@@ -179,7 +179,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 }
             });
         }
-        
+
         $scope.getRectStyle = function(image)
         {
             if (((image == 'original') && (!$scope.adjustedSelected)) ||
@@ -192,7 +192,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 return "background-color: #E3E3E3;";
             }
         }
-        
+
         $scope.selectProcessing = function(choice)
         {
             if (choice == "original")
@@ -415,8 +415,5 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.drawTime = function() {
             return $scope.$$childTail.isAnnotable && $scope.$$childTail.lib && ((!$scope.$$childTail.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.$$childTail.lib.when_signed && $rootScope.navState.role == "investor"));
         };
-
-        $scope.tabs = [{title: "Annotations", content: "<annotation-list doc-id='docId'></annotation-list>"}]; // TODO: "content" key doesn't work with directives
-        $scope.activeTab = {};
     }
 ]);
