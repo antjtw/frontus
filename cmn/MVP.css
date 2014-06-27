@@ -4481,6 +4481,11 @@ textarea.email-text {
     color: #3498DB;
     font-size: 14px !important;
     cursor: pointer;
+    width: 220px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .linkedDocuments ul > li:nth-child(2) > span {
     font-size: 12px !important;
@@ -4504,7 +4509,6 @@ textarea.email-text {
     position: absolute !important;
     left: 450px;
 }
-
 
 
 .secondbar {
@@ -4572,3 +4576,17 @@ textarea.email-text {
     padding-right: 0px;
 } 
 
+.scrollable-docs {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.scrollable-docs li {
+    border-bottom: 1px solid #8D8D8D;
+    min-height: 300px;
+}
+
+.modal.dmvModal {
+    margin-left: -350px;
+    width: 700px;
+}

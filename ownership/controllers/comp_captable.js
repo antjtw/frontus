@@ -1683,9 +1683,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
     $scope.viewEvidence = function(ev) {
         if (ev.doc_id != null) {
-            window.open('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+            if (!$scope.toggleView()) {
+                $scope.viewme = ['investor', ev.doc_id];
+            } else {
+                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1')
+            }
         } else if (ev.original != null) {
-            window.open('/app/documents/company-view?doc='+ev.original+'&page=1');
+            if (!$scope.toggleView()) {
+                $scope.viewme = ['issuer', ev.original];
+            } else {
+                $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
+            }
         }
     };
     $scope.editEvidence = function(obj) {
