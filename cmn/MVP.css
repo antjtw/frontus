@@ -4540,7 +4540,7 @@ textarea.email-text {
 }
 
 .messages .activity-feed2 li.event:first-of-type {
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 .messages .activity-feed2 li.event:last-of-type {
@@ -4578,4 +4578,7 @@ textarea.email-text {
 
 
 
-
+.messages .activity-feed2 span.recipients.blue-link{
+    color: #3498DB;
+    cursor: pointer; 
+}

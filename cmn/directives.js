@@ -101,8 +101,6 @@ m.directive('messageSide', function(){
                                 if(value.event == "open"){
                                     value.event = "opened"
                                 }
-                                $scope.myEvent = value.event
-                                console.log($scope.myEvent)
                                 myEvents[i].category = value.category;
                                 var idxtox = myEvents[i].tox.indexOf(value.tox)
                                 if(idxtox == -1){
@@ -132,8 +130,10 @@ m.directive('messageSide', function(){
                                     if(login.email == value.tox){
                                         myEvents[i].foo.forEach(function(elem){
                                             elem.login = login.logintime;
+                                            // $scope.hasLogin = true;
                                         })
                                     }
+                                    // else $scope.hasLogin = false;
                                 })
                          
                             }
@@ -141,7 +141,6 @@ m.directive('messageSide', function(){
                     })
                     $scope.message_data = myEvents;                                     
                     $scope.myEvents = $scope.message_data.length         
-                    // console.log($scope.message_data);
                 }).except(function(data){
                     console.log("error");
                 });
@@ -150,16 +149,22 @@ m.directive('messageSide', function(){
 
             $scope.gotoPerson = function(person) {
                 if(person.login == undefined){
-                    console.log("not a link");
-                    $scope.gotoPerson == false;
+                    $scope.hasLink = false;
+                    // console.log($scope.hasLink)
+                    // console.log($scope.isaLink)
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + person.person 
                     $location.url(link);
-                    $scope.gotoPerson == true;
+                    // $scope.hasLink = true;
                 }
+                console.log($scope.isaLink)              
+            }; 
+
+            // $scope.hasLink = function(){
                 
-            };     
+            // }
+            // $scope.gotoPerson()    
             
         }]
     };
