@@ -3,6 +3,13 @@
 <div class="container dynamic-page">
     <subnav>
         <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
+        <div class="pull-right">
+            <button class="btn" ng-click="leave()">
+                <span data-icon="&#xe602;" aria-hidden="true">
+                    <span ng-if="prepareable()">Save &amp; </span>Exit
+                </span>
+            </button>
+        </div>
     </subnav>
     <div modal="tourModal" close="tourclose();" options="touropts">
         <div class="modal-title">

@@ -1429,43 +1429,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     margin-top: 23px;
 }
 
-.docViewerTitle {
-    background-color: white;
-    height: 60px;
-    display: inline-block;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.docViewerTitle .docName {
-    margin-top: 14px;
-    margin-left: 20px;
-    font-size: 14px;
-    color: #1E2D3D
-}
-
-.docViewerTitle .docStatus {
-    margin-left: 20px;
-    font-size: 10px;
-    text-transform: uppercase;
-}
-
-.docViewerTitle .lastUpdated {
-    margin-top: 0px;
-    margin-left: 20px;
-    text-transform: uppercase;
-    text-align: left;
-    font-size: 10px;
-}
-
-.docViewerTitle .lastUpdated > button {
-    border: none;
-    background-color: white;
-    color: #1E2D3D;
-    padding-left: 20px;
-    font-size: 16px;
-}
-
 .stageControls {
     position: absolute;
     left:-webkit-calc(50% - 140px);

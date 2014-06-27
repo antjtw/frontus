@@ -413,5 +413,10 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             });
             */
         };
+
+        $scope.prepareable = function() {
+            // TODO (logic currently in docViewer)
+            return true;
+        }
     }
 ]);

@@ -52,29 +52,6 @@
 
 <div class="docViewer">
     <div class="docViewerHeader">
-        <div class="row-fluid docViewerTitle">
-            <div>
-                <div class="pull-left">
-                    <div class="docName">{{lib.docname | caplength: 100}}</div>
-                    <div class="docStatus" ng-show="!invq">{{doc_status}}</div>
-                    <div class="lastUpdated" ng-show="lib.last_updated">
-                        Last Updated {{lib.last_updated | fromNow:servertime}}
-                    </div>
-                </div>
-                <div class="pull-right">
-                    <div ng-show="prepareable(lib) && !doc.hasUnfilled(user.signaturePresent, $root.navState.role)" class="small-standard-button standard-button green">
-                        <button class="btn" ng-click="leave()">Done</button>
-                    </div>
-                    <div ng-show="prepareable(lib) && doc.hasUnfilled(user.signaturePresent, $root.navState.role)" class="small-standard-button standard-button green red-needed">
-                        <button class="btn" ng-click="leave()">Exit</button>
-                    </div>
-                    <div ng-hide="prepareable(lib)" class="small-standard-button standard-button gray">
-                        <button class="btn" ng-click="leave()">Exit</button>
-                    </div>
-                </div>
-            </div>
-            <div class="DivHelper"></div>
-        </div>
         <div class="docViewerControls">
             <!--Annotation Controls-->
             <div ng-show="stage===0 || stage==-1" style="overflow: hidden;">
