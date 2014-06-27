@@ -61,22 +61,21 @@ m.directive('messageSide', function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
                     $scope.msgstatus = data
                     console.log($scope.msgstatus)
-                    function Message(time, event, tox, to_names, our_id, indEvents, foo){
+                    function Message(time, event, tox, to_names, our_id, foo){
                         this.time = time
                         this.event = []
                         this.tox = []
                         this.to_names = []
-                        this.unique_names = []
                         this.our_id = []
                         this.foo = []
                     }
 
-                    function myEvent(our_id, timestamp, person, event, array){
+                    function indEvent(our_id, email, event, array, event_time){
                         this.our_id = our_id
-                        this.timestamp = timestamp
-                        this.person = person
+                        this.email = email
                         this.event = event
                         this.array = []
+                        this.event_time = []
                         // this.lastlogin = lastlogin
                     }
 
@@ -114,33 +113,40 @@ m.directive('messageSide', function(){
                                 var idx = myEvents[i].our_id.indexOf(value.our_id)
                                 if(idx == -1){
                                     myEvents[i].our_id.push(value.our_id)
-                                    myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox));
+                                    myEvents[i].foo.push(new indEvent(value.our_id, value.tox));
                                 }
-                                myEvents[i].foo.forEach(function(thing){
-                                    if(value.our_id == thing.our_id){
-                                        thing.array.push(value.event)
-                                        thing[value.event] = value.event_time
-                                    }
-                                    
-                                })
-                                myEvents[i].foo.forEach(function(item){
-                                    if($scope.peopleDict[item.person]==null){
-                                        item.personName = item.person
-                                    }
-                                    else{
-                                        item.personName = $scope.peopleDict[item.person]
+                                angular.forEach(myEvents[i].foo, function(myThings){
+                                    myThings[value.event_time] = value.event;
+                                    if(myThings.our_id == value.our_id){
+                                        myThings.array.push({
+                                            time: value.event_time,
+                                            event: value.event,
+                                        })
+                                        myThings.event_time.push(value.event_time)
+                                        var newEvent = myThings.event_time.sort()
+                                        var lastEvent = newEvent[newEvent.length -1];
+                                        myThings.timestamp = lastEvent;
+                                        myThings.event = myThings[lastEvent];
+                                        if(myThings.event == 'open'){
+                                            myThings.event = 'opened'
+                                        }
+                                        if($scope.peopleDict[myThings.email]==null){
+                                            myThings.personName = myThings.email;
+                                        }
+                                        else {
+                                            myThings.personName = $scope.peopleDict[myThings.email]
+                                        }
                                     }
                                 })
                                 angular.forEach($scope.logins, function(login){
                                     if(login.email == value.tox){
                                         myEvents[i].foo.forEach(function(elem){
                                             elem.login = login.logintime;
-                                            // $scope.hasLogin = true;
                                         })
                                     }
-                                    // else $scope.hasLogin = false;
                                 })
-                         
+
+
                             }
                         }
                     })
@@ -150,13 +156,13 @@ m.directive('messageSide', function(){
                     console.log("error");
                 });
                
-            }
+            };
+
 
             $scope.gotoPerson = function(person) {
                 if(person.login == undefined){
                     $scope.hasLink = false;
-                    // console.log($scope.hasLink)
-                    // console.log($scope.isaLink)
+                  
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + person.person 
@@ -164,12 +170,7 @@ m.directive('messageSide', function(){
                     // $scope.hasLink = true;
                 }
                 console.log($scope.isaLink)              
-            }; 
-
-            // $scope.hasLink = function(){
-                
-            // }
-            // $scope.gotoPerson()    
+            };    
             
         }]
     };
