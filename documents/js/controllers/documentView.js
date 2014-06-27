@@ -694,6 +694,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 a.position.size.width = 0;
                 a.position.size.height = 0;
                 a.initDrag = event;
+                if ($rootScope.navState.role == "issuer") {
+                    a.investorfixed = true;
+                } else {
+                    a.investorfixed = false;
+                }
                 $scope.annots.push(a);
             }
         };
