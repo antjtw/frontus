@@ -71,11 +71,12 @@ m.directive('messageSide', function(){
                         this.foo = []
                     }
 
-                    function myEvent(our_id, timestamp, person, event){
+                    function myEvent(our_id, timestamp, person, event, array){
                         this.our_id = our_id
                         this.timestamp = timestamp
                         this.person = person
                         this.event = event
+                        this.array = []
                         // this.lastlogin = lastlogin
                     }
 
@@ -98,9 +99,6 @@ m.directive('messageSide', function(){
                     angular.forEach($scope.msgstatus, function(value){
                         for (var i = 0; i < myEvents.length; i++){
                             if(value.when_requested.equals(myEvents[i].time)) {
-                                if(value.event == "open"){
-                                    value.event = "opened"
-                                }
                                 myEvents[i].category = value.category;
                                 var idxtox = myEvents[i].tox.indexOf(value.tox)
                                 if(idxtox == -1){
@@ -116,8 +114,15 @@ m.directive('messageSide', function(){
                                 var idx = myEvents[i].our_id.indexOf(value.our_id)
                                 if(idx == -1){
                                     myEvents[i].our_id.push(value.our_id)
-                                    myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox, value.event));
+                                    myEvents[i].foo.push(new myEvent(value.our_id, value.event_time, value.tox));
                                 }
+                                myEvents[i].foo.forEach(function(thing){
+                                    if(value.our_id == thing.our_id){
+                                        thing.array.push(value.event)
+                                        thing[value.event] = value.event_time
+                                    }
+                                    
+                                })
                                 myEvents[i].foo.forEach(function(item){
                                     if($scope.peopleDict[item.person]==null){
                                         item.personName = item.person
