@@ -249,15 +249,17 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     };
 
     this.setDocAnnotations = function(doc_id, annotations) {
-        if (doc_annotations[doc_id]) {
-            // if the array exists, make sure we return the same array reference so all copies update (meaning, modify, don't replace the object)
-            doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
-            annotations.forEach(function(annot) {
-                doc_annotations[doc_id].push((new Annotation()).parseFromJson(annot));
-            });
+        if (!doc_annotations[doc_id]) {
+            doc_annotations[doc_id] = [];
         } else {
-            doc_annotations[doc_id] = annotations;
+            // clear out any existing annotations
+            // TODO: should check for dupes and update instead
+            doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
         }
+        annotations.forEach(function(annot) {
+            var new_annot = (new Annotation()).parseFromJson(annot);
+            doc_annotations[doc_id].push(new_annot);
+        });
         return doc_annotations[doc_id];
     };
 

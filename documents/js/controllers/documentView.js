@@ -528,6 +528,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
                  $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
 
+                 // TODO: move all of this to the Documents and Annotations services
                  if ($scope.lib.annotations) {
                      // restoreNotes
                      var annots = [];
