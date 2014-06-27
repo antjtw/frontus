@@ -2373,6 +2373,7 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
     min-width: 300px;
+    cursor: pointer;
 }
 
 .rightTabWindow > table.status-table.evidence > tbody > tr.version {
