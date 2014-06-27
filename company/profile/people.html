@@ -75,7 +75,7 @@
                         </div>
             
                         <ul>
-                            <li>{{person.name}}</li>
+                            <li ng-class="{'link': person.lastlogin}">{{person.name}}</li>
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
                         </ul>
                     </td>

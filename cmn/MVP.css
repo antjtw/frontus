@@ -1880,6 +1880,10 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 18px;
 }
 
+.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
+    cursor: pointer;
+}
+
 .status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
     font-size: 12px;
     text-transform: capitalize;
@@ -1903,9 +1907,10 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
-    cursor:pointer;
+   /* cursor:pointer;*/
     padding-left: 10px;
 }
+
 .status-table.people-table > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
 }

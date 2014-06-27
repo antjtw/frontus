@@ -50,12 +50,10 @@ m.directive('messageSide', function(){
 
             $scope.getLogins = function(){
                 SWBrijj.tblm('global.user_tracker').then(function(data){
-                    $scope.logins = data
-                    console.log($scope.logins)
+                    $scope.logins = data                
                 })
             }
-            $scope.getLogins();
-
+ 
 
             $scope.getLogs = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
@@ -169,7 +167,7 @@ m.directive('messageSide', function(){
                     $location.url(link);
                     // $scope.hasLink = true;
                 }
-                console.log($scope.isaLink)              
+                      
             };    
             
         }]
@@ -220,13 +218,12 @@ m.directive('addPerson', function(){
             
             $scope.toggleRole = function() {
                 $scope.newRole = !$scope.newRole;
-                console.log("this makes someone an admin or not");
+                
             };
 
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             $scope.fieldCheck = function() {
                 return re.test($scope.newEmail);
-                console.log($scope.newEmail)
 
             };
 
