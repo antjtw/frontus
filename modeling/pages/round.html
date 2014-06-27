@@ -3,16 +3,18 @@
     <div class="container dynamic-page">
         <div>
             <span>Pre-money valuation</span>
-            <input ng-model="fields.premoney">
+            <input ng-change="calculate()" ng-model="fields.premoney">
         </div>
         <div>
             <span>Investment amount</span>
-            <input ng-model="fields.investment">
+            <input ng-change="calculate()" ng-model="fields.investment">
         </div>
         <div>
             <span>Post-Money Option Pool %</span>
-            <input ng-model="fields.optionpool">
+            <input ng-change="calculate()" ng-model="fields.optionpool">
         </div>
+
+        <div>Initial Ownership</div>
         <ul class="visualize-table">
             <li>
                 <ul>
@@ -21,14 +23,43 @@
                     <li>Percentage</li>
                 </ul>
             </li>
-            <li ng-repeat='round in rounds'>
+            <li ng-repeat='round in initialrounds'>
                 <ul>
                     <li>{{round.issue}}</li>
                     <li>{{formatAmount(round.units)}}</li>
-                    <li>{{formatAmount(round.start_percent)}}%</li>
+                    <li>{{formatAmount(round.percent)}}%</li>
                 </ul>
             </li>
         </ul>
+
+        <div>After option pool creation</div>
+        <ul class="visualize-table">
+            <li>
+                <ul>
+                    <li>Issue Name</li>
+                    <li>Units</li>
+                    <li>Percentage</li>
+                </ul>
+            </li>
+            <li ng-repeat='round in optionrounds'>
+                <ul>
+                    <li>{{round.issue}}</li>
+                    <li>{{formatAmount(round.units)}}</li>
+                    <li>{{formatAmount(round.percent)}}%</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div>Final ownership structure</div>
+        <div>
+            <span>Effective pre-money: </span>
+            {{formatAmount(effectivepremoney)}}
+        </div>
+
+        <div>
+            <span>Price per share</span>
+            {{formatAmount(effectiveppshare)}}
+        </div>
 
         <ul class="visualize-table 4-column">
             <li>
