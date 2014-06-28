@@ -38,6 +38,12 @@ m.directive('messageSide', function(){
                 }        
             });
 
+            $scope.$watch('msgstatus', function(newdata, olddata){
+                if(newdata){
+                    $scope.getLogs();
+                }
+            })
+
             $scope.gotoPerson = function(person) {
                 if (!person.lastlogin) return;
                 var link;
@@ -53,62 +59,66 @@ m.directive('messageSide', function(){
                     $scope.logins = data                
                 })
             }
+
+            $scope.getFeed = function(){
+                SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
+                    $scope.msgstatus = data;
+                    console.log($scope.msgstatus);
+                }).except(function(data){
+                    console.log("error");
+                });
+            }
+            $scope.getFeed();
  
 
             $scope.getLogs = function(){
-                SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
-                    $scope.msgstatus = data
-                    console.log($scope.msgstatus)
-                    function Message(time, event, tox, to_names, our_id, foo){
-                        this.time = time
-                        this.event = []
-                        this.tox = []
-                        this.to_names = []
-                        this.our_id = []
-                        this.foo = []
-                    }
+                function Message(time, event, tox, to_names, our_id, foo){
+                    this.time = time
+                    this.event = []
+                    this.tox = []
+                    this.to_names = []
+                    this.our_id = []
+                    this.foo = []
+                }
 
-                    function indEvent(our_id, email, event, array, event_time){
-                        this.our_id = our_id
-                        this.email = email
-                        this.event = event
-                        this.array = []
-                        this.event_time = []
-                        // this.lastlogin = lastlogin
-                    }
+                function indEvent(our_id, email, event, array, event_time){
+                    this.our_id = our_id
+                    this.email = email
+                    this.event = event
+                    this.array = []
+                    this.event_time = []
+                }
 
-                    var msgdata = []
-                    angular.forEach($scope.msgstatus, function(value){
-                        if (!msgdata.some(function(timestamp, idx, arr){
-                             return timestamp.equals(value.when_requested);
-                        })) {
-                            msgdata.push(value.when_requested);
-                        }
-                         
-                    });
-                    var myEvents = []
-                    for (var i = 0; i < msgdata.length; i++){
-                       myEvents.push(new Message(msgdata[i]))
+                var msgdata = []
+                angular.forEach($scope.msgstatus, function(value){
+                    if (!msgdata.some(function(timestamp, idx, arr){
+                         return timestamp.equals(value.when_requested);
+                    })) {
+                        msgdata.push(value.when_requested);
                     }
-                    console.log(myEvents)
-
-               
-                    angular.forEach($scope.msgstatus, function(value){
-                        for (var i = 0; i < myEvents.length; i++){
-                            if(value.when_requested.equals(myEvents[i].time)) {
-                                myEvents[i].category = value.category;
-                                var idxtox = myEvents[i].tox.indexOf(value.tox)
-                                if(idxtox == -1){
-                                    myEvents[i].tox.push(value.tox);
-                                } 
-                                myEvents[i].event.push(value.event)
-                                if($scope.peopleDict[value.tox]==null){
-                                    myEvents[i].to_names.push(value.tox)
-                                }
-                                else {
-                                    myEvents[i].to_names.push($scope.peopleDict[value.tox])
-                                }
-                                var idx = myEvents[i].our_id.indexOf(value.our_id)
+                     
+                });
+                var myEvents = []
+                for (var i = 0; i < msgdata.length; i++){
+                   myEvents.push(new Message(msgdata[i]))
+                }
+                console.log(myEvents)              
+                angular.forEach($scope.msgstatus, function(value){
+                    for (var i = 0; i < myEvents.length; i++){
+                        if(value.when_requested.equals(myEvents[i].time)) {
+                            myEvents[i].category = value.category;
+                            var idxtox = myEvents[i].tox.indexOf(value.tox)
+                            if(idxtox == -1){
+                                myEvents[i].tox.push(value.tox);
+                            } 
+                            myEvents[i].event.push(value.event)
+                            if($scope.peopleDict[value.tox]==null){
+                                myEvents[i].to_names.push(value.tox)
+                            }
+                            else {
+                                myEvents[i].to_names.push($scope.peopleDict[value.tox])
+                            }
+                            var idx = myEvents[i].our_id.indexOf(value.our_id)
                                 if(idx == -1){
                                     myEvents[i].our_id.push(value.our_id)
                                     myEvents[i].foo.push(new indEvent(value.our_id, value.tox));
@@ -147,11 +157,9 @@ m.directive('messageSide', function(){
 
                             }
                         }
-                    })
+                    // })
                     $scope.message_data = myEvents;                                     
                     $scope.myEvents = $scope.message_data.length         
-                }).except(function(data){
-                    console.log("error");
                 });
                
             };
