@@ -6,6 +6,9 @@ m.directive('messageSide', function(){
         // replace: true,
         // transclude: false,
         restrict: 'E',
+        // link: function (scope, element, attrs){
+        //     scope.$watch(attrs.value function())
+        // }
         templateUrl: '/cmn/partials/messageSide.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 'navState',
 
@@ -32,6 +35,12 @@ m.directive('messageSide', function(){
             };
             $scope.getPeople();
 
+            // $scope.$watchCollection(['peopleDict', 'msgstatus'], function(newdata, olddata){
+            //     if(newdata){
+            //         $scope.getLogs();
+            //     }
+            // })
+
             $scope.$watch('peopleDict', function(newdata, olddata){
                 if(newdata){
                     $scope.getLogs();
@@ -39,10 +48,14 @@ m.directive('messageSide', function(){
             });
 
             $scope.$watch('msgstatus', function(newdata, olddata){
+                $scope.getLogs();
                 if(newdata){
+                    console.log("new message")
                     $scope.getLogs();
                 }
+                
             })
+
 
             $scope.gotoPerson = function(person) {
                 if (!person.lastlogin) return;
