@@ -27,19 +27,12 @@ m.directive('messageSide', function(){
                             array.push(obj[info.email]= null)
                         }
                     }) 
-                    $scope.peopleDict = obj
-                    console.log($scope.peopleDict)
-                    console.log($scope.peopleDict['ariel+3@sharewave.com'])
+                    $scope.peopleDict = obj                
                     $scope.getLogs();
                 });               
             };
             $scope.getPeople();
 
-            $scope.$watchCollection(['peopleDict', 'msgstatus'], function(newdata, olddata){
-                if(newdata){
-                    $scope.getLogs();
-                }
-            })
 
             $scope.$watch('peopleDict', function(newdata, olddata){
                 if(newdata){
@@ -47,13 +40,12 @@ m.directive('messageSide', function(){
                 }        
             });
 
-            $scope.$watch('test1', function(newdata, olddata){
-                if(newdata){
-                    console.log("new message")
-                    $scope.getLogs();
-                }
-                
-            })
+            // $scope.$watch('test1', function(newdata, olddata){
+            //     if(newdata){
+            //         console.log("new message")
+            //         $scope.getPeople();
+            //     }
+            // });
 
 
             $scope.gotoPerson = function(person) {

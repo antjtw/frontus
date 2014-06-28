@@ -1880,8 +1880,12 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 18px;
 }
 
-.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
+/*.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
     cursor: pointer;
+}*/
+
+.link{
+   cursor: pointer; 
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
