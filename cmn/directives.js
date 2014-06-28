@@ -35,11 +35,11 @@ m.directive('messageSide', function(){
             };
             $scope.getPeople();
 
-            // $scope.$watchCollection(['peopleDict', 'msgstatus'], function(newdata, olddata){
-            //     if(newdata){
-            //         $scope.getLogs();
-            //     }
-            // })
+            $scope.$watchCollection(['peopleDict', 'msgstatus'], function(newdata, olddata){
+                if(newdata){
+                    $scope.getLogs();
+                }
+            })
 
             $scope.$watch('peopleDict', function(newdata, olddata){
                 if(newdata){
@@ -47,8 +47,7 @@ m.directive('messageSide', function(){
                 }        
             });
 
-            $scope.$watch('msgstatus', function(newdata, olddata){
-                $scope.getLogs();
+            $scope.$watch('test1', function(newdata, olddata){
                 if(newdata){
                     console.log("new message")
                     $scope.getLogs();
@@ -76,6 +75,7 @@ m.directive('messageSide', function(){
             $scope.getFeed = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
                     $scope.msgstatus = data;
+                    $scope.test1 = data
                     console.log($scope.msgstatus);
                 }).except(function(data){
                     console.log("error");
