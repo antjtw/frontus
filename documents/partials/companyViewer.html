@@ -52,13 +52,12 @@
                     </tab>
                 </tabset>
                 <div class="bottom-part confirmPanelContainer">
-                    <span ng-show="signable(lib)">Confirm Electronic Signature</span>
-                    <span ng-show="doc.countersignable($root.navState.role)">Approve Document</span>
-                    <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
-                    <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
+                    <span ng-show="invq && doc.signable()">Confirm Electronic Signature</span>
+                    <span ng-show="!invq && doc.countersignable($root.navState.role)">Approve Document</span>
+                    <span ng-show="!invq && doc.finalizable() && doc.signature_flow===1">Approve Investor's Signature</span>
 
                     <div class="confirmPanel">
-                        <!-- div ng-show="invq && signable(lib)" -->
+                        <div ng-show="invq && doc.signable()">
                             <div class='confirmBody'>
                                 <ul class="checkboxOption">
                                     <li class="pull-left">
@@ -73,7 +72,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        <!-- /div -->
+                        </div>
 
                         <div ng-show="!invq && doc.countersignable($root.navState.role)">
                             <div class='confirmBody'>
@@ -83,7 +82,7 @@
                                         Warning: Approving this document will automatically upgrade your payment plan.
                                     </span>
                                 </div>
-                                <ul class="radioOption" style="height:80px;">
+                                <ul class="radioOption">
                                     <li class="pull-left">
                                         <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
                                     </li>
@@ -113,7 +112,7 @@
                             </div>
                         </div>
 
-                        <div ng-show="finalizable(lib) && lib.signature_flow===1">
+                        <div ng-show="!invq && doc.finalizable() && doc.signature_flow===1">
                             <div class="confirmBody">
                                 <div class="upgradeWarning"
                                     ng-if="triggerUpgradeDocuments(1)">
@@ -153,47 +152,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div ng-show="finalizable(lib) && lib.signature_flow===2">
-                            <div class="confirmBody">
-                                <div class="upgradeWarning"
-                                    ng-if="triggerUpgradeDocuments(1)">
-                                    <span>
-                                        Warning: Approving this document will automatically upgrade your payment plan.
-                                    </span>
-                                </div>
-                                <ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
-                                    </li>
-                                    <li class="pull-left">
-                                        <span>Approve Document</span>
-                                        <br>
-                                        <span>Approve countersignature and finalize this document.</span>
-                                    </li>
-                                </ul>
-                                <br>
-                                <ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button"
-                                            ng-class="{'selected':confirmValue===-1}"
-                                            ng-click="setConfirmValue(-1)">
-                                        </button>
-                                    </li>
-                                    <li class="pull-left">
-                                        <span>Reject Document</span>
-                                        <br>
-                                        <span>Reject countersignature on this document.</span>
-                                        <br>
-                                        <textarea ng-show="confirmValue===-1"
-                                            class="messageText" rows="3"
-                                            ng-model="$parent.rejectMessage"
-                                            ng-click="resetMsg()">
-                                        </textarea>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div ng-show="voidable(lib) && lib.signature_flow > 0">
+                        <div ng-show="invq && doc.voidable() && doc.signature_flow > 0">
                             <div class="confirmBody">
                                 <ul class="radioOption">
                                     <li class="pull-left">
@@ -228,7 +187,7 @@
                             </div>
                         </div>
 
-                        <div ng-show="template_original && forsigning">
+                        <div ng-show="template_original && forsigning"> <!-- TODO: neither of these are set. Should be when invester is signing a smart doc -->
                             <div class='confirmBody'>
                                 <div>
                                     <ul class="checkboxOption">
@@ -276,25 +235,25 @@
                     <div class="docViewerAction">
                         <div class="standard-button green confirmButton">
                             <button class="btn"
-                                    ng-show="signable(lib)"
+                                    ng-show="invq && doc.signable()"
                                     ng-disabled="processing || confirmValue===0"
                                     ng-click="signDocument(document, confirmValue);">
                                 Confirm
                             </button>
                             <button class="btn"
-                                    ng-show="doc.countersignable($root.navState.role)"
+                                    ng-show="!invq && doc.countersignable($root.navState.role)"
                                     ng-disabled="processing || confirmValue===0"
                                     ng-click="countersignAction(confirmValue, rejectMessage);">
                                 Confirm
                             </button>
                             <button class="btn"
-                                    ng-show="finalizable(lib)"
+                                    ng-show="!invq && doc.finalizable()"
                                     ng-disabled="processing || confirmValue===0"
                                     ng-click="finalizeAction(confirmValue, rejectMessage);">
                                 Confirm
                             </button>
                             <button class="btn"
-                                    ng-show="voidable(lib)"
+                                    ng-show="invq && doc.voidable()"
                                     ng-disabled="processing || confirmValue===0"
                                     ng-click="voidAction(confirmValue, rejectMessage);">
                                 Confirm

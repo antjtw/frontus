@@ -1450,12 +1450,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     left: 50%;
     height: 60px;
 }
-.confirmBody {
-    margin: 0 auto;
-    padding-top: 30px;
-    padding-bottom: 60px;
-    width: 380px;
-}
 
 .confirmBody.shareDoc {
     text-align: left;
@@ -1463,10 +1457,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 
 .confirmBody.shareDoc .single-share-input .select2-container {
     width: 450px;
-}
-
-.confirmBody > .radioOption {
-    height: 40px;
 }
 
 .confirmBody > .radioOption > li:first-child {
@@ -1504,20 +1494,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 
 .confirmBody > .checkboxOption > li:last-child > span:last-child {
     color: #666666;
-}
-
-.confirmBody .email-text {
-    margin-top: 20px;
-}
-
-.confirmFooter {
-    height: 12px;
-}
-
-.confirmButton {
-    position: absolute;
-    right: 20px;
-    top: 15px;
 }
 
 .hidden {

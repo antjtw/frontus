@@ -80,9 +80,21 @@ Document.prototype = {
             return false;
         });
     },
+    signable: function() {
+        return this.signature_flow > 0 && !this.when_signed;
+    },
     countersignable: function(role) {
+        // TODO: remove role check (should happen in caller)
         return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned
     },
+    finalizable: function() {
+        // signature_flow 2 is no longer finalizeable, as sign / countersign takes care of it
+        return this.signature_flow===1 && this.when_signed && !this.when_finalized;
+    },
+    voidable: function() {
+        return this.signature_flow > 0 && this.when_finalized && this.when_void_requested && !this.when_void_accepted;
+    },
+
 };
 
 docs.service('Documents', ["Annotations", function(Annotations) {
