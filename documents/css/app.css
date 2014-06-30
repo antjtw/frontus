@@ -1395,24 +1395,16 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     height: 60px;
 }
 
-.confirmBody.shareDoc {
-    text-align: left;
-}
-
-.confirmBody.shareDoc .single-share-input .select2-container {
-    width: 450px;
-}
-
-.confirmBody span:first-child {
+.confirmPanel span:first-child {
     font-size: 14px;
     color: #1E2D3D;
 }
 
-.confirmBody span:last-child {
+.confirmPanel span:last-child {
     color: #666666;
 }
 
-.confirmBody > .radioOption textarea.messageText {
+.confirmPanel > .radioOption textarea.messageText {
     margin-left: 0;
     margin-right: 0;
     margin-top: 6px;

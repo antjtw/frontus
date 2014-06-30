@@ -54,144 +54,122 @@
                 <div class="bottom-part confirmPanelContainer">
                     <div class="confirmPanel">
                         <div ng-show="invq && doc.signable()">
-                            <div class='confirmBody'>
-                                <div class="pull-left">
-                                    <span>Do you want to electronically sign this document?</span>
-                                    <br>
-                                    <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.</span>
-                                </div>
-                            </div>
+                            <span>Do you want to electronically sign this document?</span>
+                            <br>
+                            <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.</span>
                         </div>
 
                         <div ng-show="!invq && doc.countersignable($root.navState.role)">
-                            <div class='confirmBody'>
-                                <div class="upgradeWarning"
-                                    ng-if="triggerUpgradeDocuments(1)">
-                                    <span>
-                                        Warning: Approving this document will automatically upgrade your payment plan.
-                                    </span>
-                                </div>
-                                <div>
-                                    <span>Approve Document with Electronic Signature</span>
-                                    <br>
-                                    <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.</span>
-                                </div>
-                                <!-- ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button" ng-class="{'selected':confirmValue===-1}" ng-click="setConfirmValue(-1)"></button>
-                                    </li>
-                                    <li class="pull-left">
-                                        <span>Reject Document</span>
-                                        <br>
-                                        <span>Reject signature on this document.</span>
-                                        <br>
-                                        <textarea ng-show="confirmValue===-1"
-                                            class="messageText" rows="3"
-                                            ng-model="$parent.rejectMessage"
-                                            ng-click="resetMsg()">
-                                        </textarea>
-                                    </li>
-                                </ul -->
+                            <div class="upgradeWarning"
+                                ng-if="triggerUpgradeDocuments(1)">
+                                <span>
+                                    Warning: Approving this document will automatically upgrade your payment plan.
+                                </span>
                             </div>
+                            <span>Approve Document with Electronic Signature</span>
+                            <br>
+                            <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.</span>
+                            <!-- ul class="radioOption">
+                                <li class="pull-left">
+                                    <button class="radio-button" ng-class="{'selected':confirmValue===-1}" ng-click="setConfirmValue(-1)"></button>
+                                </li>
+                                <li class="pull-left">
+                                    <span>Reject Document</span>
+                                    <br>
+                                    <span>Reject signature on this document.</span>
+                                    <br>
+                                    <textarea ng-show="confirmValue===-1"
+                                        class="messageText" rows="3"
+                                        ng-model="$parent.rejectMessage"
+                                        ng-click="resetMsg()">
+                                    </textarea>
+                                </li>
+                            </ul -->
                         </div>
 
                         <div ng-show="!invq && doc.finalizable() && doc.signature_flow===1">
-                            <div class="confirmBody">
-                                <div class="upgradeWarning"
-                                    ng-if="triggerUpgradeDocuments(1)">
-                                    <span>
-                                        Warning: Approving this document will automatically upgrade your payment plan.
-                                    </span>
-                                </div>
-                                <div>
-                                    <span>Approve Document</span>
-                                    <br>
-                                    <span>Approve signature and finalize this document.</span>
-                                </div>
-                                <!-- ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button"
-                                            ng-class="{'selected':confirmValue===-1}"
-                                            ng-click="setConfirmValue(-1)">
-                                        </button>
-                                    </li>
-                                    <li class="pull-left">
-                                        <span>Reject Document</span>
-                                        <br>
-                                        <span>Reject signature on this document.</span>
-                                        <br>
-                                        <textarea ng-show="confirmValue===-1"
-                                            class="messageText" rows="3"
-                                            ng-model="$parent.rejectMessage"
-                                            ng-click="resetMsg()">
-                                        </textarea>
-                                    </li>
-                                </ul -->
+                            <div class="upgradeWarning"
+                                ng-if="triggerUpgradeDocuments(1)">
+                                <span>
+                                    Warning: Approving this document will automatically upgrade your payment plan.
+                                </span>
                             </div>
+                            <span>Approve Document</span>
+                            <br>
+                            <span>Approve signature and finalize this document.</span>
+                            <!-- ul class="radioOption">
+                                <li class="pull-left">
+                                    <button class="radio-button"
+                                        ng-class="{'selected':confirmValue===-1}"
+                                        ng-click="setConfirmValue(-1)">
+                                    </button>
+                                </li>
+                                <li class="pull-left">
+                                    <span>Reject Document</span>
+                                    <br>
+                                    <span>Reject signature on this document.</span>
+                                    <br>
+                                    <textarea ng-show="confirmValue===-1"
+                                        class="messageText" rows="3"
+                                        ng-model="$parent.rejectMessage"
+                                        ng-click="resetMsg()">
+                                    </textarea>
+                                </li>
+                            </ul -->
                         </div>
                         <div ng-show="invq && doc.voidable() && doc.signature_flow > 0">
-                            <div class="confirmBody">
-                                <div>
-                                    <span>Accept Void</span>
+                            <span>Accept Void</span>
+                            <br>
+                            <span>Accept the voiding of this document.</span>
+                            <!--ul class="radioOption">
+                                <li class="pull-left">
+                                    <button class="radio-button"
+                                        ng-class="{'selected':confirmValue===-1}"
+                                        ng-click="setConfirmValue(-1)">
+                                    </button>
+                                </li>
+                                <li class="pull-left">
+                                    <span>Reject Void</span>
                                     <br>
-                                    <span>Accept the voiding of this document.</span>
-                                </div>
-                                <!--ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button"
-                                            ng-class="{'selected':confirmValue===-1}"
-                                            ng-click="setConfirmValue(-1)">
-                                        </button>
-                                    </li>
-                                    <li class="pull-left">
-                                        <span>Reject Void</span>
-                                        <br>
-                                        <span>Reject the voiding of this document.</span>
-                                        <br>
-                                        <textarea ng-show="confirmValue===-1"
-                                            class="messageText" rows="3"
-                                            ng-model="$parent.rejectMessage"
-                                            ng-click="resetMsg()">
-                                        </textarea>
-                                    </li>
-                                </ul-->
-                            </div>
+                                    <span>Reject the voiding of this document.</span>
+                                    <br>
+                                    <textarea ng-show="confirmValue===-1"
+                                        class="messageText" rows="3"
+                                        ng-model="$parent.rejectMessage"
+                                        ng-click="resetMsg()">
+                                    </textarea>
+                                </li>
+                            </ul-->
                         </div>
 
                         <div ng-show="template_original && forsigning"> <!-- TODO: neither of these are set. Should be when invester is signing a smart doc -->
-                            <div class='confirmBody'>
-                                <div>
-                                    <span>Do you want to electronically sign this document?</span>
+                            <span>Do you want to electronically sign this document?</span>
+                            <br>
+                            <span>(This action is irreversible.)</span>
+                            <ul class="radioOption inline-radio">
+                                <li>
+                                    <span>Save Info?</span>
                                     <br>
-                                    <span>(This action is irreversible.)</span>
-                                </div>
-                                <div>
-                                    <ul class="radioOption inline-radio">
-                                        <li>
-                                            <span>Save Info?</span>
-                                            <br>
-                                            <span>Choose yes or no below if you want like to save all this information for other investor requests.
-                                                You can access and change information in your investor profile.</span>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="radio-button" ng-class="{'selected':infoValue===1}" ng-click="setinfoValue(1)"></button>
-                                        </li>
-                                        <li>
-                                            YES
-                                        </li>
-                                        <li>
-                                            <button class="radio-button"
-                                                ng-class="{'selected':infoValue===-1}"
-                                                ng-click="setinfoValue(-1)">
-                                            </button>
-                                        </li>
-                                        <li>
-                                            NO
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                                    <span>Choose yes or no below if you want like to save all this information for other investor requests.
+                                        You can access and change information in your investor profile.</span>
+                                </li>
+                                <br>
+                                <li>
+                                    <button class="radio-button" ng-class="{'selected':infoValue===1}" ng-click="setinfoValue(1)"></button>
+                                </li>
+                                <li>
+                                    YES
+                                </li>
+                                <li>
+                                    <button class="radio-button"
+                                        ng-class="{'selected':infoValue===-1}"
+                                        ng-click="setinfoValue(-1)">
+                                    </button>
+                                </li>
+                                <li>
+                                    NO
+                                </li>
+                            </ul>
                         </div>
                     </div> <!-- confirm panel -->
                     <div class="docViewerAction">

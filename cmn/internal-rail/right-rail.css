@@ -296,7 +296,8 @@ internal-right-rail .bottom-part {
     background-color: #E3E3E3;
     position: absolute;
     bottom: 0;
+    padding-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
-    padding-bottom: 45px; /* To accomodate the "Feedback" button
+    padding-bottom: 45px; /* To accomodate the "Feedback" button */
 }
