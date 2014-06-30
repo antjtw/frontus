@@ -12,8 +12,6 @@ m.directive('messageSide', function(){
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
-                    console.log($scope.people.length);
-                    console.log($scope.people)
                     var array = []
                     var obj = {}
                     angular.forEach($scope.people, function(info){
@@ -22,47 +20,36 @@ m.directive('messageSide', function(){
                             array.push(obj[info.email]= null)
                         }
                     }) 
-                    $scope.peopleDict = obj                
+                    $scope.peopleDict = obj  
+                    $scope.getFeed();
+              
                 });               
             };
             $scope.getPeople();
 
 
-            $scope.$watch('peopleDict', function(newdata, olddata){
-                if(newdata){
-                    $scope.getLogs();
-                }        
-            });
-
-            $scope.$watch('msgstatus', function(newvalues, oldvalues, scope){
-                
-            })
-
-            // $scope.$watchGroup(['getFeed', 'getLogs'], function(newValues, oldValues, scope) {
-
-            // $scope.$watchCollection('myInfo', function(newdata, olddata){
+            // $scope.$watch('peopleDict', function(newdata, olddata){
             //     if(newdata){
-            //         $scope.getFeed();
-            //         // this always checks
+            //         $scope.getLogs();
             //     }        
             // });
 
-            // $scope.watchCollection('test1', function(newdata, olddata){
-            //     $scope.getLogs();
-            // })
-
-            // $scope.$watch('test1', function(newdata, olddata){
-            //     if(newdata){
-            //         console.log("new message")
+            // $scope.$watch('msgstatus', function(newvalues, oldvalues){
+            //     if(newvalues){
             //         $scope.getLogs();
             //     }
-            // });
+            //     true
+            // })
+
+            $rootScope.$on('new:message', function(x){
+                console.log(x);
+                setTimeout($scope.getFeed, 5500);
+            })
 
 
             $scope.gotoPerson = function(person) {
                 if (!person.lastlogin) return;
                 var link;
-                console.log(person.lastlogin)
                 link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
                 if (link) {
                 $location.url(link);
@@ -77,18 +64,18 @@ m.directive('messageSide', function(){
 
             $scope.getFeed = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
-                    $scope.msgstatus = data;
                     console.log($scope.msgstatus)
+                    $scope.msgstatus = data;
+                    $scope.getLogs();
+
                 }).except(function(data){
                     console.log("error");
                 });
             }
-            $scope.getFeed();
  
 
             $scope.getLogs = function(){
                 // $scope.getFeed();
-                console.log($scope.msgstatus)
                 function Message(time, event, tox, to_names, our_id, foo){
                     this.time = time
                     this.event = []
@@ -115,12 +102,11 @@ m.directive('messageSide', function(){
                     }
                      
                 });
-                console.log(msgdata)
                 var myEvents = []
                 for (var i = 0; i < msgdata.length; i++){
                    myEvents.push(new Message(msgdata[i]))
-                }
-                console.log(myEvents)              
+                }           
+                console.log($scope.msgstatus)
                 angular.forEach($scope.msgstatus, function(value){
                     for (var i = 0; i < myEvents.length; i++){
                         if(value.when_requested.equals(myEvents[i].time)) {
@@ -176,12 +162,12 @@ m.directive('messageSide', function(){
                             }
                         }
                     // })
-                    $scope.message_data = myEvents;                                     
+                    $scope.message_data = myEvents; 
+                    //console.log($scope.message_data)                                    
                     $scope.myEvents = $scope.message_data.length         
                 });
                
             };
-            $scope.getLogs();
 
 
             $scope.gotoPerson = function(person) {
@@ -315,6 +301,7 @@ m.directive('composeMessage', function() {
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     //this works but i don't know why for the root scope
+                    $rootScope.$emit('new:message');
                     $scope.resetMessage();
                     $scope.recipients = [];
                     $scope.clicked = false;
