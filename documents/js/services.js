@@ -111,7 +111,11 @@ docs.service('Documents', ["Annotations", function(Annotations) {
         angular.extend(oldDoc, doc);
         oldDoc.pages = realPages;
         oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
-        oldDoc.tags = JSON.parse(oldDoc.tags);
+        if (oldDoc.tags) {
+            oldDoc.tags = JSON.parse(oldDoc.tags);
+        } else {
+            oldDoc.tags = [];
+        }
         return oldDoc;
     };
 }]);
