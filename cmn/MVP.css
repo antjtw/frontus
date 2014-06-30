@@ -4596,6 +4596,7 @@ textarea.email-text {
 .modal.dmvModal {
     margin-left: -350px;
     width: 700px;
+}
 
 .recipients.details{
     font-size: 12px;
@@ -4608,5 +4609,4 @@ textarea.email-text {
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
     cursor: pointer; 
->>>>>>> message_status
 }
