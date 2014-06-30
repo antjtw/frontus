@@ -291,3 +291,11 @@ button.right-rail-button > span.arrow-flip {
 .span4.capright, .span4.capright span, .span4.capright input {
     -webkit-transform: translateZ(0);
 }
+
+internal-right-rail .bottom-part {
+    background-color: #E3E3E3;
+    position: absolute;
+    bottom: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
