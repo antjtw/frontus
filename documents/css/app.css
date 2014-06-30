@@ -1262,10 +1262,6 @@ input[type='text']:disabled, textarea:disabled {
     width: 280px;
 }
 
-.footerBar {
-    display: none !important;
-}
-
 doc-viewer, internal-right-rail, internal-right-rail > div {
     background-color: #f1f1f1;
     height: 100%;
@@ -1280,36 +1276,10 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     background-color: white;
 }
 
-.docViewerHeader {
-    z-index: 10;
-}
-
 .docViewerAction {
     text-transform: uppercase;
     font-size: 14px;
     color: #1E2D3D;
-}
-
-.docViewerControls > div > div.tools {
-    margin-left: 20px;
-    padding-top: 15px;
-    min-width: 210px;
-}
-
-.tools > button {
-    border: none;
-    border-radius: 3px;
-    font-size: 20px;
-    color: #666666;
-    background-color: #E3E3E3;
-    background-position: top;
-    width: 30px;
-    height: 30px;
-    margin-right: 20px;
-}
-
-.tools > button:hover {
-    background-color: #C7C7C7;
 }
 
 .pageTurn {
@@ -1383,36 +1353,10 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     background-color: #FFFFFF;
 }
 
-.docActions {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-right: 20px;
-}
-
-.docActions > div > button {
-    display: block;
-}
-
 .last-saved {
     text-transform: uppercase;
     font-size: 10px;
     margin-top: 23px;
-}
-
-.stageControls {
-    position: absolute;
-    left:-webkit-calc(50% - 140px);
-    left:-moz-calc(50% - 140px);
-    left: calc(50% - 140px);
-    margin: 14px auto;
-    width: 280px;
-    color: #666666;
-}
-
-.stageControls > div.disabled > button {
-    cursor: default;
-    text-decoration: none;
-    box-shadow: none;
 }
 
 .docViewerTitle div.standard-button {

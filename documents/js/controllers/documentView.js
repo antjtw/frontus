@@ -150,7 +150,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.templateId = templateId;
             $scope.isAnnotable = false;
             $scope.docLength = 0;
-            $scope.stage = -1;
             $scope.template_original = true;
             $scope.used_attributes = {};
             $scope.template_email = [];
@@ -264,45 +263,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         });
 
-        $scope.stage = 0;
-        $scope.confirmValue = 0;
-        $scope.infoValue = 1;
         if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
         $scope.pageScroll = 0;
         $scope.isAnnotable = true;
 
         $scope.signatureURL = '/photo/user?id=signature:';
-
-        $scope.setStage = function(n) {
-            $scope.setConfirmValue(0);
-            if (n==1) window.scrollTo(window.scrollX, 0);
-            $scope.stage = n;
-            if ($scope.stage === 0) {
-                refreshDocImage();
-            }
-            if (!$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.doc.countersignable($rootScope.navState.role)) {
-                $scope.saveNoteData();
-            }
-        };
-        $scope.setConfirmValue = function(n) {
-            if ($scope.confirmValue === n) {
-                $scope.confirmValue = 0;
-            } else {
-                $scope.confirmValue = n;
-            }
-            if ($scope.confirmValue !== -1) {
-                //$scope.messageText = "Explain the reason for rejecting this document.";
-                //"Add an optional message...";
-            }
-        };
-
-        $scope.setinfoValue = function(n) {
-            if ($scope.infoValue === n) {
-                $scope.infoValue = 0;
-            } else {
-                $scope.infoValue = n;
-            }
-        };
 
         $scope.annotable = function() {
             return ($scope.invq && $scope.investorCanAnnotate()) || (!$scope.invq && $scope.issuerCanAnnotate());

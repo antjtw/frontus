@@ -52,10 +52,6 @@
                     </tab>
                 </tabset>
                 <div class="bottom-part confirmPanelContainer">
-                    <span ng-show="invq && doc.signable()">Confirm Electronic Signature</span>
-                    <span ng-show="!invq && doc.countersignable($root.navState.role)">Approve Document</span>
-                    <span ng-show="!invq && doc.finalizable() && doc.signature_flow===1">Approve Investor's Signature</span>
-
                     <div class="confirmPanel">
                         <div ng-show="invq && doc.signable()">
                             <div class='confirmBody'>
