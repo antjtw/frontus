@@ -3,16 +3,11 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 m.directive('messageSide', function(){
     return {
         scope: false,
-        // replace: true,
-        // transclude: false,
         restrict: 'E',
-        // link: function (scope, element, attrs){
-        //     scope.$watch(attrs.value function())
-        // }
         templateUrl: '/cmn/partials/messageSide.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 'navState',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location',
 
-        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, navState) {
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location) {
             
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -28,7 +23,6 @@ m.directive('messageSide', function(){
                         }
                     }) 
                     $scope.peopleDict = obj                
-                    $scope.getLogs();
                 });               
             };
             $scope.getPeople();
@@ -40,10 +34,27 @@ m.directive('messageSide', function(){
                 }        
             });
 
+            $scope.$watch('msgstatus', function(newvalues, oldvalues, scope){
+                
+            })
+
+            // $scope.$watchGroup(['getFeed', 'getLogs'], function(newValues, oldValues, scope) {
+
+            // $scope.$watchCollection('myInfo', function(newdata, olddata){
+            //     if(newdata){
+            //         $scope.getFeed();
+            //         // this always checks
+            //     }        
+            // });
+
+            // $scope.watchCollection('test1', function(newdata, olddata){
+            //     $scope.getLogs();
+            // })
+
             // $scope.$watch('test1', function(newdata, olddata){
             //     if(newdata){
             //         console.log("new message")
-            //         $scope.getPeople();
+            //         $scope.getLogs();
             //     }
             // });
 
@@ -67,8 +78,7 @@ m.directive('messageSide', function(){
             $scope.getFeed = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
                     $scope.msgstatus = data;
-                    $scope.test1 = data
-                    console.log($scope.msgstatus);
+                    console.log($scope.msgstatus)
                 }).except(function(data){
                     console.log("error");
                 });
@@ -77,6 +87,8 @@ m.directive('messageSide', function(){
  
 
             $scope.getLogs = function(){
+                // $scope.getFeed();
+                console.log($scope.msgstatus)
                 function Message(time, event, tox, to_names, our_id, foo){
                     this.time = time
                     this.event = []
@@ -103,6 +115,7 @@ m.directive('messageSide', function(){
                     }
                      
                 });
+                console.log(msgdata)
                 var myEvents = []
                 for (var i = 0; i < msgdata.length; i++){
                    myEvents.push(new Message(msgdata[i]))
@@ -168,6 +181,7 @@ m.directive('messageSide', function(){
                 });
                
             };
+            $scope.getLogs();
 
 
             $scope.gotoPerson = function(person) {
