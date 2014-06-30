@@ -5,9 +5,9 @@ m.directive('messageSide', function(){
         scope: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/messageSide.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
 
-        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location) {
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout) {
             
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -33,6 +33,26 @@ m.directive('messageSide', function(){
                 }        
             });
 
+           $scope.newMessages = function(){
+            SWBrijj.tblm('mail.msgstatus', ['our_id', 'event']).then(function(data){
+                $scope.messageCount = data;
+                // $scope.getFeed();
+                var incrementer = 0;
+                if($scope.msgstatus.length == $scope.messageCount.length && incrementer < 20){
+                    $timeout($scope.newMessages, 2000)
+                    incrementer += 1
+                }
+                else {
+                    $scope.getFeed();
+                }
+
+            }).except(function(data){
+                console.log('error')
+            })
+           }
+           // $scope.newMessages();
+
+
             // $scope.$watch('msgstatus', function(newvalues, oldvalues){
             //     if(newvalues){
             //         $scope.getLogs();
@@ -42,7 +62,10 @@ m.directive('messageSide', function(){
 
             $rootScope.$on('new:message', function(x){
                 console.log(x);
-                setTimeout($scope.getFeed, 5500);
+                console.log("test")
+                $scope.newMessages();
+
+                // setTimeout($scope.newMessages, 5500);
             })
 
 
@@ -61,11 +84,13 @@ m.directive('messageSide', function(){
                 })
             }
 
+
             $scope.getFeed = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
                     console.log($scope.msgstatus)
                     $scope.msgstatus = data;
                     $scope.getLogs();
+                    // $scope.newMessages();
 
                 }).except(function(data){
                     console.log("error");
@@ -192,7 +217,7 @@ m.directive('addPerson', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/addPerson.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
 
         function($scope, $rootScope, SWBrijj, $route) {
 
