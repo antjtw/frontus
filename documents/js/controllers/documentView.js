@@ -75,7 +75,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.pages = pages;
             $scope.template_original = false;
             refreshDocImage();
-            $scope.reqDocStatus($scope.docId); // sets $scope.doc_status
             $scope.loadPages();
         });
 
@@ -708,13 +707,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
 
-        $scope.reqDocStatus = function(doc_id) {
-            if (doc_id) {$scope.$emit('reqVersionStatus', doc_id);}
-        };
-
-        $scope.$on('retVersionStatus', function(event, message) {
-            $scope.doc_status = message;
-        });
 
         $scope.saveSmartdocData = function(clicked) {
             if (!$scope.used_attributes || $rootScope.navState.role=='investor') {return;}

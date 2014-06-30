@@ -273,55 +273,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             adjusted.width = "150";
         };
 
-        $scope.fakeSign = function(cd) {
-            /** @name SWBrijj#spoof_procm
-             * @function
-             * @param {string} investor
-             * @param {string} company
-             * @param {string} procname
-             * @param {...*}
-             */
-            SWBrijj.spoof_procm(cd.investor, cd.company, "investor", "document.sign_document", cd.doc_id, "[]").then(function(data) {
-                cd.when_signed = data;
-                $route.reload();
-            });
-        };
-
-        $scope.loadDocumentActivity = function() {
-            SWBrijj.tblmm("document.company_activity", "doc_id", $scope.version.doc_id).then(function(data) {
-                $scope.version.last_event = data.sort($scope.compareEvents)[0];
-                var versionViews = data.filter(function(el) {return el.person===$scope.version.investor && el.activity==='viewed';});
-                $scope.version.last_viewed = versionViews.length > 0 ? versionViews[0].event_time : null;
-            });
-        };
-
-        $scope.$on("reqVersionStatus", function(event, doc_id) {
-            $scope.$broadcast("retVersionStatus", $scope.versionStatus($scope.version));
-        });
-
-        $scope.versionStatus = function(version) {
-            if (version && version.last_event) {
-                return "" + version.last_event.activity +
-                       " by " + (version.last_event.name || version.investor) +
-                       " " + moment(version.last_event.event_time).from($rootScope.servertime);
-            } else {
-                return "";
-            }
-        };
-
-        $scope.compareEvents = function(a, b) {
-              var initRank = $scope.eventRank(b) - $scope.eventRank(a);
-              return initRank === 0 ? (b.event_time - a.event_time) : initRank;
-        };
-
-        $scope.setVersionStatusRank = function(version) {
-            version.statusRank = $scope.eventRank(version.last_event);
-        };
-
-        $scope.eventRank = function (ev) {
-            return basics.eventRank(ev);
-        };
-
         $scope.leave = function() {
             // TODO: save notes / smartdoc data
             if ($rootScope.lastPage
