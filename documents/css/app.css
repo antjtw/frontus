@@ -1272,10 +1272,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     overflow: auto;
 }
 
-navbar .navbar + doc-viewer.modal-backdrop {
-    display: none !important;
-}
-
 .docViewer {
     z-index: 1041 !important;
     width: 928px;
@@ -1284,40 +1280,14 @@ navbar .navbar + doc-viewer.modal-backdrop {
     background-color: white;
 }
 
-.docViewerHeader.affix {
-    position: fixed;
-    top: 0px;
-    max-width: 928px;
-    width: 928px;
-    margin: 0 auto;
-}
-
 .docViewerHeader {
     z-index: 10;
 }
 
-.affix + .docPanelContainer {
-    padding-top: 120px;
-}
-
-.docViewerHeader.affix-top {
-}
-
-.docViewerHeader.affix-bottom {
-    bottom: 0;
-}
-
 .docViewerAction {
     text-transform: uppercase;
-    text-align: center;
     font-size: 14px;
     color: #1E2D3D;
-    display: inline-block;
-    vertical-align: middle;
-    height: 60px;
-    line-height: 60px;
-    width: 100%;
-    position: relative; /* for the action buttons inside */
 }
 
 .docViewerControls > div > div.tools {
@@ -1548,25 +1518,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     position: absolute;
     right: 20px;
     top: 15px;
-}
-.backButton {
-    position: absolute;
-    left: 20px;
-    top: 15px;
-}
-.backButton > button > span {
-    font-size: 16px;
-    padding-right: 1px;
-}
-.backButton > button > span:before {
-    vertical-align: middle;
-}
-.forwardButton > button > span {
-    font-size: 16px;
-    padding-left: 6px;
-}
-.forwardButton > button > span:before {
-    vertical-align: middle;
 }
 
 .hidden {

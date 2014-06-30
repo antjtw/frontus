@@ -52,6 +52,11 @@
                     </tab>
                 </tabset>
                 <div class="bottom-part confirmPanelContainer">
+                    <span ng-show="signable(lib)">Confirm Electronic Signature</span>
+                    <span ng-show="doc.countersignable($root.navState.role)">Approve Document</span>
+                    <span ng-show="finalizable(lib) && lib.signature_flow===2">Approve Issuer's Countersignature</span>
+                    <span ng-show="finalizable(lib) && lib.signature_flow===1">Approve Investor's Signature</span>
+
                     <div class="confirmPanel">
                         <!-- div ng-show="invq && signable(lib)" -->
                             <div class='confirmBody'>
@@ -268,6 +273,47 @@
                             </div>
                         </div>
                     </div> <!-- confirm panel -->
+                    <div class="docViewerAction">
+                        <div class="standard-button green confirmButton">
+                            <button class="btn"
+                                    ng-show="signable(lib)"
+                                    ng-disabled="processing || confirmValue===0"
+                                    ng-click="signDocument(document, confirmValue);">
+                                Confirm
+                            </button>
+                            <button class="btn"
+                                    ng-show="doc.countersignable($root.navState.role)"
+                                    ng-disabled="processing || confirmValue===0"
+                                    ng-click="countersignAction(confirmValue, rejectMessage);">
+                                Confirm
+                            </button>
+                            <button class="btn"
+                                    ng-show="finalizable(lib)"
+                                    ng-disabled="processing || confirmValue===0"
+                                    ng-click="finalizeAction(confirmValue, rejectMessage);">
+                                Confirm
+                            </button>
+                            <button class="btn"
+                                    ng-show="voidable(lib)"
+                                    ng-disabled="processing || confirmValue===0"
+                                    ng-click="voidAction(confirmValue, rejectMessage);">
+                                Confirm
+                            </button>
+                            <button class="btn"
+                                    ng-show="template_original && !forsigning"
+                                    ng-disabled="processing || checkmany(template_email)"
+                                    ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
+                                Send
+                            </button>
+                            <button class="btn"
+                                    ng-disabled="!confirmValue"
+                                    ng-show="template_original && forsigning"
+                                    ng-click="signTemplate(investor_attributes, infoValue, confirmValue)">
+                                Sign
+                            </button>
+                        </div>
+                    </div>
+
 
                 </div>
             </internal-right-rail>
