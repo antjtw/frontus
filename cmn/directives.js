@@ -80,9 +80,11 @@ m.directive('messageSide', function(){
 
             $scope.getLogins = function(){
                 SWBrijj.tblm('global.user_tracker').then(function(data){
-                    $scope.logins = data                
+                    $scope.logins = data  
+                    console.log($scope.logins)              
                 })
             }
+            $scope.getLogins();
 
 
             $scope.getFeed = function(){
@@ -90,7 +92,7 @@ m.directive('messageSide', function(){
                     console.log($scope.msgstatus)
                     $scope.msgstatus = data;
                     $scope.getLogs();
-                    // $scope.newMessages();
+                    // $scope.getLogins();
 
                 }).except(function(data){
                     console.log("error");
@@ -99,7 +101,7 @@ m.directive('messageSide', function(){
  
 
             $scope.getLogs = function(){
-                // $scope.getFeed();
+                // $scope.getLogins();
                 function Message(time, event, tox, to_names, our_id, foo){
                     this.time = time
                     this.event = []
@@ -175,6 +177,7 @@ m.directive('messageSide', function(){
                                     }
                                 })
                                 angular.forEach($scope.logins, function(login){
+                                    console.log($scope.logins)
                                     if(login.email == value.tox){
                                         myEvents[i].foo.forEach(function(elem){
                                             elem.login = login.logintime;
@@ -187,6 +190,7 @@ m.directive('messageSide', function(){
                         }
                     // })
                     $scope.message_data = myEvents; 
+                    // console.log($scope.message_data)
                     //console.log($scope.message_data)                                    
                     $scope.myEvents = $scope.message_data.length         
                 });
