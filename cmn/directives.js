@@ -27,12 +27,11 @@ m.directive('messageSide', function(){
             };
             $scope.getPeople();
 
-
-            // $scope.$watch('peopleDict', function(newdata, olddata){
-            //     if(newdata){
-            //         $scope.getLogs();
-            //     }        
-            // });
+            $scope.$watch('peopleDict', function(newdata, olddata){
+                if(newdata){
+                    $scope.getLogs();
+                }        
+            });
 
             // $scope.$watch('msgstatus', function(newvalues, oldvalues){
             //     if(newvalues){
