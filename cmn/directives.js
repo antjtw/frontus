@@ -92,7 +92,7 @@ m.directive('messageSide', function(){
                     console.log($scope.msgstatus)
                     $scope.msgstatus = data;
                     $scope.getLogs();
-                    // $scope.getLogins();
+                    $scope.getLogins();
 
                 }).except(function(data){
                     console.log("error");
