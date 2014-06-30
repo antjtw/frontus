@@ -1,5 +1,16 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
+m.directive('verifyFileModal', function() {
+    return {
+        scope: true,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/verifyFileModal.html',
+        controller: ['$scope', 'annals',
+        function($scope, annals) {
+            console.log(annals);
+        }]
+    };
+});
 m.directive('messageSide', function(){
     return {
         scope: false,

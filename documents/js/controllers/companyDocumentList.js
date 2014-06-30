@@ -3,10 +3,10 @@
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-        'basics', '$http', 'oauth',
+        'basics', '$http', 'oauth', 'annals',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
-                 basics, $http, oauth) {
+                 basics, $http, oauth, annals) {
             $scope.docShareState = {
                 doclist:[],
             };
@@ -274,6 +274,8 @@ app.controller('CompanyDocumentListController',
                             $scope.fileError = "Please choose a smaller file";
                         } else if (mimetypes.indexOf(element.files[i].type) == -1) {
                             $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
+                        } else if (annals.verify(element.files[i])) {
+                            $scope.$emit("notification:fail", "Sorry, you've already uploaded this file.");
                         } else {
                             $scope.files.push(element.files[i]);
                         }
