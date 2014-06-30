@@ -12,6 +12,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         SWBrijj.tblm('ownership.company_issue').then(function (issues) {
             SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
                 rounds = issues;
+                var existingoptions = 0;
                 totals = {'units': 0, 'amount': 0};
                 angular.forEach(rounds, function(round) {
                     round.units = 0;
@@ -27,11 +28,13 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                     if (!isNaN(round.totalauth)) {
                         if (round.totalauth > round.units && round.type == "Option") {
                             var unauth = (round.totalauth - round.units);
-                            rounds.push({'issue': "Options Unissued", 'units': unauth});
+                            existingoptions += unauth;
                             totals.units += unauth;
                         }
                     }
                 });
+
+                rounds.push({'issue': "Options Unissued", 'units': existingoptions});
                 angular.forEach(rounds, function(round) {
                     round.start_percent = (round.units / totals.units) * 100;
                     round.percent = round.start_percent;

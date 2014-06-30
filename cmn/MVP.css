@@ -4555,7 +4555,7 @@ textarea.email-text {
 }
 
 .span4.capright.sidecontent{ 
-    padding-right: none;
+    padding-right: 0;
 }
 
 
