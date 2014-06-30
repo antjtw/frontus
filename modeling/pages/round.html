@@ -32,6 +32,24 @@
             </li>
         </ul>
 
+        <div>After debt conversion</div>
+        <ul class="visualize-table">
+            <li>
+                <ul>
+                    <li>Issue Name</li>
+                    <li>Units</li>
+                    <li>Percentage</li>
+                </ul>
+            </li>
+            <li ng-repeat='round in debtrounds'>
+                <ul>
+                    <li>{{round.issue}}</li>
+                    <li>{{formatAmount(round.units)}}</li>
+                    <li>{{formatAmount(round.percent)}}%</li>
+                </ul>
+            </li>
+        </ul>
+
         <div>After option pool creation</div>
         <ul class="visualize-table">
             <li>
@@ -58,7 +76,7 @@
 
         <div>
             <span>Price per share</span>
-            {{formatAmount(effectiveppshare)}}
+            {{effectiveppshare}}
         </div>
 
         <ul class="visualize-table 4-column">
