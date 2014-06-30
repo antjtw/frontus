@@ -55,18 +55,11 @@
                     <div class="confirmPanel">
                         <div ng-show="invq && doc.signable()">
                             <div class='confirmBody'>
-                                <ul class="checkboxOption">
-                                    <li class="pull-left">
-                                        <button class="check-box-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)">
-                                            <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                        </button>
-                                    </li>
-                                    <li class="pull-left">
-                                        <span>Do you want to electronically sign this document?</span>
-                                        <br>
-                                        <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.</span>
-                                    </li>
-                                </ul>
+                                <div class="pull-left">
+                                    <span>Do you want to electronically sign this document?</span>
+                                    <br>
+                                    <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.</span>
+                                </div>
                             </div>
                         </div>
 
@@ -78,18 +71,12 @@
                                         Warning: Approving this document will automatically upgrade your payment plan.
                                     </span>
                                 </div>
-                                <ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
-                                    </li>
-                                    <li>
-                                        <span>Approve Document with Electronic Signature</span>
-                                        <br>
-                                        <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.</span>
-                                    </li>
-                                </ul>
-                                <br>
-                                <ul class="radioOption">
+                                <div>
+                                    <span>Approve Document with Electronic Signature</span>
+                                    <br>
+                                    <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.</span>
+                                </div>
+                                <!-- ul class="radioOption">
                                     <li class="pull-left">
                                         <button class="radio-button" ng-class="{'selected':confirmValue===-1}" ng-click="setConfirmValue(-1)"></button>
                                     </li>
@@ -104,7 +91,7 @@
                                             ng-click="resetMsg()">
                                         </textarea>
                                     </li>
-                                </ul>
+                                </ul -->
                             </div>
                         </div>
 
@@ -116,18 +103,12 @@
                                         Warning: Approving this document will automatically upgrade your payment plan.
                                     </span>
                                 </div>
-                                <ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
-                                    </li>
-                                    <li>
-                                        <span>Approve Document</span>
-                                        <br>
-                                        <span>Approve signature and finalize this document.</span>
-                                    </li>
-                                </ul>
-                                <br>
-                                <ul class="radioOption">
+                                <div>
+                                    <span>Approve Document</span>
+                                    <br>
+                                    <span>Approve signature and finalize this document.</span>
+                                </div>
+                                <!-- ul class="radioOption">
                                     <li class="pull-left">
                                         <button class="radio-button"
                                             ng-class="{'selected':confirmValue===-1}"
@@ -145,23 +126,17 @@
                                             ng-click="resetMsg()">
                                         </textarea>
                                     </li>
-                                </ul>
+                                </ul -->
                             </div>
                         </div>
                         <div ng-show="invq && doc.voidable() && doc.signature_flow > 0">
                             <div class="confirmBody">
-                                <ul class="radioOption">
-                                    <li class="pull-left">
-                                        <button class="radio-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)"></button>
-                                    </li>
-                                    <li class="pull-left">
-                                        <span>Accept Void</span>
-                                        <br>
-                                        <span style="margin-left: 0">Accept the voiding of this document.</span>
-                                    </li>
-                                </ul>
-                                <br>
-                                <ul class="radioOption">
+                                <div>
+                                    <span>Accept Void</span>
+                                    <br>
+                                    <span>Accept the voiding of this document.</span>
+                                </div>
+                                <!--ul class="radioOption">
                                     <li class="pull-left">
                                         <button class="radio-button"
                                             ng-class="{'selected':confirmValue===-1}"
@@ -179,25 +154,16 @@
                                             ng-click="resetMsg()">
                                         </textarea>
                                     </li>
-                                </ul>
+                                </ul-->
                             </div>
                         </div>
 
                         <div ng-show="template_original && forsigning"> <!-- TODO: neither of these are set. Should be when invester is signing a smart doc -->
                             <div class='confirmBody'>
                                 <div>
-                                    <ul class="checkboxOption">
-                                        <li class="pull-left">
-                                            <button class="check-box-button" ng-class="{'selected':confirmValue===1}" ng-click="setConfirmValue(1)">
-                                                <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                            </button>
-                                        </li>
-                                        <li class="pull-left">
-                                            <span>Do you want to electronically sign this document?</span>
-                                            <br>
-                                            <span>(This action is irreversible.)</span>
-                                        </li>
-                                    </ul>
+                                    <span>Do you want to electronically sign this document?</span>
+                                    <br>
+                                    <span>(This action is irreversible.)</span>
                                 </div>
                                 <div>
                                     <ul class="radioOption inline-radio">
@@ -232,19 +198,19 @@
                         <div class="standard-button green confirmButton">
                             <button class="btn"
                                     ng-show="invq && doc.signable()"
-                                    ng-disabled="processing || confirmValue===0"
+                                    ng-disabled="processing"
                                     ng-click="signDocument(document, confirmValue);">
                                 Confirm
                             </button>
                             <button class="btn"
                                     ng-show="!invq && doc.countersignable($root.navState.role)"
-                                    ng-disabled="processing || confirmValue===0"
+                                    ng-disabled="processing"
                                     ng-click="countersignAction(confirmValue, rejectMessage);">
                                 Confirm
                             </button>
                             <button class="btn"
                                     ng-show="!invq && doc.finalizable()"
-                                    ng-disabled="processing || confirmValue===0"
+                                    ng-disabled="processing"
                                     ng-click="finalizeAction(confirmValue, rejectMessage);">
                                 Confirm
                             </button>
@@ -268,7 +234,6 @@
                             </button>
                         </div>
                     </div>
-
 
                 </div>
             </internal-right-rail>
