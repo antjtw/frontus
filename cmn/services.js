@@ -396,3 +396,7 @@ service.factory('myPayments', function($q, payments) {
     return d;
 
 });
+
+// service.service('Messages', ['SWBrijj', function(SWBrijj) {
+//     this.message_data = [];
+// }]);
