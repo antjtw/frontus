@@ -50,15 +50,6 @@ m.directive('messageSide', function(){
                 console.log('error')
             })
            }
-           // $scope.newMessages();
-
-
-            // $scope.$watch('msgstatus', function(newvalues, oldvalues){
-            //     if(newvalues){
-            //         $scope.getLogs();
-            //     }
-            //     true
-            // })
 
             $rootScope.$on('new:message', function(x){
                 console.log(x);
@@ -91,6 +82,8 @@ m.directive('messageSide', function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
                     console.log($scope.msgstatus)
                     $scope.msgstatus = data;
+                    $scope.getNumber = $scope.msgstatus.length;
+                    console.log($scope.getNumber)
                     $scope.getLogs();
                     $scope.getLogins();
 
@@ -132,7 +125,6 @@ m.directive('messageSide', function(){
                 for (var i = 0; i < msgdata.length; i++){
                    myEvents.push(new Message(msgdata[i]))
                 }           
-                console.log($scope.msgstatus)
                 angular.forEach($scope.msgstatus, function(value){
                     for (var i = 0; i < myEvents.length; i++){
                         if(value.when_requested.equals(myEvents[i].time)) {
@@ -188,11 +180,7 @@ m.directive('messageSide', function(){
 
                             }
                         }
-                    // })
-                    $scope.message_data = myEvents; 
-                    // console.log($scope.message_data)
-                    //console.log($scope.message_data)                                    
-                    $scope.myEvents = $scope.message_data.length         
+                    $scope.message_data = myEvents;        
                 });
                
             };
@@ -206,7 +194,6 @@ m.directive('messageSide', function(){
                 else{
                     var link = '/app/company/profile/view?id=' + person.email 
                     $location.url(link);
-                    // $scope.hasLink = true;
                 }
                       
             };    
