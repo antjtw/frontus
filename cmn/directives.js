@@ -4,10 +4,34 @@ m.directive('verifyFileModal', function() {
     return {
         scope: true,
         restrict: 'E',
+        replace: true,
+        transclude: true,
         templateUrl: '/cmn/partials/verifyFileModal.html',
         controller: ['$scope', 'annals',
         function($scope, annals) {
-            console.log(annals);
+            $scope.verifyModalOpen = function() {
+                $scope.verifyFileModal = true;
+            };
+            $scope.verifyModalClose = function() {
+                $scope.verifyFileModal = false;
+            };
+            $scope.setFiles = function(element) {
+                $scope.$apply(function() {
+                    $scope.files = [];
+                    for (var i = 0; i < element.files.length; i++) {
+                        annals.verify(element.files[i],
+                                      $scope.verifyCallbackHandler);
+                    }
+                });
+            };
+            $scope.verifyCallbackHandler = function(res) {
+                if (res) {
+                    $scope.$emit('notification:success', 'I know this one!');
+                } else {
+                    $scope.$emit('notification:fail', 'WHAT IS THIS?!?');
+                }
+                $scope.verifyModalClose();
+            };
         }]
     };
 });

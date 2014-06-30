@@ -38,7 +38,7 @@ service.service('oauth', function($http) {
 service.service('annals', function(SWBrijj, sha256) {
     var annals = {};
 
-    annals.verify = function(file) {
+    annals.verify = function(file, callback) {
         var reader = new FileReader();
         var hash = null;
         reader.onload = (function(theFile) {
@@ -47,11 +47,11 @@ service.service('annals', function(SWBrijj, sha256) {
                 console.log(hash);
                 SWBrijj.procm('annals.isHashKnown', hash)
                 .then(function(x) {
-                    console.log(x);
-                    return x[0].ishashknown;
+                    //console.log(x);
+                    callback(x[0].ishashknown);
                 }).except(function(err) {
-                    console.log(err);
-                    return false;
+                    //console.log(err);
+                    callback(false);
                 });
             };
         })(file);

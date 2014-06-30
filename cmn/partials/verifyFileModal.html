@@ -1,9 +1,11 @@
-<div class="box-button pull-right">
+<div class="box-button pull-right"
+     ng-click="verifyModalOpen()">
     <ul>
         <li>
-            <span class=></span>;w
+            <span data-icon="&#xe026;" aria-hidden="true"></span>
         </li>
         <li>
+            <span>Verify Doc</span>
         </li>
     </ul>
     <div modal="verifyFileModal" close="verifyModalClose()" options="opts">
@@ -16,7 +18,13 @@
             </span>
         </div>
         <div class="modalText">
-            Hello, World!
+            <input multiple type="file" class="file"
+                   onchange="angular.element(this).scope().setFiles(this);"/>
+            <div class="documentUpload fakefile">
+                <div class="standard-button green">
+                    <button class="btn">Choose</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
