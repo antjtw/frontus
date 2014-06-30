@@ -323,6 +323,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.leave = function() {
+            // TODO: save notes / smartdoc data
             if ($rootScope.lastPage
                 && ($rootScope.lastPage.indexOf("/register/") === -1)
                 && ($rootScope.lastPage.indexOf("/login/") === -1)

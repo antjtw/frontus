@@ -270,9 +270,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
         $scope.pageScroll = 0;
         $scope.isAnnotable = true;
-        $('.docViewerHeader').affix({
-            offset: {top: 40}
-        });
 
         $scope.signatureURL = '/photo/user?id=signature:';
 
