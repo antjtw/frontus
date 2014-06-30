@@ -204,7 +204,7 @@ m.directive('messageSide', function(){
                   
                 }
                 else{
-                    var link = '/app/company/profile/view?id=' + person.person 
+                    var link = '/app/company/profile/view?id=' + person.email 
                     $location.url(link);
                     // $scope.hasLink = true;
                 }
