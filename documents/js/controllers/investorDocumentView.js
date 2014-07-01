@@ -134,59 +134,13 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             // before signing the document, I may need to save the existing annotations
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
-            var dce = angular.element(".docPanel").scope();
             SWBrijj.sign_document($scope.docId, JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId))).then(function(data) {
                 doc.when_signed = data;
-                $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document signed");
                 $scope.leave();
                 //$location.path('/investor-list').search({});
             }).except(function(x) {
                 console.log(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.processing = false;
-            });
-        };
-
-        $scope.$on('finalizeAction', function(evt, data) {
-            $scope.finalizeAction(data);
-        });
-        $scope.finalizeAction = function(data) {
-            if (data[0] === 1) {
-                $scope.finalizeDocument();
-            } else if (data[0] === -1) {
-                $scope.rejectCountersignature(data[1]);
-            }
-        };
-
-        $scope.finalizeDocument = function() {
-            $scope.processing = true;
-            //var dce = angular.element(".docPanel").scope();
-            SWBrijj.document_finalize($scope.docId).then(function(data) {
-                $scope.$emit('refreshDocImage');
-                $scope.$emit("notification:success", "Document approved");
-                $scope.leave();
-                //$location.path('/investor-list').search({});
-            }).except(function(x) {
-                console.log(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.processing = false;
-            });
-        };
-
-        $scope.rejectCountersignature = function(msg) {
-            $scope.processing = true;
-            if (msg === "Explain the reason for rejecting this document.") {
-                msg = "";
-            }
-            //var dce = angular.element(".docPanel").scope();
-            SWBrijj.procm("document.reject_countersignature", $scope.docId, msg).then(function(data) {
-                $scope.$emit("notification:success", "Document countersignature rejected.");
-                void(data);
-                $scope.leave();
-                //$location.path('/company-list').search({});
-            }).except(function(x) {
-                void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
                 $scope.processing = false;
             });

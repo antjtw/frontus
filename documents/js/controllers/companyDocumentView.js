@@ -289,54 +289,27 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 $location.url('/documents/company-list');
             }
         };
-        $scope.$on('countersignAction', function(evt, data) {
-            $scope.countersignAction(data);
-        });
-        $scope.countersignAction = function(data) {
-            if (data[0] === 1) {
-                $scope.countersignDocument();
-            } else if (data[0] === -1) {
-                $scope.rejectSignature(data[1]);
-            }
-        };
 
         $scope.countersignDocument = function() {
             $scope.processing = true;
-            var dce = angular.element(".docPanel").scope();
             SWBrijj.document_countersign( $scope.docId, JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId))).then(function(data) {
-                dce.removeAllNotes();
+                doc.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
-                $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document countersigned");
                 $scope.leave();
-                //$location.path('/company-list').search({});
             }).except(function(x) {
-                console.log(x);
                 $scope.processing = false;
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
             });
         };
 
-        $scope.$on('finalizeAction', function(evt, data) {
-            $scope.finalizeAction(data);
-        });
-        $scope.finalizeAction = function(data) {
-            if (data[0] === 1) {
-                $scope.finalizeDocument();
-            } else if (data[0] === -1) {
-                $scope.rejectSignature(data[1]);
-            }
-        };
         $scope.finalizeDocument = function() {
             $scope.processing = true;
             SWBrijj.document_issuer_finalize($scope.docId).then(function(data) {
                 $rootScope.billing.usage.documents_total += 1;
-                $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document approved");
                 $scope.leave();
-                //$location.path('/company-list').search({});
             }).except(function(x) {
-                console.log(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
                 $scope.processing = false;
             });
@@ -347,14 +320,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 msg = "";
             }
             SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
-                void(data);
                 $scope.$emit("notification:success", "Document signature rejected.");
-                $scope.$broadcast('rejectSignature');
                 $scope.leave();
-                //$location.path('/company-list').search({});
             }).except(function(x) {
-                void(x);
                 $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
             });
         };
 

@@ -287,14 +287,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-
-        $scope.countersignAction = function(conf, msg) {
-            $scope.$emit('countersignAction', [conf, msg]);
-        };
-        $scope.finalizeAction = function(conf, msg) {
-            $scope.$emit('finalizeAction', [conf, msg]);
-        };
-
         $scope.voidAction = function(confirm, message) {
             $scope.processing = true;
             if (message == "Explain the reason for rejecting this document.") {
@@ -608,10 +600,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             } else {
                 $location.url('/app/documents/company-list');
             }
-        };
-
-        $scope.removeAllNotes = function() {
-            $scope.annots.splice(0);
         };
 
         $scope.safeApply = function(fn) {

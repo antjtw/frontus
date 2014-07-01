@@ -49,55 +49,58 @@ docs.service('basics', function () {
 
 });
 
-// DOCUMENTS
-Document = function() {
-    this.annotations = [];
-};
-
-Document.prototype = {
-    pageAnnotated: function(pageNum) {
-        return this.annotations.some(function(annot) {
-            return annot.page == pageNum;
-        });
-    },
-    hasUnfilled: function(signaturepresent, role) {
-        // TODO: use Annotation.filled()
-        var unfilled = false;
-        return this.annotations.some(function(annot) {
-            if (annot.whattype == 'ImgSignature') {
-                if (!signaturepresent &&
-                    ((annot.whosign == 'Investor' && role == 'investor') ||
-                     (annot.whosign == 'Issuer' && role == 'issuer'))) {
-                    return true;
-                }
-            }
-            else if (annot.required && annot.val.length === 0) {
-                if ((annot.whosign == 'Investor' && role == 'investor') ||
-                    (annot.whosign == 'Issuer' && role == 'issuer')) {
-                    return true;
-                }
-            }
-            return false;
-        });
-    },
-    signable: function() {
-        return this.signature_flow > 0 && !this.when_signed;
-    },
-    countersignable: function(role) {
-        // TODO: remove role check (should happen in caller)
-        return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned
-    },
-    finalizable: function() {
-        // signature_flow 2 is no longer finalizeable, as sign / countersign takes care of it
-        return this.signature_flow===1 && this.when_signed && !this.when_finalized;
-    },
-    voidable: function() {
-        return this.signature_flow > 0 && this.when_finalized && this.when_void_requested && !this.when_void_accepted;
-    },
-
-};
-
 docs.service('Documents', ["Annotations", function(Annotations) {
+    /// Document object definition
+    Document = function() {
+        this.annotations = [];
+    };
+
+    Document.prototype = {
+        pageAnnotated: function(pageNum) {
+            return this.annotations.some(function(annot) {
+                return annot.page == pageNum;
+            });
+        },
+        hasUnfilled: function(signaturepresent, role) {
+            // TODO: use Annotation.filled()
+            var unfilled = false;
+            return this.annotations.some(function(annot) {
+                if (annot.whattype == 'ImgSignature') {
+                    if (!signaturepresent &&
+                        ((annot.whosign == 'Investor' && role == 'investor') ||
+                         (annot.whosign == 'Issuer' && role == 'issuer'))) {
+                        return true;
+                    }
+                }
+                else if (annot.required && annot.val.length === 0) {
+                    if ((annot.whosign == 'Investor' && role == 'investor') ||
+                        (annot.whosign == 'Issuer' && role == 'issuer')) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        },
+        signable: function() {
+            return this.signature_flow > 0 && !this.when_signed;
+        },
+        countersignable: function(role) {
+            // TODO: remove role check (should happen in caller)
+            return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned
+        },
+        finalizable: function() {
+            // signature_flow 2 is no longer finalizeable, as sign / countersign takes care of it
+            return this.signature_flow===1 && this.when_signed && !this.when_finalized;
+        },
+        voidable: function() {
+            return this.signature_flow > 0 && this.when_finalized && this.when_void_requested && !this.when_void_accepted;
+        },
+        removeAllNotes: function() {
+            this.annotations.splice(0);
+        },
+    };
+
+    /// Document service definition
     // TODO: probably need to distinguish between originals and investor versions
     var docs = {};
 
