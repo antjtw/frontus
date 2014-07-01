@@ -49,7 +49,7 @@ docs.service('basics', function () {
 
 });
 
-docs.service('Documents', ["Annotations", function(Annotations) {
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", function(Annotations, SWBrijj, $q, $rootScope) {
     /// Document object definition
     Document = function() {
         this.annotations = [];
@@ -98,6 +98,42 @@ docs.service('Documents', ["Annotations", function(Annotations) {
         removeAllNotes: function() {
             this.annotations.splice(0);
         },
+        rejectSignature: function(msg) {
+            // TODO: convert aBrijj.js to use the promise / $q library directly so we can just chain the promises
+            var promise = $q.defer();
+            SWBrijj.procm("document.reject_signature", this.doc_id, msg).then(function(data) {
+                promise.resolve(data);
+                $scope.$emit("notification:success", "Document signature rejected.");
+                $scope.leave();
+            }).except(function(x) {
+                promise.reject(x)
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+                $scope.processing = false;
+            });
+            return promise.promise;
+        },
+        countersign: function() {
+            var promise = $q.defer();
+            // TODO: Annotations.getIssuerNotesForUpload seems a little when we're inside the document
+            // TODO: shouldn't send notes for countersign, should just use DB version
+            SWBrijj.document_countersign(this.doc_id, JSON.stringify(Annotations.getIssuerNotesForUpload(this.doc_id))).then(function(data) {
+                this.removeAllNotes();
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.reject(x);
+            });
+            return promise.promise;
+        },
+        finalize: function() {
+            var promise = $q.defer();
+            SWBrijj.document_issuer_finalize(this.doc_id).then(function(data) {
+                $rootScope.billing.usage.documents_total += 1;
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.reject(x);
+            });
+            return promise.promise;
+        }
     };
 
     /// Document service definition

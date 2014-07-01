@@ -281,12 +281,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                    ($scope.lib && $scope.prepare);
         };
 
-        $scope.resetMsg = function() {
-            if ($scope.rejectMessage === "Explain the reason for rejecting this document.") {
-                $scope.rejectMessage = "";
-            }
-        };
-
         $scope.voidAction = function(confirm, message) {
             $scope.processing = true;
             if (message == "Explain the reason for rejecting this document.") {

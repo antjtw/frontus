@@ -81,7 +81,7 @@
                                     <textarea ng-show="confirmValue===-1"
                                         class="messageText" rows="3"
                                         ng-model="$parent.rejectMessage"
-                                        ng-click="resetMsg()">
+                                        placeholder="Explain the reason for rejecting this document.">
                                     </textarea>
                                 </li>
                             </ul -->
@@ -112,7 +112,7 @@
                                     <textarea ng-show="confirmValue===-1"
                                         class="messageText" rows="3"
                                         ng-model="$parent.rejectMessage"
-                                        ng-click="resetMsg()">
+                                        placeholder="Explain the reason for rejecting this document.">
                                     </textarea>
                                 </li>
                             </ul -->
@@ -136,7 +136,7 @@
                                     <textarea ng-show="confirmValue===-1"
                                         class="messageText" rows="3"
                                         ng-model="$parent.rejectMessage"
-                                        ng-click="resetMsg()">
+                                        placeholder="Explain the reason for rejecting this document.">
                                     </textarea>
                                 </li>
                             </ul-->
@@ -183,13 +183,13 @@
                             <button class="btn"
                                     ng-show="!invq && doc.countersignable($root.navState.role)"
                                     ng-disabled="processing"
-                                    ng-click="countersignAction(confirmValue, rejectMessage);">
+                                    ng-click="countersignDocument();">
                                 Confirm
                             </button>
                             <button class="btn"
                                     ng-show="!invq && doc.finalizable()"
                                     ng-disabled="processing"
-                                    ng-click="finalizeAction(confirmValue, rejectMessage);">
+                                    ng-click="finalizeDocument();">
                                 Confirm
                             </button>
                             <button class="btn"

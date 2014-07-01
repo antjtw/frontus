@@ -292,40 +292,47 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
 
         $scope.countersignDocument = function() {
             $scope.processing = true;
-            SWBrijj.document_countersign( $scope.docId, JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId))).then(function(data) {
-                doc.removeAllNotes();
-                // can't reload directly because of the modal -- need to pause for the modal to come down.
-                $scope.$emit("notification:success", "Document countersigned");
-                $scope.leave();
-            }).except(function(x) {
-                $scope.processing = false;
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-            });
+            $scope.doc.countersign().then(
+                function(data) {
+                    $scope.$emit("notification:success", "Document countersigned");
+                    $scope.leave();
+                },
+                function(fail) {
+                    $scope.processing = false;
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                }
+            );
         };
 
         $scope.finalizeDocument = function() {
             $scope.processing = true;
-            SWBrijj.document_issuer_finalize($scope.docId).then(function(data) {
-                $rootScope.billing.usage.documents_total += 1;
-                $scope.$emit("notification:success", "Document approved");
-                $scope.leave();
-            }).except(function(x) {
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.processing = false;
-            });
+            $scope.doc.finalize().then(
+                function(data) {
+                    $rootScope.billing.usage.documents_total += 1;
+                    $scope.$emit("notification:success", "Document approved");
+                    $scope.leave();
+                },
+                function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.processing = false;
+                }
+            );
         };
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
             if (msg === "Explain the reason for rejecting this document.") {
                 msg = "";
             }
-            SWBrijj.procm("document.reject_signature", $scope.docId, msg).then(function(data) {
-                $scope.$emit("notification:success", "Document signature rejected.");
-                $scope.leave();
-            }).except(function(x) {
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.processing = false;
-            });
+            $scope.doc.rejectSignature(msg).then(
+                function(data) {
+                    $scope.$emit("notification:success", "Document signature rejected.");
+                    $scope.leave();
+                },
+                function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.processing = false;
+                }
+            );
         };
 
         $scope.remind = function(doc_id, user_email) {
