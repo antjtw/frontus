@@ -1294,7 +1294,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
                     $rootScope.lastPage = $rootScope.lastPage + "?share";
                 }
                 if ($rootScope.lastPage.indexOf("company-status") !== -1) {
-                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
+                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docKey;
                 }
                 $location.url($rootScope.lastPage);
             } else if ($scope.invq) {
@@ -1486,7 +1486,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.newnewBox = function(event) {
-            if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor")) {
+            if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
                 var aa = $scope.newBoxX($scope.currentPage, '', null);
                 $scope.annotatedPages.push($scope.currentPage);
                 aa.scope().newinitdrag(event);
@@ -1719,12 +1719,12 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.signable = function(doc) {
-            return $scope.invq && doc && doc.signature_deadline && !doc.when_signed;
+            return $scope.invq && doc && doc.signature_flow > 0 && doc.signature_deadline && !doc.when_signed;
         };
 
         $scope.rejectable = function(doc) {
             // reject reject signature OR countersignature
-            return (!$scope.invq && doc && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.when_countersigned && !doc.when_finalized);
+            return (!$scope.invq && doc && doc.signature_flow > 0 && doc.when_signed && !doc.when_countersigned) || ($scope.invq && doc && doc.signature_flow > 0 && doc.when_countersigned && !doc.when_finalized);
         };
 
         $scope.countersignable = function(doc) {
@@ -1737,7 +1737,7 @@ docs.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '
         };
 
         $scope.voidable = function(doc) {
-            return (doc && doc.when_finalized && doc.when_void_requested && !doc.when_void_accepted && $rootScope.navState.role == "investor");
+            return (doc && doc.signature_flow > 0 && doc.when_finalized && doc.when_void_requested && !doc.when_void_accepted && $rootScope.navState.role == "investor");
         };
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});

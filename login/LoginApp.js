@@ -151,6 +151,6 @@ app.controller('ResetCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
 
 app.controller('SentCtrl', ['$scope', function($scope) {
     $scope.gobacklogin = function(){
-        document.location.href = '/login';
+        document.location.href = '/login/';
     };
 }]);

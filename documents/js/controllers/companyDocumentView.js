@@ -41,6 +41,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.tourclose = function () {
             $scope.hideSharebar = false;
             $scope.tourModal = false;
+            $scope.checkProcessing();
         };
 
         $scope.sharinggot = function () {
@@ -53,6 +54,14 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             backdropFade: true,
             dialogFade: true,
             dialogClass: 'helpModal modal'
+        };
+        
+        $scope.processedopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'processedImageModal modal',
+            backdropClick: false,
+            backdrop: 'static'
         };
 
         $scope.docKey = parseInt($routeParams.doc, 10);
@@ -72,6 +81,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             SWBrijj.tblm('account.user_settings', ["knows_sharing"]).then(function(data) {
                 if (!data[0].knows_sharing) {
                     $scope.helpModalUp();
+                    $scope.imageProcessedModal = false;
                 }
             });
         }
@@ -144,15 +154,116 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             z.page = 1;
             $location.search(z);
             $scope.initDocView();
+            
+            $scope.checkProcessing();
+        };
+        
+        $scope.checkProcessing = function() {
+            if ($scope.tourModal)
+                return; //don't step on other modal's toes
+            SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
+            {
+                var approved = data.processing_approved;
+                if (!approved)
+                {
+                    $scope.selectProcessing('adjusted');
+                    //$scope.adjustedColor = "{background-color: #1ABC96;}";
+                    //$scope.originalColor = "{'background-color': #E3E3E3;}";
+                    $scope.imageProcessedModal = true;
+                    $scope.getProcessedPage();
+                }
+            });
+        }
+        
+        $scope.getRectStyle = function(image)
+        {
+            if (((image == 'original') && (!$scope.adjustedSelected)) ||
+                ((image != 'original') && ($scope.adjustedSelected)))
+            {
+                return "background-color: #1ABC96;";
+            }
+            else
+            {
+                return "background-color: #E3E3E3;";
+            }
+        }
+        
+        $scope.selectProcessing = function(choice)
+        {
+            if (choice == "original")
+            {
+                //$scope.$apply(function() {
+                    $scope.adjustedSelected = false;
+                    $scope.adjustedColor = "gray";
+                    $scope.adjustedText = "";
+                    $scope.originalColor = "green";
+                    $scope.originalText = "whiteText";
+                //});
+            }
+            else
+            {
+                //$scope.$apply(function() {
+                    $scope.adjustedSelected = true;
+                    $scope.adjustedColor = "green";
+                    $scope.adjustedText = "whiteText";
+                    $scope.originalColor = "gray";
+                    $scope.originalText = "";
+                //});
+            }
         };
 
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
-
-
+        
+        $scope.processedClose = function(erase) {
+            $scope.imageProcessedModal = false;
+            if (erase)
+            {
+                SWBrijj.procm("document.undo_processing", $scope.docId).then(function(data)
+                {
+                    $scope.$broadcast('refreshDocImage');
+                }).except(function(data)
+                {
+                    console.log(data);
+                });
+            }
+            else
+            {
+                SWBrijj.procm("document.approve_processing", $scope.docId).then(function(data)
+                {;}).except(function(data)
+                {
+                    console.log(data);
+                });
+            }
+        };
+        
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
+        };
+        
+        $scope.getProcessedPage = function() {
+            SWBrijj.procm("document.get_first_processed", $scope.docId).then(function(data) {
+                var d = data[0].get_first_processed;
+                if (!d)
+                {
+                    $scope.processedClose(false);
+                }
+                else
+                {
+                    $scope.pageForModal = d;
+                    $scope.setProcessedImages();
+                }
+            });
+        };
+        
+        $scope.setProcessedImages = function() {
+            var original = document.getElementById("processedModalOriginalImage");
+            var adjusted = document.getElementById("processedModalAdjustedImage");
+            original.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true&original=true";
+            original.width = 150;
+            adjusted.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true";
+            adjusted.width = "150";
         };
 
         $scope.fakeSign = function(cd) {

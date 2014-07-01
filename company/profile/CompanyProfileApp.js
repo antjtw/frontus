@@ -1,14 +1,13 @@
 'use strict';
 app.controller('CompContactCtrl',
     ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-        'payments', '$route', '$filter', '$location', '$http',
+        'payments', '$route', '$filter', '$location', '$http', 'oauth',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
-                 payments, $route, $filter, $location, $http) {
+                 payments, $route, $filter, $location, $http, oauth) {
             if (navState.role == 'investor') {
                 document.location.href = "/app/home";
                 return;
             }
-            console.log(navState);
             $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
             $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
@@ -347,32 +346,45 @@ app.controller('CompContactCtrl',
                 }
             };
             $scope.startOauth = function(svc) {
-                if (!(navState.userid && navState.company && navState.role)) {
-                    alert("User role not selected.");
-                    $scope.response = "User role not selected.";
+                var post = oauth.start_oauth(svc, navState);
+                if (post == null)
                     return;
-                }
-                document.domain = "sharewave.com";
-                $http.post('/cgi/suDbProc.py', {
-                    'proc': 'oauth.request_authorization',
-                    'service': svc,
-                    'userid': navState.userid,
-                    'company': navState.company,
-                    'role': navState.role
-                }).success(function(x) {
-                        window.oauthSuccessCallback = function (){
-                            $rootScope.access_token = 1;
-                            $scope.$apply();
-                            $rootScope.$emit("notification:success", "Linked to Dropbox");
-                        };
-                        window.open(x);
-                        console.log(x);
-                    })
-                    .error(function(x) {
-                        console.log(x);
-                        $scope.response = x;
-                    });
+                post.success(function(x) {
+                    document.domain = "sharewave.com";
+                    window.oauthSuccessCallback = function(x){
+                        console.log("success");
+                        $rootScope.access_token = 1;
+                        $scope.$apply();
+                        $rootScope.$emit("notification:success", "Linked to Dropbox");
+                    };
+                    window.open(x);
+                    console.log(x);
+                }).error(function(x) {
+                    console.log(x);
+                    $scope.response = x;
+                });
             };
+            
+            $scope.exportAllToDropbox = function() {
+                SWBrijj.document_dropbox_export_all().then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                }).except(function(x) {
+                    $scope.response = x;
+                    console.log(x);
+                });
+                $scope.$emit("notification:success", "Starting Export . . .");
+            };
+            
+            $scope.exportCaptableToDropbox = function() {
+                SWBrijj.document_dropbox_export_captable().then(function(x) {
+                    $scope.$emit("notification:success", "Successfully Exported to Dropbox");
+                }).except(function(x) {
+                    $scope.response = x;
+                    console.log(x);
+                });
+                $scope.$emit("notification:success", "Starting Export . . .");
+            };
+            
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();
             });
@@ -450,8 +462,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
-        $scope.hideSharebar = true;
+        $scope.hideSharebar = false;
         $scope.sidebarPage = null;
+        // $scope.hideRail = false;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -492,6 +505,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.sort = 'name';
             });
         });
+    
+
+
+
 
         $scope.setLastLogins = function() {
             SWBrijj.tblm("global.user_tracker").then(function(logins) {
@@ -630,34 +647,79 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             return !$scope.hideShareBar;
         };
 
+        // $scope.showRail = function(){
+        //     return $scope.hideRail;
+        // }
 
+       
 
+       
 
         // email sidebar
         $scope.toggleSide = function(button) {
-            if (!$scope.hideSharebar && (button == undefined || button == $scope.sidebarPage) ) {
-                $scope.hideSharebar = true;
-                $scope.sidebarPage = button
+            if (!$scope.hideSharebar && (button == $scope.sidebarPage) && !$scope.hideRail) {
+                $scope.sidebarPage = false;
+                console.log("1")
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)
                 
             } 
+            else if(!$scope.hideSharebar && (button == $scope.sidebarPage) && $scope.hideRail){
+                $scope.sidebarPage = false;
+                $scope.hideSharebar = true;
+            }
+            
             else if(!$scope.hideSharebar && button){
                 $scope.sidebarPage = button;
                 $scope.hideSharebar = false;
-              
+                console.log("2")
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)      
                 // $scope.clearRecipient(); 
             }
             else if($scope.hideSharebar && button == undefined){
                 $scope.hideSharebar = false;
-                
+                console.log(3)
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)               
             }
+            else if($scope.hideRail && !$scope.hideSharebar && button){
+                $scope.hideRail = true;
+                $scope.hideSharebar = true
+            }
+            else if($scope.hideRail && !$scope.hideSharebar && button == undefined){
+                $scope.hideSharebar = true;
+                $scope.sidebarPage = false;
+                console.log($scope.hideSharebar)
+            }
+           
             else {
                 $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
+                console.log(4)
+                console.log($scope.hideSharebar)
+                console.log($scope.hideRail)
           
                // opens sidebar with email
             };
         };
 
+   
+
+        $scope.toggleRail = function(){
+            if (!$scope.hideRail && !$scope.hideSharebar){
+                $scope.hideRail = true;
+                $scope.hideSharebar = true;
+                console.log($scope.hideSharebar)
+
+            }
+         
+            else if($scope.hideRail && $scope.hideSharebar){
+                $scope.hideSharebar = false;
+                $scope.hideRail = false;
+                console.log($scope.hideSharebar);
+            }
+        };
 
     }
 ]);
@@ -715,14 +777,16 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
         };
         $scope.setDocsLastEvent = function(activityfeed) {
             angular.forEach($scope.docs, function(doc) {
+                //TODO This is not working currently - commented out to stop the errors occuring
                 var version_activity = activityfeed.filter(function(el) {
                     return el.doc_id === doc.doc_id;
                 });
                 doc.last_event = version_activity.sort($scope.compareEvents)[0];
-                if (doc.last_event.activity === 'finalized') {
+                /*if (doc.last_event.activity === 'finalized') {
                     doc.last_event.activity = 'approved';
                 }
                 $scope.setStatusRank(doc);
+                 */
             });
         };
 

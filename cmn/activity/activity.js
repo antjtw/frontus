@@ -103,8 +103,8 @@ active.filter('description', function() {
             }
             var type = ac.type;
             if (type == "ownership") {
-                if (activity == "received") return "Sent to " + person;
-                else if (activity == "viewed") return "Viewed by "+person;
+                if (activity == "received") return "Cap table sent to " + person;
+                else if (activity == "viewed") return "Cap table viewed by "+person;
                 else return "Something with Capitalization Table";
             }
             else {
@@ -188,7 +188,7 @@ active.filter('description', function() {
         else if (which == "issdoc") {
             var activity = ac.activity;
             var person = ac.name;
-            if (person === "") {
+            if ((person === "")||(person == null)) {
                 person = ac.person;
             }
             if (activity == "sent") return "";
@@ -203,11 +203,11 @@ active.filter('description', function() {
             else if (activity == "rejected") return "Signature rejected by " +person;
             else if (activity == "countersigned") return "Countersigned by " + person;
             else if (activity == "finalized") return "Approved by " + person;
-            else if (activity == "Retracted") return "Retracted by " + person;
+            else if (activity == "retracted") return "Retracted by " + person;
             else if (activity == "void requested") return "Void request sent to " +person;
             else if (activity == "void accepted") return "Void accepted by " + person;
             else if (activity == "void rejected") return "Void rejected by " + person;
-            else return activity + "ed Document";
+            else return activity + " Document";
         }
     }
 });

@@ -13,6 +13,28 @@ service.filter('caplength', function () {
     };
 });
 
+service.service('oauth', function($http) {
+    var s = {};
+    
+    s.start_oauth = function(svc, navState)
+    {
+        if (!(navState.userid && navState.company && navState.role)) {
+            alert("User role not selected.");
+            $scope.response = "User role not selected.";
+            return null;
+        }
+        return $http.post('/cgi/suDbProc.py', {
+            'proc': 'oauth.request_authorization',
+            'service': svc,
+            'userid': navState.userid,
+            'company': navState.company,
+            'role': navState.role
+        });
+    }
+    
+    return s;
+});
+
 service.service('payments', function(SWBrijj) {
     var s = {};
     s.available_plans = function() {
@@ -172,3 +194,7 @@ service.factory('myPayments', function($q, payments) {
     return d;
 
 });
+
+// service.service('Messages', ['SWBrijj', function(SWBrijj) {
+//     this.message_data = [];
+// }]);
