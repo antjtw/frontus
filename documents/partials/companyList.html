@@ -202,64 +202,6 @@
     </div>
 </div>
 
-<!--
-<div modal="documentUploadModal" close="modals.documentUploadClose()" options="narrowopts">
-    <div class="modalHeader">
-        <span>Upload Documents</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="documentUploadClose()"></span>
-    </div>
-
-    <div class="modalText uploadModal">
-        <div ng-if="triggerUpgradeDocs(files.length)"
-             class="upgradeWarning">
-            <span>
-                Warning: Uploading these documents will automatically upgrade your payment plan.
-            </span>
-        </div>
-        <p>Please select any document, presentation or image (20MB max per file)</p>
-        <form class="form-inline">
-            <fieldset>
-                <!--
-                <div ng-show="fileError" class="upload-errors">
-                    <span>{{fileError}}</span>
-                </div>
-
-                <div class="fileinputs">
-                    <input multiple ng-hide="showProgress || showProcessing" type="file" class='file'
-                           onchange="angular.element(this).scope().setFiles(this);"/>
-
-                    <div ng-hide="showProgress" class="fakefile">
-                        <span>CHOOSE FILES</span>
-
-                    </div>
-                    <div ng-show="showProgress" class="progress-bar">
-                        <progress percent="loadProgress"></progress>
-                    </div>
-                </div>
-                <div ng-show="showProcessing" class="upload-errors">
-                    <span>Processing Document</span>
-                </div>
-            </fieldset>
-        </form>
-        <div class="multiple-files" ng-show="files.length">
-            <ul>
-                <li ng-repeat="file in files">{{file.name | caplength:40}}</li>
-            </ul>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="modals.documentUploadClose()">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn"
-                    ng-click="uploadFile(files)"
-                    ng-disabled="files.length === 0">Upload</button>
-        </div>
-    </div>
-</div>
--->
-
 <div modal="updateTitleModal" close="modals.updateTitleClose()" options="opts">
     <div class="modalHeader">
         <span>Rename Document</span>

@@ -47,7 +47,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             }
             else if(version.sendgrid_event == 'dropped'){
                 return "Bounced Share"
-                $scope.reShareDoc = true;
             }
             else {
                 return version.sendgrid_event;

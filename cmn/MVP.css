@@ -1842,6 +1842,9 @@ ul.spaced-list > li:nth-child(odd) {
     color: #F1F1F1;
 }
 
+.circle.red{
+    background: red;
+}
 .circle.yellow {
     background: #FFBB00;
 }
@@ -1883,6 +1886,7 @@ ul.spaced-list > li:nth-child(odd) {
     color: #666666;
     line-height: 18px;
 }
+
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:first-child.red{
     color: red;

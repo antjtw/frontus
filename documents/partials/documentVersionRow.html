@@ -6,6 +6,11 @@
         <li>{{versionStatus(version)}}</li>
     </ul>
 </td>
+<td class="shareholder-column docname-column" ng-show="showReshareDoc">
+    <ul>
+        <li>show doc</li>
+    </ul>
+</td>
 <td class="status-toggle status-icon">
     <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
          class="circle green" aria-hidden="true"></div>
@@ -15,7 +20,8 @@
     <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
          aria-hidden="true"><span>x</span>
     </div>
-    <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
+    <div ng-show="isPendingVoid(version) || !versionIsComplete(version) && version.sendgrid_event !='dropped'" class="circle yellow" aria-hidden="true"></div>
+    <div ng-show="version.sendgrid_event=='dropped'" class="circle red" aria-hidden="true"></div>
 </td>
 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)" >
     <ul>
@@ -29,7 +35,7 @@
         <button ng-show="isPendingIssuerFinalization(version)" class="btn"
                 ng-click="viewInvestorCopy(version)">Approve</button>
     </div>
-    <ul class="dropdown-list">
+    <ul class="dropdown-list" ng-if="version.sendgrid_event !='dropped'">
         <li class="dropdown standard menu-drop">
             <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 
@@ -53,4 +59,5 @@
             </ul>
         </li>
     </ul>
+<!--     <button ng-if="version.sendgrid_event =='dropped'" ng-click="showReshareDoc = !showReshareDoc">reshare</button> -->
 </td>
