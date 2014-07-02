@@ -4013,7 +4013,6 @@ h2.onboard {
     width: calc(100% - 350px);
     margin-left: 0;
     min-height: 300px;
-    padding-bottom: 150px;
     overflow-y: auto;
 }
 
