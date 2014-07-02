@@ -20,12 +20,12 @@
     <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
          aria-hidden="true"><span>x</span>
     </div>
-    <div ng-show="isPendingVoid(version) || !versionIsComplete(version) && version.sendgrid_event !='dropped'" class="circle yellow" aria-hidden="true"></div>
-    <div ng-show="version.sendgrid_event=='dropped'" class="circle red" aria-hidden="true"></div>
+    <div ng-show="isPendingVoid(version) || !versionIsComplete(version) && version.sendgrid_event !='dropped' && version.sendgrid_event!='bounce'" class="circle yellow" aria-hidden="true"></div>
+    <div ng-show="version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'" class="circle red" aria-hidden="true"></div>
 </td>
 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)" >
     <ul>
-        <li ng-class="{'red':version.sendgrid_event=='dropped'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
+        <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
     <!-- </ul>
         <ul>
         <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'}">{{version.sendgrid_event}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
