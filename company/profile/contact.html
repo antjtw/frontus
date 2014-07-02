@@ -97,7 +97,10 @@
                     <div class="pull-left span5">
                         Billing Information
                     </div>
-                    <div class="pull-left">******{{billing.current_card.last4}}</div>
+                    <div class="pull-left">
+                        <span>******{{billing.current_card.last4}}</span>
+                        <span style="padding-left:60px">{{billing.discount}}</span>
+                    </div>
                     <div class="pull-right pointer">
                                             <span data-icon="&#xe00e;" aria-hidden="true" ng-click="ccModalOpen()">
                                             </span>
