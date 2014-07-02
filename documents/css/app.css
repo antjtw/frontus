@@ -1665,12 +1665,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     font-weight: normal;
 }
 
-annotation {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 .draggable {
     border: 0 solid red;
     position: relative;
@@ -1782,7 +1776,7 @@ annotation {
 }
 
 .sticky {
-    position: relative;
+    position: absolute;
 }
 
 .sticky .close-button {
