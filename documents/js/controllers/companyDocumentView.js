@@ -320,9 +320,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         };
         $scope.rejectSignature = function(msg) {
             $scope.processing = true;
-            if (msg === "Explain the reason for rejecting this document.") {
-                msg = "";
-            }
             $scope.doc.rejectSignature(msg).then(
                 function(data) {
                     $scope.$emit("notification:success", "Document signature rejected.");

@@ -53,72 +53,22 @@
                 </tabset>
                 <div class="bottom-part confirmPanelContainer">
                     <div class="confirmPanel">
-                        <div ng-show="invq && doc.signable()">
-                            <span>Do you want to electronically sign this document?</span>
-                            <br>
-                            <span>By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.</span>
-                        </div>
+                        <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()">
+                            By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
+                        </doc-action>
 
-                        <div ng-show="!invq && doc.countersignable($root.navState.role)">
-                            <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" reject-action="rejectSignature()">
-                                By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
-                            </doc-action>
-                        </div>
+                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.countersignable($root.navState.role)">
+                            By clicking "Countersign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
+                        </doc-action>
 
-                        <div ng-show="!invq && doc.finalizable() && doc.signature_flow===1">
-                            <div class="upgradeWarning"
-                                ng-if="triggerUpgradeDocuments(1)">
-                                <span>
-                                    Warning: Approving this document will automatically upgrade your payment plan.
-                                </span>
-                            </div>
-                            <span>Approve Document</span>
-                            <br>
-                            <span>Approve signature and finalize this document.</span>
-                            <!-- ul class="radioOption">
-                                <li class="pull-left">
-                                    <button class="radio-button"
-                                        ng-class="{'selected':confirmValue===-1}"
-                                        ng-click="setConfirmValue(-1)">
-                                    </button>
-                                </li>
-                                <li class="pull-left">
-                                    <span>Reject Document</span>
-                                    <br>
-                                    <span>Reject signature on this document.</span>
-                                    <br>
-                                    <textarea ng-show="confirmValue===-1"
-                                        class="messageText" rows="3"
-                                        ng-model="$parent.rejectMessage"
-                                        placeholder="Explain the reason for rejecting this document.">
-                                    </textarea>
-                                </li>
-                            </ul -->
-                        </div>
-                        <div ng-show="invq && doc.voidable() && doc.signature_flow > 0">
-                            <span>Accept Void</span>
-                            <br>
-                            <span>Accept the voiding of this document.</span>
-                            <!--ul class="radioOption">
-                                <li class="pull-left">
-                                    <button class="radio-button"
-                                        ng-class="{'selected':confirmValue===-1}"
-                                        ng-click="setConfirmValue(-1)">
-                                    </button>
-                                </li>
-                                <li class="pull-left">
-                                    <span>Reject Void</span>
-                                    <br>
-                                    <span>Reject the voiding of this document.</span>
-                                    <br>
-                                    <textarea ng-show="confirmValue===-1"
-                                        class="messageText" rows="3"
-                                        ng-model="$parent.rejectMessage"
-                                        placeholder="Explain the reason for rejecting this document.">
-                                    </textarea>
-                                </li>
-                            </ul-->
-                        </div>
+                        <doc-action upgrade-warning="true" approve-action="finalizeDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.finalizable()">
+                            Approve signature and finalize this document.
+                        </doc-action>
+
+                        <doc-action approve-action="voidDocument()" approve-verb="Void" rejectable="true" reject-action="rejectVoid(msg)" ng-if="invq && doc.voidable()">
+                            <!-- TODO: voidDocument and rejectVoid -->
+                            Accept the voiding of this document.
+                        </doc-action>
 
                         <div ng-show="template_original && forsigning"> <!-- TODO: neither of these are set. Should be when invester is signing a smart doc -->
                             <span>Do you want to electronically sign this document?</span>
@@ -152,30 +102,6 @@
                     </div> <!-- confirm panel -->
                     <div class="docViewerAction">
                         <div class="standard-button green confirmButton">
-                            <button class="btn"
-                                    ng-show="invq && doc.signable()"
-                                    ng-disabled="processing"
-                                    ng-click="signDocument(document, confirmValue);">
-                                Confirm
-                            </button>
-                            <!-- <button class="btn"
-                                    ng-show="!invq && doc.countersignable($root.navState.role)"
-                                    ng-disabled="processing"
-                                    ng-click="countersignDocument();">
-                                Confirm
-                            </button> -->
-                            <button class="btn"
-                                    ng-show="!invq && doc.finalizable()"
-                                    ng-disabled="processing"
-                                    ng-click="finalizeDocument();">
-                                Confirm
-                            </button>
-                            <button class="btn"
-                                    ng-show="invq && doc.voidable()"
-                                    ng-disabled="processing"
-                                    ng-click="voidAction(confirmValue, rejectMessage);">
-                                Confirm
-                            </button>
                             <button class="btn"
                                     ng-show="template_original && !forsigning"
                                     ng-disabled="processing || checkmany(template_email)"

@@ -214,14 +214,16 @@ app.directive('docAction', function() {
         scope: {
             approveAction: "&",
             approveVerb: "@",
+            rejectable: "@",
             rejectAction: "&",
             upgradeWarning: "@",
         },
         transclude: true,
         templateUrl: "/documents/partials/doc-action.html",
         controller: ["$scope", function($scope) {
-            $scope.rejectVerb = "Reject"
-            return;
+            $scope.rejectVerb = "Reject";
+            console.log($scope.rejectable);
+            console.log($scope.rejectAction);
         }],
     };
 });

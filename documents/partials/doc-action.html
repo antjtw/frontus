@@ -25,21 +25,5 @@
     </button>
 </div>
 
-<a class="green" ng-click="rejectMode=true" ng-show="!rejectMode">Reject?</a>
+<a class="green" ng-click="rejectMode=true" ng-show="!rejectMode && rejectable">Reject?</a>
 <a class="green" ng-click="rejectMode=false" ng-show="rejectMode">{{approveVerb}}?</a>
-<!-- ul class="radioOption">
-    <li class="pull-left">
-        <button class="radio-button" ng-class="{'selected':confirmValue===-1}" ng-click="setConfirmValue(-1)"></button>
-    </li>
-    <li class="pull-left">
-        <span>Reject Document</span>
-        <br>
-        <span>Reject signature on this document.</span>
-        <br>
-        <textarea ng-show="confirmValue===-1"
-            class="messageText" rows="3"
-            ng-model="$parent.rejectMessage"
-            placeholder="Explain the reason for rejecting this document.">
-        </textarea>
-    </li>
-</ul -->
