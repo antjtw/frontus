@@ -1880,6 +1880,14 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 18px;
 }
 
+/*.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
+    cursor: pointer;
+}*/
+
+.link{
+   cursor: pointer; 
+}
+
 .status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
     font-size: 12px;
     text-transform: capitalize;
@@ -1903,9 +1911,10 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
-    cursor:pointer;
+   /* cursor:pointer;*/
     padding-left: 10px;
 }
+
 .status-table.people-table > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
 }
@@ -4442,6 +4451,7 @@ textarea.email-text {
      background-color: white; 
      height: 100%; 
      width: 350px;
+    border-left: 1px solid #C7C7C7;
 }
  .composemessage {
     padding-left: 30px;
@@ -4481,6 +4491,11 @@ textarea.email-text {
     color: #3498DB;
     font-size: 14px !important;
     cursor: pointer;
+    width: 220px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .linkedDocuments ul > li:nth-child(2) > span {
     font-size: 12px !important;
@@ -4506,11 +4521,11 @@ textarea.email-text {
 }
 
 
-
 .secondbar {
     right: -350px;
 }
 
+/*//Message sidebar*/
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
     font-size: 14px;
@@ -4533,16 +4548,12 @@ textarea.email-text {
     padding-top: 14px;
 }
 
-.messages .activity-feed2 .testing:last-of-type {
-    padding-bottom: 14px;
-}
-
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
 }
 
 .messages .activity-feed2 li.event:first-of-type {
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 .messages .activity-feed2 li.event:last-of-type {
@@ -4572,3 +4583,30 @@ textarea.email-text {
     padding-right: 0px;
 } 
 
+.scrollable-docs {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.scrollable-docs li {
+    border-bottom: 1px solid #8D8D8D;
+    min-height: 300px;
+}
+
+.modal.dmvModal {
+    margin-left: -350px;
+    width: 700px;
+}
+
+.recipients.details{
+    font-size: 12px;
+    padding-left: 1.5em;
+    padding-bottom: 1em; 
+}
+
+
+
+.messages .activity-feed2 span.recipients.blue-link{
+    color: #3498DB;
+    cursor: pointer; 
+}

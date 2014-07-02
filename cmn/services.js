@@ -202,3 +202,7 @@ service.service('User', ['SWBrijj', function(SWBrijj) {
         u.signaturePresent = sig[0].have_signature;
     });
 }]);
+
+// service.service('Messages', ['SWBrijj', function(SWBrijj) {
+//     this.message_data = [];
+// }]);
