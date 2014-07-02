@@ -1491,7 +1491,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     background-position: top center;
     margin: 0 auto 0 auto;
     position: relative;
-    z-index: 0; /* for annotations */
 }
 
 .docPanelContainer {
@@ -1666,16 +1665,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     font-weight: normal;
 }
 
-annotation {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-annotation > div {
-    z-index: 1; /* since annotations have size but no content, make sure they can't block the div */
-}
-
 .draggable {
     border: 0 solid red;
     position: relative;
@@ -1787,7 +1776,7 @@ annotation > div {
 }
 
 .sticky {
-    position: relative;
+    position: absolute;
 }
 
 .sticky .close-button {
