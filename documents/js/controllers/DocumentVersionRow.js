@@ -12,6 +12,10 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
+    $scope.reShareDoc = function(){
+        console.log('reshare')
+    }
+
     $scope.shortVersionStatus = function(version) {
         if (!version) return "";
         if ($scope.isVoided(version)) {
@@ -41,6 +45,10 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             if(version.sendgrid_event == null){
                 return "Unviewed";  
             }
+            else if(version.sendgrid_event == 'dropped'){
+                return "Bounced Share"
+                $scope.reShareDoc = true;
+            }
             else {
                 return version.sendgrid_event;
             }
@@ -49,6 +57,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else {
             return "Sent";
         }
+        console.log($scope.shortVersionStatus(version))
     };
 
     function lastEventByInvestor(doc) {

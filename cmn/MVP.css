@@ -1750,6 +1750,10 @@ ul.spaced-list > li:nth-child(odd) {
     border: 1px solid #E3E3E3;
     height: 60px;
 }
+
+.status-table > tbody > tr.red {
+    color: red;
+}
 .status-table > tbody > tr > th {
     font-weight: normal;
 }
@@ -1878,6 +1882,10 @@ ul.spaced-list > li:nth-child(odd) {
     font-size: 14px;
     color: #666666;
     line-height: 18px;
+}
+
+.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.red{
+    color: red;
 }
 
 /*.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
