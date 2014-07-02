@@ -750,7 +750,7 @@
 </button>
 <div class="row-fluid">
     <tabset ng-class="{'singletab': tabnumber() == 1, 'tabBorder': windowToggle}">
-        <tab ng-repeat="tab in tabs" active="tab.active" ng-show="tabvisible(tab)" heading="{{tab.title}}">
+        <tab ng-repeat="tab in tabs" active="tab.active" ng-if="tabvisible(tab)" heading="{{tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')" ng-style="viewportactivity" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
                     <span ng-switch-when="1">
@@ -1741,10 +1741,10 @@
                 <th class="left">
                     Document Name
                 </th>
-                <th></th>
+                <th class="left">Tags</th>
             </tr>
         </tbody>
-        <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter" ng-if="!doc.investor && !doc.doc_id">
+        <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceOrder" ng-if="!doc.investor && !doc.doc_id">
             <tr class="empty-row"/>
             <tr>
                 <td ng-click="toggleShown(doc)" class="pointer">
@@ -1758,7 +1758,13 @@
                         <li title="{{doc.docname}}">{{doc.docname}}</li>
                     </ul>
                 </td>
-                <td/>
+                <td>
+                    <span class="tag"
+                          ng-repeat="tag in doc.tags"
+                          ng-click="state.evidenceQuery = tag">
+                        {{tag + (($last && ' ') || ', ')}}
+                    </span>
+                </td>
             </tr>
             <tr class="version" ng-show="doc.shown">
                 <td/>
@@ -1774,7 +1780,7 @@
                 </td>
                 <td/>
             </tr>
-            <tr ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter"
+            <tr ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceNestedOrder"
                 ng-if="invdoc.original==doc.original && invdoc.doc_id && invdoc.investor"
                 class="version" ng-show="doc.shown">
                 <td/>
