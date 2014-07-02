@@ -300,4 +300,5 @@ internal-right-rail .bottom-part {
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 45px; /* To accomodate the "Feedback" button */
+    width: calc(100% - 40px);
 }

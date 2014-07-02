@@ -1,8 +1,8 @@
 //'use strict';
 
 app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
-        'navState', 'Annotations',
-    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics, Annotations) {
+        'navState', 'Annotations', 'Documents',
+    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics, Annotations, Documents) {
         // Switch to company view if the role is issuer
         /** @name $routeParams#doc
          * @type {string} */
@@ -10,6 +10,10 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             $location.path("/company-view");
             return;
         }
+
+        $scope.$watch('docId', function(new_doc_id) {
+            $scope.doc = Documents.getDoc(new_doc_id);
+        });
 
         if ($routeParams.page) {
             $scope.currentPage = parseInt($routeParams.page, 10);

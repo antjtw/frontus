@@ -3,6 +3,13 @@
 <div class="container dynamic-page">
     <subnav>
         <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
+        <div class="pull-right">
+            <button class="btn" ng-click="leave()">
+                <span data-icon="&#xe602;" aria-hidden="true">
+                    <span ng-if="prepareable()">Save &amp; </span>Exit
+                </span>
+            </button>
+        </div>
     </subnav>
     <div modal="tourModal" close="tourclose();" options="touropts">
         <div class="modal-title">
@@ -34,6 +41,73 @@
                         <annotation-list doc-id="docId" ng-if="docId"></annotation-list>
                     </tab>
                 </tabset>
+                <div class="bottom-part confirmPanelContainer">
+                    <div class="confirmPanel">
+                        <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()">
+                            By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
+                        </doc-action>
+
+                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.countersignable($root.navState.role)">
+                            By clicking "Countersign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
+                        </doc-action>
+
+                        <doc-action upgrade-warning="true" approve-action="finalizeDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.finalizable()">
+                            Approve signature and finalize this document.
+                        </doc-action>
+
+                        <doc-action approve-action="voidDocument()" approve-verb="Void" rejectable="true" reject-action="rejectVoid(msg)" ng-if="invq && doc.voidable()">
+                            <!-- TODO: voidDocument and rejectVoid -->
+                            Accept the voiding of this document.
+                        </doc-action>
+
+                        <div ng-show="template_original && forsigning"> <!-- TODO: neither of these are set. Should be when invester is signing a smart doc -->
+                            <span>Do you want to electronically sign this document?</span>
+                            <br>
+                            <span>(This action is irreversible.)</span>
+                            <ul class="radioOption inline-radio">
+                                <li>
+                                    <span>Save Info?</span>
+                                    <br>
+                                    <span>Choose yes or no below if you want like to save all this information for other investor requests.
+                                        You can access and change information in your investor profile.</span>
+                                </li>
+                                <br>
+                                <li>
+                                    <button class="radio-button" ng-class="{'selected':infoValue===1}" ng-click="setinfoValue(1)"></button>
+                                </li>
+                                <li>
+                                    YES
+                                </li>
+                                <li>
+                                    <button class="radio-button"
+                                        ng-class="{'selected':infoValue===-1}"
+                                        ng-click="setinfoValue(-1)">
+                                    </button>
+                                </li>
+                                <li>
+                                    NO
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!-- confirm panel -->
+                    <div class="docViewerAction">
+                        <div class="standard-button green confirmButton">
+                            <button class="btn"
+                                    ng-show="template_original && !forsigning"
+                                    ng-disabled="processing || checkmany(template_email)"
+                                    ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
+                                Send
+                            </button>
+                            <button class="btn"
+                                    ng-show="template_original && forsigning"
+                                    ng-click="signTemplate(investor_attributes, infoValue, confirmValue)">
+                                Sign
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
             </internal-right-rail>
         </div>
     </div>
