@@ -207,3 +207,21 @@ app.directive('pageControls', function() {
         }],
     };
 });
+
+app.directive('docAction', function() {
+    return {
+        restrict: "E",
+        scope: {
+            approveAction: "&",
+            approveVerb: "@",
+            rejectAction: "&",
+            upgradeWarning: "@",
+        },
+        transclude: true,
+        templateUrl: "/documents/partials/doc-action.html",
+        controller: ["$scope", function($scope) {
+            $scope.rejectVerb = "Reject"
+            return;
+        }],
+    };
+});

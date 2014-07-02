@@ -1400,12 +1400,11 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     color: #666666;
 }
 
-.confirmPanel > .radioOption textarea.messageText {
+.confirmPanelContainer textarea.messageText {
     margin-left: 0;
     margin-right: 0;
-    margin-top: 6px;
-    margin-bottom: 30px;
     color: #666666;
+    width: calc(100% - 12px); /* 12px is to account for padding, set by bootstrap */
 }
 
 .hidden {

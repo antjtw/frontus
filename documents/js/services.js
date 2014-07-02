@@ -103,12 +103,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             var promise = $q.defer();
             SWBrijj.procm("document.reject_signature", this.doc_id, msg).then(function(data) {
                 promise.resolve(data);
-                $scope.$emit("notification:success", "Document signature rejected.");
-                $scope.leave();
             }).except(function(x) {
-                promise.reject(x)
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.processing = false;
+                promise.reject(x);
             });
             return promise.promise;
         },
