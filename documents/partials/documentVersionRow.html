@@ -26,7 +26,14 @@
 <td class="shareholder-column status-column pointer" ng-click="viewStatus(doc)" >
     <ul>
         <li ng-class="{'red':version.sendgrid_event=='dropped'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
+    <!-- </ul>
+        <ul>
+        <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'}">{{version.sendgrid_event}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
     </ul>
+    <ul ng-show="version.sendgrid_event == null">
+        <li>{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span>
+        </li>
+    </ul> -->
 </td>
 <td colspan="2">
     <div class="standard-button small-standard-button doc-share-button">

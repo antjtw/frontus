@@ -21,18 +21,27 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         if ($scope.isVoided(version)) {
             return "Voided"
         }
+        else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce'){
+            return 'Bounced Share'
+        }
+        else if(version.sendgrid_event =='processed'){
+            return 'doc processed'
+        }
         else if ($scope.isPendingVoid(version)) {
             return "Void requested by you"
         }
         else if (wasJustRejected(version) && lastEventByInvestor(version)) {
             return "Rejected by recipient";
-        } else if (wasJustRejected(version) &&
+        } 
+        else if (wasJustRejected(version) &&
                    !lastEventByInvestor(version)) {
             return "Rejected by you";
-        } else if ($scope.isPendingSignature(version)){
-            return "Sent for Signature";
+        } 
+        else if ($scope.isPendingSignature(version)){
+                return "Sent for Signature";
+            
         } else if ($scope.isPendingCountersignature(version)){
-            return "Review and Sign";
+                return "Review and Sign";                    
         } else if ($scope.isPendingInvestorFinalization(version)) {
             return "Signed and Sent for Approval";
         } else if ($scope.isPendingIssuerFinalization(version)) {
@@ -44,9 +53,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else if ($scope.isPendingView(version)){
             if(version.sendgrid_event == null){
                 return "Unviewed";  
-            }
-            else if(version.sendgrid_event == 'dropped'){
-                return "Bounced Share"
             }
             else {
                 return version.sendgrid_event;
