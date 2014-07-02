@@ -2375,8 +2375,13 @@ span.tour-icon.issue-cog + .tooltip {
     text-align: center;
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
-    min-width: 300px;
+    //min-width: 300px;
+    width: 200px;
     cursor: pointer;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(3) {
+    width: 100px;
+    padding-left: 0;
 }
 
 .rightTabWindow > table.status-table.evidence > tbody > tr.version {
