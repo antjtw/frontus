@@ -1770,12 +1770,21 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
     $scope.evidenceFilter = function(obj) {
+        var res = [];
         if ($scope.state.evidenceQuery && obj) {
-            var re = new RegExp($scope.state.evidenceQuery, 'i');
-            return re.test(obj.docname) || re.test(obj.tags);
-        } else {
-            return true;
+            var items = $scope.state.evidenceQuery.split(" ");
+            angular.forEach(items, function(item) {
+                res.push(new RegExp(item, 'i'))
+            });
         }
+        var truthiness = res.length;
+        var result = 0;
+        angular.forEach(res, function(re) {
+            if (re.test(obj.docname) || re.test(obj.tags)) {
+                result += 1;
+            }
+        });
+        return !$scope.state.evidenceQuery || truthiness == result;
     };
     // Captable Conversion Modal
 
