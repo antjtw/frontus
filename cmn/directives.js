@@ -1,20 +1,14 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
-m.directive('verifyFileModal', function() {
+m.directive('verifyFileButton', function() {
     return {
         scope: true,
         restrict: 'E',
-        replace: true,
-        transclude: true,
-        templateUrl: '/cmn/partials/verifyFileModal.html',
+        //replace: true,
+        //transclude: true,
+        templateUrl: '/cmn/partials/verifyFileButton.html',
         controller: ['$scope', 'annals',
         function($scope, annals) {
-            $scope.verifyModalOpen = function() {
-                $scope.verifyFileModal = true;
-            };
-            $scope.verifyModalClose = function() {
-                $scope.verifyFileModal = false;
-            };
             $scope.setFiles = function(element) {
                 $scope.$apply(function() {
                     $scope.files = [];
@@ -30,9 +24,31 @@ m.directive('verifyFileModal', function() {
                 } else {
                     $scope.$emit('notification:fail', 'WHAT IS THIS?!?');
                 }
-                $scope.verifyModalClose();
             };
-        }]
+        }],
+        link: function(scope, element, attrs) {
+            function handleDragOver(evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+                evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+            }
+            function handleFileSelect(evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+                console.log(evt);
+                element.scope().setFiles(evt.dataTransfer.files.length);
+            }
+            var el = element[0];
+            element.bind('drop', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                console.log(e);
+                element.scope().setFiles(e.dataTransfer.files.length);
+
+            });
+            el.addEventListener('dragover', handleDragOver, false);
+            //el.addEventListener('drop', handleFileSelect, false);
+        }
     };
 });
 m.directive('messageSide', function(){
