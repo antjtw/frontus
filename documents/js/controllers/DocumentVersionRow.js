@@ -16,6 +16,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         console.log('reshare')
     }
 
+
     $scope.shortVersionStatus = function(version) {
         if (!version) return "";
         if ($scope.isVoided(version)) {

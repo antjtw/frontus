@@ -129,4 +129,5 @@ app.directive('documentVersionRow', function() {
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController
     }
+
 });

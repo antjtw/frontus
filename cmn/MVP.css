@@ -2391,6 +2391,15 @@ tr.preparedDoc {
     text-shadow: none;
     box-shadow: none;
 }
+
+.btn.red{
+    background-color: #E74C3C;
+}
+
+.btn.red:hover{
+    background-color: #c44032;
+}
+
 .standard-button > button.btn > span:before {
     padding-right: 5px;
     vertical-align: middle;
@@ -4623,6 +4632,4 @@ textarea.email-text {
     cursor: pointer; 
 }
 
-.btn.red{
-    background-color: #E74C3C;
-}
+
