@@ -41,8 +41,9 @@
         <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
         <button ng-show="isPendingIssuerFinalization(version)" class="btn"
                 ng-click="viewInvestorCopy(version)">Approve</button>
+        <button ng-show="version.sendgrid_event =='dropped' || version.sendgrid_event =='bounce'" class="btn red" ng-click="showReshareDoc = !showReshareDoc">ReShare</button>
     </div>
-    <ul class="dropdown-list" ng-if="version.sendgrid_event !='dropped'">
+    <ul class="dropdown-list" ng-hide="version.sendgrid_event =='dropped' || version.sendgrid_event == 'bounce'">
         <li class="dropdown standard menu-drop">
             <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 
@@ -66,5 +67,4 @@
             </ul>
         </li>
     </ul>
-<!--     <button ng-if="version.sendgrid_event =='dropped'" ng-click="showReshareDoc = !showReshareDoc">reshare</button> -->
 </td>

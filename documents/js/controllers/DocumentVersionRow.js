@@ -51,12 +51,13 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else if ($scope.isCompleteSigned(version)){
             return "Completed";
         } else if ($scope.isPendingView(version)){
-            if(version.sendgrid_event == null){
-                return "Unviewed";  
-            }
-            else {
-                return version.sendgrid_event;
-            }
+            return "Unviewed"
+            // if(version.sendgrid_event == null){
+            //     return "Unviewed";  
+            // }
+            // else {
+            //     return version.sendgrid_event;
+            // }
         } else if ($scope.isCompleteViewed(version)){
             return "Viewed";
         } else {

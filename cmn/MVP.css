@@ -1752,7 +1752,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr.red {
-    color: red;
+    color: #c44032;
 }
 .status-table > tbody > tr > th {
     font-weight: normal;
@@ -1843,7 +1843,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .circle.red{
-    background: red;
+    background: #E74C3C;
 }
 .circle.yellow {
     background: #FFBB00;
@@ -1889,7 +1889,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:first-child.red{
-    color: red;
+    color: #E74C3C;
 }
 
 /*.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
@@ -4621,4 +4621,8 @@ textarea.email-text {
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
     cursor: pointer; 
+}
+
+.btn.red{
+    background-color: #E74C3C;
 }
