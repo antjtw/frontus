@@ -56,10 +56,10 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                 existingpercent += round.percent;
             }
         });
-        $scope.optionpoolpercentage = ($scope.optionpool/100)/ (1-(($scope.investment) / ($scope.investment + $scope.premoney)));
+        $scope.optionpoolpercentage = ($scope.optionpool/100)/ (1-(($scope.investment + $scope.totaldebtcost) / ($scope.investment + $scope.premoney)));
         var withoutoptionsunits = ($scope.optionpoolpercentage/(1-$scope.optionpoolpercentage)) * (100-(existingpercent));
         var optionscreated = withoutoptionsunits - existingpercent;
-        $scope.effectivepremoney = $scope.effectivepremoney - (((optionscreated/(100+optionscreated)) * ($scope.premoney)));
+        $scope.effectivepremoney = $scope.effectivepremoney - (((optionscreated/(100+optionscreated)) * ($scope.effectivepremoney)));
     };
 
     $scope.debtcost = function() {
@@ -74,6 +74,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                         actualdiscount = tran.discount;
                     }
                     $scope.effectivepremoney -= (round.amount / (1 - (actualdiscount/100)));
+                    console.log($scope.effectivepremoney);
                     $scope.totaldebtcost += (round.amount / (1 - (actualdiscount/100)));
                 }
             });
@@ -83,14 +84,13 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
     $scope.optionshuffle = function() {
         var withoutoptionstotals = 0;
         var existingoptions = 0;
-        var existingoptionspercentage = 0;
         var withoutoptionsunits = 0;
         var optionscreated = 0;
         angular.forEach($scope.rounds, function (round) {
             if (round.issue == "Options Unissued") {
                 withoutoptionstotals = $scope.totals.units - round.units;
                 existingoptions = round.units;
-                existingoptionspercentage = round.start_percent;
+                $scope.optionpoolpercentage = ($scope.optionpool/100)/ (1-(($scope.investment) / ($scope.investment + $scope.premoney)));
                 withoutoptionsunits = ($scope.optionpoolpercentage/(1-$scope.optionpoolpercentage)) * withoutoptionstotals;
                 optionscreated = withoutoptionsunits - existingoptions;
                 $scope.totals.units += optionscreated;
@@ -172,13 +172,16 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         $scope.newseries.final_percent = ($scope.investment / ($scope.investment + $scope.premoney)) * 100;
         $scope.newseries.percent = ($scope.investment / ($scope.investment + $scope.premoney)) * 100;
         $scope.newseries.units = (($scope.newseries.final_percent/100) / (1- ($scope.newseries.final_percent/100))) * $scope.totals.units;
-        console.log($scope.newseries.units * $scope.effectiveppshare);
+        var finaltotals = 0;
         angular.forEach($scope.rounds, function(round) {
             round.final_percent = ((1 - ($scope.newseries.final_percent/100)) * round.percent);
             round.percent = round.final_percent;
             $scope.finalrounds.push(round);
+            finaltotals += round.units;
         });
         $scope.finalrounds.push($scope.newseries);
+        finaltotals += $scope.newseries.units;
+        $scope.dilution = ((finaltotals - $scope.initialtotals.units)/finaltotals) * 100;
     };
 
     $scope.getRounds();

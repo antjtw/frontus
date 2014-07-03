@@ -32,7 +32,7 @@
             <div class="modeling-round">
                 <div class="round-header">Initial Ownership</div>
                 <div class="round-output">
-                    <d3expdonut data="initialrounds"></d3expdonut>
+                    <d3expdonut nosort="true" data="initialrounds"></d3expdonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
@@ -66,7 +66,7 @@
             <div ng-if="debtrounds[0].percent != initialrounds[0].percent" class="modeling-round">
                 <div class="round-header">After Debt Conversion</div>
                 <div class="round-output">
-                    <d3expdonut data="debtrounds"></d3expdonut>
+                    <d3expdonut nosort="true" data="debtrounds"></d3expdonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
@@ -91,7 +91,7 @@
             <div class="modeling-round">
                 <div class="round-header">After Option Pool Creation</div>
                 <div class="round-output">
-                    <d3expdonut data="optionrounds"></d3expdonut>
+                    <d3expdonut nosort="true" data="optionrounds"></d3expdonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
@@ -116,7 +116,7 @@
             <div class="modeling-round">
                 <div class="round-header">Final Ownership Structure</div>
                 <div class="round-output">
-                    <d3expdonut data="finalrounds"></d3expdonut>
+                    <d3expdonut nosort="true" data="finalrounds"></d3expdonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
@@ -142,6 +142,38 @@
 
                             <li>{{formatAmount(effectiveppshare)}}</li>
                             <li>Price per Share</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modeling-block">
+            <div class="modeling-round summary-round">
+                <div class="round-header">Final Ownership Structure</div>
+                <div>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(premoney + investment)}}</li>
+                            <li>Post-money Valuation</li>
+                        </ul>
+                    </div>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(effectiveppshare)}}</li>
+                            <li>Price per Share</li>
+                        </ul>
+                    </div>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(newseries.percent)}}%</li>
+                            <li>Investor's Equity</li>
+                        </ul>
+                    </div>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(dilution)}}%</li>
+                            <li>Dilution</li>
                         </ul>
                     </div>
                 </div>

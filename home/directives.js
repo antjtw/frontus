@@ -6,7 +6,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
         scope: {
             data: "=",
             label: "@",
-            onClick: "&"
+            onClick: "&",
+            nosort: "@"
         },
         link: function(scope, iElement, iAttrs) {
 
@@ -14,15 +15,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 height = 180,
                 radius = Math.min(width, height) / 2;
 
-            var labelr = radius-25;
-
-            var color = d3.scale.ordinal()
-                .range(["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"]);
-
-            var colors = ["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"];
+            var colors = ["#1ABC96", "#3498DB", "F78D1E", "#34495E", "#FFBB00", "#2676AB"];
             var corecolor = function(i) {
-                if (i > 3) {
-                   return i % 3 == 0 ? colors[3] : colors[i % 3]
+                if (i > 5) {
+                   return i % 5 == 0 ? colors[5] : colors[i % 5]
                 }
                 else {
                     return colors[i]

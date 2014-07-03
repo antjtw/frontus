@@ -231,3 +231,16 @@ ul.visualize-table > li > ul > li:first-of-type {
     text-shadow: none;
     shape-rendering: crispEdges;
 }
+
+.text-bubble > rect {
+    fill: #1d2c3c;
+}
+
+.text-bubble > text {
+    fill: #c6c6c6;
+}
+
+.text-bubble > polygon {
+    fill: #1d2c3c;
+    stroke: none;
+}
