@@ -126,7 +126,7 @@
     <div class="shareForm">
         <span>Recipients</span>
         <div class="sharepeople-input">
-            <input></input>
+            <input ui-select2="select2Options" ng-model="docShareState.emails">
         </div>
         <span>Message</span>
         <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>

@@ -45,10 +45,10 @@
     </div>
     <ul ng-show="showReshareDoc">
         <li>
-            <input ng-model="docShareState.emails"></input><button> test</button>
+            <input ng-model="docShareState.emails"></input><button ng-click="doc"> test</button>
 
         </li>
-        
+
     </ul>
     <ul class="dropdown-list" ng-hide="version.sendgrid_event =='dropped' || version.sendgrid_event == 'bounce'">
         <li class="dropdown standard menu-drop">
