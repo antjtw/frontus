@@ -606,7 +606,7 @@
 </subnav>
 
 <div class="row-fluid leftTabWindow" ng-class="{showRightTab:windowToggle}">
-<div ng-style="viewportheight" ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
+<div ng-style="viewportheight" ng-class="{leftFullTableBlock:sideToggle, widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
 
     <div class="row-fluid capcontainer">
         <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
@@ -744,7 +744,7 @@
     </div>
 </div>
 
-<internal-right-rail toggle-side="sideToggle">
+<internal-right-rail toggle-side="sideToggle" window-toggle="windowToggle" window-callback="editEvidence()">
     <tabset ng-class="{'singletab': tabnumber() == 1, 'tabBorder': windowToggle}">
         <tab ng-repeat="tab in tabs" active="tab.active" ng-if="tabvisible(tab)" heading="{{tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')" ng-style="viewportactivity" ng-switch on="sideBar">

@@ -1661,23 +1661,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         return $scope.dilutionSwitch;
     };
 
-    // Toggles sidebar back and forth
-    $scope.toggleSide = function () {
-        if (!$scope.sideToggle) {
-            $scope.sideToggleName = "Hide";
-            return false
-        } else {
-            $scope.sideToggleName = "Details";
-            return true
-        }
-    };
-    $scope.complexSideToggleButton = function() {
-        if (!$scope.windowToggle) {
-            $scope.sideToggle = !$scope.sideToggle;
-        } else {
-            $scope.editEvidence();
-        }
-    };
     $scope.switchCapTab = function(tab) {
         $scope.currentTab = tab;
     };
