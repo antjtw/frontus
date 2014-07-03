@@ -138,14 +138,14 @@
 <div ng-show="navState.userid" ng-class="{'navopened': navhover}" class="new-nav">
         <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'issuer'}).length > 0"><span data-icon="&#xe020;" aria-hidden="true"></span>Admin</span>
         <ul>
-            <li ng-class="{activecompany: navState.company == company.company && navState.role == 'issuer'}" ng-repeat="company in companies | filter: {role:'issuer'}">
-                <span ng-click="switchCandP(company, '/app/home/company')">{{company.name}}</span>
+            <li ng-click="switchCandP(company, '/app/home/company')" ng-class="{activecompany: navState.company == company.company && navState.role == 'issuer'}" ng-repeat="company in companies | filter: {role:'issuer'}">
+                <span>{{company.name}}</span>
             </li>
         </ul>
         <span class="nav-section-header" ng-show="companies.length > 1 && (companies | filter: {role:'investor'}).length > 0"><span data-icon="&#xe608;" aria-hidden="true"></span>Investments</span>
         <ul>
-            <li ng-class="{activecompany: navState.company == company.company && navState.role == 'investor'}" ng-repeat="company in companies | filter: {role:'investor'}">
-                <span ng-click="switchCandP(company, '/app/home/investor')">{{company.name}}</span>
+            <li ng-click="switchCandP(company, '/app/home/investor')" ng-class="{activecompany: navState.company == company.company && navState.role == 'investor'}" ng-repeat="company in companies | filter: {role:'investor'}">
+                <span>{{company.name}}</span>
             </li>
         </ul>
     <div class="nav-bottom-buttons">
