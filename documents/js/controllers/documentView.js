@@ -280,27 +280,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2) ||
                    ($scope.lib && $scope.prepare);
         };
-
-        $scope.voidAction = function(confirm, message) {
-            $scope.processing = true;
-            if (message == "Explain the reason for rejecting this document.") {
-                message = " ";
-            }
-            SWBrijj.document_investor_void($scope.docId, confirm, message).then(function(data) {
-                if (confirm == 1) {
-                    $scope.$emit("notification:success", "Void request accepted and document voided");
-                }
-                else {
-                    $scope.$emit("notification:success", "Void request rejected");
-                }
-                $scope.leave();
-            }).except(function(x) {
-                console.log(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.processing = false;
-            });
-        };
-
         $scope.$emit('docViewerReady');
 
         $scope.loadPages = function () {

@@ -108,6 +108,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             });
             return promise.promise;
         },
+        sign:function() {
+            var promise = $q.defer();
+            // before signing the document, I may need to save the existing annotations
+            // In fact, I should send the existing annotations along with the signature request for a two-fer.
+
+            SWBrijj.sign_document(this.doc_id, JSON.stringify(Annotations.getInvestorNotesForUpload(this.doc_id))).then(function(data) {
+                this.when_signed = data;
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.reject(x);
+            });
+            return promise.promise
+        }
         countersign: function() {
             var promise = $q.defer();
             // TODO: Annotations.getIssuerNotesForUpload seems a little when we're inside the document
@@ -129,7 +142,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 promise.reject(x);
             });
             return promise.promise;
-        }
+        },
+        void: function() {
+            var promise = $q.defer();
+            SWBrijj.document_investor_void($scope.doc_id, 1, "").then(function(data) {
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.rejecdt(x);
+            });
+            return promise.promise;
+        },
+        rejectVoid: function(message) {
+            var promise = $q.defer();
+            SWBrijj.document_investor_void(this.doc_id, 0, message).then(function(data) {
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.rejecdt(x);
+            });
+            return promise.promise;
+        },
     };
 
     /// Document service definition

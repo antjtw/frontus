@@ -55,8 +55,7 @@
                             Approve signature and finalize this document.
                         </doc-action>
 
-                        <doc-action approve-action="voidDocument()" approve-verb="Void" rejectable="true" reject-action="rejectVoid(msg)" ng-if="invq && doc.voidable()">
-                            <!-- TODO: voidDocument and rejectVoid -->
+                        <doc-action approve-action="confirmVoid()" approve-verb="Void" rejectable="true" reject-action="rejectVoid(msg)" ng-if="invq && doc.voidable()">
                             Accept the voiding of this document.
                         </doc-action>
 

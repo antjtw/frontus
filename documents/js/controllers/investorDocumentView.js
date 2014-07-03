@@ -133,21 +133,46 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             }
         };
 
-        $scope.signDocument = function(doc) {
+        $scope.signDocument = function() {
             $scope.processing = true;
-            // before signing the document, I may need to save the existing annotations
-            // In fact, I should send the existing annotations along with the signature request for a two-fer.
+            $scope.doc.sign().then(
+                function(data) {
+                    $scope.$emit("notification:success", "Document signed");
+                    $scope.leave();
+                },
+                function(fail) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.processing = false;
+                }
+            );
+        };
 
-            SWBrijj.sign_document($scope.docId, JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId))).then(function(data) {
-                doc.when_signed = data;
-                $scope.$emit("notification:success", "Document signed");
-                $scope.leave();
-                //$location.path('/investor-list').search({});
-            }).except(function(x) {
-                console.log(x);
-                $scope.$emit("notification:fail", "Oops, something went wrong.");
-                $scope.processing = false;
-            });
+        $scope.confirmVoid = function() {
+            $scope.processing = true;
+            $scope.doc.void().then(
+                function(data) {
+                    $scope.$emit("notification:success", "Void request accepted and document voided");
+                    $scope.leave();
+                },
+                function(fail) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.processing = false;
+                }
+            );
+        };
+
+        $scope.rejectVoid = function(msg) {
+            $scope.processing = true;
+            $scope.doc.rejectVoid(msg).then(
+                function(data) {
+                    $scope.$emit("notification:success", "Void request rejected");
+                    $scope.leave();
+                },
+                function(fail) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    $scope.processing = false;
+                }
+            );
         };
     }
 ]);

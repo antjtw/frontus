@@ -223,8 +223,6 @@ app.directive('docAction', function() {
         templateUrl: "/documents/partials/doc-action.html",
         controller: ["$scope", function($scope) {
             $scope.rejectVerb = "Reject";
-            console.log($scope.rejectable);
-            console.log($scope.rejectAction);
         }],
     };
 });
