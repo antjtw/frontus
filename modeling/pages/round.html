@@ -1,101 +1,151 @@
 <link type="text/css" rel="stylesheet" href="/modeling/css/visualize.css">
 <div class="company-list maincontent">
-    <div class="container dynamic-page">
-        <div>
-            <span>Pre-money valuation</span>
-            <input ng-change="calculate()" ng-model="fields.premoney">
+    <div class="grey-background container dynamic-page">
+        <div class="modeling-block">
+            <div class="modeling-inputs">
+                <div class="modeling-header">Calculate</div>
+                <div class="modeling-input-row">
+                    <div>
+                        <span>Pre-money valuation</span>
+                        <input ng-change="calculate()" ng-model="fields.premoney">
+                    </div>
+                    <div>
+                        <span>Investment amount</span>
+                        <input ng-change="calculate()" ng-model="fields.investment">
+                    </div>
+                    <div>
+                        <span>Post-Money Option Pool %</span>
+                        <input ng-change="calculate()" ng-model="fields.optionpool">
+                    </div>
+                </div>
+                <div class="modeling-header">Convert Debt</div>
+                <div class="modeling-input-row debt">
+                    <div ng-show="round.type == 'Debt'" ng-repeat="round in initialrounds">
+                        <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
+                            <span data-icon="&#xe023;" aria-hidden="true"></span>
+                        </button>
+                        <span>{{round.name}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modeling-round">
+                <div class="round-header">Initial Ownership</div>
+                <div class="round-output">
+                    <d3expdonut data="initialrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Units</li>
+                                <li>Percentage</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.percent > 0" ng-repeat='round in initialrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.percent)}}%</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(initialeffectivepremoney)}}</li>
+                            <li>Effective Pre-money</li>
+
+                            <li>{{formatAmount(initialppshare)}}</li>
+                            <li>Price per Share</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="debtrounds[0].percent != initialrounds[0].percent" class="modeling-round">
+                <div class="round-header">After Debt Conversion</div>
+                <div class="round-output">
+                    <d3expdonut data="debtrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Units</li>
+                                <li>Percentage</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.percent > 0" ng-repeat='round in debtrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.percent)}}%</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modeling-round">
+                <div class="round-header">After Option Pool Creation</div>
+                <div class="round-output">
+                    <d3expdonut data="optionrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Units</li>
+                                <li>Percentage</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.percent > 0" ng-repeat='round in optionrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.percent)}}%</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modeling-round">
+                <div class="round-header">Final Ownership Structure</div>
+                <div class="round-output">
+                    <d3expdonut data="finalrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Units</li>
+                                <li>Percentage</li>
+                                <li>Change</li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.final_percent > 0" ng-repeat='round in finalrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.final_percent)}}%</li>
+                                <li>{{formatAmount(round.final_percent - round.start_percent)}}%</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(effectivepremoney)}}</li>
+                            <li>Effective Pre-money</li>
+
+                            <li>{{formatAmount(effectiveppshare)}}</li>
+                            <li>Price per Share</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <span>Investment amount</span>
-            <input ng-change="calculate()" ng-model="fields.investment">
-        </div>
-        <div>
-            <span>Post-Money Option Pool %</span>
-            <input ng-change="calculate()" ng-model="fields.optionpool">
-        </div>
-
-        <div>Initial Ownership</div>
-        <ul class="visualize-table">
-            <li>
-                <ul>
-                    <li>Issue Name</li>
-                    <li>Units</li>
-                    <li>Percentage</li>
-                </ul>
-            </li>
-            <li ng-repeat='round in initialrounds'>
-                <ul>
-                    <li>{{round.issue}}</li>
-                    <li>{{formatAmount(round.units)}}</li>
-                    <li>{{formatAmount(round.percent)}}%</li>
-                </ul>
-            </li>
-        </ul>
-
-        <div>After debt conversion</div>
-        <ul class="visualize-table">
-            <li>
-                <ul>
-                    <li>Issue Name</li>
-                    <li>Units</li>
-                    <li>Percentage</li>
-                </ul>
-            </li>
-            <li ng-repeat='round in debtrounds'>
-                <ul>
-                    <li>{{round.issue}}</li>
-                    <li>{{formatAmount(round.units)}}</li>
-                    <li>{{formatAmount(round.percent)}}%</li>
-                </ul>
-            </li>
-        </ul>
-
-        <div>After option pool creation</div>
-        <ul class="visualize-table">
-            <li>
-                <ul>
-                    <li>Issue Name</li>
-                    <li>Units</li>
-                    <li>Percentage</li>
-                </ul>
-            </li>
-            <li ng-repeat='round in optionrounds'>
-                <ul>
-                    <li>{{round.issue}}</li>
-                    <li>{{formatAmount(round.units)}}</li>
-                    <li>{{formatAmount(round.percent)}}%</li>
-                </ul>
-            </li>
-        </ul>
-
-        <div>Final ownership structure</div>
-        <div>
-            <span>Effective pre-money: </span>
-            {{formatAmount(effectivepremoney)}}
-        </div>
-
-        <div>
-            <span>Price per share</span>
-            {{effectiveppshare}}
-        </div>
-
-        <ul class="visualize-table 4-column">
-            <li>
-                <ul>
-                    <li>Issue Name</li>
-                    <li>Units</li>
-                    <li>Percentage
-                    <li>Change</li>
-                </ul>
-            </li>
-            <li ng-repeat='round in finalrounds'>
-                <ul>
-                    <li>{{round.issue}}</li>
-                    <li>{{formatAmount(round.units)}}</li>
-                    <li>{{formatAmount(round.final_percent)}}%</li>
-                    <li>{{formatAmount(round.final_percent - round.start_percent)}}%</li>
-                </ul>
-            </li>
-        </ul>
     </div>
 </div>
