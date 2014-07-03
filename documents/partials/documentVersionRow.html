@@ -1,7 +1,8 @@
 <td class="status-toggle"></td>
 <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
     <ul>
-        <li>{{version.name || version.investor}}</li>
+        <li ng-show="type == 'doc'">{{version.name || version.investor}}</li>
+        <li ng-show="type == 'investor'">{{version.docname}}</li>
         <li>{{versionStatus(version)}}</li>
     </ul>
 </td>
