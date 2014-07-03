@@ -1544,6 +1544,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
 
 .confirmBody > .radioOption > li:last-child {
     -webkit-transform: translateZ(0);
+    width: 345px; /* ul's width is 380, so drop some for the checkbox */
 }
 
 .confirmBody > .radioOption > li:last-child > span:first-child {
@@ -1553,8 +1554,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
 
 .confirmBody > .radioOption > li:last-child > span:last-child {
     color: #666666;
-    margin-left: 35px;
-    display: inline-block;
 }
 
 .confirmBody > .radioOption textarea.messageText {
