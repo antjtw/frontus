@@ -323,7 +323,7 @@ m.directive('composeMessage', function() {
 
                 }).except(function(err) {
                     void(err);
-                    $rootsScope.$emit("notification:fail",
+                    $rootScope.$emit("notification:fail",
                         "Oops, something went wrong.");
                     $scope.clicked = false;
                 });
