@@ -10,55 +10,6 @@ input[disabled].default-pointer {
 
 /* Captable */
 
-button.right-rail-button {
-    position: absolute;
-    right: 0;
-    top: 100px;
-    height: 40px;
-    width: 40px;
-    border: none;
-    background-color: #E3E3E3;
-    border-bottom: 1px solid #C6C6C6;
-    border-left: 1px solid #C6C6C6;
-    transition: right 0.25s linear;
-}
-
-button.right-rail-button > span {
-    display: inline-block;
-    -moz-transition: all 0.5s ease;
-    -webkit-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    top: 0;
-    left: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    line-height: 44px;
-}
-button.right-rail-button.showRightTab {
-    right: -webkit-calc(100% - 430px);
-    border-right: 1px solid #C6C6C6;
-}
-.right-rail-button > span.ng-enter,
-.right-rail-button > span.ng-leave.ng-leave-active {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.125s linear 0,
-                visibility 0 linear 0.125s;
-}
-
-button.right-rail-button > span.arrow-flip {
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-}
-
-.dynamic-page .row-fluid .span8.leftBlock {
-    padding-bottom: 0;
-}
-
 div.last-saved {
     display: inline-block;
     float: right;

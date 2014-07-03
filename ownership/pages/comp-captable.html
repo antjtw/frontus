@@ -744,11 +744,7 @@
     </div>
 </div>
 
-<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" ng-show="rows.length > 0" class="span4 capright button-offset">
-<button ng-hide="true" type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
-    {{sideToggleName}}
-</button>
-<div class="row-fluid">
+<internal-right-rail toggle-side="sideToggle">
     <tabset ng-class="{'singletab': tabnumber() == 1, 'tabBorder': windowToggle}">
         <tab ng-repeat="tab in tabs" active="tab.active" ng-if="tabvisible(tab)" heading="{{tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')" ng-style="viewportactivity" ng-switch on="sideBar">
@@ -1726,12 +1722,7 @@
                 </div>
             </tab>
         </tabset>
-</div>
-</div>
-<button class="right-rail-button" ng-click="complexSideToggleButton()" ng-class="{showRightTab:windowToggle}">
-    <span ng-if="!windowToggle" ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
-    <span ng-if="windowToggle" data-icon="&#xe00f;" aria-hidden="true"></span>
-</button>
+    </internal-right-rail>
 </div>
 <div class="rightTabWindow" ng-if="windowToggle" ng-class="{showRightTab:windowToggle}" ng-style="viewportheight">
     <table class="status-table investor evidence">
