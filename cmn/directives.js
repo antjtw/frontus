@@ -33,14 +33,16 @@ m.directive('messageSide', function(){
                 }        
             });
 
+           $scope.poll = 0;
+
            $scope.newMessages = function(){
             SWBrijj.tblm('mail.msgstatus', ['our_id', 'event']).then(function(data){
                 $scope.messageCount = data;
                 // $scope.getFeed();
-                var incrementer = 0;
-                if($scope.msgstatus.length == $scope.messageCount.length && incrementer < 20){
+                var incrementer = 0
+                if($scope.msgstatus.length == $scope.messageCount.length && $scope.poll < 5){
                     $timeout($scope.newMessages, 2000)
-                    incrementer += 1
+                    $scope.poll += 1
                 }
                 else {
                     $scope.getFeed();
@@ -292,10 +294,6 @@ m.directive('composeMessage', function() {
                 }
             };
 
-            // var rr = getCSSRule('.for-r0ml');
-            // if (rr) {
-            //     rr.style.display="inline";
-            // }
 
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
@@ -329,7 +327,13 @@ m.directive('composeMessage', function() {
                 });
             };
 
+            // $scope.printRecipeints = function{
+
+            //     $scope.recipients
+            // }
+            
             $scope.readyToSend = function(msg) {
+                // console.log($scope.recipients)
                 if ($scope.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
