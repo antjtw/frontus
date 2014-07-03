@@ -4525,6 +4525,10 @@ textarea.email-text {
 }
 
 /*//Message sidebar*/
+.message-side ul.activity-feed2 {
+    width: 345px;
+}
+
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
     font-size: 14px;
