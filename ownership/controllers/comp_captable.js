@@ -70,6 +70,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.liquidpref = ['None','1X','2X', '3X'];
     $scope.eligible_evidence = [];
     $scope.evidence_object = null;
+    $scope.evidenceOrder = 'docname';
+    $scope.evidenceNestedOrder = 'name';
 
     $scope.tourUp = function () {
         $scope.tourModal = true;
@@ -94,6 +96,11 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     });
 
     SWBrijj.tblm('ownership.my_company_eligible_evidence').then(function(data) {
+        angular.forEach(data, function(x) {
+            if (x.tags) {
+                x.tags = JSON.parse(x.tags);
+            }
+        });
         $scope.eligible_evidence = data;
     }).except(function(e) {
         console.log(e);
@@ -1763,12 +1770,21 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
     $scope.evidenceFilter = function(obj) {
+        var res = [];
         if ($scope.state.evidenceQuery && obj) {
-            var re = new RegExp($scope.state.evidenceQuery, 'i');
-            return re.test(obj.docname);
-        } else {
-            return true;
+            var items = $scope.state.evidenceQuery.split(" ");
+            angular.forEach(items, function(item) {
+                res.push(new RegExp(item, 'i'))
+            });
         }
+        var truthiness = res.length;
+        var result = 0;
+        angular.forEach(res, function(re) {
+            if (re.test(obj.docname) || re.test(obj.tags)) {
+                result += 1;
+            }
+        });
+        return !$scope.state.evidenceQuery || truthiness == result;
     };
     // Captable Conversion Modal
 

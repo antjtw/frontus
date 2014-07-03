@@ -1,0 +1,11 @@
+<div ng-class="{rightNoTableBlock:sideToggle, slidingcss25:oldSafari()}" class="span4 capright button-offset">
+    <button ng-hide="true" type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
+        {{sideToggleName}}
+    </button>
+    <div class="row-fluid">
+        <div ng-transclude></div>
+    </div>
+</div>
+<button class="right-rail-button" ng-click="sideToggle = !sideToggle">
+    <span ng-class="{'arrow-flip': sideToggle}" data-icon="&#xe033;" aria-hidden="true"></span>
+</button>

@@ -1,0 +1,293 @@
+button.right-rail-button {
+    position: absolute;
+    right: 0;
+    height: 40px;
+    width: 40px;
+    border: none;
+    background-color: #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
+    border-left: 1px solid #C6C6C6;
+}
+
+button.right-rail-button > span {
+    display: inline-block;
+    -moz-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    height: 16px;
+}
+
+button.right-rail-button > span.arrow-flip {
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+}
+
+.capright {
+    position: relative;
+}
+
+.capright input:disabled {
+    background: url("/img/stripe-pattern.png") repeat;
+    -webkit-text-fill-color: #8D8D8D;
+}
+
+.span4.capright {
+    float: right;
+    margin-left: 0;
+    width: 350px;
+    border-left: 1px solid #C6C6C6;
+    background-color: #F1F1F1;
+}
+
+.slidingcss25 {
+    transition: all 0.25s;
+    -moz-transition:all 0.25s; /* Firefox 4 */;
+    -webkit-transition: all 0.25s; /* Safari and Chrome */
+    -o-transition: all 0.25s; /* Opera */
+}
+
+.span4.capright > button {
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform:rotate(90deg);
+    -ms-transform:rotate(90deg);
+    border-radius: 0;
+    border: none;
+    background-color: #E3E3E3;
+    box-shadow: none;
+    width: 108px;
+    line-height: 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #1E2D3D;
+}
+
+.span4.capright > button:active {
+    color: #1E2D3D;
+}
+
+.capright .headsection.tabbed {
+    border: none;
+}
+
+.capright .headsection.company-info {
+    margin-bottom: 37px;
+}
+
+.capright .headsection.company-info  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.capright .headsection {
+    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+    padding-left: 20px;
+    border-bottom: 1px solid #F1F1F1;
+}
+
+.capright .headsection h2 input {
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+    font-size: 24px;
+    line-height:21px;
+    font-weight: normal;
+    color: #1e2d3d;
+    width: 240px;
+    border-radius: 3px;
+}
+
+.capright .transaction-icon {
+    margin-right: 20px;
+    font-family: 'FS Elliot Web Regular', sans-serif !important;
+}
+
+.capright .issue-delete {
+    background-color: #F1F1F1;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 20px;
+    width: 24px;
+    font-size: 20px;
+    padding: 4px 0 3px 6px;
+    color: rgb(141, 141, 141);
+    border-radius: 3px;
+}
+
+.capright .issue-delete:hover {
+    background-color: #E3E3E3;
+}
+
+.capright .date-selection input {
+    margin-left: 10px;
+    padding-left: 10px;
+}
+
+.capright .date-selection input:disabled {
+    margin-left: 10px;
+    padding-left: 0;
+}
+
+.capright .in-brief p, .capright .in-brief span, .capright .in-brief h2 {
+    color: #1e2d3d;
+}
+
+.capright .in-brief .headsection {
+    padding-left: 0;
+}
+
+.capright .in-brief h2 {
+    margin-bottom: 20px;
+}
+
+.capright .in-brief > div > div:first-of-type {
+    border-top: 1px solid #C6C6C6;
+}
+
+.capright .in-brief > div > div {
+    font-size: 14px;
+    border-bottom: 1px solid #C6C6C6;
+    height: 55px;
+    margin-right: 40px;
+}
+
+.capright .in-brief div.belowTitle > img {
+    vertical-align: top;
+    margin-top: 13px;
+    margin-right: 10px;
+}
+
+.capright .in-brief div.belowTitle > div {
+    padding-top: 14px;
+    height: 30px;
+    display: inline-block;
+}
+
+.capright .in-brief div.belowTitle > div > span {
+    line-height: 15px;
+}
+
+.capright .in-brief div.belowTitle > div > span:last-child {
+    text-transform: capitalize;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+    font-size: 12px;
+    color: #A5A5A5;
+}
+
+.capright .in-brief span {
+    display: block;
+}
+
+.capright .in-brief div.profile-link {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding: 5px;
+    display: inline-block;
+    border-radius: 3px;
+    cursor: pointer;
+    height: 20px;
+    border: none !important;
+}
+
+.capright .in-brief div.profile-link:hover {
+    background-color: #E3E3E3;
+}
+
+.capright .in-brief div.profile-link > span {
+    display: inline-block;
+}
+
+.capright .in-brief div.profile-link > span:first-of-type {
+    vertical-align: -16%;
+}
+
+.capright .in-brief .share-link {
+    margin-right: 40px;
+    border-top: 1px solid #C6C6C6;
+}
+
+.capright .in-brief .share-link div.profile-link:hover {
+    background-color: #FFFFFF;
+}
+
+/* 1 tab */
+.tabbable .nav-tabs > li:first-child:nth-last-child(1) {
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+}
+
+/* 2 tabs */
+.tabbable .nav-tabs > li:first-child:nth-last-child(2),
+.tabbable .nav-tabs > li:first-child:nth-last-child(2) ~ li {
+    width: -moz-calc((100% - 40px) / 2);
+    width: -webkit-calc((100% - 40px) / 2);
+    width: calc((100% - 40px) / 2);
+}
+
+/* 3 tabs */
+.tabbable .nav-tabs > li:first-child:nth-last-child(3),
+.tabbable .nav-tabs > li:first-child:nth-last-child(3) ~ li {
+    width: -moz-calc((100% - 40px) / 3);
+    width: -webkit-calc((100% - 40px) / 3);
+    width: calc((100% - 40px) / 3);
+}
+
+.nav-tabs > li > a {
+    border-radius: 0;
+    margin-right: 0px;
+    cursor: pointer;
+    border: 1px solid #C6C6C6;
+    background-color: #E3E3E3;
+    padding-top: 9px;
+    padding-bottom: 10px;
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    background-color: #F1F1F1;
+}
+
+.nav-tabs > li > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+    border-left: transparent;
+    border-top: transparent;
+}
+
+.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+    border-color: #C6C6C6;
+}
+
+.nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus {
+    border-right: 0;
+}
+
+.trantabs .nav.nav-tabs, .tabbable .nav.nav-tabs {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    background-color: #E3E3E3;
+    border-color: #C6C6C6;
+}
+
+.tabbable .info-box > .head-box {
+    display: none;
+}
+
+.tabbable .tab-content {
+    padding-bottom: 0;
+}
+
+.tabbable .info-box {
+    margin-bottom: 0;
+    border-top: none;
+}
+
+/* Chrome visual bug fix */
+
+.span4.capright, .span4.capright span, .span4.capright input {
+    -webkit-transform: translateZ(0);
+}

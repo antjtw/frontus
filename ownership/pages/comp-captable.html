@@ -565,54 +565,45 @@
 
 
 <!-- Captable From Here Down -->
-<div class="row-fluid">
+<subnav>
+    <div class="box-button pull-right"
+         ng-if="!windowToggle"
+         ng-class="{'disabledme': companyIsZombie()}"
+         ng-click="companyIsZombie() || modalUp();"
+         id='a_own_tour_share_subnav'
+         data-placement="bottom" bs-tooltip="zombiemessage">
+        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" data-placement="bottom" bs-tooltip="tourmessages.share"><span>?</span></span>
+        <ul>
+            <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 
-    <div class="row-fluid">
-        <div class="captable-controls subnav-controls">
-            <div>
-                <div class="box-button pull-right"
-                     ng-if="!windowToggle"
-                     ng-class="{'disabledme': companyIsZombie()}"
-                     ng-click="companyIsZombie() || modalUp();"
-                     id='a_own_tour_share_subnav'
-                     data-placement="bottom" bs-tooltip="zombiemessage">
-                    <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-share" data-placement="bottom" bs-tooltip="tourmessages.share"><span>?</span></span>
-                    <ul>
-                        <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+            </li>
+            <li> <span>Share</span>
 
-                        </li>
-                        <li> <span>Share</span>
-
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="box-button pull-right"
-                     ng-if="!windowToggle"
-                     ng-class="{'disabledme': companyIsZombie()}"
-                     ng-click="companyIsZombie() || editViewToggle();"
-                     data-placement="bottom" bs-tooltip="zombiemessage">
-                    <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="bottom" bs-tooltip="tourmessages.view"><span>?</span></span>
-                    <ul>
-                        <li> <span ng-show="!toggleView()" data-icon="&#xe001;" aria-hidden="true"></span>
-                             <span ng-show="toggleView()" data-icon="&#xe00e;" aria-hidden="true"></span>
-                        </li>
-                        <li> <span>{{radioModel}}</span>
-
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="evidenceSearch" ng-if="windowToggle">
-                    <span>Search</span>
-                    <input type="text" class="search-box" ng-model="state.evidenceQuery">
-                </div>
-            </div>
-            <div class="DivHelper"></div>
-        </div>
+            </li>
+        </ul>
     </div>
 
-</div>
+    <div class="box-button pull-right"
+         ng-if="!windowToggle"
+         ng-class="{'disabledme': companyIsZombie()}"
+         ng-click="companyIsZombie() || editViewToggle();"
+         data-placement="bottom" bs-tooltip="zombiemessage">
+        <span ng-hide="toggleView() || tourstate == 0" class="tour-icon tour-view"  data-placement="bottom" bs-tooltip="tourmessages.view"><span>?</span></span>
+        <ul>
+            <li> <span ng-show="!toggleView()" data-icon="&#xe001;" aria-hidden="true"></span>
+                 <span ng-show="toggleView()" data-icon="&#xe00e;" aria-hidden="true"></span>
+            </li>
+            <li> <span>{{radioModel}}</span>
+
+            </li>
+        </ul>
+    </div>
+
+    <div class="evidenceSearch" ng-if="windowToggle">
+        <span>Search</span>
+        <input type="text" class="search-box" ng-model="state.evidenceQuery">
+    </div>
+</subnav>
 
 <div class="row-fluid leftTabWindow" ng-class="{showRightTab:windowToggle}">
 <div ng-style="viewportheight" ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}" class="span8 docLibrary leftBlock">
@@ -753,13 +744,9 @@
     </div>
 </div>
 
-<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" ng-show="rows.length > 0" class="span4 capright button-offset">
-<button ng-hide="true" type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
-    {{sideToggleName}}
-</button>
-<div class="row-fluid">
+<internal-right-rail toggle-side="sideToggle">
     <tabset ng-class="{'singletab': tabnumber() == 1, 'tabBorder': windowToggle}">
-        <tab ng-repeat="tab in tabs" active="tab.active" ng-show="tabvisible(tab)" heading="{{tab.title}}">
+        <tab ng-repeat="tab in tabs" active="tab.active" ng-if="tabvisible(tab)" heading="{{tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')" ng-style="viewportactivity" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
                     <span ng-switch-when="1">
@@ -1735,12 +1722,7 @@
                 </div>
             </tab>
         </tabset>
-</div>
-</div>
-<button class="right-rail-button" ng-click="complexSideToggleButton()" ng-class="{showRightTab:windowToggle}">
-    <span ng-if="!windowToggle" ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
-    <span ng-if="windowToggle" data-icon="&#xe00f;" aria-hidden="true"></span>
-</button>
+    </internal-right-rail>
 </div>
 <div class="rightTabWindow" ng-if="windowToggle" ng-class="{showRightTab:windowToggle}" ng-style="viewportheight">
     <table class="status-table investor evidence">
@@ -1750,10 +1732,10 @@
                 <th class="left">
                     Document Name
                 </th>
-                <th></th>
+                <th class="left">Tags</th>
             </tr>
         </tbody>
-        <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter" ng-if="!doc.investor && !doc.doc_id">
+        <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceOrder" ng-if="!doc.investor && !doc.doc_id">
             <tr class="empty-row"/>
             <tr>
                 <td ng-click="toggleShown(doc)" class="pointer">
@@ -1767,7 +1749,13 @@
                         <li title="{{doc.docname}}">{{doc.docname}}</li>
                     </ul>
                 </td>
-                <td/>
+                <td>
+                    <span class="tag"
+                          ng-repeat="tag in doc.tags"
+                          ng-click="state.evidenceQuery = tag">
+                        {{tag + (($last && ' ') || ', ')}}
+                    </span>
+                </td>
             </tr>
             <tr class="version" ng-show="doc.shown">
                 <td/>
@@ -1783,7 +1771,7 @@
                 </td>
                 <td/>
             </tr>
-            <tr ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter"
+            <tr ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceNestedOrder"
                 ng-if="invdoc.original==doc.original && invdoc.doc_id && invdoc.investor"
                 class="version" ng-show="doc.shown">
                 <td/>

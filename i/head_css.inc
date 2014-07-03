@@ -13,4 +13,6 @@
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/fselliot/elliot.css">
 <link type="text/css" rel="stylesheet" href="/cmn/newnav.css">
+<link type="text/css" rel="stylesheet" href="/cmn/internal-rail/right-rail.css">
+
 <link href='https://fonts.googleapis.com/css?family=Arizonia' rel='stylesheet' type='text/css'>

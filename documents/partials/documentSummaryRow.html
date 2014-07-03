@@ -98,4 +98,4 @@
     </td>
 </tr>
 <!-- TODO animate show/hide by sliding down/up -->
-<tr document-version-row version="version" view-state="viewState" modals="modals" ng-if="viewState.hideSharebar && doc.shown && !(version.archived && !viewState.show_archived) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>
+<tr document-version-row version="version" view-state="viewState" modals="modals" ng-if="viewState.hideSharebar && doc.shown && !(version.archived && !viewState.show_archived) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" type="doc.type" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>
