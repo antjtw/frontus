@@ -74,7 +74,6 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                         actualdiscount = tran.discount;
                     }
                     $scope.effectivepremoney -= (round.amount / (1 - (actualdiscount/100)));
-                    console.log($scope.effectivepremoney);
                     $scope.totaldebtcost += (round.amount / (1 - (actualdiscount/100)));
                 }
             });
@@ -181,7 +180,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         });
         $scope.finalrounds.push($scope.newseries);
         finaltotals += $scope.newseries.units;
-        $scope.dilution = ((finaltotals - $scope.initialtotals.units)/finaltotals) * 100;
+        $scope.dilution = ((finaltotals - $scope.initialtotals.units)/ $scope.initialtotals.units) * 100;
     };
 
     $scope.getRounds();
