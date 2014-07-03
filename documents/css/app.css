@@ -1542,10 +1542,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     padding-right: 20px;
 }
 
-.confirmBody > .radioOption > li:last-child {
-    -webkit-transform: translateZ(0);
-}
-
 .confirmBody > .radioOption > li:last-child > span:first-child {
     font-size: 14px;
     color: #1E2D3D;
