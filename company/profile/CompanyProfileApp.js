@@ -462,7 +462,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
-        $scope.hideSharebar = false;
         $scope.sidebarPage = null;
         // $scope.hideRail = false;
 
@@ -643,84 +642,23 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         };
-        $scope.showSharebar = function() {
-            return !$scope.hideShareBar;
-        };
-
-        // $scope.showRail = function(){
-        //     return $scope.hideRail;
-        // }
-
-       
-
-       
 
         // email sidebar
         $scope.toggleSide = function(button) {
-            if (!$scope.hideSharebar && (button == $scope.sidebarPage) && !$scope.hideRail) {
+            if(button == $scope.sidebarPage){
                 $scope.sidebarPage = false;
-                console.log("1")
-                console.log($scope.hideSharebar)
-                console.log($scope.hideRail)
-                
-            } 
-            else if(!$scope.hideSharebar && (button == $scope.sidebarPage) && $scope.hideRail){
-                $scope.sidebarPage = false;
-                $scope.hideSharebar = true;
             }
-            
-            else if(!$scope.hideSharebar && button){
+            else if(button){
                 $scope.sidebarPage = button;
-                $scope.hideSharebar = false;
-                console.log("2")
-                console.log($scope.hideSharebar)
-                console.log($scope.hideRail)      
-                // $scope.clearRecipient(); 
             }
-            else if($scope.hideSharebar && button == undefined){
-                $scope.hideSharebar = false;
-                console.log(3)
-                console.log($scope.hideSharebar)
-                console.log($scope.hideRail)               
-            }
-            else if($scope.hideRail && !$scope.hideSharebar && button){
-                $scope.hideRail = true;
-                $scope.hideSharebar = true
-            }
-            else if($scope.hideRail && !$scope.hideSharebar && button == undefined){
-                $scope.hideSharebar = true;
+            else if(button == undefined){
                 $scope.sidebarPage = false;
-                console.log($scope.hideSharebar)
             }
-           
             else {
-                $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
-                console.log(4)
-                console.log($scope.hideSharebar)
-                console.log($scope.hideRail)
-          
-               // opens sidebar with email
+                // opens sidebar with email
             };
         };
-
-   
-
-        $scope.toggleRail = function(){
-            if (!$scope.hideRail && !$scope.hideSharebar){
-                $scope.hideRail = true;
-                $scope.hideSharebar = true;
-                console.log($scope.hideSharebar)
-
-            }
-         
-            else if($scope.hideRail && $scope.hideSharebar){
-                $scope.hideSharebar = false;
-                $scope.hideRail = false;
-                console.log($scope.hideSharebar);
-            }
-        };
-
     }
 ]);
 
