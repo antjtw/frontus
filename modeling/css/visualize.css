@@ -48,6 +48,7 @@
     float: left;  
     width: 210px;
     margin-right: 20px;
+    position: relative;
 }
 
 .modeling-inputs .modeling-input-row > div > span {
@@ -67,12 +68,32 @@
     box-sizing: border-box;
     border-radius: 3px;
     padding-left: 5px;
+    margin-bottom: 0;
+}
+
+.modeling-inputs .modeling-input-row > div > input:disabled {
+    background-color: #c6c6c6;
+    border-color: #c6c6c6;
+}
+
+.modeling-inputs .modeling-input-row > div > span.lockedinput {
+    position: absolute;
+    right: 5px;
+    width: 20px;
+    bottom: 4px;
+    color: #8c8c8c;
 }
 
 .modeling-round {
     border-bottom: 1px solid #E3E3E3;
     padding: 20px;
     position: relative;
+    overflow: hidden;
+    max-height: 400px;
+    -moz-transition: max-height 0.5s ease;
+    -webkit-transition: max-height 0.5s ease;
+    -o-transition: max-height 0.5s ease;
+    transition: max-height 0.5s ease;
 }
 
 .modeling-round:before {
@@ -112,11 +133,38 @@
 .modeling-round .round-header {
     text-transform: uppercase;
     color: #1d2c3c;
+    margin-left: 20px;
+    position: relative;
 }
 
 .modeling-round .round-output {
     margin: 20px auto 0 auto;
     width: 1124px;
+}
+
+.modeling-round.collapsed-round {
+    max-height: 20px;
+}
+
+.modeling-round .round-header > span {
+    position: absolute;
+    left: -20px;
+    top: -2px;
+    -moz-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.modeling-round.collapsed-round .round-header > span {
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+}
+
+.modeling-round.summary-round {
+    height: 120px;
 }
 
 ul.visualize-table {

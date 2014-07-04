@@ -1,4 +1,8 @@
 var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState) {
+    $scope.optioncollapsed = true;
+    $scope.debtcollapsed = true;
+
+
     $scope.fields = {'premoney': 8000000, 'investment': 2000000, 'optionpool': 20};
     $scope.initialrounds = [];
     $scope.rounds = [];

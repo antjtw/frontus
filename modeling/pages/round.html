@@ -63,8 +63,8 @@
                 </div>
             </div>
 
-            <div ng-if="debtrounds[0].percent != initialrounds[0].percent" class="modeling-round">
-                <div class="round-header">After Debt Conversion</div>
+            <div ng-if="debtrounds[0].percent != initialrounds[0].percent" class="modeling-round" ng-class="{'collapsed-round': debtcollapsed}">
+                <div class="round-header pointer" ng-click="debtcollapsed = !debtcollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Debt Conversion</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="debtrounds"></d3expdonut>
                     <ul class="visualize-table">
@@ -88,8 +88,8 @@
                 </div>
             </div>
 
-            <div class="modeling-round">
-                <div class="round-header">After Option Pool Creation</div>
+            <div class="modeling-round" ng-class="{'collapsed-round': optioncollapsed}">
+                <div class="round-header pointer" ng-click="optioncollapsed = !optioncollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Option Pool Creation</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="optionrounds"></d3expdonut>
                     <ul class="visualize-table">

@@ -33,9 +33,22 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
 
     window.onresize = $scope.updateWindow;
 
+    $scope.getNotes = function() {
+        SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
+            $scope.debttrans = [];
+            angular.forEach(trans, function(tran) {
+                if (tran.type == 'Debt') {
+                    $scope.debttrans.push(tran);
+                }
+            });
+        });
+    };
+
+    $scope.getNotes();
+
     $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"500000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4000000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
     $scope.convertTran = {"toissue": {}};
-    $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25"};
+    $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25", "convertdate": new Date.today()};
     $scope.intervals = 200;
     $scope.fiddled = false;
     $scope.debttab = "one";
@@ -57,13 +70,12 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
         $scope.convertTran.amountsold = parseFloat(String($scope.fields.convertTranamountsold).replace(/[^0-9.]/g,''));
         $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
         $scope.postmoney = parseFloat(String($scope.fields.postmoney).replace(/[^0-9.]/g,''));
+        $scope.convertTran.date = $scope.fields.convertdate;
 
         if (isNaN(parseFloat($scope.fromtran.discount))) {
             $scope.fromtran.discount = 0;
         }
 
-        //Hard code the valuation type of conversion for now.
-        //TODO implement price per share conversion.
         $scope.convertTran.method = "Valuation";
         if ($scope.convertTran.method == "Valuation") {
             //Empty Graph data
@@ -72,10 +84,10 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
             //Default ppshare to 1 we're not displaying this for now
             $scope.convertTran.toissue.ppshare = 1;
 
-            //Default values before the loop (will allow for date changing
-            $scope.convertTran.date = new Date(1401768000000);
+            //Default values before the loop
             $scope.convertTran.tran = $scope.fromtran;
             $scope.convertTran.newtran = angular.copy($scope.fromtran);
+            $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
 
             //Bottom limit for the range calculation
             $scope.convertTran.bottomamount = parseFloat($scope.convertTran.amountsold) - ($scope.convertTran.amountsold *0.5);
@@ -159,6 +171,57 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
             var fixedpercentage = (((1 - (parseFloat($scope.convertTran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
             var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ $scope.convertTran.toissue.postmoney);
             $scope.convertTran.ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage) * 100;
+        }
+    };
+
+    $scope.selectNote = function (tran) {
+        if (tran.selected) {
+            tran.selected = false;
+            $scope.fields.fromtranamount = $scope.addCommas("500000");
+            $scope.fields.fromtranvalcap = $scope.addCommas("4000000");
+            $scope.fields.fromtrandiscount = $scope.addCommas("20");
+            $scope.fromtran.interestrate = null;
+            $scope.fromtran.interestratefreq = null;
+            $scope.fixinputs = false;
+        } else {
+            angular.forEach($scope.debttrans, function(x) {
+                x.selected = false;
+            });
+            tran.selected = true;
+            $scope.fields.fromtranamount = tran.amount != null ? $scope.addCommas(String(tran.amount)) : null;
+            $scope.fields.fromtranvalcap = tran.valcap != null ? $scope.addCommas(String(tran.valcap)): null;
+            $scope.fields.fromtrandiscount = tran.discount != null ? $scope.addCommas(String(tran.discount)) : null;
+            $scope.fromtran.interestrate = tran.interestrate;
+            $scope.fromtran.interestratefreq = tran.interestratefreq;
+            $scope.fromtran.date = tran.date;
+
+            $scope.fixinputs = true;
+        }
+        $scope.conversion("Note");
+    };
+
+    var keyPressed = false;
+    $scope.dateconversion = function (fields, evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('#convertdate').val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    $scope.fields.convertdate = calculate.timezoneOffset(date);
+                    $scope.conversion('date');
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if (fields['convertdate'] instanceof Date) {
+                $scope.fields.convertdate = calculate.timezoneOffset(fields['convertdate']);
+                $scope.conversion('date');
+                keyPressed = false;
+            }
         }
     };
 
