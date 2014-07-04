@@ -163,6 +163,11 @@
     -o-transform: rotate(180deg);
 }
 
+.modeling-round.summary-round .summary-row {
+    margin: 0 auto 0 auto;
+    width: 860px;
+}
+
 .modeling-round.summary-round {
     height: 120px;
 }
@@ -221,6 +226,7 @@ ul.visualize-table > li > ul > li:first-of-type {
     font-size: 26px;
     color: #19bb95;
     margin-top: 30px;
+    margin-bottom: 5px;
 }
 
 .round-summary > ul > li:nth-child(even) {
