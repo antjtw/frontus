@@ -23,13 +23,7 @@ service.service('oauth', function($http) {
             $scope.response = "User role not selected.";
             return null;
         }
-        return $http.post('/cgi/suDbProc.py', {
-            'proc': 'oauth.request_authorization',
-            'service': svc,
-            'userid': navState.userid,
-            'company': navState.company,
-            'role': navState.role
-        });
+        return SWBrijj.start_oauth(svc);
     }
 
     return s;
