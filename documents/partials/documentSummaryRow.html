@@ -17,7 +17,10 @@
     </td>
     <td class="shareholder-column docname-column" ng-click="titleClick()">
         <ul>
-            <li ng-if="doc.length >= 50" tooltip="{{title(doc)}}" tooltip-placement="top" class="docViewTootlip" data-container="body">{{title(doc)}} 
+            <li ng-if="doc.docname.length > 50" tooltip="{{title(doc)}}" tooltip-placement="top">
+                {{title(doc) | caplength:50}} 
+            <li ng-if="doc.docname.length < 50"> 
+                {{title(doc) | caplength:50}} 
             <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span>
             </li>
             <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar">{{docStatus(doc)}}</li>
