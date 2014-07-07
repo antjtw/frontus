@@ -16,15 +16,16 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     // this returns everyone you have ever emailed. yay
     $scope.getPeople = function(){
         SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-            $scope.emails = []
-            $scope.emailList = data
-            angular.forEach($scope.emailList, function(email){
-                $scope.emails.push(email);
-            })
+           $scope.myEmails = []
+            $scope.emailList = data           
+            angular.forEach($scope.emailList, function(value, key){
+                $scope.myEmails.push(value['email']);
+            });
+            console.log($scope.myEmails)
         });
-        console.log($scope.emails)
+        // $scope.myEmails = array
     };
-    $scope.getPeople();
+
 
 
     $scope.reShare = function(version){
@@ -32,6 +33,11 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
          var oldEmail = version.investor;
          console.log(oldEmail);
          console.log($scope.emailList);
+         $scope.myArray = [];
+         angular.forEach($scope.emailList, function(address){
+            $scope.myArray.push(address)
+         })
+         console.log($scope.myArray)
          $route.reload();
          $scope.$emit('notification:success', 'Document reshared');
     }
@@ -39,7 +45,8 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
-        'tags':[],
+        'tags': [],
+        'tokenSeparators': [",", " "],
         'placeholder': 'Enter email address & press enter'
     };
 

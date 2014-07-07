@@ -42,11 +42,11 @@
         <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
         <button ng-show="isPendingIssuerFinalization(version)" class="btn"
                 ng-click="viewInvestorCopy(version)">Approve</button>
-        <button ng-show="!showReshareDoc && version.sendgrid_event == 'dropped' || !showReshareDoc && version.sendgrid_event =='bounce'" class="btn red" ng-click="showReshareDoc = !showReshareDoc">Retract</button>
+        <button ng-show="!showReshareDoc && version.sendgrid_event == 'dropped' || !showReshareDoc && version.sendgrid_event =='bounce'" class="btn red" ng-click="showReshareDoc = !showReshareDoc; getPeople()">Retract</button>
 
     </div>
     <div ng-if="showReshareDoc" class="standard-button small-standard-button doc-share-button">
-          <input ui-select2="select2Options" type="text" ng-model="emailList.emails"></input>
+          <input ui-select2="select2Options" ng-model="emailList.email" style="width:200px;"></input>
 
           <button ng-click="reShare(version)" class="btn reshare"> Reshare</button>
    </div>
