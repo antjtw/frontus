@@ -218,6 +218,7 @@ app.directive('docAction', function() {
             rejectable: "@",
             rejectAction: "&",
             upgradeWarning: "@",
+            disabled: "&",
         },
         transclude: true,
         templateUrl: "/documents/partials/doc-action.html",

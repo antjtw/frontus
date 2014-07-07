@@ -1,8 +1,8 @@
 //'use strict';
 
 app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
-        'navState', 'Annotations', 'Documents',
-    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics, Annotations, Documents) {
+        'navState', 'Annotations', 'Documents', 'User',
+    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics, Annotations, Documents, User) {
         // Switch to company view if the role is issuer
         /** @name $routeParams#doc
          * @type {string} */
@@ -174,5 +174,11 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
                 }
             );
         };
+
+        $scope.unfilledAnnotation = function() {
+            return $scope.doc.annotations.some(function(annot) {
+                return (annot.required && annot.forRole($rootScope.navState.role) && !annot.filled(User.signaturepresent, $rootScope.navState.role));
+            });
+        }
     }
 ]);

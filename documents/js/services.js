@@ -61,26 +61,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 return annot.page == pageNum;
             });
         },
-        hasUnfilled: function(signaturepresent, role) {
-            // TODO: use Annotation.filled()
-            var unfilled = false;
-            return this.annotations.some(function(annot) {
-                if (annot.whattype == 'ImgSignature') {
-                    if (!signaturepresent &&
-                        ((annot.whosign == 'Investor' && role == 'investor') ||
-                         (annot.whosign == 'Issuer' && role == 'issuer'))) {
-                        return true;
-                    }
-                }
-                else if (annot.required && annot.val.length === 0) {
-                    if ((annot.whosign == 'Investor' && role == 'investor') ||
-                        (annot.whosign == 'Issuer' && role == 'issuer')) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-        },
         signable: function() {
             return this.signature_flow > 0 && !this.when_signed;
         },
@@ -120,7 +100,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 promise.reject(x);
             });
             return promise.promise
-        }
+        },
         countersign: function() {
             var promise = $q.defer();
             // TODO: Annotations.getIssuerNotesForUpload seems a little when we're inside the document

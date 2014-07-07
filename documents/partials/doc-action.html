@@ -13,7 +13,7 @@
 <div class="standard-button docViewerAction">
     <button class="btn"
             ng-show="!rejectMode"
-            ng-disabled="processing"
+            ng-disabled="processing || disabled()"
             ng-click="approveAction();">
         {{approveVerb}}
     </button>

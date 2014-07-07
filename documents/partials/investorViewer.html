@@ -43,7 +43,7 @@
                 </tabset>
                 <div class="bottom-part confirmPanelContainer">
                     <div class="confirmPanel">
-                        <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()">
+                        <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()" disabled="unfilledAnnotation()">
                             By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
 
