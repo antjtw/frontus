@@ -594,7 +594,7 @@ app.controller('CompanyDocumentListController',
                     {
                         filename = doc.investor + "-" + doc.docname;
                     }
-                    SWBrijj.document_dropbox_export(doc.doc_id, filename, role).then(function(x) {
+                    SWBrijj.run_process(["document_dropbox_export", doc.doc_id.toString(), filename, role]).then(function(x) {
                         $scope.$emit("notification:success", "Successfully Exported to Dropbox");
                     }).except(function(x) {
                         $scope.response = x;

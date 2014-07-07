@@ -366,7 +366,7 @@ app.controller('CompContactCtrl',
             };
             
             $scope.exportAllToDropbox = function() {
-                SWBrijj.document_dropbox_export_all().then(function(x) {
+                SWBrijj.run_process(["document_dropbox_export_all"]).then(function(x) {
                     $scope.$emit("notification:success", "Successfully Exported to Dropbox");
                 }).except(function(x) {
                     $scope.response = x;
@@ -376,7 +376,7 @@ app.controller('CompContactCtrl',
             };
             
             $scope.exportCaptableToDropbox = function() {
-                SWBrijj.document_dropbox_export_captable().then(function(x) {
+                SWBrijj.run_process(["document_dropbox_export_captable"]).then(function(x) {
                     $scope.$emit("notification:success", "Successfully Exported to Dropbox");
                 }).except(function(x) {
                     $scope.response = x;
