@@ -44,11 +44,11 @@
         <button ng-show="version.sendgrid_event =='dropped' || version.sendgrid_event =='bounce' && !showReshareDoc" class="btn red" ng-click="showReshareDoc = !showReshareDoc">Re-Share</button>
 
     </div>
-    <ul ng-show="showReshareDoc">
-        <li>
-            <input ng-model="docShareState.emails"></input><button ng-click="doc"> test</button>
+    <div ng-show="showReshareDoc" class="standard-button small-standard-button doc-share-button">
 
-        </li>
+            <input ng-model="docShareState.emails"></input><button ng-click="doc" class="btn reshare"> test</button>
+        
+    </div>
 
     </ul>
     <ul class="dropdown-list" ng-hide="version.sendgrid_event =='dropped' || version.sendgrid_event == 'bounce'">

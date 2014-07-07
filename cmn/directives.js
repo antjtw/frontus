@@ -12,8 +12,8 @@ m.directive('messageSide', function(){
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.people = data
-                    var array = []
-                    var obj = {}
+                    var array = [];
+                    var obj = {};
                     angular.forEach($scope.people, function(info){
                         array.push(obj[info.email] = info.name)
                         if(info.name == ""){
@@ -327,10 +327,7 @@ m.directive('composeMessage', function() {
                 });
             };
 
-            // $scope.printRecipeints = function{
 
-            //     $scope.recipients
-            // }
             
             $scope.readyToSend = function(msg) {
                 // console.log($scope.recipients)
