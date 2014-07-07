@@ -52,7 +52,7 @@
 
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
-        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">
                 <table class="status-table people-table">
                     <tbody>
@@ -69,12 +69,12 @@
                     
                       
                     <td style="width:400px" class="shareholder-column docname-column" ng-click=" sidebarPage || gotoPerson(person)">      
-                        <div ng-if="!hideSharebar && sidebarPage == 'email'" class="check-box-side">
+                        <div ng-if="sidebarPage == 'email'" class="check-box-side">
                             <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
                              <span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </div>
             
-                        <ul>
+                        <ul ng-class="{'link': person.lastlogin}">
                             <li>{{person.name}}</li>
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
                         </ul>
@@ -104,17 +104,15 @@
             </div>
         </div>
 
-        <div  ng-class="{rightNoTableBlock:hideSharebar,
-                             slidingcss25:oldSafari()}" class="span4 capright side sidecontent button-offset" ng-style="viewportheight">
-
-            <tabset class="singletab">
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
+            <tabset class="singletab" style="display:block;" ng-style="viewportheight">
                 <tab heading = "Activity">
-                <div style="clear: both;">
-                    <message-side style></message-side>
-                </div>
-            </tab>
-                      
-        </div>
+                    <div style="clear: both;">
+                        <message-side style></message-side>
+                    </div>
+                </tab>
+            </tabset>
+        </internal-right-rail>
         <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                 </compose-message>
@@ -126,11 +124,6 @@
 
     </section>
 
-<!--     rail toggle -->
-<button class="right-rail-button" ng-click="toggleRail()">
- <!--    hide button -->
-    <span data-icon="&#xe033;" aria-hidden="true" ng-class="{'arrow-flip': hideRail}"></span>
-</button>
 </div>
 
 

@@ -1,12 +1,20 @@
 //'use strict';
 
 app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
-        'navState',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics) {
+        'navState', 'Annotations',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations) {
+        if ($routeParams.page) {
+            $scope.currentPage = parseInt($routeParams.page, 10);
+        } else if (!$scope.currentPage) {
+            $scope.currentPage = 1;
+        }
+
         if (navState.role == 'investor') {
             $location.path('/investor-view');
             return;
         }
+
+        $scope.toggleSide = false;
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
@@ -30,8 +38,12 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         });
 
         $scope.$on('docViewerReady', function(event) {
-            if ($scope.docId) $scope.getData();//{$route.reload();}
-            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            if ($scope.docId) {
+                $scope.getData();//{$route.reload();}
+            } else if ($scope.templateKey) {
+                $scope.toggleSide = false;
+                $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            }
         });
 
         $scope.helpModalUp = function () {
@@ -55,7 +67,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             dialogFade: true,
             dialogClass: 'helpModal modal'
         };
-        
+
         $scope.processedopts = {
             backdropFade: true,
             dialogFade: true,
@@ -122,8 +134,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.getData();
 
         $scope.getVersion = function(doc) {
-            $scope.invq = false;
-            $scope.counterparty = true;
             /** @name doc#doc_id
              * @type {number} */
             /** @name doc#signature_deadline
@@ -139,12 +149,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             $scope.initDocView();
         };
 
-        $scope.jumpToPage = function(pg) {
-            $rootScope.$broadcast("setPage", pg);
-        };
-
         $scope.getOriginal = function() {
-            $scope.invq = false;
             $scope.counterparty = false;
             $scope.docId = $scope.docKey;
             $scope.library = "document.my_company_library";
@@ -154,10 +159,10 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             z.page = 1;
             $location.search(z);
             $scope.initDocView();
-            
+
             $scope.checkProcessing();
         };
-        
+
         $scope.checkProcessing = function() {
             if ($scope.tourModal)
                 return; //don't step on other modal's toes
@@ -174,7 +179,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 }
             });
         }
-        
+
         $scope.getRectStyle = function(image)
         {
             if (((image == 'original') && (!$scope.adjustedSelected)) ||
@@ -187,7 +192,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 return "background-color: #E3E3E3;";
             }
         }
-        
+
         $scope.selectProcessing = function(choice)
         {
             if (choice == "original")
@@ -215,7 +220,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
-        
+
         $scope.processedClose = function(erase) {
             $scope.imageProcessedModal = false;
             if (erase)
@@ -237,11 +242,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 });
             }
         };
-        
+
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
         };
-        
+
         $scope.getProcessedPage = function() {
             SWBrijj.procm("document.get_first_processed", $scope.docId).then(function(data) {
                 var d = data[0].get_first_processed;
@@ -256,7 +261,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 }
             });
         };
-        
+
         $scope.setProcessedImages = function() {
             var original = document.getElementById("processedModalOriginalImage");
             var adjusted = document.getElementById("processedModalAdjustedImage");
@@ -340,11 +345,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 $scope.rejectSignature(data[1]);
             }
         };
-        
+
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.document_countersign( $scope.docId, dce.getNoteData(true)[1]).then(function(data) {
+            SWBrijj.document_countersign( $scope.docId, JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId))).then(function(data) {
                 dce.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');

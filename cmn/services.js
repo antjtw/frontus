@@ -15,7 +15,7 @@ service.filter('caplength', function () {
 
 service.service('oauth', function($http) {
     var s = {};
-    
+
     s.start_oauth = function(svc, navState)
     {
         if (!(navState.userid && navState.company && navState.role)) {
@@ -31,11 +31,11 @@ service.service('oauth', function($http) {
             'role': navState.role
         });
     }
-    
+
     return s;
 });
 
-service.service('payments', function(SWBrijj) {
+service.service('payments', function(SWBrijj, $filter) {
     var s = {};
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
@@ -60,6 +60,22 @@ service.service('payments', function(SWBrijj) {
     };
     s.get_upcoming_invoice = function(cusid) {
         return SWBrijj.stripe(['get_upcoming_invoice', cusid]);
+    };
+    s.format_discount = function(discount) {
+        var cpn = discount.coupon;
+        var formatted_coupon = "";
+        if (cpn.percent_off) {
+            formatted_coupon = cpn.percent_off + "% off";
+        } else {
+            formatted_coupon = $filter('currency')(cpn.amount_off/100, "$") +
+                               " off";
+        }
+        if (discount.end) {
+            formatted_coupon += ' until ' +
+                                $filter('date')(discount['end']*1000,
+                                                'MMMM d, yyyy');
+        }
+        return formatted_coupon;
     };
     /*
     s.get_coupon = function(cpn) {
@@ -170,7 +186,7 @@ service.factory('myPayments', function($q, payments) {
                             }
                             $scope.openModalsFromURL();
                         }
-                        
+
                     });
                         */
         },
@@ -181,7 +197,7 @@ service.factory('myPayments', function($q, payments) {
             this.data = d;
             console.log(this.data);
         };
-        
+
 
     loadPlans()
         //.then( handlePlans )
@@ -194,3 +210,15 @@ service.factory('myPayments', function($q, payments) {
     return d;
 
 });
+
+service.service('User', ['SWBrijj', function(SWBrijj) {
+    this.signaturePresent = false;
+    u = this; // save "this" context for procm callback
+    SWBrijj.procm('account.have_signature').then(function(sig) {
+        u.signaturePresent = sig[0].have_signature;
+    });
+}]);
+
+// service.service('Messages', ['SWBrijj', function(SWBrijj) {
+//     this.message_data = [];
+// }]);

@@ -650,6 +650,10 @@ navm.controller('NavCtrl',
                     .then(function(x) {
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
+                            if (rsp.discount) {
+                                $rootScope.billing.discount = 
+                                    payments.format_discount(rsp.discount);
+                            }
                             $rootScope.billing.current_card = rsp.cards.data[0];
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;

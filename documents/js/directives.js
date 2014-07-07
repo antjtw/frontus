@@ -114,7 +114,7 @@ app.directive('documentSummaryRow', function() {
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController
-    }
+    };
 });
 
 app.directive('documentVersionRow', function() {
@@ -124,9 +124,88 @@ app.directive('documentVersionRow', function() {
         scope: {
             version: '=',
             viewState: '=',
+            type: '=',
             modals: '='
         },
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController
-    }
+    };
+});
+
+app.directive('annotationList', ["User", function(User) {
+    return {
+        restrict: "E",
+        scope: {
+            docId: "=",
+        },
+        templateUrl: "/documents/partials/annotationList.html",
+        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents",
+            function($scope, $element, $rootScope, Annotations, Documents) {
+                $scope.annotations = [];
+                $scope.$watch("docId", function(new_doc_id, old_doc_id) {
+                    $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
+                    $scope.doc = Documents.getDoc(new_doc_id);
+
+                    // we want a new page_visible array for every doc
+                    $scope.page_visible = [];
+                });
+
+                $scope.annotated = function(page) {
+                    var ret = $scope.doc.pageAnnotated(page.page);
+                    return ret;
+                };
+
+                $scope.attributeLabel = Annotations.attributeLabel;
+
+                $scope.user = User;
+            }
+        ],
+    };
+}]);
+
+app.directive('annotation', function() {
+    return {
+        restrict: "E",
+        scope: {
+            annot: "=",
+            isAnnotable: "=",
+            signatureprocessing: "=",
+            doc: "=",
+            removeannot: "&",
+            sigModalUp: "&",
+        },
+        replace: true,
+        templateUrl: "/documents/partials/annotation.html",
+        controller: annotationController
+    };
+});
+
+app.directive('pageControls', function() {
+    return {
+        restrict: "E",
+        scope: {
+            docId: "=",
+            currentPage: "=",
+        },
+        templateUrl: "/documents/partials/page-controls.html",
+        controller: ["$scope", "Documents", function($scope, Documents) {
+            $scope.doc = Documents.getDoc($scope.docId);
+            $scope.doc.currentPage = $scope.currentPage
+            $scope.$watch('docId', function(new_doc_id) {
+                $scope.doc = Documents.getDoc(new_doc_id);
+                $scope.doc.currentPage = $scope.currentPage
+            });
+            $scope.template_original = false;
+            $scope.$watch('doc.currentPage', function(page) {
+                if ((page != void(page)) && $scope.doc.pages) {
+                    if (page < 1) {
+                        $scope.doc.currentPage = 1;
+                    } else if (page > $scope.doc.pages.length) {
+                        $scope.doc.currentPage = $scope.doc.pages.length;
+                    }
+                }
+            });
+
+        }],
+    };
 });

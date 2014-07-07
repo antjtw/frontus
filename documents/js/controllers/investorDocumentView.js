@@ -1,8 +1,8 @@
 //'use strict';
 
 app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
-        'navState',
-    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics) {
+        'navState', 'Annotations',
+    function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics, Annotations) {
         // Switch to company view if the role is issuer
         /** @name $routeParams#doc
          * @type {string} */
@@ -10,6 +10,14 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             $location.path("/company-view");
             return;
         }
+
+        if ($routeParams.page) {
+            $scope.currentPage = parseInt($routeParams.page, 10);
+        } else if (!$scope.currentPage) {
+            $scope.currentPage = 1;
+        }
+
+        $scope.toggleSide = false;
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
@@ -127,7 +135,7 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
             var dce = angular.element(".docPanel").scope();
-          SWBrijj.sign_document($scope.docId,dce.getNoteData(true)[0]).then(function(data) {
+            SWBrijj.sign_document($scope.docId, JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId))).then(function(data) {
                 doc.when_signed = data;
                 $scope.$emit('refreshDocImage');
                 $scope.$emit("notification:success", "Document signed");
