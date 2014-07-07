@@ -17,7 +17,7 @@
     </td>
     <td class="shareholder-column docname-column" ng-click="titleClick()">
         <ul>
-            <li title="{{title(doc)}}" tooltip="{{doc.docname}}">{{title(doc) | caplength:50}} 
+            <li title="{{title(doc)}}" tooltip="{{doc.docname}}" tooltip-trigger="{{{true: 'mouseenter', false: 'never'}[doc.docname.length > 50]}}">{{title(doc) | caplength:50}} 
                 
 
                 <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span>
