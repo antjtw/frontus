@@ -1,6 +1,7 @@
 'use strict';
 
-function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $location) {
+DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location', '$route'];
+function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $location, $route) {
     $scope.versionStatus = function(version) {
         if (version.last_event_activity) {
             return (version.last_event_activity==='received' ? 'sent to ' : (version.last_event_activity === 'retracted' ? (version.last_event_activity + " from ") : (version.last_event_activity + " by "))) +
@@ -12,8 +13,37 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
-    $scope.reShareDoc = function(){
-        console.log('reshare')
+    // this returns everyone you have ever emailed. yay
+    $scope.getPeople = function(){
+        SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+            $scope.emails = []
+            $scope.emailList = data
+            angular.forEach($scope.emailList, function(email){
+                $scope.emails.push(email);
+            })
+        });
+        console.log($scope.emails)
+    };
+    $scope.getPeople();
+
+
+    $scope.reShare = function(version){
+         console.log(version.doc_id)
+         var oldEmail = version.investor;
+         console.log(oldEmail);
+         console.log($scope.emailList);
+         $route.reload();
+         $scope.$emit('notification:success', 'Document reshared');
+    }
+
+    // $scope.select2Options = {
+    //     'multiple': true,
+    //     'tags': $scope.emails,
+    //     'placeholder': 'Enter email address & press enter'
+    // };
+
+    $scope.shareDocuments = function(docId, emails){
+        console.log(version.doc_id)
     }
 
 
@@ -191,4 +221,4 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
 }
-DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];
+

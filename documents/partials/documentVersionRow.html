@@ -22,7 +22,8 @@
 </td>
 <td class="shareholder-column status-column pointer" ng-click="viewStatus(version)">
     <ul>
-        <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
+        <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span>
+        </li>
     <!-- </ul>
         <ul>
         <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'}">{{version.sendgrid_event}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
@@ -41,14 +42,13 @@
         <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
         <button ng-show="isPendingIssuerFinalization(version)" class="btn"
                 ng-click="viewInvestorCopy(version)">Approve</button>
-        <button ng-show="version.sendgrid_event =='dropped' || version.sendgrid_event =='bounce' && !showReshareDoc" class="btn red" ng-click="showReshareDoc = !showReshareDoc">Re-Share</button>
+        <button ng-show="!showReshareDoc && version.sendgrid_event == 'dropped' || !showReshareDoc && version.sendgrid_event =='bounce'" class="btn red" ng-click="showReshareDoc = !showReshareDoc">Retract</button>
 
     </div>
-    <div ng-show="showReshareDoc" class="standard-button small-standard-button doc-share-button">
-
-            <input ng-model="docShareState.emails"></input><button ng-click="doc" class="btn reshare"> test</button>
-        
-    </div>
+    <div ng-if="showReshareDoc" class="standard-button small-standard-button doc-share-button">
+          <input ui-select2="select2Options" ng-model="emails"></input>
+          <button ng-click="reShare(version)" class="btn reshare"> Reshare</button>
+   </div>
 
     </ul>
     <ul class="dropdown-list" ng-hide="version.sendgrid_event =='dropped' || version.sendgrid_event == 'bounce'">
