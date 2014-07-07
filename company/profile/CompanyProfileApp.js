@@ -349,7 +349,7 @@ app.controller('CompContactCtrl',
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
                     return;
-                post.success(function(x) {
+                post.then(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
                         console.log("success");
@@ -359,7 +359,7 @@ app.controller('CompContactCtrl',
                     };
                     window.open(x);
                     console.log(x);
-                }).error(function(x) {
+                }).except(function(x) {
                     console.log(x);
                     $scope.response = x;
                 });

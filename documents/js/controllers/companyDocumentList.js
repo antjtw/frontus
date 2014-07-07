@@ -610,7 +610,7 @@ app.controller('CompanyDocumentListController',
                 var post = oauth.start_oauth(svc, navState);
                 if (post == null)
                     return;
-                post.success(function(x) {
+                post.then(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
                         $scope.$apply(function() {
@@ -622,7 +622,7 @@ app.controller('CompanyDocumentListController',
                         });
                     };
                     window.open(x);
-                }).error(function(x) {
+                }).except(function(x) {
                     console.log(x);
                     $scope.response = x;
                 });
