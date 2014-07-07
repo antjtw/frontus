@@ -3,14 +3,6 @@
 app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route', '$rootScope', '$routeParams', '$timeout', 'SWBrijj', 'basics',
         'navState', 'Annotations', 'Documents', 'User',
     function($scope, $location, $route, $rootScope, $routeParams, $timeout, SWBrijj, navState, basics, Annotations, Documents, User) {
-        // Switch to company view if the role is issuer
-        /** @name $routeParams#doc
-         * @type {string} */
-        if (navState.role == 'issuer') {
-            $location.path("/company-view");
-            return;
-        }
-
         $scope.$watch('docId', function(new_doc_id) {
             $scope.doc = Documents.getDoc(new_doc_id);
         });
@@ -19,6 +11,11 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             $scope.currentPage = parseInt($routeParams.page, 10);
         } else if (!$scope.currentPage) {
             $scope.currentPage = 1;
+        }
+
+        if (navState.role == 'issuer') {
+            $location.path("/company-view");
+            return;
         }
 
         $scope.toggleSide = false;
@@ -32,10 +29,6 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             document.location.href = '/login';
         });
 
-        $scope.$on('event:brijjError', function(event, msg) {
-            $rootScope.errorMessage = msg;
-        });
-
         $scope.$on('event:reload', function(event) {
             void(event);
             $timeout(function() {
@@ -44,22 +37,12 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
         });
 
         $scope.$on('docViewerReady', function(event) {
-            if ($scope.docId) $scope.getData();
-            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            if ($scope.docId) {
+                $scope.getData();
+            } else if ($scope.templateKey) {
+                $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            }
         });
-
-        $scope.docId = parseInt($routeParams.doc, 10);
-        $scope.templateKey = parseInt($routeParams.template, 10);
-        $scope.subId = parseInt($routeParams.subid, 10);
-        $scope.thisPage = $routeParams.page ? parseInt($routeParams.page, 10) : 1;
-        $scope.library = "document.my_investor_library";
-        $scope.pages = "document.my_investor_codex";
-        $scope.tester = false;
-        $scope.invq = true;
-        $scope.pageQueryString = function() {
-            return "id=" + $scope.docId + "&investor=" + $scope.invq;
-        };
-        $scope.processing = false;
 
         $scope.helpModalUp = function () {
             $scope.tourModal = true;
@@ -70,17 +53,28 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
             $scope.tourModal = false;
         };
 
+        $scope.signinggot = function () {
+            SWBrijj.procm("account.update_user_settings", "knows_signing", "true").then(function(data) {
+                void(data);
+            });
+        };
+
         $scope.touropts = {
             backdropFade: true,
             dialogFade: true,
             dialogClass: 'helpModal modal'
         };
 
-        $scope.signinggot = function () {
-            SWBrijj.procm("account.update_user_settings", "knows_signing", "true").then(function(data) {
-                void(data);
-            });
+        $scope.docId = parseInt($routeParams.doc, 10);
+        $scope.templateKey = parseInt($routeParams.template, 10);
+        $scope.subId = parseInt($routeParams.subid, 10);
+        $scope.library = "document.my_investor_library";
+        $scope.pages = "document.my_investor_codex";
+        $scope.invq = true;
+        $scope.pageQueryString = function() {
+            return "id=" + $scope.docId + "&investor=" + $scope.invq;
         };
+        $scope.processing = false;
 
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
@@ -98,7 +92,7 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
                         document.location.href = "/documents/investor-view?template=" + data.template_id + "&subid=" + data.doc_id;
                     }
 
-                    if ($scope.signable()) {
+                    if ($scope.doc.signable()) {
                         SWBrijj.tblm('account.user_settings', ["knows_signing"]).then(function(data) {
                             if (!data[0].knows_signing) {
                                 $scope.helpModalUp();
@@ -115,10 +109,6 @@ app.controller('InvestorDocumentViewController', ['$scope', '$location', '$route
         };
 
         $scope.getData();
-
-        $scope.signable = function() {
-            return $scope.document && $scope.document.signature_deadline && !$scope.document.when_signed;
-        };
 
         $scope.leave = function() {
             if ($rootScope.lastPage

@@ -1,8 +1,8 @@
 //'use strict';
 
 app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
-        'navState', 'Annotations', 'Documents',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations, Documents) {
+        'navState', 'Annotations', 'Documents', 'User',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations, Documents, User) {
         $scope.$watch('docId', function(new_doc_id) {
             $scope.doc = Documents.getDoc(new_doc_id);
         });
@@ -28,11 +28,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.$on('event:loginRequired', function() {
             document.location.href = '/login';
         });
-        /*
-        Don't really want this as it overrides even the ones that are caught and handled properly
-        $scope.$on('event:brijjError', function(event, msg) {
-            $scope.$emit("notification:fail", msg);//"Oops, something went wrong.");
-        }); */
 
         $scope.$on('event:reload', function(event) {
             void(event);
@@ -87,8 +82,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.prepare = ($routeParams.prepare==='true') ? true : false;
         $scope.invq = false;
         $scope.counterparty = !! $scope.urlInves;
-        $scope.tester = false;
-        $scope.signeeded = "No";
 
         $scope.library = $scope.urlInves ? "document.my_counterparty_library" : "document.my_company_library";
         $scope.pages = $scope.urlInves ? "document.my_counterparty_codex" : "document.my_company_codex";
@@ -343,6 +336,12 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.prepareable = function() {
             // TODO (logic currently in docViewer)
             return true;
+        };
+
+        $scope.unfilledAnnotation = function() {
+            return $scope.doc.annotations.some(function(annot) {
+                return (annot.required && annot.forRole($rootScope.navState.role) && !annot.filled(User.signaturepresent, $rootScope.navState.role));
+            });
         }
     }
 ]);
