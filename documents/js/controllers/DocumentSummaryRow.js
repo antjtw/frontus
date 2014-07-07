@@ -114,6 +114,12 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         };
     };
 
+    $scope.howLong = function(summary){
+        if(summary.type == 'doc' && summary.docname.length > 50){
+            return true
+        };
+    };
+
     $scope.getShareType = function(doc) {
         if (!doc) {return 0;}
         if (!doc.signature_flow && !doc.template_id) {

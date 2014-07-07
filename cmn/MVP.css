@@ -155,7 +155,7 @@ input:focus, textarea:focus {
     color: #C7C7C7;
     text-transform: none;
     max-width: none;
-    white-space: pre;
+  /*  white-space: pre;*/
 }
 
 .tooltip-date > div.tooltip {
