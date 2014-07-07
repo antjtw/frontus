@@ -23,6 +23,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                     round.name = round.issue;
                     if (round.type == "Debt") {
                         round.convertme = false;
+                        $scope.debtpresent = true;
                     }
                     angular.forEach(trans, function(tran) {
                         if (tran.issue == round.issue) {
@@ -150,6 +151,8 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         $scope.rounds = angular.copy($scope.initialrounds);
         $scope.totals = angular.copy($scope.initialtotals);
 
+        console.log($scope.rounds);
+
         // Get the initial price per share and premoney
         $scope.effectivepremoney = $scope.premoney;
         $scope.effectiveppshare = $scope.effectivepremoney / $scope.totals.units;
@@ -196,5 +199,9 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
     $scope.formatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
     };
+
+    $scope.roundable = function() {
+        return ($scope.rounds.length > 1 && !isNaN($scope.rounds[0].percent))
+    }
 
 };

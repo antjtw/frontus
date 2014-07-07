@@ -172,6 +172,29 @@
     height: 120px;
 }
 
+.modeling-round.no-captable {
+    height: 600px;
+    text-align: center;
+
+}
+
+.modeling-round.no-captable > div {
+    font-size: 20px;
+    line-height: 40px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    color: #1d2c3c;
+}
+
+.modeling-round.no-captable > div a {
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    color: #3397da;
+}
+
+.modeling-round.no-captable > div:first-of-type {
+    margin-top: 50px;
+}
+
 ul.visualize-table {
     vertical-align: top;
     display: inline-block;
@@ -297,4 +320,12 @@ ul.visualize-table > li > ul > li:first-of-type {
 .text-bubble > polygon {
     fill: #1d2c3c;
     stroke: none;
+}
+
+.disclaimer {
+    padding-left:   20px;
+}
+
+.disclaimer > p {
+    font-size: 12px;
 }

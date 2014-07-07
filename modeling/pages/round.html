@@ -7,18 +7,21 @@
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
-                        <input ng-change="calculate()" ng-model="fields.premoney" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Investment amount</span>
-                        <input ng-change="calculate()" ng-model="fields.investment" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Post-Money Option Pool %</span>
-                        <input ng-change="calculate()" ng-model="fields.optionpool" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100}">
+                        <input ng-change="calculate()" ng-model="fields.optionpool" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100}">
+                        <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                 </div>
-                <div class="modeling-header">Convert Debt</div>
+                <div ng-show="debtpresent" class="modeling-header">Convert Debt</div>
                 <div class="modeling-input-row debt">
                     <div ng-show="round.type == 'Debt'" ng-repeat="round in initialrounds">
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
@@ -29,7 +32,12 @@
                 </div>
             </div>
 
-            <div class="modeling-round first-round">
+            <div ng-show="!roundable()" class="modeling-round no-captable">
+                <div>Uh Oh. Looks like you haven't started your captable yet</div>
+                <div>Get started on <a href="/app/ownership/company-captable">your captable now</a></div>
+            </div>
+
+            <div ng-show="roundable()" class="modeling-round first-round">
                 <div class="round-header">Initial Ownership</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="initialrounds"></d3expdonut>
@@ -63,7 +71,7 @@
                 </div>
             </div>
 
-            <div ng-if="debtrounds[0].percent != initialrounds[0].percent" class="modeling-round" ng-class="{'collapsed-round': debtcollapsed}">
+            <div ng-if="debtrounds[0].percent != initialrounds[0].percent && roundable()" class="modeling-round" ng-class="{'collapsed-round': debtcollapsed}">
                 <div class="round-header pointer" ng-click="debtcollapsed = !debtcollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Debt Conversion</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="debtrounds"></d3expdonut>
@@ -88,7 +96,7 @@
                 </div>
             </div>
 
-            <div class="modeling-round" ng-class="{'collapsed-round': optioncollapsed}">
+            <div ng-if="optionrounds[0].percent != debtrounds[0].percent && optionrounds[0].percent != initialrounds[0].percent && roundable()" class="modeling-round" ng-class="{'collapsed-round': optioncollapsed}">
                 <div class="round-header pointer" ng-click="optioncollapsed = !optioncollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Option Pool Creation</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="optionrounds"></d3expdonut>
@@ -113,7 +121,7 @@
                 </div>
             </div>
 
-            <div class="modeling-round">
+            <div ng-show="roundable()" class="modeling-round">
                 <div class="round-header">Final Ownership Structure</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="finalrounds"></d3expdonut>
@@ -148,7 +156,7 @@
             </div>
         </div>
 
-        <div class="modeling-block">
+        <div ng-show="roundable()" class="modeling-block">
             <div class="modeling-round summary-round">
                 <div class="round-header">Final Ownership Structure</div>
                 <div class="summary-row">
@@ -178,6 +186,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div ng-show="roundable()" class="disclaimer">
+            <div>Disclaimer:</div>
+            <p>Lorem Ipsum</p>
         </div>
     </div>
 </div>
