@@ -1,9 +1,9 @@
 'use strict';
 app.controller('CompContactCtrl',
     ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-        'payments', '$route', '$filter', '$location', '$http', 'oauth',
+        'payments', '$route', '$filter', '$location', '$http',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
-                 payments, $route, $filter, $location, $http, oauth) {
+                 payments, $route, $filter, $location, $http) {
             if (navState.role == 'investor') {
                 document.location.href = "/app/home";
                 return;
@@ -346,10 +346,7 @@ app.controller('CompContactCtrl',
                 }
             };
             $scope.startOauth = function(svc) {
-                var post = oauth.start_oauth(svc, navState);
-                if (post == null)
-                    return;
-                post.then(function(x) {
+                SWBrijj.start_oauth(svc).then(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
                         console.log("success");

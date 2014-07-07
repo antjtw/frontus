@@ -3,10 +3,10 @@
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-        'basics', '$http', 'oauth',
+        'basics', '$http',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
-                 basics, $http, oauth) {
+                 basics, $http) {
             $scope.docShareState = {
                 doclist:[],
             };
@@ -607,10 +607,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.startOauth = function(svc, doc, role) {
-                var post = oauth.start_oauth(svc, navState);
-                if (post == null)
-                    return;
-                post.then(function(x) {
+                SWBrijj.start_oauth(svc).then(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
                         $scope.$apply(function() {

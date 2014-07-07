@@ -13,22 +13,6 @@ service.filter('caplength', function () {
     };
 });
 
-service.service('oauth', function($http) {
-    var s = {};
-
-    s.start_oauth = function(svc, navState)
-    {
-        if (!(navState.userid && navState.company && navState.role)) {
-            alert("User role not selected.");
-            $scope.response = "User role not selected.";
-            return null;
-        }
-        return SWBrijj.start_oauth(svc);
-    }
-
-    return s;
-});
-
 service.service('payments', function(SWBrijj, $filter) {
     var s = {};
     s.available_plans = function() {
