@@ -29,7 +29,7 @@
     border-top: 20px solid #33485d;
 }
 
-.modeling-inputs > .modeling-header {
+.modeling-inputs > .modeling-header > span {
     font-size: 14px;
     text-transform: uppercase;
     color: #FFFFFF;
@@ -324,8 +324,43 @@ ul.visualize-table > li > ul > li:first-of-type {
 
 .disclaimer {
     padding-left:   20px;
+    padding-bottom: 20px;
 }
 
 .disclaimer > p {
     font-size: 12px;
+}
+
+.calc-outputs {
+    width: 800px;
+    margin: 0 auto 0 auto;
+}
+
+.dropdown-list.dark-drop {
+    margin-left: 10px;
+}
+
+.dropdown-list.dark-drop .standard .dropdown-toggle {
+    width: 220px;
+    background-color: #1d2c3c;
+    color: #E3E3E3;
+    border: none;
+}
+
+.dropdown-list.dark-drop .standard .dropdown-menu {
+    width: 224px;
+    background-color: #1d2c3c;
+    border: none;
+}
+
+.dropdown-list.dark-drop .standard .dropdown-menu > li > a {
+    color: #E3E3E3;
+}
+
+.dropdown-list.dark-drop .standard .dropdown-menu > li > a:hover {
+    background-color: #2980B9;
+}
+
+.dropdown-list.dark-drop .standard .dropdown-menu:after {
+    border-bottom-color: #1d2c3c;
 }

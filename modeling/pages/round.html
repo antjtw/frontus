@@ -3,7 +3,7 @@
     <div class="grey-background container dynamic-page">
         <div class="modeling-block">
             <div class="modeling-inputs">
-                <div class="modeling-header">Calculate</div>
+                <div class="modeling-header"><span>Calculate</span></div>
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
@@ -21,7 +21,7 @@
                         <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                 </div>
-                <div ng-show="debtpresent" class="modeling-header">Convert Debt</div>
+                <div ng-show="debtpresent" class="modeling-header"><span>Convert Debt</span></div>
                 <div class="modeling-input-row debt">
                     <div ng-show="round.type == 'Debt'" ng-repeat="round in initialrounds">
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">

@@ -3,7 +3,24 @@
     <div class="grey-background container dynamic-page">
         <div class="modeling-block">
             <div class="modeling-inputs">
-                <div class="modeling-header">Calculate</div>
+                <div class="modeling-header">
+                    <span>Calculate</span>
+                    <ul class="dropdown-list drop-selector dark-drop">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{graphtype}}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="pickGraph('Effective Discount')">Effective Discount</a>
+                                </li>
+                                <li>
+                                    <a ng-click="pickGraph('Resulting Equity')">Resulting Equity</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
                 <div class="modeling-input-row">
                     <div>
                         <span>Investment Amount</span>
@@ -55,13 +72,19 @@
 
             <div class="modeling-round">
                 <div ng-if="variablewidth && debttab == 'one'" class="calc-outputs">
-                    <d3-discount style="margin-left: 160px;" class="discount-chart" type="discount" width="variablewidth" data="graphdatadiscount"></d3-discount>
+                    <d3-discount class="discount-chart" type="discount" width="variablewidth" data="graphdatadiscount"></d3-discount>
                 </div>
 
                 <div ng-if="variablewidth && debttab == 'two'" class="calc-outputs">
-                    <d3-discount style="margin-left: 160px;" class="discount-chart" type="equity" width="variablewidth" data="graphdataequity"></d3-discount>
+                    <d3-discount class="discount-chart" type="equity" width="variablewidth" data="graphdataequity"></d3-discount>
                 </div>
             </div>
+
+        </div>
+
+        <div class="disclaimer">
+            <div>Disclaimer:</div>
+            <p>Lorem Ipsum</p>
         </div>
     </div>
 </div>

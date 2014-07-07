@@ -1,4 +1,4 @@
-var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState) {
+var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
     $scope.optioncollapsed = true;
     $scope.debtcollapsed = true;
 

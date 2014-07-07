@@ -1,9 +1,5 @@
-var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState) {
-    if (window.innerWidth < 1024) {
-        $scope.variablewidth = window.innerWidth;
-    } else {
-        $scope.variablewidth = 800;
-    }
+var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
+    $scope.variablewidth = 800;
 
     $scope.addCommas = function(num) {
         var split = num.split('.');
@@ -17,17 +13,10 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
     };
 
     $scope.updateWindow = function (){
-        if (window.innerWidth < 1024) {
-            $scope.variablewidth = false;
-            $scope.$apply();
-            $scope.variablewidth = window.innerWidth;
-            $scope.$apply();
-        } else {
-            $scope.variablewidth = false;
-            $scope.$apply();
-            $scope.variablewidth = 800;
-            $scope.$apply();
-        }
+        $scope.variablewidth = false;
+        $scope.$apply();
+        $scope.variablewidth = 800;
+        $scope.$apply();
     };
 
 
@@ -52,6 +41,7 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
     $scope.intervals = 200;
     $scope.fiddled = false;
     $scope.debttab = "one";
+    $scope.graphtype = "Effective Discount";
 
     $scope.resetDefaults = function() {
         $scope.fields = {"fromtranamount": "500000", "fromtranvalcap": "4000000", "fromtrandiscount": "20", "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25"};
@@ -222,6 +212,15 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
                 $scope.conversion('date');
                 keyPressed = false;
             }
+        }
+    };
+
+    $scope.pickGraph = function(which) {
+        $scope.graphtype = which;
+        if (which == "Effective Discount") {
+            $scope.debttab = "one"
+        } else {
+            $scope.debttab = "two"
         }
     };
 
