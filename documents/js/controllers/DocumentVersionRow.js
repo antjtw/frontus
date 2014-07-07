@@ -13,15 +13,16 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
+    $scope.myEmails = []
     // this returns everyone you have ever emailed. yay
     $scope.getPeople = function(){
         SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-           $scope.myEmails = []
             $scope.emailList = data           
             angular.forEach($scope.emailList, function(value, key){
                 $scope.myEmails.push(value['email']);
             });
-            console.log($scope.myEmails)
+            console.log($scope.emailList)
+            return $scope.myEmails
         });
         // $scope.myEmails = array
     };
@@ -42,10 +43,15 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
          $scope.$emit('notification:success', 'Document reshared');
     }
 
+    $scope.newEmail = {};
+
+    $scope.clear = function(){
+        $scope.newEmail.selected= undefined;
+    }
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
-        'tags': [],
+        'tags': $scope.myEmails,
         'tokenSeparators': [",", " "],
         'placeholder': 'Enter email address & press enter'
     };
