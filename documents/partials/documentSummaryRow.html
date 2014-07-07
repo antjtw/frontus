@@ -17,14 +17,18 @@
     </td>
     <td class="shareholder-column docname-column" ng-click="titleClick()">
         <ul>
-            <li ng-if="doc.docname.length > 50" tooltip="{{title(doc)}}" tooltip-placement="top">
-                {{title(doc) | caplength:50}} 
-            <li ng-if="doc.docname.length < 50"> 
-                {{title(doc) | caplength:50}} 
-            <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span>
+            <li title="{{title(doc)}}" tooltip="{{doc.docname}}">{{title(doc) | caplength:50}} 
+                
+
+                <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span>
+
+               
             </li>
+
             <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar">{{docStatus(doc)}}</li>
+
         </ul>
+           <!-- <a href="#" tooltip-placement="top" ng-if="doc.docname.length > 50" tooltip="{{doc.docname}}"> -->
     </td>
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
         <div ng-if="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>

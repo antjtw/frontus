@@ -114,6 +114,15 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         };
     };
 
+    $scope.setTooltip = function(doc){
+        if(doc.docname.length > 50){
+            $scope.showTooltip = true;
+        }
+        else {
+            $scope.showTooltip = false;
+        }
+    }
+
     $scope.howLong = function(summary){
         if(summary.type == 'doc' && summary.docname.length > 50){
             return true
