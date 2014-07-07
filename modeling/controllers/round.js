@@ -142,9 +142,9 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
 
     $scope.calculate = function() {
         // Get User Input
-        $scope.premoney = parseFloat($scope.fields.premoney);
-        $scope.investment = parseFloat($scope.fields.investment);
-        $scope.optionpool = parseFloat($scope.fields.optionpool);
+        $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
+        $scope.investment = parseFloat(String($scope.fields.investment).replace(/[^0-9.]/g,''));
+        $scope.optionpool = parseFloat(String($scope.fields.optionpool).replace(/[^0-9.]/g,''));
 
         // Reset rounds and totals to their cap table levels
         $scope.rounds = angular.copy($scope.initialrounds);

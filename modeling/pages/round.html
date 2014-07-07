@@ -7,15 +7,15 @@
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
-                        <input ng-change="calculate()" ng-model="fields.premoney">
+                        <input ng-change="calculate()" ng-model="fields.premoney" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
                     </div>
                     <div>
                         <span>Investment amount</span>
-                        <input ng-change="calculate()" ng-model="fields.investment">
+                        <input ng-change="calculate()" ng-model="fields.investment" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
                     </div>
                     <div>
                         <span>Post-Money Option Pool %</span>
-                        <input ng-change="calculate()" ng-model="fields.optionpool">
+                        <input ng-change="calculate()" ng-model="fields.optionpool" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100}">
                     </div>
                 </div>
                 <div class="modeling-header">Convert Debt</div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="modeling-round">
+            <div class="modeling-round first-round">
                 <div class="round-header">Initial Ownership</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="initialrounds"></d3expdonut>
