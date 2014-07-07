@@ -43,11 +43,8 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
          $scope.$emit('notification:success', 'Document reshared');
     }
 
-    $scope.newEmail = {};
 
-    $scope.clear = function(){
-        $scope.newEmail.selected= undefined;
-    }
+
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
