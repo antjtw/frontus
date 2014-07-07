@@ -154,7 +154,7 @@ input:focus, textarea:focus {
     background-color: #1E2D3D;
     color: #C7C7C7;
     text-transform: none;
-    max-width: none;
+  /*  max-width: none;*/
   /*  white-space: pre;*/
 }
 
