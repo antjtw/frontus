@@ -46,7 +46,8 @@
 
     </div>
     <div ng-if="showReshareDoc" class="standard-button small-standard-button doc-share-button">
-          <input ui-select2="select2Options" ng-model="emails"></input>
+          <input ui-select2="select2Options" type="text" ng-model="emailList.emails"></input>
+
           <button ng-click="reShare(version)" class="btn reshare"> Reshare</button>
    </div>
 
