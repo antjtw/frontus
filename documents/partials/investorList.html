@@ -34,8 +34,12 @@
                     <tr ng-class="{selectedrow:doc.shown}">
                         <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)">
                             <ul>
-                                <li title="{{doc.docname}}" tooltip="{{doc.docname}}" tooltip-placement="top" tooltip-trigger="{{{true: 'mouseenter', false: 'never'}[doc.docname.length > 40]}}">{{doc.docname | caplength:40}}</li>
-                                <li>{{docStatusa(doc)}}</li>
+                            <li>
+                                <span bs-tooltip="showtooltip(doc.docname)">{{doc.docname | caplength:40}}</span>
+                            </li>
+                            <li>
+                                <span>{{docStatusa(doc)}}</span>
+                            </li>
                             </ul>
                         </td>
                         <td class="status-toggle status-icon">
