@@ -54,10 +54,10 @@
                 <div class="bottom-part confirmPanelContainer">
                     <div class="confirmPanel">
                         <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()" disabled="unfilledAnnotation()">
-                            By clicking "Confirm", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
+                            By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
 
-                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.countersignable($root.navState.role)">
+                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.countersignable($root.navState.role)" disabled="unfilledAnnotation()">
                             By clicking "Countersign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
                         </doc-action>
 
@@ -69,8 +69,11 @@
                             Accept the voiding of this document.
                         </doc-action>
 
-                        <div ng-show="template_original && forsigning"> <!-- TODO: neither of these are set. Should be when invester is signing a smart doc -->
-                            <span>Do you want to electronically sign this document?</span>
+                        <doc-action approve-action="signTemplate(investor_attributes, infoValue, confirmValue)" approve-verb="Sign" ng-if="invq && templateKey">
+                            By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
+                        </doc-action>
+                        <!--<div ng-show="template_original && forsigning"> <!-- TODO: "Save information" prompt and logic -->
+                            <!-- <span>Do you want to electronically sign this document?</span>
                             <br>
                             <span>(This action is irreversible.)</span>
                             <ul class="radioOption inline-radio">
@@ -97,23 +100,8 @@
                                     NO
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div> <!-- confirm panel -->
-                    <div class="docViewerAction">
-                        <div class="standard-button green confirmButton">
-                            <button class="btn"
-                                    ng-show="template_original && !forsigning"
-                                    ng-disabled="processing || checkmany(template_email)"
-                                    ng-click="template_share(template_email, used_attributes, template_message, true, '22 November 2113');">
-                                Send
-                            </button>
-                            <button class="btn"
-                                    ng-show="template_original && forsigning"
-                                    ng-click="signTemplate(investor_attributes, infoValue, confirmValue)">
-                                Sign
-                            </button>
-                        </div>
-                    </div>
 
                 </div>
             </internal-right-rail>

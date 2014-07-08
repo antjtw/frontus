@@ -111,40 +111,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             });
         };
 
-        $scope.signTemplate = function(attributes, saved, signed) {
-            // This is hideous and can go away when the user profile is updated at the backend
-            $scope.processing = true;
-            var cleanatt = {};
-            for (var key in attributes) {
-                if (key == 'investorName') {
-                    cleanatt.name = attributes[key];
-                }
-                else if (key == 'investorState') {
-                    cleanatt.state = attributes[key];
-                }
-                else if (key == 'investorCountry') {
-                    cleanatt.country = attributes[key];
-                }
-                else if (key == 'investorAddress') {
-                    cleanatt.street = attributes[key];
-                }
-                else if (key == 'investorPhone') {
-                    cleanatt.phone = attributes[key];
-                }
-                cleanatt[key] = attributes[key];
-            }
-            attributes = JSON.stringify(cleanatt);
-            SWBrijj.smartdoc_investor_sign_and_save($scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
-                $scope.$emit("notification:success", "Signed Document");
-                $location.path('/investor-list').search({});
-            }).except(function(err) {
-                $scope.processing = false;
-                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
-                console.log(err);
-            });
-        };
-
-
         $scope.$on('initTemplateView', function(event, templateId, subId) {
             $scope.templateId = templateId;
             $scope.isAnnotable = false;
@@ -207,7 +173,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 });
             }
             else {
-                $scope.forsigning = true;
                 SWBrijj.smartdoc_render_investor_template($scope.subId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {

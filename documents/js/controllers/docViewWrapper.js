@@ -317,6 +317,39 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             );
         };
 
+        $scope.signTemplate = function(attributes, saved, signed) {
+            // This is hideous and can go away when the user profile is updated at the backend
+            $scope.processing = true;
+            var cleanatt = {};
+            for (var key in attributes) {
+                if (key == 'investorName') {
+                    cleanatt.name = attributes[key];
+                }
+                else if (key == 'investorState') {
+                    cleanatt.state = attributes[key];
+                }
+                else if (key == 'investorCountry') {
+                    cleanatt.country = attributes[key];
+                }
+                else if (key == 'investorAddress') {
+                    cleanatt.street = attributes[key];
+                }
+                else if (key == 'investorPhone') {
+                    cleanatt.phone = attributes[key];
+                }
+                cleanatt[key] = attributes[key];
+            }
+            attributes = JSON.stringify(cleanatt);
+            SWBrijj.smartdoc_investor_sign_and_save($scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
+                $scope.$emit("notification:success", "Signed Document");
+                $location.path('/investor-list').search({});
+            }).except(function(err) {
+                $scope.processing = false;
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                console.log(err);
+            });
+        };
+
         $scope.countersignDocument = function() {
             $scope.processing = true;
             $scope.doc.countersign().then(
@@ -335,7 +368,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             $scope.processing = true;
             $scope.doc.finalize().then(
                 function(data) {
-                    $rootScope.billing.usage.documents_total += 1;
                     $scope.$emit("notification:success", "Document approved");
                     $scope.leave();
                 },
@@ -388,8 +420,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.prepareable = function() {
-            // TODO (logic currently in docViewer)
-            return true;
+            return ($scope.prepare && !$scope.invq && $scope.doc && !$scope.doc.signature_flow && !$scope.templateKey) || ($scope.templateKey);
         };
 
         $scope.unfilledAnnotation = function() {

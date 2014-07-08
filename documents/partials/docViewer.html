@@ -59,7 +59,7 @@
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
     </div>
 
-    <div class="keyboardHintContainer" ng-show="docLength > 1">
+    <div class="keyboardHintContainer" ng-show="doc.pages.length > 1">
         <img class="keyboardHint" src="/img/keyboard.png">
         <span><br>Use the arrow keys on the keyboard to<br>navigate between page</span>
     </div>
