@@ -194,6 +194,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         $scope.finalrounds.push($scope.newseries);
         finaltotals += $scope.newseries.units;
         $scope.dilution = ((finaltotals - $scope.initialtotals.units)/ $scope.initialtotals.units) * 100;
+        $scope.doneround = true;
     };
 
     $scope.getRounds();
