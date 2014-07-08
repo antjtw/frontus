@@ -71,10 +71,6 @@ h2.large-h2 {
     /* letter-spacing: -0.09em; */
 }
 
-.companyDocViewer {
-    border-left: 1px solid #E3E3E3;
-}
-
 .subnav-controls.flush-controls {
     margin-bottom: 0px;
 }
@@ -685,9 +681,9 @@ textarea.email-text {
     color: #3498DB;
 }
 
-/* CSS for the captable style sliding right panel */
+/* doclist specific CSS for the captable style sliding right panel (sharebar) */
 
-.span4.capright {
+.company-list .span4.capright {
     float: right;
     margin-left: 0;
     width: 350px;
@@ -695,10 +691,10 @@ textarea.email-text {
     padding-left: 20px;
     padding-right: 40px;
 }
-.span4.capright.showSharebar {
+.company-list .span4.capright.showSharebar {
     border-left: 6px solid #E3E3E3;
 }
-.right-bar-header {
+.company-list .right-bar-header {
     letter-spacing: 1px;
 }
 
@@ -709,13 +705,7 @@ textarea.email-text {
     -o-transition: all 0.25s; /* Opera */
 }
 
-.fadeHide {
-    // text should be hidden width height and width transitions
-    // all else can't be squished...i don't think
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.25s linear, visibility 0 linear 0.25s;
-}
+
 .shareholder-column.docname-column .fadeHide {
     -webkit-transform: translate3d(0, 10px, 0);
     -moz-transform: translate3d(0, 10px, 0);
@@ -746,7 +736,7 @@ textarea.email-text {
     overflow: hidden;
     text-overflow: clip;
     white-space:nowrap;
-} 
+}
 
 .animate.ng-leave.animate.ng-leave-active,
 .animate.ng-enter {
@@ -765,7 +755,7 @@ textarea.email-text {
     height: 30px;
 */
 }
-    
+
 .subnav-controls.doclist-controls .fadeShow,
 .subnav-controls.doclist-controls .fadeShow + div {
     -webkit-animation: slideIn 0.25s ease-in-out;
@@ -791,30 +781,7 @@ textarea.email-text {
     100% {margin-left: inherit;}
 }
 
-.fadeShow {
-    visibility: visible;
-    -webkit-animation:fadeShow 0.25s linear;
-    -moz-animation: fadeShow 0.25s linear;
-    -ms-animation: fadeShow 0.25s linear;
-    -o-animation: fadeShow 0.25s linear;
-    animation: fadeShow 0.25s linear;
-}
-@keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-webkit-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-moz-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color: inherit;}
-}
-@-o-keyframes fadeShow {
-    0% {opacity: 0; color: white;}
-    100% {opacity: 1; color:inherit;}
-}
+
 
 /* Template CSS */
 
@@ -1118,6 +1085,77 @@ input[type='text']:disabled, textarea:disabled {
     padding-top: 20px;
 }
 
+.processedImageModal {
+    margin-left: -360px;
+    width:718px;
+    z-index: 1060;
+    text-align: left;
+}
+
+.processedImageModal .modalText {
+    padding-top: 60px;
+    padding-right: 30px;
+    text-align: left;
+}
+
+.processedImageModal .textBlock {
+    padding-bottom: 40px;
+}
+
+.processedImageModal .subtitle {
+    color: #000;
+    display: block;
+}
+
+.processedImageModal ul > li.blue-link {
+    color: #3498DB;
+    height: 30px;
+    margin-left: 0px;
+}
+
+.processedImageModal .dataIcon {
+    vertical-align: -10%;
+}
+
+.processedImageModal .gray-link {
+    cursor: pointer;
+}
+
+.processedImageModal .rect {
+    padding: 3px 3px 3px 3px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: inline-block;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.processedImageModal .leftOffset {
+    margin-left: 35px;
+}
+
+.processedImageModal .centeredText {
+    text-align: center;
+    padding: 1px 1px 1px 1px;
+    margin: 0px 0px 0px 0px;
+}
+
+.processedImageModal .whiteText {
+    color: #FFFFFF;
+}
+
+.processedImageModal .green {
+    background-color: #1ABC96;
+}
+
+.processedImageModal .gray {
+    background-color: #E3E3E3;
+}
+
+.processedImageModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
+}
 
 .helpModal {
     margin-left: -360px;
@@ -1224,19 +1262,18 @@ input[type='text']:disabled, textarea:disabled {
     display: none !important;
 }
 
+doc-viewer, internal-right-rail, internal-right-rail > div {
+    background-color: #f1f1f1;
+    height: 100%;
+    overflow: auto;
+}
+
 navbar .navbar + doc-viewer.modal-backdrop {
     display: none !important;
 }
 
-doc-viewer > .modal-backdrop {
-    background-color: #E3E3E3;
-}
 .docViewer {
     z-index: 1041 !important;
-    position: absolute;
-    top: 40px;
-    left: 0px;
-    right: 0px;
     width: 928px;
     max-width: 928px;
     margin: 0 auto;
@@ -1259,10 +1296,6 @@ doc-viewer > .modal-backdrop {
     padding-top: 120px;
 }
 
-.affix + .docPanelContainer.annotatedPageBar {
-    padding-top: 160px;
-}
-
 .docViewerHeader.affix-top {
 }
 
@@ -1280,6 +1313,7 @@ doc-viewer > .modal-backdrop {
     height: 60px;
     line-height: 60px;
     width: 100%;
+    position: relative; /* for the action buttons inside */
 }
 
 .docViewerControls > div > div.tools {
@@ -1305,11 +1339,10 @@ doc-viewer > .modal-backdrop {
 }
 
 .pageTurn {
-    padding-top:15px;
     position: absolute;
-    left:-webkit-calc(50% - 95px);
-    left:-moz-calc(50% - 95px);
-    left: calc(50% - 95px);
+    left:-webkit-calc(50% - 68px);
+    left:-moz-calc(50% - 68px);
+    left: calc(50% - 68px);
 }
 
 .pageTurn > ul {
@@ -1322,7 +1355,7 @@ doc-viewer > .modal-backdrop {
     display: block;
     float: left;
     vertical-align: middle;
-    padding-top: 6px;
+    padding-top: 5px;
 }
 
 .pageTurn > ul > li > span {
@@ -1331,18 +1364,16 @@ doc-viewer > .modal-backdrop {
 }
 
 .docViewerControls {
-    min-height: 60px;
     width: 100%;
     overflow: visible;
     background-color: #F1F1F1;
 }
 
-.docViewerControls .pageTurn > ul > li:first-child {
-    margin-left: 20px;
-    margin-right: 20px;
+.pageTurn > ul > li:first-child, .pageTurn > ul > li:last-child {
+    margin-left: 3px;
+    margin-right: 3px;
     border-radius: 3px;
-    background-color: #E3E3E3;
-    background-position: top;
+    padding-top: 7px;
     width: 30px;
     height: 30px;
     -webkit-box-sizing: border-box;
@@ -1350,24 +1381,11 @@ doc-viewer > .modal-backdrop {
     box-sizing: border-box;
 }
 
-.docViewerControls .pageTurn > ul > li:last-child {
-    margin-left: 20px;
-    margin-right: 20px;
-    border-radius: 3px;
-    background-color: #E3E3E3;
-    background-position: top;
-    width: 30px;
-    height: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.docViewerControls > .pageTurn > ul > li:first-child:hover {
+.pageTurn > ul > li:first-child:hover {
     background-color: #C7C7C7;
 }
 
-.docViewerControls > .pageTurn > ul > li:last-child:hover {
+.pageTurn > ul > li:last-child:hover {
     background-color: #C7C7C7;
 }
 
@@ -1375,8 +1393,25 @@ doc-viewer > .modal-backdrop {
     opacity: 0.3;
 }
 
+.pageTurn input.page-jumper {
+    border: none;
+    height: 12px;
+    margin-bottom: 1px;
+    line-height: 12px;
+    padding: 4px 0 4px 0;
+    border-radius: 3px;
+    border: 1px solid #E3E3E3;
+    margin-right: 8px;
+    width: 30px;
+    height: 22px;
+    margin-top: -6px;
+    text-align: center;
+    background-color: #FFFFFF;
+}
+
 .docActions {
     padding-top: 15px;
+    padding-bottom: 15px;
     margin-right: 20px;
 }
 
@@ -1390,112 +1425,12 @@ doc-viewer > .modal-backdrop {
     margin-top: 23px;
 }
 
-.page-bar {
-    background-color: white;
-    position: relative;
-    width: 100%;
-    height: 40px;
-    margin-left: 0;
-    margin-bottom: 0;
-    border-bottom: 1px solid #E3E3E3;
-}
-
-.page-bar > ul > li:first-child {
-    padding-left: 20px;
-}
-
-.page-bar > ul > li:last-child {
-    padding-right: 20px;
-}
-
-.page-bar > ul > li {
-    float: left;
-}
-
-.page-bar > ul > li.page-icons {
-    padding-top: 10px;
-}
-
-.page-bar > ul > li.page-icons.button {
-    padding-left: 40px;
-    padding-right: 10px;
-}
-
-.page-bar > ul > li.page-tabs {
-    padding-top: 5px;
-    padding-left: 6px;
-    padding-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 6px;
-    border-radius: 3px;
-    background-color: #E3E3E3;
-    background-position: top;
-    color: #666666;
-    height: 30px;
-    overflow: hidden;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.page-bar > ul > li.page-tabs.red-tab, .page-bar > ul > li.page-tabs.red-tab.green-tab {
-    background-color: #E74C3C;
-    color: #FFFFFF;
-}
-
-.page-bar > ul > li.page-tabs.green-tab {
-    background-color: #1ABC96;
-    color: #FFFFFF;
-}
-
-.page-bar > ul > li.page-tabs:hover {
-    background-color: #C7C7C7;
-}
-
-.page-bar > ul > li.page-tabs.cur-page {
-    background-color: #8D8D8D !important;
-    color: #FFFFFF !important;
-}
-
-.page-bar > ul > li.page-tabs.cur-page.green-tab {
-    background-color: #15A085 !important;
-}
-
-.page-bar > ul > li.page-tabs.cur-page.red-tab, .page-bar > ul > li.page-tabs.cur-page.red-tab.green-tab {
-    background-color: #C44032 !important;
-}
-
-.page-bar > ul > li.page-tabs.cur-page:hover {
-    background-color: #666666 !important;
-}
-
-.page-jumper {
-    border: none;
-    text-align: right;
-    height: 12px;
-    margin-bottom: 1px;
-    line-height: 12px;
-    padding: 4px 0 4px 0;
-    background-color: #FFFFFF;
-    border-radius: 3px;
-    border: 1px solid #E3E3E3;
-    margin-right: 3px;
-    width: 30px;
-    height: 22px;
-    margin-top: -7px;
-    text-align: center;
-}
-
-.page-jumper:focus {
-    background-color: #FFFFFF;
-}
-
 .docViewerTitle {
     background-color: white;
     height: 60px;
     display: inline-block;
     vertical-align: middle;
+    border-bottom: 1px solid #f1f1f1;
 }
 
 .docViewerTitle .docName {
@@ -1555,6 +1490,7 @@ doc-viewer > .modal-backdrop {
     background-repeat: no-repeat;
     background-position: top center;
     margin: 0 auto 0 auto;
+    position: relative;
 }
 
 .docPanelContainer {
@@ -1606,6 +1542,11 @@ doc-viewer > .modal-backdrop {
     padding-right: 20px;
 }
 
+.confirmBody > .radioOption > li:last-child {
+    -webkit-transform: translateZ(0);
+    width: 345px; /* ul's width is 380, so drop some for the checkbox */
+}
+
 .confirmBody > .radioOption > li:last-child > span:first-child {
     font-size: 14px;
     color: #1E2D3D;
@@ -1613,8 +1554,6 @@ doc-viewer > .modal-backdrop {
 
 .confirmBody > .radioOption > li:last-child > span:last-child {
     color: #666666;
-    margin-left: 35px;
-    display: inline-block;
 }
 
 .confirmBody > .radioOption textarea.messageText {
@@ -1655,12 +1594,12 @@ doc-viewer > .modal-backdrop {
 .confirmButton {
     position: absolute;
     right: 20px;
-    top: 75px;
+    top: 15px;
 }
 .backButton {
     position: absolute;
     left: 20px;
-    top: 75px;
+    top: 15px;
 }
 .backButton > button > span {
     font-size: 16px;
@@ -1731,7 +1670,7 @@ doc-viewer > .modal-backdrop {
 
 .draggable {
     border: 0 solid red;
-    position:absolute;
+    position: relative;
     cursor: default;
     width: auto;
     height: auto;
@@ -1840,7 +1779,7 @@ doc-viewer > .modal-backdrop {
 }
 
 .sticky {
-    position: relative;
+    position: absolute;
 }
 
 .sticky .close-button {
@@ -2059,4 +1998,53 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
+annotation-list > div {
+    margin: 0 20px;
+}
 
+annotation-list h6 {
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    color: rgb(30, 45, 61);
+    cursor: pointer;
+}
+
+annotation-list [data-icon]:before {
+    padding-right: 2px;
+}
+
+annotation-list .annotmark {
+    font-size: 13px;
+    margin-top: 5px;
+    margin-left: 25px;
+    cursor: pointer;
+}
+
+annotation-list .annotmark:hover {
+    color: #666;
+}
+
+annotation-list .annotmark.mine {
+    color: #FFBA00;
+}
+
+annotation-list .annotmark.mine:hover {
+    color: #F78D1E;
+}
+
+annotation-list .annotmark.mine.complete {
+    color: #1ABC96;
+}
+
+annotation-list .annotmark.mine.complete:hover {
+    color: #15A085;
+}
+
+annotation-list .annotmark.mine.incomplete {
+    color: #E74C3C;
+}
+
+annotation-list .annotmark.mine.incomplete:hover {
+    color: #C44032;
+}

@@ -103,8 +103,8 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         $location.url("/app/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
     };
 
-    $scope.viewStatus = function(doc) {
-        $location.url("/app/documents/company-status?doc=" + doc.original);
+    $scope.viewStatus = function(version) {
+        $location.url("/app/documents/company-status?doc=" + version.original);
     };
 
     $scope.remind = function(doc_id, user_email) {

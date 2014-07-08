@@ -1,14 +1,13 @@
 'use strict';
 app.controller('CompContactCtrl',
     ['$scope', '$rootScope', 'SWBrijj', 'navState', '$routeParams',
-        'payments', '$route', '$filter', '$location', '$http', 'oauth',
+        'payments', '$route', '$filter', '$location', '$http',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
-                 payments, $route, $filter, $location, $http, oauth) {
+                 payments, $route, $filter, $location, $http) {
             if (navState.role == 'investor') {
                 document.location.href = "/app/home";
                 return;
             }
-            console.log(navState);
             $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
             $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
@@ -347,10 +346,7 @@ app.controller('CompContactCtrl',
                 }
             };
             $scope.startOauth = function(svc) {
-                var post = oauth.start_oauth(svc, navState);
-                if (post == null)
-                    return;
-                post.success(function(x) {
+                SWBrijj.start_oauth(svc).then(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
                         console.log("success");
@@ -360,7 +356,7 @@ app.controller('CompContactCtrl',
                     };
                     window.open(x);
                     console.log(x);
-                }).error(function(x) {
+                }).except(function(x) {
                     console.log(x);
                     $scope.response = x;
                 });
@@ -463,8 +459,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             document.location.href = "/home";
             return;
         }
-        $scope.hideSharebar = true;
         $scope.sidebarPage = null;
+        // $scope.hideRail = false;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
@@ -505,6 +501,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.sort = 'name';
             });
         });
+    
+
+
+
 
         $scope.setLastLogins = function() {
             SWBrijj.tblm("global.user_tracker").then(function(logins) {
@@ -639,39 +639,23 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
         };
-        $scope.showSharebar = function() {
-            return !$scope.hideShareBar;
-        };
-
-
-
 
         // email sidebar
         $scope.toggleSide = function(button) {
-            if (!$scope.hideSharebar && (button == undefined || button == $scope.sidebarPage) ) {
-                $scope.hideSharebar = true;
-                $scope.sidebarPage = button
-                
-            } 
-            else if(!$scope.hideSharebar && button){
-                $scope.sidebarPage = button;
-                $scope.hideSharebar = false;
-              
-                // $scope.clearRecipient(); 
+            if(button == $scope.sidebarPage){
+                $scope.sidebarPage = false;
             }
-            else if($scope.hideSharebar && button == undefined){
-                $scope.hideSharebar = false;
-                
+            else if(button){
+                $scope.sidebarPage = button;
+            }
+            else if(button == undefined){
+                $scope.sidebarPage = false;
             }
             else {
-                $scope.hideSharebar = false;
                 $scope.sidebarPage = button;
-          
-               // opens sidebar with email
+                // opens sidebar with email
             };
         };
-
-
     }
 ]);
 

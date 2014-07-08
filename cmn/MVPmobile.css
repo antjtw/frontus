@@ -194,7 +194,7 @@
         margin: 0 20px 10px 20px;
     }
 
-    .home .standard-button.blue.invite {
+    .home .standard-button.invite {
         padding-left: 0;
     }
 
@@ -204,7 +204,7 @@
 
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
 
     .navBarLoggedOut {
         height: 40px;

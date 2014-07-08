@@ -210,7 +210,22 @@ navm.controller('NavCtrl',
         };
         $scope.gotoPage = function(page) {
             sessionStorage.clear();
-            $location.url(page);
+            if (document.URL.indexOf("app") == -1) {
+                document.location.href = page;
+            } else {
+                $location.url(page);
+            }
+        };
+
+        $scope.toggleSubmenu = function(tab) {
+            if ($scope.navhover && $scope.submenu == tab) {
+                $scope.navhover = !$scope.navhover;
+            } else if ($scope.navhover && $scope.submenu != tab) {
+                $scope.submenu = tab;
+            } else {
+                $scope.navhover = !$scope.navhover;
+                $scope.submenu = tab;
+            }
         };
 
 
@@ -635,6 +650,10 @@ navm.controller('NavCtrl',
                     .then(function(x) {
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
+                            if (rsp.discount) {
+                                $rootScope.billing.discount = 
+                                    payments.format_discount(rsp.discount);
+                            }
                             $rootScope.billing.current_card = rsp.cards.data[0];
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
@@ -798,7 +817,7 @@ navm.filter('notifications', function () {
         var url = "";
         if (note.signature_status == -1) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
+            return "<a href=" + url + ">View " + document + "</a>"
         }
         else if (note.signature_status == 1) {
             if (note.template_id) {
@@ -807,23 +826,23 @@ navm.filter('notifications', function () {
             else {
                 url = '/app/documents/investor-view?doc=' + note.doc_id;
             }
-            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
+            return "<a href=" + url + ">Sign " + document + "</a>"
         }
         else if (note.signature_status == 2) {
             url = '/app/documents/company-view?doc=' + note.original + "&investor=" + note.doc_id;
-            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
+            return "<a href=" + url + ">Finalize " + document + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
+            return "<a href=" + url + ">Finalize " + document + "</a>"
         }
         else if (note.signature_status == 3 && note.signature_flow == 1) {
             url = '/app/documents/company-view?doc=' + note.original +"&page=1&investor=" + note.doc_id;
-            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
+            return "<a href=" + url + ">Finalize " + document + "</a>"
         }
         else if (note.signature_status == 5 && note.signature_flow == 2) {
             url = '/app/documents/investor-view?doc=' + note.doc_id;
-            return "<a href=" + url + ">" + caplength(document, 25) + "</a>"
+            return "<a href=" + url + ">Void " + document + "</a>"
         }
     };
 });

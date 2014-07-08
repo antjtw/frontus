@@ -1,5 +1,206 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
+m.directive('messageSide', function(){
+    return {
+        scope: false,
+        restrict: 'E',
+        templateUrl: '/cmn/partials/messageSide.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
+
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout) {
+            
+            $scope.getPeople = function(){
+                SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                    $scope.people = data
+                    var array = []
+                    var obj = {}
+                    angular.forEach($scope.people, function(info){
+                        array.push(obj[info.email] = info.name)
+                        if(info.name == ""){
+                            array.push(obj[info.email]= null)
+                        }
+                    }) 
+                    $scope.peopleDict = obj  
+                    $scope.getFeed();
+              
+                });               
+            };
+            $scope.getPeople();
+
+            $scope.$watch('peopleDict', function(newdata, olddata){
+                if(newdata){
+                    $scope.getLogs();
+                }        
+            });
+
+           $scope.newMessages = function(){
+            SWBrijj.tblm('mail.msgstatus', ['our_id', 'event']).then(function(data){
+                $scope.messageCount = data;
+                // $scope.getFeed();
+                var incrementer = 0;
+                if($scope.msgstatus.length == $scope.messageCount.length && incrementer < 20){
+                    $timeout($scope.newMessages, 2000)
+                    incrementer += 1
+                }
+                else {
+                    $scope.getFeed();
+                }
+
+            }).except(function(data){
+                console.log('error')
+            })
+           }
+
+            $rootScope.$on('new:message', function(x){
+                console.log(x);
+                console.log("test")
+                $scope.newMessages();
+
+                // setTimeout($scope.newMessages, 5500);
+            })
+
+
+            $scope.gotoPerson = function(person) {
+                if (!person.lastlogin) return;
+                var link;
+                link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
+                if (link) {
+                $location.url(link);
+                }
+            };
+
+            $scope.getLogins = function(){
+                SWBrijj.tblm('global.user_tracker').then(function(data){
+                    $scope.logins = data  
+                    console.log($scope.logins)              
+                })
+            }
+            $scope.getLogins();
+
+
+            $scope.getFeed = function(){
+                SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
+                    console.log($scope.msgstatus)
+                    $scope.msgstatus = data;
+                    $scope.getNumber = $scope.msgstatus.length;
+                    console.log($scope.getNumber)
+                    $scope.getLogs();
+                    $scope.getLogins();
+
+                }).except(function(data){
+                    console.log("error");
+                });
+            }
+ 
+
+            $scope.getLogs = function(){
+                // $scope.getLogins();
+                function Message(time, event, tox, to_names, our_id, foo){
+                    this.time = time
+                    this.event = []
+                    this.tox = []
+                    this.to_names = []
+                    this.our_id = []
+                    this.foo = []
+                }
+
+                function indEvent(our_id, email, event, array, event_time){
+                    this.our_id = our_id
+                    this.email = email
+                    this.event = event
+                    this.array = []
+                    this.event_time = []
+                }
+
+                var msgdata = []
+                angular.forEach($scope.msgstatus, function(value){
+                    if (!msgdata.some(function(timestamp, idx, arr){
+                         return timestamp.equals(value.when_requested);
+                    })) {
+                        msgdata.push(value.when_requested);
+                    }
+                     
+                });
+                var myEvents = []
+                for (var i = 0; i < msgdata.length; i++){
+                   myEvents.push(new Message(msgdata[i]))
+                }           
+                angular.forEach($scope.msgstatus, function(value){
+                    for (var i = 0; i < myEvents.length; i++){
+                        if(value.when_requested.equals(myEvents[i].time)) {
+                            myEvents[i].category = value.category;
+                            var idxtox = myEvents[i].tox.indexOf(value.tox)
+                            if(idxtox == -1){
+                                myEvents[i].tox.push(value.tox);
+                            } 
+                            myEvents[i].event.push(value.event)
+                            if($scope.peopleDict[value.tox]==null){
+                                myEvents[i].to_names.push(value.tox)
+                            }
+                            else {
+                                myEvents[i].to_names.push($scope.peopleDict[value.tox])
+                            }
+                            var idx = myEvents[i].our_id.indexOf(value.our_id)
+                                if(idx == -1){
+                                    myEvents[i].our_id.push(value.our_id)
+                                    myEvents[i].foo.push(new indEvent(value.our_id, value.tox));
+                                }
+                                angular.forEach(myEvents[i].foo, function(myThings){
+                                    myThings[value.event_time] = value.event;
+                                    if(myThings.our_id == value.our_id){
+                                        myThings.array.push({
+                                            time: value.event_time,
+                                            event: value.event,
+                                        })
+                                        myThings.event_time.push(value.event_time)
+                                        var newEvent = myThings.event_time.sort()
+                                        var lastEvent = newEvent[newEvent.length -1];
+                                        myThings.timestamp = lastEvent;
+                                        myThings.event = myThings[lastEvent];
+                                        if(myThings.event == 'open'){
+                                            myThings.event = 'opened'
+                                        }
+                                        if($scope.peopleDict[myThings.email]==null){
+                                            myThings.personName = myThings.email;
+                                        }
+                                        else {
+                                            myThings.personName = $scope.peopleDict[myThings.email]
+                                        }
+                                    }
+                                })
+                                angular.forEach($scope.logins, function(login){
+                                    console.log($scope.logins)
+                                    if(login.email == value.tox){
+                                        myEvents[i].foo.forEach(function(elem){
+                                            elem.login = login.logintime;
+                                        })
+                                    }
+                                })
+
+
+                            }
+                        }
+                    $scope.message_data = myEvents;        
+                });
+               
+            };
+
+
+            $scope.gotoPerson = function(person) {
+                if(person.login == undefined){
+                    $scope.hasLink = false;
+                  
+                }
+                else{
+                    var link = '/app/company/profile/view?id=' + person.email 
+                    $location.url(link);
+                }
+                      
+            };    
+            
+        }]
+    };
+});
 m.directive('addPerson', function(){
     return {
         scope: false,
@@ -7,7 +208,7 @@ m.directive('addPerson', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/addPerson.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
 
         function($scope, $rootScope, SWBrijj, $route) {
 
@@ -45,7 +246,7 @@ m.directive('addPerson', function(){
             
             $scope.toggleRole = function() {
                 $scope.newRole = !$scope.newRole;
-                console.log("this makes someone an admin or not")
+                
             };
 
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -115,6 +316,7 @@ m.directive('composeMessage', function() {
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     //this works but i don't know why for the root scope
+                    $rootScope.$emit('new:message');
                     $scope.resetMessage();
                     $scope.recipients = [];
                     $scope.clicked = false;
@@ -159,7 +361,6 @@ m.directive('composeMessage', function() {
                 $scope.messagetext=msg.text
                 $scope.sendername = $rootScope.person.name;
                 $scope.company = $rootScope.navState.name;
-                console.log($scope.messagetext);
             };
 
             $scope.previewModalClose = function(){
@@ -224,5 +425,76 @@ m.directive('meter', function() {
             $scope.$watch('cur', $scope.updateMeter);
             $scope.$watch('tot', $scope.updateMeter);
         }]
+    };
+});
+
+m.directive('docMiniViewer', function() {
+    return {
+        scope: {docid: "="},
+        restrict: 'E',
+        templateUrl: '/cmn/partials/docMiniViewer.html',
+        controller: ['$scope', 'SWBrijj',
+            function($scope, SWBrijj) {
+
+
+                $scope.opts = {
+                    backdropFade: true,
+                    dialogFade: true,
+                    dialogClass: 'dmvModal modal'
+                };
+
+                $scope.openmodal = function () {
+                    $scope.docMiniViewer = true;
+                };
+
+                $scope.closemodal = function () {
+                    $scope.docMiniViewer = false;
+                    $scope.docid = undefined;
+                };
+
+                $scope.getPages = function () {
+                    while ($scope.lastpage <= parseInt($scope.document.pages) && $scope.lastpage < $scope.currentblock) {
+                        if ($scope.docid[0] == "investor") {
+                            $scope.pages.push("/photo/docpg?id=" + $scope.docid[1] + "&investor=false&counterparty=true&page=" + ($scope.lastpage) + "");
+                        } else {
+                            $scope.pages.push("/photo/docpg?id=" + $scope.docid[1] + "&investor=false&counterparty=false&page=" + ($scope.lastpage) + "");
+                        }
+                        $scope.lastpage += 1
+                    }
+                };
+
+                $scope.loadPages = function() {
+                    $scope.currentblock = $scope.lastpage + 3;
+                    if (!$scope.document.pages) {
+                        SWBrijj.tblm('document.my_company_library', 'doc_id', $scope.document.original).then(function(data) {
+                            $scope.document.pages = data.pages
+                            $scope.getPages();
+                        });
+                    } else {
+                        $scope.getPages();
+                    }
+
+                };
+
+                $scope.$watch('docid', function() {
+                    if ($scope.docid && $scope.docid[1]) {
+                        $scope.lastpage = 1;
+                        if ($scope.docid[0] == "issuer") {
+                            SWBrijj.tblm('document.my_company_library', 'doc_id', $scope.docid[1]).then(function(data) {
+                                $scope.document = data;
+                                $scope.pages = [];
+                                $scope.openmodal();
+                            });
+                        } else if ($scope.docid[0] == "investor") {
+                            SWBrijj.tblm('document.my_counterparty_library', 'doc_id', $scope.docid[1]).then(function(data) {
+                                $scope.document = data;
+                                $scope.pages = [];
+                                $scope.openmodal();
+                            });
+                        }
+
+                    }
+                });
+            }]
     };
 });

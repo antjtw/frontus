@@ -3,10 +3,10 @@
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-        'basics', '$http', 'oauth',
+        'basics', '$http',
         function($scope, $timeout, $modal, $window, $q, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
-                 basics, $http, oauth) {
+                 basics, $http) {
             $scope.docShareState = {
                 doclist:[],
             };
@@ -14,7 +14,7 @@ app.controller('CompanyDocumentListController',
                 hideSharebar: true,
                 maxRatio: 1000,
                 show_archived: false,
-                query: $routeParams.q || "",
+                query: $routeParams.q || ""
             };
             $scope.modals = {};
 
@@ -150,7 +150,13 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.searchFilter = function(obj) {
-                var re = new RegExp($scope.state.query, 'i');
+                var res = [];
+                if ($scope.state.query) {
+                    var items = $scope.state.query.split(" ");
+                    angular.forEach(items, function(item) {
+                        res.push(new RegExp(item, 'i'))
+                    });
+                }
                 /** @name obj#docname
                  * @type { string} */
                 if (!$scope.state.hideSharebar && obj.forShare) {
@@ -163,9 +169,23 @@ app.controller('CompanyDocumentListController',
                     return false;
                 } else {
                     if (obj.type == "doc") {
-                        return !$scope.state.query || re.test(obj.docname) || re.test(obj.tags);
+                        var truthiness = res.length;
+                        var result = 0;
+                        angular.forEach(res, function(re) {
+                            if (re.test(obj.docname) || re.test(obj.tags)) {
+                                result += 1;
+                            }
+                        });
+                        return !$scope.state.query || truthiness == result;
                     } else {
-                        return !$scope.state.query || re.test(obj.name) || re.test(obj.email);
+                        var truthiness = res.length;
+                        var result = 0;
+                        angular.forEach(res, function(re) {
+                            if (re.test(obj.name) || re.test(obj.email)) {
+                                result += 1;
+                            }
+                        });
+                        return !$scope.state.query ||truthiness == result ;
                     }
                 }
             };
@@ -268,25 +288,30 @@ app.controller('CompanyDocumentListController',
             $scope.checkReady = function() {
                 // Cap at 10 then say error
                 var incrementer = 0;
-                SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id']).then(function(data) {
+                SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id', 'pages']).then(function(data) {
                     angular.forEach(data, function(doc) {
                         var index = $scope.uploadprogress.indexOf(doc.upload_id);
                         if (index != -1) {
-                            $scope.uploadprogress.splice(index, 1);
-                            angular.forEach($scope.documents, function(document) {
-                                //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
-                                if (document.doc_id == doc.upload_id) {
-                                    document.doc_id = doc.doc_id;
-                                    document.uploading = false;
-                                    $rootScope.billing.usage.documents_total+=1;
-                                }
-                            });
+                            if (doc.pages != null)
+                            {
+                                $scope.uploadprogress.splice(index, 1);
+                                angular.forEach($scope.documents, function(document) {
+                                    //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
+                                    if (document.doc_id == doc.upload_id) {
+                                        document.doc_id = doc.doc_id;
+                                        document.uploading = false;
+                                        $rootScope.billing.usage.documents_total+=1;
+                                    }
+                                });
+                            }
                         }
                     });
                     if ($scope.uploadprogress.length !== 0 && incrementer < 30) {
                         incrementer += 1;
                         $timeout($scope.checkReady, 2000);
                     }
+                }).except(function(data) {
+                    console.log(data);
                 });
             };
 
@@ -475,6 +500,7 @@ app.controller('CompanyDocumentListController',
             $scope.retractVersion = function(version, archive) {
                 SWBrijj.procm("document.retract_document", version.doc_id, archive).then(function(data) {
                     void(data);
+                    $scope.retractDocModal = false;
                     $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
                     version.when_retracted = new Date.today();
                     version.last_event_activity = "retracted";
@@ -582,10 +608,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.startOauth = function(svc, doc, role) {
-                var post = oauth.start_oauth(svc, navState);
-                if (post == null)
-                    return;
-                post.success(function(x) {
+                SWBrijj.start_oauth(svc).then(function(x) {
                     document.domain = "sharewave.com";
                     window.oauthSuccessCallback = function(x){
                         $scope.$apply(function() {
@@ -597,7 +620,7 @@ app.controller('CompanyDocumentListController',
                         });
                     };
                     window.open(x);
-                }).error(function(x) {
+                }).except(function(x) {
                     console.log(x);
                     $scope.response = x;
                 });
@@ -622,10 +645,11 @@ app.controller('CompanyDocumentListController',
                 SWBrijj.document_issuer_request_void(doc.doc_id, message).then(function(data) {
                     $scope.$emit("notification:success", "Void requested");
                     doc.when_void_requested = new Date.today();
-                    doc.last_event.activity = "void requested";
-                    doc.last_event.event_time = new Date.today();
-                    doc.last_event.timenow = new Date.today();
-                    doc.last_event.person = $rootScope.person.name;
+                    doc.last_event_activity = "void requested";
+                    doc.last_event_time = new Date.today();
+                    doc.last_event_name = $rootScope.person.name;
+                    // TODO: determine if doc.doc was archived, if so, decrement doc.doc.archive_complete_count
+                    //doc.doc.complete_count -= 1; // current db logic counts documents in void requested status as complete ...
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                         console.log(x);

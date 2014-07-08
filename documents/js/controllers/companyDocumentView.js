@@ -1,12 +1,20 @@
 //'use strict';
 
 app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj', 'basics',
-        'navState',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics) {
+        'navState', 'Annotations',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, basics, Annotations) {
+        if ($routeParams.page) {
+            $scope.currentPage = parseInt($routeParams.page, 10);
+        } else if (!$scope.currentPage) {
+            $scope.currentPage = 1;
+        }
+
         if (navState.role == 'investor') {
             $location.path('/investor-view');
             return;
         }
+
+        $scope.toggleSide = false;
 
         SWBrijj.tblm('global.server_time').then(function(time) {
             $rootScope.servertime = time[0].fromnow;
@@ -30,8 +38,12 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         });
 
         $scope.$on('docViewerReady', function(event) {
-            if ($scope.docId) $scope.getData();//{$route.reload();}
-            else if ($scope.templateKey) $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            if ($scope.docId) {
+                $scope.getData();//{$route.reload();}
+            } else if ($scope.templateKey) {
+                $scope.toggleSide = false;
+                $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
+            }
         });
 
         $scope.helpModalUp = function () {
@@ -41,6 +53,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.tourclose = function () {
             $scope.hideSharebar = false;
             $scope.tourModal = false;
+            $scope.checkProcessing();
         };
 
         $scope.sharinggot = function () {
@@ -53,6 +66,14 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             backdropFade: true,
             dialogFade: true,
             dialogClass: 'helpModal modal'
+        };
+
+        $scope.processedopts = {
+            backdropFade: true,
+            dialogFade: true,
+            dialogClass: 'processedImageModal modal',
+            backdropClick: false,
+            backdrop: 'static'
         };
 
         $scope.docKey = parseInt($routeParams.doc, 10);
@@ -72,6 +93,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             SWBrijj.tblm('account.user_settings', ["knows_sharing"]).then(function(data) {
                 if (!data[0].knows_sharing) {
                     $scope.helpModalUp();
+                    $scope.imageProcessedModal = false;
                 }
             });
         }
@@ -112,8 +134,6 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
         $scope.getData();
 
         $scope.getVersion = function(doc) {
-            $scope.invq = false;
-            $scope.counterparty = true;
             /** @name doc#doc_id
              * @type {number} */
             /** @name doc#signature_deadline
@@ -129,12 +149,7 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             $scope.initDocView();
         };
 
-        $scope.jumpToPage = function(pg) {
-            $rootScope.$broadcast("setPage", pg);
-        };
-
         $scope.getOriginal = function() {
-            $scope.invq = false;
             $scope.counterparty = false;
             $scope.docId = $scope.docKey;
             $scope.library = "document.my_company_library";
@@ -144,15 +159,116 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
             z.page = 1;
             $location.search(z);
             $scope.initDocView();
+
+            $scope.checkProcessing();
+        };
+
+        $scope.checkProcessing = function() {
+            if ($scope.tourModal)
+                return; //don't step on other modal's toes
+            SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
+            {
+                var approved = data.processing_approved;
+                if (!approved)
+                {
+                    $scope.selectProcessing('adjusted');
+                    //$scope.adjustedColor = "{background-color: #1ABC96;}";
+                    //$scope.originalColor = "{'background-color': #E3E3E3;}";
+                    $scope.imageProcessedModal = true;
+                    $scope.getProcessedPage();
+                }
+            });
+        }
+
+        $scope.getRectStyle = function(image)
+        {
+            if (((image == 'original') && (!$scope.adjustedSelected)) ||
+                ((image != 'original') && ($scope.adjustedSelected)))
+            {
+                return "background-color: #1ABC96;";
+            }
+            else
+            {
+                return "background-color: #E3E3E3;";
+            }
+        }
+
+        $scope.selectProcessing = function(choice)
+        {
+            if (choice == "original")
+            {
+                //$scope.$apply(function() {
+                    $scope.adjustedSelected = false;
+                    $scope.adjustedColor = "gray";
+                    $scope.adjustedText = "";
+                    $scope.originalColor = "green";
+                    $scope.originalText = "whiteText";
+                //});
+            }
+            else
+            {
+                //$scope.$apply(function() {
+                    $scope.adjustedSelected = true;
+                    $scope.adjustedColor = "green";
+                    $scope.adjustedText = "whiteText";
+                    $scope.originalColor = "gray";
+                    $scope.originalText = "";
+                //});
+            }
         };
 
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
 
+        $scope.processedClose = function(erase) {
+            $scope.imageProcessedModal = false;
+            if (erase)
+            {
+                SWBrijj.procm("document.undo_processing", $scope.docId).then(function(data)
+                {
+                    $scope.$broadcast('refreshDocImage');
+                }).except(function(data)
+                {
+                    console.log(data);
+                });
+            }
+            else
+            {
+                SWBrijj.procm("document.approve_processing", $scope.docId).then(function(data)
+                {;}).except(function(data)
+                {
+                    console.log(data);
+                });
+            }
+        };
 
         $scope.pageQueryString = function() {
             return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
+        };
+
+        $scope.getProcessedPage = function() {
+            SWBrijj.procm("document.get_first_processed", $scope.docId).then(function(data) {
+                var d = data[0].get_first_processed;
+                if (!d)
+                {
+                    $scope.processedClose(false);
+                }
+                else
+                {
+                    $scope.pageForModal = d;
+                    $scope.setProcessedImages();
+                }
+            });
+        };
+
+        $scope.setProcessedImages = function() {
+            var original = document.getElementById("processedModalOriginalImage");
+            var adjusted = document.getElementById("processedModalAdjustedImage");
+            original.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true&original=true";
+            original.width = 150;
+            adjusted.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true";
+            adjusted.width = "150";
         };
 
         $scope.fakeSign = function(cd) {
@@ -229,11 +345,11 @@ app.controller('CompanyDocumentViewController', ['$scope', '$routeParams', '$rou
                 $scope.rejectSignature(data[1]);
             }
         };
-        
+
         $scope.countersignDocument = function() {
             $scope.processing = true;
             var dce = angular.element(".docPanel").scope();
-            SWBrijj.document_countersign( $scope.docId, dce.getNoteData(true)[1]).then(function(data) {
+            SWBrijj.document_countersign( $scope.docId, JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId))).then(function(data) {
                 dce.removeAllNotes();
                 // can't reload directly because of the modal -- need to pause for the modal to come down.
                 $scope.$emit('refreshDocImage');

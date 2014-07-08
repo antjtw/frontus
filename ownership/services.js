@@ -173,10 +173,17 @@ ownership.service('calculate', function () {
     this.tranvested = function (tran) {
         var tranvested = [];
         var vestbegin = angular.copy(tran.vestingbegins);
+        var maxunits = parseFloat(tran.units) - parseFloat(tran.forfeited);
+        var vestedunits = 0;
         if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
             var cycleDate = angular.copy(tran.date).add(1).days();
             if (Date.compare(Date.today(), vestbegin) > -1) {
                 tranvested.push({"date" : angular.copy(vestbegin), "units" : (tran.units * (tran.vestcliff / 100))});
+                vestedunits += (tran.units * (tran.vestcliff / 100));
+            }
+            if (vestedunits > maxunits) {
+                var diff = vestedunits - maxunits;
+                tranvested[tranvested.length-1].units -= diff;
             }
             var remainingterm = angular.copy(tran.terms);
             while (Date.compare(vestbegin, cycleDate) > -1) {
@@ -212,6 +219,12 @@ ownership.service('calculate', function () {
                 }
                 if (Date.compare(Date.today(), cycleDate) > -1) {
                     tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
+                    vestedunits += (x * ((monthlyperc / 100) * tran.units));
+                    if (vestedunits > maxunits) {
+                        var diff = vestedunits - maxunits;
+                        tranvested[tranvested.length-1].units -= diff;
+                        return tranvested;
+                    }
                 }
             }
         }
@@ -633,6 +646,11 @@ ownership.service('calculate', function () {
     };
 
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
+
+    this.currencysymbol = function(settings) {
+        return settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
+    };
+
     this.formatMoneyAmount = function (amount, settings) {
         var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
         if (amount) {
@@ -694,12 +712,12 @@ ownership.service('calculate', function () {
         if (convertTran.method == "Valuation") {
             var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? (parseFloat(convertTran.tran.discount)/100) : 0;
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
-            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.toissue.postmoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
+            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
                 var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));
+                convertTran.newtran.prevalcappercentage = String(premoneypercent*100);
                 if (premoneypercent > (discount)) {
-                    var postmoneypercent = (1- (parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.postmoney)));
-                    convertTran.newtran.valcappercentage = String(postmoneypercent*100);
-                    regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-postmoneypercent);
+                    regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-premoneypercent);
+                    convertTran.newtran.caphit = true;
                 }
             }
             if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {

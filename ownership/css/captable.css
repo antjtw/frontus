@@ -10,39 +10,6 @@ input[disabled].default-pointer {
 
 /* Captable */
 
-button.right-rail-button {
-    position: absolute;
-    right: 0;
-    top: 100px;
-    height: 40px;
-    width: 40px;
-    border: none;
-    background-color: #E3E3E3;
-    border-bottom: 1px solid #C6C6C6;
-    border-left: 1px solid #C6C6C6;
-}
-
-button.right-rail-button > span {
-    display: inline-block;
-    -moz-transition: all 0.5s ease;
-    -webkit-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    height: 16px;
-    margin-top: 4px;
-}
-
-button.right-rail-button > span.arrow-flip {
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-}
-
-.dynamic-page .row-fluid .span8.leftBlock {
-    padding-bottom: 0;
-}
-
 div.last-saved {
     display: inline-block;
     float: right;
@@ -373,14 +340,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     -webkit-text-fill-color: #F1F1F1;
 }
 
-.span4.capright {
-    float: right;
-    margin-left: 0;
-    width: 350px;
-    border-left: 1px solid #C6C6C6;
-    background-color: #F1F1F1;
-}
-
 .slidingcss25 {
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;
@@ -556,6 +515,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     background-color: #FFFFFF;
 }
 
+.tran-action {
+    color: #3498D8;
+}
 .paripassu-list > div.rightTitle > span {
     visibility: hidden;
 }
@@ -584,6 +546,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
 }
+.singletab .tabbable .nav-tabs > li > a {
+    border-right: 0;
+}
 
 .delete-link.blue-link {
     display: inline-block;
@@ -609,16 +574,24 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     padding: 11px 12px;
 }
 
-.transaction-accordion .accordion-heading > a > span:not(:last-of-type) {
-    vertical-align: -15%;
+.transaction-accordion .accordion-heading > a > span:not(:last-of-type),
+.transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
+    vertical-align: -10%;
+    color: #1E2D3D;
 }
 
-.transaction-accordion.lessmargin .capGuide {
+.transaction-accordion.lessmargin .capGuide,
+.transaction-accordion.lessmargin .linkedDocuments,
+.transaction-accordion.lessmargin .btn-group {
     padding-left: 0;
+}
+.transaction-accordion .btn-group,
+.transaction-accordion .linkedDocuments {
+    padding-left: 20px;
 }
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
-    color: #1D2C3C;
+    color: #1E2D3D;
 }
 
 .transaction-accordion .accordion-group {
@@ -654,7 +627,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 .tabbable .tab-content {
     padding-bottom: 0;
 }
-
+.tabBorder .tabbable .tab-content {
+    border-right: 1px solid #C6C6C6;
+}
 .tabbable .info-box {
     margin-bottom: 0;
     border-top: none;
@@ -721,10 +696,16 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-color: #C6C6C6;
 }
 
-.nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus {
+.nav-tabs > li:nth-child(x-1) > a,
+.nav-tabs > li:nth-child(x+1) > a:hover,
+.nav-tabs > li:nth-child(x+1) > a:focus {
     border-right: 0;
 }
-
+.nav-tabs > li:last-child > a,
+.nav-tabs > li:last-child > a:hover,
+.nav-tabs > li:last-child > a:focus {
+    border-right: 0;
+}
 
 div.rightTitle {
     margin: 0 0 10px 0;
@@ -1730,7 +1711,8 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 
 .transferModal .share-modal-main .tableView.modal-table .column-label > th:first-child {
-    width: 35px;
+    width: 50px;
+    padding-left: 0;
 }
 
 .transferModal .share-modal-main input.transfer-shares-input {
@@ -1821,6 +1803,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     color: #FFFFFF;
 }
 
+.tour-box {
+    z-index: 1000;
+}
+
 .tour-box.affix-top {
     position: fixed;
     right: 0;
@@ -1841,7 +1827,6 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .tour-box.showtour {
     left: 0;
-    z-index: 1000;
 }
 
 .tour-box > .tour-stage {
@@ -1958,7 +1943,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     position: absolute;
     width: 30px;
     height: 30px;
-    bottom: 10px;
+    top: 10px;
 }
 
 .tour-box .tour-finish-button > button.btn {
@@ -1989,7 +1974,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
     position: absolute;
     left: 0;
-    top: -12px;
+    top: -10px;
     z-index: 1;
     content: ' ';
     width: 158px;
@@ -2039,7 +2024,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     display: inline-block;
     position: absolute;
     left: 0;
-    top: -14px;
+    top: -24px;
     z-index: 10;
     content: ' ';
     width: 152px;
@@ -2198,8 +2183,8 @@ span.tour-icon.tour-view, span.tour-icon.tour-share {
 
 span.tour-icon.intro-icon {
     display: inline-block;
-    top: 140px;
-    left: 380px;
+    top: 158px;
+    left: 379px;
 }
 
 span.tour-icon > span:first-of-type {
@@ -2324,4 +2309,32 @@ span.tour-icon.issue-cog + .tooltip {
 
 .span4.capright, .span4.capright span, .span4.capright input {
     -webkit-transform: translateZ(0);
+}
+
+.rightTabWindow > table.status-table.evidence > tbody > tr > td {
+    text-align: left;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:first-child {
+    width: 60px;
+    text-align: center;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
+    //min-width: 300px;
+    width: 200px;
+    cursor: pointer;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(3) {
+    width: 100px;
+    padding-left: 0;
+}
+
+.rightTabWindow > table.status-table.evidence > tbody > tr.version {
+    background-color: #F1F1F1;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr.version > td > div {
+    float: left;
+    width: 30px;
+}
+.rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
+    float: left;
 }

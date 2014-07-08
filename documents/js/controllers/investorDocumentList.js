@@ -73,8 +73,21 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
         };
 
         $scope.searchFilter = function(obj) {
-            var re = new RegExp($scope.query, 'i');
-            return !($scope.hideCompleted && $scope.docIsComplete(obj)) && (!$scope.query || re.test(obj.docname));
+            var res = [];
+            if ($scope.query) {
+                var items = $scope.query.split(" ");
+                angular.forEach(items, function(item) {
+                    res.push(new RegExp(item, 'i'))
+                });
+            }
+            var truthiness = res.length;
+            var result = 0;
+            angular.forEach(res, function(re) {
+                if (re.test(obj.docname)) {
+                    result += 1;
+                }
+            });
+            return !($scope.hideCompleted && $scope.docIsComplete(obj)) && (!$scope.query || truthiness == result);
         };
 
         $scope.time = function(doc) {
@@ -193,6 +206,13 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
         $scope.isvoided = function(version) {
             return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
         };
+
+
+        $scope.showtooltip = function(doc){
+            if(doc.length > 40 && doc.indexOf(' ') >= 0){
+                return doc;
+            }
+        }
 
     }
 ]);

@@ -1,4 +1,5 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
@@ -8,7 +9,7 @@
                 <div>
                     <div class="pull-left">
                         <div class="pull-left" >
-                            <span>SEARCH</span>
+                            <span>Search</span>
                             <input type="text" class="search-box" ng-model="filterText">
                             
                         </div>
@@ -17,13 +18,13 @@
                  <!--    email button -->
                     <div class="box-button pull-right"
                          ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide('email'); clearRecipient()"
+                         ng-click="companyIsZombie() || toggleSide('email'); clearRecipient();"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
 
                             </li>
-                            <li> <span>Email</span>
+                            <li> <span>Message</span>
 
                             </li>
                         </ul>
@@ -41,13 +42,17 @@
                             </li>
                         </ul>
                     </div>
+
+
+                    
                 </div>
                 <div class="DivHelper"></div>
             </div>
         </div>
+
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
-        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:hideSharebar, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">
                 <table class="status-table people-table">
                     <tbody>
@@ -63,13 +68,13 @@
                     <tr class="empty-row"></tr>
                     
                       
-                    <td style="width:400px" class="shareholder-column docname-column" ng-click="!hideSharebar || gotoPerson(person)">      
-                        <div ng-if="!hideSharebar && sidebarPage == 'email'" class="check-box-side">
+                    <td style="width:400px" class="shareholder-column docname-column" ng-click=" sidebarPage || gotoPerson(person)">      
+                        <div ng-if="sidebarPage == 'email'" class="check-box-side">
                             <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
                              <span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </div>
             
-                        <ul>
+                        <ul ng-class="{'link': person.lastlogin}">
                             <li>{{person.name}}</li>
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
                         </ul>
@@ -98,34 +103,29 @@
                 </table>
             </div>
         </div>
-        <!-- this will be where the sidebar switch goes go -->
-        <div ng-style="viewportheight" ng-show="showSharebar()" ng-class="{rightNoTableBlock:hideSharebar,
-                showSharebar:!hideSharebar,
-                slidingcss25:oldSafari()}" class="span4 capright button-offset" ng-switch on="sidebarPage">
 
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
+            <tabset class="singletab" style="display:block;" ng-style="viewportheight">
+                <tab heading = "Messages">
+                    <div style="clear: both;">
+                        <message-side style></message-side>
+                    </div>
+                </tab>
+            </tabset>
+        </internal-right-rail>
+        <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
-                 </compose-message>
-                <add-person ng-switch-when= "people">
-                    </add-person>
-              
-               <!--  <div ng-switch-when="people">
-                    <div class="sidebarHeader">
-                        <span>ADD PERSON</span>    
-                    </div>
-
-                    <div>
-                        <span>Email<span>
-                        <input type="text" ng-model="newPerson.email"/>
-                    </div>
-
-                </div> -->
-                        
+                </compose-message>
+                <add-person ng-switch-when="people"></add-person>
         </div>
+
     </div>
 
 
     </section>
+
 </div>
+
 
 <!-- admin toolbar -->
 <div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
@@ -168,5 +168,7 @@
             </div>
         </div>
     </div>
+<!-- toggle siderail -->
+
 </div>
 </div>

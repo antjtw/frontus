@@ -1,7 +1,7 @@
 /* Marketing Pages */
 
 #register h1 {
-    margin-top: 40px;
+    margin-top: 60px;
 }
 
 .static {
@@ -272,6 +272,12 @@ address {
     font-family: 'FS Elliot Web Thin', sans-serif !important;
 }
 
+.static .feature-block.dark-feature h2 > a {
+    font-family: 'FS Elliot Web Thin', sans-serif !important;
+    font-size: 20px;
+    line-height: 28px;
+}
+
 .static .feature-block.feature-permission {
     padding: 0;
     background-color: #E3E3E3;
@@ -296,7 +302,7 @@ address {
 }
 
 .static .feature-block.feature-permission + .icon-set {
-    margin-top: -4px;
+    margin-top: 0;
     background-color: #FFFFFF;
 }
 
@@ -380,6 +386,11 @@ address {
 .feature-block .screen {
     display: inline-block;
     vertical-align: top;
+    position: relative;
+}
+
+.screen.captable-click {
+    cursor: pointer;
 }
 
 .feature-block .screen:nth-child(odd) {
@@ -446,6 +457,13 @@ address {
     position: absolute;
     left: -45px;
     top: -20px;
+    transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+
+.features .try-me-button.disappear {
+    opacity: 0;
 }
 
 .features .demo-captable {
@@ -511,6 +529,294 @@ address {
     margin-left: -40px;
 }
 
+.large-paragraph {
+    font-size: 20px;
+    line-height: 28px;
+    font-family: "FS Elliot Web Light", sans-serif;
+    color: #666666;
+    margin-top: 40px;
+}
+
+.large-paragraph > span:first-of-type {
+    font-family: "FS Elliot Web Regular", sans-serif;
+    color: #1d2c3c;
+    display: block;
+    margin-top: 30px;
+}
+
+.large-paragraph a {
+    font-size: 20px;
+    line-height: 28px;
+    cursor: pointer;
+}
+
+.large-paragraph.term-explanations {
+    border-top: 1px solid #C6C6C6;
+}
+
+.large-paragraph.term-explanations > ul > li {
+    font-size: 14px;
+    font-family: "FS Elliot Web Regular", sans-serif;
+}
+
+.large-paragraph.term-explanations > ul > li:nth-child(odd) {
+    margin-top: 20px;
+    color: #1d2c3c;
+}
+
+.large-paragraph.term-explanations > ul > li:nth-child(event) {
+}
+
+.features .features-blockquote > div {
+    border-left: 1px solid #C6C6C6;
+    margin-left: 20px;
+    padding-left: 20px;
+    margin-top: 40px;
+    line-height: 28px;
+    font-size: 20px;
+    font-family: "FS Elliot Web Light Italic", sans-serif;
+}
+
+/* Features Debt Calculator */
+
+.features .debt-calculator {
+    max-width: 1024px;
+    margin: 40px auto 0 auto;
+    position: relative;
+}
+
+.features .debt-calculator > div.debt-block {
+    border-right: 1px solid #C6C6C6;
+    border-left: 1px solid #C6C6C6;
+    border-bottom: 1px solid #C6C6C6;
+    height: 425px;
+}
+
+.features .debt-calculator .try-me-button {
+    top: -15px;
+    left: -60px;
+}
+
+.features .debt-calculator .debt-calculator-tabs {
+    display: block;
+    width: 260px;
+    overflow: auto;
+    border-right: 1px solid #C6C6C6;
+    border-left: 1px solid #C6C6C6;
+    border-top: 1px solid #C6C6C6;
+    cursor: pointer;
+    position: absolute;
+    top: -30px;
+}
+
+.features .debt-calculator .debt-calculator-tabs > div {
+    display: inline-block;
+    width: 130px;
+    float: left;
+    text-align: center;
+    background-color: #C6C6C6;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+    color: #666666;
+}
+
+.features .debt-calculator .debt-calculator-tabs > div.active-graph {
+    background-color: #F1F1F1;
+}
+
+.features .calc-inputs {
+    width: 260px;
+    float: left;
+    height: 425px;
+    background-color: #F1F1F1;
+    border-right: 1px solid #C6C6C6;
+}
+
+.features .calc-inputs input {
+    height: 26px;
+    width: 195px;
+    border: 1px solid #E3E3E3;
+    border-radius: 3px;
+    padding-left: 5px;
+}
+
+.features .calc-inputs input:disabled {
+    background-color: #E3E3E3;
+}
+
+.features .calc-inputs ul > li:first-child {
+    margin-top: 40px;
+    color: #003045;
+    margin-bottom: 0;
+}
+
+.features .calc-inputs ul > li {
+    margin-left: 28px;
+    margin-bottom: 5px;
+}
+
+.features .calc-inputs ul > li > span {
+    font-size: 12px;
+    display: inline-block;
+    width: 100%;
+}
+
+.features .calc-outputs {
+    border-top: 1px solid #C6C6C6;
+}
+
+.features .discount-chart .axis > .domain {
+    fill: none;
+}
+
+.features .discount-chart .ticks {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+
+.features .discount-chart .ticks.y .tick:first-child {
+    display: none;
+}
+
+.features .discount-chart .y.axis > .tick:first-child {
+    display: none;
+}
+
+.features .discount-chart .ticks .domain {
+    opacity: 0;
+}
+
+.graph-flag {
+    font-size: 12px;
+}
+
+.text-bubble > rect {
+    fill: #1d2c3c;
+}
+
+.text-bubble > text {
+    fill: #c6c6c6;
+}
+
+.text-bubble > polygon {
+    fill: #1d2c3c;
+    stroke: none;
+}
+
+.features .discount-chart .overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.features .discount-chart .focus circle {
+    fill: white;
+    stroke: #00c399;
+    stroke-width: 3;
+}
+
+.features .discount-chart .headline {
+    font-size: 26px;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    fill: #00c399;
+    stroke: none;
+    text-shadow: none;
+    shape-rendering: crispEdges;
+}
+
+.features .discount-chart .label {
+    fill: #C6C6C6;
+    stroke: none;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: 'FS Elliot Web Regular', sans-serif;
+    text-shadow: none;
+    shape-rendering: crispEdges;
+}
+
+.debt-calculator-mobile {
+    display: none;
+}
+
+.clear-strip {
+    height: 60px;
+    background-color: #F1F1F1;
+    color: #666666;
+    line-height: 60px;
+    text-align: center;
+    border-bottom: 1px solid #C6C6C6;
+}
+
+.clear-strip > div.standard-button {
+    display: inline-block;
+}
+
+.clear-strip > div.standard-button > button {
+    background-color: #a6a6a6;
+    margin-top: -4px;
+    margin-left: 10px;
+    letter-spacing: 0.025em;
+}
+
+.clear-strip > div.standard-button > button:hover {
+    background-color: #8D8D8D;
+}
+
+@media (max-width: 1024px) {
+
+    .features .debt-calculator .try-me-button {
+        display: none;
+    }
+
+    .features .debt-calculator {
+        display: block;
+        width: 100%;
+        margin: 40px auto 0 auto;
+    }
+
+    .features .calc-inputs {
+        width: 100%;
+        height: 250px;
+    }
+
+    .features .calc-inputs > ul {
+        width: 50%;
+        display: inline-block;
+        float: left;
+    }
+
+    .features .calc-inputs ul > li > span {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .features .debt-calculator > div.debt-block {
+        min-height: 425;
+        height: inherit;
+    }
+
+    .features .calc-inputs input {
+        width: 145px;
+    }
+}
+
+@media (max-width: 767px) {
+    .features .grey-stripe.white-stripe.debt-stripe > div {
+        padding-top: 0;
+    }
+
+    .features .debt-calculator > .debt-calculator-tabs .join-sharewave > a {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .features .calc-inputs input {
+        width: 100px;
+    }
+}
+
 
 @media (min-width: 1000px) {
     .feature-block .screen {
@@ -540,7 +846,6 @@ address {
     }
 
     .features .header-section .header {
-        margin: 0 20px;
     }
 
     .static .feature-block {
@@ -549,7 +854,6 @@ address {
     }
 
     .feature-block .text {
-       margin: 0 20px;     
        padding-right: 0;    
     }
 
@@ -559,7 +863,11 @@ address {
     }
 
     .feature-block .feature-list .feature {
-        max-width: 124px;
+        max-width: 120px;
+    }
+
+    .features .header-section ul > li {
+        margin: 0 10px;
     }
 
 }
