@@ -167,7 +167,7 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
 
     $scope.selectNote = function (tran) {
         if (tran == "Custom Note") {
-            $scope.selectedNote = ""
+            $scope.selectedNote = "Custom Note"
             $scope.fields.fromtranamount = $scope.addCommas("500000");
             $scope.fields.fromtranvalcap = $scope.addCommas("4000000");
             $scope.fields.fromtrandiscount = $scope.addCommas("20");

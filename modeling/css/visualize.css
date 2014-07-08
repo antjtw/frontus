@@ -329,6 +329,7 @@ ul.visualize-table > li > ul > li:first-of-type {
 
 .disclaimer > p {
     font-size: 12px;
+    max-width: 800px;
 }
 
 .calc-outputs {
