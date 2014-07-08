@@ -1,6 +1,7 @@
 var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
     $scope.optioncollapsed = true;
     $scope.debtcollapsed = true;
+    $rootScope.greypage = true;
 
 
     $scope.fields = {'premoney': 8000000, 'investment': 2000000, 'optionpool': 20};

@@ -1,3 +1,7 @@
+.wrap.greypage {
+    background-color: #F1F1F1;
+}
+
 .container.grey-background {
     background-color: #F1F1F1;
 }
@@ -240,8 +244,19 @@ ul.visualize-table > li > ul > li:first-of-type {
 .round-summary.smart-text {
     float: right;
     width: 190px;
-    margin-right: 20px;
+    margin-right: 30px;
+    font-size: 14px;
+    margin-top: 30px;
 }
+
+.round-summary.smart-text > span {
+    text-transform: uppercase;
+    display: block;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #1d2c3c;
+}
+
 
 .round-summary > ul {
     width: 190px;
@@ -348,14 +363,14 @@ ul.visualize-table > li > ul > li:first-of-type {
 }
 
 .dropdown-list.dark-drop .standard .dropdown-toggle {
-    width: 220px;
+    width: 264px;
     background-color: #1d2c3c;
     color: #E3E3E3;
     border: none;
 }
 
 .dropdown-list.dark-drop .standard .dropdown-menu {
-    width: 224px;
+    width: 268px;
     background-color: #1d2c3c;
     border: none;
 }

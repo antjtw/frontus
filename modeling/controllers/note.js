@@ -1,5 +1,6 @@
 var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
     $scope.variablewidth = 800;
+    $rootScope.greypage = true;
 
     $scope.addCommas = function(num) {
         var split = num.split('.');

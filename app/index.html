@@ -50,7 +50,7 @@
 
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" ng-class="{'greypage': greypage == true}">
     <navbar></navbar>
     <div class="coreEdit" ng-class="{'extrapadding': billingLoaded == true && companyIsZombie()}" data-ng-view=""></div>
 </div>
