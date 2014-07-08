@@ -646,6 +646,11 @@ ownership.service('calculate', function () {
     };
 
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
+
+    this.currencysymbol = function(settings) {
+        return settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
+    };
+
     this.formatMoneyAmount = function (amount, settings) {
         var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
         if (amount) {

@@ -7,17 +7,17 @@
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
-                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Investment amount</span>
-                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Post-Money Option Pool %</span>
-                        <input ng-change="calculate()" ng-model="fields.optionpool" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100}">
+                        <input ng-change="calculate()" ng-model="fields.optionpool" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100}">
                         <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                 </div>
@@ -61,10 +61,10 @@
                     </ul>
                     <div class="round-summary">
                         <ul>
-                            <li>{{formatAmount(initialeffectivepremoney)}}</li>
+                            <li>{{formatDollarAmount(initialeffectivepremoney)}}</li>
                             <li>Effective Pre-money</li>
 
-                            <li>{{formatAmount(initialppshare)}}</li>
+                            <li>{{formatDollarAmount(initialppshare)}}</li>
                             <li>Price per Share</li>
                         </ul>
                     </div>
@@ -145,10 +145,10 @@
                     </ul>
                     <div class="round-summary">
                         <ul>
-                            <li>{{formatAmount(effectivepremoney)}}</li>
+                            <li>{{formatDollarAmount(effectivepremoney)}}</li>
                             <li>Effective Pre-money</li>
 
-                            <li>{{formatAmount(effectiveppshare)}}</li>
+                            <li>{{formatDollarAmount(effectiveppshare)}}</li>
                             <li>Price per Share</li>
                         </ul>
                     </div>
@@ -162,13 +162,13 @@
                 <div class="summary-row">
                     <div class="round-summary">
                         <ul>
-                            <li>{{formatAmount(premoney + investment)}}</li>
+                            <li>{{formatDollarAmount(premoney + investment)}}</li>
                             <li>Post-money Valuation</li>
                         </ul>
                     </div>
                     <div class="round-summary">
                         <ul>
-                            <li>{{formatAmount(effectiveppshare)}}</li>
+                            <li>{{formatDollarAmount(effectiveppshare)}}</li>
                             <li>Price per Share</li>
                         </ul>
                     </div>

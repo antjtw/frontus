@@ -42,6 +42,7 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
     $scope.fiddled = false;
     $scope.debttab = "one";
     $scope.graphtype = "Effective Discount";
+    $scope.selectedNote = "Custom Note";
 
     $scope.resetDefaults = function() {
         $scope.fields = {"fromtranamount": "500000", "fromtranvalcap": "4000000", "fromtrandiscount": "20", "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25"};
@@ -165,8 +166,8 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
     };
 
     $scope.selectNote = function (tran) {
-        if (tran.selected) {
-            tran.selected = false;
+        if (tran == "Custom Note") {
+            $scope.selectedNote = ""
             $scope.fields.fromtranamount = $scope.addCommas("500000");
             $scope.fields.fromtranvalcap = $scope.addCommas("4000000");
             $scope.fields.fromtrandiscount = $scope.addCommas("20");
@@ -174,10 +175,7 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
             $scope.fromtran.interestratefreq = null;
             $scope.fixinputs = false;
         } else {
-            angular.forEach($scope.debttrans, function(x) {
-                x.selected = false;
-            });
-            tran.selected = true;
+            $scope.selectedNote = tran.investor +"'s " + tran.issue;
             $scope.fields.fromtranamount = tran.amount != null ? $scope.addCommas(String(tran.amount)) : null;
             $scope.fields.fromtranvalcap = tran.valcap != null ? $scope.addCommas(String(tran.valcap)): null;
             $scope.fields.fromtrandiscount = tran.discount != null ? $scope.addCommas(String(tran.discount)) : null;
@@ -222,6 +220,10 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
         } else {
             $scope.debttab = "two"
         }
+    };
+
+    $scope.currency = function () {
+        return calculate.currencysymbol($scope.settings);
     };
 
     $scope.conversion("start");

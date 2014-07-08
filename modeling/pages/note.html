@@ -20,21 +20,37 @@
                             </ul>
                         </li>
                     </ul>
+                    <span>on</span>
+                    <ul class="dropdown-list drop-selector dark-drop">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{selectedNote}}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="selectNote('Custom Note')">Custom Note</a>
+                                </li>
+                                <li ng-repeat="tran in debttrans">
+                                    <a ng-click="selectNote(tran)">{{tran.investor}}'s {{tran.issue}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
                 <div class="modeling-input-row">
                     <div>
                         <span>Investment Amount</span>
-                        <input type="text" class="money" ng-disabled="fixinputs" ng-model="fields.fromtranamount" ng-change="conversion('fromtranamount')" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                        <input type="text" class="money" ng-disabled="fixinputs" ng-model="fields.fromtranamount" ng-change="conversion('fromtranamount')" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="fixinputs" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Valuation Cap</span>
-                        <input type="text" class="money" ng-disabled="fixinputs" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                        <input type="text" class="money" ng-disabled="fixinputs" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="fixinputs" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Discount (%)</span>
-                        <input type="text" ng-disabled="fixinputs" ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
+                        <input type="text" ng-disabled="fixinputs" ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
                         <span class="lockedinput" ng-show="fixinputs" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
 
@@ -43,29 +59,20 @@
                 <div class="modeling-input-row">
                     <div>
                         <span>Investment Amount</span>
-                        <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                        <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
                     </div>
                     <div ng-show="debttab == 'one'">
                         <span>Percentage of Company Sold</span>
-                        <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
+                        <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
                     </div>
                     <div ng-show="debttab == 'two'">
                         <span>Pre-money Valuation</span>
-                        <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney" data-ui-jq="autoNumeric" data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                        <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
                     </div>
                     <div ng-show="fromtran.interestrate">
                         <span>Date of Conversion</span>
                         <input id="convertdate" ng-change="dateconversion(fields)" ui-event="{keydown:'dateconversion(fields, $event)', blur:'dateconversion(fields, \'blur\')'}" type="text"
                                ng-model="fields.convertdate" data-date-format={{settings.lowercasedate}} bs-datepicker onkeydown="testForEnter();">
-                    </div>
-                </div>
-
-                <div class="modeling-input-row debt">
-                    <div ng-repeat="tran in debttrans">
-                        <button class="check-box-button" ng-class="{selected: tran.selected}" ng-click="selectNote(tran)">
-                            <span data-icon="&#xe023;" aria-hidden="true"></span>
-                        </button>
-                        <span>{{tran.investor}}'s {{tran.issue}}</span>
                     </div>
                 </div>
             </div>

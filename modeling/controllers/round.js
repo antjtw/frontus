@@ -196,8 +196,18 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
 
     $scope.getRounds();
 
+    $scope.currency = function () {
+        return calculate.currencysymbol($scope.settings);
+    };
+
     $scope.formatAmount = function (amount) {
         return calculate.funcformatAmount(amount);
+    };
+
+    $scope.formatDollarAmount = function(amount) {
+        var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+        console.log(output);
+        return (output);
     };
 
     $scope.roundable = function() {
