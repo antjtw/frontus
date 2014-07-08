@@ -55,6 +55,10 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'ledgerController',
             templateUrl: '/ownership/pages/ledger.html'
         }).
+        when('/app/ownership/transaction-log', {
+            controller: 'transactionLogController',
+            templateUrl: '/ownership/pages/transaction-log.html'
+        }).
         when('/app/ownership/company-grants', {
             controller: 'grantController',
             templateUrl: '/ownership/pages/comp-grant.html'
