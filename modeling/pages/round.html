@@ -3,7 +3,7 @@
     <div class="grey-background container dynamic-page">
         <div class="modeling-block">
             <div class="modeling-inputs">
-                <div class="modeling-header"><span>Calculate</span></div>
+                <div class="modeling-header"><span>Round Modeling</span></div>
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
@@ -21,7 +21,7 @@
                         <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                 </div>
-                <div ng-show="debtpresent" class="modeling-header"><span>Convert Debt</span></div>
+                <div ng-show="debtpresent" class="modeling-header"><span>Convert Notes</span></div>
                 <div class="modeling-input-row debt">
                     <div ng-show="round.type == 'Debt'" ng-repeat="round in initialrounds">
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
@@ -45,7 +45,7 @@
                         <li>
                             <ul>
                                 <li>Issue Name</li>
-                                <li>Units</li>
+                                <li>Shares</li>
                                 <li>Percentage</li>
                                 <li></li>
                             </ul>
@@ -72,14 +72,14 @@
             </div>
 
             <div ng-if="debtrounds[0].percent != initialrounds[0].percent && roundable()" class="modeling-round" ng-class="{'collapsed-round': debtcollapsed}">
-                <div class="round-header pointer" ng-click="debtcollapsed = !debtcollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Debt Conversion</div>
+                <div class="round-header pointer" ng-click="debtcollapsed = !debtcollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Note Conversion</div>
                 <div class="round-output">
                     <d3expdonut nosort="true" data="debtrounds"></d3expdonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
                                 <li>Issue Name</li>
-                                <li>Units</li>
+                                <li>Shares</li>
                                 <li>Percentage</li>
                                 <li></li>
                             </ul>
@@ -104,7 +104,7 @@
                         <li>
                             <ul>
                                 <li>Issue Name</li>
-                                <li>Units</li>
+                                <li>Shares</li>
                                 <li>Percentage</li>
                                 <li></li>
                             </ul>
@@ -129,7 +129,7 @@
                         <li>
                             <ul>
                                 <li>Issue Name</li>
-                                <li>Units</li>
+                                <li>Shares</li>
                                 <li>Percentage</li>
                                 <li>Change</li>
                             </ul>
@@ -158,7 +158,7 @@
 
         <div ng-show="roundable()" class="modeling-block">
             <div class="modeling-round summary-round">
-                <div class="round-header">Final Ownership Structure</div>
+                <div class="round-header">Summary</div>
                 <div class="summary-row">
                     <div class="round-summary">
                         <ul>
@@ -175,7 +175,7 @@
                     <div class="round-summary">
                         <ul>
                             <li>{{formatAmount(newseries.percent)}}%</li>
-                            <li>Investor's Equity</li>
+                            <li>New Series Equity</li>
                         </ul>
                     </div>
                     <div class="round-summary">
