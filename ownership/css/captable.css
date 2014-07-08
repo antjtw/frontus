@@ -1711,7 +1711,8 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 
 .transferModal .share-modal-main .tableView.modal-table .column-label > th:first-child {
-    width: 35px;
+    width: 50px;
+    padding-left: 0;
 }
 
 .transferModal .share-modal-main input.transfer-shares-input {
