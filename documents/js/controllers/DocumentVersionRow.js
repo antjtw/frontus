@@ -48,9 +48,10 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
+        maximumSelectionSize: 1,
         'tags': $scope.myEmails,
         'tokenSeparators': [",", " "],
-        'placeholder': 'Enter email address & press enter'
+        'placeholder': 'Enter an email address & press enter'
     };
 
     $scope.shareDocuments = function(docId, emails){
