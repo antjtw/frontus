@@ -129,8 +129,8 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                     convertTran.toissue.premoney = $scope.premoney;
                     convertTran.toissue.ppshare = $scope.effectiveppshare;
                     converted = calculate.conversion(convertTran);
-                    tran.units += converted.units;
-                    $scope.totals.units += tran.units;
+                    round.units += converted.units;
+                    $scope.totals.units += converted.units;
                 }
             });
         });
