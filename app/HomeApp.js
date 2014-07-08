@@ -5,7 +5,7 @@ var app = angular.module('HomeApp',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
         'homeDirectives', 'activityDirective', 'commonDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
-        'bootstrap-tagsinput', 'infinite-scroll']);
+        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -90,6 +90,14 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'InvestorDocumentViewController',
             reloadOnSearch: false
         }).
+        when('/app/modeling/round', {
+            templateUrl: '/modeling/pages/round.html',
+            controller: 'roundController'
+        }).
+        when('/app/modeling/convertible-notes', {
+            templateUrl: '/modeling/pages/note.html',
+            controller: 'noteController'
+        }).
 
         otherwise({redirectTo:'/app/home/investor'});
 });
@@ -101,7 +109,6 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
             $scope.inbox = messages.inbox;
         });
         $rootScope.$on('outboxRefresh', function() {
-            console.log('here');
             $scope.outbox = messages.outbox;
         });
         $scope.mailbox = 'inbox';
@@ -119,7 +126,6 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
 
 
         SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
-            console.log(x);
             $scope.people = x;
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                 angular.forEach(admins, function(admin) {

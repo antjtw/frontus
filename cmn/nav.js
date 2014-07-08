@@ -217,6 +217,17 @@ navm.controller('NavCtrl',
             }
         };
 
+        $scope.toggleSubmenu = function(tab) {
+            if ($scope.navhover && $scope.submenu == tab) {
+                $scope.navhover = !$scope.navhover;
+            } else if ($scope.navhover && $scope.submenu != tab) {
+                $scope.submenu = tab;
+            } else {
+                $scope.navhover = !$scope.navhover;
+                $scope.submenu = tab;
+            }
+        };
+
 
         $scope.switchCandP = function (company, url) {
             if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
