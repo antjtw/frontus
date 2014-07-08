@@ -367,6 +367,8 @@ ul.visualize-table > li > ul > li:first-of-type {
     background-color: #1d2c3c;
     color: #E3E3E3;
     border: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .dropdown-list.dark-drop .standard .dropdown-menu {
@@ -377,6 +379,10 @@ ul.visualize-table > li > ul > li:first-of-type {
 
 .dropdown-list.dark-drop .standard .dropdown-menu > li > a {
     color: #E3E3E3;
+    width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dropdown-list.dark-drop .standard .dropdown-menu > li > a:hover {
