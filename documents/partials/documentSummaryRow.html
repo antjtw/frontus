@@ -15,9 +15,14 @@
             </button>
         </div>
     </td>
-    <td class="shareholder-column docname-column" ng-click="titleClick()">
+    <td class="shareholder-column docname-column">
+  <!--       ng-click="titleClick()" -->
         <ul>
-            <li title="{{title(doc)}}" class="docshow" tooltip="{{doc.docname}}" tooltip-trigger="{{{true: 'mouseenter', false: 'never'}[doc.docname.length > 50]}}">{{title(doc)| caplength:50}} 
+           <!--  <li title="{{title(doc)}}" class="docshow" tooltip="{{doc.docname}}" tooltip-trigger="{{{true: 'click', false: 'never'}[doc.docname.length > 50]}}"> -->
+           <li>
+            <span tooltip="{{showtooltip(doc.docname)}}"  value="test">
+               <span> {{title(doc)| caplength:50}} </span>
+            </span>
 
       <!--           title(doc) -->
                 

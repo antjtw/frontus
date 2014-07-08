@@ -151,6 +151,12 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
+    $scope.showtooltip = function(doc){
+        if(doc.length > 50 && doc.indexOf(' ') >= 0){
+            return doc
+        }
+    }
+
     // dropdown list functions
     $scope.viewProfile = function(investor) {
         document.location.href = "/app/company/profile/view?id=" + investor.email;
