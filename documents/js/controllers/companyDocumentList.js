@@ -500,6 +500,7 @@ app.controller('CompanyDocumentListController',
             $scope.retractVersion = function(version, archive) {
                 SWBrijj.procm("document.retract_document", version.doc_id, archive).then(function(data) {
                     void(data);
+                    $scope.retractDocModal = false;
                     $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
                     version.when_retracted = new Date.today();
                     version.last_event_activity = "retracted";
