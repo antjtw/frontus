@@ -73,7 +73,7 @@ app.config(function($routeProvider, $locationProvider){
             reloadOnSearch: false
         }).
         when('/app/documents/company-view', {
-            templateUrl: '/documents/partials/companyViewer.html',
+            templateUrl: '/documents/partials/docViewerWrapper.html',
             controller: 'CompanyDocumentViewController',
             reloadOnSearch: false
         }).
@@ -86,7 +86,7 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'InvestorDocumentListController'
         }).
         when('/app/documents/investor-view', {
-            templateUrl: '/documents/partials/investorViewer.html',
+            templateUrl: '/documents/partials/docViewerWrapper.html',
             controller: 'InvestorDocumentViewController',
             reloadOnSearch: false
         }).
