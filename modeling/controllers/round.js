@@ -82,6 +82,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                     } else {
                         actualdiscount = tran.discount;
                     }
+                    console.log(actualdiscount);
                     console.log(tran);
                     console.log((round.amount / (1 - (actualdiscount/100))));
                     $scope.effectivepremoney -= (round.amount / (1 - (actualdiscount/100)));
