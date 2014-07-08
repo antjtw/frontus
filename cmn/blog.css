@@ -90,13 +90,12 @@ h2 {
 }
 
 .navbounder {
-<<<<<<< HEAD
+/*<<<<<<< HEAD*/
 	width: 1024px;
 	margin: 0 auto 0 auto;
-=======
-	margin: 0 auto;
-    padding: 0 40px;
->>>>>>> master
+/*=======*/
+	/*margin: 0 auto;
+    padding: 0 40px;*/
 }
 
 .topnav {
