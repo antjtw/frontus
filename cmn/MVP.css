@@ -154,13 +154,8 @@ input:focus, textarea:focus {
     background-color: #1E2D3D;
     color: #C7C7C7;
     text-transform: none;
-
-   /* white-space: pre-wrap;
-    height: 300px;*/
+    white-space: pre-wrap;
 }
-/*    max-width: none;*/
-
-
 
 
 .tooltip-date > div.tooltip {
@@ -1884,7 +1879,7 @@ ul.spaced-list > li:nth-child(odd) {
 .status-table > tbody > tr > td.shareholder-column > ul > li:first-child {
     font-size: 14px;
     color: #666666;
-/*    line-height: 18px;*/
+    line-height: 18px;
 }
 
 /*.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
@@ -3614,8 +3609,8 @@ button.icon-button:hover {
 .payment-modal .initpayment form .input-list > div {
     margin: 0 auto;
     width: 100%;
-    line-height: 30px;
-    padding-bottom: 15px;
+//    line-height: 30px;
+//    padding-bottom: 15px;
 }
 .payment-modal .initpayment form .input-list input {
     width: 100%;
