@@ -100,9 +100,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 $scope.library = "document.my_counterparty_library";
                 $scope.pages = "document.my_counterparty_codex";
 
-                var z = $location.search();
-                z.investor = doc.investor;
-                $location.search(z);
                 $scope.initDocView();
             };
 
@@ -128,24 +125,25 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                         field = "doc_id";
                         tempdocid = parseInt($scope.urlInves);
                     }
-                    SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
-                        if ($scope.counterparty) {
+                    if ($scope.counterparty) {
+                        SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
                             if (flag) {
                                 $scope.getVersion(data[0]);
                                 return;
                             }
                             else {
+                                // probably unused at this point
                                 for (var i = 0; i < data.length; i++) {
-                                    if (doc.investor == $scope.urlInves) {
+                                    if (data[i].investor == $scope.urlInves) {
                                         $scope.getVersion(data[i]);
                                         return;
                                     }
                                 }
                             }
-                        } else {
-                            $scope.getOriginal();
-                        }
-                    });
+                        });
+                    } else {
+                        $scope.getOriginal();
+                    }
                 }
             };
         } else if (navState.role == 'investor') {
@@ -202,8 +200,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.initDocView = function() {
             $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString(), $scope.pages);
         };
-
-        $scope.getData();
 
         $scope.checkProcessing = function() {
             if ($scope.tourModal)
@@ -428,5 +424,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 return (annot.required && annot.forRole($rootScope.navState.role) && !annot.filled(User.signaturepresent, $rootScope.navState.role));
             });
         }
+
+        $scope.getData();
     }
 ]);

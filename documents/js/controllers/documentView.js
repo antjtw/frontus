@@ -66,18 +66,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
-            if (!docId) return;
-            $scope.docId = docId;
-            $scope.invq = invq;
-            $scope.library = library;
-            $scope.pageQueryString = pageQueryString;
-            $scope.pages = pages;
-            $scope.template_original = false;
-            refreshDocImage();
-            $scope.loadPages();
-        });
-
         $scope.get_attribute = function(attribute, type, attributes) {
             if (type == "company") {
                 if (attribute == "companyName") {
@@ -245,7 +233,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2) ||
                    ($scope.lib && $scope.prepare);
         };
-        $scope.$emit('docViewerReady');
 
         $scope.loadPages = function () {
             /** @name SWBrijj#tblmm * @function
@@ -633,7 +620,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.$on('refreshDocImage', function (event) {refreshDocImage();});
 
-
         $scope.saveSmartdocData = function(clicked) {
             if (!$scope.used_attributes || $rootScope.navState.role=='investor') {return;}
             SWBrijj.proc("account.company_attribute_update",
@@ -708,5 +694,19 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.user = User;
+
+
+        $scope.$on('initDocView', function(event, docId, invq, library, pageQueryString, pages) {
+            if (!docId) return;
+            $scope.docId = docId;
+            $scope.invq = invq;
+            $scope.library = library;
+            $scope.pageQueryString = pageQueryString;
+            $scope.pages = pages;
+            $scope.template_original = false;
+            refreshDocImage();
+            $scope.loadPages();
+        });
+        $scope.$emit('docViewerReady');
     }
 ]);
