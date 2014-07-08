@@ -64,8 +64,9 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         $scope.optionpoolpercentage = ($scope.optionpool/100)/ (1-(($scope.investment + $scope.totaldebtcost) / ($scope.investment + $scope.premoney)));
         var withoutoptionsunits = ($scope.optionpoolpercentage/(1-$scope.optionpoolpercentage)) * (100-(existingpercent));
         var optionscreated = withoutoptionsunits - existingpercent;
+        $scope.optioncost = (((optionscreated/(100+optionscreated)) * ($scope.effectivepremoney)));
         if (optionscreated > 0) {
-            $scope.effectivepremoney = $scope.effectivepremoney - (((optionscreated/(100+optionscreated)) * ($scope.effectivepremoney)));
+            $scope.effectivepremoney = $scope.effectivepremoney - $scope.optioncost;
         }
     };
 
@@ -206,7 +207,6 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
 
     $scope.formatDollarAmount = function(amount) {
         var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
-        console.log(output);
         return (output);
     };
 

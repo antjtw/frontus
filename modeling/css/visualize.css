@@ -237,6 +237,12 @@ ul.visualize-table > li > ul > li:first-of-type {
     vertical-align: top;
 }
 
+.round-summary.smart-text {
+    float: right;
+    width: 190px;
+    margin-right: 20px;
+}
+
 .round-summary > ul {
     width: 190px;
 }
