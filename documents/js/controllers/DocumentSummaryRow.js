@@ -114,6 +114,8 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         };
     };
 
+
+
     $scope.getShareType = function(doc) {
         if (!doc) {return 0;}
         if (!doc.signature_flow && !doc.template_id) {
@@ -148,6 +150,12 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             }
         }
     };
+
+    $scope.showtooltip = function(doc){
+        if(doc.length > 50 && doc.indexOf(' ') >= 0){
+            return doc
+        }
+    }
 
     // dropdown list functions
     $scope.viewProfile = function(investor) {
