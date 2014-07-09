@@ -1850,5 +1850,15 @@ annotation-list .annotmark.mine.incomplete:hover {
 }
 
 .docinfo {
-    margin 0 20px;
+    margin: 0 20px;
+}
+
+.docinfo .inforow {
+    padding: 10px 0;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.docinfo .inforow .info {
+    vertical-align: 10px;
+    margin-left: 5px;
 }

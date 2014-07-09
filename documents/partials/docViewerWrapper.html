@@ -42,12 +42,14 @@
                     </tab>
                     <tab heading="Information">
                         <div class="docinfo">
-                            <span class="activity-icon tags-icon"></span>
-                            <span>{{doc.docname}}</span>
-                            <hr>
-                            <span class="activity-icon page-icon"></span>
-                            <span ng-repeat="t in doc.tags">{{t}}</span>
-                            <hr>
+                            <div class="inforow">
+                                <span class="activity-icon page-icon"></span>
+                                <span class="info">{{doc.docname}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.tags">
+                                <span class="activity-icon tags-icon"></span>
+                                <span class="info" ng-repeat="t in doc.tags">{{t}}</span>
+                            </div>
                         </div>
                     </tab>
                 </tabset>
