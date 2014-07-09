@@ -73,17 +73,21 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
 
     $scope.debtcost = function() {
         $scope.totaldebtcost = 0;
+        var convertTran = {'date': $scope.rounddate};
         angular.forEach($scope.rounds, function (round) {
             angular.forEach($scope.trans, function (tran) {
                 if (round.type == "Debt" && round.issue == tran.issue && round.convertme) {
                     var actualdiscount;
+                    convertTran.tran = angular.copy(tran);
+                    convertTran.newtran = angular.copy(tran);
+                    tran.interestamount = calculate.debtinterest(convertTran);
                     if (!isNaN(parseFloat(tran.valcap))) {
                         actualdiscount = Math.max(tran.discount, 1 - (tran.valcap / $scope.premoney));
                     } else {
                         actualdiscount = tran.discount;
                     }
-                    $scope.effectivepremoney -= (tran.amount / (1 - (actualdiscount/100)));
-                    $scope.totaldebtcost += (tran.amount / (1 - (actualdiscount/100)));
+                    $scope.effectivepremoney -= (tran.interestamount / (1 - (actualdiscount/100)));
+                    $scope.totaldebtcost += (tran.interestamount / (1 - (actualdiscount/100)));
                 }
             });
         });
@@ -122,11 +126,10 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
             angular.forEach($scope.trans, function (tran) {
                 if (round.type == "Debt" && round.issue == tran.issue && round.convertme) {
                     convertTran = {};
-                    convertTran.date = $scope.fields.convertdate;
                     convertTran.method = "Valuation";
-                    convertTran.tran = tran;
+                    convertTran.tran = angular.copy(tran);
+                    convertTran.tran.amount = tran.interestamount;
                     convertTran.newtran = tran;
-                    convertTran.newtran.amount = calculate.debtinterest(convertTran);
                     convertTran.toissue = {};
                     convertTran.toissue.premoney = $scope.premoney;
                     convertTran.toissue.ppshare = $scope.effectiveppshare;
@@ -150,12 +153,12 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
         $scope.investment = parseFloat(String($scope.fields.investment).replace(/[^0-9.]/g,''));
         $scope.optionpool = parseFloat(String($scope.fields.optionpool).replace(/[^0-9.]/g,''));
+        $scope.rounddate = $scope.fields.convertdate;
 
         // Reset rounds and totals to their cap table levels
         $scope.rounds = angular.copy($scope.initialrounds);
         $scope.totals = angular.copy($scope.initialtotals);
 
-        console.log($scope.rounds);
 
         // Get the initial price per share and premoney
         $scope.effectivepremoney = $scope.premoney;
