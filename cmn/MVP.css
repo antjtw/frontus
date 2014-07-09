@@ -950,9 +950,6 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     cursor: pointer;
 }
 
-.subnav-controls .backbutton > span {
-
-}
 
 .subnav-controls .backbutton > span:before {
     font-size: 26px;
@@ -1462,6 +1459,7 @@ ul.spaced-list > li:nth-child(odd) {
     height: 536px;
 }
 
+/*activity feed, also used in mail status settings*/
 .activity-feed2 {
     height: 536px;
     overflow: auto;
@@ -1752,6 +1750,10 @@ ul.spaced-list > li:nth-child(odd) {
     border: 1px solid #E3E3E3;
     height: 60px;
 }
+
+.status-table > tbody > tr.red {
+    color: #c44032;
+}
 .status-table > tbody > tr > th {
     font-weight: normal;
 }
@@ -1840,6 +1842,10 @@ ul.spaced-list > li:nth-child(odd) {
     color: #F1F1F1;
 }
 
+/*circles in doc page*/
+.circle.red{
+    background: #E74C3C;
+}
 .circle.yellow {
     background: #FFBB00;
 }
@@ -1882,9 +1888,14 @@ ul.spaced-list > li:nth-child(odd) {
     line-height: 18px;
 }
 
-/*.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
-    cursor: pointer;
-}*/
+
+.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.red{
+    color: #E74C3C;
+}
+
+.status-table > tbody > tr > td.shareholder-column > ul > button {
+    color: blue;
+}
 
 .link{
    cursor: pointer; 
@@ -1913,7 +1924,6 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
-   /* cursor:pointer;*/
     padding-left: 10px;
 }
 
@@ -2381,6 +2391,21 @@ tr.preparedDoc {
     text-shadow: none;
     box-shadow: none;
 }
+
+.btn.reshare{
+    background-color: #1ABC96;
+    margin-left: 30px;
+    color: #fff;
+}
+
+.btn.red{
+    background-color: #E74C3C;
+}
+
+.btn.red:hover{
+    background-color: #c44032;
+}
+
 .standard-button > button.btn > span:before {
     padding-right: 5px;
     vertical-align: middle;
@@ -3609,8 +3634,8 @@ button.icon-button:hover {
 .payment-modal .initpayment form .input-list > div {
     margin: 0 auto;
     width: 100%;
-//    line-height: 30px;
-//    padding-bottom: 15px;
+   line-height: 30px;
+    padding-bottom: 15px;
 }
 .payment-modal .initpayment form .input-list input {
     width: 100%;
@@ -4615,3 +4640,5 @@ textarea.email-text {
     color: #3498DB;
     cursor: pointer; 
 }
+
+

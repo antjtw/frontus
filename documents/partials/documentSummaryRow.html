@@ -37,6 +37,7 @@
         </ul>
            <!-- <a href="#" tooltip-placement="top" ng-if="doc.docname.length > 50" tooltip="{{doc.docname}}"> -->
     </td>
+<!--     this is where the circles are set -->
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
         <div ng-if="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
         <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
