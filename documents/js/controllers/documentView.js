@@ -21,18 +21,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             return [offx, offy];
         }
 
-        $scope.image = {width: 0, height: 0};
         $scope.dp = {width: 0, height: 0};
-        $scope.updateDocPanelSize = function() {
+        $scope.updateDocPanelSize = function(img_width, img_height) {
             var dp = $('.docPanel');
             if (dp) {
-                dp.height((dp.width()/$scope.image.width)*$scope.image.height);
+                dp.height((dp.width()/img_width)*$scope.img_eight);
                 $scope.dp.width = dp.width();
                 $scope.dp.height = dp.height();
             }
         };
-        $scope.$watchCollection('image', $scope.updateDocPanelSize);
-        window.onresize = $scope.updateDocPanelSize;
         $window.onkeydown = function(evt) {
             // TODO: evt.which is read-only ("TypeError: setting a property that has only a getter")
             var ev = evt.which || e.keyCode;
@@ -51,16 +48,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         var refreshDocImage = function() {
             var docpanel = document.querySelector(".docPanel");
             if (docpanel) {
-                var imgurl;
-                imgurl = docpanel.style.backgroundImage;
-                docpanel.style.backgroundImage = imgurl;
                 var img = new Image();
                 img.onload = function() {
-                    $scope.$apply(function() {
-                        $scope.image.width = img.width;
-                        $scope.image.height = img.height;
-                        $scope.updateDocPanelSize();
-                    });
+                    $scope.updateDocPanelSize(img.width, img.height);
                 };
                 img.src = $scope.pageImageUrl();
             }

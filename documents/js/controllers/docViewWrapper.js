@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
         'navState', 'Annotations', 'Documents', 'User',
