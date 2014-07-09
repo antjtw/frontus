@@ -937,6 +937,11 @@ p.belowTitle {
     text-transform: capitalize;
     font-size: 12px;
     color: #8D8D8D;
+
+}
+
+.belowTitle span.forTooltip {
+    display: inline-block;
 }
 
 .capGuide.conversion-activity {
@@ -2338,3 +2343,5 @@ span.tour-icon.issue-cog + .tooltip {
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
     float: left;
 }
+
+

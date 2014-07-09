@@ -1111,6 +1111,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         return tran
     };
 
+    // add tooltip info to fix issue
+
 
 };
 
