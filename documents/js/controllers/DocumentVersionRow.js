@@ -1,6 +1,6 @@
 'use strict';
 
-function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $location) {
+function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $location, $route) {
     $scope.versionStatus = function(version) {
         if (version.last_event_activity) {
             return (version.last_event_activity==='received' ? 'sent to ' : (version.last_event_activity === 'retracted' ? (version.last_event_activity + " from ") : (version.last_event_activity + " by "))) +
@@ -167,6 +167,17 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $scope.$emit("notification:fail", "Oops, something went wrong.");
         });
     };
-
+    
+    SWBrijj.tblm("config.configuration", ["value"], "name", "elizamail").then(
+        function(data) {
+            $scope.elizamail = data["value"];
+        }).except(function(data){console.log(data);});
+    
+    $scope.deleteElizaVers = function(version) {
+        SWBrijj.delete_eliza_doc(version.doc_id).then(function (x) {
+            $scope.$emit("notification:success", "Deleted ELIZA's version.");
+            $route.reload();
+        });
+    };
 }
-DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];
+DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location', '$route'];

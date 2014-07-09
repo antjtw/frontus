@@ -656,6 +656,18 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 // opens sidebar with email
             };
         };
+        
+        SWBrijj.tblm("config.configuration", ["value"], "name", "elizamail").then(
+            function(data) {
+                $scope.elizamail = data["value"];
+            }).except(function(data){console.log(data);});
+        
+        $scope.delete_eliza = function() {
+            SWBrijj.delete_eliza().then(function (x) {
+                $scope.$emit("notification:success", "Deleted ELIZA.");
+                $route.reload();
+            });
+        };
     }
 ]);
 

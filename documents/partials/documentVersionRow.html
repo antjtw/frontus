@@ -50,6 +50,7 @@
                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
                     ng-click="modals.exportToDropbox(version, 'investor');">Export Final to Dropbox</li>
                 <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="modals.voidDocOpen(version)">Void Document</li>
+                <li ng-show="version.investor == elizamail" ng-click="deleteElizaVers(version)">Delete Version</li>
             </ul>
         </li>
     </ul>
