@@ -286,10 +286,8 @@ app.controller('CompanyDocumentListController',
             };
             
             $scope.checkUploaded = function() {
-                console.log("checkUploaded.");
                 SWBrijj.tblm('document.my_company_library', ['doc_id', 'pages']).then(function(data) {
                     var repeat = false;
-                    console.log(data);
                     angular.forEach(data, function(doc) {
                         if (doc.pages == null)
                         {
@@ -914,7 +912,6 @@ app.controller('CompanyDocumentListController',
                     $scope.loadingDocs = false;
                     return;
                 }
-                console.log(typeVars.view);
                 SWBrijj.tblmlimitorder(typeVars.view,
                                        loadState.quantity,
                                        loadState.quantity * (ascending? loopState.iteration : loopState.reverseIteration),
@@ -924,7 +921,6 @@ app.controller('CompanyDocumentListController',
                     } else {
                         loopState.reverseIteration += 1;
                     }
-                    console.log(data);
                     $scope.loadingDocs = false;
                     $scope.finishedLoading = true;
                     var myList;
@@ -975,7 +971,6 @@ app.controller('CompanyDocumentListController',
                             typeVars.statusRatio.reverseList = myList;
                         }
                     }
-                    console.log(myList);
                     if ($scope.viewBy == "document") {
                         $scope.documents = myList;
                     } else if ($scope.viewBy == "name") {
