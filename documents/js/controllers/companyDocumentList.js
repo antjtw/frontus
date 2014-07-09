@@ -284,6 +284,36 @@ app.controller('CompanyDocumentListController',
                     $scope.modals.documentUploadClose();
                 });
             };
+            
+            $scope.checkUploaded = function() {
+                console.log("checkUploaded.");
+                SWBrijj.tblm('document.my_company_library', ['doc_id', 'pages']).then(function(data) {
+                    var repeat = false;
+                    console.log(data);
+                    angular.forEach(data, function(doc) {
+                        if (doc.pages == null)
+                        {
+                            repeat = true;
+                        }
+                        else
+                        {
+                            angular.forEach($scope.documents, function(document) {
+                                if ((document.pages == null) && 
+                                    (document.doc_id == doc.doc_id))
+                                {
+                                    document.pages = doc.pages;
+                                }
+                            });
+                        }
+                    });
+                    if (repeat)
+                    {
+                        $timeout($scope.checkUploaded, 2000);
+                    }
+                }).except(function(data) {
+                    console.log(data);
+                });
+            }
 
             $scope.checkReady = function() {
                 // Cap at 10 then say error
@@ -300,6 +330,7 @@ app.controller('CompanyDocumentListController',
                                     if (document.doc_id == doc.upload_id) {
                                         document.doc_id = doc.doc_id;
                                         document.uploading = false;
+                                        document.pages = doc.pages;
                                         $rootScope.billing.usage.documents_total+=1;
                                     }
                                 });
@@ -883,6 +914,7 @@ app.controller('CompanyDocumentListController',
                     $scope.loadingDocs = false;
                     return;
                 }
+                console.log(typeVars.view);
                 SWBrijj.tblmlimitorder(typeVars.view,
                                        loadState.quantity,
                                        loadState.quantity * (ascending? loopState.iteration : loopState.reverseIteration),
@@ -892,6 +924,7 @@ app.controller('CompanyDocumentListController',
                     } else {
                         loopState.reverseIteration += 1;
                     }
+                    console.log(data);
                     $scope.loadingDocs = false;
                     $scope.finishedLoading = true;
                     var myList;
@@ -900,12 +933,18 @@ app.controller('CompanyDocumentListController',
                     } else {
                         myList = loopState.reverseList;
                     }
+                    var stillUploading = false;
                     angular.forEach(data, function(s) {
                         if (typeVars.doTags && s.tags !== null) {
                             s.tags = JSON.parse(s.tags);
                         }
                         s.type = typeVars.type;
                         s.statusRatio = s.status_ratio;
+                        
+                        if (s.pages == null)
+                        {
+                            stillUploading = true;
+                        }
 
                         // check for existing item in typeVars.list and update instead of duplicating
                         if (!myList.some(function(val, idx, arr) {
@@ -936,10 +975,16 @@ app.controller('CompanyDocumentListController',
                             typeVars.statusRatio.reverseList = myList;
                         }
                     }
+                    console.log(myList);
                     if ($scope.viewBy == "document") {
                         $scope.documents = myList;
                     } else if ($scope.viewBy == "name") {
                         $scope.investorDocs = myList;
+                    }
+                    
+                    if (stillUploading)
+                    {
+                        $timeout($scope.checkUploaded, 2000);
                     }
                 });
             };
