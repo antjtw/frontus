@@ -4,7 +4,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
     $rootScope.greypage = true;
 
 
-    $scope.fields = {'premoney': 8000000, 'investment': 2000000, 'optionpool': 20};
+    $scope.fields = {'premoney': 8000000, 'investment': 2000000, 'optionpool': 20, 'convertdate': new Date.today()};
     $scope.initialrounds = [];
     $scope.rounds = [];
     $scope.initialtotals = {};
@@ -122,9 +122,11 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
             angular.forEach($scope.trans, function (tran) {
                 if (round.type == "Debt" && round.issue == tran.issue && round.convertme) {
                     convertTran = {};
+                    convertTran.date = $scope.fields.convertdate;
                     convertTran.method = "Valuation";
                     convertTran.tran = tran;
                     convertTran.newtran = tran;
+                    convertTran.newtran.amount = calculate.debtinterest(convertTran);
                     convertTran.toissue = {};
                     convertTran.toissue.premoney = $scope.premoney;
                     convertTran.toissue.ppshare = $scope.effectiveppshare;
@@ -214,6 +216,31 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
 
     $scope.roundable = function() {
         return ($scope.rounds.length > 1 && !isNaN($scope.rounds[0].percent))
-    }
+    };
+
+    var keyPressed = false;
+    $scope.dateconversion = function (fields, evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('#convertdate').val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    $scope.fields.convertdate = calculate.timezoneOffset(date);
+                    $scope.calculate();
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if (fields['convertdate'] instanceof Date) {
+                $scope.fields.convertdate = calculate.timezoneOffset(fields['convertdate']);
+                $scope.calculate();
+                keyPressed = false;
+            }
+        }
+    };
 
 };

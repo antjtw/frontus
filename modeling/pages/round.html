@@ -20,6 +20,12 @@
                         <input ng-change="calculate()" ng-model="fields.optionpool" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100}">
                         <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
+                    <div>
+                        <span>Date of Investment</span>
+                        <input ng-disabled="!roundable()" id="convertdate" ng-change="dateconversion(fields)" ui-event="{keydown:'dateconversion(fields, $event)', blur:'dateconversion(fields, \'blur\')'}" type="text"
+                               ng-model="fields.convertdate" data-date-format={{settings.lowercasedate}} bs-datepicker onkeydown="testForEnter();">
+                        <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
                 </div>
                 <div ng-show="debtpresent" class="modeling-header"><span>Convert Notes</span></div>
                 <div class="modeling-input-row debt">
@@ -27,7 +33,7 @@
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
-                        <span>{{round.name | caplength:30}}</span>
+                        <span>{{round.name | caplength:28}}</span>
                     </div>
                 </div>
             </div>
