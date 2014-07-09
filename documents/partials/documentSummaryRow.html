@@ -42,7 +42,7 @@
         <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
     </td>
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
-        ng-click="doc.uploading || viewStatus(doc)">
+        ng-click="!(!doc.uploaded_by || doc.pages > 0) || viewStatus(doc)">
         <ul>
             <li>{{formatDocStatusRatio(doc)}}</li>
         </ul>
@@ -91,7 +91,7 @@
             </ul>
         </div>
         <div ng-if="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-            <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
+            <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && (!doc.uploaded_by || doc.pages > 0)" class="dropdown-list">
                 <li class="dropdown standard menu-drop">
                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
                     </a>
