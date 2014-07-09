@@ -195,12 +195,21 @@ app.directive('pageControls', function() {
                 $scope.doc.currentPage = $scope.currentPage
             });
             $scope.template_original = false;
-            $scope.$watch('doc.currentPage', function(page) {
+            $scope.$watch('doc.currentPage', function(page, old_page) {
+                var orig = page;
+                var output = page;
+                // ensure it's a valid page set
                 if ((page != void(page)) && $scope.doc.pages) {
+                    // ensure it's within bounds
                     if (page < 1) {
-                        $scope.doc.currentPage = 1;
+                        output = 1;
                     } else if (page > $scope.doc.pages.length) {
-                        $scope.doc.currentPage = $scope.doc.pages.length;
+                        output = $scope.doc.pages.length;
+                    }
+
+                    // change it only if needed
+                    if (orig !== output) {
+                        $scope.doc.currentPage = output;
                     }
                 }
             });
@@ -225,5 +234,24 @@ app.directive('docAction', function() {
         controller: ["$scope", function($scope) {
             $scope.rejectVerb = "Reject";
         }],
+    };
+});
+
+app.directive('integer', function() {
+    // add number formatting to an input
+    // useful with <input type="number" can't be styled correctly
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attr, ctrl) {
+            // ctrl is ngModel controller
+            ctrl.$parsers.unshift(function(val) {
+                var ret = parseInt(val);
+                if (isNaN(ret)) {
+                    ret = 1;
+                }
+                return ret;
+            });
+        }
     };
 });
