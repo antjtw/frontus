@@ -135,16 +135,12 @@ app.directive('annotationList', ["User", function(User) {
     return {
         restrict: "E",
         scope: {
-            docId: "=",
+            doc: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents",
-            function($scope, $element, $rootScope, Annotations, Documents) {
-                $scope.annotations = [];
-                $scope.$watch("docId", function(new_doc_id, old_doc_id) {
-                    $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
-                    $scope.doc = Documents.getDoc(new_doc_id);
-
+        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents", "User",
+            function($scope, $element, $rootScope, Annotations, Documents, User) {
+                $scope.$watch("doc", function(doc) {
                     // we want a new page_visible array for every doc
                     $scope.page_visible = [];
                 });
