@@ -154,7 +154,9 @@ input:focus, textarea:focus {
     background-color: #1E2D3D;
     color: #C7C7C7;
     text-transform: none;
+    white-space: pre-wrap;
 }
+
 
 .tooltip-date > div.tooltip {
     width: 90px;
@@ -4533,6 +4535,10 @@ textarea.email-text {
 }
 
 /*//Message sidebar*/
+.message-side ul.activity-feed2 {
+    width: 345px;
+}
+
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
     font-size: 14px;
@@ -4572,8 +4578,8 @@ textarea.email-text {
     padding-top: 12px;
 }
 
-.span4.capright.sidecontent{
-    padding-right: none;
+.span4.capright.sidecontent{ 
+    padding-right: 0;
 }
 
 

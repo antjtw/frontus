@@ -217,6 +217,17 @@ navm.controller('NavCtrl',
             }
         };
 
+        $scope.toggleSubmenu = function(tab) {
+            if ($scope.navhover && $scope.submenu == tab) {
+                $scope.navhover = !$scope.navhover;
+            } else if ($scope.navhover && $scope.submenu != tab) {
+                $scope.submenu = tab;
+            } else {
+                $scope.navhover = !$scope.navhover;
+                $scope.submenu = tab;
+            }
+        };
+
 
         $scope.switchCandP = function (company, url) {
             if ($rootScope.navState.company != company.company || $rootScope.navState.role != company.role) {
@@ -639,6 +650,10 @@ navm.controller('NavCtrl',
                     .then(function(x) {
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
+                            if (rsp.discount) {
+                                $rootScope.billing.discount = 
+                                    payments.format_discount(rsp.discount);
+                            }
                             $rootScope.billing.current_card = rsp.cards.data[0];
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;

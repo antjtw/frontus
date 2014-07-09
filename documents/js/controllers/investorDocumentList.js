@@ -207,5 +207,12 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
             return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
         };
 
+
+        $scope.showtooltip = function(doc){
+            if(doc.length > 40 && doc.indexOf(' ') >= 0){
+                return doc;
+            }
+        }
+
     }
 ]);

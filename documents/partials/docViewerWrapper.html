@@ -34,7 +34,7 @@
     </div>
     <div class="row-fluid">
         <div class="leftTabWindow" ng-style="viewportheight">
-            <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide}" page-query-string="pageQueryString()" doc-id="docId"></doc-viewer>
+            <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" page-query-string="pageQueryString()" doc-id="docId"></doc-viewer>
             <internal-right-rail toggle-side="toggleSide">
                 <tabset>
                     <tab heading="Annotations" ng-if="prepareable() || actionNeeded()">

@@ -13,29 +13,7 @@ service.filter('caplength', function () {
     };
 });
 
-service.service('oauth', function($http) {
-    var s = {};
-
-    s.start_oauth = function(svc, navState)
-    {
-        if (!(navState.userid && navState.company && navState.role)) {
-            alert("User role not selected.");
-            $scope.response = "User role not selected.";
-            return null;
-        }
-        return $http.post('/cgi/suDbProc.py', {
-            'proc': 'oauth.request_authorization',
-            'service': svc,
-            'userid': navState.userid,
-            'company': navState.company,
-            'role': navState.role
-        });
-    }
-
-    return s;
-});
-
-service.service('payments', function(SWBrijj) {
+service.service('payments', function(SWBrijj, $filter) {
     var s = {};
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
@@ -60,6 +38,22 @@ service.service('payments', function(SWBrijj) {
     };
     s.get_upcoming_invoice = function(cusid) {
         return SWBrijj.stripe(['get_upcoming_invoice', cusid]);
+    };
+    s.format_discount = function(discount) {
+        var cpn = discount.coupon;
+        var formatted_coupon = "";
+        if (cpn.percent_off) {
+            formatted_coupon = cpn.percent_off + "% off";
+        } else {
+            formatted_coupon = $filter('currency')(cpn.amount_off/100, "$") +
+                               " off";
+        }
+        if (discount.end) {
+            formatted_coupon += ' until ' +
+                                $filter('date')(discount['end']*1000,
+                                                'MMMM d, yyyy');
+        }
+        return formatted_coupon;
     };
     /*
     s.get_coupon = function(cpn) {

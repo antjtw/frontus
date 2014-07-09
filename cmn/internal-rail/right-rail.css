@@ -25,6 +25,11 @@ button.right-rail-button > span.arrow-flip {
     -o-transform: rotate(180deg);
 }
 
+button.right-rail-button.showRightTab {
+    right: calc(100% - 430px);
+    border-right: 1px solid #C6C6C6;
+}
+
 .capright {
     position: relative;
 }
