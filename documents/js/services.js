@@ -88,13 +88,14 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             });
             return promise.promise;
         },
-        sign:function() {
+        sign: function() {
             var promise = $q.defer();
             // before signing the document, I may need to save the existing annotations
             // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
+            var d = this;
             SWBrijj.sign_document(this.doc_id, JSON.stringify(Annotations.getInvestorNotesForUpload(this.doc_id))).then(function(data) {
-                this.when_signed = data;
+                d.when_signed = data;
                 promise.resolve(data);
             }).except(function(x) {
                 promise.reject(x);
@@ -105,8 +106,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             var promise = $q.defer();
             // TODO: Annotations.getIssuerNotesForUpload seems a little when we're inside the document
             // TODO: shouldn't send notes for countersign, should just use DB version
+            var d = this;
             SWBrijj.document_countersign(this.doc_id, JSON.stringify(Annotations.getIssuerNotesForUpload(this.doc_id))).then(function(data) {
-                this.removeAllNotes();
+                d.removeAllNotes();
                 promise.resolve(data);
             }).except(function(x) {
                 promise.reject(x);
