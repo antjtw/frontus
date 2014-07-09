@@ -1281,12 +1281,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     background-color: white;
 }
 
-.docViewerAction {
-    text-transform: uppercase;
-    font-size: 14px;
-    color: #1E2D3D;
-}
-
 .pageTurn {
     position: absolute;
     left:-webkit-calc(50% - 68px);
@@ -1385,35 +1379,42 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     margin: 0px auto;
 }
 
-.confirmPanelContainer {
-    margin: 0px auto;
-}
-.confirmPanel {
-    margin: 0 auto;
-}
-.confirmPanel > div {
-    width: 100%;
-    height: 100%;
-}
-.confirmPanel > .my-loading-spinner-container > div {
-    left: 50%;
-    height: 60px;
+.confirmPanel span {
+    margin: 3px 0;
 }
 
-.confirmPanel span:first-child {
+.confirmPanel .main {
+    margin-bottom: 14px;
+}
+
+.confirmPanel span.title {
     font-size: 14px;
     color: #1E2D3D;
 }
 
-.confirmPanel span:last-child {
+.confirmPanel span:.body {
     color: #666666;
 }
 
 .confirmPanelContainer textarea.messageText {
     margin-left: 0;
     margin-right: 0;
+    margin-bottom: 0;
     color: #666666;
     width: calc(100% - 12px); /* 12px is to account for padding, set by bootstrap */
+}
+
+.confirmPanel .docViewerAction {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #1E2D3D;
+    float: left;
+}
+
+.confirmPanel .modeSwitch {
+    float: left;
+    line-height: 32px; /* should match ".standard-button button" min-height in MVP.css */
+    margin-left: 50px;
 }
 
 .hidden {
