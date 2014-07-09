@@ -1,4 +1,4 @@
-//'use strict';
+'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
         'navState', 'Annotations', 'Documents', 'User',
@@ -159,7 +159,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             $scope.getData = function () {
                 if ($scope.docId) {
                     SWBrijj.tblm("document.my_investor_library", "doc_id", $scope.docId).then(function(data) {
-                        if ($rootScope.navState.company != data.company) {
+                        if (navState.company != data.company) {
                             $location.path("/investor-list?");
                             return;
                         }
@@ -214,7 +214,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     $scope.getProcessedPage();
                 }
             });
-        }
+        };
 
         $scope.selectProcessing = function(choice)
         {
@@ -419,11 +419,19 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return ($scope.prepare && !$scope.invq && $scope.doc && !$scope.doc.signature_flow && !$scope.templateKey) || ($scope.templateKey);
         };
 
+        $scope.actionNeeded = function() {
+            if ($scope.invq) {
+                return ($scope.doc.signable() || $scope.doc.voidable());
+            } else {
+                return ($scope.doc.countersignable(navState.role) || $scope.doc.finalizable());
+            }
+        };
+
         $scope.unfilledAnnotation = function() {
             return $scope.doc.annotations.some(function(annot) {
-                return (annot.required && annot.forRole($rootScope.navState.role) && !annot.filled(User.signaturepresent, $rootScope.navState.role));
+                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturepresent, navState.role));
             });
-        }
+        };
 
         $scope.getData();
     }

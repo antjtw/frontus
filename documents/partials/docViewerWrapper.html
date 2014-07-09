@@ -6,7 +6,7 @@
         <div class="pull-right">
             <button class="btn exit" ng-click="leave()">
                 <span data-icon="&#xe602;" aria-hidden="true">
-                    <br><span ng-if="prepareable()">Save &amp; </span>Exit
+                    <br><span ng-if="prepareable() || actionNeeded()">Save &amp; </span>Exit
                 </span>
             </button>
         </div>
@@ -37,7 +37,7 @@
             <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide}" page-query-string="pageQueryString()" doc-id="docId"></doc-viewer>
             <internal-right-rail toggle-side="toggleSide">
                 <tabset>
-                    <tab heading="Annotations">
+                    <tab heading="Annotations" ng-if="prepareable() || actionNeeded()">
                         <annotation-list doc-id="docId" ng-if="docId"></annotation-list>
                     </tab>
                     <tab heading="Information">
@@ -53,7 +53,7 @@
                         </div>
                     </tab>
                 </tabset>
-                <div class="bottom-part confirmPanelContainer">
+                <div class="bottom-part confirmPanelContainer" ng-if="actionNeeded()">
                     <div class="confirmPanel">
                         <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()" disabled="unfilledAnnotation()">
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.

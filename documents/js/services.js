@@ -66,7 +66,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         },
         countersignable: function(role) {
             // TODO: remove role check (should happen in caller)
-            return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned
+            return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned;
         },
         finalizable: function() {
             // signature_flow 2 is no longer finalizeable, as sign / countersign takes care of it
@@ -99,7 +99,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             }).except(function(x) {
                 promise.reject(x);
             });
-            return promise.promise
+            return promise.promise;
         },
         countersign: function() {
             var promise = $q.defer();
