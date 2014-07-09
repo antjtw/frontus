@@ -29,7 +29,16 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
 
 
-    $scope.reShare = function(version){
+    $scope.reShare = function(version, email){
+        SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
+            console.log(data)
+        }).except(function(data){
+            console.log("failed")
+        })
+        console.log($scope.emailList.email)
+        console.log(email)
+
+
          console.log(version.doc_id)
          var oldEmail = version.investor;
          console.log(oldEmail);
