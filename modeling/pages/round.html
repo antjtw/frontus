@@ -27,7 +27,7 @@
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
-                        <span>{{round.name}}</span>
+                        <span>{{round.name | caplength:30}}</span>
                     </div>
                 </div>
             </div>
