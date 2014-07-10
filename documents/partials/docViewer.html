@@ -53,7 +53,7 @@
 <div class="docViewer">
     <div class="docPanelContainer row-fluid">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)">
-            <annotation ng-repeat="annotation in annots | filter: {page: doc.currentPage}" ng-if="annots && drawTime() || (lib.when_signed && !lib.when_countersigned && annotation.isCountersign())" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()" doc="doc"></annotation>
+            <annotation ng-repeat="annotation in annots | filter: {page: doc.currentPage} | orderBy: 'position.coords.y'" ng-if="annots && drawTime() || (lib.when_signed && !lib.when_countersigned && annotation.isCountersign())" annot="annotation" is-annotable="isAnnotable" signatureprocessing="signatureprocessing" removeannot="removeannot" sig-modal-up="sigModalUp()" doc="doc"></annotation>
         </div>
 
         <div template-viewer html=html ng-class="{'investor': $parent.navState.role == 'investor'}" class="templatePanel" ng-show="templateId"></div>
