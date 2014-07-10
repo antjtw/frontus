@@ -314,6 +314,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 
     $scope.closeBox = function() {
+        $scope.active.annotation = null;
         if ($rootScope.navState.role == "issuer") {
             $scope.getme = false;
         }

@@ -169,6 +169,7 @@ app.directive('annotation', function() {
             doc: "=",
             removeannot: "&",
             sigModalUp: "&",
+            active: "=",
         },
         replace: true,
         templateUrl: "/documents/partials/annotation.html",
