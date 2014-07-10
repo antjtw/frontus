@@ -59,15 +59,15 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
 
-                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.countersignable($root.navState.role)" disabled="unfilledAnnotation()">
+                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.countersignable($root.navState.role)" disabled="unfilledAnnotation()">
                             By clicking "Countersign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
                         </doc-action>
 
-                        <doc-action upgrade-warning="true" approve-action="finalizeDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(msg)" ng-if="!invq && doc.finalizable()">
+                        <doc-action upgrade-warning="true" approve-action="finalizeDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.finalizable()">
                             Approve signature and finalize this document.
                         </doc-action>
 
-                        <doc-action approve-action="confirmVoid()" approve-verb="Void" rejectable="true" reject-action="rejectVoid(msg)" ng-if="invq && doc.voidable()">
+                        <doc-action approve-action="confirmVoid()" approve-verb="Void" rejectable="true" reject-action="rejectVoid(message)" ng-if="invq && doc.voidable()">
                             Accept the voiding of this document.
                         </doc-action>
 

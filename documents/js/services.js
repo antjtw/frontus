@@ -81,6 +81,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         rejectSignature: function(msg) {
             // TODO: convert aBrijj.js to use the promise / $q library directly so we can just chain the promises
             var promise = $q.defer();
+            if (!msg) {
+                // prevent email from going out with {{message}} variable unsubstituted
+                msg = "";
+            }
             SWBrijj.procm("document.reject_signature", this.doc_id, msg).then(function(data) {
                 promise.resolve(data);
             }).except(function(x) {
@@ -134,8 +138,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             });
             return promise.promise;
         },
-        rejectVoid: function(message) {
+        rejectVoid: function(msg) {
             var promise = $q.defer();
+            if (!msg) {
+                // prevent email from going out with {{message}} variable unsubstituted
+                msg = "";
+            }
             SWBrijj.document_investor_void(this.doc_id, 0, message).then(function(data) {
                 promise.resolve(data);
             }).except(function(x) {

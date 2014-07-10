@@ -1410,11 +1410,17 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     color: #1E2D3D;
     float: left;
 }
+.confirmPanel .docViewerAction:last-child {
+    float: right;
+}
 
 .confirmPanel .modeSwitch {
     float: left;
     line-height: 32px; /* should match ".standard-button button" min-height in MVP.css */
+}
+.confirmPanel .modeSwitch:last-child {
     margin-left: 50px;
+    float: right;
 }
 
 .hidden {

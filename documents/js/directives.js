@@ -229,7 +229,22 @@ app.directive('docAction', function() {
         transclude: true,
         templateUrl: "/documents/partials/doc-action.html",
         controller: ["$scope", function($scope) {
+            $scope.processing = false;
             $scope.rejectVerb = "Reject";
+
+            $scope.approve = function(){
+                $scope.processing = true;
+                $scope.approveAction().catch(function(data) {
+                    $scope.processing = false;
+                });
+            };
+
+            $scope.reject = function(){
+                $scope.processing = true;
+                $scope.rejectAction({message: $scope.rejectMessage}).catch(function(data) {
+                    $scope.processing = false;
+                });
+            };
         }],
     };
 });

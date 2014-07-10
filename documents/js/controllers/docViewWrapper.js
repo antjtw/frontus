@@ -186,7 +186,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         }
         $scope.subId = parseInt($routeParams.subid, 10);
         $scope.templateKey = parseInt($routeParams.template, 10);
-        $scope.processing = false;
 
         if ($scope.prepare) {
             SWBrijj.tblm('account.user_settings', ["knows_sharing"]).then(function(data) {
@@ -300,22 +299,19 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.signDocument = function() {
-            $scope.processing = true;
-            $scope.doc.sign().then(
+            return $scope.doc.sign().then(
                 function(data) {
                     $scope.$emit("notification:success", "Document signed");
                     $scope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    $scope.processing = false;
                 }
             );
         };
 
         $scope.signTemplate = function(attributes, saved, signed) {
             // This is hideous and can go away when the user profile is updated at the backend
-            $scope.processing = true;
             var cleanatt = {};
             for (var key in attributes) {
                 if (key == 'investorName') {
@@ -340,77 +336,67 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 $scope.$emit("notification:success", "Signed Document");
                 $location.path('/investor-list').search({});
             }).except(function(err) {
-                $scope.processing = false;
                 $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 console.log(err);
             });
+            // TODO: return a promise so that doc-action can disable processing
         };
 
         $scope.countersignDocument = function() {
-            $scope.processing = true;
-            $scope.doc.countersign().then(
+            return $scope.doc.countersign().then(
                 function(data) {
                     $scope.$emit("notification:success", "Document countersigned");
                     $scope.leave();
                 },
                 function(fail) {
-                    $scope.processing = false;
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
                 }
             );
         };
 
         $scope.finalizeDocument = function() {
-            $scope.processing = true;
-            $scope.doc.finalize().then(
+            return $scope.doc.finalize().then(
                 function(data) {
                     $scope.$emit("notification:success", "Document approved");
                     $scope.leave();
                 },
                 function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    $scope.processing = false;
                 }
             );
         };
         $scope.rejectSignature = function(msg) {
-            $scope.processing = true;
-            $scope.doc.rejectSignature(msg).then(
+            return $scope.doc.rejectSignature(msg).then(
                 function(data) {
                     $scope.$emit("notification:success", "Document signature rejected.");
                     $scope.leave();
                 },
                 function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    $scope.processing = false;
                 }
             );
         };
 
         $scope.confirmVoid = function() {
-            $scope.processing = true;
-            $scope.doc.void().then(
+            return $scope.doc.void().then(
                 function(data) {
                     $scope.$emit("notification:success", "Void request accepted and document voided");
                     $scope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    $scope.processing = false;
                 }
             );
         };
 
         $scope.rejectVoid = function(msg) {
-            $scope.processing = true;
-            $scope.doc.rejectVoid(msg).then(
+            return $scope.doc.rejectVoid(msg).then(
                 function(data) {
                     $scope.$emit("notification:success", "Void request rejected");
                     $scope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    $scope.processing = false;
                 }
             );
         };
@@ -429,7 +415,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.unfilledAnnotation = function() {
             return $scope.doc.annotations.some(function(annot) {
-                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturepresent, navState.role));
+                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
             });
         };
 
