@@ -80,35 +80,34 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     $scope.extraPeople = [];
 
-    // Database calls to get the available issuetypes and frequency types (i.e. monthly, weekly etc.)
+    // Database calls to get the available issuetypes
+    // and frequency types (i.e. monthly, weekly etc.)
     SWBrijj.procm('ownership.get_transaction_types').then(function (results) {
         angular.forEach(results, function (result) {
-            // Made a booboo in the database that is surprisingly hard to fix. Extra enum value "warrant" as opposed to "Warrant"
-            if (result['get_transaction_types'] != "warrant") {
-                $scope.issuetypes.push(result['get_transaction_types']);
+            // Made a booboo in the database that is surprisingly hard to fix.
+            //Extra enum value "warrant" as opposed to "Warrant"
+            if (result.get_transaction_types != "warrant") {
+                $scope.issuetypes.push(result.get_transaction_types);
             }
         });
     });
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
         angular.forEach(results, function (result) {
-            $scope.freqtypes.push(result['get_freqtypes']);
+            $scope.freqtypes.push(result.get_freqtypes);
         });
     });
 
-    SWBrijj.tblm('ownership.my_company_eligible_evidence').then(function(data) {
+    SWBrijj.tblm('ownership.my_company_eligible_evidence')
+    .then(function(data) {
         angular.forEach(data, function(x) {
             if (x.tags) {
                 x.tags = JSON.parse(x.tags);
             }
         });
         $scope.eligible_evidence = data;
-    }).except(function(e) {
-        console.log(e);
-    });
+    }).except(logError);
 
     $scope.vInvestors = [];
-
-
     // Empty variables for issues
     $scope.issuekeys = [];
     $scope.issues = [];
@@ -130,364 +129,398 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         Intercom('update', {company : {'captable_shares':data.length}});
+        // OMG!!!
         $scope.userstatuses = data;
+        //$scope.userStatus = data;
+        var userDict = {};
 
-        $scope.userStatus = data;
-        $scope.userDict = {};
-        for (var i = 0; i < $scope.userstatuses.length; i++) {
-            $scope.userDict[$scope.userstatuses[i].email] = {};
-            $scope.userDict[$scope.userstatuses[i].email].name = ($scope.userStatus[i].name) ? $scope.userStatus[i].name : $scope.userStatus[i].email;
-            $scope.userDict[$scope.userstatuses[i].email].shown = false;
-            $scope.userDict[$scope.userstatuses[i].email].level = $scope.userstatuses[i].level;
-        }
-        SWBrijj.procm("ownership.get_company_activity").then(function (activities) {
-            angular.forEach($scope.userstatuses, function (person) {
-                angular.forEach(activities, function (activity) {
-                    if (activity.email == person.email) {
-                        var act = activity.activity;
-                        var time;
-                        time = activity.event_time;
-                        $scope.userDict[person.email][act] = time;
-                    }
-                });
-            });
+        angular.forEach($scope.userstatuses, function(userStatus) {
+            userDict[userStatus.email] = {};
+            userDict[userStatus.email].name =
+                userStatus.name ? userStatus.name : userStatus.email;
+            userDict[userStatus.email].shown = false;
+            userDict[userStatus.email].level = userStatus.level;
         });
-        SWBrijj.tblm("ownership.user_tracker").then(function (logins) {
-            angular.forEach($scope.userStatus, function (person) {
-                angular.forEach(logins, function (login) {
-                    if (login.email == person.email) {
-                        $scope.userDict[person.email].lastlogin = login.logintime;
-                    }
+        SWBrijj.procm("ownership.get_company_activity")
+        .then(function(activities) {
+            SWBrijj.tblm("ownership.user_tracker")
+            .then(function(logins) {
+                angular.forEach($scope.userstatuses, function(person) {
+                    angular.forEach(activities, function(activity) {
+                        if (activity.email == person.email) {
+                            var act = activity.activity;
+                            var time = activity.event_time;
+                            userDict[person.email][act] = time;
+                        }
+                    });
+                    angular.forEach(logins, function (login) {
+                        if (login.email == person.email) {
+                            userDict[person.email].lastlogin =
+                                login.logintime;
+                        }
+                    });
                 });
-            });
-        });
+            }).except(logError);
+        }).except(logError);
+        $scope.userDict = userDict;
     });
     $scope.attachEvidence = function(data) {
         angular.forEach($scope.trans, function(tran) {
-            var this_tran_evidence = data.filter(function(el) { return el.evidence==tran.evidence; });
-            tran.evidence_data = this_tran_evidence;
+            tran.evidence_data = data.filter(function(el) {
+                return el.evidence==tran.evidence;
+            });
         });
         // TODO implement for issues
     };
-    $scope.generateCaptable = function(names) {
-        for (var i = 0, l = $scope.issues.length; i < l; i++) {
-            $scope.issues[i].key = $scope.issues[i].issue;
-            $scope.issuekeys.push($scope.issues[i].key);
+    function setIssueKey(iss) {
+        iss.key = iss.issue;
+        $scope.issuekeys.push(iss.key);
+    }
+    function reformatDate(obj) {
+        obj.date = calculate.timezoneOffset(obj.date);
+    }
+    function setVestingDates(obj) {
+        if (obj.vestingbegins) {
+            obj.vestingbegins = calculate.timezoneOffset(obj.vestingbegins);
+            obj.vestingbeginsdisplay = calculate.monthDiff(obj.vestingbegins,
+                                                           obj.date);
         }
-
-        angular.forEach($scope.issues, function(issue) {
-            issue.date = calculate.timezoneOffset(issue.date);
-            if (issue.vestingbegins) {
-                issue.vestingbegins = calculate.timezoneOffset(issue.vestingbegins);
-                issue.vestingbeginsdisplay = calculate.monthDiff(issue.vestingbegins,issue.date);
-            }
-        });
-
-        // Uses the grants to update the transactions with forfeited values
-        // Eliminates the need for further reference to forfeit grants
-        angular.forEach($scope.grants, function (grant) {
-            angular.forEach($scope.trans, function (tran) {
+    }
+    // Uses the grants to update the transactions with forfeited values
+    // Eliminates the need for further reference to forfeit grants
+    function incorporateGrantsIntoTransactions(grants, transactions) {
+        angular.forEach(grants, function(grant) {
+            angular.forEach(transactions, function(tran) {
                 if (grant.tran_id == tran.tran_id) {
                     grant.investor = tran.investor;
                     if (grant.action == "forfeited") {
                         if (tran.forfeited) {
                             tran.forfeited = tran.forfeited + grant.unit;
-                        }
-                        else {
-                            tran.forfeited = grant.unit;
-                        }
+                        } else { tran.forfeited = grant.unit; }
                     }
                     if (grant.action == "exercised") {
                         if (tran.exercised) {
                             tran.exercised = tran.exercised + grant.unit;
-                        }
-                        else {
-                            tran.exercised = grant.unit;
-                        }
+                        } else { tran.exercised = grant.unit; }
                     }
                 }
             });
         });
-
+    }
+    function initRowsFromNames(names) {
         angular.forEach(names, function(name) {
-            $scope.rows.push({"name": name.name, "namekey": name.name, "editable": "yes"});
+            $scope.rows.push({"name": name.name,
+                              "namekey": name.name,
+                              "editable": "yes"});
         });
-
-        // Various extra key fields given to the transactions to allow for reverting at a later point
-        for (var i = 0, l = $scope.trans.length; i < l; i++) {
-            $scope.trans[i].key = $scope.trans[i].issue;
-            $scope.trans[i].unitskey = $scope.trans[i].units;
-            $scope.trans[i].paidkey = $scope.trans[i].amount;
-            $scope.trans[i].date = calculate.timezoneOffset($scope.trans[i].date);
-            $scope.trans[i].datekey = $scope.trans[i]['date'].toUTCString();
-            if ($scope.trans[i].vestingbegins) {
-                $scope.trans[i].vestingbegins = calculate.timezoneOffset($scope.trans[i].vestingbegins);
-                $scope.trans[i].vestingbeginsdisplay = calculate.monthDiff($scope.trans[i].vestingbegins,$scope.trans[i].date);
-            }
-            $scope.trans[i].investorkey = $scope.trans[i].investor;
-            if ($scope.uniquerows.indexOf($scope.trans[i].investor) == -1) {
-                $scope.uniquerows.push($scope.trans[i].investor);
-                angular.forEach($scope.rows, function(row) {
-                    if (row.namekey == $scope.trans[i].investor) {
-                        row.email = $scope.trans[i].email;
-                        row.emailkey = $scope.trans[i].email;
-                    }
-                });
-            }
-            // Transactions inherit the issue values that are uneditable for individual transactions
-            angular.forEach($scope.issues, function (issue) {
-                if ($scope.trans[i].issue == issue.issue) {
-                    $scope.trans[i].totalauth = issue.totalauth;
-                    $scope.trans[i].premoney = issue.premoney;
-                    $scope.trans[i].postmoney = issue.postmoney;
+    }
+    function addTranToRows(tran) {
+        if ($scope.uniquerows.indexOf(tran.investor) == -1) {
+            $scope.uniquerows.push(tran.investor);
+            angular.forEach($scope.rows, function(row) {
+                if (row.namekey == tran.investor) {
+                    row.email = tran.email;
+                    row.emailkey = tran.email;
                 }
             });
         }
-
-        // Generate the rows from the transactions
-        // u represents units throughout, a price
-        angular.forEach($scope.trans, function (tran) {
-            angular.forEach($scope.rows, function (row) {
-                if (row.name == tran.investor) {
-                    if (tran.issue in row) {
-                        row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
-                        row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
-                        row[tran.issue]["ukey"] = row[tran.issue]["u"];
-                        row[tran.issue]["akey"] = row[tran.issue]["a"];
-                        if (!isNaN(parseFloat(tran.forfeited))) {
-                            row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
-                            row[tran.issue]["ukey"] = row[tran.issue]["u"];
-                        }
-                        if (!isNaN(parseFloat(tran.exercised))) {
-                            row[tran.issue]["exercised"] = calculate.sum(row[tran.issue]["exercised"], (tran.exercised));
-                        }
-                    }
-                    else {
-                        row[tran.issue] = {};
-                        row[tran.issue]["u"] = tran.units;
-                        row[tran.issue]["a"] = tran.amount;
-                        row[tran.issue]["ukey"] = tran.units;
-                        row[tran.issue]["akey"] = tran.amount;
-                        row[tran.issue]["state"] = false;
-                        if (!isNaN(parseFloat(tran.forfeited))) {
-                            row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
-                            row[tran.issue]["ukey"] = row[tran.issue]["u"];
-                        }
-                        if (!isNaN(parseFloat(tran.exercised))) {
-                            row[tran.issue]["exercised"] = calculate.sum(row[tran.issue]["exercised"], (tran.exercised));
-                        }
-                    }
-                }
-                else {
-                    if (tran.issue in row) {
-                    }
-                    else {
-                        row[tran.issue] = {"u": null, "a": null, "ukey": null, "akey": null};
-                    }
-                }
-            });
+    }
+    function inheritDataFromIssue(obj) {
+        angular.forEach($scope.issues, function(iss) {
+            if (obj.issue == iss.issue) {
+                obj.totalauth = iss.totalauth;
+                obj.premoney = iss.premoney;
+                obj.postmoney = iss.postmoney;
+            }
         });
-
-        // Get the company's Paripassu's on issues
-        SWBrijj.tblm('ownership.company_paripassu').then(function (links) {
-            var links = links;
-            angular.forEach($scope.issues, function(issue) {
-                issue.paripassu = [];
-                angular.forEach(links, function(pari) {
-                    if (pari.issue == issue.issue) {
-                        issue.paripassu.push(pari);
-                    }
-                });
-                if (issue.paripassu.length == 0) {
-                    issue.paripassu.push({"company":issue.company, "issue": issue.issue, "pariwith": null});
-                }
-            })
-        });
-
-        SWBrijj.tblm('ownership.company_conversion').then(function (convert) {
-            SWBrijj.tblm('ownership.company_transfer').then(function (transfer) {
-                angular.forEach($scope.trans, function (tran) {
-                    tran.convert = [];
-                    angular.forEach(convert, function(con) {
-                        if (con.tranto == tran.tran_id) {
-                            con.date = calculate.timezoneOffset(con.date);
-                            if (con.method == "Split") {
-                                con.split = new Fraction(con.split);
-                            }
-                            tran.convert.push(con);
-                        }
-                    });
-
-                    angular.forEach(transfer, function(transf) {
-                        transf.date = calculate.timezoneOffset(transf.date);
-                        if (transf.tranto == tran.tran_id) {
-                            var final = angular.copy(transf);
-                            final.direction = "To";
-                            tran.convert.push(final);
-                        }
-                        else if (transf.tranfrom == tran.tran_id) {
-                            var final = angular.copy(transf);
-                            final.direction = "From";
-                            tran.convert.push(final);
-                        }
-                    });
-                });
-            });
-        });
-
-
-
-
-        // Debt calculation for any rows with paid but no shares
+    }
+    function setTransactionKeys(tran) {
+        tran.key = tran.issue;
+        tran.unitskey = tran.units;
+        tran.paidkey = tran.amount;
+        tran.datekey = tran.date.toUTCString();
+        tran.investorkey = tran.investor;
+    }
+    function updateCell(tran, row) {
+        var cell;
+        if (tran.issue in row) {
+            cell = row[tran.issue];
+        } else {
+            cell = row[tran.issue] = {};
+            cell.state = false;
+        }
+        cell.ukey = cell.u = calculate.sum(cell.u, tran.units);
+        cell.akey = cell.a = calculate.sum(cell.a, tran.amount);
+        if (!isNaN(parseFloat(tran.forfeited))) {
+            cell.ukey = cell.u = calculate.sum(cell.u, (-tran.forfeited));
+        }
+        if (!isNaN(parseFloat(tran.exercised))) {
+            cell.exercised = calculate.sum(cell.exercised, tran.exercised);
+        }
+    }
+    function logError(err) { console.log(err); }
+    function nullCell() {
+        return {"u": null, "a": null, "ukey": null, "akey": null};
+    }
+    function addTranToCell(tran) {
         angular.forEach($scope.rows, function (row) {
-            angular.forEach($scope.issues, function (issue) {
-                if (row[issue.issue] != undefined) {
-                    if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u']))) && !isNaN(parseFloat(row[issue.issue]['a']))) {
-                        row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
-                    }
+            if (row.name == tran.investor) {
+                updateCell(tran, row);
+            } else if (!(tran.issue in row)) {
+                // init cell
+                row[tran.issue] = nullCell();
+            }
+        });
+    }
+    function attachPariPassu(issues, links) {
+        angular.forEach(issues, function(iss) {
+            iss.paripassu = [];
+            angular.forEach(links, function(link) {
+                if (link.issue == iss.issue) {
+                    iss.paripassu.push(link);
                 }
             });
+            if (iss.paripassu.length === 0) {
+                iss.paripassu.push({"company": iss.company,
+                                    "issue": iss.issue,
+                                    "pariwith": null});
+            }
         });
-
-        // Generate the unissued rows (the difference between total authorised and actually authorised)
-        angular.forEach($scope.issues, function (issue) {
-            $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
-        });
-
-
-        angular.forEach($scope.rows, function (row) {
-            angular.forEach($scope.issuekeys, function (issuekey) {
-                if (issuekey in row) {
+    }
+    function incorporateConversionsTransfers(tran) {
+        tran.convert = [];
+        angular.forEach($scope.conversions, function(con) {
+            if (con.tranto == tran.tran_id) {
+                con.date = calculate.timezoneOffset(con.date);
+                if (con.method == "Split") {
+                    con.split = new Fraction(con.split);
                 }
-                else {
-                    row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
-                }
-            });
+                tran.convert.push(con);
+            }
         });
-
-        angular.forEach($scope.rows, function(row) {
-            row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.issuekeys, shareSum(row), totalShares($scope.rows))
+        angular.forEach($scope.transfers, function(transf) {
+            transf.date = calculate.timezoneOffset(transf.date);
+            var final = angular.copy(transf);
+            if (transf.tranto == tran.tran_id) {
+                final.direction = "To";
+            } else if (transf.tranfrom == tran.tran_id) {
+                final.direction = "From";
+            }
+            tran.convert.push(final);
         });
-
-
+    }
+    function prepareForDisplay() {
         // Sort the columns before finally showing them
         // Issues are sorted by date, rows by ownership within each issue
         $scope.issues.sort(sorting.issuedate);
         $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
         $scope.rows.sort(sorting.basicrow());
-
-        do
-        {
+        do {
             var values = {"name": "", "editable": "0"};
-            angular.forEach($scope.issuekeys, function (key) {
-                values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+            angular.forEach($scope.issuekeys, function(key) {
+                values[key] = nullCell();
             });
             $scope.rows.push(values);
-        }
-        while ($scope.rows.length < 5);
+        } while ($scope.rows.length < 5);
 
         //Calculate the total vested for each row
         $scope.rows = calculate.detailedvested($scope.rows, $scope.trans);
 
-        // Add extra blank issue, which will create a new one when clicked. Silly future date so that
-        // the issue always appears on the rightmost side of the table
+        // Add extra blank issue, which will create a new one when clicked.
+        // Silly future date so that the issue always appears
+        // on the rightmost side of the table
         $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
-
-        $scope.finishedsorting = true;
-        if ($scope.radioModel == "Edit") {
-            //Placeholder for where the tour start function will be
-        }
-
+        return true;
+    }
+    function calculateDebtCells() {
+        angular.forEach($scope.rows, function (row) {
+            angular.forEach($scope.issues, function (issue) {
+                var cell = row[issue.issue];
+                if (cell !== undefined &&
+                    issue.type == "Debt" &&
+                    isNaN(parseFloat(cell.u)) &&
+                    !isNaN(parseFloat(cell.a)))
+                {
+                    cell.x = calculate.debt($scope.rows, issue, row);
+                }
+            });
+        });
+    }
+    function generateUnissuedRows() {
+        angular.forEach($scope.issues, function (issue) {
+            // FIXME this is awful. nested loops of the same array.
+            $scope.rows = calculate.unissued($scope.rows,
+                                             $scope.issues,
+                                             String(issue.issue));
+        });
+    }
+    function fillEmptyCells() {
+        angular.forEach($scope.rows, function (row) {
+            angular.forEach($scope.issuekeys, function (issuekey) {
+                if (!(issuekey in row)) {
+                    row[issuekey] = nullCell();
+                }
+            });
+        });
+    }
+    function calculateInvestorPercentages() {
+        angular.forEach($scope.rows, function(row) {
+            row.startpercent =
+                calculate.sharePercentage(row,
+                                          $scope.rows,
+                                          $scope.issuekeys,
+                                          shareSum(row),
+                                          totalShares($scope.rows));
+        });
+    }
+    function attachWatches() {
         for (var i=0; i < $scope.trans.length; i++) {
-            $scope.$watch('trans['+i+']', function(newval, oldval) {
-                $scope.transaction_watch(newval, oldval);
-            }, true);
+            $scope.$watch('trans['+i+']', $scope.transaction_watch, true);
         }
-
-        for (var i=0; i < $scope.issues.length; i++) {
-            $scope.$watch('issues['+i+']', function(newval, oldval) {
-                $scope.issue_watch(newval, oldval);
-            }, true);
+        for (var j=0; j < $scope.issues.length; j++) {
+            $scope.$watch('issues['+j+']', $scope.issue_watch, true);
         }
-
+    }
+    function processIssue(iss) {
+        setIssueKey(iss);
+        reformatDate(iss);
+        setVestingDates(iss);
+    }
+    function processTransaction(tran) {
+        reformatDate(tran);
+        setTransactionKeys(tran);
+        setVestingDates(tran);
+        inheritDataFromIssue(tran);
+        addTranToRows(tran); // incorporate transaction's investor
+        addTranToCell(tran);
+    }
+    function pingIntercomIfCaptableStarted() {
         var earliestedit = new Date.today().addDays(1);
         var duplicate = earliestedit;
         angular.forEach($scope.issues, function(issue) {
-            if (issue.created) {
-                if (Date.compare(earliestedit, issue.created) > -1) {
-                    earliestedit = issue.created;
-                }
+            if (issue.created &&
+                Date.compare(earliestedit, issue.created) > -1) {
+                earliestedit = issue.created;
             }
         });
         if (earliestedit != duplicate) {
-            Intercom('update', {company : {'captablestart_at':parseInt(Date.parse(earliestedit).getTime()/1000)}});
+            Intercom('update',
+                     {company: {'captablestart_at':
+                                   parseInt(Date.parse(earliestedit)
+                                                .getTime()/1000, 10) } });
         }
-
-        // Generates the list of company users who haven't been shared to yet
-        var emailedalready = []
+    }
+    function generateListOfInvestorsWithoutAccessToTheCaptable() {
+        var emailedalready = [];
         angular.forEach($scope.rows, function (row) {
-            if (row.emailkey != null) {
+            if (row.emailkey !== null) {
                 emailedalready.push(row.emailkey);
             }
         });
 
-        SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
-            for (var i = 0; i < data.length; i++) {
-                if (emailedalready.indexOf(data[i].email) == -1) {
-                    if (data[i].name) {
-                        $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
-                    }
-                    else {
-                        $scope.vInvestors.push("(" +data[i].email+")");
-                    }
+        SWBrijj.tblm('global.investor_list', ['email', 'name'])
+        .then(function(investors) {
+            angular.forEach(investors, function(investor, idx) {
+                if (emailedalready.indexOf(investor.email) == -1) {
+                    var label = (investor.name ? investor.name : "") +
+                                "(" + investor.email + ")";
+                    $scope.vInvestor.push(label);
                 }
-            }
-        });
-    };
-
-    // Get the company's Issues
-    SWBrijj.tblm('ownership.company_issue').then(function (data) {
-        $scope.issues = data;
-
-        // Get the company's rows
-        SWBrijj.tblm('ownership.company_row_names').then(function (names) {
-            // Get the company's Transactions
-            SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
-                $scope.trans = trans;
-                if (Object.keys(trans).length == 0 && Modernizr.testProp('pointerEvents')) {
-                    $rootScope.$on('billingLoaded', function(x) {
-                        if (!$rootScope.companyIsZombie()) {
-                            $scope.maintoggle = false;
-                            $scope.radioModel = "View";
-                            $scope.tourshow = true;
-                            $scope.sideToggle = true;
-                            $scope.tourUp();
-                        }
-                    });
-                    if ($rootScope.selectedPlan) {
-                        if (!$rootScope.companyIsZombie()) {
-                            $scope.maintoggle = false;
-                            $scope.radioModel = "View";
-                            $scope.tourshow = true;
-                            $scope.sideToggle = true;
-                            $scope.tourUp();
-                        }
-                    }
-
-                }
-
-                // Get the company's Grants
-                SWBrijj.tblm('ownership.company_grants').then(function (grants) {
-                    $scope.grants = grants;
-                    SWBrijj.tblm('ownership.my_company_evidence').then(function(evidence_data) {
-                        $scope.attachEvidence(evidence_data);
-                        $scope.generateCaptable(names);
-                    });
-                });
             });
         });
-    });
-
+    }
+    $scope.generateCaptable = function(names) {
+        angular.forEach($scope.issues, processIssue);
+        incorporateGrantsIntoTransactions($scope.grants, $scope.trans);
+        initRowsFromNames(names);
+        angular.forEach($scope.trans, processTransaction);
+        attachPariPassu($scope.issues, $scope.paripassu);
+        angular.forEach($scope.trans, incorporateConversionsTransfers);
+        calculateDebtCells();
+        generateUnissuedRows();
+        fillEmptyCells();
+        calculateInvestorPercentages();
+        $scope.finishedsorting = prepareForDisplay();
+        attachWatches();
+        pingIntercomIfCaptableStarted();
+        populateListOfInvestorsWithoutAccessToTheCaptable();
+        console.log($scope.rows);
+        console.log($scope.issues);
+    };
+    function initUI(isZombie) {
+        if (!isZombie) {
+            $scope.maintoggle = false;
+            $scope.radioModel = "View";
+            $scope.tourshow = true;
+            $scope.sideToggle = true;
+            $scope.tourUp();
+        }
+    }
+    loadCapTable();
+    function loadCapTable() { getIssues(); }
+    function getIssues() {
+        SWBrijj.tblm('ownership.company_issue')
+        .then(function(data) {
+            $scope.issues = data;
+            getTransactions();
+        }).except(logError);
+    }
+    function getTransactions() {
+        SWBrijj.tblm('ownership.company_transaction')
+        .then(function(trans) {
+            $scope.trans = trans;
+            if (Object.keys(trans).length === 0 &&
+                Modernizr.testProp('pointerEvents'))
+            {
+                $rootScope.$on('billingLoaded', function(x) {
+                    initUI($rootScope.companyIsZombie());
+                });
+                initUI($rootScope.companyIsZombie());
+            }
+            getGrants();
+        }).except(logError);
+    }
+    function getGrants() {
+        SWBrijj.tblm('ownership.company_grants')
+        .then(function(grants) {
+            $scope.grants = grants;
+            getPariPassu();
+        }).except(logError);
+    }
+    function getPariPassu() {
+        SWBrijj.tblm('ownership.company_paripassu')
+        .then(function(pari) {
+            $scope.paripassu = pari;
+            getConversions();
+        }).except(logError);
+    }
+    function getConversions() {
+        SWBrijj.tblm('ownership.company_conversion')
+        .then(function(conversions) {
+            $scope.conversions = conversions;
+            getTransfers();
+        }).except(logError);
+    }
+    function getTransfers() {
+        SWBrijj.tblm('ownership.company_transfer')
+        .then(function(transfers) {
+            $scope.transfers = transfers;
+            getEvidence();
+        }).except(logError);
+    }
+    function getEvidence() {
+        SWBrijj.tblm('ownership.my_company_evidence')
+        .then(function(evidence) {
+            $scope.attachEvidence(evidence);
+            getRowNames();
+        }).except(logError);
+    }
+    function getRowNames() {
+        SWBrijj.tblm('ownership.company_row_names')
+        .then(function(names) {
+            $scope.generateCaptable(names);
+        }).except(logError);
+    }
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -518,12 +551,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             });
 
         } else {
-            if ($scope.toggleView()) {
-                $scope.sideBar = 4;
-            }
-            else {
-                $scope.sideBar = 2;
-            }
+            $scope.sidebar = $scope.toggleView() ? 4 : 2;
             $scope.activeTran = [];
             $scope.activeIssue = currentcolumn;
             $scope.activeInvestor = currenttran;
@@ -535,17 +563,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
             var first = 0;
             angular.forEach($scope.trans, function (tran) {
-                if (tran.investor == currenttran) {
-                    if (tran.issue == currentcolumn) {
-                        if (first == 0) {
-                            tran['active'] = true;
-                            first = first + 1
-                        }
-                        tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
-                        tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
-                        tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
-                        $scope.activeTran.push(tran);
+                if (tran.investor == currenttran && tran.issue == currentcolumn) {
+                    if (first === 0) {
+                        tran.active = true;
+                        first = first + 1;
                     }
+                    tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
+                    tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
+                    tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
+                    $scope.activeTran.push(tran);
                 }
             });
             if ($scope.activeTran.length < 1 && !$scope.toggleView()) {
@@ -573,10 +599,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         if (row.name == currenttran && currentcolumn == issue.issue && $scope.activeTran.length > 0) {
                             row[currentcolumn].state = true;
                         }
-                        else {
-                            if (row[issue.issue]) {
-                                row[issue.issue].state = false;
-                            }
+                        else if (row[issue.issue]) {
+                            row[issue.issue].state = false;
+                        } else {
                             issue.state = false;
                         }
                     }
@@ -586,7 +611,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.getActiveIssue = function (issuekey) {
-
         if ($scope.toggleView() && $scope.activeIssue &&  $scope.activeIssue.issue == issuekey) {
             angular.forEach($scope.rows, function (row) {
                 row.state = false;
@@ -605,13 +629,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     issue = issuefull;
                 }
             });
-
-            if ($scope.toggleView()) {
-                $scope.sideBar = 5;
-            }
-            else {
-                $scope.sideBar = 1;
-            }
+            $scope.sidebar = $scope.toggleView() ? 5 : 1;
             $scope.activeIssue = issue;
             $scope.issueRevert = angular.copy(issue);
 
@@ -646,10 +664,8 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     $scope.saveIssueAssign = function (issue, field, i) {
-        if (i) {
-            issue[field] = i;
-        }
-        $scope.saveIssueCheck(issue, field)
+        if (i) { issue[field] = i; }
+        $scope.saveIssueCheck(issue, field);
     };
 
     $scope.saveIssueCheckDate = function (issue, field, evt) {
@@ -679,20 +695,19 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.saveIssueCheck = function (issue, field) {
         var x = false;
         var testcopy = angular.copy(issue);
-        if ($scope.issueModal == true) {
+        if ($scope.issueModal === true) {
             return;
-        }
-        else {
-            if (!angular.equals(testcopy, $scope.issueRevert)) {
-                    $scope.saveIssue(issue, field);
-            }
-            else {
-                return;
-            }
+        } else if (!angular.equals(testcopy, $scope.issueRevert)) {
+            $scope.saveIssue(issue, field);
+        } else {
+            return;
         }
     };
 
-    /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
+    /* Save Issue Function.
+     * Takes the issue and the item being changed so sub transactions can
+     * also be updated in just that field.
+     */
     $scope.saveIssue = function (issue, item) {
         if (item == "issuekey") {
             item = "issue";
@@ -702,40 +717,33 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             });
         }
-        if ((issue['issue'] == null || issue['issue'] == "") && issue['key'] == null) {
-            return
-        }
-
-        else if (issue['issue'] == "" && issue['key'] != null) {
+        if ((issue.issue === null || issue.issue === "") && issue.key === null) {
+            return;
+        } else if (issue.issue === "" && issue.key !== null) {
             $scope.dmodalUp(issue);
-            return
-        }
-
-        else {
-
-            if (issue['key'] != null) {
-                var dateconvert = issue['date'];
+            return;
+        } else {
+            if (issue.key !== null) {
+                var dateconvert = issue.date;
                 var d1 = dateconvert.toUTCString();
-                var partpref = $scope.strToBool(issue['partpref']);
-                var dragalong = $scope.strToBool(issue['dragalong']);
-                var tagalong = $scope.strToBool(issue['tagalong']);
-                var common = $scope.strToBool(issue['common']);
+                var partpref = $scope.strToBool(issue.partpref);
+                var dragalong = $scope.strToBool(issue.dragalong);
+                var tagalong = $scope.strToBool(issue.tagalong);
+                var common = $scope.strToBool(issue.common);
+                var vestcliffdate;
 
-                if (!isNaN(parseInt(issue.vestingbeginsdisplay))) {
-                    var vestcliffdate = angular.copy(issue.date).addMonths(parseInt(issue.vestingbeginsdisplay));
-                    issue['vestingbegins'] = vestcliffdate;
+                if (!isNaN(parseInt(issue.vestingbeginsdisplay, 10))) {
+                    vestcliffdate = angular.copy(issue.date)
+                        .addMonths(parseInt(issue.vestingbeginsdisplay, 10));
+                    issue.vestingbegins = vestcliffdate;
                 }
-                if (issue['vestingbegins'] == undefined) {
-                    var vestcliffdate = null
+                if (issue.vestingbegins === undefined) {
+                    vestcliffdate = null;
                 }
-
-                if (issue.issue == "name") {
-                    issue.issue = "No name";
-                }
-
+                if (issue.issue == "name") { issue.issue = "No name"; }
                 angular.forEach($scope.issues, function (x) {
                     // Duplicate issue names are not allowed
-                    if (x.issue != "" && issue.issue == x.issue && x != issue) {
+                    if (x.issue !== "" && issue.issue == x.issue && x != issue) {
                         issue.issue = issue.issue + " (1)";
                     }
                 });
@@ -799,7 +807,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (issuekey in row) {
                             }
                             else {
-                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                                row[issuekey] = nullCell();
                             }
                         });
                     });
@@ -1006,7 +1014,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (investor.name == "" && rowindex >= 4) {
                 var values = {"name": "", "editable": "0"};
                 angular.forEach($scope.issuekeys, function (key) {
-                    values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+                    values[key] = nullCell();
                 });
                 $scope.rows.push(values);
             }
@@ -1236,7 +1244,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if ($scope.rows.length <= 5) {
                         var values = {"name": "", "editable": "0"};
                         angular.forEach($scope.issuekeys, function (key) {
-                            values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+                            values[key] = nullCell();
                         });
                         $scope.rows.splice(index, 0, values);
                     }
@@ -1503,7 +1511,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (issuekey in row) {
                             }
                             else {
-                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                                row[issuekey] = nullCell();
                             }
                         });
                     });
@@ -1938,7 +1946,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (issuekey in row) {
                     }
                     else {
-                        row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                        row[issuekey] = nullCell();
                     }
                 });
             });
@@ -2095,7 +2103,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         if (issuekey in row) {
                         }
                         else {
-                            row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                            row[issuekey] = nullCell();
                         }
                     });
                 });
@@ -2232,7 +2240,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (issuekey in row) {
                             }
                             else {
-                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                                row[issuekey] = nullCell();
                             }
                         });
                     });
@@ -2847,56 +2855,43 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.stretchheight = {height: String(newValue + 59) + "px"}
     });
 
+    function generic_watch(newval, oldval, obj) {
+        if (!newval || !oldval) {return;}
+        if (parseFloat(newval.interestrate) > 100 ||
+            parseFloat(newval.interestrate) < 0)
+        {
+            for (var x=0; x < obj.length; x++) {
+                if (obj[x] && obj[x].tran_id == newval.tran_id) {
+                    obj[x].interestrate = oldval.interestrate;
+                }
+            }
+        }
+        if (parseFloat(newval.discount) > 100 ||
+            parseFloat(newval.discount) < 0)
+        {
+            for (var x=0; x < obj.length; x++) {
+                if (obj[x] && obj[x].tran_id == newval.tran_id) {
+                    obj[x].discount = oldval.discount;
+                }
+            }
+        }
+        if (parseFloat(newval.vestcliff) > 100 ||
+            parseFloat(newval.vestcliff) < 0)
+        {
+            for (var x=0; x < obj.length; x++) {
+                if (obj[x] && obj[x].tran_id == newval.tran_id) {
+                    obj[x].vestcliff = oldval.vestcliff;
+                }
+            }
+        }
+    }
+
     $scope.transaction_watch = function(newval, oldval) {
-        if (newval && oldval && (parseFloat(newval.interestrate) > 100 || parseFloat(newval.interestrate) < 0)) {
-            for (var x=0; x < $scope.trans.length; x++) {
-                if ($scope.trans[x].tran_id == newval.tran_id) {
-                    $scope.trans[x].interestrate = oldval.interestrate;
-                }
-            }
-        }
-
-        if (newval && oldval && (parseFloat(newval.discount) > 100 || parseFloat(newval.discount) < 0)) {
-            for (var x=0; x < $scope.trans.length; x++) {
-                if ($scope.trans[x].tran_id == newval.tran_id) {
-                    $scope.trans[x].discount = oldval.discount;
-                }
-            }
-        }
-
-        if (newval && oldval && (parseFloat(newval.vestcliff) > 100 || parseFloat(newval.vestcliff) < 0)) {
-            for (var x=0; x < $scope.trans.length; x++) {
-                if ($scope.trans[x].tran_id == newval.tran_id) {
-                    $scope.trans[x].vestcliff = oldval.vestcliff;
-                }
-            }
-        }
+        generic_watch(newval, oldval, $scope.trans);
     };
 
     $scope.issue_watch = function(newval, oldval) {
-        if (newval && oldval && (parseFloat(newval.interestrate) > 100 || parseFloat(newval.interestrate) < 0)) {
-            for (var x=0; x < $scope.issues.length; x++) {
-                if ($scope.issues[x] && $scope.issues[x].tran_id == newval.tran_id) {
-                    $scope.issues[x].interestrate = oldval.interestrate;
-                }
-            }
-        }
-
-        if (newval && oldval && (parseFloat(newval.discount) > 100 || parseFloat(newval.discount) < 0)) {
-            for (var x=0; x < $scope.issues.length; x++) {
-                if ($scope.issues[x] && $scope.issues[x].tran_id == newval.tran_id) {
-                    $scope.issues[x].discount = oldval.discount;
-                }
-            }
-        }
-
-        if (newval && oldval && (parseFloat(newval.vestcliff) > 100 || parseFloat(newval.vestcliff) < 0)) {
-            for (var x=0; x < $scope.issues.length; x++) {
-                if ($scope.issues[x] && $scope.issues[x].tran_id == newval.tran_id) {
-                    $scope.issues[x].vestcliff = oldval.vestcliff;
-                }
-            }
-        }
+        generic_watch(newval, oldval, $scope.issues);
     };
 
     $scope.namePaste = function(ev, row) {
@@ -2908,7 +2903,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (!$scope.rows[startindex]) {
                 var values = {"name": "", "editable": "yes"};
                 angular.forEach($scope.issuekeys, function (key) {
-                    values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+                    values[key] = nullCell();
                 });
                 $scope.rows.push(values);
             }
@@ -2921,7 +2916,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         var values = {"name": "", "editable": "0"};
         angular.forEach($scope.issuekeys, function (key) {
-            values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
+            values[key] = nullCell();
         });
         $scope.rows.push(values);
         return false;

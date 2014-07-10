@@ -71,7 +71,7 @@ ownership.service('calculate', function () {
 
     // Simple summation checking that the added value is a number.
     this.sum = function (current, additional) {
-        if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
+        if ((!current || isNaN(parseFloat(current))) && !isNaN(parseFloat(additional))) {
             current = 0;
         }
         if (!isNaN(parseFloat(additional))) {
