@@ -106,7 +106,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             if ($rootScope.navState.role == "issuer") {
                 SWBrijj.smartdoc_render_template($scope.templateId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
-                        var attributes = attributes;
                         SWBrijj.tblm('account.my_company').then(function(company_info) {
                             $scope.company_info = company_info[0];
 
@@ -155,10 +154,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 SWBrijj.smartdoc_render_investor_template($scope.subId).then(function(raw_html) {
                     SWBrijj.procm('smartdoc.template_attributes', $scope.templateId).then(function(attributes) {
                         SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
-                            // TODO: use information from Annotations service for investor_attributes
-                            $scope.investor_attributes = {};
+                            // TODO: use information from Annotations service for investor_attribute labels
                             angular.forEach(inv_attributes, function(attr) {
-                                $scope.investor_attributes[attr.attribute] = attr.answer;
+                                if (attr.answer !== null) {
+                                    $scope.investor_attributes[attr.attribute] = attr.answer;
+                                }
                             });
                             $scope.investor_attributes.investorName = angular.copy($rootScope.person.name);
                             $scope.investor_attributes.investorState = angular.copy($rootScope.person.state);
@@ -206,7 +206,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         });
 
-        if (!$scope.rejectMessage) {$scope.rejectMessage = "Explain the reason for rejecting this document.";}
         $scope.pageScroll = 0;
         $scope.isAnnotable = true;
 
@@ -418,7 +417,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              if (data.iss_annotations) {
                                  annots = annots.concat(JSON.parse(data.iss_annotations));
                              }
-                         };
+                         }
                      }
                      $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
                      var sticky;
@@ -518,17 +517,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.safeApply = function(fn) {
-            var phase = this.$root.$$phase;
-            if (phase === '$apply' || phase === '$digest') {
-                if(fn && (typeof(fn) === 'function')) {
-                    fn();
-                }
-            } else {
-                this.$apply(fn);
-            }
-        };
-
         $scope.$watch('doc.currentPage', function(page) {
             if (page) {
                 var s = $location.search();
@@ -577,16 +565,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 }
             });
         }*/
-
-        $scope.acceptSign = function(sig) {
-            void(sig);
-            SWBrijj.procm("document.countersign", $scope.docId).then(function(data) {
-                void(data);
-                // should this be: ??
-                // $route.reload();
-                window.location.reload();
-            });
-        };
 
         $scope.prepareable = function(doc) {
             return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original) || ($scope.template_original);

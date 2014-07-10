@@ -2,6 +2,7 @@
 
 function annotationController($scope, $element, $rootScope, $document, Annotations, User, $timeout) {
     function applyLineBreaks(oTextarea) {
+        // TODO: rewrite as an ngModel validator
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
         if (oTextarea.wrap) {
             oTextarea.setAttribute("wrap", "off");

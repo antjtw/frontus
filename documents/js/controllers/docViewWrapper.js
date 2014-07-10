@@ -1,8 +1,9 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', 'User',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User) {
+        'navState', 'Annotations', 'Documents', 'User', '$q',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
+        $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.$watch('docId', function(new_doc_id) {
             $scope.doc = Documents.getDoc(new_doc_id);
         });
@@ -35,7 +36,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             if ($scope.docId) {
                 $scope.getData();//{$route.reload();}
             } else if ($scope.templateKey) {
-                $scope.toggleSide = false;
+                if (!$scope.invq) {
+                    // investor needs the sidebar to sign, issuer doesn't
+                    $scope.toggleSide = true;
+                }
                 $scope.$broadcast('initTemplateView', $scope.templateKey, $scope.subId);
             }
         });
@@ -310,36 +314,41 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             );
         };
 
-        $scope.signTemplate = function(attributes, saved, signed) {
+        $scope.signTemplate = function() {
             // This is hideous and can go away when the user profile is updated at the backend
+            // TODO: prompt the user to save attributes if they so desire.
             var cleanatt = {};
-            for (var key in attributes) {
+            for (var key in $scope.investor_attributes) {
                 if (key == 'investorName') {
-                    cleanatt.name = attributes[key];
+                    cleanatt.name = $scope.investor_attributes[key];
                 }
                 else if (key == 'investorState') {
-                    cleanatt.state = attributes[key];
+                    cleanatt.state = $scope.investor_attributes[key];
                 }
                 else if (key == 'investorCountry') {
-                    cleanatt.country = attributes[key];
+                    cleanatt.country = $scope.investor_attributes[key];
                 }
                 else if (key == 'investorAddress') {
-                    cleanatt.street = attributes[key];
+                    cleanatt.street = $scope.investor_attributes[key];
                 }
                 else if (key == 'investorPhone') {
-                    cleanatt.phone = attributes[key];
+                    cleanatt.phone = $scope.investor_attributes[key];
                 }
-                cleanatt[key] = attributes[key];
+                cleanatt[key] = $scope.investor_attributes[key];
             }
-            attributes = JSON.stringify(cleanatt);
-            SWBrijj.smartdoc_investor_sign_and_save($scope.subId, $scope.templateId, attributes, saved).then(function(meta) {
+            var attributes = JSON.stringify(cleanatt);
+            var promise = $q.defer();
+            // TODO: move to Document service somehow
+            SWBrijj.smartdoc_investor_sign_and_save($scope.subId, $scope.templateId, attributes, true).then(function(meta) {
+                promise.resolve(meta);
                 $scope.$emit("notification:success", "Signed Document");
                 $location.path('/investor-list').search({});
             }).except(function(err) {
+                promise.reject(err);
                 $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                 console.log(err);
             });
-            // TODO: return a promise so that doc-action can disable processing
+            return promise.promise;
         };
 
         $scope.countersignDocument = function() {
@@ -407,7 +416,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.actionNeeded = function() {
             if ($scope.invq) {
-                return ($scope.doc.signable() || $scope.doc.voidable());
+                return ($scope.templateKey || $scope.doc.signable() || $scope.doc.voidable());
             } else {
                 return ($scope.doc.countersignable(navState.role) || $scope.doc.finalizable());
             }
