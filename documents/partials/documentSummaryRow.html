@@ -24,7 +24,7 @@
                 <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span>
             </li>
 
-            <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar">{{docStatus(doc)}}</li>
+            <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar" ng-if="doc.type == 'doc'">{{docStatus(doc)}}</li>
 
         </ul>
     </td>
