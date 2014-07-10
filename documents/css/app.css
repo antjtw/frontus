@@ -183,17 +183,6 @@ table.docLibrary > tbody > tr:first-child > td {
     margin-right: 20px;
 }
 
-.subnav-controls .exit.btn {
-    margin-top: -10px;
-    width: 90px;
-    background-color: #F1F1F1;
-    margin-right: 5px;
-}
-
-.subnav-controls .exit.btn:hover {
-    background-color: #1E2D3D;
-}
-
 .dModalButtons {
     display: block;
     padding: 0 0 20px 0;
