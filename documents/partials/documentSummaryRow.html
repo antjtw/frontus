@@ -15,7 +15,7 @@
             </button>
         </div>
     </td>
-    <td class="shareholder-column docname-column" ng-click="titleClick()">
+    <td class="shareholder-column docname-column" ng-click="titleClick()" ng-class="{pointer: doc.type=='doc'}">
         <ul>
             <li>
                 <span tooltip="{{showtooltip(title(doc))}}"  value="test">
