@@ -1625,6 +1625,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky .dragger > span {
+    cursor: pointer;
     height: 100%;
     position: relative;
     display: inline-block;
@@ -1637,7 +1638,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     top: 50%;
     margin-top: -9px;
     margin-left: -3px;
-    cursor: pointer;
     height: 16px;
 }
 
