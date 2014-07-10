@@ -1578,6 +1578,14 @@ ul.spaced-list > li:nth-child(odd) {
     font-size: 12px;
 }
 
+li.no-activity {
+    text-align: left;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    border-bottom: 1px solid #E3E3E3;
+}
+
 /* Document Status */
 .documentInfo {
     float: right;
