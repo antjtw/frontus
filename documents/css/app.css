@@ -1411,6 +1411,9 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     margin-left: 50px;
     float: right;
 }
+.confirmPanel a {
+    cursor: pointer;
+}
 
 .hidden {
     visibility: hidden;
