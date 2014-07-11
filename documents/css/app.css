@@ -1408,11 +1408,12 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     line-height: 32px; /* should match ".standard-button button" min-height in MVP.css */
 }
 .confirmPanel .modeSwitch:last-child {
-    margin-left: 50px;
+    margin-right: 20px;
     float: right;
 }
 .confirmPanel a {
     cursor: pointer;
+    color: #3397da;
 }
 
 .hidden {
@@ -1795,6 +1796,10 @@ div.imgsig > div > img {
 
 .standard-button.green.red-needed > button {
     background-color: #E74C3C;
+}
+
+annotation-list div:last-child {
+    margin-bottom: 20px;
 }
 
 annotation-list > div {
