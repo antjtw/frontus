@@ -194,7 +194,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                             }
                                             else if (attribute.attribute_type == "check-box") {
                                                 if ($scope.investor_attributes[attribute.attribute] === undefined || $scope.investor_attributes[attribute.attribute] === "") {
-                                                    $scope.investor_attributes[attribute.attribute] = false;
+                                                    $scope.investor_attributes[attribute.attribute] = "false"; // every value is strings, even the booleans
                                                 }
                                                 replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>";
                                             }
