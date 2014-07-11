@@ -56,34 +56,34 @@
                             </div>
                             <div class="inforow" ng-if="doc.when_shared">
                                 <span class="activity-icon doc-share-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'">Delivered to {{doc.name}}<br>{{doc.when_shared  | date:settings.fulldate}}</span>
-                                <span class="info" ng-if="navState.role == 'investor'">Received<br>{{doc.when_shared  | date:settings.fulldate}}</span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Delivered to {{doc.name}}</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Received</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.last_viewed && navState.role == 'issuer' && !doc.when_signed">
                                 <span class="activity-icon doc-view-icon"></span>
-                                <span class="info">Viewed by {{doc.name}}<br>{{doc.last_viewed  | date:settings.fulldate}}</span>
+                                <span class="info"><span>Viewed by {{doc.name}}</span><span>{{doc.last_viewed  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_signed">
                                 <span class="activity-icon doc-sign-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'">Signed by {{doc.name}}<br>{{doc.when_signed  | date:settings.fulldate}}</span>
-                                <span class="info" ng-if="navState.role == 'investor'">Signed<br>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Signed by {{doc.name}}</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Signed</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
                                 <span class="activity-icon doc-countersign-icon"></span>
-                                <span class="info">Approved<br>{{doc.when_countersigned  | date:settings.fulldate}}</span>
+                                <span class="info"><span>Approved</span><span>{{doc.when_countersigned  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_retracted">
                                 <span class="activity-icon doc-retract-icon"></span>
-                                <span class="info">Retracted<br>{{doc.when_retracted  | date:settings.fulldate}}</span>
+                                <span class="info"><span>Retracted</span><span>{{doc.when_retracted  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_void_requested">
                                 <span class="activity-icon doc-void-request-icon"></span>
-                                <span class="info">Void requested<br>{{doc.when_void_requested  | date:settings.fulldate}}</span>
+                                <span class="info"><span>Void requested</span><span>{{doc.when_void_requested  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_void_accepted">
                                 <span class="activity-icon doc-void-accept-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'">Void accepted by {{doc.name}}<br>{{doc.when_void_requested  | date:settings.fulldate}}</span>
-                                <span class="info" ng-if="navState.role == 'investor'">Void accepted<br>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Void accepted by {{doc.name}}</span><span>{{doc.when_void_requested  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
                         </div>
                     </tab>

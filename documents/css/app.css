@@ -1838,6 +1838,19 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     width: 270px;
 }
 
+.docinfo .inforow .info > span {
+    display: block;
+}
+
+.docinfo .inforow .info > span:first-of-type {
+    color: #666666;
+}
+
+.docinfo .inforow .info > span:last-of-type {
+    font-size: 12px;
+    line-height: 12px;
+}
+
 .docinfo .inforow .activity-icon {
     display: inline-block;
     text-align: center;
@@ -1845,6 +1858,7 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
 }
 
 .docinfo .docname {
+    line-height: 24px;
     font-size: 20px;
     color: #1d2c3c;
     margin-top: 30px;
