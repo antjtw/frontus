@@ -187,12 +187,21 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                             }
 
                                             if (attribute.attribute_type == "text") {
+                                                if ($scope.investor_attributes[attribute.attribute] === undefined) {
+                                                    $scope.investor_attributes[attribute.attribute] = "";
+                                                }
                                                 replace = "<span class='template-label'>" +attribute.label + "</span><input class='"+ extra_class +"'" + max_length + " type='text' ng-model='$parent.investor_attributes." + attribute.attribute + "'>";
                                             }
                                             else if (attribute.attribute_type == "check-box") {
+                                                if ($scope.investor_attributes[attribute.attribute] === undefined || $scope.investor_attributes[attribute.attribute] === "") {
+                                                    $scope.investor_attributes[attribute.attribute] = false;
+                                                }
                                                 replace = "<button type='text' ng-click=\"$parent.booleanUpdate('"+attribute.attribute+"',$parent.investor_attributes."+ attribute.attribute +")\" ng-class=\"{'selected':$parent.investor_attributes." + attribute.attribute +"=='true'}\" ng-model='$parent.investor_attributes." + attribute.attribute + "' class='check-box-button check-box-attribute'><span data-icon='&#xe023;' aria-hidden='true'></span></button>";
                                             }
                                             else if (attribute.attribute_type == "textarea") {
+                                                if ($scope.investor_attributes[attribute.attribute] === undefined) {
+                                                    $scope.investor_attributes[attribute.attribute] = "";
+                                                }
                                                 replace = "<span class='template-label'>" +attribute.label + "</span><textarea ng-model='$parent.investor_attributes." + attribute.attribute + "'></textarea>";
                                             }
                                         }
