@@ -277,9 +277,14 @@ app.directive('docTransactionDetails', function() {
             doc: "=",
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
-        controller: ["$scope", function($scope) {
-            $scope.select2Options = {
-            };
+        controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
+            $scope.select2Options = {};
+
+            // Get the company's Issues
+            // TODO: issue / cap table service
+            SWBrijj.tblm('ownership.company_issue').then(function (data) {
+                $scope.issues = data;
+            });
         }],
     };
 });
