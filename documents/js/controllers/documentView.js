@@ -157,6 +157,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             angular.forEach(inv_attributes, function(attr) {
                                 if (attr.answer !== null) {
                                     $scope.investor_attributes[attr.attribute] = attr.answer;
+                                } else {
+                                    $scope.investor_attributes[attr.attribute] = "";
                                 }
                             });
                             $scope.investor_attributes.investorName = angular.copy($rootScope.person.name);

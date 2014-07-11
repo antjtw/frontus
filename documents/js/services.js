@@ -184,7 +184,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 oldDoc.tags = JSON.parse(oldDoc.tags);
             } catch (e) {
                 console.log("error while parsing JSON");
-                console.log("oldDoc.tags");
+                console.log(oldDoc.tags);
                 oldDoc.tags = [];
             }
         } else {
