@@ -269,3 +269,17 @@ app.directive('integer', function() {
         }
     };
 });
+
+app.directive('docTransactionDetails', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            doc: "=",
+        },
+        templateUrl: "/documents/partials/doc-transaction-details.html",
+        controller: ["$scope", function($scope) {
+            $scope.select2Options = {
+            };
+        }],
+    };
+});
