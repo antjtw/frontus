@@ -137,6 +137,7 @@ app.directive('annotationList', ["User", function(User) {
         restrict: "E",
         scope: {
             doc: "=",
+            active: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
         controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents", "User",

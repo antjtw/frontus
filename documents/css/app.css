@@ -1820,7 +1820,7 @@ annotation-list .annotmark {
     cursor: pointer;
 }
 
-annotation-list .annotmark:hover {
+annotation-list .annotmark:hover, annotation-list .annotmark.active {
     color: #666;
 }
 
@@ -1828,7 +1828,7 @@ annotation-list .annotmark.mine {
     color: #FFBA00;
 }
 
-annotation-list .annotmark.mine:hover {
+annotation-list .annotmark.mine:hover, annotation-list .annotmark.mine.active {
     color: #F78D1E;
 }
 
@@ -1836,7 +1836,7 @@ annotation-list .annotmark.mine.complete {
     color: #1ABC96;
 }
 
-annotation-list .annotmark.mine.complete:hover {
+annotation-list .annotmark.mine.complete:hover, annotation-list .annotmark.mine.complete.active {
     color: #15A085;
 }
 
@@ -1844,7 +1844,7 @@ annotation-list .annotmark.mine.incomplete {
     color: #E74C3C;
 }
 
-annotation-list .annotmark.mine.incomplete:hover {
+annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.mine.incomplete.active {
     color: #C44032;
 }
 

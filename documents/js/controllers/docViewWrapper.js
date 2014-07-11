@@ -7,6 +7,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.$watch('docId', function(new_doc_id) {
             $scope.doc = Documents.getDoc(new_doc_id);
         });
+        $scope.active = {}; // to keep track of which annotation the user is currently working with (if any)
 
         if ($routeParams.page) {
             $scope.currentPage = parseInt($routeParams.page, 10);
