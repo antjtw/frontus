@@ -1838,6 +1838,16 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     width: 270px;
 }
 
+.docinfo .inforow .tags {
+    display: inline-block;
+    width: 270px;
+}
+
+.docinfo .inforow .tags > span {
+    display: inline-block;
+    margin-left: 5px;
+}
+
 .docinfo .inforow .info > span {
     display: block;
 }
