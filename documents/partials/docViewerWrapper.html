@@ -47,13 +47,39 @@
                     </tab>
                     <tab heading="Information">
                         <div class="docinfo">
-                            <div class="inforow" ng-if="doc.docname">
-                                <span class="activity-icon page-icon"></span>
-                                <span class="info">{{doc.docname}}</span>
+                            <div class="docname" ng-if="doc.docname">
+                                <span>{{doc.docname}}</span>
                             </div>
                             <div class="inforow" ng-if="doc.tags">
                                 <span class="activity-icon tags-icon"></span>
                                 <span class="info" ng-repeat="t in doc.tags">{{t}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_shared">
+                                <span class="activity-icon doc-share-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'">Delivered to {{doc.name}}<br>{{doc.when_shared  | date:settings.shortdate}}</span>
+                                <span class="info" ng-if="navState.role == 'investor'">Received<br>{{doc.when_shared  | date:settings.shortdate}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_signed">
+                                <span class="activity-icon doc-sign-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'">Signed by {{doc.name}}<br>{{doc.when_signed  | date:settings.shortdate}}</span>
+                                <span class="info" ng-if="navState.role == 'investor'">Signed<br>{{doc.when_signed  | date:settings.shortdate}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_countersigned">
+                                <span class="activity-icon doc-countersign-icon"></span>
+                                <span class="info">Approved<br>{{doc.when_countersigned  | date:settings.shortdate}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_retracted">
+                                <span class="activity-icon doc-retract-icon"></span>
+                                <span class="info">Retracted<br>{{doc.when_retracted  | date:settings.shortdate}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_void_requested">
+                                <span class="activity-icon doc-void-request-icon"></span>
+                                <span class="info">Void requested<br>{{doc.when_void_requested  | date:settings.shortdate}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_void_accepted">
+                                <span class="activity-icon doc-void-accept-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'">Void accepted by {{doc.name}}<br>{{doc.when_void_requested  | date:settings.shortdate}}</span>
+                                <span class="info" ng-if="navState.role == 'investor'">Void accepted<br>{{doc.when_signed  | date:settings.shortdate}}</span>
                             </div>
                         </div>
                     </tab>
@@ -108,7 +134,7 @@
             <div class="modalText">
                 <div class="textBlock">
                     <span class="subtitle">We fixed it!</span>
-                    <span>We've straightened up your document to make it look better!<span>
+                    <span>We've straightened up your document to make it look better!</span>
                 </div>
                 <div class='blue-link' ng-if="adjustedSelected"><span ng-click="processedClose(false)">Continue with enhancements</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
                 <div class='blue-link' ng-if="!adjustedSelected"><span ng-click="processedClose(true)">Continue with original</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>

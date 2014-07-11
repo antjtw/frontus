@@ -68,7 +68,6 @@ h2.large-h2 {
 
 .draggable textarea {
     font-family: Helvetica, sans-serif;
-    /* letter-spacing: -0.09em; */
 }
 
 .subnav-controls.flush-controls {
@@ -84,7 +83,6 @@ h2.large-h2 {
     padding-top: 9px;
     padding-bottom: 9px;
 
-    /* height: 30px; */
     list-style-type: none;
     line-height: normal;
     text-transform: uppercase;
@@ -100,12 +98,6 @@ h2.large-h2 {
     margin: 0 6px 0 6px;
     float: left;
 }
-
-/*.tableView tr.status-bubbles > div {
-    width: 120px;
-    margin: 0 48px 0 48px;
-}
-  */
 
 .tableView td.status-bar span[data-icon] {
     font-size: 24px;
@@ -195,7 +187,6 @@ table.docLibrary > tbody > tr:first-child > td {
     border: 0;
     box-sizing:border-box;
     vertical-align: middle;
-    padding: 0 0 0 0;
 }
 
 .dModalButtons button {
@@ -213,12 +204,6 @@ table.docLibrary > tbody > tr:first-child > td {
     padding: 0;
     margin: 0;
 }
-
-/*
-.modalText.dshare > ul {
-    width: 469px;
-}
-*/
 
 .modalText.dshare > ul > li {
     display: inline-block;
@@ -243,22 +228,6 @@ table.docLibrary > tbody > tr:first-child > td {
     width: 300px;
     height: 24px;
 }
-
-
-/*
-.button:hover {
-    text-decoration: none;
-}
-
-.button.adisabled {
-    background-color:#BDC3C7;
-    cursor:default;
-}
-
-.button.adisabled:hover {
-    background-color:#BDC3C7;
-}
-*/
 
 button.blueButton {
     color:#ffffff;
@@ -323,7 +292,7 @@ button.greyButton {
 .sign-modal label {
     display: inline;
     font-size: 10px;
-    padding: 15px 0px 15px 20px;
+    padding: 15px 0 15px 20px;
     text-transform: none;
 }
 
@@ -438,7 +407,7 @@ button.greyButton {
 .modalText.linkDropboxModalText {
     width: 300px;
     margin-bottom: 5px;
-    padding-top: 0px;
+    padding-top: 0;
     padding-left: 20px;
     padding-right: 20px;
     text-align: left;
@@ -1863,6 +1832,23 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
 }
 
 .docinfo .inforow .info {
-    vertical-align: 10px;
+    vertical-align: top;
     margin-left: 5px;
+    display: inline-block;
+    width: 270px;
+}
+
+.docinfo .inforow .activity-icon {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+
+.docinfo .docname {
+    font-size: 20px;
+    color: #1d2c3c;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #E3E3E3;
+    font-family:'FS Elliot Web Light', sans-serif !important;
 }
