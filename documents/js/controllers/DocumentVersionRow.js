@@ -28,7 +28,25 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
     $scope.getPeople()
 
-
+    $scope.docRecipients = function(version, email){
+        SWBrijj.tblmm('document.my_counterpart_document_library_view', 'original', version.original).then(function(data){
+                $scope.myLibrary = data
+                var alreadySent = []
+                angular.forEach($scope.myLibrary, function(name){
+                   alreadySent.push(name.investor)
+                })
+                console.log(alreadySent)
+                console.log(email)
+                if(alreadySent.indexOf(email[0]) > -1){
+                    console.log("repeater");
+                     $scope.$emit('notification:fail', 'You have already shared this');
+                }
+                else{
+                    console.log("single");
+                    $scope.reShare(version, email);
+                }
+        });
+    };
 
     $scope.reShare = function(version, email){
         SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
