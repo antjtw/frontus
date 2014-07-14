@@ -253,7 +253,7 @@ app.directive('docAction', function() {
 
 app.directive('integer', function() {
     // add number formatting to an input
-    // useful with <input type="number" can't be styled correctly
+    // useful when <input type="number"> can't be styled correctly
     return {
         restrict: 'A',
         require: 'ngModel',
