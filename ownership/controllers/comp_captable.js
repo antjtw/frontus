@@ -196,7 +196,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             });
 
         } else {
-            $scope.sidebar = $scope.toggleView() ? 4 : 2;
+            $scope.sideBar = $scope.toggleView() ? 4 : 2;
             $scope.activeTran = [];
             $scope.activeIssue = currentcolumn;
             $scope.activeInvestor = currenttran;

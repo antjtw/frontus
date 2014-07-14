@@ -6,7 +6,6 @@ CapTable = function() {
     this.issues = [];
     this.rows = [];
     this.uniquerows = [];
-
     this.trans = [];
     this.grants = [];
     this.paripassu = [];
@@ -16,10 +15,9 @@ CapTable = function() {
 // CRUD the captable
 ownership.service('captable',
 function($rootScope, calculate, sorting, SWBrijj) {
-    // TODO separate individual brijj calls from chain
-    // flatten/group chain for loading the cap table
-    // move towards directive
+
     var captable = new CapTable();
+
     this.getCapTable = function() {
         return captable;
     };
@@ -97,6 +95,23 @@ function($rootScope, calculate, sorting, SWBrijj) {
         }).except(logError);
     }
 
+    /*
+    function loadTransactions() {
+        return SWBrijj.tblm('ownership.company_issue')
+            .then(function(data) {
+                console.log(data);
+            });
+    }
+    function loadGrants() {
+        return SWBrijj.tblm('ownership.company_grants')
+            .then(function(data) {
+                console.log(data);
+            });
+    }
+    loadTransactions()
+        .then(loadGrants);
+    */
+
 
     function updateCell(tran, row) {
         var cell;
@@ -166,8 +181,8 @@ function($rootScope, calculate, sorting, SWBrijj) {
     function initRowsFromNames(names) {
         angular.forEach(names, function(name) {
             captable.rows.push({"name": name.name,
-                            "namekey": name.name,
-                            "editable": "yes"});
+                                "namekey": name.name,
+                                "editable": "yes"});
         });
     }
     function setTransactionKeys(tran) {
@@ -274,8 +289,8 @@ function($rootScope, calculate, sorting, SWBrijj) {
         angular.forEach(captable.issues, function (issue) {
             // FIXME this is awful. nested loops of the same array.
             captable.rows = calculate.unissued(captable.rows,
-                                             captable.issues,
-                                             String(issue.issue));
+                                               captable.issues,
+                                               String(issue.issue));
         });
     }
     function fillEmptyCells() {
@@ -303,7 +318,8 @@ function($rootScope, calculate, sorting, SWBrijj) {
     }
 
     function formatDollarAmount(amount) {
-        var output = calculate.formatMoneyAmount(memformatamount(amount), $rootScope.settings);
+        var output = calculate.formatMoneyAmount(memformatamount(amount),
+                                                 $rootScope.settings);
         return (output);
     }
     // Total Shares | Paid for an issue column (type is either u or a)
@@ -330,7 +346,8 @@ function($rootScope, calculate, sorting, SWBrijj) {
         // Sort the columns before finally showing them
         // Issues are sorted by date, rows by ownership within each issue
         captable.issues.sort(sorting.issuedate);
-        captable.issuekeys = sorting.issuekeys(captable.issuekeys, captable.issues);
+        captable.issuekeys = sorting.issuekeys(captable.issuekeys,
+                                               captable.issues);
         captable.rows.sort(sorting.basicrow());
         do {
             var values = {"name": "", "editable": "0"};
@@ -425,11 +442,11 @@ function($rootScope, calculate, sorting, SWBrijj) {
 
     function transaction_watch(newval, oldval) {
         generic_watch(newval, oldval, captable.trans);
-    };
+    }
 
     function issue_watch(newval, oldval) {
         generic_watch(newval, oldval, captable.issues);
-    };
+    }
     function generateCaptable(names) {
         angular.forEach(captable.issues, processIssue);
         incorporateGrantsIntoTransactions(captable.grants, captable.trans);
@@ -445,8 +462,6 @@ function($rootScope, calculate, sorting, SWBrijj) {
         attachWatches();
         pingIntercomIfCaptableStarted();
         populateListOfInvestorsWithoutAccessToTheCaptable();
-        console.log(captable.rows);
-        console.log(captable.issues);
     };
 });
 
