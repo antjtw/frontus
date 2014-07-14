@@ -167,9 +167,9 @@ app.directive('helpTab', function() {
             doc: "="
         },
         templateUrl: "/documents/partials/helpTab.html",
-        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents",
-            function($scope, $element, $rootScope, Annotations, Documents) {
-
+        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents", "navState",
+            function($scope, $element, $rootScope, Annotations, Documents, navState) {
+                $scope.invq = navState.role == "investor";
             }
         ]
     };
