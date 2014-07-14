@@ -17,40 +17,30 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     // this returns everyone you have ever emailed. yay
     $scope.getPeople = function(){
         SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-            $scope.emailAddresses = data           
-            angular.forEach($scope.emailAddresses, function(value, key){
+            $scope.emailList = data           
+            angular.forEach($scope.emailList, function(value, key){
                 $scope.myEmails.push(value['email']);
             });
-            console.log($scope.emailAddresses)
+            console.log($scope.emailList)
             return $scope.myEmails
         });
         // $scope.myEmails = array
     };
-    $scope.getPeople();
+    $scope.getPeople()
 
 
 
     $scope.reShare = function(version, email){
-        // SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
-        //     console.log(data)
-        // }).except(function(data){
-        //     console.log("failed")
-        // })
-        console.log($scope.emailList.email);
+        SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
+            console.log(data)
+        }).except(function(data){
+            console.log("failed")
+        })
         console.log(email);
-
-
-         console.log(version.doc_id)
-         var oldEmail = version.investor;
-         console.log(oldEmail);
-         console.log($scope.emailList);
-         $scope.myArray = [];
-         angular.forEach($scope.emailList, function(address){
-            $scope.myArray.push(address)
-         });
-         console.log($scope.myArray)
-         $route.reload();
-         $scope.$emit('notification:success', 'Document reshared');
+        console.log(version.doc_id)
+        var oldEmail = version.investor;
+        $route.reload();
+        $scope.$emit('notification:success', 'Document reshared');
     };
 
 
