@@ -136,16 +136,13 @@ app.directive('annotationList', ["User", function(User) {
     return {
         restrict: "E",
         scope: {
-            docId: "=",
+            doc: "=",
+            active: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents",
-            function($scope, $element, $rootScope, Annotations, Documents) {
-                $scope.annotations = [];
-                $scope.$watch("docId", function(new_doc_id, old_doc_id) {
-                    $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
-                    $scope.doc = Documents.getDoc(new_doc_id);
-
+        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents", "User",
+            function($scope, $element, $rootScope, Annotations, Documents, User) {
+                $scope.$watch("doc", function(doc) {
                     // we want a new page_visible array for every doc
                     $scope.page_visible = [];
                 });
@@ -173,6 +170,7 @@ app.directive('annotation', function() {
             doc: "=",
             removeannot: "&",
             sigModalUp: "&",
+            active: "=",
         },
         replace: true,
         templateUrl: "/documents/partials/annotation.html",
@@ -190,22 +188,84 @@ app.directive('pageControls', function() {
         templateUrl: "/documents/partials/page-controls.html",
         controller: ["$scope", "Documents", function($scope, Documents) {
             $scope.doc = Documents.getDoc($scope.docId);
-            $scope.doc.currentPage = $scope.currentPage
+            $scope.doc.currentPage = $scope.currentPage;
             $scope.$watch('docId', function(new_doc_id) {
                 $scope.doc = Documents.getDoc(new_doc_id);
-                $scope.doc.currentPage = $scope.currentPage
+                $scope.doc.currentPage = $scope.currentPage;
             });
             $scope.template_original = false;
-            $scope.$watch('doc.currentPage', function(page) {
+            $scope.$watch('doc.currentPage', function(page, old_page) {
+                var orig = page;
+                var output = page;
+                // ensure it's a valid page set
                 if ((page != void(page)) && $scope.doc.pages) {
+                    // ensure it's within bounds
                     if (page < 1) {
-                        $scope.doc.currentPage = 1;
+                        output = 1;
                     } else if (page > $scope.doc.pages.length) {
-                        $scope.doc.currentPage = $scope.doc.pages.length;
+                        output = $scope.doc.pages.length;
+                    }
+
+                    // change it only if needed
+                    if (orig !== output) {
+                        $scope.doc.currentPage = output;
                     }
                 }
             });
 
         }],
+    };
+});
+
+app.directive('docAction', function() {
+    return {
+        restrict: "E",
+        scope: {
+            approveAction: "&",
+            approveVerb: "@",
+            rejectable: "@",
+            rejectAction: "&",
+            upgradeWarning: "@",
+            disabled: "&",
+        },
+        transclude: true,
+        templateUrl: "/documents/partials/doc-action.html",
+        controller: ["$scope", function($scope) {
+            $scope.processing = false;
+            $scope.rejectVerb = "Reject";
+
+            $scope.approve = function(){
+                $scope.processing = true;
+                $scope.approveAction().catch(function(data) {
+                    $scope.processing = false;
+                });
+            };
+
+            $scope.reject = function(){
+                $scope.processing = true;
+                $scope.rejectAction({message: $scope.rejectMessage}).catch(function(data) {
+                    $scope.processing = false;
+                });
+            };
+        }],
+    };
+});
+
+app.directive('integer', function() {
+    // add number formatting to an input
+    // useful with <input type="number" can't be styled correctly
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attr, ctrl) {
+            // ctrl is ngModel controller
+            ctrl.$parsers.unshift(function(val) {
+                var ret = parseInt(val);
+                if (isNaN(ret)) {
+                    ret = 1;
+                }
+                return ret;
+            });
+        }
     };
 });

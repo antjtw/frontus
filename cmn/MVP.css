@@ -1185,7 +1185,7 @@ form.inputs {
 
 .coreEdit input {
     box-shadow: none !important;
-} 
+}
 
 .input-list .inner-editor{
     width: 270px;
@@ -1484,7 +1484,7 @@ ul.spaced-list > li:nth-child(odd) {
     vertical-align: top;
 }
 
-.activity-feed2 .activity-icon {
+.activity-icon {
     width: 30px;
     height: 30px;
     display: inline-block;
@@ -1529,6 +1529,14 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-icon.reminder-icon {
     background-position: -270px 0;
+}
+
+.activity-icon.tags-icon {
+    background-position: 0 -30px;
+}
+
+.activity-icon.page-icon {
+    background-position: -210px -30px;
 }
 
 .activity-icon.doc-rejected-icon {
@@ -1576,6 +1584,14 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: capitalize;
     font-size: 12px;
+}
+
+li.no-activity {
+    text-align: left;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    border-bottom: 1px solid #E3E3E3;
 }
 
 /* Document Status */
@@ -2974,7 +2990,7 @@ button.icon-button:hover {
     display: inline-block;
 }
 .topnav .standard .dropdown-toggle {
-    background-color: transparent; 
+    background-color: transparent;
     border-radius: 0;
 }
 .standard .dropdown-toggle {
@@ -4074,12 +4090,12 @@ h2.onboard {
 /* Zendesk Styling */
 
 #zenbox_tab {
-    border: none !important;
     bottom: 0 !important;
     top: inherit !important;
     background-color: #E3E3E3;
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
+    border-bottom: 0 !important;
 }
 /* IE won't read ID-and-class selectors like #zenbox_tab.left, so we use just a class: */
 
@@ -4290,7 +4306,7 @@ h2.onboard {
     height: 0px;
     overflow: hidden;
 }
-.persistentNotification.ng-leave, 
+.persistentNotification.ng-leave,
 .persistentNotification.ng-enter.ng-enter-active {
     height: 50px;
     overflow: hidden;
@@ -4390,7 +4406,7 @@ textarea.email-text {
 }
 
 .sidebarFooter {
-    
+
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -4446,11 +4462,11 @@ textarea.email-text {
 
 /*container div for side content*/
 .side-content{
-    position:absolute; 
+    position:absolute;
     right:0;
-     z-index:1; 
-     background-color: white; 
-     height: 100%; 
+     z-index:1;
+     background-color: white;
+     height: 100%;
      width: 350px;
     border-left: 1px solid #C7C7C7;
 }
@@ -4540,7 +4556,7 @@ textarea.email-text {
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type > div {
     padding-top: 14px;
     padding-bottom: 12px;
-    color: #003045;  
+    color: #003045;
 }
 
 .messages .activity-feed2 span.recipients {

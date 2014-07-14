@@ -107,7 +107,7 @@
                                 {{e.docname | maxLength}}
                             </a>
                         </li>
-                    </ul> 
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -745,7 +745,7 @@
 </div>
 
 <internal-right-rail toggle-side="sideToggle" window-toggle="windowToggle" window-callback="editEvidence()">
-    <tabset ng-class="{'singletab': tabnumber() == 1, 'tabBorder': windowToggle}">
+    <tabset ng-class="{'tabBorder': windowToggle}" ng-style="viewportheight">
         <tab ng-repeat="tab in tabs" active="tab.active" ng-if="tabvisible(tab)" heading="{{tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')" ng-style="viewportactivity" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
@@ -1514,7 +1514,7 @@
                                 <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1"></span>
                                 <span>{{tran.date | date:settings.shortdate}} Transaction</span>
                             </accordion-heading>
-                            
+
                             <div class="standard-button btn-group darkgray">
                                 <button class="btn" ng-click="switchCapTab('details');" ng-class="{on:currentTab=='details'}">
                                     <span data-icon="&#xe01e;" aria-hidden="true">Details</span>
