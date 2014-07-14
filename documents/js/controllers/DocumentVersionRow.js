@@ -34,9 +34,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
                 var alreadySent = []
                 angular.forEach($scope.myLibrary, function(name){
                    alreadySent.push(name.investor)
-                })
-                console.log(alreadySent)
-                console.log(email)
+                });
                 if(alreadySent.indexOf(email[0]) > -1){
                     console.log("repeater");
                      $scope.$emit('notification:fail', 'You have already shared this');
@@ -57,14 +55,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $scope.$emit('notification:fail', 'Something went wrong');
             console.log("failed")
         })
-        // console.log($scope.emailList.email);
-        console.log(email);
-
-
-        console.log(version.doc_id)
-         // var oldEmail = version.investor;
-        // console.log(oldEmail);
-        console.log($scope.emailList);
       
     };
 
@@ -89,7 +79,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         if ($scope.isVoided(version)) {
             return "Voided"
         }
-        else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce'){
+        else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred'){
             return 'Bounced Share'
         }
         else if(version.sendgrid_event =='processed'){

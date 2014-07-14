@@ -17,12 +17,12 @@
     <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
          aria-hidden="true"><span>x</span>
     </div>
-    <div ng-show="isPendingVoid(version) || !versionIsComplete(version) && version.sendgrid_event !='dropped' && version.sendgrid_event!='bounce'" class="circle yellow" aria-hidden="true"></div>
-    <div ng-show="version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'" class="circle red" aria-hidden="true"></div>
+    <div ng-show="isPendingVoid(version) || !versionIsComplete(version) && version.sendgrid_event !='dropped' && version.sendgrid_event!='bounce' && version.sendgrid_event !='deferred'" class="circle yellow" aria-hidden="true"></div>
+    <div ng-show="version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce' || version.sendgrid_event =='deferred'" class="circle red" aria-hidden="true"></div>
 </td>
 <td class="shareholder-column status-column pointer" ng-click="viewStatus(version)">
     <ul>
-        <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span>
+        <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce' || version.sendgrid_event == 'deferred'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span>
         </li>
     <!-- </ul>
         <ul>
@@ -45,7 +45,7 @@
       <!--   <button ng-show="!showReshareDoc && version.sendgrid_event == 'dropped' || !showReshareDoc && version.sendgrid_event =='bounce'" class="btn red" ng-click="showReshareDoc = !showReshareDoc; getPeople()">Retract</button> -->
 
     </div>
-    <div ng-if="version.sendgrid_event=='dropped' || version.sendgrid_event =='bounce'" class="standard-button small-standard-button doc-share-button">
+    <div ng-if="version.sendgrid_event=='dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred' " class="standard-button small-standard-button doc-share-button">
         
           <input ui-select2="select2Options" ng-model="emailList.email" style="min-width:230px; max-width:300px"></input>
 
@@ -53,7 +53,7 @@
    </div>
 
     </ul>
-    <ul class="dropdown-list" ng-hide="version.sendgrid_event =='dropped' || version.sendgrid_event == 'bounce'">
+    <ul class="dropdown-list" ng-hide="version.sendgrid_event =='dropped' || version.sendgrid_event == 'bounce' || version.sendgrid_event =='deferred' ">
         <li class="dropdown standard menu-drop">
             <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 
