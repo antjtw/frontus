@@ -1822,6 +1822,22 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     color: #C44032;
 }
 
+help-tab > div {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+help-tab > div > p {
+    margin-bottom: 10px;
+    width: 250px;
+    line-height: 20px;
+}
+
+help-tab > div > p > span {
+    color: #1d2c3c;
+    display: block;
+}
+
 .docinfo {
     margin: 0 20px;
 }

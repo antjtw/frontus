@@ -160,6 +160,21 @@ app.directive('annotationList', ["User", function(User) {
     };
 }]);
 
+app.directive('helpTab', function() {
+    return {
+        restrict: "E",
+        scope: {
+            doc: "="
+        },
+        templateUrl: "/documents/partials/helpTab.html",
+        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents",
+            function($scope, $element, $rootScope, Annotations, Documents) {
+
+            }
+        ]
+    };
+});
+
 app.directive('annotation', function() {
     return {
         restrict: "E",
