@@ -1,4 +1,9 @@
-<span>Do you want to associate this document with a Cap Table transaction?</span>
-<input ui-select2="select2Options" ng-model="selectedIssue">
-<button ng-click="nextClick()" ng-disabled="selectedIssue.id == 0">Next</button>
-<div ng-repeat="field in fields">{{field.name}}</div>
+<div ng-hide="fields">
+    <span>Do you want to associate this document with a Cap Table transaction?</span>
+    <input ui-select2="select2Options" ng-model="selectedIssue">
+    <button ng-click="nextClick()" ng-disabled="selectedIssue.id == 0">Next</button>
+</div>
+<div ng-show="fields">
+    <span>Fields necessary to complete document for {{selectedIssue.issue.issue}}</span>
+    <div ng-repeat="field in fields" ng-show="field.required">{{field.name}}</div>
+</div>
