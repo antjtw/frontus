@@ -278,13 +278,65 @@ app.directive('docTransactionDetails', function() {
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
         controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
-            $scope.select2Options = {};
+            var transaction_attributes = null;
+            var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
+            $scope.selectedIssue = defaultSelectObj;
+            $scope.select2Options = {
+                data: [defaultSelectObj],
+            };
+
+            function mungeIssue(issue) {
+                // set the type of the issue appropriately (currently it's ambiguous based on type alone)
+                // TODO: remove once the ownership conversion is complete
+                if (issue.type == "Equity") {
+                    if (issue.common) {
+                        issue.type = "Equity Common";
+                    } else {
+                        issue.type = "Equity Preferred";
+                    }
+                } else if (issue.type == "Debt") {
+                    issue.type = "Convertible Debt";
+                }
+
+                delete issue.common;
+                return issue;
+            }
 
             // Get the company's Issues
             // TODO: issue / cap table service
             SWBrijj.tblm('ownership.company_issue').then(function (data) {
+                // convert the data in to the future format (if needed)
+                data.forEach(function(issue) {
+                    issue = mungeIssue(issue);
+                });
                 $scope.issues = data;
             });
+
+            $scope.$watch('issues', function(issues) {
+                // set up the select box
+                if (issues) {
+                    $scope.select2Options.data.splice(0);
+                    $scope.select2Options.data.push(defaultSelectObj);
+                    issues.forEach(function(issue) {
+                        // TODO: filter to usable issue types
+                        $scope.select2Options.data.push({
+                            id: issue.issue,
+                            text: 'Add to "' + issue.issue + '"',
+                            issue: issue
+                        });
+                    });
+                    $scope.selectedIssue = defaultSelectObj;
+                }
+            });
+
+            SWBrijj.transaction_attributes().then(function(data) {
+                transaction_attributes = data;
+            });
+
+            $scope.nextClick = function() {
+                var viable_actions = transaction_attributes[$scope.selectedIssue.issue.type].actions;
+                $scope.fields = viable_actions.purchase ? viable_actions.purchase.fields : viable_actions.grant.fields;
+            };
         }],
     };
 });

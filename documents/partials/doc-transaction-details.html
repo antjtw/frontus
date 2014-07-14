@@ -1,6 +1,4 @@
 <span>Do you want to associate this document with a Cap Table transaction?</span>
-<select ui-select2="select2Options" ng-model="selectedIssue">
-    <option value="">Prepare for signature only</option>
-    <option ng-repeat="issue in issues" value="issue">Add to "{{issue.issue}}"</option>
-</select>
-<button>Next</button>
+<input ui-select2="select2Options" ng-model="selectedIssue">
+<button ng-click="nextClick()" ng-disabled="selectedIssue.id == 0">Next</button>
+<div ng-repeat="field in fields">{{field.name}}</div>
