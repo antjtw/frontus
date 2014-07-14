@@ -37,15 +37,15 @@
 <!-- far left column -->
 <td colspan="2">
 
-    <div class="standard-button small-standard-button doc-share-button">
+    <div class="standard-button small-standard-button doc-share-button bounced">
         <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn" ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
         <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
         <button ng-show="isPendingIssuerFinalization(version)" class="btn"
                 ng-click="viewInvestorCopy(version)">Approve</button>
-        <button ng-show="!showReshareDoc && version.sendgrid_event == 'dropped' || !showReshareDoc && version.sendgrid_event =='bounce'" class="btn red" ng-click="showReshareDoc = !showReshareDoc; getPeople()">Retract</button>
+      <!--   <button ng-show="!showReshareDoc && version.sendgrid_event == 'dropped' || !showReshareDoc && version.sendgrid_event =='bounce'" class="btn red" ng-click="showReshareDoc = !showReshareDoc; getPeople()">Retract</button> -->
 
     </div>
-    <div ng-if="showReshareDoc" class="standard-button small-standard-button doc-share-button">
+    <div ng-if="version.sendgrid_event=='dropped' || version.sendgrid_event =='bounce'" class="standard-button small-standard-button doc-share-button">
         
           <input ui-select2="select2Options" ng-model="emailList.email" style="min-width:230px; max-width:300px"></input>
 
