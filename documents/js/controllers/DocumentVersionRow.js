@@ -31,16 +31,26 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
 
     $scope.reShare = function(version, email){
-        SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
-            console.log(data)
-        }).except(function(data){
-            console.log("failed")
-        })
+        // SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
+        //     console.log(data)
+        // }).except(function(data){
+        //     console.log("failed")
+        // })
+        console.log($scope.emailList.email);
         console.log(email);
-        console.log(version.doc_id)
-        var oldEmail = version.investor;
-        $route.reload();
-        $scope.$emit('notification:success', 'Document reshared');
+
+
+         console.log(version.doc_id)
+         var oldEmail = version.investor;
+         console.log(oldEmail);
+         console.log($scope.emailList);
+         $scope.myArray = [];
+         angular.forEach($scope.emailList, function(address){
+            $scope.myArray.push(address)
+         });
+         console.log($scope.myArray)
+         $route.reload();
+         $scope.$emit('notification:success', 'Document reshared');
     };
 
 
