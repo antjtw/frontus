@@ -44,8 +44,8 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
 
         console.log(version.doc_id)
-         var oldEmail = version.investor;
-        console.log(oldEmail);
+         // var oldEmail = version.investor;
+        // console.log(oldEmail);
         console.log($scope.emailList);
       
     };
