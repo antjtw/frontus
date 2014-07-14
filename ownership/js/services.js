@@ -14,7 +14,7 @@ CapTable = function() {
 };
 // CRUD the captable
 ownership.service('captable',
-function($rootScope, calculate, sorting, SWBrijj) {
+function($rootScope, calculate, sorting, SWBrijj, $q) {
 
     var captable = new CapTable();
 
@@ -26,93 +26,106 @@ function($rootScope, calculate, sorting, SWBrijj) {
      *   Main promise chain.
      */
     this.loadCapTable = function() { 
-        getIssues();
+        //getIssues();
+        $q.all([loadIssues(),
+                loadTransactions(),
+                loadGrants(),
+                loadPariPassu(),
+                loadConversions(),
+                loadTransfers(),
+                loadEvidence(),
+                loadRowNames()])
+        .then(function(results) {
+            captable.issues = results[0];
+            captable.trans  = results[1];
+            handleTransactions(results[1]);
+            captable.grants = results[2];
+            captable.paripassu = results[3];
+            captable.conversions = results[4];
+            captable.transfers = results[5];
+            attachEvidence(results[6]);
+
+            generateCaptable(results[7]);
+        });
     };
-    function getIssues() {
+    function loadIssues() {
+        var promise = $q.defer();
         SWBrijj.tblm('ownership.company_issue')
-        .then(function(data) {
-            captable.issues = data;
-            getTransactions();
-        }).except(logError);
+        .then(function(issues) {
+            promise.resolve(issues);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadTransactions() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_transaction')
+        .then(function(trans) {
+            promise.resolve(trans);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadGrants() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_grants')
+        .then(function(grants) {
+            promise.resolve(grants);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadPariPassu() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_paripassu')
+        .then(function(paripassu) {
+            promise.resolve(paripassu);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadConversions() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_conversion')
+        .then(function(conversions) {
+            promise.resolve(conversions);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadTransfers() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_transfer')
+        .then(function(transfers) {
+            promise.resolve(transfers);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadEvidence() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.my_company_evidence')
+        .then(function(evidence) {
+            promise.resolve(evidence);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadRowNames() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_row_names')
+        .then(function(names) {
+            promise.resolve(names);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+
+    function handleTransactions(trans) {
+        if (Object.keys(trans).length === 0 &&
+            Modernizr.testProp('pointerEvents'))
+        {
+            $rootScope.$on('billingLoaded', function(x) {
+                initUI($rootScope.companyIsZombie());
+            });
+            initUI($rootScope.companyIsZombie());
+        }
     }
     function initUI(isZombie) {
         $rootScope.$broadcast('captable:initui');
     }
-    function getTransactions() {
-        SWBrijj.tblm('ownership.company_transaction')
-        .then(function(trans) {
-            captable.trans = trans;
-            if (Object.keys(trans).length === 0 &&
-                Modernizr.testProp('pointerEvents'))
-            {
-                $rootScope.$on('billingLoaded', function(x) {
-                    initUI($rootScope.companyIsZombie());
-                });
-                initUI($rootScope.companyIsZombie());
-            }
-            getGrants();
-        }).except(logError);
-    }
-    function getGrants() {
-        SWBrijj.tblm('ownership.company_grants')
-        .then(function(grants) {
-            captable.grants = grants;
-            getPariPassu();
-        }).except(logError);
-    }
-    function getPariPassu() {
-        SWBrijj.tblm('ownership.company_paripassu')
-        .then(function(pari) {
-            captable.paripassu = pari;
-            getConversions();
-        }).except(logError);
-    }
-    function getConversions() {
-        SWBrijj.tblm('ownership.company_conversion')
-        .then(function(conversions) {
-            captable.conversions = conversions;
-            getTransfers();
-        }).except(logError);
-    }
-    function getTransfers() {
-        SWBrijj.tblm('ownership.company_transfer')
-        .then(function(transfers) {
-            captable.transfers = transfers;
-            getEvidence();
-        }).except(logError);
-    }
-    function getEvidence() {
-        SWBrijj.tblm('ownership.my_company_evidence')
-        .then(function(evidence) {
-            attachEvidence(evidence);
-            getRowNames();
-        }).except(logError);
-    }
-    function getRowNames() {
-        SWBrijj.tblm('ownership.company_row_names')
-        .then(function(names) {
-            generateCaptable(names);
-        }).except(logError);
-    }
-
-    /*
-    function loadTransactions() {
-        return SWBrijj.tblm('ownership.company_issue')
-            .then(function(data) {
-                console.log(data);
-            });
-    }
-    function loadGrants() {
-        return SWBrijj.tblm('ownership.company_grants')
-            .then(function(data) {
-                console.log(data);
-            });
-    }
-    loadTransactions()
-        .then(loadGrants);
-    */
-
-
     function updateCell(tran, row) {
         var cell;
         if (tran.issue in row) {
@@ -213,6 +226,10 @@ function($rootScope, calculate, sorting, SWBrijj) {
         }
     }
     function logError(err) { console.log(err); }
+    function logErrorPromise(err) {
+        console.log(err);
+        promise.reject(err);
+    }
     function nullCell() {
         return {"u": null, "a": null, "ukey": null, "akey": null};
     }
