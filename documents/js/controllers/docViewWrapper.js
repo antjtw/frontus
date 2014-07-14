@@ -4,17 +4,26 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         'navState', 'Annotations', 'Documents', 'User', '$q',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
+
+        $scope.setTab = function() {
+            if ($scope.actionNeeded() || $scope.prepareable()) {
+                $scope.annottab = "true";
+                $scope.infotab = "false";
+            } else {
+                $scope.infotab = "true";
+                $scope.annottab = "false";
+            }
+        };
+
         $scope.$watch('docId', function(new_doc_id) {
             $scope.doc = Documents.getDoc(new_doc_id);
-            setTimeout(function(){
-                if ($scope.actionNeeded() || $scope.prepareable()) {
-                    $scope.annottab = "true";
-                    $scope.infotab = "false";
-                } else {
-                    $scope.infotab = "true";
-                    $scope.annottab = "false";
-                }
-            }, 1000);
+            if ($scope.doc.doc_id) {
+                $scope.setTab();
+            } else {
+                setTimeout(function(){
+                    $scope.setTab();
+                }, 1000);
+            }
         });
         $scope.active = {}; // to keep track of which annotation the user is currently working with (if any)
 
