@@ -6,6 +6,15 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.$watch('docId', function(new_doc_id) {
             $scope.doc = Documents.getDoc(new_doc_id);
+            setTimeout(function(){
+                if ($scope.actionNeeded() || $scope.prepareable()) {
+                    $scope.annottab = "true";
+                    $scope.infotab = "false";
+                } else {
+                    $scope.infotab = "true";
+                    $scope.annottab = "false";
+                }
+            }, 1000);
         });
         $scope.active = {}; // to keep track of which annotation the user is currently working with (if any)
 
@@ -104,7 +113,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 $scope.docId = doc.doc_id;
                 $scope.library = "document.my_counterparty_library";
                 $scope.pages = "document.my_counterparty_codex";
-
                 $scope.initDocView();
             };
 

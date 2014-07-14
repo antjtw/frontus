@@ -42,11 +42,11 @@
             <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" page-query-string="pageQueryString()" doc-id="docId" investor_attributes="investor_attributes"></doc-viewer>
             <internal-right-rail toggle-side="toggleSide">
                 <tabset>
-                    <tab heading="Annotations" ng-if="prepareable() || actionNeeded()">
+                    <tab active="annottab" heading="Annotations" ng-if="prepareable() || actionNeeded()">
                         <annotation-list doc="doc" active="active"></annotation-list>
                         <help-tab doc="doc"></help-tab>
                     </tab>
-                    <tab heading="Information">
+                    <tab active="infotab" heading="Information">
                         <div class="docinfo">
                             <div class="docname" ng-if="doc.docname">
                                 <span>{{doc.docname}}</span>
