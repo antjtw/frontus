@@ -23,7 +23,7 @@
                     </tr>
                 </tbody>
                 <tbody class="scrollable-body">
-                    <tr ng-repeat="row in rows | shareList track by $index">
+                    <tr ng-repeat="row in ct.rows | shareList track by $index">
                         <td>
                             <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </td>
@@ -280,7 +280,7 @@
                         {{convertTran.toissue.issue | maxLength}}<span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="i in justEquity(issues, convertTransOptions[0])">
+                        <li ng-repeat="i in justEquity(ct.issues, convertTransOptions[0])">
                             <span ng-click="assignConvert('toissue', i);">{{i.issue | maxLength}}</span>
                         </li>
                     </ul>
@@ -475,7 +475,7 @@
                                     {{tran.transferto}}<span class="invisible-drop">'</span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li ng-repeat="row in rows | otherinvestors: tran.investor">
+                                    <li ng-repeat="row in ct.rows | otherinvestors: tran.investor">
                                         <span ng-click="trantorow(tran, row.namekey)">{{row.namekey}}</span>
                                     </li>
                                 </ul>
@@ -616,7 +616,7 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="one in issues track by $index">
+                <th ng-repeat="one in ct.issues track by $index">
                     <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                     <input placeholder="Add Security" class="capEditHeaders"
                            ui-event="{focus : 'getActiveIssue(one.issue)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
@@ -627,7 +627,7 @@
             <tr ng-if="toggleView();" class="column-label">
                 <th class="longrow" colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in issues | issueviewList track by $index" ng-click="getActiveIssue(one.issue)">
+                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in ct.issues | issueviewList track by $index" ng-click="getActiveIssue(one.issue)">
                     <span>{{one.issue}}</span>
                     <span class="next-button" ng-click="moveTour();">Next</span>
                 </th>
@@ -638,15 +638,15 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
+                <td ng-repeat="one in ct.issuekeys | orderBy:issueSort track by $index">
                     <span>{{grantbyIssue(one)}}</span>
                     <span>Total Paid</span>
                 </td>
             </tr>
             <!-- Editable rows -->
-            <tr ng-if="!toggleView();" ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
+            <tr ng-if="!toggleView();" ng-repeat="row in ct.rows track by $index" ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, ct.rows, ct.issuekeys) || 0.000 | number:3}}%">
                 </td>
                 <td>
                     <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
@@ -665,7 +665,7 @@
                         </span>
                       </span>
                 </td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
+                <td ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
                     <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour(); tourNotification();">Done!</span></span>
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
@@ -697,11 +697,11 @@
             </tr>
             <!-- Un-editable view -->
             <!-- Regular Rows -->
-            <tr ng-if="toggleView()" ng-repeat="row in rows | rowviewList track by $index">
+            <tr ng-if="toggleView()" ng-repeat="row in ct.rows | rowviewList track by $index">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state, 'hoverable': row.name}" class="viewName tableFields" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td ng-click="getActiveTransaction(row.name, key)" class="tableFields" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
+                <td ng-click="getActiveTransaction(row.name, key)" class="tableFields" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
                             <span class="captablepair-box">
                                 <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                                 <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
@@ -709,11 +709,11 @@
                 </td>
             </tr>
             <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-repeat="row in rows track by $index" ng-show="([row] | unissuedrowviewList).length > 0">
+            <tr class="unissued-rows" ng-repeat="row in ct.rows track by $index" ng-show="([row] | unissuedrowviewList).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%"></td>
                 <td  class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
+                <td class="tableFields" ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
                             <span class="captablepair-box">
                                 <div ng-class="{'editview': !toggleView()}" ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                                 <div ng-class="{'editview': !toggleView()}" ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
@@ -725,18 +725,18 @@
                 <td class="tableFields">Total</td>
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in issuekeys track by $index"></td>
+                <td class="tableFields" ng-repeat="one in ct.issuekeys track by $index"></td>
             </tr>
             <!-- Undiluted footer -->
             <tr class='tablefooter'>
-                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(ct.rows);}}"></td>
                 <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
                 <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in issuekeys track by $index">
+                <td class="tableFields" ng-repeat="one in ct.issuekeys track by $index">
                             <span class="captablepair-box">
-                                <div ng-bind="formatAmount(colTotal(one, rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
+                                <div ng-bind="formatAmount(colTotal(one, ct.rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
 
-                                <div ng-bind="formatDollarAmount(colTotal(one, rows, 'a'))" ng-class="{'editview': !toggleView()}" class="output second footer"></div>
+                                <div ng-bind="formatDollarAmount(colTotal(one, ct.rows, 'a'))" ng-class="{'editview': !toggleView()}" class="output second footer"></div>
                             </span>
                 </td>
             </tr>
@@ -939,7 +939,7 @@
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalauth"></span>
                               </p>
 
-                              <p class="rightTitle"><span>Total Granted</span><input disabled value="{{totalGranted(activeIssue.issue, trans);}}">
+                              <p class="rightTitle"><span>Total Granted</span><input disabled value="{{totalGranted(activeIssue.issue, ct.trans);}}">
                                   <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.totalgranted"></span>
                               </p>
 
@@ -1453,7 +1453,7 @@
 
                               <p ng-show="activeIssue.totalauth" class="belowTitle"><span ng-bind="formatAmount(activeIssue.totalauth)"></span><span tooltip-placement="right" tooltip="The sum total of shares authorized to be issued" class="forTooltip">Total Authorized</span></p>
 
-                              <p ng-show="totalGranted(activeIssue.issue, trans)" class="belowTitle"><span ng-bind="formatAmount(totalGranted(activeIssue.issue, trans))"></span><span tooltip-placement="right" tooltip="The sum total of shares granted" class="forTooltip">Total Granted</span>
+                              <p ng-show="totalGranted(activeIssue.issue, ct.trans)" class="belowTitle"><span ng-bind="formatAmount(totalGranted(activeIssue.issue, ct.trans))"></span><span tooltip-placement="right" tooltip="The sum total of shares granted" class="forTooltip">Total Granted</span>
                               </p>
 
                               <p ng-show="activeIssue.price"  class="belowTitle"><span ng-bind="formatDollarAmount(activeIssue.price)"></span><span tooltip-placement="right" tooltip="The price each granted share can be purchased at when vested" class="forTooltip">Strike Price</span></p>
@@ -1700,16 +1700,16 @@
                             </div>
 
                             <div class="summary-bar">
-                                <div ng-show="totalPaid(rows)" class="belowTitle">
+                                <div ng-show="totalPaid(ct.rows)" class="belowTitle">
                                     <img src="/img/activity/invested.png">
                                     <div>
-                                        <span ng-bind="totalPaid(rows)"></span><span>Total Invested</span>
+                                        <span ng-bind="totalPaid(ct.rows)"></span><span>Total Invested</span>
                                     </div>
                                 </div>
-                                <div ng-show="totalShares(rows)" class="belowTitle">
+                                <div ng-show="totalShares(ct.rows)" class="belowTitle">
                                     <img src="/img/activity/sharews.png">
                                     <div>
-                                        <span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span>
+                                        <span ng-bind="totalShares(ct.rows)"></span><span>Fully Diluted Units</span>
                                     </div>
                                 </div>
                                 <div ng-show="numShareholders()" class="belowTitle">

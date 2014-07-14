@@ -1,23 +1,35 @@
 var ownership = angular.module('ownerServices', []);
 
+CapTable = function() {
+    this.vInvestors = [];
+    this.issuekeys = [];
+    this.issues = [];
+    this.rows = [];
+    this.uniquerows = [];
+
+    this.trans = [];
+    this.grants = [];
+    this.paripassu = [];
+    this.conversions = [];
+    this.transfers = [];
+};
 // CRUD the captable
 ownership.service('captable',
 function($rootScope, calculate, sorting, SWBrijj) {
     // TODO separate individual brijj calls from chain
     // flatten/group chain for loading the cap table
-    // captable service
-    // move towards directives
-    var captable = {};
-    captable.vInvestors = [];
-    captable.issuekeys = [];
-    captable.issues = [];
-    captable.rows = [];
-    captable.uniquerows = [];
+    // move towards directive
+    var captable = new CapTable();
+    this.getCapTable = function() {
+        return captable;
+    };
 
     /* NOTE
      *   Main promise chain.
      */
-    this.loadCapTable = function() { getIssues(); };
+    this.loadCapTable = function() { 
+        getIssues();
+    };
     function getIssues() {
         SWBrijj.tblm('ownership.company_issue')
         .then(function(data) {
