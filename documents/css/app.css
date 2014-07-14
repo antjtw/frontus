@@ -654,13 +654,10 @@ textarea.email-text {
     float: right;
     margin-left: 0;
     width: 350px;
-    border-left: 6px solid white;
     padding-left: 20px;
     padding-right: 40px;
 }
-.company-list .span4.capright.showSharebar {
-    border-left: 6px solid #E3E3E3;
-}
+
 .company-list .right-bar-header {
     letter-spacing: 1px;
 }
