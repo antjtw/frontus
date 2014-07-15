@@ -1775,6 +1775,8 @@ li.no-activity {
 .status-table > tbody > tr {
     border: 1px solid #E3E3E3;
     height: 60px;
+    -webkit-transform: none!important;
+    -webkit-transition-property: none!important;
 }
 .status-table > tbody > tr > th {
     font-weight: normal;
