@@ -1941,6 +1941,10 @@ li.no-activity {
     padding-left: 10px;
 }
 
+.status-table .padding-left-ten {
+    padding-left: 10px;
+}
+
 .status-table.people-table > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
 }
@@ -2008,46 +2012,7 @@ a.oldschool-link  {
     background-color: rgb(141, 141, 141);
     color: rgb(241, 241, 241);
 }
-/*
-tr.preparedDoc {
-    background-color: white;
-    -webkit-animation: pulseBlue 1s linear 0.25s;
-    -moz-animation: pulseBlue 0.5s linear 0.25s;
-    -ms-animation: pulseBlue 0.5s linear 0.25s;
-    -o-animation: pulseBlue 0.5s linear 0.25s;
-    animation: pulseBlue 1s linear 0.25s;
-}
-@keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-webkit-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-moz-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-o-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-*/
-/*.status-row.selectedrow:after {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0;
-    border-right: 10px solid transparent;
-    border-left: 10px solid transparent;
-    border-top: 6px solid #8D8D8D;
-    position: absolute;
-}*/
+
 .status-row.selectedrow a {
     color: rgb(241, 241, 241);
 }
