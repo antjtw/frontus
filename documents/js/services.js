@@ -53,6 +53,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     /// Document object definition
     Document = function() {
         this.annotations = [];
+        this.custom_annotation_types = [];
     };
 
     Document.prototype = {

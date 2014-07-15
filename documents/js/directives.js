@@ -336,6 +336,10 @@ app.directive('docTransactionDetails', function() {
             $scope.nextClick = function() {
                 var viable_actions = transaction_attributes[$scope.selectedIssue.issue.type].actions;
                 $scope.fields = viable_actions.purchase ? viable_actions.purchase.fields : viable_actions.grant.fields;
+                $scope.doc.custom_annotation_types.splice(0);
+                for (var field in $scope.fields) {
+                    $scope.doc.custom_annotation_types.push($scope.fields[field]);
+                }
             };
         }],
     };
