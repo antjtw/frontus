@@ -4079,6 +4079,8 @@ h2.onboard {
     width: -moz-calc(100%) !important;
     width: -webkit-calc(100%) !important;
     width: calc(100%) !important;
+    -webkit-transform: translateZ(0);
+    z-index: 1;
 }
 
 .dynamic-page .span12 .status-table {
