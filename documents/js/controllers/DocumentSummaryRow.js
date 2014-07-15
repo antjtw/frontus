@@ -70,7 +70,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return "All documents archived";
         } else if (total == doc.complete_count && hide_completed) {
             return "All documents completed";
-        } else if (total == (doc.archive_count + doc.complete_count) && (!show_archived && hide_completed)) {
+        } else if (total == (doc.archive_count + doc.complete_count - doc.archive_complete_count) && (!show_archived && hide_completed)) {
             return "All documents are archived or completed";
         } else {
             return num + " / " + display_total + " completed";
