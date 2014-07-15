@@ -44,6 +44,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             generateCaptable(      results[7]);
         }, logErrorPromise);
     };
+    this.loadCapTable();
     function loadIssues() {
         var promise = $q.defer();
         SWBrijj.tblm('ownership.company_issue')
@@ -474,6 +475,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         attachWatches();
         pingIntercomIfCaptableStarted();
         populateListOfInvestorsWithoutAccessToTheCaptable();
+
+        console.log(captable);
     }
 });
 

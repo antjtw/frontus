@@ -166,7 +166,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             $scope.tourUp();
         }
     }
-    captable.loadCapTable();
     $scope.findValue = function (row, header) {
         angular.forEach($scope.ct.rows, function (picked) {
             if (picked == row) {
