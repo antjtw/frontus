@@ -32,15 +32,14 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         SWBrijj.tblmm('document.my_counterpart_document_library_view', 'original', version.original).then(function(data){
                 $scope.myLibrary = data
                 var alreadySent = []
+                $scope.buttondisabled = true
                 angular.forEach($scope.myLibrary, function(name){
                    alreadySent.push(name.investor)
                 });
                 if(alreadySent.indexOf(email[0]) > -1){
-                    console.log("repeater");
                      $scope.$emit('notification:fail', 'You have already shared this');
                 }
                 else{
-                    console.log("single");
                     $scope.reShare(version, email);
                 }
         });
@@ -53,6 +52,8 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $scope.$emit('notification:success', 'Document reshared');
         }).except(function(data){
             console.log("failed")
+            $rootScope.$emit('notification:fail', 'Something went wrong');
+            $scope.buttondisabled = false
         })
       
     };
