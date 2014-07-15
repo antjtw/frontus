@@ -120,8 +120,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 /** @name doc#signature_deadline
                  * @type {Date} */
 
-                 SWBrijj.procm("document.get_investor_pageviews", doc.doc_id, doc.investor).then(function(data) {
-                        console.log(data);
+                 SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
                         $scope.docviews = data;
                         /* Should not be required
                         angular.forEach($scope.docviews, function(view) {
