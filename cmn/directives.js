@@ -2,7 +2,7 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('peopleFilter', function(){
     return {
-        scope: false,
+        scope: {people: '='},
         restrict: 'E',
         templateUrl:'/cmn/partials/peopleFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
@@ -11,9 +11,18 @@ m.directive('peopleFilter', function(){
             $scope.getContacts = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.myContacts = data;
-                    console.log($scope.myContacts)
+                    console.log($scope.myContacts);
                 })
             }
+            $scope.getContacts();
+
+            $scope.getUserRoles = function(){
+                SWBrijj.tblmm('account.my_user_role', ['email, role']).then(function(data){
+                    $scope.myRoles = data;
+                    console.log($scope.myRoles);
+                });
+            };
+            $scope.getUserRoles();
             // $scope.listPeople= function(){
             //     SWBrijj.tblm('global.user_list'['email', 'name']).then(function(data){
             //         $scope.myUsers = data 
