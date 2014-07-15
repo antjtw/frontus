@@ -49,43 +49,111 @@ docs.service('basics', function () {
 
 });
 
-// DOCUMENTS
-Document = function() {
-    this.annotations = [];
-};
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", function(Annotations, SWBrijj, $q, $rootScope) {
+    /// Document object definition
+    Document = function() {
+        this.annotations = [];
+    };
 
-Document.prototype = {
-    pageAnnotated: function(pageNum) {
-        return this.annotations.some(function(annot) {
-            return annot.page == pageNum;
-        });
-    },
-    hasUnfilled: function(signaturepresent, role) {
-        // TODO: use Annotation.filled()
-        var unfilled = false;
-        return this.annotations.some(function(annot) {
-            if (annot.whattype == 'ImgSignature') {
-                if (!signaturepresent &&
-                    ((annot.whosign == 'Investor' && role == 'investor') ||
-                     (annot.whosign == 'Issuer' && role == 'issuer'))) {
-                    return true;
-                }
+    Document.prototype = {
+        pageAnnotated: function(pageNum) {
+            return this.annotations.some(function(annot) {
+                return annot.page == pageNum;
+            });
+        },
+        signable: function() {
+            return this.signature_flow > 0 && !this.when_signed;
+        },
+        countersignable: function(role) {
+            // TODO: remove role check (should happen in caller)
+            return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned;
+        },
+        finalizable: function() {
+            // signature_flow 2 is no longer finalizeable, as sign / countersign takes care of it
+            return this.signature_flow===1 && this.when_signed && !this.when_finalized;
+        },
+        voidable: function() {
+            return this.signature_flow > 0 && this.when_finalized && this.when_void_requested && !this.when_void_accepted;
+        },
+        removeAllNotes: function() {
+            this.annotations.splice(0);
+        },
+        rejectSignature: function(msg) {
+            // TODO: convert aBrijj.js to use the promise / $q library directly so we can just chain the promises
+            var promise = $q.defer();
+            if (!msg) {
+                // prevent email from going out with {{message}} variable unsubstituted
+                msg = "";
             }
-            else if (annot.required && annot.val.length === 0) {
-                if ((annot.whosign == 'Investor' && role == 'investor') ||
-                    (annot.whosign == 'Issuer' && role == 'issuer')) {
-                    return true;
-                }
-            }
-            return false;
-        });
-    },
-    countersignable: function(role) {
-        return role == "issuer" && this.signature_flow===2 && this.when_signed && !this.when_countersigned
-    },
-};
+            SWBrijj.procm("document.reject_signature", this.doc_id, msg).then(function(data) {
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.reject(x);
+            });
+            return promise.promise;
+        },
+        sign: function() {
+            var promise = $q.defer();
+            // before signing the document, I may need to save the existing annotations
+            // In fact, I should send the existing annotations along with the signature request for a two-fer.
 
-docs.service('Documents', ["Annotations", function(Annotations) {
+            var d = this;
+            SWBrijj.sign_document(this.doc_id, JSON.stringify(Annotations.getInvestorNotesForUpload(this.doc_id))).then(function(data) {
+                d.when_signed = data;
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.reject(x);
+            });
+            return promise.promise;
+        },
+        countersign: function() {
+            var promise = $q.defer();
+            // TODO: Annotations.getIssuerNotesForUpload seems a little when we're inside the document
+            // TODO: shouldn't send notes for countersign, should just use DB version
+            var d = this;
+            SWBrijj.document_countersign(this.doc_id, JSON.stringify(Annotations.getIssuerNotesForUpload(this.doc_id))).then(function(data) {
+                d.removeAllNotes();
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.reject(x);
+            });
+            return promise.promise;
+        },
+        finalize: function() {
+            var promise = $q.defer();
+            SWBrijj.document_issuer_finalize(this.doc_id).then(function(data) {
+                $rootScope.billing.usage.documents_total += 1;
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.reject(x);
+            });
+            return promise.promise;
+        },
+        void: function() {
+            var promise = $q.defer();
+            SWBrijj.document_investor_void($scope.doc_id, 1, "").then(function(data) {
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.rejecdt(x);
+            });
+            return promise.promise;
+        },
+        rejectVoid: function(msg) {
+            var promise = $q.defer();
+            if (!msg) {
+                // prevent email from going out with {{message}} variable unsubstituted
+                msg = "";
+            }
+            SWBrijj.document_investor_void(this.doc_id, 0, message).then(function(data) {
+                promise.resolve(data);
+            }).except(function(x) {
+                promise.rejecdt(x);
+            });
+            return promise.promise;
+        },
+    };
+
+    /// Document service definition
     // TODO: probably need to distinguish between originals and investor versions
     var docs = {};
 
@@ -111,6 +179,17 @@ docs.service('Documents', ["Annotations", function(Annotations) {
         angular.extend(oldDoc, doc);
         oldDoc.pages = realPages;
         oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
+        if (oldDoc.tags) {
+            try {
+                oldDoc.tags = JSON.parse(oldDoc.tags);
+            } catch (e) {
+                console.log("error while parsing JSON");
+                console.log(oldDoc.tags);
+                oldDoc.tags = [];
+            }
+        } else {
+            oldDoc.tags = [];
+        }
         return oldDoc;
     };
 }]);

@@ -4,7 +4,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
     $rootScope.greypage = true;
 
 
-    $scope.fields = {'premoney': 8000000, 'investment': 2000000, 'optionpool': 20};
+    $scope.fields = {'premoney': 8000000, 'investment': 2000000, 'optionpool': 20, 'convertdate': new Date.today()};
     $scope.initialrounds = [];
     $scope.rounds = [];
     $scope.initialtotals = {};
@@ -73,17 +73,21 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
 
     $scope.debtcost = function() {
         $scope.totaldebtcost = 0;
+        var convertTran = {'date': $scope.rounddate};
         angular.forEach($scope.rounds, function (round) {
             angular.forEach($scope.trans, function (tran) {
                 if (round.type == "Debt" && round.issue == tran.issue && round.convertme) {
                     var actualdiscount;
+                    convertTran.tran = angular.copy(tran);
+                    convertTran.newtran = angular.copy(tran);
+                    tran.interestamount = calculate.debtinterest(convertTran);
                     if (!isNaN(parseFloat(tran.valcap))) {
                         actualdiscount = Math.max(tran.discount, 1 - (tran.valcap / $scope.premoney));
                     } else {
                         actualdiscount = tran.discount;
                     }
-                    $scope.effectivepremoney -= (tran.amount / (1 - (actualdiscount/100)));
-                    $scope.totaldebtcost += (tran.amount / (1 - (actualdiscount/100)));
+                    $scope.effectivepremoney -= (tran.interestamount / (1 - (actualdiscount/100)));
+                    $scope.totaldebtcost += (tran.interestamount / (1 - (actualdiscount/100)));
                 }
             });
         });
@@ -123,7 +127,8 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                 if (round.type == "Debt" && round.issue == tran.issue && round.convertme) {
                     convertTran = {};
                     convertTran.method = "Valuation";
-                    convertTran.tran = tran;
+                    convertTran.tran = angular.copy(tran);
+                    convertTran.tran.amount = tran.interestamount;
                     convertTran.newtran = tran;
                     convertTran.toissue = {};
                     convertTran.toissue.premoney = $scope.premoney;
@@ -148,12 +153,12 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
         $scope.investment = parseFloat(String($scope.fields.investment).replace(/[^0-9.]/g,''));
         $scope.optionpool = parseFloat(String($scope.fields.optionpool).replace(/[^0-9.]/g,''));
+        $scope.rounddate = $scope.fields.convertdate;
 
         // Reset rounds and totals to their cap table levels
         $scope.rounds = angular.copy($scope.initialrounds);
         $scope.totals = angular.copy($scope.initialtotals);
 
-        console.log($scope.rounds);
 
         // Get the initial price per share and premoney
         $scope.effectivepremoney = $scope.premoney;
@@ -214,6 +219,31 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
 
     $scope.roundable = function() {
         return ($scope.rounds.length > 1 && !isNaN($scope.rounds[0].percent))
-    }
+    };
+
+    var keyPressed = false;
+    $scope.dateconversion = function (fields, evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('#convertdate').val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    $scope.fields.convertdate = calculate.timezoneOffset(date);
+                    $scope.calculate();
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if (fields['convertdate'] instanceof Date) {
+                $scope.fields.convertdate = calculate.timezoneOffset(fields['convertdate']);
+                $scope.calculate();
+                keyPressed = false;
+            }
+        }
+    };
 
 };

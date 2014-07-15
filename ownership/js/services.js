@@ -1,6 +1,485 @@
 var ownership = angular.module('ownerServices', []);
 
-// Captable functions for basic mathematics. Should be expanded by peeling some of the reusable pieces out of the controller.
+CapTable = function() {
+    this.vInvestors = [];
+    this.issuekeys = [];
+    this.issues = [];
+    this.rows = [];
+    this.uniquerows = [];
+    this.trans = [];
+    this.grants = [];
+    this.paripassu = [];
+    this.conversions = [];
+    this.transfers = [];
+};
+// CRUD the captable
+ownership.service('captable',
+function($rootScope, calculate, sorting, SWBrijj, $q) {
+
+    var captable = new CapTable();
+
+    this.getCapTable = function() {
+        return captable;
+    };
+
+    this.loadCapTable = function() { 
+        $q.all([loadIssues(),
+                loadTransactions(),
+                loadGrants(),
+                loadPariPassu(),
+                loadConversions(),
+                loadTransfers(),
+                loadEvidence(),
+                loadRowNames()])
+        .then(function(results) {
+            captable.issues      = results[0];
+            captable.trans       = results[1];
+            handleTransactions(    results[1]);
+            captable.grants      = results[2];
+            captable.paripassu   = results[3];
+            captable.conversions = results[4];
+            captable.transfers   = results[5];
+            attachEvidence(        results[6]);
+
+            generateCaptable(      results[7]);
+        }, logErrorPromise);
+    };
+    function loadIssues() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_issue')
+        .then(function(issues) {
+            promise.resolve(issues);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadTransactions() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_transaction')
+        .then(function(trans) {
+            promise.resolve(trans);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadGrants() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_grants')
+        .then(function(grants) {
+            promise.resolve(grants);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadPariPassu() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_paripassu')
+        .then(function(paripassu) {
+            promise.resolve(paripassu);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadConversions() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_conversion')
+        .then(function(conversions) {
+            promise.resolve(conversions);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadTransfers() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_transfer')
+        .then(function(transfers) {
+            promise.resolve(transfers);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadEvidence() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.my_company_evidence')
+        .then(function(evidence) {
+            promise.resolve(evidence);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadRowNames() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.company_row_names')
+        .then(function(names) {
+            promise.resolve(names);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function handleTransactions(trans) {
+        if (Object.keys(trans).length === 0 &&
+            Modernizr.testProp('pointerEvents'))
+        {
+            $rootScope.$on('billingLoaded', function(x) {
+                initUI($rootScope.companyIsZombie());
+            });
+            initUI($rootScope.companyIsZombie());
+        }
+    }
+    function initUI(isZombie) {
+        $rootScope.$broadcast('captable:initui');
+    }
+    function updateCell(tran, row) {
+        var cell;
+        if (tran.issue in row) {
+            cell = row[tran.issue];
+        } else {
+            cell = row[tran.issue] = {};
+            cell.state = false;
+        }
+        cell.ukey = cell.u = calculate.sum(cell.u, tran.units);
+        cell.akey = cell.a = calculate.sum(cell.a, tran.amount);
+        if (!isNaN(parseFloat(tran.forfeited))) {
+            cell.ukey = cell.u = calculate.sum(cell.u, (-tran.forfeited));
+        }
+        if (!isNaN(parseFloat(tran.exercised))) {
+            cell.exercised = calculate.sum(cell.exercised, tran.exercised);
+        }
+    }
+    function attachEvidence(data) {
+        angular.forEach(captable.trans, function(tran) {
+            tran.evidence_data = data.filter(function(el) {
+                return el.evidence==tran.evidence;
+            });
+        });
+        // TODO implement for issues
+    }
+    function setIssueKey(iss) {
+        iss.key = iss.issue;
+        captable.issuekeys.push(iss.key);
+    }
+    function reformatDate(obj) {
+        obj.date = calculate.timezoneOffset(obj.date);
+    }
+    function setVestingDates(obj) {
+        if (obj.vestingbegins) {
+            obj.vestingbegins = calculate.timezoneOffset(obj.vestingbegins);
+            obj.vestingbeginsdisplay = calculate.monthDiff(obj.vestingbegins,
+                                                           obj.date);
+        }
+    }
+    function processIssue(iss) {
+        setIssueKey(iss);
+        reformatDate(iss);
+        setVestingDates(iss);
+    }
+    // Uses the grants to update the transactions with forfeited values
+    // Eliminates the need for further reference to forfeit grants
+    function incorporateGrantsIntoTransactions(grants, transactions) {
+        angular.forEach(grants, function(grant) {
+            angular.forEach(transactions, function(tran) {
+                if (grant.tran_id == tran.tran_id) {
+                    grant.investor = tran.investor;
+                    if (grant.action == "forfeited") {
+                        if (tran.forfeited) {
+                            tran.forfeited = tran.forfeited + grant.unit;
+                        } else { tran.forfeited = grant.unit; }
+                    }
+                    if (grant.action == "exercised") {
+                        if (tran.exercised) {
+                            tran.exercised = tran.exercised + grant.unit;
+                        } else { tran.exercised = grant.unit; }
+                    }
+                }
+            });
+        });
+    }
+    function initRowsFromNames(names) {
+        angular.forEach(names, function(name) {
+            captable.rows.push({"name": name.name,
+                                "namekey": name.name,
+                                "editable": "yes"});
+        });
+    }
+    function setTransactionKeys(tran) {
+        tran.key = tran.issue;
+        tran.unitskey = tran.units;
+        tran.paidkey = tran.amount;
+        tran.datekey = tran.date.toUTCString();
+        tran.investorkey = tran.investor;
+    }
+    function inheritDataFromIssue(obj) {
+        angular.forEach(captable.issues, function(iss) {
+            if (obj.issue == iss.issue) {
+                obj.totalauth = iss.totalauth;
+                obj.premoney = iss.premoney;
+                obj.postmoney = iss.postmoney;
+            }
+        });
+    }
+    function addTranToRows(tran) {
+        if (captable.uniquerows.indexOf(tran.investor) == -1) {
+            captable.uniquerows.push(tran.investor);
+            angular.forEach(captable.rows, function(row) {
+                if (row.namekey == tran.investor) {
+                    row.email = tran.email;
+                    row.emailkey = tran.email;
+                }
+            });
+        }
+    }
+    function logError(err) { console.log(err); }
+    function logErrorPromise(err) {
+        console.log(err);
+        promise.reject(err);
+    }
+    function nullCell() {
+        return {"u": null, "a": null, "ukey": null, "akey": null};
+    }
+    function addTranToCell(tran) {
+        angular.forEach(captable.rows, function (row) {
+            if (row.name == tran.investor) {
+                updateCell(tran, row);
+            } else if (!(tran.issue in row)) {
+                // init cell
+                row[tran.issue] = nullCell();
+            }
+        });
+    }
+    function processTransaction(tran) {
+        reformatDate(tran);
+        setTransactionKeys(tran);
+        setVestingDates(tran);
+        inheritDataFromIssue(tran);
+        addTranToRows(tran); // incorporate transaction's investor
+        addTranToCell(tran);
+    }
+    function attachPariPassu(issues, links) {
+        angular.forEach(issues, function(iss) {
+            iss.paripassu = [];
+            angular.forEach(links, function(link) {
+                if (link.issue == iss.issue) {
+                    iss.paripassu.push(link);
+                }
+            });
+            if (iss.paripassu.length === 0) {
+                iss.paripassu.push({"company": iss.company,
+                                    "issue": iss.issue,
+                                    "pariwith": null});
+            }
+        });
+    }
+    function incorporateConversionsTransfers(tran) {
+        tran.convert = [];
+        angular.forEach(captable.conversions, function(con) {
+            if (con.tranto == tran.tran_id) {
+                con.date = calculate.timezoneOffset(con.date);
+                if (con.method == "Split") {
+                    con.split = new Fraction(con.split);
+                }
+                tran.convert.push(con);
+            }
+        });
+        angular.forEach(captable.transfers, function(transf) {
+            transf.date = calculate.timezoneOffset(transf.date);
+            var final = angular.copy(transf);
+            if (transf.tranto == tran.tran_id) {
+                final.direction = "To";
+            } else if (transf.tranfrom == tran.tran_id) {
+                final.direction = "From";
+            }
+            tran.convert.push(final);
+        });
+    }
+    function calculateDebtCells() {
+        angular.forEach(captable.rows, function (row) {
+            angular.forEach(captable.issues, function (issue) {
+                var cell = row[issue.issue];
+                if (cell !== undefined &&
+                    issue.type == "Debt" &&
+                    isNaN(parseFloat(cell.u)) &&
+                    !isNaN(parseFloat(cell.a)))
+                {
+                    cell.x = calculate.debt(captable.rows, issue, row);
+                }
+            });
+        });
+    }
+    function generateUnissuedRows() {
+        angular.forEach(captable.issues, function (issue) {
+            // FIXME this is awful. nested loops of the same array.
+            captable.rows = calculate.unissued(captable.rows,
+                                               captable.issues,
+                                               String(issue.issue));
+        });
+    }
+    function fillEmptyCells() {
+        angular.forEach(captable.rows, function (row) {
+            angular.forEach(captable.issuekeys, function (issuekey) {
+                if (!(issuekey in row)) {
+                    row[issuekey] = nullCell();
+                }
+            });
+        });
+    }
+    //switches the sidebar based on the type of the issue
+    function funcformatAmount(amount) {
+        return calculate.funcformatAmount(amount);
+    }
+
+    var memformatamount = memoize(funcformatAmount);
+    function formatAmount(amount) {
+        return memformatamount(amount);
+    }
+    // Total Shares in captable
+    var totalShares = memoize(calculate.totalShares);
+    function totalShares(rows) {
+        return formatAmount(totalShares(rows));
+    }
+
+    function formatDollarAmount(amount) {
+        var output = calculate.formatMoneyAmount(memformatamount(amount),
+                                                 $rootScope.settings);
+        return (output);
+    }
+    // Total Shares | Paid for an issue column (type is either u or a)
+    var totalPaid = memoize(calculate.totalPaid);
+    function totalPaid(rows) {
+        return formatDollarAmount(totalPaid(rows));
+    }
+    // Total Shares for a shareholder row
+    var shareSum = memoize(calculate.shareSum);
+    function shareSum(row) {
+        return formatAmount(shareSum(row));
+    }
+    function calculateInvestorPercentages() {
+        angular.forEach(captable.rows, function(row) {
+            row.startpercent =
+                calculate.sharePercentage(row,
+                                          captable.rows,
+                                          captable.issuekeys,
+                                          shareSum(row),
+                                          totalShares(captable.rows));
+        });
+    }
+    function prepareForDisplay() {
+        // Sort the columns before finally showing them
+        // Issues are sorted by date, rows by ownership within each issue
+        captable.issues.sort(sorting.issuedate);
+        captable.issuekeys = sorting.issuekeys(captable.issuekeys,
+                                               captable.issues);
+        captable.rows.sort(sorting.basicrow());
+        do {
+            var values = {"name": "", "editable": "0"};
+            angular.forEach(captable.issuekeys, function(key) {
+                values[key] = nullCell();
+            });
+            captable.rows.push(values);
+        } while (captable.rows.length < 5);
+
+        //Calculate the total vested for each row
+        captable.rows = calculate.detailedvested(captable.rows, captable.trans);
+
+        // Add extra blank issue, which will create a new one when clicked.
+        // Silly future date so that the issue always appears
+        // on the rightmost side of the table
+        captable.issues.push({"name": "", "date": new Date(2100, 1, 1)});
+        return true;
+    }
+    function attachWatches() {
+        for (var i=0; i < captable.trans.length; i++) {
+            $rootScope.$watch('trans['+i+']', transaction_watch, true);
+        }
+        for (var j=0; j < captable.issues.length; j++) {
+            $rootScope.$watch('issues['+j+']', issue_watch, true);
+        }
+    }
+    function pingIntercomIfCaptableStarted() {
+        var earliestedit = new Date.today().addDays(1);
+        var duplicate = earliestedit;
+        angular.forEach(captable.issues, function(issue) {
+            if (issue.created &&
+                Date.compare(earliestedit, issue.created) > -1) {
+                earliestedit = issue.created;
+            }
+        });
+        if (earliestedit != duplicate) {
+            Intercom('update',
+                     {company: {'captablestart_at':
+                                   parseInt(Date.parse(earliestedit)
+                                                .getTime()/1000, 10) } });
+        }
+    }
+    function populateListOfInvestorsWithoutAccessToTheCaptable() {
+        var emailedalready = [];
+        angular.forEach(captable.rows, function (row) {
+            if (row.emailkey !== null) {
+                emailedalready.push(row.emailkey);
+            }
+        });
+        // FIXME move to loadCaptable
+        SWBrijj.tblm('global.investor_list', ['email', 'name'])
+        .then(function(investors) {
+            angular.forEach(investors, function(investor, idx) {
+                if (emailedalready.indexOf(investor.email) == -1) {
+                    var label = (investor.name ? investor.name : "") +
+                                "(" + investor.email + ")";
+                    captable.vInvestors.push(label);
+                }
+            });
+        });
+    }
+    function generic_watch(newval, oldval, obj) {
+        if (!newval || !oldval) {return;}
+        if (parseFloat(newval.interestrate) > 100 ||
+            parseFloat(newval.interestrate) < 0)
+        {
+            for (var x=0; x < obj.length; x++) {
+                if (obj[x] && obj[x].tran_id == newval.tran_id) {
+                    obj[x].interestrate = oldval.interestrate;
+                }
+            }
+        }
+        if (parseFloat(newval.discount) > 100 ||
+            parseFloat(newval.discount) < 0)
+        {
+            for (var x=0; x < obj.length; x++) {
+                if (obj[x] && obj[x].tran_id == newval.tran_id) {
+                    obj[x].discount = oldval.discount;
+                }
+            }
+        }
+        if (parseFloat(newval.vestcliff) > 100 ||
+            parseFloat(newval.vestcliff) < 0)
+        {
+            for (var x=0; x < obj.length; x++) {
+                if (obj[x] && obj[x].tran_id == newval.tran_id) {
+                    obj[x].vestcliff = oldval.vestcliff;
+                }
+            }
+        }
+    }
+
+    function transaction_watch(newval, oldval) {
+        generic_watch(newval, oldval, captable.trans);
+    }
+
+    function issue_watch(newval, oldval) {
+        generic_watch(newval, oldval, captable.issues);
+    }
+    function generateCaptable(names) {
+        angular.forEach(captable.issues, processIssue);
+        incorporateGrantsIntoTransactions(captable.grants, captable.trans);
+        initRowsFromNames(names);
+        angular.forEach(captable.trans, processTransaction);
+        attachPariPassu(captable.issues, captable.paripassu);
+        angular.forEach(captable.trans, incorporateConversionsTransfers);
+        calculateDebtCells();
+        generateUnissuedRows();
+        fillEmptyCells();
+        calculateInvestorPercentages();
+        captable.finishedsorting = prepareForDisplay();
+        attachWatches();
+        pingIntercomIfCaptableStarted();
+        populateListOfInvestorsWithoutAccessToTheCaptable();
+    }
+});
+
+// Captable functions for basic mathematics.
+// Should be expanded by peeling some of the reusable pieces
+// out of the controller.
 ownership.service('calculate', function () {
 
     this.toFloat = function(value) {
@@ -71,7 +550,7 @@ ownership.service('calculate', function () {
 
     // Simple summation checking that the added value is a number.
     this.sum = function (current, additional) {
-        if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
+        if ((!current || isNaN(parseFloat(current))) && !isNaN(parseFloat(additional))) {
             current = 0;
         }
         if (!isNaN(parseFloat(additional))) {

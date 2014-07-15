@@ -265,6 +265,7 @@ button.right-rail-button.showRightTab {
 
 .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
     border-color: #C6C6C6;
+    color: #666666;
 }
 
 .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus {
@@ -295,4 +296,23 @@ button.right-rail-button.showRightTab {
 
 .span4.capright, .span4.capright span, .span4.capright input {
     -webkit-transform: translateZ(0);
+}
+
+internal-right-rail tabset {
+    display: block;
+}
+
+internal-right-rail .tab-content {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    width: 100%;
+}
+
+internal-right-rail #bottom-part {
+    background-color: #E3E3E3;
+    position: absolute;
+    bottom: 0;
+    padding: 20px;
+    width: calc(100% - 40px);
 }

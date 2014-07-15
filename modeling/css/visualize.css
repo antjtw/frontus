@@ -233,6 +233,9 @@ ul.visualize-table > li > ul > li {
 ul.visualize-table > li > ul > li:first-of-type {
     width: 190px;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .round-summary {

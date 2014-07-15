@@ -7,18 +7,24 @@
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
-                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
-                        <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Investment amount</span>
-                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
-                        <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Post-Money Option Pool %</span>
-                        <input ng-change="calculate()" ng-model="fields.optionpool" ng-disabled="!roundable()" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100}">
-                        <span class="lockedinput" ng-show="!roundable()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                        <input ng-change="calculate()" ng-model="fields.optionpool" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100}">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+                    <div>
+                        <span>Date of Investment</span>
+                        <input ng-disabled="!roundable() || companyIsZombie()" id="convertdate" ng-change="dateconversion(fields)" ui-event="{keydown:'dateconversion(fields, $event)', blur:'dateconversion(fields, \'blur\')'}" type="text"
+                               ng-model="fields.convertdate" data-date-format={{settings.lowercasedate}} bs-datepicker onkeydown="testForEnter();">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                 </div>
                 <div ng-show="debtpresent" class="modeling-header"><span>Convert Notes</span></div>
@@ -27,14 +33,13 @@
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
-                        <span>{{round.name}}</span>
+                        <span>{{round.name | caplength:28}}</span>
                     </div>
                 </div>
             </div>
 
             <div ng-show="!roundable() && doneround" class="modeling-round no-captable">
-                <div>Uh Oh. Looks like you haven't started your captable yet</div>
-                <div>Get started on <a href="/app/ownership/company-captable">your captable now</a></div>
+                <div>This model is built on your cap table data. <a href="/app/ownership/company-captable">Start your cap table</a></div>
             </div>
 
             <div ng-show="roundable()" class="modeling-round first-round">

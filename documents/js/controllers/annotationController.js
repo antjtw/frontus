@@ -2,6 +2,7 @@
 
 function annotationController($scope, $element, $rootScope, $document, Annotations, User, $timeout) {
     function applyLineBreaks(oTextarea) {
+        // TODO: rewrite as an ngModel validator
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
         if (oTextarea.wrap) {
             oTextarea.setAttribute("wrap", "off");
@@ -159,8 +160,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         $scope.$apply(function() {
             var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
             var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
-            $scope.annot.position.size.height = dy - 4;
-            $scope.annot.position.size.width = dx - 8;
+            $scope.annot.position.size.height = dy;
+            $scope.annot.position.size.width = dx;
             return false;
         });
     };
@@ -232,8 +233,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         var dpr = dp.getBoundingClientRect(); // top/left of docPanel
         var dprl = dpr.left - dp.offsetLeft; // left of document itself
         var dprt = dpr.top - dp.offsetTop; // top of document itself
-        $scope.startX = ev.clientX - dprl - 6; // mouse start positions relative to the box/pad
-        $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
+        $scope.startX = ev.clientX - dprl; // mouse start positions relative to the box/pad
+        $scope.startY = ev.clientY - dprt;
         $scope.initialMouseX = ev.clientX;
         $scope.initialMouseY = ev.clientY;
         $scope.initialScrollX = document.documentElement.scrollLeft;
@@ -242,8 +243,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         var dy = ev.clientY - $scope.initialMouseY;
         var mousex = $scope.startX + dx;
         var mousey = $scope.startY + dy;
-        $scope.annot.position.coords.y = topLocation($element.height(), mousey);
-        $scope.annot.position.coords.x = leftLocation($element.width(), mousex);
+        $scope.annot.position.coords.y = topLocation(0, mousey); // box has no size (since it's new) so pass 0 instead of $element.height/width
+        $scope.annot.position.coords.x = leftLocation(0, mousex);
         if (document.attachEvent) {
             document.attachEvent('on'+mousewheelevt, $scope.mousemove);
         } else if (document.addEventListener) {
@@ -268,10 +269,13 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 
     $scope.openBox = function() {
+        $scope.active.annotation = $scope.annot;
         if ($rootScope.navState.role == "issuer" && !$scope.doc.countersignable($rootScope.navState.role)) {
             $scope.getme = true;
         }
-        if ($scope.annot.whattype == "ImgSignature" && (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') || ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+        if ($scope.annot.whattype == "ImgSignature" &&
+            (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
+             ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer' && !$scope.doc.countersignable($rootScope.navState.role)))) {
             $scope.signaturestyle = {height: 180, width: 330 };
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.sigModalUp();
@@ -314,6 +318,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 
     $scope.closeBox = function() {
+        $scope.active.annotation = null;
         if ($rootScope.navState.role == "issuer") {
             $scope.getme = false;
         }

@@ -39,7 +39,7 @@
                 </div>
                 <div class="modeling-input-row">
                     <div>
-                        <span>Investment Amount</span>
+                        <span>Note Amount</span>
                         <input type="text" class="money" ng-disabled="fixinputs" ng-model="fields.fromtranamount" ng-change="conversion('fromtranamount')" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="fixinputs" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
@@ -58,7 +58,7 @@
 
                 <div class="modeling-input-row">
                     <div>
-                        <span>Investment Amount</span>
+                        <span>New Investment Amount</span>
                         <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
                     </div>
                     <div ng-show="debttab == 'one'">

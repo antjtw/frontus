@@ -15,34 +15,25 @@
             </button>
         </div>
     </td>
-    <td class="shareholder-column docname-column">
-  <!--       ng-click="titleClick()" -->
+    <td class="shareholder-column docname-column" ng-click="titleClick()" ng-class="{pointer: doc.type=='doc'}">
         <ul>
-           <!--  <li title="{{title(doc)}}" class="docshow" tooltip="{{doc.docname}}" tooltip-trigger="{{{true: 'click', false: 'never'}[doc.docname.length > 50]}}"> -->
-           <li>
-            <span tooltip="{{showtooltip(doc.docname)}}"  value="test">
-               <span> {{title(doc)| caplength:50}} </span>
-            </span>
-
-      <!--           title(doc) -->
-                
-
+            <li>
+                <span tooltip="{{showtooltip(title(doc))}}"  value="test">
+                    <span> {{title(doc)| caplength:50}} </span>
+                </span>
                 <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span>
-
-               
             </li>
 
-            <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar">{{docStatus(doc)}}</li>
+            <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar" ng-if="doc.type == 'doc'">{{docStatus(doc)}}</li>
 
         </ul>
-           <!-- <a href="#" tooltip-placement="top" ng-if="doc.docname.length > 50" tooltip="{{doc.docname}}"> -->
     </td>
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
         <div ng-if="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
         <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
     </td>
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
-        ng-click="doc.uploading || viewStatus(doc)">
+        ng-click="!(!doc.uploaded_by || doc.pages > 0) || viewStatus(doc)">
         <ul>
             <li>{{formatDocStatusRatio(doc)}}</li>
         </ul>
@@ -91,7 +82,7 @@
             </ul>
         </div>
         <div ng-if="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-            <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && !doc.uploading" class="dropdown-list">
+            <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && (!doc.uploaded_by || doc.pages > 0)" class="dropdown-list">
                 <li class="dropdown standard menu-drop">
                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
                     </a>
