@@ -17,7 +17,7 @@
     </div>
     <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
 </td>
-<td class="shareholder-column status-column pointer" ng-click="viewStatus(version)">
+<td class="shareholder-column status-column pointer" ng-click="viewInvestorCopy(version)">
     <ul>
         <li>{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
     </ul>
