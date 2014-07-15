@@ -7,11 +7,15 @@ m.directive('peopleFilter', function(){
         templateUrl:'/cmn/partials/peopleFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout){
-            $scope.listPeople= function(){
-                SWBrijj.tblm('global.user_list'['email', 'name']).then(function(data){
-                    $scope.myUsers = data 
-                })
-            }
+            // $scope.listPeople= function(){
+            //     SWBrijj.tblm('global.user_list'['email', 'name']).then(function(data){
+            //         $scope.myUsers = data 
+            //         console.log($scope.myUsers)
+            //     }).except(function(){
+            //         console.log('error')
+            //     })
+            // }
+            // $scope.listPeople();
 
         }]
     }
