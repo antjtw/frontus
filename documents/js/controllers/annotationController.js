@@ -3,6 +3,18 @@
 function annotationController($scope, $element, $document, Annotations, User, $timeout, navState) {
     $scope.navState = navState; // TODO: UI is very dependant on navState
 
+    $scope.defaultTypes = [
+        {name: "Text", display: "Text"},
+        {name: "Signature", display: "Signature Text"},
+        {name: "ImgSignature", display: "Signature Image"},
+        {name: "investorName", display: "Name"},
+        {name: "investorStreet", display: "Address"},
+        {name: "investorState", display: "State"},
+        {name: "investorPostalcode", display: "Zip code"},
+        {name: "investorEmail", display: "Email"},
+        {name: "signatureDate", display: "Date"},
+    ];
+
     function applyLineBreaks(oTextarea) {
         // TODO: rewrite as an ngModel validator
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
@@ -104,7 +116,6 @@ function annotationController($scope, $element, $document, Annotations, User, $t
     });
 
     $scope.$watch('annot.whattype', function(newval, oldval) {
-        var elem = $element.find('textarea');
         if (newval == "Signature") {
             $scope.annot.fontsize = 18;
             if ($scope.annot.position.size.height < 37) {

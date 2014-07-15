@@ -49,32 +49,8 @@
                                         {{ whattypelabel }}
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'Text')" class="button">Text</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'Signature')" class="button">Signature Text</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'ImgSignature')" class="button">Signature Image</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'investorName')" class="button">Name</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'investorStreet')" class="button">Address</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'investorState')" class="button">State</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'investorPostalcode')" class="button">Zip code</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'investorEmail')" class="button">Email</a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="setAnnot($event, this, 'signatureDate')" class="button">Date</a>
+                                        <li ng-repeat="type in defaultTypes">
+                                            <a ng-click="setAnnot($event, this, type.name)" class="button">{{type.display}}</a>
                                         </li>
                                     </ul>
                                 </li>
