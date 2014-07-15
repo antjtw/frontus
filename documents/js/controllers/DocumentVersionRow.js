@@ -69,9 +69,9 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         'placeholder': 'Enter an email address & press enter'
     };
 
-    $scope.shareDocuments = function(docId, emails){
-        console.log(version.doc_id)
-    }
+    // $scope.shareDocuments = function(docId, emails){
+    //     console.log(version.doc_id)
+    // }
 
 
     $scope.shortVersionStatus = function(version) {
@@ -115,7 +115,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else {
             return "Sent";
         }
-        console.log($scope.shortVersionStatus(version))
+  
     };
 
     function lastEventByInvestor(doc) {
@@ -180,13 +180,13 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         $location.url("/app/documents/company-status?doc=" + version.original);
     };
 
-    $scope.remind = function(doc_id, user_email) {
+    // $scope.remind = function(doc_id, user_email) {
         /*
           SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
           $scope.emit('event:remind');
           });
         */
-    };
+    // };
 
     $scope.switchSignatureFlow = function(version, sigflow) {
         SWBrijj.procm("document.update_signature_flow", version.doc_id, sigflow).then(function(x) {
