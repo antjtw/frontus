@@ -22,11 +22,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         return captable;
     };
 
-    /* NOTE
-     *   Main promise chain.
-     */
     this.loadCapTable = function() { 
-        //getIssues();
         $q.all([loadIssues(),
                 loadTransactions(),
                 loadGrants(),
@@ -36,17 +32,17 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 loadEvidence(),
                 loadRowNames()])
         .then(function(results) {
-            captable.issues = results[0];
-            captable.trans  = results[1];
-            handleTransactions(results[1]);
-            captable.grants = results[2];
-            captable.paripassu = results[3];
+            captable.issues      = results[0];
+            captable.trans       = results[1];
+            handleTransactions(    results[1]);
+            captable.grants      = results[2];
+            captable.paripassu   = results[3];
             captable.conversions = results[4];
-            captable.transfers = results[5];
-            attachEvidence(results[6]);
+            captable.transfers   = results[5];
+            attachEvidence(        results[6]);
 
-            generateCaptable(results[7]);
-        });
+            generateCaptable(      results[7]);
+        }, logErrorPromise);
     };
     function loadIssues() {
         var promise = $q.defer();
@@ -112,7 +108,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }).except(logErrorPromise);
         return promise.promise;
     }
-
     function handleTransactions(trans) {
         if (Object.keys(trans).length === 0 &&
             Modernizr.testProp('pointerEvents'))
@@ -414,7 +409,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 emailedalready.push(row.emailkey);
             }
         });
-
+        // FIXME move to loadCaptable
         SWBrijj.tblm('global.investor_list', ['email', 'name'])
         .then(function(investors) {
             angular.forEach(investors, function(investor, idx) {
@@ -479,7 +474,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         attachWatches();
         pingIntercomIfCaptableStarted();
         populateListOfInvestorsWithoutAccessToTheCaptable();
-    };
+    }
 });
 
 // Captable functions for basic mathematics.

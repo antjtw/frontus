@@ -49,23 +49,23 @@ app.config(function($routeProvider, $locationProvider){
         }).
         when('/app/ownership/company-captable', {
             controller: 'captableController',
-            templateUrl: '/ownership/pages/comp-captable.html'
+            templateUrl: '/ownership/partials/comp-captable.html'
         }).
         when('/app/ownership/company-grants', {
             controller: 'grantController',
-            templateUrl: '/ownership/pages/comp-grant.html'
+            templateUrl: '/ownership/partials/comp-grant.html'
         }).
         when('/app/ownership/company-status', {
             controller: 'statusController',
-            templateUrl: '/ownership/pages/comp-status.html'
+            templateUrl: '/ownership/partials/comp-status.html'
         }).
         when('/app/ownership/investor-captable', {
             controller: 'invCaptableController',
-            templateUrl: '/ownership/pages/inv-captable.html'
+            templateUrl: '/ownership/partials/inv-captable.html'
         }).
         when('/app/ownership/investor-grants', {
             controller: 'invGrantController',
-            templateUrl: '/ownership/pages/inv-grant.html'
+            templateUrl: '/ownership/partials/inv-grant.html'
         }).
         when('/app/documents/company-list', {
             templateUrl: '/documents/partials/companyList.html',
