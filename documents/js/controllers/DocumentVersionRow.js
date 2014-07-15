@@ -52,7 +52,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $route.reload();
             $scope.$emit('notification:success', 'Document reshared');
         }).except(function(data){
-            $scope.$emit('notification:fail', 'Something went wrong');
             console.log("failed")
         })
       
