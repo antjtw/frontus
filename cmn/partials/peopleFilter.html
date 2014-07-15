@@ -1,36 +1,17 @@
 <div class="row-fluid">
-
-
-  <div class="row-fluid">
 <div class="message-side">
 
  <div class="messages tabbable">            
     <ul class="activity-feed2">
                     <li class="event">
-                        <div><img ng-src="/img/activity/message.png"></div>
                         <div>
                             <ul>
                                 <li>
-                                    <span>
-                                        Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': 'one shareholder', 'other': '{} shareholders'}">
-                                    </span><br/>
                                     
                                     <div>
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showRecipients" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showRecipients = !showRecipients"></span>
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showRecipients = !showRecipients"></span>
-                                        <span style="cursor:pointer" ng-click = "showRecipients = !showRecipients">Recipient Details</span>
-                                        <ul ng-class="{'testing':showRecipients}">
-                                            <ul ng-show="showRecipients">
-                                                <li  ng-repeat="foo in message_datum.foo track by $index">
-                                                    <span class="recipients" ng-click="gotoPerson(foo)" ng-class="{'blue-link': foo.login}">{{foo.personName}}</span>
-
-                                                    <div class="recipients details">Message {{foo.event}}<span ng-if="foo.event=='opened'"> on {{foo.timestamp | date:'shortDate'}}
-                                                    </span></div>
-                                                </li>                        
-                                                
-                                            </ul>
-                                           
-                                        </ul>
+                                        <span style="cursor:pointer" ng-click = "showRecipients = !showRecipients">People</span>
                         
                                     </div>          
                                 </li>                

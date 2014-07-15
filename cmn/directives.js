@@ -88,8 +88,7 @@ m.directive('messageSide', function(){
 
             $scope.getLogins = function(){
                 SWBrijj.tblm('global.user_tracker').then(function(data){
-                    $scope.logins = data  
-                    console.log($scope.logins)              
+                    $scope.logins = data              
                 })
             }
             $scope.getLogins();
@@ -100,7 +99,6 @@ m.directive('messageSide', function(){
                     console.log($scope.msgstatus)
                     $scope.msgstatus = data;
                     $scope.getNumber = $scope.msgstatus.length;
-                    console.log($scope.getNumber)
                     $scope.getLogs();
                     $scope.getLogins();
 
@@ -186,7 +184,6 @@ m.directive('messageSide', function(){
                                     }
                                 })
                                 angular.forEach($scope.logins, function(login){
-                                    console.log($scope.logins)
                                     if(login.email == value.tox){
                                         myEvents[i].foo.forEach(function(elem){
                                             elem.login = login.logintime;
