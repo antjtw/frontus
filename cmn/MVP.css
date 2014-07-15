@@ -1479,7 +1479,7 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 li.event > div:first-of-type {
     display: inline-block;
     width: 50px;
-    text-align: center;
+/*    text-align: center;*/
     margin-top: 10px;
     vertical-align: top;
 }
