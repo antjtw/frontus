@@ -9,7 +9,7 @@ m.directive('peopleFilter', function(){
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout){
             $scope.listPeople= function(){
                 SWBrijj.tblm('global.user_list'['email', 'name']).then(function(data){
-                    $scope.users = data 
+                    $scope.myUsers = data 
                 })
             }
 
