@@ -4637,3 +4637,9 @@ textarea.email-text {
     color: #3498DB;
     cursor: pointer; 
 }
+
+/*Filter sidebar*/
+.tinycol{
+    display: inline-block;
+    width: 20%;
+}

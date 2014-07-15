@@ -12,26 +12,21 @@ m.directive('peopleFilter', function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.myContacts = data;
                     console.log($scope.myContacts);
-                })
-            }
-            $scope.getContacts();
+                });
+            };
+            // $scope.getContacts();
 
             $scope.getUserRoles = function(){
-                SWBrijj.tblmm('account.my_user_role', ['email, role']).then(function(data){
+                SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
+                    $scope.getContacts();
                     $scope.myRoles = data;
+                    $scope.myAdmins = $scope.myRoles.length 
+                    $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins
                     console.log($scope.myRoles);
                 });
             };
-            $scope.getUserRoles();
-            // $scope.listPeople= function(){
-            //     SWBrijj.tblm('global.user_list'['email', 'name']).then(function(data){
-            //         $scope.myUsers = data 
-            //         console.log($scope.myUsers)
-            //     }).except(function(){
-            //         console.log('error')
-            //     })
-            // }
-            // $scope.listPeople();
+            $scope.getUserRoles()
+
 
         }]
     }
