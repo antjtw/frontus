@@ -122,9 +122,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
                  SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
                         $scope.docviews = data;
+                     /* Should not be required
                         angular.forEach($scope.docviews, function(view) {
                             view.max = view.max.addMinutes(-view.max.getTimezoneOffset())
                         });
+                        */
                     }).except(function(x) {
                      console.log(x);
                  });
