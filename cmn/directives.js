@@ -7,6 +7,13 @@ m.directive('peopleFilter', function(){
         templateUrl:'/cmn/partials/peopleFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout){
+
+            $scope.getContacts = function(){
+                SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                    $scope.myContacts = data;
+                    console.log($scope.myContacts)
+                })
+            }
             // $scope.listPeople= function(){
             //     SWBrijj.tblm('global.user_list'['email', 'name']).then(function(data){
             //         $scope.myUsers = data 
