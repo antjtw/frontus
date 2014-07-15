@@ -11,6 +11,9 @@
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showRecipients" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showRecipients = !showRecipients"></span>
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showRecipients = !showRecipients"></span>
                                         <span style="cursor:pointer" ng-click = "showRecipients = !showRecipients">Roles</span>
+                                        <ul ng-show="!showRecipients">
+                                            <li ng-repeat="user in users">{{user}}</li>
+                                        </ul>
                                     </div>          
                                 </li>                
                             </ul>
@@ -26,6 +29,17 @@
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="showRecipients" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showRecipients = !showRecipients"></span>
                                         <span style="cursor:pointer" ng-click = "showRecipients = !showRecipients">Groups</span>
                         
+                                    </div>          
+                                </li>                
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="event roles">
+                        <div>
+                            <ul>
+                                <li>                                    
+                                    <div>
+                                        <span>Archive</span>
                                     </div>          
                                 </li>                
                             </ul>
