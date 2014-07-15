@@ -194,7 +194,7 @@ input:focus, textarea:focus {
 p, button, select, textarea, a, address, div, input, button {
     font-family:'FS Elliot Web Regular', sans-serif;
     font-size: 14px;
-    line-height: 18px;
+    line-height: 21px;
     color: rgb(141, 141, 141);
 }
 
@@ -1029,7 +1029,7 @@ form.inputs {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    width: 200px;
+    width: 300px;
     height: 32px;
     outline: none !important;
     -webkit-box-shadow: none !important;
@@ -4509,7 +4509,7 @@ textarea.email-text {
 }
 .capTab span.blue-link.delete-link {
     margin-left: 0 !important;
-    margin-top: 0 !important;
+    margin-top: 20 !important;
 }
 .capTab > span.blue-link:before {
     padding-right: 5px;
