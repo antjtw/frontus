@@ -7,7 +7,7 @@
         <li>{{versionStatus(version)}}</li>
     </ul>
 </td>
-
+<!-- These are the different circles -->
 <td class="status-toggle status-icon">
     <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
          class="circle green" aria-hidden="true"></div>
@@ -18,11 +18,14 @@
          aria-hidden="true"><span>x</span>
     </div>
     <div ng-show="isPendingVoid(version) || !versionIsComplete(version) && version.sendgrid_event !='dropped' && version.sendgrid_event!='bounce' && version.sendgrid_event !='deferred'" class="circle yellow" aria-hidden="true"></div>
-    <div ng-show="version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce' || version.sendgrid_event =='deferred'" class="circle red" aria-hidden="true"></div>
+
+    <div ng-show="version.sendgrid_event=='bounce' && !version.when_retracted" class="circle red" aria-hidden="true"></div>
+
 </td>
 <td class="shareholder-column status-column pointer" ng-click="viewStatus(version)">
     <ul>
-        <li ng-class="{'red':version.sendgrid_event=='dropped' || version.sendgrid_event=='bounce' || version.sendgrid_event == 'deferred'}">{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span>
+        <li ng-class="{'red':version.sendgrid_event=='bounce' && !version.when_retracted}">{{shortVersionStatus(version)}} 
+        <span ng-show="viewState.show_archived && version.archived"> & archived</span>
         </li>
 <td colspan="2">
 
@@ -32,7 +35,7 @@
                 ng-click="viewInvestorCopy(version)">Approve</button>
 
     </div>
-    <div ng-if="version.sendgrid_event=='dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred' " class="standard-button small-standard-button doc-share-button" style="margin-right: -1px">
+    <div ng-if="version.sendgrid_event=='bounce' && !version.when_retracted" class="standard-button small-standard-button doc-share-button" style="margin-right: -1px">
         
           <input ui-select2="select2Options" ng-model="emailList.email" style="min-width:230px; max-width:300px"></input>
 

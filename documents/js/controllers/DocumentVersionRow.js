@@ -79,6 +79,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             return "Voided"
         }
         else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred'){
+            version.sendgrid_event ='bounce'
             return 'Bounced Share'
         }
         else if(version.sendgrid_event =='processed'){
