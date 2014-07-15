@@ -4641,5 +4641,12 @@ textarea.email-text {
 /*Filter sidebar*/
 .tinycol{
     display: inline-block;
-    width: 20%;
+    width: 30%;
+    padding-left: 20px;
 }
+
+.tinycol.left{
+    text-align: right;
+}
+
+

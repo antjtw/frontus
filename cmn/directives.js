@@ -5,24 +5,29 @@ m.directive('peopleFilter', function(){
         scope: {people: '='},
         restrict: 'E',
         templateUrl:'/cmn/partials/peopleFilter.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
-        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout){
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
             $scope.getContacts = function(){
+                var promise = $q.defer();
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.myContacts = data;
+                    promise.resolve($scope.myContacts);
                     console.log($scope.myContacts);
                 });
+                return promise.promise
             };
             // $scope.getContacts();
-
+            // thing is scope.mycontacts because that is what the promise resolves
             $scope.getUserRoles = function(){
                 SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
-                    $scope.getContacts();
-                    $scope.myRoles = data;
-                    $scope.myAdmins = $scope.myRoles.length 
-                    $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins
-                    console.log($scope.myRoles);
+                    $scope.getContacts().then(function(){
+                        $scope.myRoles = data;
+                        $scope.myAdmins = $scope.myRoles.length 
+                        $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins
+                        console.log($scope.myRoles);
+                    });
+                   
                 });
             };
             $scope.getUserRoles()
