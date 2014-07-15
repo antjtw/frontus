@@ -1,6 +1,8 @@
 'use strict';
 
-function annotationController($scope, $element, $rootScope, $document, Annotations, User, $timeout) {
+function annotationController($scope, $element, $document, Annotations, User, $timeout, navState) {
+    $scope.navState = navState; // TODO: UI is very dependant on navState
+
     function applyLineBreaks(oTextarea) {
         // TODO: rewrite as an ngModel validator
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
@@ -96,7 +98,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
 
     $scope.$watch('annot.val', function(newValue, oldValue) {
         // prevent issuers from filling in the investor values
-        if ($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Investor") {
+        if (navState.role == "issuer" && $scope.annot.whosign == "Investor") {
             $scope.annot.val = "";
         }
     });
@@ -256,13 +258,13 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 
     $scope.imageMine = function() {
-        var role = $rootScope.navState.role;
+        var role = navState.role;
         var whosign = $scope.annot.whosign;
         return (role == "issuer" && whosign == "Issuer") ||
                (role == "investor" && whosign == "Investor") ? true : false;
     };
     $scope.whosignssticky = function() {
-        var role = $rootScope.navState.role;
+        var role = navState.role;
         var whosign = $scope.annot.whosign;
         return (role == "issuer" && whosign == "Investor") ||
                (role == "investor" && whosign == "Issuer") ? true : false;
@@ -270,12 +272,12 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
 
     $scope.openBox = function() {
         $scope.active.annotation = $scope.annot;
-        if ($rootScope.navState.role == "issuer" && !$scope.doc.countersignable($rootScope.navState.role)) {
+        if (navState.role == "issuer" && !$scope.doc.countersignable(navState.role)) {
             $scope.getme = true;
         }
         if ($scope.annot.whattype == "ImgSignature" &&
-            (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
-             ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer' && !$scope.doc.countersignable($rootScope.navState.role)))) {
+            (($scope.annot.whosign == 'Investor' && navState.role == 'investor') ||
+             ($scope.annot.whosign == 'Issuer' && navState.role == 'issuer' && !$scope.doc.countersignable(navState.role)))) {
             $scope.signaturestyle = {height: 180, width: 330 };
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.sigModalUp();
@@ -283,7 +285,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 
     function setPlaceholder() {
-        $scope.whosignlabel = ($scope.annot.whosign == "Investor") ? "Recipient" : $rootScope.navState.name;
+        $scope.whosignlabel = ($scope.annot.whosign == "Investor") ? "Recipient" : navState.name;
         $scope.whattypelabel = Annotations.attributeLabel($scope.annot.whattype);
         $scope.val_placeholder = $scope.whosignlabel + " " + $scope.whattypelabel;
     }
@@ -291,7 +293,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
 
     function setDefaultText() {
         if ($scope.annot.val.length === 0) {
-            if (($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Issuer") || $rootScope.navState.role == "investor" && $scope.annot.whosign == "Investor") {
+            if ((navState.role == "issuer" && $scope.annot.whosign == "Issuer") || navState.role == "investor" && $scope.annot.whosign == "Investor") {
                 $scope.annot.val = Annotations.investorAttribute([$scope.annot.whattype]);
             } else {
                 $scope.annot.val = "";
@@ -319,13 +321,13 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
 
     $scope.closeBox = function() {
         $scope.active.annotation = null;
-        if ($rootScope.navState.role == "issuer") {
+        if (navState.role == "issuer") {
             $scope.getme = false;
         }
     };
 
     $scope.investorFixed= function() {
-        return $scope.annot.investorfixed && $rootScope.navState.role == 'investor' ? false : true;
+        return $scope.annot.investorfixed && navState.role == 'investor' ? false : true;
     };
 
     $scope.annotationCoordsStyle = {};
@@ -371,4 +373,4 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     $scope.user = User;
 }
 
-annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User", "$timeout"];
+annotationController.$inject = ["$scope", "$element", "$document", "Annotations", "User", "$timeout", "navState"];

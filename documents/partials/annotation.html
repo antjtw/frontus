@@ -1,17 +1,17 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, $root.navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
-    <span class="dragger" ng-show="isAnnotable && investorFixed() && !doc.countersignable($root.navState.role)" ng-mousedown="$event.stopPropagation();">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
+    <span class="dragger" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="$event.stopPropagation();">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
-    <span class="close-button" ng-show="isAnnotable && investorFixed() && !doc.countersignable($root.navState.role)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe(); $event.stopPropagation()">
+    <span class="close-button" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe(); $event.stopPropagation()">
         <span data-icon="&#xe00f;"></span>
     </span>
     <div>
         <fieldset>
             <div class="textarea-container">
-                <textarea wrap="hard" ng-class="{'roundedcorners': $root.navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable($root.navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
+                <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
         </fieldset>
-        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="$root.navState.role == 'issuer' && getme && active.annotation == annot">
+        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == 'issuer' && getme && active.annotation == annot">
             <ul>
                 <li>
                     <ul>
@@ -29,7 +29,7 @@
                                             <a ng-click="setSign(this, 'Investor')" class="button">Recipient</a>
                                         </li>
                                         <li>
-                                            <a ng-click="setSign(this, 'Issuer')" class="button">{{$root.navState.name}}</a>
+                                            <a ng-click="setSign(this, 'Issuer')" class="button">{{navState.name}}</a>
                                         </li>
                                     </ul>
                                 </li>
