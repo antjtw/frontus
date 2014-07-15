@@ -1848,7 +1848,7 @@ help-tab > div > p > span {
     vertical-align: top;
     margin-left: 5px;
     display: inline-block;
-    width: 270px;
+    width: 255px;
 }
 
 .docinfo .inforow .tags {
@@ -1888,4 +1888,41 @@ help-tab > div > p > span {
     padding-bottom: 30px;
     border-bottom: 1px solid #E3E3E3;
     font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.docinfo .investor-views {
+    margin-top: 10px;
+    margin-left: 35px;
+}
+
+.docinfo .investor-views > span {
+    color: #1d2c3c;
+    cursor: pointer;
+}
+
+.docinfo .investor-views > span.toggle-icon {
+    vertical-align: -10%;
+}
+
+.docinfo .investor-views ul {
+    margin-left: 19px;
+}
+
+.docinfo .investor-views ul > li {
+    margin-top: 10px;
+}
+
+.docinfo .investor-views ul > li:first-of-type {
+    margin-top: 5px;
+}
+
+.docinfo .investor-views ul > li > span:first-of-type {
+    display: block;
+    color: #666666;
+}
+
+.docinfo .investor-views ul > li > span:last-of-type {
+    font-size: 12px;
+    line-height: 12px;
+    display: block;
 }

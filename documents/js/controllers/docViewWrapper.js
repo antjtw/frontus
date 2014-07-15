@@ -119,6 +119,15 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                  * @type {number} */
                 /** @name doc#signature_deadline
                  * @type {Date} */
+
+                 SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
+                        $scope.docviews = data;
+                        angular.forEach($scope.docviews, function(view) {
+                            view.max = view.max.addMinutes(-view.max.getTimezoneOffset())
+                        });
+                    }).except(function(x) {
+                     console.log(x);
+                 });
                 $scope.docId = doc.doc_id;
                 $scope.library = "document.my_counterparty_library";
                 $scope.pages = "document.my_counterparty_codex";
