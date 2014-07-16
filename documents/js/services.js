@@ -174,15 +174,16 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             var viable_actions = transaction_attributes[transactionType].actions;
             // documents can only create grants and purchases right now
             var fields = viable_actions.purchase ? viable_actions.purchase.fields : viable_actions.grant.fields;
-            this.annotation_types.splice(0);
-            var tmp_name = this.annotation_types; // forEach creates a new scope
-            defaultTypes.forEach(function(type) {
-                tmp_name.push(type);
-            });
+            this.annotation_types.splice(defaultTypes.length, this.annotation_types.length); // remove anything past the defaultTypes
+            var tmp_array = [];
             for (var field in fields) {
                 var f = fields[field];
-                this.annotation_types.push({name: f.name, display: f.display_name, required: f.required});
+                tmp_array.push({name: f.name, display: f.display_name, required: f.required});
             }
+            // add new types onto the end (in one action, without changing the reference, for performance reasons)
+            var args = [this.annotation_types.length, 0].concat(tmp_array);
+            Array.prototype.splice.apply(this.annotation_types, args);
+            //this.annotation_types.splice(this.annotation_types.length, 0, tmp_array);
         },
     };
 
