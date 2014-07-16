@@ -21,7 +21,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             angular.forEach($scope.emailList, function(value, key){
                 $scope.myEmails.push(value['email']);
             });
-            console.log($scope.emailList)
             return $scope.myEmails
         });
         // $scope.myEmails = array
@@ -53,7 +52,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.reShare = function(version, email){
         SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
-            console.log(data)
+            // console.log(data)
             $route.reload();
             $scope.$emit('notification:success', 'Document reshared');
         }).except(function(data){
@@ -74,10 +73,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         'tokenSeparators': [",", " "],
         'placeholder': 'Enter an email address & press enter'
     };
-
-    // $scope.shareDocuments = function(docId, emails){
-    //     console.log(version.doc_id)
-    // }
 
 
     $scope.shortVersionStatus = function(version) {
