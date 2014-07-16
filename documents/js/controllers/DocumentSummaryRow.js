@@ -39,9 +39,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         console.log($scope.doc)
     }
 
-    $scope.resendDoc = function(version){
-        console.log(version);
-    }
+
 
     $scope.versionsVisible = function(doc) {
         var total = doc.version_count;
