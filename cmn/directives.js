@@ -8,10 +8,48 @@ m.directive('groupPeople', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
-            $scope.showAdmin = function(){
-                console.log($scope.addAdmin)
+            // get all groups of each user
+
+            // if no one has a group
+            //     use multi_update function
+            // array [email, role], {group as json}
+
+            // to remove from group
+            // same function, shorter json
+
+            // if they already have a group 
+            //     separate who is in the group
+            //     add to the group
+
+            $scope.showGroup = function(){
+               console.log($scope.groupName)
             }
-            $scope.showAdmin();
+            $scope.showGroup();
+
+            $scope.groupName = ""
+
+            $scope.checkGroups = function(person){
+                angular.forEach(person, function(info){
+                    console.log(info.email)
+                    var email = info.email
+                    SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
+                        $scope.userInfo = data;
+                        console.log(data);
+                        console.log($scope.userInfo);
+                    }).except(function(data){
+                        console.log("error")
+                    });
+                });      
+
+            }
+
+            $scope.showUserRoles = function(){
+
+                SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
+                    $scope.myUserRoles = data;
+                    // console.log($scope.myUserRoles);
+                })
+            }
 
             
         }]

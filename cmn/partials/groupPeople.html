@@ -10,9 +10,26 @@
   <div class="sidebarText">
     <span>Group Name {{people}}</span>
     <div>
-       <textarea class="email-text" rows="6"
-                  cols="10">
-        </textarea>
+       <input type="text"
+                  cols="10" ng-model="groupName">
+        </input>
     </div>
   </div>
+
+    <div class="sidebarFooter">
+
+        <div class="preview-message" 
+            ng-click="checkGroups(people); showUserRoles()">
+            Group 
+        </div>
+
+       <!--  <div class="footer-headline-left">
+            <div class = "standard-button green">
+                <button class="btn"
+                    ng-disabled="!readyToSend(message)  || clicked"
+                    ng-click="sendMessage(message); $parent.toggleSide()">
+                    Send
+                </button>
+            </div>
+        </div> -->
 </div>
