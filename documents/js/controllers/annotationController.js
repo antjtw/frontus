@@ -22,8 +22,7 @@ function annotationController($scope, $element, $document, Annotations, User, $t
         console.log(new_types);
         $scope.types = angular.copy(defaultTypes); // reset $scope.types
         new_types.forEach(function(type) {
-            // TODO: figure out display names
-            $scope.types.push({name: type.name, display: type.name, required: type.required});
+            $scope.types.push({name: type.name, display: type.display_name, required: type.required});
         });
         console.log($scope.types);
     }, true);

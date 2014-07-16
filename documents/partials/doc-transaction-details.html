@@ -5,5 +5,5 @@
 </div>
 <div ng-show="fields">
     <span>Fields necessary to complete document for {{selectedIssue.issue.issue}}</span>
-    <div ng-repeat="field in fields" ng-show="field.required">{{field.name}}</div>
+    <div ng-repeat="field in fields" ng-show="field.required">{{field.display_name}}</div>
 </div>
