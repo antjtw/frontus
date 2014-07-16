@@ -582,16 +582,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 return $scope.messageData.recipients.indexOf(person.email) != -1;
             }
             else {
-                console.log(person);
-
-                // return person.email;
-            }
+                return $scope.addAdmin.indexOf(person) != -1;
+            };
             
-            // select person in email
         };
 
 
-      
+
         $scope.clearRecipient = function(){
             while($scope.messageData.recipients.length > 0) {
                 $scope.messageData.recipients.pop();
@@ -599,11 +596,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
       
 
-        $scope.emailRecipient = function(person){
+        $scope.selectPerson = function(person){
             if($scope.sidebarPage == 'email'){
                 if ($scope.messageData.recipients.indexOf(person.email)=== -1){
                  $scope.messageData.recipients.push(person.email);
-                 console.log($scope.messageData.recipients)
+                 // console.log($scope.messageData.recipients)
                  }
 
                 else {
@@ -615,7 +612,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else {
                 console.log(person);
                 $scope.addAdmin.push(person);
-                return person
+                return $scope.addAdmin;
+                return true;    
             }
             
         };

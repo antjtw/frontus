@@ -16,10 +16,7 @@
                     </div>
             <!--         admin dropdowns -->
                     <div class="pull-left">
-                        <span class="dropdown">More</span>
-                        <ul class="dropdown-menu">
-                            <li>Admin</li>
-                        </ul>
+                        {{addAdmin[0]}}
                     </div>
 
                  <!--    email button -->
@@ -78,9 +75,10 @@
                     
                       
                     <td style="width:400px" class="shareholder-column docname-column" ng-click=" sidebarPage=='email'"> 
+                        
                    <!--  check boxes      -->
                         <div class="check-box-side">
-                            <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
+                            <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="selectPerson(person)">
                              <span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </div>
             
