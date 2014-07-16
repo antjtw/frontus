@@ -1322,7 +1322,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 
 .docPanel {
     width: 100%;
-    height: 1165px;
     background-size: contain !important;
     background-repeat: no-repeat;
     background-position: top center;
