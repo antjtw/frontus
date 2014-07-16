@@ -73,8 +73,8 @@ app.config(function($routeProvider, $locationProvider){
             reloadOnSearch: false
         }).
         when('/app/documents/company-view', {
-            templateUrl: '/documents/partials/companyViewer.html',
-            controller: 'CompanyDocumentViewController',
+            templateUrl: '/documents/partials/docViewerWrapper.html',
+            controller: 'DocumentViewWrapperController',
             reloadOnSearch: false
         }).
         when('/app/documents/company-status', {
@@ -86,8 +86,8 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'InvestorDocumentListController'
         }).
         when('/app/documents/investor-view', {
-            templateUrl: '/documents/partials/investorViewer.html',
-            controller: 'InvestorDocumentViewController',
+            templateUrl: '/documents/partials/docViewerWrapper.html',
+            controller: 'DocumentViewWrapperController',
             reloadOnSearch: false
         }).
         when('/app/modeling/round', {

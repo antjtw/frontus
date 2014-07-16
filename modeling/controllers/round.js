@@ -82,7 +82,7 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
                     convertTran.newtran = angular.copy(tran);
                     tran.interestamount = calculate.debtinterest(convertTran);
                     if (!isNaN(parseFloat(tran.valcap))) {
-                        actualdiscount = Math.max(tran.discount, 1 - (tran.valcap / $scope.premoney));
+                        actualdiscount = Math.max(tran.discount, (1 - (tran.valcap / $scope.premoney)) *100);
                     } else {
                         actualdiscount = tran.discount;
                     }

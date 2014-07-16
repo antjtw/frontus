@@ -107,7 +107,7 @@
                                 {{e.docname | maxLength}}
                             </a>
                         </li>
-                    </ul> 
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -745,7 +745,7 @@
 </div>
 
 <internal-right-rail toggle-side="sideToggle" window-toggle="windowToggle" window-callback="editEvidence()">
-    <tabset ng-class="{'singletab': tabnumber() == 1, 'tabBorder': windowToggle}">
+    <tabset ng-class="{'tabBorder': windowToggle}" ng-style="viewportheight">
         <tab ng-repeat="tab in tabs" active="tab.active" ng-if="tabvisible(tab)" heading="{{tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')" ng-style="viewportactivity" ng-switch on="sideBar">
 <!-- Issues Side Bar when Editable -->
@@ -1514,7 +1514,7 @@
                                 <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1"></span>
                                 <span>{{tran.date | date:settings.shortdate}} Transaction</span>
                             </accordion-heading>
-                            
+
                             <div class="standard-button btn-group darkgray">
                                 <button class="btn" ng-click="switchCapTab('details');" ng-class="{on:currentTab=='details'}">
                                     <span data-icon="&#xe01e;" aria-hidden="true">Details</span>
@@ -1735,7 +1735,7 @@
             <tr>
                 <th class="left"></th>
                 <th class="left">
-                    Document Name
+                    <span class="padding-left-ten">Document Name</span>
                 </th>
                 <th class="left">Tags</th>
             </tr>
@@ -1743,7 +1743,7 @@
         <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceOrder" ng-if="!doc.investor && !doc.doc_id">
             <tr class="empty-row"/>
             <tr>
-                <td ng-click="toggleShown(doc)" class="pointer">
+                <td ng-click="toggleShown(doc)" class="pointer status-toggle" ng-class="{'status-toggle-on': (doc.shown)}">
                     <div>
                         <span class="toggle-icon" ng-hide="doc.shown" data-icon="&#xe017;" aria-hidden="true"></span>
                         <span class="toggle-icon" ng-show="doc.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
@@ -1751,7 +1751,7 @@
                 </td>
                 <td ng-click="viewEvidence(doc)">
                     <ul>
-                        <li title="{{doc.docname}}">{{doc.docname}}</li>
+                        <li title="{{doc.docname}}"><span class="padding-left-ten">{{doc.docname}}</span></li>
                     </ul>
                 </td>
                 <td>
@@ -1765,7 +1765,7 @@
             <tr class="version" ng-show="doc.shown">
                 <td/>
                 <td>
-                    <div>
+                    <div class="padding-left-ten">
                         <button class="check-box-button" ng-class="{selected:isEvidence(doc)}" ng-click="toggleForEvidence(doc);">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
@@ -1781,7 +1781,7 @@
                 class="version" ng-show="doc.shown">
                 <td/>
                 <td>
-                    <div>
+                    <div class="padding-left-ten">
                         <button class="check-box-button" ng-class="{selected:isEvidence(invdoc)}" ng-click="toggleForEvidence(invdoc);">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>

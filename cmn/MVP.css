@@ -14,6 +14,14 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+::selection {
+    background: rgba(26, 188, 130, 0.3); /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+    background: rgba(26, 188, 130, 0.3); /* Gecko Browsers */
+}
+
 .wrap {
     min-height: 100%;
     height: auto !important;
@@ -1185,7 +1193,7 @@ form.inputs {
 
 .coreEdit input {
     box-shadow: none !important;
-} 
+}
 
 .input-list .inner-editor{
     width: 270px;
@@ -1484,7 +1492,7 @@ ul.spaced-list > li:nth-child(odd) {
     vertical-align: top;
 }
 
-.activity-feed2 .activity-icon {
+.activity-icon {
     width: 30px;
     height: 30px;
     display: inline-block;
@@ -1529,6 +1537,14 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-icon.reminder-icon {
     background-position: -270px 0;
+}
+
+.activity-icon.tags-icon {
+    background-position: 0 -30px;
+}
+
+.activity-icon.page-icon {
+    background-position: -210px -30px;
 }
 
 .activity-icon.doc-rejected-icon {
@@ -1576,6 +1592,14 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: capitalize;
     font-size: 12px;
+}
+
+li.no-activity {
+    text-align: left;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    border-bottom: 1px solid #E3E3E3;
 }
 
 /* Document Status */
@@ -1917,6 +1941,10 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 10px;
 }
 
+.status-table .padding-left-ten {
+    padding-left: 10px;
+}
+
 .status-table.people-table > tbody > tr > td.shareholder-column.docname-column {
     padding-left: 20px;
 }
@@ -1984,46 +2012,7 @@ a.oldschool-link  {
     background-color: rgb(141, 141, 141);
     color: rgb(241, 241, 241);
 }
-/*
-tr.preparedDoc {
-    background-color: white;
-    -webkit-animation: pulseBlue 1s linear 0.25s;
-    -moz-animation: pulseBlue 0.5s linear 0.25s;
-    -ms-animation: pulseBlue 0.5s linear 0.25s;
-    -o-animation: pulseBlue 0.5s linear 0.25s;
-    animation: pulseBlue 1s linear 0.25s;
-}
-@keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-webkit-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-moz-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-o-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-*/
-/*.status-row.selectedrow:after {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0;
-    border-right: 10px solid transparent;
-    border-left: 10px solid transparent;
-    border-top: 6px solid #8D8D8D;
-    position: absolute;
-}*/
+
 .status-row.selectedrow a {
     color: rgb(241, 241, 241);
 }
@@ -2974,7 +2963,7 @@ button.icon-button:hover {
     display: inline-block;
 }
 .topnav .standard .dropdown-toggle {
-    background-color: transparent; 
+    background-color: transparent;
     border-radius: 0;
 }
 .standard .dropdown-toggle {
@@ -4055,6 +4044,8 @@ h2.onboard {
     width: -moz-calc(100%) !important;
     width: -webkit-calc(100%) !important;
     width: calc(100%) !important;
+    -webkit-transform: translateZ(0);
+    z-index: 1;
 }
 
 .dynamic-page .span12 .status-table {
@@ -4074,12 +4065,12 @@ h2.onboard {
 /* Zendesk Styling */
 
 #zenbox_tab {
-    border: none !important;
     bottom: 0 !important;
     top: inherit !important;
     background-color: #E3E3E3;
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
+    border-bottom: 0 !important;
 }
 /* IE won't read ID-and-class selectors like #zenbox_tab.left, so we use just a class: */
 
@@ -4290,7 +4281,7 @@ h2.onboard {
     height: 0px;
     overflow: hidden;
 }
-.persistentNotification.ng-leave, 
+.persistentNotification.ng-leave,
 .persistentNotification.ng-enter.ng-enter-active {
     height: 50px;
     overflow: hidden;
@@ -4390,7 +4381,7 @@ textarea.email-text {
 }
 
 .sidebarFooter {
-    
+
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -4446,11 +4437,11 @@ textarea.email-text {
 
 /*container div for side content*/
 .side-content{
-    position:absolute; 
+    position:absolute;
     right:0;
-     z-index:1; 
-     background-color: white; 
-     height: 100%; 
+     z-index:1;
+     background-color: white;
+     height: 100%;
      width: 350px;
     border-left: 1px solid #C7C7C7;
 }
@@ -4540,7 +4531,7 @@ textarea.email-text {
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type > div {
     padding-top: 14px;
     padding-bottom: 12px;
-    color: #003045;  
+    color: #003045;
 }
 
 .messages .activity-feed2 span.recipients {

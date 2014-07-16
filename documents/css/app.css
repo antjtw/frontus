@@ -68,7 +68,6 @@ h2.large-h2 {
 
 .draggable textarea {
     font-family: Helvetica, sans-serif;
-    /* letter-spacing: -0.09em; */
 }
 
 .subnav-controls.flush-controls {
@@ -84,7 +83,6 @@ h2.large-h2 {
     padding-top: 9px;
     padding-bottom: 9px;
 
-    /* height: 30px; */
     list-style-type: none;
     line-height: normal;
     text-transform: uppercase;
@@ -100,12 +98,6 @@ h2.large-h2 {
     margin: 0 6px 0 6px;
     float: left;
 }
-
-/*.tableView tr.status-bubbles > div {
-    width: 120px;
-    margin: 0 48px 0 48px;
-}
-  */
 
 .tableView td.status-bar span[data-icon] {
     font-size: 24px;
@@ -183,8 +175,6 @@ table.docLibrary > tbody > tr:first-child > td {
     margin-right: 20px;
 }
 
-
-
 .dModalButtons {
     display: block;
     padding: 0 0 20px 0;
@@ -197,7 +187,6 @@ table.docLibrary > tbody > tr:first-child > td {
     border: 0;
     box-sizing:border-box;
     vertical-align: middle;
-    padding: 0 0 0 0;
 }
 
 .dModalButtons button {
@@ -215,12 +204,6 @@ table.docLibrary > tbody > tr:first-child > td {
     padding: 0;
     margin: 0;
 }
-
-/*
-.modalText.dshare > ul {
-    width: 469px;
-}
-*/
 
 .modalText.dshare > ul > li {
     display: inline-block;
@@ -245,22 +228,6 @@ table.docLibrary > tbody > tr:first-child > td {
     width: 300px;
     height: 24px;
 }
-
-
-/*
-.button:hover {
-    text-decoration: none;
-}
-
-.button.adisabled {
-    background-color:#BDC3C7;
-    cursor:default;
-}
-
-.button.adisabled:hover {
-    background-color:#BDC3C7;
-}
-*/
 
 button.blueButton {
     color:#ffffff;
@@ -325,7 +292,7 @@ button.greyButton {
 .sign-modal label {
     display: inline;
     font-size: 10px;
-    padding: 15px 0px 15px 20px;
+    padding: 15px 0 15px 20px;
     text-transform: none;
 }
 
@@ -440,7 +407,7 @@ button.greyButton {
 .modalText.linkDropboxModalText {
     width: 300px;
     margin-bottom: 5px;
-    padding-top: 0px;
+    padding-top: 0;
     padding-left: 20px;
     padding-right: 20px;
     text-align: left;
@@ -687,13 +654,10 @@ textarea.email-text {
     float: right;
     margin-left: 0;
     width: 350px;
-    border-left: 6px solid white;
     padding-left: 20px;
     padding-right: 40px;
 }
-.company-list .span4.capright.showSharebar {
-    border-left: 6px solid #E3E3E3;
-}
+
 .company-list .right-bar-header {
     letter-spacing: 1px;
 }
@@ -1258,18 +1222,10 @@ input[type='text']:disabled, textarea:disabled {
     width: 280px;
 }
 
-.footerBar {
-    display: none !important;
-}
-
 doc-viewer, internal-right-rail, internal-right-rail > div {
     background-color: #f1f1f1;
     height: 100%;
     overflow: auto;
-}
-
-navbar .navbar + doc-viewer.modal-backdrop {
-    display: none !important;
 }
 
 .docViewer {
@@ -1278,64 +1234,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     max-width: 928px;
     margin: 0 auto;
     background-color: white;
-}
-
-.docViewerHeader.affix {
-    position: fixed;
-    top: 0px;
-    max-width: 928px;
-    width: 928px;
-    margin: 0 auto;
-}
-
-.docViewerHeader {
-    z-index: 10;
-}
-
-.affix + .docPanelContainer {
-    padding-top: 120px;
-}
-
-.docViewerHeader.affix-top {
-}
-
-.docViewerHeader.affix-bottom {
-    bottom: 0;
-}
-
-.docViewerAction {
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 14px;
-    color: #1E2D3D;
-    display: inline-block;
-    vertical-align: middle;
-    height: 60px;
-    line-height: 60px;
-    width: 100%;
-    position: relative; /* for the action buttons inside */
-}
-
-.docViewerControls > div > div.tools {
-    margin-left: 20px;
-    padding-top: 15px;
-    min-width: 210px;
-}
-
-.tools > button {
-    border: none;
-    border-radius: 3px;
-    font-size: 20px;
-    color: #666666;
-    background-color: #E3E3E3;
-    background-position: top;
-    width: 30px;
-    height: 30px;
-    margin-right: 20px;
-}
-
-.tools > button:hover {
-    background-color: #C7C7C7;
 }
 
 .pageTurn {
@@ -1409,73 +1307,10 @@ navbar .navbar + doc-viewer.modal-backdrop {
     background-color: #FFFFFF;
 }
 
-.docActions {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-right: 20px;
-}
-
-.docActions > div > button {
-    display: block;
-}
-
 .last-saved {
     text-transform: uppercase;
     font-size: 10px;
     margin-top: 23px;
-}
-
-.docViewerTitle {
-    background-color: white;
-    height: 60px;
-    display: inline-block;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.docViewerTitle .docName {
-    margin-top: 14px;
-    margin-left: 20px;
-    font-size: 14px;
-    color: #1E2D3D
-}
-
-.docViewerTitle .docStatus {
-    margin-left: 20px;
-    font-size: 10px;
-    text-transform: uppercase;
-}
-
-.docViewerTitle .lastUpdated {
-    margin-top: 0px;
-    margin-left: 20px;
-    text-transform: uppercase;
-    text-align: left;
-    font-size: 10px;
-}
-
-.docViewerTitle .lastUpdated > button {
-    border: none;
-    background-color: white;
-    color: #1E2D3D;
-    padding-left: 20px;
-    font-size: 16px;
-}
-
-.stageControls {
-    position: absolute;
-    left:-webkit-calc(50% - 140px);
-    left:-moz-calc(50% - 140px);
-    left: calc(50% - 140px);
-    margin: 14px auto;
-    width: 280px;
-    color: #666666;
-}
-
-.stageControls > div.disabled > button {
-    cursor: default;
-    text-decoration: none;
-    box-shadow: none;
 }
 
 .docViewerTitle div.standard-button {
@@ -1498,121 +1333,52 @@ navbar .navbar + doc-viewer.modal-backdrop {
     margin: 0px auto;
 }
 
-.confirmPanelContainer {
-    left: 0px;
-    right: 0px;
-    margin: 0px auto;
-}
-.confirmPanel {
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-}
-.confirmPanel > div {
-    width: 100%;
-    height: 100%;
-}
-.confirmPanel > .my-loading-spinner-container > div {
-    left: 50%;
-    height: 60px;
-}
-.confirmBody {
-    margin: 0 auto;
-    padding-top: 30px;
-    padding-bottom: 60px;
-    width: 380px;
-    height: 100%;
-    min-height: 40px;
+.confirmPanel span {
+    margin: 3px 0;
 }
 
-.confirmBody.shareDoc {
-    text-align: left;
+.confirmPanel .main {
+    margin-bottom: 14px;
 }
 
-.confirmBody.shareDoc .single-share-input .select2-container {
-    width: 450px;
-}
-
-.confirmBody > .radioOption {
-    height: 40px;
-}
-
-.confirmBody > .radioOption > li:first-child {
-    padding-right: 20px;
-}
-
-.confirmBody > .radioOption > li:last-child {
-    -webkit-transform: translateZ(0);
-    width: 345px; /* ul's width is 380, so drop some for the checkbox */
-}
-
-.confirmBody > .radioOption > li:last-child > span:first-child {
+.confirmPanel span.title {
     font-size: 14px;
     color: #1E2D3D;
 }
 
-.confirmBody > .radioOption > li:last-child > span:last-child {
+.confirmPanel span:.body {
     color: #666666;
 }
 
-.confirmBody > .radioOption textarea.messageText {
+.confirmPanelContainer textarea.messageText {
     margin-left: 0;
     margin-right: 0;
-    margin-top: 6px;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     color: #666666;
+    width: calc(100% - 12px); /* 12px is to account for padding, set by bootstrap */
 }
 
-.confirmBody > .checkboxOption {
-    width: 360px;
-    margin: 0 auto;
-}
-
-.confirmBody > .checkboxOption > li:last-child {
-    padding-left: 30px;
-    float: inherit;
-}
-
-.confirmBody > .checkboxOption > li:last-child > span:first-child {
+.confirmPanel .docViewerAction {
+    text-transform: uppercase;
     font-size: 14px;
     color: #1E2D3D;
+    float: left;
+}
+.confirmPanel .docViewerAction:last-child {
+    float: right;
 }
 
-.confirmBody > .checkboxOption > li:last-child > span:last-child {
-    color: #666666;
+.confirmPanel .modeSwitch {
+    float: left;
+    line-height: 32px; /* should match ".standard-button button" min-height in MVP.css */
 }
-
-.confirmBody .email-text {
-    margin-top: 20px;
+.confirmPanel .modeSwitch:last-child {
+    margin-right: 20px;
+    float: right;
 }
-
-.confirmFooter {
-    height: 12px;
-}
-
-.confirmButton {
-    position: absolute;
-    right: 20px;
-    top: 15px;
-}
-.backButton {
-    position: absolute;
-    left: 20px;
-    top: 15px;
-}
-.backButton > button > span {
-    font-size: 16px;
-    padding-right: 1px;
-}
-.backButton > button > span:before {
-    vertical-align: middle;
-}
-.forwardButton > button > span {
-    font-size: 16px;
-    padding-left: 6px;
-}
-.forwardButton > button > span:before {
-    vertical-align: middle;
+.confirmPanel a {
+    cursor: pointer;
+    color: #3397da;
 }
 
 .hidden {
@@ -1828,6 +1594,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
 }
 
 .sticky .dragger > span {
+    cursor: pointer;
     height: 100%;
     position: relative;
     display: inline-block;
@@ -1840,7 +1607,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     top: 50%;
     margin-top: -9px;
     margin-left: -3px;
-    cursor: pointer;
     height: 16px;
 }
 
@@ -1997,6 +1763,10 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
+annotation-list div:last-child {
+    margin-bottom: 20px;
+}
+
 annotation-list > div {
     margin: 0 20px;
 }
@@ -2020,7 +1790,7 @@ annotation-list .annotmark {
     cursor: pointer;
 }
 
-annotation-list .annotmark:hover {
+annotation-list .annotmark:hover, annotation-list .annotmark.active {
     color: #666;
 }
 
@@ -2028,7 +1798,7 @@ annotation-list .annotmark.mine {
     color: #FFBA00;
 }
 
-annotation-list .annotmark.mine:hover {
+annotation-list .annotmark.mine:hover, annotation-list .annotmark.mine.active {
     color: #F78D1E;
 }
 
@@ -2036,7 +1806,7 @@ annotation-list .annotmark.mine.complete {
     color: #1ABC96;
 }
 
-annotation-list .annotmark.mine.complete:hover {
+annotation-list .annotmark.mine.complete:hover, annotation-list .annotmark.mine.complete.active {
     color: #15A085;
 }
 
@@ -2044,6 +1814,114 @@ annotation-list .annotmark.mine.incomplete {
     color: #E74C3C;
 }
 
-annotation-list .annotmark.mine.incomplete:hover {
+annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.mine.incomplete.active {
     color: #C44032;
+}
+
+help-tab > div {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+help-tab > div > p {
+    margin-bottom: 10px;
+    width: 250px;
+    line-height: 20px;
+}
+
+help-tab > div > p > span {
+    color: #1d2c3c;
+    display: block;
+}
+
+.docinfo {
+    margin: 0 20px;
+}
+
+.docinfo .inforow {
+    padding: 10px 0;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.docinfo .inforow .info {
+    vertical-align: top;
+    margin-left: 5px;
+    display: inline-block;
+    width: 255px;
+}
+
+.docinfo .inforow .tags {
+    display: inline-block;
+    width: 270px;
+}
+
+.docinfo .inforow .tags > span {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.docinfo .inforow .info > span {
+    display: block;
+}
+
+.docinfo .inforow .info > span:first-of-type {
+    color: #666666;
+}
+
+.docinfo .inforow .info > span:last-of-type {
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.docinfo .inforow .activity-icon {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+
+.docinfo .docname {
+    line-height: 24px;
+    font-size: 20px;
+    color: #1d2c3c;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #E3E3E3;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.docinfo .investor-views {
+    margin-top: 10px;
+    margin-left: 35px;
+}
+
+.docinfo .investor-views > span {
+    color: #1d2c3c;
+    cursor: pointer;
+}
+
+.docinfo .investor-views > span.toggle-icon {
+    vertical-align: -10%;
+}
+
+.docinfo .investor-views ul {
+    margin-left: 19px;
+}
+
+.docinfo .investor-views ul > li {
+    margin-top: 10px;
+}
+
+.docinfo .investor-views ul > li:first-of-type {
+    margin-top: 5px;
+}
+
+.docinfo .investor-views ul > li > span:first-of-type {
+    display: block;
+    color: #666666;
+}
+
+.docinfo .investor-views ul > li > span:last-of-type {
+    font-size: 12px;
+    line-height: 12px;
+    display: block;
 }
