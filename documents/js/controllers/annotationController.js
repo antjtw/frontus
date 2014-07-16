@@ -3,7 +3,7 @@
 function annotationController($scope, $element, $document, Annotations, User, $timeout, navState) {
     $scope.navState = navState; // TODO: UI is very dependant on navState
 
-    $scope.defaultTypes = [
+    var defaultTypes = [
         {name: "Text", display: "Text"},
         {name: "Signature", display: "Signature Text"},
         {name: "ImgSignature", display: "Signature Image"},
@@ -14,6 +14,19 @@ function annotationController($scope, $element, $document, Annotations, User, $t
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
+
+    $scope.types = angular.copy(defaultTypes);
+
+    $scope.$watch('doc.custom_annotation_types', function(new_types, old_types) {
+        //custom_annotation_types comes from docTransactionDetails
+        console.log(new_types);
+        $scope.types = angular.copy(defaultTypes); // reset $scope.types
+        new_types.forEach(function(type) {
+            // TODO: figure out display names
+            $scope.types.push({name: type.name, display: type.name, required: type.required});
+        });
+        console.log($scope.types);
+    }, true);
 
     function applyLineBreaks(oTextarea) {
         // TODO: rewrite as an ngModel validator
