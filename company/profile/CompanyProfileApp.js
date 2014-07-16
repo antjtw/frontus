@@ -582,7 +582,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 return $scope.messageData.recipients.indexOf(person.email) != -1;
             }
             else {
-                return $scope.addAdmin.indexOf(person) != -1;
+                return $scope.groupPeople.indexOf(person) != -1;
             };
             
         };
@@ -610,12 +610,12 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 return $scope.messageData.recipients;
             }
             else {
-                if($scope.addAdmin.indexOf(person)=== -1){
-                    $scope.addAdmin.push(person);
+                if($scope.groupPeople.indexOf(person)=== -1){
+                    $scope.groupPeople.push(person);
                 }
                 else {
-                    var toDelete = $scope.addAdmin.indexOf(person)
-                    $scope.addAdmin.splice(toDelete, 1);
+                    var toDelete = $scope.groupPeople.indexOf(person)
+                    $scope.groupPeople.splice(toDelete, 1);
                 }
                 console.log(person);  
             }
@@ -624,7 +624,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         
         $scope.messageData = {};
         $scope.messageData.recipients = [];
-        $scope.addAdmin = []
+        $scope.groupPeople = []
 
 
         $scope.narrowopts = {

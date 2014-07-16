@@ -2,11 +2,16 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('groupPeople', function(){
     return {
-        scope: false,
+        scope: {addAdmin: '='},
         restrict: 'E',
         templateUrl:'/cmn/partials/groupPeople.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
+
+            $scope.showAdmin = function(){
+                console.log($scope.addAdmin)
+            }
+            $scope.showAdmin();
 
             
         }]
