@@ -501,9 +501,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.sort = 'name';
             });
         });
-    
 
 
+   
 
 
         $scope.setLastLogins = function() {
@@ -578,14 +578,20 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         //want the email directive to bind to this property in the controller
 
         $scope.personIs = function(person){
-            return $scope.messageData.recipients.indexOf(person.email) != -1;
+            if($scope.sidebarPage=='email'){
+                return $scope.messageData.recipients.indexOf(person.email) != -1;
+            }
+            else {
+                console.log(person);
+
+                // return person.email;
+            }
+            
             // select person in email
         };
 
-        $scope.showCheck = function(){
-            $scope.sidebarPage = 'email';
-        }
 
+      
         $scope.clearRecipient = function(){
             while($scope.messageData.recipients.length > 0) {
                 $scope.messageData.recipients.pop();
@@ -594,18 +600,29 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
       
 
         $scope.emailRecipient = function(person){
-            if ($scope.messageData.recipients.indexOf(person.email)=== -1){
+            if($scope.sidebarPage == 'email'){
+                if ($scope.messageData.recipients.indexOf(person.email)=== -1){
                  $scope.messageData.recipients.push(person.email);
+                 console.log($scope.messageData.recipients)
+                 }
+
+                else {
+                    var toDelete = $scope.messageData.recipients.indexOf(person.email)
+                    $scope.messageData.recipients.splice(toDelete, 1);
+                 };   
+                return $scope.messageData.recipients;
             }
             else {
-                var toDelete = $scope.messageData.recipients.indexOf(person.email)
-                $scope.messageData.recipients.splice(toDelete, 1);
-            };   
-            return $scope.messageData.recipients
+                console.log(person);
+                $scope.addAdmin.push(person);
+                return person
+            }
+            
         };
         
         $scope.messageData = {};
         $scope.messageData.recipients = [];
+        $scope.addAdmin = []
 
 
         $scope.narrowopts = {
