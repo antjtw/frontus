@@ -8,19 +8,6 @@ m.directive('groupPeople', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
-            // get all groups of each user
-
-            // if no one has a group
-            //     use multi_update function
-            // array [email, role], {group as json}
-
-            // to remove from group
-            // same function, shorter json
-
-            // if they already have a group 
-            //     separate who is in the group
-            //     add to the group
-
             $scope.showGroup = function(){
                console.log($scope.groupName)
             }
@@ -28,20 +15,45 @@ m.directive('groupPeople', function(){
 
             $scope.groupName = ""
 
+            $scope.addFirstGroups = function(manyNoGroup, name){
+               
+                SWBrijj.procm('account.multi_update_groups')
+            }
+
             $scope.checkGroups = function(person){
-                angular.forEach(person, function(info){
-                    console.log(info.email)
-                    var email = info.email
+                var manyNoGroup = [];
+                angular.forEach(person, function(info){              
+                    var email = info.email                 
+                    var noGroup = [];
+                    var hasGroup = [];
                     SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
-                        $scope.userInfo = data;
-                        console.log(data);
-                        console.log($scope.userInfo);
+                        // console.log(data);
+                        $scope.userRole = data;
+                        // console.log($scope.userRole.email);
+                        // this will return undefined
+                        angular.forEach($scope.userRole, function(user){
+                            console.log(user.email);
+                            if(user.groups==null){
+                                // noGroup[user.email] = user.role;
+                                noGroup.push(user.email, user.role);
+                                console.log(noGroup);
+                                manyNoGroup.push(noGroup)
+                            }
+                            else {
+                                hasGroup.push(user.email, user.role);
+                            }
+                           
+                        });
+                        console.log("array", manyNoGroup);
+                        
+                       
+                    
                     }).except(function(data){
                         console.log("error")
                     });
-                });      
-
-            }
+                });
+                console.log(manyNoGroup);      
+            };
 
             $scope.showUserRoles = function(){
 

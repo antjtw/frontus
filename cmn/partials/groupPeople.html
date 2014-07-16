@@ -10,8 +10,7 @@
   <div class="sidebarText">
     <span>Group Name {{people}}</span>
     <div>
-       <input type="text"
-                  cols="10" ng-model="groupName">
+       <input type="text" ng-model="groupName">
         </input>
     </div>
   </div>
@@ -19,7 +18,7 @@
     <div class="sidebarFooter">
 
         <div class="preview-message" 
-            ng-click="checkGroups(people); showUserRoles()">
+            ng-click="checkGroups(people); showUserRoles(); createGroup(groupName)">
             Group 
         </div>
 
