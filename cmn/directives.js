@@ -18,23 +18,23 @@ m.directive('groupPeople', function(){
             $scope.createGroup = function(string){
                 if(string.length == 0){
                     console.log("empty string");
+                   
                 }
                 else{
                     $scope.newGroup = JSON.stringify(string)
-                    // console.log(a);
-                    // return a
+                    console.log($scope.newGroup);
                 };
             };
 
-            // $scope.addFirstGroup = function(){
-            //     SWBrijj.procm('account.multi_update_groups', $scope.manyNoGroup, $scope.newGroup).then(function(data)){
-            //         console.log("test")
-            //     }
-            // }
+            $scope.addFirstGroup = function(array, json){
+                SWBrijj.procm("account.multi_update_groups", array, json).then(function(x){
+
+                    console.log("test")
+                })
+            }
 
 
             $scope.manyNoGroup = [];
-
             $scope.checkGroups = function(person){
                 // var manyNoGroup = [];
                 angular.forEach(person, function(info){              
@@ -42,10 +42,7 @@ m.directive('groupPeople', function(){
                     var noGroup = [];
                     var hasGroup = [];
                     SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
-                        // console.log(data);
                         $scope.userRole = data;
-                        // console.log($scope.userRole.email);
-                        // this will return undefined
                         angular.forEach($scope.userRole, function(user){
                             console.log(user.email);
                             if(user.groups==null){
@@ -67,11 +64,12 @@ m.directive('groupPeople', function(){
                         console.log("error")
                     });
                 });
-                console.log($scope.manyNoGroup);      
+                console.log($scope.manyNoGroup); 
+                
+                // this is where the procm will be called     
             };
 
             $scope.showUserRoles = function(){
-
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
                     $scope.myUserRoles = data;
                     // console.log($scope.myUserRoles);
