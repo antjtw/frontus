@@ -337,6 +337,7 @@ navm.controller('NavCtrl',
             $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
             $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
             $rootScope.settings.fulldate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y' : 'dd MMMM y';
+            $rootScope.settings.dateandtime = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y, h:mm a' : 'dd MMMM y, h:mm a';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
             $rootScope.settings.domain = window.location.host;
         });

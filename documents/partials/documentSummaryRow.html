@@ -5,11 +5,11 @@
                   'status-toggle-on': (viewState.hideSharebar && doc.shown && versionsVisible(doc))}"
         ng-click="doc.version_count == 0 || !viewState.hideSharebar || opendetails()"
         ng-mouseenter="loadVersions()">
-        <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="viewState.hideSharebar">
+        <div ng-if="viewState.hideSharebar">
             <span class="toggle-icon" ng-hide="!versionsVisible(doc) || (doc.shown || doc.version_count == 0)" data-icon="&#xe017;" aria-hidden="true"></span>
             <span class="toggle-icon" ng-show="versionsVisible(doc) && doc.shown && doc.version_count > 0" data-icon="&#xe01c;" aria-hidden="true"></span>
         </div>
-        <div ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-if="!viewState.hideSharebar">
+        <div ng-if="!viewState.hideSharebar">
             <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
                 <span data-icon="&#xe023;" aria-hidden="true"></span>
             </button>
@@ -24,21 +24,23 @@
                 <span ng-show="doc.type == 'doc' && doc.version_count == 0 && !doc.uploaded_by">(Template)</span>
             </li>
 
-            <li ng-animate="{show:'fadeShow', hide:'fadeHide'}" ng-show="viewState.hideSharebar" ng-if="doc.type == 'doc'">{{docStatus(doc)}}</li>
+            <li ng-show="viewState.hideSharebar" ng-if="doc.type == 'doc'">{{docStatus(doc)}}</li>
 
         </ul>
     </td>
+
     <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
+
         <div ng-if="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
         <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
     </td>
-    <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="shareholder-column status-column issuer pointer"
+    <td ng-show="viewState.hideSharebar" class="shareholder-column status-column issuer pointer"
         ng-click="!(!doc.uploaded_by || doc.pages > 0) || viewStatus(doc)">
         <ul>
             <li>{{formatDocStatusRatio(doc)}}</li>
         </ul>
     </td>
-    <td ng-if="doc.type == 'doc'" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+    <td ng-if="doc.type == 'doc'">
         <span class="tag"
               ng-repeat="tag in doc.tags"
               ng-click="viewState.query = tag">
@@ -58,7 +60,7 @@
         </ul>
     </td>
     <td ng-if="doc.type == 'doc'">
-        <div ng-if="!viewState.hideSharebar && doc.forShare" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+        <div ng-if="!viewState.hideSharebar && doc.forShare">
             <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
                         {{ formatShareType(getShareType(doc)) }}
@@ -81,7 +83,7 @@
                 </li>
             </ul>
         </div>
-        <div ng-if="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
+        <div ng-if="viewState.hideSharebar">
             <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && (!doc.uploaded_by || doc.pages > 0)" class="dropdown-list">
                 <li class="dropdown standard menu-drop">
                     <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>

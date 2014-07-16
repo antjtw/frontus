@@ -14,6 +14,14 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+::selection {
+    background: rgba(26, 188, 130, 0.3); /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+    background: rgba(26, 188, 130, 0.3); /* Gecko Browsers */
+}
+
 .wrap {
     min-height: 100%;
     height: auto !important;
@@ -950,9 +958,6 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     cursor: pointer;
 }
 
-.subnav-controls .backbutton > span {
-
-}
 
 .subnav-controls .backbutton > span:before {
     font-size: 26px;
@@ -1462,6 +1467,7 @@ ul.spaced-list > li:nth-child(odd) {
     height: 536px;
 }
 
+/*activity feed, also used in mail status settings*/
 .activity-feed2 {
     height: 536px;
     overflow: auto;
@@ -1774,6 +1780,10 @@ li.no-activity {
     border: 1px solid #E3E3E3;
     height: 60px;
 }
+
+.status-table > tbody > tr.red {
+    color: #c44032;
+}
 .status-table > tbody > tr > th {
     font-weight: normal;
 }
@@ -1862,6 +1872,10 @@ li.no-activity {
     color: #F1F1F1;
 }
 
+/*circles in doc page*/
+.circle.red{
+    background: #E74C3C;
+}
 .circle.yellow {
     background: #FFBB00;
 }
@@ -1904,9 +1918,14 @@ li.no-activity {
     line-height: 18px;
 }
 
-/*.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.link{
-    cursor: pointer;
-}*/
+
+.status-table > tbody > tr > td.shareholder-column > ul > li:first-child.red{
+    color: #E74C3C;
+}
+
+.status-table > tbody > tr > td.shareholder-column > ul > button {
+    color: blue;
+}
 
 .link{
    cursor: pointer; 
@@ -1935,7 +1954,10 @@ li.no-activity {
 }
 
 .status-table > tbody > tr > td.shareholder-column.docname-column {
-   /* cursor:pointer;*/
+    padding-left: 10px;
+}
+
+.status-table .padding-left-ten {
     padding-left: 10px;
 }
 
@@ -2006,46 +2028,7 @@ a.oldschool-link  {
     background-color: rgb(141, 141, 141);
     color: rgb(241, 241, 241);
 }
-/*
-tr.preparedDoc {
-    background-color: white;
-    -webkit-animation: pulseBlue 1s linear 0.25s;
-    -moz-animation: pulseBlue 0.5s linear 0.25s;
-    -ms-animation: pulseBlue 0.5s linear 0.25s;
-    -o-animation: pulseBlue 0.5s linear 0.25s;
-    animation: pulseBlue 1s linear 0.25s;
-}
-@keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-webkit-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-moz-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-@-o-keyframes pulseBlue {
-    0% {opacity: 0.5; background-color: #3498DB !important;}
-    50% {opacity: 1; background-color: #3498DB !important;}
-    100% {opacity: 0; background-color: white;}
-}
-*/
-/*.status-row.selectedrow:after {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0;
-    border-right: 10px solid transparent;
-    border-left: 10px solid transparent;
-    border-top: 6px solid #8D8D8D;
-    position: absolute;
-}*/
+
 .status-row.selectedrow a {
     color: rgb(241, 241, 241);
 }
@@ -2403,6 +2386,21 @@ tr.preparedDoc {
     text-shadow: none;
     box-shadow: none;
 }
+
+.btn.reshare{
+    background-color: #1ABC96;
+    margin-left: 30px;
+    color: #fff;
+}
+
+.btn.red{
+    background-color: #E74C3C;
+}
+
+.btn.red:hover{
+    background-color: #c44032;
+}
+
 .standard-button > button.btn > span:before {
     padding-right: 5px;
     vertical-align: middle;
@@ -3631,8 +3629,8 @@ button.icon-button:hover {
 .payment-modal .initpayment form .input-list > div {
     margin: 0 auto;
     width: 100%;
-//    line-height: 30px;
-//    padding-bottom: 15px;
+   line-height: 30px;
+    padding-bottom: 15px;
 }
 .payment-modal .initpayment form .input-list input {
     width: 100%;
@@ -4077,6 +4075,8 @@ h2.onboard {
     width: -moz-calc(100%) !important;
     width: -webkit-calc(100%) !important;
     width: calc(100%) !important;
+    -webkit-transform: translateZ(0);
+    z-index: 1;
 }
 
 .dynamic-page .span12 .status-table {
@@ -4631,12 +4631,11 @@ textarea.email-text {
     padding-bottom: 1em; 
 }
 
-
-
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
     cursor: pointer; 
 }
+
 
 /*Filter sidebar*/
 .tinycol{
