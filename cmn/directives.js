@@ -8,10 +8,6 @@ m.directive('groupPeople', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
-            $scope.showGroup = function(){
-               console.log($scope.groupName)
-            }
-            $scope.showGroup();
 
             $scope.groupName = ""
 
@@ -35,6 +31,7 @@ m.directive('groupPeople', function(){
 
 
             $scope.manyNoGroup = [];
+            $scope.manyWithGroup = [];
             $scope.checkGroups = function(person){
                 // var manyNoGroup = [];
                 angular.forEach(person, function(info){              
@@ -53,6 +50,7 @@ m.directive('groupPeople', function(){
                             }
                             else {
                                 hasGroup.push(user.email, user.role);
+                                $scope.manyWithGroup.push(hasGroup)
                             }
                            
                         });
@@ -65,14 +63,13 @@ m.directive('groupPeople', function(){
                     });
                 });
                 console.log($scope.manyNoGroup); 
-                
-                // this is where the procm will be called     
+                console.log($scope.manyWithGroup);   
             };
 
             $scope.showUserRoles = function(){
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
                     $scope.myUserRoles = data;
-                    // console.log($scope.myUserRoles);
+                    console.log($scope.myUserRoles);
                 })
             }
 
