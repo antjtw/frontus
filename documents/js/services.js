@@ -185,6 +185,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             Array.prototype.splice.apply(this.annotation_types, args);
             //this.annotation_types.splice(this.annotation_types.length, 0, tmp_array);
         },
+        hasFilledAnnotation: function(annotType) {
+            return this.annotations.some(function(annot) {
+                return (annot.whattype == annotType) && (annot.filled(false, $rootScope.navState.role));
+            });
+        },
     };
 
     /// Document service definition

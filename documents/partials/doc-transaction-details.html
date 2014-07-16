@@ -5,5 +5,5 @@
 </div>
 <div ng-show="doc.transactionType">
     <span>Fields necessary to complete document for {{selectedIssue.issue.issue}}</span>
-    <div ng-repeat="field in doc.annotation_types" ng-show="field.required">{{field.display}}</div>
+    <div ng-repeat="field in doc.annotation_types" ng-show="field.required"><span data-icon="&#xe052;" ng-show="doc.hasFilledAnnotation(field.name)"></span>{{field.display}}</div>
 </div>
