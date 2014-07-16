@@ -113,6 +113,11 @@ function annotationController($scope, $element, $document, Annotations, User, $t
         else {
             $scope.annot.fontsize = 12;
         }
+        if (newval != oldval) {
+            $scope.annot.val = ""; // clear out value since the type changed
+            setDefaultText();
+            setPlaceholder();
+        }
     });
 
     var topLocation = function(elementHeight, mouseY) {
@@ -303,13 +308,6 @@ function annotationController($scope, $element, $document, Annotations, User, $t
     $scope.setSign = function($event, value) {
         $scope.annot.whosign = value;
         $scope.annot.val = "";
-        setDefaultText();
-        setPlaceholder();
-    };
-
-    $scope.setAnnot = function($event, sticky, value) {
-        $scope.annot.whattype = value;
-        $scope.annot.val = ""; // clear out value since the type changed
         setDefaultText();
         setPlaceholder();
     };

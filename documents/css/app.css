@@ -1649,6 +1649,10 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     margin-top: 15px;
 }
 
+.sticky .sticky-menu .select2-container {
+    width: 150px;
+}
+
 .sticky-menu > ul > li:last-of-type > ul {
     margin-bottom: 20px;
 }
