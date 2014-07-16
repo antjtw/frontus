@@ -1485,7 +1485,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
 
 .docPanel {
     width: 100%;
-    height: 1165px;
     background-size: contain !important;
     background-repeat: no-repeat;
     background-position: top center;
