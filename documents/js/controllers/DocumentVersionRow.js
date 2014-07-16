@@ -42,6 +42,8 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
                 });
                 if(alreadySent.indexOf(email[0]) > -1){
                      $scope.$emit('notification:fail', 'You have already shared this');
+                     $route.reload();
+                    // $scope.buttondisabled = false;  
                 }
                 else{
                     $scope.reShare(version, email);
@@ -57,7 +59,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         }).except(function(data){
             console.log("failed")
             $rootScope.$emit('notification:fail', 'Something went wrong');
-            $scope.buttondisabled = false
+            // $scope.buttondisabled = false
         })
       
     };
