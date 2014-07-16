@@ -49,7 +49,7 @@
                                         {{ whattypelabel }}
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li ng-repeat="type in types">
+                                        <li ng-repeat="type in doc.annotation_types">
                                             <a ng-click="setAnnot($event, this, type.name)" class="button">{{type.display}}</a>
                                         </li>
                                     </ul>

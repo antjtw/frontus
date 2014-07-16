@@ -1,9 +1,9 @@
-<div ng-hide="fields">
+<div ng-hide="doc.transactionType">
     <span>Do you want to associate this document with a Cap Table transaction?</span>
     <input ui-select2="select2Options" ng-model="selectedIssue">
-    <button ng-click="nextClick()" ng-disabled="selectedIssue.id == 0">Next</button>
+    <button ng-click="doc.setTransaction(selectedIssue.issue.type);" ng-disabled="selectedIssue.id == 0">Next</button>
 </div>
-<div ng-show="fields">
+<div ng-show="doc.transactionType">
     <span>Fields necessary to complete document for {{selectedIssue.issue.issue}}</span>
-    <div ng-repeat="field in fields" ng-show="field.required">{{field.display_name}}</div>
+    <div ng-repeat="field in doc.annotation_types" ng-show="field.required">{{field.display}}</div>
 </div>

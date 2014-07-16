@@ -50,10 +50,27 @@ docs.service('basics', function () {
 });
 
 docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", function(Annotations, SWBrijj, $q, $rootScope) {
+    // transaction_attributes is needed to set the annotation types for this document
+    var transaction_attributes = null;
+    SWBrijj.transaction_attributes().then(function(data) {
+        transaction_attributes = data;
+    });
+    var defaultTypes = [
+        {name: "Text", display: "Text"},
+        {name: "Signature", display: "Signature Text"},
+        {name: "ImgSignature", display: "Signature Image"},
+        {name: "investorName", display: "Name"},
+        {name: "investorStreet", display: "Address"},
+        {name: "investorState", display: "State"},
+        {name: "investorPostalcode", display: "Zip code"},
+        {name: "investorEmail", display: "Email"},
+        {name: "signatureDate", display: "Date"},
+    ];
+
     /// Document object definition
     Document = function() {
         this.annotations = [];
-        this.custom_annotation_types = [];
+        this.annotation_types = angular.copy(defaultTypes);
     };
 
     Document.prototype = {
@@ -151,6 +168,21 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 promise.rejecdt(x);
             });
             return promise.promise;
+        },
+        setTransaction: function(transactionType) {
+            this.transactionType = transactionType;
+            var viable_actions = transaction_attributes[transactionType].actions;
+            // documents can only create grants and purchases right now
+            var fields = viable_actions.purchase ? viable_actions.purchase.fields : viable_actions.grant.fields;
+            this.annotation_types.splice(0);
+            var tmp_name = this.annotation_types; // forEach creates a new scope
+            defaultTypes.forEach(function(type) {
+                tmp_name.push(type);
+            });
+            for (var field in fields) {
+                var f = fields[field];
+                this.annotation_types.push({name: f.name, display: f.display_name, required: f.required});
+            }
         },
     };
 

@@ -293,7 +293,6 @@ app.directive('docTransactionDetails', function() {
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
         controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
-            var transaction_attributes = null;
             var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
             $scope.selectedIssue = defaultSelectObj;
             $scope.select2Options = {
@@ -343,19 +342,6 @@ app.directive('docTransactionDetails', function() {
                     $scope.selectedIssue = defaultSelectObj;
                 }
             });
-
-            SWBrijj.transaction_attributes().then(function(data) {
-                transaction_attributes = data;
-            });
-
-            $scope.nextClick = function() {
-                var viable_actions = transaction_attributes[$scope.selectedIssue.issue.type].actions;
-                $scope.fields = viable_actions.purchase ? viable_actions.purchase.fields : viable_actions.grant.fields;
-                $scope.doc.custom_annotation_types.splice(0);
-                for (var field in $scope.fields) {
-                    $scope.doc.custom_annotation_types.push($scope.fields[field]);
-                }
-            };
         }],
     };
 });
