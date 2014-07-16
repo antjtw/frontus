@@ -28,11 +28,15 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
     $scope.getPeople()
 
+    $scope.buttondisabled = false;
+
     $scope.docRecipients = function(version, email){
+        // $scope.buttondisabled = true
+        $scope.buttondisabled = true
         SWBrijj.tblmm('document.my_counterpart_document_library_view', 'original', version.original).then(function(data){
                 $scope.myLibrary = data
                 var alreadySent = []
-                $scope.buttondisabled = true
+              
                 angular.forEach($scope.myLibrary, function(name){
                    alreadySent.push(name.investor)
                 });
