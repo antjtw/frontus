@@ -12,7 +12,23 @@ CapTable = function() {
     this.conversions = [];
     this.transfers = [];
 };
-// CRUD the captable
+Transaction = function() {
+    this.active = null;
+    this.atype = null;
+    this.new = null;
+    this.investor = null;
+    this.investorkey = null;
+    this.company = null;
+    this.date = Date.today();
+    this.datekey = Date.today();
+    this.issue = null;
+    this.units = null;
+    this.unitskey = null;
+    this.paid = null;
+    this.paidkey = null;
+    this.key = 'undefined';
+    this.convert = [];
+};
 ownership.service('captable',
 function($rootScope, calculate, sorting, SWBrijj, $q) {
 
@@ -114,12 +130,12 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             Modernizr.testProp('pointerEvents'))
         {
             $rootScope.$on('billingLoaded', function(x) {
-                initUI($rootScope.companyIsZombie());
+                initUI();
             });
-            initUI($rootScope.companyIsZombie());
+            initUI();
         }
     }
-    function initUI(isZombie) {
+    function initUI() {
         $rootScope.$broadcast('captable:initui');
     }
     function updateCell(tran, row) {
@@ -210,6 +226,33 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             }
         });
     }
+    function inheritAllDataFromIssue(tran, issue) {
+        if (!issue) {throw "Cannot inherit from null issue.";}
+        tran.company = issue.company;
+        tran.issue = issue.issue;
+        tran.type = issue.type;
+        tran.totalauth = issue.totalauth;
+        tran.premoney = issue.premoney;
+        tran.postmoney = issue.postmoney;
+        tran.ppshare = issue.ppshare;
+        tran.totalauth = issue.totalauth;
+        tran.liquidpref = issue.liquidpref;
+        tran.partpref = issue.partpref;
+        tran.optundersec = issue.optundersec;
+        tran.price = issue.price;
+        tran.terms = issue.terms;
+        tran.vestingbeginsdisplay = issue.vestingbeginsdisplay;
+        tran.vestcliff = issue.vestcliff;
+        tran.vestfreq = issue.vestfreq;
+        tran.debtundersec = issue.debtundersec;
+        tran.interestrate = issue.interestrate;
+        tran.interestratefreq = issue.interestratefreq;
+        tran.valcap = issue.valcap;
+        tran.discount = issue.discount;
+        tran.term = issue.term;
+        tran.dragalong = issue.dragalong;
+        tran.tagalong = issue.tagalong;
+    }
     function addTranToRows(tran) {
         if (captable.uniquerows.indexOf(tran.investor) == -1) {
             captable.uniquerows.push(tran.investor);
@@ -230,6 +273,18 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         return {"u": null, "a": null, "ukey": null, "akey": null};
     }
     this.nullCell = nullCell;
+    function newTransaction(issuekey, investor) {
+        var tran = new Transaction();
+        tran.new = "yes";
+        tran.investor = tran.investorkey = investor;
+        inheritAllDataFromIssue(tran, getIssue(issuekey));
+        return tran;
+    }
+    this.newTransaction = newTransaction;
+    function getIssue(issuekey) {
+        return captable.issues.filter(function(el) {return el.issue==issuekey;})[0];
+    }
+    this.getIssue = getIssue;
     function addTranToCell(tran) {
         angular.forEach(captable.rows, function (row) {
             if (row.name == tran.investor) {
@@ -486,6 +541,9 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
 // out of the controller.
 ownership.service('calculate', function () {
 
+    this.complement = function(a, b) {
+        return a.filter(function(el) {return b.indexOf(el)==-1;});
+    };
     this.toFloat = function(value) {
         value = isNaN(parseFloat(value)) ? null : parseFloat(value);
         return value;
