@@ -186,66 +186,75 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             });
         });
     }
+    function deselectTransaction(currenttran, currentcolumn) {
+        $scope.activeTran = [];
+        $scope.activeIssue = undefined;
+        $scope.activeInvestor = undefined;
+        $scope.sideBar = "home";
+        deselectAllCells();
+    }
+    function selectTransaction(currenttran, currentcolumn) {
+        $scope.sideBar = $scope.toggleView() ? 4 : 2;
+        $scope.activeTran = [];
+        $scope.activeIssue = currentcolumn;
+        $scope.activeInvestor = currenttran;
+        $scope.allowKeys = calculate.complement($scope.ct.issuekeys,
+                                                [currentcolumn]);
+        // try finding the transaction
+        var first = 0;
+        angular.forEach($scope.ct.trans, function (tran) {
+            if (tran.investor == currenttran && tran.issue == currentcolumn) {
+                if (first === 0) {
+                    tran.active = true;
+                    first = first + 1;
+                }
+                tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
+                tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
+                tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
+                $scope.activeTran.push(tran);
+            }
+        });
+        // try creating a new transaction
+        if ($scope.activeTran.length < 1 && !$scope.toggleView()) {
+            var anewTran = captable.newTransaction(currentcolumn,
+                                                   $scope.activeInvestor);
+            $scope.ct.trans.push(anewTran);
+            $scope.activeTran.push(anewTran);
+        }
+
+        // give up
+        if ($scope.activeTran.length < 1 && $scope.toggleView()) {
+            $scope.activeIssue = undefined;
+            $scope.activeInvestor = undefined;
+            $scope.sideBar = "home";
+        }
+
+        // select cell
+        angular.forEach($scope.ct.rows, function (row) {
+            row.state = false;
+            angular.forEach($scope.ct.issues, function (issue) {
+                if (issue.issue) {
+                    if (row.name == currenttran && currentcolumn == issue.issue && $scope.activeTran.length > 0) {
+                        row[currentcolumn].state = true;
+                    }
+                    else if (row[issue.issue]) {
+                        row[issue.issue].state = false;
+                    } else {
+                        issue.state = false;
+                    }
+                }
+            });
+        });
+    }
     $scope.getActiveTransaction = function (currenttran, currentcolumn) {
         $scope.currentTab = 'details';
         $scope.sidebarstart = angular.copy($scope.sideBar);
         $scope.oldActive = angular.copy($scope.activeTran);
         // selected transaction == active transaction
         if ($scope.toggleView() && $scope.oldActive && $scope.oldActive[0] && $scope.oldActive[0].investorkey == currenttran && $scope.oldActive[0].key == currentcolumn) {
-            $scope.activeTran = [];
-            $scope.activeIssue = undefined;
-            $scope.activeInvestor = undefined;
-            $scope.sideBar = "home";
-            deselectAllCells();
-
+            deselectTransaction(currenttran, currentcolumn);
         } else {
-            $scope.sideBar = $scope.toggleView() ? 4 : 2;
-            $scope.activeTran = [];
-            $scope.activeIssue = currentcolumn;
-            $scope.activeInvestor = currenttran;
-            $scope.allowKeys = calculate.complement($scope.ct.issuekeys,
-                                                    [currentcolumn]);
-            var first = 0;
-            angular.forEach($scope.ct.trans, function (tran) {
-                if (tran.investor == currenttran && tran.issue == currentcolumn) {
-                    if (first === 0) {
-                        tran.active = true;
-                        first = first + 1;
-                    }
-                    tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
-                    tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
-                    tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
-                    $scope.activeTran.push(tran);
-                }
-            });
-            if ($scope.activeTran.length < 1 && !$scope.toggleView()) {
-                var anewTran = captable.newTransaction(currentcolumn,
-                                                       $scope.activeInvestor);
-                $scope.ct.trans.push(anewTran);
-                $scope.activeTran.push(anewTran);
-            }
-
-            if ($scope.activeTran.length < 1 && $scope.toggleView()) {
-                $scope.activeIssue = undefined;
-                $scope.activeInvestor = undefined;
-                $scope.sideBar = "home";
-            }
-
-            angular.forEach($scope.ct.rows, function (row) {
-                row.state = false;
-                angular.forEach($scope.ct.issues, function (issue) {
-                    if (issue.issue) {
-                        if (row.name == currenttran && currentcolumn == issue.issue && $scope.activeTran.length > 0) {
-                            row[currentcolumn].state = true;
-                        }
-                        else if (row[issue.issue]) {
-                            row[issue.issue].state = false;
-                        } else {
-                            issue.state = false;
-                        }
-                    }
-                });
-            });
+            selectTransaction(currenttran, currentcolumn);
         }
     };
 
@@ -327,6 +336,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     /* Save Issue Function.
      * Takes the issue and the item being changed so sub transactions can
      * also be updated in just that field.
+     *  TODO refactor
      */
     $scope.saveIssue = function (issue, item) {
         if (item == "issuekey") {
@@ -490,6 +500,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.dmodalUp(activeIssue);
     };
 
+    // TODO refactor
     $scope.deleteIssue = function (issue) {
         SWBrijj.proc('ownership.delete_issue', issue['key']).then(function (data) {
             $scope.lastsaved = Date.now();
@@ -562,17 +573,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         list.push("");
         angular.forEach(paripassu, function(pari) {
             used.push(pari.pariwith);
-        })
+        });
         angular.forEach(issues, function(issue) {
             if (used.indexOf(issue) == -1) {
-                list.push(issue)
+                list.push(issue);
             }
         });
-        return list
+        return list;
     };
 
     $scope.showPari = function(list) {
-        return (list.length > 0)
+        return list.length > 0;
     };
 
     $scope.toggleCommon = function(issue) {
@@ -656,26 +667,21 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (row.name == name) {
                 $scope.rmodalUp(row);
             }
-        })
+        });
     };
 
     // Creates a new blank transaction with today's date
     $scope.createTrantab = function () {
-        var inIssue = $scope.activeTran[0].issue
-        var newTran = {};
-        newTran = {"new": "yes", "atype": 0, "investor": $scope.activeInvestor, "investorkey": $scope.activeInvestor, "company": $scope.company, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": null, "unitskey": null, "paidkey": null, "key": "undefined", "convert": []};
-        angular.forEach($scope.ct.issues, function (issue) {
-            if (issue.issue == inIssue) {
-                newTran = $scope.tranInherit(newTran, issue);
-            }
-        });
+        var inIssue = $scope.activeTran[0].issue;
+        var newTran = captable.newTransaction(inIssue,
+                                              $scope.activeInvestor);
+        newTran.atype = 0;
         $scope.ct.trans.push(newTran);
         $scope.activeTran.push(newTran);
-        for (var i = 0; i < $scope.activeTran.length; i++) {
-            if (i + 1 == $scope.activeTran.length) {
+        for (var i = 1; i <= $scope.activeTran.length; i++) {
+            if (i == $scope.activeTran.length) {
                 $scope.activeTran[i].active = true;
-            }
-            else {
+            } else {
                 $scope.activeTran[i].active = false;
             }
         }
@@ -693,8 +699,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
 
     // Function for when the delete transaction button is pressed in the right sidebar
     $scope.manualdeleteTran = function (tran) {
-        var d1 = tran['date'].toUTCString();
-        SWBrijj.proc('ownership.delete_transaction', parseInt(tran['tran_id'])).then(function (data) {
+        var d1 = tran.date.toUTCString();
+        SWBrijj.proc('ownership.delete_transaction', parseInt(tran.tran_id, 10))
+        .then(function(data) {
             $scope.lastsaved = Date.now();
             var index = $scope.ct.trans.indexOf(tran);
             $scope.ct.trans.splice(index, 1);
@@ -858,7 +865,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     // Preformatting on the date to factor in the local timezone offset
-    var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
+    var keyPressed = false;
+    // Needed because selecting a date in the calendar is considered a blur,
+    // so only save on blur if user has typed a key
     $scope.saveTranDate = function (transaction, field, evt) {
         if (evt) { // User is typing
             if (evt != 'blur')
@@ -884,6 +893,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     };
 
     // Save transaction function
+    // TODO refactor
     $scope.saveTran = function (transaction) {
         //Triggers the multi modal if more than one transaction exists
         if (transaction.length > 1) {
@@ -1170,35 +1180,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
     };
 
-
-    // Function to inherit all the values from the issue to new and updating transactions
-    $scope.tranInherit = function (tran, issue) {
-        tran.issue = issue.issue;
-        tran.type = issue.type;
-        tran.totalauth = issue.totalauth;
-        tran.premoney = issue.premoney;
-        tran.postmoney = issue.postmoney;
-        tran.ppshare = issue.ppshare;
-        tran.totalauth = issue.totalauth;
-        tran.liquidpref = issue.liquidpref;
-        tran.partpref = issue.partpref;
-        tran.optundersec = issue.optundersec;
-        tran.price = issue.price;
-        tran.terms = issue.terms;
-        tran.vestingbeginsdisplay = issue.vestingbeginsdisplay;
-        tran.vestcliff = issue.vestcliff;
-        tran.vestfreq = issue.vestfreq;
-        tran.debtundersec = issue.debtundersec;
-        tran.interestrate = issue.interestrate;
-        tran.interestratefreq = issue.interestratefreq;
-        tran.valcap = issue.valcap;
-        tran.discount = issue.discount;
-        tran.term = issue.term;
-        tran.dragalong = issue.dragalong;
-        tran.tagalong = issue.tagalong;
-        return tran
-    };
-
     $scope.editViewToggle = function() {
         $scope.maintoggle = !$scope.maintoggle;
         $scope.radioModel = $scope.maintoggle ? "Edit" : "View";
@@ -1392,7 +1373,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $scope.convertTran.step = number;
         if (number == '2') {
             $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
-            $scope.convertTran.newtran = $scope.tranInherit($scope.convertTran.newtran, $scope.convertTran.toissue);
+            $scope.convertTran.newtran = captable.inheritAllDataFromIssue($scope.convertTran.newtran, $scope.convertTran.toissue);
             $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
             $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
         }
@@ -1990,15 +1971,15 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.mComplete = function (transactions, picked, number, type) {
         var inIssue = transactions[0].issue;
         if (!picked) {
-            if (type == "u") {
-                var newTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeTran[0].investor, "investorkey": $scope.activeTran[0].investor, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": number, "paid": null, "unitskey": number, "paidkey": null, "key": undefined, "convert": []};
-            }
-            else {
-                var newTran = {"active": true, "atype": 0, "new": "yes", "investor": $scope.activeTran[0].investor, "investorkey": $scope.activeTran[0].investor, "company": $scope.currentCompany, "date": (Date.today()), "datekey": (Date.today()), "issue": (inIssue), "units": null, "paid": number, "unitskey": null, "paidkey": number, "key": undefined, "convert": []};
-            }
+            var newTran = captable.newTransaction(inIssue,
+                                                  $scope.activeTran[0].investor);
+            newTran.active = true;
+            newTran.atype = 0;
+            if (type == "u") { newTran.units = newTran.unitskey = number; }
+            else { newTran.paid = newtran.paidkey = number; }
             angular.forEach($scope.ct.issues, function (issue) {
                 if (issue.issue == inIssue) {
-                    newTran = $scope.tranInherit(newTran, issue);
+                    newTran = captable.inheritAllDataFromIssue(newTran, issue);
                 }
             });
             if (number < 0 && newTran.type == "Option") {
