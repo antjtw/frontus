@@ -18,7 +18,7 @@ app.controller('CompanyDocumentListController',
             };
             $scope.modals = {};
             $scope.scrollParent = angular.element(".leftBlock");
-            $scope.activityView = "global.get_company_activity";
+            $scope.activityView = "document.company_name_activity_feed";
 
             if (navState.role == 'investor') {
                 $location.path('/investor-list'); // goes into a bottomless recursion ?
