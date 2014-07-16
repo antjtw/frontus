@@ -714,10 +714,10 @@
                 <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%"></td>
                 <td  class="viewName">{{row.name}}</td>
                 <td class="tableFields" ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
-                            <span class="captablepair-box">
-                                <div ng-class="{'editview': !toggleView()}" ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
-                                <div ng-class="{'editview': !toggleView()}" ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
-                            </span>
+                    <span class="captablepair-box">
+                        <div ng-class="{'editview': !toggleView()}" ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
+                        <div ng-class="{'editview': !toggleView()}" ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
+                    </span>
                 </td>
             </tr>
             <!-- Footer Total Row -->
@@ -733,11 +733,11 @@
                 <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields" ng-repeat="one in ct.issuekeys track by $index">
-                            <span class="captablepair-box">
-                                <div ng-bind="formatAmount(colTotal(one, ct.rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(colTotal(one, ct.rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
 
-                                <div ng-bind="formatDollarAmount(colTotal(one, ct.rows, 'a'))" ng-class="{'editview': !toggleView()}" class="output second footer"></div>
-                            </span>
+                        <div ng-bind="formatDollarAmount(colTotal(one, ct.rows, 'a'))" ng-class="{'editview': !toggleView()}" class="output second footer"></div>
+                    </span>
                 </td>
             </tr>
         </table>

@@ -229,6 +229,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function nullCell() {
         return {"u": null, "a": null, "ukey": null, "akey": null};
     }
+    this.nullCell = nullCell;
     function addTranToCell(tran) {
         angular.forEach(captable.rows, function (row) {
             if (row.name == tran.investor) {

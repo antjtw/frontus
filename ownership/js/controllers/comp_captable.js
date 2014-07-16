@@ -6,6 +6,9 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         $location.path('/investor-captable');
         return;
     }
+    $scope.$watch('sideBar', function(x) {
+        console.log(x);
+    });
     var company = navState.company;
     $scope.ct = captable.getCapTable();
     $scope.currentCompany = company;
@@ -273,7 +276,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     issue = issuefull;
                 }
             });
-            $scope.sidebar = $scope.toggleView() ? 5 : 1;
+            $scope.sideBar = $scope.toggleView() ? 5 : 1;
             $scope.activeIssue = issue;
             $scope.issueRevert = angular.copy(issue);
 
@@ -451,7 +454,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (issuekey in row) {
                             }
                             else {
-                                row[issuekey] = nullCell();
+                                row[issuekey] = captable.nullCell();
                             }
                         });
                     });
@@ -658,7 +661,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (investor.name == "" && rowindex >= 4) {
                 var values = {"name": "", "editable": "0"};
                 angular.forEach($scope.ct.issuekeys, function (key) {
-                    values[key] = nullCell();
+                    values[key] = captable.nullCell();
                 });
                 $scope.ct.rows.push(values);
             }
@@ -888,7 +891,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if ($scope.ct.rows.length <= 5) {
                         var values = {"name": "", "editable": "0"};
                         angular.forEach($scope.ct.issuekeys, function (key) {
-                            values[key] = nullCell();
+                            values[key] = captable.nullCell();
                         });
                         $scope.ct.rows.splice(index, 0, values);
                     }
@@ -1155,7 +1158,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (issuekey in row) {
                             }
                             else {
-                                row[issuekey] = nullCell();
+                                row[issuekey] = captable.nullCell();
                             }
                         });
                     });
@@ -1590,7 +1593,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                     if (issuekey in row) {
                     }
                     else {
-                        row[issuekey] = nullCell();
+                        row[issuekey] = captable.nullCell();
                     }
                 });
             });
@@ -1747,7 +1750,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         if (issuekey in row) {
                         }
                         else {
-                            row[issuekey] = nullCell();
+                            row[issuekey] = captable.nullCell();
                         }
                     });
                 });
@@ -1884,7 +1887,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                             if (issuekey in row) {
                             }
                             else {
-                                row[issuekey] = nullCell();
+                                row[issuekey] = captable.nullCell();
                             }
                         });
                     });
@@ -2547,7 +2550,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
             if (!$scope.ct.rows[startindex]) {
                 var values = {"name": "", "editable": "yes"};
                 angular.forEach($scope.ct.issuekeys, function (key) {
-                    values[key] = nullCell();
+                    values[key] = captable.nullCell();
                 });
                 $scope.ct.rows.push(values);
             }
@@ -2560,7 +2563,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         }
         var values = {"name": "", "editable": "0"};
         angular.forEach($scope.ct.issuekeys, function (key) {
-            values[key] = nullCell();
+            values[key] = captable.nullCell();
         });
         $scope.ct.rows.push(values);
         return false;
