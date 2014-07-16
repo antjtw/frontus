@@ -1,5 +1,17 @@
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
+m.directive('groupPeople', function(){
+    return {
+        scope: false,
+        restrict: 'E',
+        templateUrl:'/cmn/partials/groupPeople.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
+
+            
+        }]
+    }
+})
 m.directive('peopleFilter', function(){
     return {
         scope: {people: '='},

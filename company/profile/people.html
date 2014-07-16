@@ -27,7 +27,7 @@
                                     <a class="button">Remove Admin</a>
                                 </li>
                                 <li>
-                                    <p class="button" ng-click=>Group</a>
+                                    <p class="button" ng-click="companyIsZombie() || toggleSide('group'); clearRecipient();">Group</a>
                                 </li>
                                 </ul>
                             </li>
@@ -144,6 +144,7 @@
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                 </compose-message>
                 <add-person ng-switch-when="people"></add-person>
+                <group-people ng-switch-when="group"></group-people>
         </div>
 
     </div>
