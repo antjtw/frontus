@@ -595,7 +595,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             };
         };
       
-
+        // add person to dropdown on people page
         $scope.selectPerson = function(person){
             if($scope.sidebarPage == 'email'){
                 if ($scope.messageData.recipients.indexOf(person.email)=== -1){
@@ -610,10 +610,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 return $scope.messageData.recipients;
             }
             else {
-                console.log(person);
-                $scope.addAdmin.push(person);
-                return $scope.addAdmin;
-                return true;    
+                if($scope.addAdmin.indexOf(person)=== -1){
+                    $scope.addAdmin.push(person);
+                }
+                else {
+                    var toDelete = $scope.addAdmin.indexOf(person)
+                    $scope.addAdmin.splice(toDelete, 1);
+                }
+                console.log(person);  
             }
             
         };

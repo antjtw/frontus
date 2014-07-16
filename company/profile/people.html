@@ -16,8 +16,24 @@
                     </div>
             <!--         admin dropdowns -->
                     <div class="pull-left">
-                        {{addAdmin[0]}}
+                        <ul class="dropdown-list drop-selector">
+                            <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                             </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                    <a class="button">Make admin</a>
+                                </li>
+                                <li>
+                                    <a class="button">Remove Admin</a>
+                                </li>
+                                <li>
+                                    <a class="button">Add group</a>
+                                </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
+                  <!--   </div> -->
 
                  <!--    email button -->
                     <div class="box-button pull-right"
@@ -75,7 +91,7 @@
                     
                       
                     <td style="width:400px" class="shareholder-column docname-column" ng-click=" sidebarPage=='email'"> 
-                        
+
                    <!--  check boxes      -->
                         <div class="check-box-side">
                             <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="selectPerson(person)">
