@@ -1,12 +1,12 @@
-var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
+var m = angular.module('commonDirectives', ['ui.select2', 'brijj', 'ui.filters']);
 
 m.directive('groupPeople', function(){
     return {
         scope: {people: '='},
         restrict: 'E',
         templateUrl:'/cmn/partials/groupPeople.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
-        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location){
 
             $scope.groupName = "";
 
@@ -24,21 +24,12 @@ m.directive('groupPeople', function(){
             $scope.selectedGroup = [];
             var newGroups = [];
             var firstGroup = [];
-            $scope.oldGroups = [];
-            var groupObj = {}
+ 
 
-            // This checks how you will update the json object and creates the objects you need to pass in to upDateGroup, as well as calls updateGroup
-
-            $scope.parseGroups = function(){                
-                console.log("where are my groups");
+            $scope.parseGroups = function(){              console.log("where are my groups");
                 SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
-                    angular.forEach($scope.myUserGroups, function(group){
-                        $scope.oldGroups.push(
-                            groupObj["group"] = group.json_array_elements);
-                        console.log($scope.oldGroups);
-                    })
-                    console.log("stuff");
+                    console.log($scope.myUserGroups)
                 })
             };
             $scope.parseGroups();
@@ -100,8 +91,8 @@ m.directive('groupPeople', function(){
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
                     $scope.myUserRoles = data;
                     console.log($scope.myUserRoles);
-                })
-            }
+                });
+            };
 
             
         }]

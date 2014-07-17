@@ -15,8 +15,8 @@
     </div>
   </div>
 
-  <div ng-repeat="myUserGroups in myUserGroup">{{myUserGroup.json_array_elements}}</div>
-  <div ng-repeat="oldGroup in oldGroups track by $index">{{oldGroup}}</div>
+ <div ng-repeat="myUserGroup in myUserGroups | unique: 'json_array_elements'">{{myUserGroup.json_array_elements}}</div>
+<!--   <div ng-repeat="oldGroup in oldGroups | unique: 'id'">{{oldGroup}}</div> -->
 <!--     <div class="check-box-side">
       <button class="check-box-button" ng-class="{'selected': groupIs(group)}">
         <span data-icon="&#xe023;" aria-hidden="true"></span></button>
