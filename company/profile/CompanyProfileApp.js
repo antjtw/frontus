@@ -617,7 +617,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     var toDelete = $scope.groupPeople.indexOf(person)
                     $scope.groupPeople.splice(toDelete, 1);
                 }
-                console.log(person);  
+                console.log($scope.groupPeople.length);  
             }
             
         };

@@ -22,16 +22,26 @@ m.directive('groupPeople', function(){
                 };
             };
 
-            $scope.addFirstGroup = function(array, json){
-                SWBrijj.procm("account.multi_update_groups", array, json).then(function(x){
+            // $scope.readToAddGroup = function(){
+            //     if($scope.groupName.length > 0 && $scope.manyWithGroup.length > 0 || $scope.manyNoGroup.length >0){
+            //         return true;
+            //     }
+            //     else {
+            //         return false;
+            //     }
+            // }
 
-                    console.log("test")
-                })
+            $scope.addFirstGroup = function(array, json){
+                SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
+                   console.log("added group");
+                }).except(function(x){
+                    console.log("failed to add group");
+                });
             }
 
 
-            $scope.manyNoGroup = [];
-            $scope.manyWithGroup = [];
+            var manyNoGroup = [];
+            var manyWithGroup = [];
             $scope.checkGroups = function(person){
                 // var manyNoGroup = [];
                 angular.forEach(person, function(info){              
@@ -46,11 +56,11 @@ m.directive('groupPeople', function(){
                                 // noGroup[user.email] = user.role;
                                 noGroup.push(user.email, user.role);
                                 console.log(noGroup);
-                                $scope.manyNoGroup.push(noGroup)
+                                manyNoGroup.push(noGroup)
                             }
                             else {
                                 hasGroup.push(user.email, user.role);
-                                $scope.manyWithGroup.push(hasGroup)
+                                manyWithGroup.push(hasGroup)
                             }
                            
                         });
@@ -62,8 +72,11 @@ m.directive('groupPeople', function(){
                         console.log("error")
                     });
                 });
-                console.log($scope.manyNoGroup); 
-                console.log($scope.manyWithGroup);   
+                var array = JSON.stringify(manyNoGroup);
+                console.log(array)
+                $scope.addFirstGroup(array, $scope.groupName)
+                console.log(manyNoGroup); 
+                console.log(manyWithGroup);   
             };
 
             $scope.showUserRoles = function(){
