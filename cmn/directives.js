@@ -2,13 +2,13 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('groupPeople', function(){
     return {
-        scope: {contacts: '='},
+        scope: {people: '='},
         restrict: 'E',
         templateUrl:'/cmn/partials/groupPeople.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
-            $scope.groupName = ""
+            $scope.groupName = "";
 
 
             $scope.updateGroup = function(array, json){
@@ -20,10 +20,10 @@ m.directive('groupPeople', function(){
             }
 
             // This updates the JSON of groups with a new name
-            $scope.addToGroups = function(oldString, newString){
-                string1 = JSON.parse(oldString)
-                return string1 + ", " + newString;
-            }
+            // $scope.addToGroups = function(oldString, newString){
+            //     string1 = JSON.parse(oldString)
+            //     return string1 + ", " + newString;
+            // }
 
             $scope.makeJson = function(item){
                 return JSON.stringify(item);
@@ -32,9 +32,12 @@ m.directive('groupPeople', function(){
 
             $scope.manyNoGroup = [];
             $scope.manyHasGroup = [];
+            var newGroups = [];
+            var firstGroup = []
             // This checks how you will update the json object and creates the objects you need to pass in to upDateGroup, as well as calls updateGroup
             $scope.checkGroups = function(person){
                 // var manyNoGroup = [];
+                console.log($scope.groupName);
                 angular.forEach(person, function(info){              
                     var email = info.email                 
                     var noGroup = [];
@@ -45,19 +48,30 @@ m.directive('groupPeople', function(){
                             console.log(user.email);
                             if(user.groups==null){
                                 noGroup.push(user.email, user.role);
+                                firstGroup.push($scope.groupName);
                                 $scope.manyNoGroup.push(noGroup);
-                                $scope.updateGroup($scope.makeJson($scope.manyNoGroup), $scope.makeJson($scope.groupName));
+                                console.log(JSON.stringify(firstGroup));
+                                console.log(JSON.stringify($scope.manyNoGroup));
+                                $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(firstGroup))
+                                // $scope.updateGroup($scope.makeJson($scope.manyNoGroup), $scope.makeJson(firstGroup));
 
                             }
                             else if(user.groups != null){
+                                var array = JSON.parse(user.groups);
+                                array.push($scope.groupName);
+                                console.log(typeof user.groups)
                                 hasGroup.push(user.email, user.role);
                                 $scope.manyHasGroup.push(hasGroup);
-                                var array1 = JSON.stringify($scope.manyHasGroup);
-                                var json1 = JSON.stringify($scope.addToGroups(user.groups, $scope.groupName));
-                                console.log(json1);
-                                console.log(typeof json1)
-                                $scope.updateGroup($scope.makeJson($scope.manyHasGroup), json1);
+                                console.log($scope.manyHasGroup);
+                                $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
+                                // var array1 = JSON.stringify($scope.manyHasGroup);
+                                
+                                // console.log(array1)
+                                // console.log(json1);
+                                // console.log(typeof json1)
+                                // $scope.updateGroup($scope.makeJson($scope.manyHasGroup), $scope.makeJson(newGroups));
                             }
+                            console.log("where am I?")
                            
                         });           
                     }).except(function(data){
