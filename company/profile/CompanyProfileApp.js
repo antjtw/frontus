@@ -510,7 +510,12 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 angular.forEach($scope.people, function(person){
                     angular.forEach(group, function(group){
                         if(group.email == person.email){
-                            person.groups = JSON.parse(group.groups);
+                            person.groups = group.groups;
+                            var a = JSON.parse(group.groups);
+                            console.log(a);
+                            console.log("a is a " + typeof a);
+                            console.log(typeof group.groups);
+                            // console.log(group.groups.replace(/\, /g, ""))
 
                         };
                     });

@@ -17,97 +17,84 @@ m.directive('groupPeople', function(){
                 }).except(function(x){
                     console.log("failed to add group");
                 });
-            }
-
-            // This updates the JSON of groups with a new name
-            // $scope.addToGroups = function(oldString, newString){
-            //     string1 = JSON.parse(oldString)
-            //     return string1 + ", " + newString;
-            // }
-
-            $scope.makeJson = function(item){
-                return JSON.stringify(item);
-            }
-
+            };
 
             $scope.manyNoGroup = [];
             $scope.manyHasGroup = [];
+            $scope.selectedGroup = [];
             var newGroups = [];
-            var firstGroup = []
-            // This checks how you will update the json object and creates the objects you need to pass in to upDateGroup, as well as calls updateGroup
-            $scope.checkGroups = function(person){
-                // var manyNoGroup = [];
-                console.log($scope.groupName);
-                angular.forEach(person, function(info){              
-                    var email = info.email                 
-                    var noGroup = [];
-                    var hasGroup = [];
-                    SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
-                        $scope.userRole = data;
-                        angular.forEach($scope.userRole, function(user){
-                            console.log(user.email);
-                            if(user.groups==null){
-                                noGroup.push(user.email, user.role);
-                                firstGroup.push($scope.groupName);
-                                $scope.manyNoGroup.push(noGroup);
-                                console.log(JSON.stringify(firstGroup));
-                                console.log(JSON.stringify($scope.manyNoGroup));
-                                $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(firstGroup))
-                                // $scope.updateGroup($scope.makeJson($scope.manyNoGroup), $scope.makeJson(firstGroup));
+            var firstGroup = [];
+            $scope.oldGroups = [];
+            var groupObj = {}
 
-                            }
-                            else if(user.groups != null){
-                                var array = JSON.parse(user.groups);
-                                array.push($scope.groupName);
-                                console.log(typeof user.groups)
-                                hasGroup.push(user.email, user.role);
-                                $scope.manyHasGroup.push(hasGroup);
-                                console.log($scope.manyHasGroup);
-                                $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
-                                // var array1 = JSON.stringify($scope.manyHasGroup);
-                                
-                                // console.log(array1)
-                                // console.log(json1);
-                                // console.log(typeof json1)
-                                // $scope.updateGroup($scope.makeJson($scope.manyHasGroup), $scope.makeJson(newGroups));
-                            }
-                            console.log("where am I?")
-                           
-                        });           
-                    }).except(function(data){
-                        console.log("error")
-                    });
-                });
-                // var array = JSON.stringify(manyNoGroup);
-                // var json = JSON.stringify($scope.groupName)
-                // $scope.performUpate();
-                // $scope.addFirstGroup(array, json)
-                // console.log(manyNoGroup); 
-                // console.log(manyWithGroup);   
+            // This checks how you will update the json object and creates the objects you need to pass in to upDateGroup, as well as calls updateGroup
+
+            $scope.parseGroups = function(){                
+                console.log("where are my groups");
+                SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
+                    $scope.myUserGroups = data;
+                    angular.forEach($scope.myUserGroups, function(group){
+                        $scope.oldGroups.push(
+                            groupObj["group"] = group.json_array_elements);
+                        console.log($scope.oldGroups);
+                    })
+                    console.log("stuff");
+                })
+            };
+            $scope.parseGroups();
+
+             
+
+            $scope.groupIs = function(group){
+                return $scope.selectedGroup.indexOf(group) != -1;
             };
 
-            $scope.performUpate = function(people){
-                $scope.checkGroups(people);
-                console.log("Perform update");
-                console.log($scope.manyNoGroup.length);
-                console.log($scope.manyHasGroup.length);
-                // if(manyNoGroup.length > 0){
-                //     console.log("adding new groups")
-                //     console.log(manyNoGroup)
-                //     var array = JSON.stringify(manyNoGroup);
-                //     var json = JSON.stringify($scope.groupName);
-                //     console.log(json)
-                //     $scope.updateGroup(array, json)
-                // }
-                // else if (manyWithGroup.length > 0){
-                //     var array = JSON.stringify(manyNoGroup);
-                //     var json = JSON.stringify($scope.groupName);
-                //     $scope.updateGroup(array,json)
-                // }
-                // else{
-                //     console.log("other")
-                // }
-            }
+
+
+            $scope.checkGroups = function(person){
+                if($scope.groupName.length > 0){
+                    angular.forEach(person, function(info){              
+                        var email = info.email                 
+                        var noGroup = [];
+                        var hasGroup = [];
+                        SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
+                            $scope.userRole = data;
+                            angular.forEach($scope.userRole, function(user){
+                                if(user.groups==null){
+                                    noGroup.push(user.email, user.role);
+                                    firstGroup.push($scope.groupName);
+                                    $scope.manyNoGroup.push(noGroup);
+                                    $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(firstGroup));
+                                }
+                                else if(user.groups != null){
+                                    var array = JSON.parse(user.groups);
+                                    array.push($scope.groupName);
+                                    console.log(typeof user.groups)
+                                    hasGroup.push(user.email, user.role);
+                                    $scope.manyHasGroup.push(hasGroup);
+                                    console.log($scope.manyHasGroup);
+                                    $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
+                                }
+                                console.log("where am I?")
+                               
+                            });           
+                        }).except(function(data){
+                            console.log("error")
+                        });
+                    });
+                    }
+                else {
+                    console.log("add a group")
+                }
+
+            };
+
+            // $scope.performUpate = function(people){
+            //     $scope.checkGroups(people);
+            //     console.log("Perform update");
+            //     console.log($scope.manyNoGroup.length);
+            //     console.log($scope.manyHasGroup.length);
+            // }
 
             $scope.showUserRoles = function(){
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){

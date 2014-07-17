@@ -15,10 +15,22 @@
     </div>
   </div>
 
+  <div ng-repeat="myUserGroups in myUserGroup">{{myUserGroup.json_array_elements}}</div>
+  <div ng-repeat="oldGroup in oldGroups track by $index">{{oldGroup}}</div>
+<!--     <div class="check-box-side">
+      <button class="check-box-button" ng-class="{'selected': groupIs(group)}">
+        <span data-icon="&#xe023;" aria-hidden="true"></span></button>
+    </div>
+    <ul>
+      <li>{{myUserGroup.json_array_elements}}</li>
+    </ul>
+  </div> -->
+
+
     <div class="sidebarFooter">
 
         <div class="preview-message" 
-            ng-click="checkGroups(people); showUserRoles()">
+            ng-click="checkGroups(people); showUserRoles(); myGroups()">
             Group 
         </div>
 
