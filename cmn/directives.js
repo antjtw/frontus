@@ -40,6 +40,17 @@ m.directive('groupPeople', function(){
                 return $scope.selectedGroup.indexOf(group) != -1;
             };
 
+            $scope.selectGroup = function(group){
+                if($scope.selectedGroup.indexOf(group)=== -1){
+                    $scope.selectedGroup.push(group);
+                }
+                else {
+                    var toDelete = $scope.selectedGroup.indexOf(group)
+                    $scope.selectedGroup.splice(toDelete, 1);
+                }
+                console.log($scope.selectedGroup);  
+            }
+
 
 
             $scope.checkGroups = function(person){

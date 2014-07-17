@@ -17,7 +17,7 @@
 
 <div ng-repeat="myUserGroup in myUserGroups | unique: 'json_array_elements'">
   <div class="check-box-side">
-    <button class="check-box-button">
+    <button class="check-box-button" ng-class="{'selected': groupIs(myUserGroup.json_array_elements)}" ng-click="selectGroup(myUserGroup.json_array_elements)">
         <span data-icon="&#xe023;" aria-hidden="true"></span>
       </button>
   </div>
