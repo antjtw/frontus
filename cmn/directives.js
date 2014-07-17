@@ -49,6 +49,44 @@ m.directive('groupPeople', function(){
                     $scope.selectedGroup.splice(toDelete, 1);
                 }
                 console.log($scope.selectedGroup);  
+            };
+
+            // $scope.deleteGroup = function(group){
+            //     angular.forEach($scope.my)
+            // }
+
+            $scope.createGroups = function(person){
+                
+                console.log("createme")
+                SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(
+                    function(data){
+                    $scope.userRoles = data;
+                    console.log($scope.userRoles)
+                    angular.forEach(person, function(info){
+                        var noGroup = []
+                        var hasGroup = []
+                        console.log(info.email)
+                        angular.forEach($scope.userRoles, function(userRole){
+                            console.log(userRole.email);
+                            if(info.email == userRole.email && userRole.groups == null){
+                                noGroup.push(userRole.email, userRole.role);
+                                $scope.manyNoGroup.push(noGroup);
+                                console.log("match");
+                                console.log($scope.manyNoGroup);
+                            }
+                            else if(info.email == userRole.email){
+                                hasGroup.push(userRole.email, userRole.role)
+                                $scope.manyHasGroup.push(hasGroup)
+                                console.log($scope.manyHasGroup)
+                            }
+                            else{
+                                console.log('the end');
+                            }
+                        });
+                     
+                    })
+                })
+
             }
 
 
