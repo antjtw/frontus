@@ -66,6 +66,9 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         var total = doc.version_count;
         var display_total = doc.version_count - (hide_completed ? doc.complete_count : 0) - (!show_archived ? doc.archive_count : 0) + ((hide_completed && !show_archived) ? doc.archive_complete_count : 0);
 
+        if (show_archived) {
+            return doc.archive_count + " archived documents"
+        }
         if (total == doc.archive_count && !show_archived) {
             return "All documents archived";
         } else if (total == doc.complete_count && hide_completed) {

@@ -123,6 +123,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.toggleMaxRatio = function() {
+                console.log($scope.state.maxRatio);
                 $scope.state.maxRatio = ($scope.state.maxRatio===1000) ? 2 : 1000;
             };
 
@@ -134,8 +135,12 @@ app.controller('CompanyDocumentListController',
             $scope.signaturedate = Date.today();
             $scope.signeeded = "No";
 
-            $scope.toggleArchived = function() {
-                $scope.state.show_archived = !$scope.state.show_archived;
+            $scope.toggleState = function(field) {
+                if (field == "archive") {
+                    $scope.state.show_archived = !$scope.state.show_archived;
+                } else if (field == "complete") {
+                    $scope.state.show_completed = !$scope.state.show_completed;
+                }
             };
 
             // only allow docOrder to be set
@@ -151,6 +156,29 @@ app.controller('CompanyDocumentListController',
                 $scope.viewBy = viewby;
             };
 
+            $scope.filterInvestor = function(investor) {
+                $scope.viewBy = ('name');
+                $scope.state.query = investor ;
+            };
+
+            $scope.toggleFilter = function(obj) {
+                /** @name obj#docname
+                 * @type { string} */
+                 if (!$scope.state.hideSharebar && obj.forShare) {
+                    return true
+                } else if ($scope.state.maxRatio!==1000 && obj.version_count == obj.complete_count && obj.complete_count > 0) {
+                    // if hide_completed and all versions are completed then return false
+                    return false
+                } else if (!$scope.state.show_archived && obj.version_count == obj.archive_count && obj.archive_count > 0) {
+                    // if !show_archived and all versions are archived then return false
+                    return false
+                } else if ($scope.state.show_archived && obj.archive_count == 0) {
+                    return false
+                 } else {
+                    return true
+                }
+            };
+
             $scope.searchFilter = function(obj) {
                 var res = [];
                 if ($scope.state.query) {
@@ -161,36 +189,27 @@ app.controller('CompanyDocumentListController',
                 }
                 /** @name obj#docname
                  * @type { string} */
-                if (!$scope.state.hideSharebar && obj.forShare) {
-                    return true;
-                } else if ($scope.state.maxRatio!==1000 && obj.version_count == obj.complete_count && obj.complete_count > 0) {
-                    // if hide_completed and all versions are completed then return false
-                    return false;
-                } else if (!$scope.state.show_archived && obj.version_count == obj.archive_count && obj.archive_count > 0) {
-                    // if !show_archived and all versions are archived then return false
-                    return false;
+                if (obj.type == "doc") {
+                    var truthiness = res.length;
+                    var result = 0;
+                    angular.forEach(res, function(re) {
+                        if (re.test(obj.docname) || re.test(obj.tags)) {
+                            result += 1;
+                        }
+                    });
+                    return !$scope.state.query || truthiness == result;
                 } else {
-                    if (obj.type == "doc") {
-                        var truthiness = res.length;
-                        var result = 0;
-                        angular.forEach(res, function(re) {
-                            if (re.test(obj.docname) || re.test(obj.tags)) {
-                                result += 1;
-                            }
-                        });
-                        return !$scope.state.query || truthiness == result;
-                    } else {
-                        var truthiness = res.length;
-                        var result = 0;
-                        angular.forEach(res, function(re) {
-                            if (re.test(obj.name) || re.test(obj.email)) {
-                                result += 1;
-                            }
-                        });
-                        return !$scope.state.query ||truthiness == result ;
-                    }
+                    var truthiness = res.length;
+                    var result = 0;
+                    angular.forEach(res, function(re) {
+                        if (re.test(obj.name) || re.test(obj.email)) {
+                            result += 1;
+                        }
+                    });
+                    return !$scope.state.query ||truthiness == result ;
                 }
             };
+
             $scope.versionFilter = function(obj) {
                 return $scope.state.maxRatio==1000 || !$scope.versionIsComplete(obj);
             };

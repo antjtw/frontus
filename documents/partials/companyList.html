@@ -28,12 +28,6 @@
                         <span data-icon="&#xe023;" aria-hidden="true"></span>
                     </button>
                 </div>
-                <div class="pull-left checkboxitem" ng-animate="{show:'fadeShow', hide:'fadeHide'}">
-                    <span>Show Archived</span>
-                    <button class="check-box-button" ng-class="{'selected':state.show_archived==true}" ng-click="toggleArchived();">
-                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                    </button>
-                </div>
                 <div class="pull-left"> <span>Search</span>
                     <input type="text" class="search-box" ng-model="state.query">
                 </div>
@@ -101,7 +95,7 @@
         <th colspan="2">Tags</th>
     </tr>
     </tbody>
-    <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
+    <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | filter:toggleFilter | orderBy:docOrder" class="animate">
     </tbody>
 </table>
 <table class="status-table" ng-show="investorDocs && viewBy==='name'" infinite-scroll="loaddocs()" infinite-scroll-distance="0" infinite-scroll-disabled="loadingDocs" infinite-scroll-container="scrollParent">
@@ -120,9 +114,7 @@
     <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
         <tabset ng-style="viewportheight">
             <tab heading = "Filters">
-                <div>
-                    Hello
-                </div>
+                <div document-filters></div>
             </tab>
             <tab heading="Activity">
                 <div activity-feed height='viewportactivity' user='navState.userid' type="iss" view="activityView"></div>

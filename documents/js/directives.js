@@ -102,6 +102,15 @@ app.directive('contenteditable', function() {
     };
 });
 
+app.directive('documentFilters', function() {
+    return {
+        restrict: "A",
+        templateUrl: "/documents/partials/documentFilters.html"
+    };
+});
+
+
+
 app.directive('documentSummaryRow', function() {
     // must be used in a tbody for valid html
     return {
