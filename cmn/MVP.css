@@ -503,6 +503,10 @@ h2 {
 .navBarLoggedOut {
     height:80px;
 }
+
+.navBarLoggedOut.scrolleddown {
+    height: 40px;
+}
 .navpadding {
     padding: 0 20px 0 20px;
 }
@@ -528,7 +532,7 @@ div.fixednav{
 }
 
 .fixednavoffset {
-    margin-top: 60px;
+    margin-top: 80px;
 }
 
 .topnav {
@@ -538,8 +542,87 @@ div.fixednav{
     background-color: rgb(30, 45, 61);
 }
 
+.external-subnav {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: 30px;
+    background-color: rgb(30, 45, 61);
+    -webkit-transition: top 0.2s ease-in-out;
+    -moz-transition: top 0.2s ease-in-out;
+    -o-transition: top 0.2s ease-in-out;
+    transition: top 0.2s ease-in-out;
+    background-color: rgba(255,255,255, 1);
+    border-bottom: 1px solid #C6C6C6;
+}
+
+.external-subnav > div.centered-menu {
+    float:left;
+    width:100%;
+    overflow:hidden;
+    position:relative;
+}
+.external-subnav > div.centered-menu ul {
+    clear:left;
+    float:left;
+    list-style:none;
+    margin:0;
+    padding:0;
+    position:relative;
+    left:50%;
+    text-align:center;
+}
+.external-subnav > div.centered-menu ul li {
+    display:block;
+    float:left;
+    list-style:none;
+    margin-right: 40px;
+    line-height: 30px;
+    padding:0;
+    position:relative;
+    right:50%;
+}
+
+.external-subnav > div.centered-menu ul li > a {
+    text-transform: uppercase;
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    font-size: 12px;
+}
+
+.external-subnav > div.centered-menu ul li > a.active {
+    color: #1d2c3c;
+}
+
+.scrolleddown.external-subnav {
+    top: 41px;
+}
+
+.navBarLoggedOut .topnav {
+    background-color: rgba(255,255,255, 1);
+    border-bottom: 1px solid #C6C6C6;
+    -webkit-transition: height 0.2s ease-in-out;
+    -moz-transition: height 0.2s ease-in-out;
+    -o-transition: height 0.2s ease-in-out;
+    transition: height 0.2s ease-in-out;
+}
+
 .topnav.navheight {
     height: 80px;
+}
+
+.scrolleddown .topnav.navheight {
+    height: 40px;
+}
+
+.navBarLoggedOut .topnav.navheight > div > ul.nav-logo, .navBarLoggedOut .topnav .content-pages .nav > li > a, .navBarLoggedOut .topnav.navheight > div > ul.nav-item {
+    -webkit-transition: margin 0.2s ease-in-out;
+    -moz-transition: margin 0.2s ease-in-out;
+    -o-transition: margin 0.2s ease-in-out;
+    transition: margin 0.2s ease-in-out;
+}
+
+.scrolleddown .topnav.navheight > div > ul.nav-logo, .scrolleddown .topnav .content-pages .nav > li > a, .scrolleddown .topnav.navheight > div > ul.nav-item {
+    margin-top: 0;
 }
 
 .topnav.navheight > div > ul.nav-logo {
@@ -553,6 +636,7 @@ ul.nav-logo > li > a > img {
 
 .topnav.navheight > div > ul.nav-item {
     margin-top: 18px;
+    display: inline-block;
 }
 
 .topnav.navheight > div > ul.nav-item > li {
@@ -623,10 +707,35 @@ ul.nav-logo > li > a > img {
     text-align: center;
 }
 
-.topnav .nav.content-pages {
+.topnav .content-pages {
+    display: inline-block;
+    width: 100%;
+    position: fixed;
+    left: 0;
+
 }
 
-.topnav .nav.content-pages > li > a {
+.topnav .content-pages .nav {
+    clear:left;
+    float:left;
+    list-style:none;
+    margin:0;
+    padding:0;
+    position:relative;
+    left:50%;
+    text-align:center;
+}
+
+.topnav .content-pages .nav > li {
+    display:block;
+    float:left;
+    list-style:none;
+    padding:0;
+    position:relative;
+    right:50%;
+}
+
+.topnav .content-pages .nav > li > a {
     text-align: center;
     padding: 0 20px;
     width: auto;
@@ -641,8 +750,12 @@ ul.nav-logo > li > a > img {
     letter-spacing: 0.1em;
 }
 
-.topnav .nav.content-pages > li > a:hover {
-   color: #FFFFFF;
+.scrolleddown .topnav .content-pages .nav > li > a {
+    margin-top: 0;
+}
+
+.topnav .content-pages .nav > li > a:hover {
+   color: #666666;
 }
 
 .topnav .nav.nav-logo > li > a {
@@ -2716,6 +2829,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 .overall-nav {
     z-index: 999;
+    position: relative;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul {

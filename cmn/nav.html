@@ -62,9 +62,23 @@
             </div>
         </div>
     </div>
-    <div class="overall-nav" ng-class="{navBarLoggedOut:isCollapsed || !navState.userid, navBarLoggedIn:navState.userid}">
+    <div class="overall-nav" ng-class="{navBarLoggedOut:!navState.userid, navBarLoggedIn:navState.userid, 'scrolleddown': scrolled}">
         <div class="navbar topnav row-fluid" ng-class="{navheight:!navState.userid}">
             <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
+                <div class="content-pages">
+                    <ul ng-hide="navState.userid" class="hidden-phone nav">
+                        <li> <a target="_self" href="/features">
+                            Features
+                        </a>
+
+                        </li>
+                        <li> <a target="_self" href="/pricing">
+                            Pricing
+                        </a>
+
+                        </li>
+                    </ul>
+                </div>
                 <ul class="nav pull-left nav-logo">
                     <li>
                         <a ng-click="gotohome();">
@@ -74,6 +88,7 @@
                     </li>
                 </ul>
                 <span ng-show="navState.userid" class='nav-company-name'><span>/</span>   {{navState.name}}</span>
+
                 <ul class="nav pull-right nav-item dropdown-list">
                     <li class="dropdown standard menu-drop" ng-show="navState.userid">
                         <a class="dropdown-toggle nav-photo">
@@ -96,26 +111,23 @@
                         </ul>
                     </li>
                     <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isCollapsed}">
-                        <div class="standard-button small-standard-button blue" ng-show="!navState.userid">
-                            <button class="btn" ng-click="toggleLogin('login')">Log In</button>
-                        </div>
+                        <button class="btn" ng-click="toggleLogin('login')">Log In</button>
                     </li>
                 </ul>
-                <ul ng-hide="navState.userid" class="hidden-phone nav pull-right content-pages">
-                    <li> <a target="_self" href="/features">
-                        Features
-                    </a>
 
-                    </li>
-                    <li> <a target="_self" href="/pricing">
-                        Pricing
-                    </a>
-
-                    </li>
-                </ul>
                 <ul class="nav pull-right nav-item dropdown-list notifications" notifications
                 notes="notes"></ul>
             </div>
+        </div>
+    </div>
+    <div ng-if="!navState.userid" class="external-subnav" ng-class="{'scrolleddown': scrolled}">
+        <div class="centered-menu">
+            <ul>
+                <li><a href="#fundraising" du-smooth-scroll du-scrollspy>Fundraising</a></li>
+                <li><a href="#funding" du-smooth-scroll du-scrollspy>Post-funding</a></li>
+                <li><a href="#hiring" du-smooth-scroll du-scrollspy>Hiring</a></li>
+                <li><a href="#security" du-smooth-scroll du-scrollspy>Security</a></li>
+            </ul>
         </div>
     </div>
     <div ng-if="persistentNotification"

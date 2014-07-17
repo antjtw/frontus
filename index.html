@@ -6,8 +6,7 @@
         <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0"
         />
         <!--{{/i/head_css.inc}}-->
-        <link type="text/css" rel="stylesheet" href="/cmn/index.css">
-        <link type="text/css" rel="stylesheet" href="/cmn/MVPmobile.css">
+        <link type="text/css" rel="stylesheet" href="/cmn/landing.css">
         <!--{{/i/head_js.inc}}-->
         <meta name="description" content="The best way to manage shareholders">
         <script src="index.js"></script>
@@ -15,237 +14,172 @@
         <script src="/lib/jquery.typer.js"></script>
     </head>
     
-    <body>
+    <body scroll id="page">
         <navbar></navbar>
-        <div ng-class="{'fixednavoffset':!navState.userid, 'homedrop': homecollapsed}"
-        class="wrap home" ng-controller="IndexCtrl">	<span ng-view=""></span>
+        <div ng-class="{'homedrop': homecollapsed}"
+        class="wrap home" ng-controller="IndexCtrl">
+        <span ng-view=""></span>
 
-            <div id="hero">
-                <div class="container">
-                    <div class="row-fluid">
-                        <div class="question-bubble">
-                            <span><span id="targetcontent" data-typer-targets='
-                                        { "targets" : ["I want to keep track of our investors",
-                                                        "I want to share documents for e-signature",
-                                                        "I want to grant options hassle free",
-                                                        "I want to make sense of convertible notes",
-                                                        "I want to build a cap table",
-                                                        "I want to send updates to my investors"]}'>I want to share documents for e-signature</span>
-                                </span>
-                            <div ng-click="getpagetarget()" class="learn-more-button">Learn More <span data-icon="&#xe016;" aria-hidden="true"></span></div>
-                        </div>
-                        <img class="home-ike" src='/img/home-ike.png'>
-                    </div>
+            <div id="compress-after" class="home-banner">
+                <div>
+                    <h2 class="key-header">The best way to manage your shareholders</h2>
+                    <h3 class="key-sub-header">Everything you need in one platform to communicate company information with your shareholders</h3>
+                </div>
+                <ul class="bottom-icons">
+                    <li>
+                        <span class="nav-icon fundraising-icon"></span>
+                        <span>Fundraising</span>
+                    </li>
+                    <li>
+                        <span class="nav-icon post-fundraising-icon"></span>
+                        <span>After<br>Fundraising</span>
+                    </li>
+                    <li>
+                        <span class="nav-icon hiring-icon"></span>
+                        <span>When You're<br>Hiring</span>
+                    </li>
+                    <li>
+                        <span class="nav-icon security-support-icon"></span>
+                        <span>Security &<br>Support</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="fundraising" class="home-image-section">
+                <div>
+                    <h2 class="key-header">Make smarter fundraising decisions</h2>
+                    <h3 class="key-sub-header">Building a cap table isn't hard but using that data for meaningful decisions can be. Founders use Sharewave to answer questions like:</h3>
+                </div>
+
+                <div class="section-full-image">
+                    <img src="/img/landing/fundraising-screen.png">
                 </div>
             </div>
-            <div class="row-fluid hidden-phone">
-                <div class="inviteRow footer">
-                    	<h2>The best way to manage shareholders</h2>
 
-                    <div class="standard-button green invite">
-                        <button class="btn" id="a_hp_taf_top" onclick="window.location.href='/pricing'">Get Started <span data-icon="&#xe016;" aria-hidden="true"></span>
-                        </button>
-                    </div>
+            <div class="home-icons-section">
+                <div>
+                    <h2 class="key-header">Keep track of the paperwork<br>behind your financing</h2>
+                </div>
+
+                <div class="section-icon-trio">
+                    <ul>
+                        <li>
+                            <span class="large-icon send-icon"></span>
+                            <span>Send</span>
+                            <span>Easily share access to documents with your investors, lawyer or anyone participating in the fundraising process.</span>
+                        </li>
+
+                        <li>
+                            <span class="large-icon sign-icon"></span>
+                            <span>Sign</span>
+                            <span>Both parties can review and electronically sign documents securely through the platform, in compliance with US & EU eSignature laws.</span>
+                        </li>
+
+                        <li>
+                            <span class="large-icon track-icon"></span>
+                            <span>Track</span>
+                            <span>You’ll see email opens, bounces, document views, individual page views, and a complete audit trail at the completion of the signature process.</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div id="comms">
-                <div class="hidden-phone spacer40"></div>
-                <div class="spacer60"></div>
-                <div class="container">
-                    <div class="row-fluid">
-                        <div class="span10 offset1 text-center">
-                            	<h1>All your records in one secure platform</h1>
 
-                            	<h2>Keeping up with shareholder data across spreadsheets, documents and email is a full-time job, but it doesn't need to be.</h2>
-
-                            <div class="spacer20"></div>
-                            <div class="hidden-phone spacer40"></div>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span10 offset1">
-                            <div class="trio-icons row-fluid">
-                                <div class="span4 text-center">
-                                    <img src="/img/icon-money.png">
-                                    	<h2>Save Money</h2>
-
-                                    <p>Spending more time on your business
-                                        <br class="hidden-phone">and less with your lawyer</p>
-                                </div>
-                                <div class="span4 text-center">
-                                    <img src="/img/icon-communication.png">
-                                    	<h2>Smarter Communication</h2>
-
-                                    <p>Your shareholders can review, sign &amp; access data on their schedule</p>
-                                </div>
-                                <div class="span4 text-center">
-                                    <img src="/img/icon-ownership.png">
-                                    	<h2>Know Your Ownership</h2>
-
-                                    <p>We'll show you exactly who owns
-                                        <br class="hidden-phone">what over time</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div id="funding" class="home-image-section">
+                <div>
+                    <h2 class="key-header">Keep a flawless cap table</h2>
+                    <h3 class="key-sub-header">It only takes a few shareholders before you start questioning your cap table math. After fundraising, record who owns what by connecting the underlying legal agreements to each transaction.
+                    </h3>
                 </div>
-                <div class="spacer60"></div>
-                <div class="hidden-phone spacer50"></div>
-            </div>
-            <div class="spacer110 hidden-phone"></div>
-            <div class="spacer70 visible-phone"></div>
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span6">
-                        	<h1>Understand your equity</h1>
 
-                        	<h2>You shouldn't need an MBA to make sense of your company's capital structure. Our cap table is simple enough for a quick review of your ownership, yet flexible enough for more complex deals.</h2> 
-                        <div class="spacer40"></div>
-                    </div>
-                    <div class="span5">
-                        <div class="hidden-phone spacer20"></div>
-                        <img src="/img/pie.png">
-                    </div>
+                <div class="section-full-image smaller-image">
+                    <img src="/img/landing/cap-screen.png">
                 </div>
             </div>
-            <div class="spacer100 hidden-phone"></div>
-            <div class="spacer50 visible-phone"></div>
-            <div class="container">
-                <div class="hidden-phone spacer40"></div>
-                <div class="row-fluid">
-                    <div class="emp-options span5">
-                         <h1>Employee options</h1>
 
-                         <h2>As your company grows, so does<br class="hidden-phone"> the complexity of your options and grants. Always know the state of<br class="hidden-phone"> your option pool, and invite your employees to monitor their<br class="hidden-phone">  vesting.</h2>
+            <div class="home-icons-section">
+                <div>
+                    <h2 class="key-header">Keep your shareholders<br>in the know</h2>
+                </div>
 
-                        <div class="spacer40"></div>
-                    </div>
-                    <div class="span6">
-                        <div class="hidden-phone spacer20"></div>
-                        <img src="/img/vesting.png">
-                    </div>
-                </div>
-                <div class="spacer120"></div>
-            </div>
-            <div id="security">
-                <div class="row-fluid text-center">
-                    <img src="/img/icon-lock.png" class="lock">
-                </div>
-                <div class="container">
-                    <div class="hidden-phone spacer120"></div>
-                    <div class="row-fluid text-center">
-                        <div class="visible-phone spacer50"></div>
-                        	<h1>Iron-clad security to protect all of your information</h1>
+                <div class="section-icon-trio">
+                    <ul>
+                        <li>
+                            <span class="large-icon contacts-icon"></span>
+                            <span>Contacts</span>
+                            <span>Profiles are automatically created for everyone you've done business with, so you'll have contact information and data history.</span>
+                        </li>
 
-                    </div>
-                    <div class="spacer120"></div>
-                </div>
-                <div class="hidden-phone row-fluid seals text-center">
-                    <div class="span3 offset3">
-                        <h4>SSL encryption</h4>
-                    </div>
-                    <div class="span3">
-                        <h4>Custom shareholder permissioning</h4> 
-                    </div>
+                        <li>
+                            <span class="large-icon messages-icon"></span>
+                            <span>Send Messages</span>
+                            <span>Easily communicate data and company performance with individuals or select groups of people.</span>
+                        </li>
+
+                        <li>
+                            <span class="large-icon footprint-icon"></span>
+                            <span>Track</span>
+                            <span>Know exactly who’s opened a message, viewed a document or looked at your cap table.</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div id="esign">
-                <div class="hidden-phone spacer100"></div>
-                <div class="spacer60"></div>
-                <div class="container">
-                    <div class="row-fluid">
-                        <div class="text-center">
-                             <h1>E-signatures made simple</h1>
 
-                             <h2>Stop chasing down signatures. With our custom e-signature technology you can send, review and sign all of your company documents.</h2>
-
-                            <div class="spacer20"></div>
-                            <div class="hidden-phone spacer100"></div>
-                        </div>
-                    </div>
+            <div id="hiring" class="home-image-section">
+                <div>
+                    <h2 class="key-header">Grant options</h2>
+                    <h3 class="key-sub-header">Send offer letters and onboarding docs for e-sign so you and your employees both have versions. Then use the documents to back up employee grant options and your employees can follow their progress.</h3>
                 </div>
-                <div class="container">
-                    <div class="row-fluid">
-                        <div class="span10 offset1">
-                            <div class="trio-icons row-fluid">
-                                <div class="span4 text-center">
-                                    <img src="/img/icon-legal.png">
-                                    	<h2>Legal Compliance</h2>
 
-                                    <p>Send and receive signatures compliant with the UETA and ESIGN Act</p>
-                                </div>
-                                <div class="span4 text-center">
-                                    <img src="/img/icon-audit.png">
-                                    	<h2>Complete Audit Trail</h2>
+                <div class="section-full-image">
+                    <img src="/img/landing/grants-screen.png">
+                </div>
+            </div>
 
-                                    <p>View every interaction with
-                                        <br class="hidden-phone">your documents</p>
-                                </div>
-                                <div class="span4 text-center">
-                                    <img src="/img/icon-template.png">
-                                    	<h2>Templates</h2>
+            <div id="security" class="home-icons-section">
+                <div>
+                    <h2 class="key-header">Around the clock support</h2>
+                    <h3 class="key-sub-header">We're always around to help, even when it's dark outside. If you have questions, you can reach us in the blue tab below to ask questions or request a demo</h3>
+                </div>
 
-                                    <p>Save time on routine documents</p>
-                                </div>
-                            </div>
+                <div class="section-icon-trio help-section">
+                    <ul>
+                        <li>
+                            <span class="photo-icon alan-icon"></span>
+                            <span>Alan</span>
+                            <span>CMO/Co-founder</span>
+                        </li>
+
+                        <li>
+                            <span class="photo-icon robbie-icon"></span>
+                            <span>Robbie</span>
+                            <span>Product Manager</span>
+                        </li>
+
+                        <li>
+                            <span class="photo-icon liz-icon"></span>
+                            <span>Liz</span>
+                            <span>Software Engineer</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="learn-more-section">
+                <div>
+                    <div>
+                        <h2>Want to see more?</h2>
+                        <div class="CompanyRegister-form large-standard-button blue standard-button">
+                            <button class="btn" onclick="window.location.href='/features'">Take a Tour</button>
                         </div>
                     </div>
-                </div>
-                <div class="spacer60"></div>
-                <div class="hidden-phone spacer100"></div>
-            </div>
-            <div id="register" class="hidden-phone">
-                <div class="row-fluid">
-                    <div class="span10 offset1 text-center">
-                        <h1 style="margin-top: 60px;">Want more from your shareholder data?</h1>
-
+                    <div>
+                        <h2>Ready to get started?</h2>
                         <div class="CompanyRegister-form large-standard-button standard-button">
-                            <button class="btn" onclick="window.location.href='/pricing'">Get Started</button>
+                            <button class="btn" onclick="window.location.href='/pricing'">View Pricing Plans</button>
                         </div>
                     </div>
                 </div>
-                <div class="spacer30"></div>
             </div>
-            <div class="row-fluid">
-                <div class="inviteRow footer">
-                    	<h2>Are you a shareholder? Invite your companies to join. </h2>
-
-                    <div class="standard-button blue invite">
-                        <button class="btn" id="a_hp_taf_bot" ng-click="tellFriendUp()">Invite<span data-icon="&#xe027;" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div modal="tafModal" close="friendClose()" options="opts">
-                <div class="modalHeader"> <span>Invite a company</span>
- <span class="close" data-icon="&#xe00f;" aria-hidden="true"
-                    ng-click="friendClose()"></span>
-
-                </div>
-                <div class="modalText">
-                    <div class="input-row">
-                        <p>Your Name</p>
-                        <input ng-model="taf.yourname">
-                    </div>
-                    <div class="input-row">
-                        <p>Recipient Email Address</p>
-                        <input ng-model="taf.sendEmail">
-                    </div>
-                    <div class="optional-message">
-                        <textarea placeholder="Optional Message" ng-model="taf.custommessage"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="pull-left standard-button gray">
-                        <button class="btn" ng-click="friendClose();">Cancel</button>
-                    </div>
-                    <div class="standard-button green">
-                        <button class="btn" id="a_hp_taf_submit" ng-disabled="!(fieldCheck(taf.sendEmail) && taf.yourname)"
-                        ng-click="friendClose(); tellafriend();">Send Invite</button>
-                    </div>
-                </div>
-            </div>
-            <div id="skrollr-body"></div>
             <div class="push"></div>
         </div>
         <!--{{/i/foot.inc}}-->
