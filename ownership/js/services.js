@@ -33,11 +33,9 @@ ownership.service('captable',
 function($rootScope, calculate, sorting, SWBrijj, $q) {
 
     var captable = new CapTable();
-
     this.getCapTable = function() {
         return captable;
     };
-
     this.loadCapTable = function() { 
         $q.all([loadIssues(),
                 loadTransactions(),
@@ -149,10 +147,12 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         cell.ukey = cell.u = calculate.sum(cell.u, tran.units);
         cell.akey = cell.a = calculate.sum(cell.a, tran.amount);
         if (!isNaN(parseFloat(tran.forfeited))) {
-            cell.ukey = cell.u = calculate.sum(cell.u, (-tran.forfeited));
+            cell.ukey = cell.u =
+                calculate.sum(cell.u, (-tran.forfeited));
         }
         if (!isNaN(parseFloat(tran.exercised))) {
-            cell.exercised = calculate.sum(cell.exercised, tran.exercised);
+            cell.exercised =
+                calculate.sum(cell.exercised, tran.exercised);
         }
     }
     function attachEvidence(data) {
@@ -172,9 +172,10 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     function setVestingDates(obj) {
         if (obj.vestingbegins) {
-            obj.vestingbegins = calculate.timezoneOffset(obj.vestingbegins);
-            obj.vestingbeginsdisplay = calculate.monthDiff(obj.vestingbegins,
-                                                           obj.date);
+            obj.vestingbegins =
+                calculate.timezoneOffset(obj.vestingbegins);
+            obj.vestingbeginsdisplay =
+                calculate.monthDiff(obj.vestingbegins, obj.date);
         }
     }
     function processIssue(iss) {
@@ -282,15 +283,42 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     this.newTransaction = newTransaction;
     function getIssue(issuekey) {
-        return captable.issues.filter(function(el) {return el.issue==issuekey;})[0];
+        return captable.issues.filter(function(el) {
+            return el.issue==issuekey;
+        })[0];
     }
     this.getIssue = getIssue;
     function tranIsInvalid(tran) {
-        return tran === undefined ||
-            tran.issue === undefined ||
-            (isNaN(parseFloat(tran.units)) && isNaN(parseFloat(tran.amount)));
+        if (tran === undefined || tran.issue === undefined ||
+                (isNaN(parseFloat(tran.units)) &&
+                 isNaN(parseFloat(tran.amount)))) {
+            return true;
+        } else if (transaction.type == "Option" &&
+                   transaction.units < 0) {
+            transaction.units = transaction.unitskey;
+            $rootScope.$emit("notification:fail",
+                    "Cannot have a negative number of shares");
+            return true;
+        } else if (transaction.amount < 0) {
+            transaction.amount = transaction.paidkey;
+            $rootScope.$emit("notification:fail",
+                    "Cannot have a negative amount for options");
+            return true;
+        } else {
+            return false;
+        }
     }
     this.tranIsInvalid = tranIsInvalid;
+    function massageTransactionValues(tran) {
+        tran.units = calculate.cleannumber(tran.units);
+        tran.amount = calculate.cleannumber(tran.amount);
+
+        tran.units = calculate.undoIf(calculate.numberIsInvalid,
+                                      tran.units, tran.unitskey);
+        tran.amount = calculate.undoIf(calculate.numberIsInvalid,
+                                       tran.amount, tran.paidkey);
+        if (tran.tran_id === undefined) { tran.tran_id = ''; }
+    }
     function addTranToCell(tran) {
         angular.forEach(captable.rows, function (row) {
             if (row.name == tran.investor) {
@@ -498,18 +526,18 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         if (parseFloat(newval.discount) > 100 ||
             parseFloat(newval.discount) < 0)
         {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].discount = oldval.discount;
+            for (var y=0; y < obj.length; y++) {
+                if (obj[y] && obj[y].tran_id == newval.tran_id) {
+                    obj[y].discount = oldval.discount;
                 }
             }
         }
         if (parseFloat(newval.vestcliff) > 100 ||
             parseFloat(newval.vestcliff) < 0)
         {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].vestcliff = oldval.vestcliff;
+            for (var z=0; z < obj.length; z++) {
+                if (obj[z] && obj[z].tran_id == newval.tran_id) {
+                    obj[z].vestcliff = oldval.vestcliff;
                 }
             }
         }
@@ -540,19 +568,88 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
 
         console.log(captable);
     }
+    var issuetypes = [];
+    this.getIssueTypes = function() {return issuetypes;};
+    function loadIssueTypes() {
+        SWBrijj.procm('ownership.get_transaction_types')
+        .then(function (results) {
+            angular.forEach(results, function (result) {
+                // extra enum value, hard to remove
+                if (result.get_transaction_types != "warrant") {
+                    issuetypes.push(result.get_transaction_types);
+                }
+            });
+        }).except(logError);
+    }
+    loadIssueTypes();
+    var freqtypes = [];
+    this.getFrequencyTypes = function() {return freqtypes;};
+    function loadFrequencyTypes() {
+        SWBrijj.procm('ownership.get_freqtypes')
+        .then(function (results) {
+            angular.forEach(results, function (result) {
+                freqtypes.push(result.get_freqtypes);
+            });
+        }).except(logError);
+    }
+    loadFrequencyTypes();
+    var eligible_evidence = [];
+    this.getEligibleEvidence = function() {
+        return eligible_evidence;
+    };
+    function loadEligibleEvidence() {
+        SWBrijj.tblm('ownership.my_company_eligible_evidence')
+        .then(function(data) {
+            angular.forEach(data, function(x) {
+                if (x.tags) { x.tags = JSON.parse(x.tags); }
+                eligible_evidence.push(x);
+            });
+        }).except(logError);
+    }
+    loadEligibleEvidence();
+    function setTransactionEmail(tran) {
+        angular.forEach(captable.rows, function (row) {
+            if ((row.name == tran.investor) && row.email) {
+                tran.email = row.email;
+            }
+        });
+        if (!transaction.email) { transaction.email = null; }
+    }
+    this.setTransactionEmail = setTransactionEmail;
+    function autocalcThirdTranValue(tran) {
+        if (tran.units && tran.amount &&
+                tran.ppshare !== 0 && !tran.ppshare) {
+            tran.ppshare =
+                parseFloat(tran.amount) / parseFloat(tran.units);
+        }
+        else if (!tran.units && tran.units !== 0 &&
+                    tran.amount && tran.ppshare) {
+            tran.units =
+                parseFloat(tran.amount) / parseFloat(tran.ppshare);
+        }
+        else if (tran.units && !tran.amount &&
+                    tran.amount !== 0 && tran.ppshare) {
+            tran.amount =
+                parseFloat(tran.units) * parseFloat(tran.ppshare);
+        }
+    }
+    this.autocalcThirdTranValue = autocalcThirdTranValue;
+
 });
 
 // Captable functions for basic mathematics.
-// Should be expanded by peeling some of the reusable pieces
-// out of the controller.
+// FIXME make into library of pure functions
 ownership.service('calculate', function () {
 
+    this.whenVestingBegins = function(tran) {
+        return angular.copy(tran.date)
+                    .addMonths(parseInt(tran.vestingbeginsdisplay));
+    }
     this.complement = function(a, b) {
         return a.filter(function(el) {return b.indexOf(el)==-1;});
     };
     this.toFloat = function(value) {
-        value = isNaN(parseFloat(value)) ? null : parseFloat(value);
-        return value;
+        return isNaN(parseFloat(value)) ? null : parseFloat(value);
     };
 
     // The remainder calculated for outstanding units rows.
