@@ -299,30 +299,9 @@ app.directive('docTransactionDetails', function() {
                 data: [defaultSelectObj],
             };
 
-            function mungeIssue(issue) {
-                // set the type of the issue appropriately (currently it's ambiguous based on type alone)
-                // TODO: remove once the ownership conversion is complete
-                if (issue.type == "Equity") {
-                    if (issue.common) {
-                        issue.type = "Equity Common";
-                    } else {
-                        issue.type = "Equity Preferred";
-                    }
-                } else if (issue.type == "Debt") {
-                    issue.type = "Convertible Debt";
-                }
-
-                delete issue.common;
-                return issue;
-            }
-
             // Get the company's Issues
             // TODO: issue / cap table service
             SWBrijj.tblm('ownership.company_issue').then(function (data) {
-                // convert the data in to the future format (if needed)
-                data.forEach(function(issue) {
-                    issue = mungeIssue(issue);
-                });
                 $scope.issues = data;
             });
 

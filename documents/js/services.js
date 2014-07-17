@@ -66,6 +66,35 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
+    function mungeIssue(issue) {
+        // set the type of the issue appropriately (currently it's ambiguous based on type alone)
+        // TODO: remove once the ownership conversion is complete
+        if (issue.type == "Equity") {
+            if (issue.common) {
+                issue.type = "Equity Common";
+            } else {
+                issue.type = "Equity Preferred";
+            }
+        } else if (issue.type == "Debt") {
+            issue.type = "Convertible Debt";
+        }
+
+        delete issue.common;
+        return issue;
+    }
+    function updateAnnotationTypes(issue_type, transaction_type, type_list) {
+        var viable_actions = transaction_attributes[issue_type].actions;
+        var fields = viable_actions[transaction_type].fields;
+        type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
+        var tmp_array = [];
+        for (var field in fields) {
+            var f = fields[field];
+            tmp_array.push({name: f.name, display: f.display_name, required: f.required});
+        }
+        // add new types onto the end (in one action, without changing the reference, for performance reasons)
+        var args = [type_list.length, 0].concat(tmp_array);
+        Array.prototype.splice.apply(type_list, args);
+    }
 
     /// Document object definition
     Document = function() {
@@ -169,21 +198,15 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             });
             return promise.promise;
         },
-        setTransaction: function(transactionType) {
-            this.transactionType = transactionType;
-            var viable_actions = transaction_attributes[transactionType].actions;
+        setTransaction: function(issue) {
+            issue = mungeIssue(issue); // convert to future format
+            this.issue = issue.issue;
+            this.issue_type = issue.type;
+            var viable_actions = transaction_attributes[this.issue_type].actions;
             // documents can only create grants and purchases right now
-            var fields = viable_actions.purchase ? viable_actions.purchase.fields : viable_actions.grant.fields;
-            this.annotation_types.splice(defaultTypes.length, this.annotation_types.length); // remove anything past the defaultTypes
-            var tmp_array = [];
-            for (var field in fields) {
-                var f = fields[field];
-                tmp_array.push({name: f.name, display: f.display_name, required: f.required});
-            }
-            // add new types onto the end (in one action, without changing the reference, for performance reasons)
-            var args = [this.annotation_types.length, 0].concat(tmp_array);
-            Array.prototype.splice.apply(this.annotation_types, args);
-            //this.annotation_types.splice(this.annotation_types.length, 0, tmp_array);
+            this.transaction_type = viable_actions.purchase ? "purchase" : "grant";
+            SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
+            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
         },
         hasFilledAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
@@ -211,6 +234,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     };
 
     this.setDoc = function(doc_id, doc) {
+        if (doc.issue_type) {
+            // calculate the future issue type
+            // TODO: remove once ownership refactor goes in
+            doc.issue_type = mungeIssue({type: doc.issue_type, common: doc.issue_common}).type;
+        }
         var oldDoc = this.getDoc(doc_id);
         // we need to keep the object reference from the docs hash as we may have given to other controllers
         // extend will keep any other properties on it too. Copy might be better?
@@ -218,6 +246,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         angular.extend(oldDoc, doc);
         oldDoc.pages = realPages;
         oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
+        if (oldDoc.issue_type) {
+            updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types);
+        }
         if (oldDoc.tags) {
             try {
                 oldDoc.tags = JSON.parse(oldDoc.tags);
