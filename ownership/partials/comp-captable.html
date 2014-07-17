@@ -617,7 +617,11 @@
                 </th>
                 <th class="longrow">Shareholder</th>
                 <th ng-repeat="one in ct.issues track by $index">
-                    <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
+                    <span ng-class="{'column-highlight':tourstate==2}">
+                        <span class="next-button" ng-click="moveTour();">
+                            Next
+                        </span>
+                    </span>
                     <input placeholder="Add Security" class="capEditHeaders"
                            ui-event="{focus : 'getActiveIssue(one.issue)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
                            onkeydown="testForEnter();">
@@ -627,9 +631,14 @@
             <tr ng-if="toggleView();" class="column-label">
                 <th class="longrow" colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th ng-class="{tranViewSelected:one.state}" class="staticHeaders" ng-repeat="one in ct.issues | issueviewList track by $index" ng-click="getActiveIssue(one.issue)">
+                <th ng-class="{tranViewSelected:one.state}"
+                    class="staticHeaders"
+                    ng-repeat="one in ct.issues | issueviewList track by $index"
+                    ng-click="getActiveIssue(one.issue)">
                     <span>{{one.issue}}</span>
-                    <span class="next-button" ng-click="moveTour();">Next</span>
+                    <span class="next-button" ng-click="moveTour();">
+                        Next
+                    </span>
                 </th>
             </tr>
 

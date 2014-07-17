@@ -146,11 +146,11 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }
         cell.ukey = cell.u = calculate.sum(cell.u, tran.units);
         cell.akey = cell.a = calculate.sum(cell.a, tran.amount);
-        if (!isNaN(parseFloat(tran.forfeited))) {
+        if (calculate.isNumber(tran.forfeited)) {
             cell.ukey = cell.u =
                 calculate.sum(cell.u, (-tran.forfeited));
         }
-        if (!isNaN(parseFloat(tran.exercised))) {
+        if (calculate.isNumber(tran.exercised)) {
             cell.exercised =
                 calculate.sum(cell.exercised, tran.exercised);
         }
@@ -293,14 +293,14 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 (isNaN(parseFloat(tran.units)) &&
                  isNaN(parseFloat(tran.amount)))) {
             return true;
-        } else if (transaction.type == "Option" &&
-                   transaction.units < 0) {
-            transaction.units = transaction.unitskey;
+        } else if (tran.type == "Option" &&
+                   tran.units < 0) {
+            tran.units = tran.unitskey;
             $rootScope.$emit("notification:fail",
                     "Cannot have a negative number of shares");
             return true;
-        } else if (transaction.amount < 0) {
-            transaction.amount = transaction.paidkey;
+        } else if (tran.amount < 0) {
+            tran.amount = tran.paidkey;
             $rootScope.$emit("notification:fail",
                     "Cannot have a negative amount for options");
             return true;
@@ -319,12 +319,12 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                                        tran.amount, tran.paidkey);
         if (tran.tran_id === undefined) { tran.tran_id = ''; }
     }
+    this.massageTransactionValues = massageTransactionValues;
     function addTranToCell(tran) {
         angular.forEach(captable.rows, function (row) {
             if (row.name == tran.investor) {
                 updateCell(tran, row);
             } else if (!(tran.issue in row)) {
-                // init cell
                 row[tran.issue] = nullCell();
             }
         });
@@ -383,11 +383,13 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                     isNaN(parseFloat(cell.u)) &&
                     !isNaN(parseFloat(cell.a)))
                 {
-                    cell.x = calculate.debt(captable.rows, issue, row);
+                    cell.x = calculate.debt(captable.rows,
+                                            issue, row);
                 }
             });
         });
     }
+    this.calculateDebtCells = calculateDebtCells;
     function generateUnissuedRows() {
         angular.forEach(captable.issues, function (issue) {
             // FIXME this is awful. nested loops of the same array.
@@ -396,6 +398,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                                                String(issue.issue));
         });
     }
+    this.generateUnissuedRows = generateUnissuedRows;
     function fillEmptyCells() {
         angular.forEach(captable.rows, function (row) {
             angular.forEach(captable.issuekeys, function (issuekey) {
@@ -405,6 +408,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             });
         });
     }
+    this.fillEmptyCells = fillEmptyCells;
     //switches the sidebar based on the type of the issue
     function funcformatAmount(amount) {
         return calculate.funcformatAmount(amount);
@@ -477,6 +481,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             $rootScope.$watch('issues['+j+']', issue_watch, true);
         }
     }
+    this.attachWatches = attachWatches;
     function pingIntercomIfCaptableStarted() {
         var earliestedit = new Date.today().addDays(1);
         var duplicate = earliestedit;
@@ -613,7 +618,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 tran.email = row.email;
             }
         });
-        if (!transaction.email) { transaction.email = null; }
+        if (!tran.email) { tran.email = null; }
     }
     this.setTransactionEmail = setTransactionEmail;
     function autocalcThirdTranValue(tran) {
@@ -641,10 +646,14 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
 // FIXME make into library of pure functions
 ownership.service('calculate', function () {
 
-    this.whenVestingBegins = function(tran) {
-        return angular.copy(tran.date)
-                    .addMonths(parseInt(tran.vestingbeginsdisplay));
-    }
+    this.whenVestingBegins = function(obj) {
+        if (this.isNumber(obj.vestingbeginsdisplay, 10)) {
+            return angular.copy(obj.date).addMonths(
+                parseInt(obj.vestingbeginsdisplay, 10));
+        } else {
+            return obj.vestingbegins;
+        }
+    };
     this.complement = function(a, b) {
         return a.filter(function(el) {return b.indexOf(el)==-1;});
     };
@@ -963,7 +972,7 @@ ownership.service('calculate', function () {
             var startdate = angular.copy(tran.date);
             while (remainingterm > 0) {
                 startdate.addMonths(1);
-                remainingterm -= 1
+                remainingterm -= 1;
             }
             lastcolumn = Date.compare(startdate, lastcolumn) > -1 ? startdate : lastcolumn;
         });
@@ -1390,6 +1399,9 @@ ownership.service('calculate', function () {
             return finalnumber
         }
     };
+    this.isNumber = function(val) {
+        return !isNaN(parseFloat(val));
+    };
 
     // Converts strings to boolean
     this.strToBool = function (string) {
@@ -1428,7 +1440,6 @@ ownership.service('calculate', function () {
     this.monthDiff = function(d1, d2) {
         var diffYears = d1.getFullYear()-d2.getFullYear();
         var diffMonths = d1.getMonth()-d2.getMonth();
-
         return (diffYears*12 + diffMonths);
     }
 
