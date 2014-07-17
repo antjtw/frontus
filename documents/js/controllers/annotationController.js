@@ -183,15 +183,18 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     
     $scope.ocrHighlighted = function () {
         var x = $scope.annot.position.coords.x;
-        var y = $scope.annot.position.coords.y + 10;
+        var y = $scope.annot.position.coords.y;
         var w = $scope.annot.position.size.width;
         var h = $scope.annot.position.size.height;
         var sW = $scope.annot.position.docPanel.width;
-        console.log($scope.annot.position);
         var page = $scope.annot.page;
         SWBrijj.document_OCR_segment($scope.doc.doc_id, page, x, y, w, h, sW).then(
             function (data) {
-                console.log(data);
+                if ($scope.annot.val == '')
+                {
+                    $scope.annot.val = data;
+                    //$document.getElementById('highlightContents').value = data;
+                }
             }).except(function (s) {console.log(x);});
     };
 
@@ -375,6 +378,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
             }
         }
     }, true);
+    
+    
 
     $scope.$watch('annot.fontsize', function(new_fontsize) {
         if (new_fontsize) {

@@ -92,7 +92,7 @@
                             <span>Contents</span>
                         </li>
                         <li>
-                            <textarea wrap="hard" class="roundedcorners" ng-trim="false"/>
+                            <textarea id="highlightContents" wrap="hard" class="roundedcorners" ng-trim="false" ng-keyup="addLineBreaks($event)" ng-model="annot.val"/>
                         </li>
                     </ul>
                 </li>

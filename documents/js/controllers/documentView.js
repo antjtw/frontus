@@ -561,6 +561,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 a.position.size.height = 0;
                 a.initDrag = event;
                 a.type = $rootScope.nextAnnotationType;
+                if (a.type == 'highlight')
+                {
+                    a.whosign = 'Issuer';
+                }
                 if ($rootScope.navState.role == "issuer") {
                     a.investorfixed = true;
                 } else {
@@ -568,7 +572,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 }
                 $scope.annots.push(a);
                 $scope.active.annotation = a;
-                console.log(a);
             }
         };
 
