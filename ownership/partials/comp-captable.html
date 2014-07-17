@@ -623,7 +623,9 @@
                         </span>
                     </span>
                     <input placeholder="Add Security" class="capEditHeaders"
-                           ui-event="{focus : 'getActiveIssue(one.issue)', blur : 'saveIssue(one, \'issue\')'}" ng-model="one.issue"
+                           ui-event="{focus : 'getActiveIssue(one.issue)',
+                                       blur : 'saveIssue(one, \'issue\')'}"
+                           ng-model="one.issue"
                            onkeydown="testForEnter();">
                 </th>
             </tr>
@@ -653,79 +655,163 @@
                 </td>
             </tr>
             <!-- Editable rows -->
-            <tr ng-if="!toggleView();" ng-repeat="row in ct.rows track by $index" ng-show="([row] | noUnissue).length > 0">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, ct.rows, ct.issuekeys) || 0.000 | number:3}}%">
+            <tbody ng-if="!toggleView();">
+            <tr ng-repeat="row in ct.rows track by $index"
+                ng-show="([row] | noUnissue).length > 0">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{shareSum(row) || 0}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{sharePercentage(row, ct.rows, ct.issuekeys) || 0.000 | number:3}}%">
                 </td>
                 <td>
-                    <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
-                      <span ng-switch on="row.nameeditable">
+                    <span ng-class="{'box-highlight':tourstate==1}">
+                        <span class="next-button" ng-click="moveTour();">
+                            Next
+                        </span>
+                    </span>
+                    <span ng-switch on="row.nameeditable">
                         <span ng-switch-default>
-                          <input class="name-row" placeholder="Add Name" style="width:140px;"
-                                 ng-model="row.name"
-                                 ng-change="nameChangeLR(row)"
-                                 ui-event="{focus : 'getActiveInvestor(row)', blur : 'updateRow(row)'}"
-                                 onpaste="return false"
-                                 ng-paste="namePaste($event, row);"
-                                 onkeydown="testForEnter();">
+                            <input class="name-row"
+                                   placeholder="Add Name"
+                                   style="width:140px;"
+                                   ng-model="row.name"
+                                   ng-change="nameChangeLR(row)"
+                                   ui-event="{focus : 'getActiveInvestor(row)',
+                                               blur : 'updateRow(row)'}"
+                                   onpaste="return false"
+                                   ng-paste="namePaste($event, row);"
+                                   onkeydown="testForEnter();">
                         </span>
                         <span ng-switch-when="0">
-                          <input class="name-row" disabled style="width:180px;" ng-model="row.name">
+                            <input class="name-row"
+                                   disabled
+                                   style="width:180px;"
+                                   ng-model="row.name">
                         </span>
-                      </span>
+                    </span>
                 </td>
                 <td ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
-                    <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour(); tourNotification();">Done!</span></span>
-                      <span ng-switch on="row.editable">
-                        <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
-                          <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
-                                 placeholder="{{grantbyIssue(key)}}"
-                                 ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
-                                 ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
-                                 onpaste="return false"
-                                 ng-paste="numberPaste($event, row, key, 'u');"
-                                 onkeydown="testForEnter();">
-                          <input ng-hide="isDebt(key);" class="captablepair default-pointer first-box" disabled>
-                          <input class="captablepair last-box" maxlength="18" placeholder="paid"
-                                 ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
-                                 ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'
-                                 onpaste="return false"
-                                 ng-paste="numberPaste($event, row, key, 'a');"
-                                 onkeydown="testForEnter();">
+                    <span ng-class="{'tran-highlight':tourstate==4}">
+                        <span class="next-button"
+                              ng-click="closeTour(); tourNotification();">
+                            Done!
                         </span>
-                        <span class="captablepair-box" ng-switch-when="0">
-                          <input disabled class="captablepair" placeholder="shares"
-                                 ng-model='row[key]["u"]'
-                                 onkeydown="testForEnter();">
-                          <input disabled class="captablepair" placeholder="paid"
-                                 ng-model='row[key]["a"]'
-                                 onkeydown="testForEnter();">
+                    </span>
+                    <span ng-switch on="row.editable">
+                        <span ng-class="{tranSelected:row[key].state}"
+                              class="captablepair-box"
+                              ng-switch-default>
+                            <input ng-show="isDebt(key);"
+                                   class="captablepair first-box"
+                                   maxlength="18"
+                                   placeholder="{{grantbyIssue(key)}}"
+                                   ui-event="{focus : 'getActiveTransaction(row.name, key)',
+                                               blur : 'saveTran(activeTran)'}"
+                                   ng-change="tranChangeU(row[key]['u'], key)"
+                                   ng-model='row[key]["u"]'
+                                   onpaste="return false"
+                                   ng-paste="numberPaste($event, row, key, 'u');"
+                                   onkeydown="testForEnter();">
+                            <input ng-hide="isDebt(key);"
+                                   class="captablepair default-pointer first-box"
+                                   disabled>
+                            <input class="captablepair last-box"
+                                   maxlength="18"
+                                   placeholder="paid"
+                                   ui-event="{focus : 'getActiveTransaction(row.name, key)',
+                                               blur : 'saveTran(activeTran)'}"
+                                   ng-change="tranChangeA(row[key]['a'])"
+                                   ng-model='row[key]["a"]'
+                                   onpaste="return false"
+                                   ng-paste="numberPaste($event, row, key, 'a');"
+                                   onkeydown="testForEnter();">
                         </span>
-                      </span>
+                        <span class="captablepair-box"
+                              ng-switch-when="0">
+                            <input disabled
+                                   class="captablepair"
+                                   placeholder="shares"
+                                   ng-model='row[key]["u"]'
+                                   onkeydown="testForEnter();">
+                            <input disabled
+                                   class="captablepair"
+                                   placeholder="paid"
+                                   ng-model='row[key]["a"]'
+                                   onkeydown="testForEnter();">
+                        </span>
+                    </span>
                 </td>
             </tr>
+            </tbody>
             <!-- Un-editable view -->
             <!-- Regular Rows -->
-            <tr ng-if="toggleView()" ng-repeat="row in ct.rows | rowviewList track by $index">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%"></td>
-                <td ng-class="{tranViewSelected:row.state, 'hoverable': row.name}" class="viewName tableFields" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td ng-click="getActiveTransaction(row.name, key)" class="tableFields" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
-                            <span class="captablepair-box">
-                                <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
-                                <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
-                            </span>
+            <tbody ng-if="toggleView()">
+            <tr ng-repeat="row in ct.rows | rowviewList track by $index">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{shareSum(row);}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%">
+                </td>
+                <td ng-class="{tranViewSelected:row.state,
+                               'hoverable': row.name}"
+                    class="viewName tableFields"
+                    ng-click="getActiveInvestor(row);">
+                    {{row.name}}
+                </td>
+                <td ng-click="getActiveTransaction(row.name, key)"
+                    class="tableFields"
+                    ng-class="{tranViewSelected:row[key].state,
+                               'hoverable':canHover(row[key])}"
+                    ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
+                    <span class="captablepair-box">
+                        <div ng-bind="formatAmount(row[key]['u'])"
+                             class="output clickable">
+                        </div>
+                        <div ng-bind="formatDollarAmount(row[key]['a'])"
+                             class="output second clickable">
+                        </div>
+                    </span>
                 </td>
             </tr>
+            </tbody>
             <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-repeat="row in ct.rows track by $index" ng-show="([row] | unissuedrowviewList).length > 0">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%"></td>
-                <td  class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
+            <tr class="unissued-rows"
+                ng-repeat="row in ct.rows track by $index"
+                ng-show="([row] | unissuedrowviewList).length > 0">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{shareSum(row);}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%">
+                </td>
+                <td class="viewName">
+                    {{row.name}}
+                </td>
+                <td class="tableFields"
+                    ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
                     <span class="captablepair-box">
-                        <div ng-class="{'editview': !toggleView()}" ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
-                        <div ng-class="{'editview': !toggleView()}" ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
+                        <div ng-class="{'editview': !toggleView()}"
+                             ng-bind="formatAmount(row[key]['u'])"
+                             class="output clickable">
+                         </div>
+                         <div ng-class="{'editview': !toggleView()}"
+                              ng-bind="formatDollarAmount(row[key]['a'])"
+                              class="output second clickable">
+                         </div>
                     </span>
                 </td>
             </tr>
@@ -734,18 +820,35 @@
                 <td class="tableFields">Total</td>
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in ct.issuekeys track by $index"></td>
+                <td class="tableFields"
+                    ng-repeat="one in ct.issuekeys track by $index">
+                </td>
             </tr>
             <!-- Undiluted footer -->
             <tr class='tablefooter'>
-                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(ct.rows);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
-                <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in ct.issuekeys track by $index">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{totalShares(ct.rows);}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="100.00%">
+                </td>
+                <td class="tableFields">
+                </td>
+                <td class="tableFields"
+                    ng-repeat="one in ct.issuekeys track by $index">
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(colTotal(one, ct.rows, 'u'))" ng-class="{'editview': !toggleView()}" class="output footer"></div>
-
-                        <div ng-bind="formatDollarAmount(colTotal(one, ct.rows, 'a'))" ng-class="{'editview': !toggleView()}" class="output second footer"></div>
+                        <div ng-bind="formatAmount(colTotal(one, ct.rows, 'u'))"
+                             ng-class="{'editview': !toggleView()}"
+                             class="output footer">
+                        </div>
+                        <div ng-bind="formatDollarAmount(colTotal(one, ct.rows, 'a'))"
+                             ng-class="{'editview': !toggleView()}"
+                             class="output second footer">
+                        </div>
                     </span>
                 </td>
             </tr>

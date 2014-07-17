@@ -1080,6 +1080,7 @@ var captableController = function($scope, $rootScope, $location, $parse,
         return (trans.length == 1);
     };
 
+    // TODO refactor and rename
     $scope.toggleView = function () {
         if ($scope.maintoggle) {
             $scope.captablestate = 1;
