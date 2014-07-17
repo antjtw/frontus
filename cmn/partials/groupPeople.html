@@ -4,11 +4,12 @@
   </div>
 
   <div class="sidebarHeader">
-    <span>Select the contacts you would like to add to this group.</span>
+    <span>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name</span>
   </div>
 
-  <div class="sidebarText">
-    <span>Group Name {{people}}</span>
+  <div class="sidebarText" ng-repeat = "contact in contacts">
+    <span>Group Name {{contact}}</span>
+    <p>{{contact.groups}}</p>
     <div>
        <input type="text" ng-model="groupName">
         </input>

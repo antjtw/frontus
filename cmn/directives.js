@@ -2,26 +2,13 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
 
 m.directive('groupPeople', function(){
     return {
-        scope: {people: '='},
+        scope: {contacts: '='},
         restrict: 'E',
         templateUrl:'/cmn/partials/groupPeople.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
-
             $scope.groupName = ""
-            // $scope.jsonString = JSON.stringify($scope.groupName);
-
-            // $scope.createGroup = function(string){
-            //     if(string.length == 0){
-            //         console.log("empty string");
-                   
-            //     }
-            //     else{
-            //         $scope.newGroup = JSON.stringify(string)
-            //         console.log($scope.newGroup);
-            //     };
-            // };
 
 
             $scope.updateGroup = function(array, json){
@@ -32,14 +19,20 @@ m.directive('groupPeople', function(){
                 });
             }
 
+            // This updates the JSON of groups with a new name
             $scope.addToGroups = function(oldString, newString){
                 string1 = JSON.parse(oldString)
                 return string1 + ", " + newString;
             }
 
+            $scope.makeJson = function(item){
+                return JSON.stringify(item);
+            }
+
 
             $scope.manyNoGroup = [];
             $scope.manyHasGroup = [];
+            // This checks how you will update the json object and creates the objects you need to pass in to upDateGroup, as well as calls updateGroup
             $scope.checkGroups = function(person){
                 // var manyNoGroup = [];
                 angular.forEach(person, function(info){              
@@ -51,26 +44,19 @@ m.directive('groupPeople', function(){
                         angular.forEach($scope.userRole, function(user){
                             console.log(user.email);
                             if(user.groups==null){
-                                // noGroup[user.email] = user.role;
                                 noGroup.push(user.email, user.role);
-                                $scope.manyNoGroup.push(noGroup)
-                                console.log($scope.manyNoGroup)
-                                var array = JSON.stringify($scope.manyNoGroup);
-                                var json = JSON.stringify($scope.groupName);
-                                $scope.updateGroup(array, json);
+                                $scope.manyNoGroup.push(noGroup);
+                                $scope.updateGroup($scope.makeJson($scope.manyNoGroup), $scope.makeJson($scope.groupName));
 
                             }
                             else if(user.groups != null){
                                 hasGroup.push(user.email, user.role);
                                 $scope.manyHasGroup.push(hasGroup);
-                                console.log(typeof user.groups)
-                                // var newString = JSON.parse(user.groups).concat($scope.groupName) 
-                                // console.log(typeof newString)
                                 var array1 = JSON.stringify($scope.manyHasGroup);
                                 var json1 = JSON.stringify($scope.addToGroups(user.groups, $scope.groupName));
                                 console.log(json1);
                                 console.log(typeof json1)
-                                $scope.updateGroup(array1, json1);
+                                $scope.updateGroup($scope.makeJson($scope.manyHasGroup), json1);
                             }
                            
                         });           
