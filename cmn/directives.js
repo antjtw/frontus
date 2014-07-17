@@ -32,6 +32,10 @@ m.directive('groupPeople', function(){
                 });
             }
 
+            $scope.addToGroups = function(string){
+
+            }
+
 
             $scope.manyNoGroup = [];
             $scope.manyHasGroup = [];
@@ -51,18 +55,18 @@ m.directive('groupPeople', function(){
                                 $scope.manyNoGroup.push(noGroup)
                                 console.log($scope.manyNoGroup)
                                 var array = JSON.stringify($scope.manyNoGroup);
-                                var json = JSON.stringify($scope.groupName)
-                                $scope.updateGroup(array, json)
-                //     var json = JSON.stringify($scope.groupName);
-                //     console.log(json)
-                //     $scope.updateGroup(array, json)
+                                var json = JSON.stringify($scope.groupName);
+                                $scope.updateGroup(array, json);
 
                             }
                             else if(user.groups != null){
                                 hasGroup.push(user.email, user.role);
                                 $scope.manyHasGroup.push(hasGroup);
-                                console.log("has a group");
-                                console.log(hasGroup);
+                                console.log(typeof user.groups)
+                                var newString = user.groups.concat($scope.groupName) 
+                                var array1 = JSON.stringify($scope.manyHasGroup);
+                                var json1 = JSON.stringify(newString);
+                                $scope.updateGroup(array1, json1);
                             }
                            
                         });           
