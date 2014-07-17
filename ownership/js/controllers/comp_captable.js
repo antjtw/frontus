@@ -1,6 +1,7 @@
-var captableController = function($scope, $rootScope, $location, $parse,
-                                  SWBrijj, calculate, switchval, sorting,
-                                  navState, captable, displayCopy) {
+var captableController = function(
+        $scope, $rootScope, $location, $parse, $filter, SWBrijj,
+        calculate, switchval, sorting, navState, captable, displayCopy)
+{
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
         return;
@@ -275,13 +276,13 @@ var captableController = function($scope, $rootScope, $location, $parse,
                 }
             });
         }
-        if ((issue.issue === null || issue.issue === "") && issue.key === null) {
+        if ((issue.issue === null || issue.issue === "") &&
+                issue.key === null) {
             return;
         } else if (issue.issue === "" && issue.key !== null) {
             $scope.dmodalUp(issue);
             return;
         } else {
-            debugger;
             if (issue.key !== null && issue.key !== undefined) {
                 var dateconvert = issue.date;
                 var d1 = dateconvert.toUTCString();
@@ -398,8 +399,10 @@ var captableController = function($scope, $rootScope, $location, $parse,
                 if (issue.issue == "name") { issue.issue = "No name"; }
                 angular.forEach($scope.ct.issues, function (x) {
                     // Duplicate issue names are not allowed
-                    if (x.issue !== "" && issue.issue == x.issue && x != issue) {
-                        issue.issue = issue.issue + " (1)";
+                    if (x.issue !== "" &&
+                            issue.issue == x.issue && x != issue) {
+                        // TODO regex to identify (_), inc num
+                        issue.issue += " (1)";
                     }
                 });
 
@@ -411,11 +414,10 @@ var captableController = function($scope, $rootScope, $location, $parse,
                 .then(function(data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue.issue;
-                    $scope.ct.issues.push({name: "",
-                                           "date": new Date(2100, 1, 1)});
+                    $scope.ct.issues.push(captable.nullIssue());
                     $scope.ct.issuekeys.push(issue.key);
                     angular.forEach($scope.ct.rows, function (row) {
-                        row[issue.key] = {"u": null, "a": null};
+                        row[issue.key] = captable.nullCell();
                     });
                     for (var i=0; i < $scope.ct.issues.length; i++) {
                         if ($scope.ct.issues[i] == issue) {
@@ -558,16 +560,11 @@ var captableController = function($scope, $rootScope, $location, $parse,
         } else {
             $scope.sideBar = 3;
             deselectAllCells();
-
             investor.state = true;
-            var rowindex = $scope.ct.rows.indexOf(investor);
 
+            var rowindex = $scope.ct.rows.indexOf(investor);
             if (investor.name === "" && rowindex >= 4) {
-                var values = {"name": "", "editable": "0"};
-                angular.forEach($scope.ct.issuekeys, function (key) {
-                    values[key] = captable.nullCell();
-                });
-                $scope.ct.rows.push(values);
+                captable.addRow();
             }
             $scope.activeInvestorName = investor.name;
             $scope.activeInvestorEmail = investor.email;
@@ -683,40 +680,42 @@ var captableController = function($scope, $rootScope, $location, $parse,
 
     $scope.updateRow = function (investor) {
         //Name has been reduced to "" and previously had a value
-        if (investor.name == "" && investor.namekey != undefined) {
-            var hastran = false
-            //Check if row has transactions
+        if (investor.name === "" && investor.namekey !== undefined) {
+            var hastran = false;
             angular.forEach($scope.ct.trans, function(tran) {
                 if (tran.investor == investor.namekey) {
                     hastran = true;
                 }
             });
-            //If they do, double check with the user
             if (hastran) {
                 $scope.rmodalUp(investor);
-            }
-            //else just delete the row
-            else {
+            } else {
                 $scope.deletePerson(investor.namekey);
             }
-            return
+            return;
         }
 
         var rowindex = $scope.ct.rows.indexOf(investor);
 
-        if (investor.name == "" && rowindex >= 4) {
+        if (investor.name === "" && rowindex >= 4) {
             var index = $scope.ct.rows.indexOf(investor);
             $scope.ct.rows.splice(index, 1);
-            return
+            return;
         }
+        // TODO this same thing is implemented elsewhere
         angular.forEach($scope.ct.rows, function (row) {
-            if (investor.name != "" && investor.name == row.name && investor != row) {
+            if (investor.name !== "" &&
+                    investor.name == row.name && investor != row) {
                 investor.name = investor.name + " (1)";
             }
         });
-        if (investor.name != "" && investor.name != investor.namekey) {
-            investor.namekey = investor.namekey ? investor.namekey : "!!";
-            SWBrijj.proc('ownership.update_row', investor.namekey, investor.name).then(function (data) {
+        if (investor.name !== "" && investor.name != investor.namekey) {
+            investor.namekey = investor.namekey ?
+                               investor.namekey : "!!";
+            SWBrijj.proc('ownership.update_row',
+                         investor.namekey,
+                         investor.name)
+            .then(function (data) {
                 $scope.lastsaved = Date.now();
                 var index = $scope.ct.rows.indexOf(investor);
                 angular.forEach($scope.ct.trans, function (tran) {
@@ -725,7 +724,7 @@ var captableController = function($scope, $rootScope, $location, $parse,
                     }
                 });
                 if (investor.name) {
-                    $scope.ct.rows[index].namekey = investor.name
+                    $scope.ct.rows[index].namekey = investor.name;
                 }
             });
         }
@@ -735,14 +734,15 @@ var captableController = function($scope, $rootScope, $location, $parse,
         angular.forEach($scope.ct.rows, function (row) {
             if (row.namekey == investor) {
                 row.name = row.namekey;
-                $scope.nameChangeLR(row)
+                $scope.nameChangeLR(row);
             }
         });
     };
 
     $scope.deletePerson = function (investor) {
         $scope.sideBar = "x";
-        SWBrijj.proc('ownership.delete_row', investor).then(function (data) {
+        SWBrijj.proc('ownership.delete_row', investor)
+        .then(function (data) {
             $scope.lastsaved = Date.now();
             angular.forEach($scope.ct.trans, function (tran) {
                 if (tran.investor == investor) {
@@ -2161,16 +2161,7 @@ var captableController = function($scope, $rootScope, $location, $parse,
         var type = "";
         angular.forEach($scope.ct.issues, function(issue) {
             if (issue.issue == key) {
-                if (issue.type == "Option") {
-                    type = "options";
-                }
-                else if (issue.type == "Warrant") {
-                    type = "warrants";
-                }
-                else {
-                    type = "shares";
-                }
-
+                type = $filter('issueUnitLabel')(issue);
             }
         });
         return type
@@ -2334,11 +2325,8 @@ var captableController = function($scope, $rootScope, $location, $parse,
         var number = splitnames.length;
         for (var i = 0; i < number; i++) {
             if (!$scope.ct.rows[startindex]) {
-                var values = {"name": "", "editable": "yes"};
-                angular.forEach($scope.ct.issuekeys, function (key) {
-                    values[key] = captable.nullCell();
-                });
-                $scope.ct.rows.push(values);
+                captable.addRow()
+                    .editable = "yes";
             }
             if ($scope.ct.rows[startindex].editable == "0") {
                 $scope.ct.rows[startindex].editable = "yes";
@@ -2347,11 +2335,7 @@ var captableController = function($scope, $rootScope, $location, $parse,
             $scope.updateRow($scope.ct.rows[startindex]);
             startindex += 1;
         }
-        var values = {"name": "", "editable": "0"};
-        angular.forEach($scope.ct.issuekeys, function (key) {
-            values[key] = captable.nullCell();
-        });
-        $scope.ct.rows.push(values);
+        captable.addRow();
         return false;
     };
 

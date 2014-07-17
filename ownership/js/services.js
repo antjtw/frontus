@@ -29,6 +29,18 @@ Transaction = function() {
     this.key = 'undefined';
     this.convert = [];
 };
+Issue = function() {
+    this.name = "";
+    this.date = new Date(2100, 1, 1);
+};
+Row = function() {
+    this.name = "";
+    this.editable = "0";
+};
+Cell = function() {
+    this.u = this.ukey = null;
+    this.a = this.akey = null;
+};
 ownership.service('captable',
 function($rootScope, calculate, sorting, SWBrijj, $q) {
 
@@ -206,9 +218,9 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     function initRowsFromNames(names) {
         angular.forEach(names, function(name) {
-            captable.rows.push({"name": name.name,
-                                "namekey": name.name,
-                                "editable": "yes"});
+            var row = addRow();
+            row.namekey = row.name = name.name;
+            row.editable = "yes";
         });
     }
     function setTransactionKeys(tran) {
@@ -271,9 +283,34 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         promise.reject(err);
     }
     function nullCell() {
-        return {"u": null, "a": null, "ukey": null, "akey": null};
+        return new Cell();
     }
     this.nullCell = nullCell;
+    function newCell(issue) {
+        var cell = new Cell();
+        cell.issue_type = issue.type;
+        return cell;
+    }
+    this.newCell = newCell;
+    function nullIssue() {
+        return new Issue();
+    }
+    this.nullIssue = nullIssue;
+    function nullRow() {
+        return new Row();
+    }
+    function newRow() {
+        var row = nullRow();
+        angular.forEach(captable.issuekeys, function(k) {
+            row[k] = nullCell();
+        });
+        return row;
+    }
+    function addRow() {
+        var row = newRow();
+        captable.rows.push(row);
+        return row;
+    }
     function newTransaction(issuekey, investor) {
         var tran = new Transaction();
         tran.new = "yes";
@@ -380,8 +417,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 var cell = row[issue.issue];
                 if (cell !== undefined &&
                     issue.type == "Debt" &&
-                    isNaN(parseFloat(cell.u)) &&
-                    !isNaN(parseFloat(cell.a)))
+                    !calculate.isNumber(cell.u) &&
+                    calculate.isNumber(cell.a))
                 {
                     cell.x = calculate.debt(captable.rows,
                                             issue, row);
@@ -392,7 +429,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     this.calculateDebtCells = calculateDebtCells;
     function generateUnissuedRows() {
         angular.forEach(captable.issues, function (issue) {
-            // FIXME this is awful. nested loops of the same array.
+            // FIXME there has to be a way to simplify
             captable.rows = calculate.unissued(captable.rows,
                                                captable.issues,
                                                String(issue.issue));
@@ -457,11 +494,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                                                captable.issues);
         captable.rows.sort(sorting.basicrow());
         do {
-            var values = {"name": "", "editable": "0"};
-            angular.forEach(captable.issuekeys, function(key) {
-                values[key] = nullCell();
-            });
-            captable.rows.push(values);
+            addRow();
         } while (captable.rows.length < 5);
 
         //Calculate the total vested for each row
@@ -778,24 +811,19 @@ ownership.service('calculate', function () {
                     var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
                     var x = 1;
                     if (tran.vestfreq == "monthly") {
-                        x = 1
-                    }
-                    else if (tran.vestfreq == "weekly") {
-                        x = 0.25
-                    }
-                    else if (tran.vestfreq == "bi-weekly") {
-                        x = 0.5
-                    }
-                    else if (tran.vestfreq == "quarterly") {
+                        x = 1;
+                    } else if (tran.vestfreq == "weekly") {
+                        x = 0.25;
+                    } else if (tran.vestfreq == "bi-weekly") {
+                        x = 0.5;
+                    } else if (tran.vestfreq == "quarterly") {
                         x = 3;
-                    }
-                    else if (tran.vestfreq == "yearly") {
+                    } else if (tran.vestfreq == "yearly") {
                         x = 12;
                     }
                     if (x < 1) {
                         cycleDate.addWeeks(x * 4);
-                    }
-                    else {
+                    } else {
                         cycleDate.addMonths(x);
                     }
                     while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
@@ -819,7 +847,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        return rows
+        return rows;
     };
 
     // Calculates vested on each transaction returning dictionary of date:amount vested
