@@ -82,8 +82,6 @@ var captableController = function(
                         }
                     });
                 });
-                console.log($scope.userstatuses);
-                console.log(userDict);
             }).except(logError);
         }).except(logError);
         $scope.userDict = userDict;
@@ -159,7 +157,9 @@ var captableController = function(
             row.state = false;
             angular.forEach($scope.ct.issues, function (issue) {
                 if (issue.issue) {
-                    if (row.name == currenttran && currentcolumn == issue.issue && $scope.activeTran.length > 0) {
+                    if (row.name == currenttran &&
+                            currentcolumn == issue.issue &&
+                            $scope.activeTran.length > 0) {
                         row[currentcolumn].state = true;
                     }
                     else if (row[issue.issue]) {
@@ -189,7 +189,8 @@ var captableController = function(
 
     $scope.getActiveIssue = function (issuekey) {
         // selected issue == active issue
-        if ($scope.toggleView() && $scope.activeIssue &&  $scope.activeIssue.issue == issuekey) {
+        if ($scope.toggleView() && $scope.activeIssue &&
+                $scope.activeIssue.issue == issuekey) {
             deselectAllCells();
             $scope.sideBar = "home";
             $scope.activeIssue = undefined;
@@ -208,7 +209,6 @@ var captableController = function(
             issue.state = true;
             $scope.allowKeys = calculate.complement($scope.ct.issuekeys,
                                                     [issuekey]);
-
             $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
             $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
             $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
@@ -535,10 +535,9 @@ var captableController = function(
     };
 
     $scope.tranChangeU = function (value, issue) {
-        angular.forEach($scope.ct.issues, function (x) {
-            $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(x.issue));
-        });
-        $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(issue));
+        captable.generateUnissuedRows();
+        // is this necessary? shouldn't it have been caught above?
+        // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(issue));
         if ($scope.activeTran.length < 2) {
             $scope.activeTran[0].units = value;
         }
@@ -670,11 +669,9 @@ var captableController = function(
                     }
                 }
             });
-            angular.forEach($scope.ct.issues, function (x) {
-                $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(x.issue));
-            });
-
-            $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(tran.issue));
+            captable.generateUnissuedRows();
+            // is this necessary? shouldn't it have been caught above?
+            //$scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(tran.issue));
         });
     };
 
@@ -768,15 +765,13 @@ var captableController = function(
                             }
                         }
                     });
-
-                    angular.forEach($scope.ct.issues, function (x) {
-                        $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(x.issue));
-                    });
-
-                    $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(tran.issue));
+                    captable.generateUnissuedRows();
+                    // is this necessary? shouldn't it have been caught above?
+                    // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(tran.issue));
                 }
             });
 
+            // TODO what's this?
             angular.forEach($scope.ct.rows, function (row) {
                 if (row.namekey == investor) {
                     var index = $scope.ct.rows.indexOf(row);
@@ -1365,36 +1360,14 @@ var captableController = function(
                 });
             });
 
-            angular.forEach($scope.ct.issues, function (x) {
-                $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(x.issue));
-            });
-
-            $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(newtran.issue));
-
-
-            angular.forEach($scope.ct.rows, function (row) {
-                angular.forEach($scope.ct.issues, function (issue) {
-                    if (row[issue.issue] != undefined) {
-                        if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && calculate.isNumber(row[issue.issue]['a'])) {
-                            row[issue.issue]['x'] = calculate.debt($scope.ct.rows, issue, row);
-                        }
-                    }
-                });
-            });
-
+            captable.generateUnissuedRows();
+            // is this necessary? shouldn't it have been caught above?
+            // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(transaction.issue));
+            captable.calculateDebtCells();
             //Calculate the total vested for each row
             $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
 
-            // Make sure we have a clean slate for everyone (including any new unissued rows
-            angular.forEach($scope.ct.rows, function (row) {
-                angular.forEach($scope.ct.issuekeys, function (issuekey) {
-                    if (issuekey in row) {
-                    }
-                    else {
-                        row[issuekey] = captable.nullCell();
-                    }
-                });
-            });
+            captable.fillEmptyCells();
             $scope.$emit("notification:success", "Conversion Successful");
         }).except(function(err) {
                 $scope.$emit("notification:fail", "Conversion Failed");
@@ -1522,34 +1495,15 @@ var captableController = function(
 
                 $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(issue.issue));
 
-
-                angular.forEach($scope.ct.rows, function (row) {
-                    angular.forEach($scope.ct.issues, function (issue) {
-                        if (row[issue.issue] != undefined) {
-                            if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && calculate.isNumber(row[issue.issue]['a'])) {
-                                row[issue.issue]['x'] = calculate.debt($scope.ct.rows, issue, row);
-                            }
-                        }
-                    });
-                });
-
+                captable.calculateDebtCells();
                 //Calculate the total vested for each row
                 $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
 
-                // Make sure we have a clean slate for everyone (including any new unissued rows
-                angular.forEach($scope.ct.rows, function (row) {
-                    angular.forEach($scope.ct.issuekeys, function (issuekey) {
-                        if (issuekey in row) {
-                        }
-                        else {
-                            row[issuekey] = captable.nullCell();
-                        }
-                    });
-                });
+                captable.fillEmptyCells();
                 $scope.$emit("notification:success", "Split Successful");
             }).except(function(err) {
-                    $scope.$emit("notification:fail", "Split Failed");
-                });
+                $scope.$emit("notification:fail", "Split Failed");
+            });
         }
     };
 
@@ -1647,40 +1601,20 @@ var captableController = function(
                         });
                     });
 
-                    angular.forEach($scope.ct.issues, function (x) {
-                        $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(x.issue));
-                    });
-
-                    $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(newtran.issue));
-
-
-                    angular.forEach($scope.ct.rows, function (row) {
-                        angular.forEach($scope.ct.issues, function (issue) {
-                            if (row[issue.issue] != undefined) {
-                                if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && calculate.isNumber(row[issue.issue]['a'])) {
-                                    row[issue.issue]['x'] = calculate.debt($scope.ct.rows, issue, row);
-                                }
-                            }
-                        });
-                    });
-
+                    captable.generateUnissuedRows();
+                    // is this necessary? shouldn't it have been caught above?
+                    // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(transaction.issue));
+                    captable.calculateDebtCells();
                     //Calculate the total vested for each row
                     $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
 
-                    // Make sure we have a clean slate for everyone (including any new unissued rows)
-                    angular.forEach($scope.ct.rows, function (row) {
-                        angular.forEach($scope.ct.issuekeys, function (issuekey) {
-                            if (issuekey in row) {
-                            }
-                            else {
-                                row[issuekey] = captable.nullCell();
-                            }
-                        });
-                    });
-                    $scope.$emit("notification:success", "Transfer Successful");
+                    captable.fillEmptyCells();
+                    $scope.$emit("notification:success",
+                                 "Transfer Successful");
                 }).except(function(err) {
-                        $scope.$emit("notification:fail", "Transfer failed");
-                    });
+                    $scope.$emit("notification:fail",
+                                 "Transfer failed");
+                });
             }
         });
     };
@@ -1717,7 +1651,8 @@ var captableController = function(
     $scope.isDebt = function(key) {
         var done = true;
         angular.forEach($scope.ct.issues, function(issue) {
-            if (key == issue.issue && (issue.type=="Debt" || issue.type=="Safe")) {
+            if (key == issue.issue &&
+                    (issue.type=="Debt" || issue.type=="Safe")) {
                 done = false
                 return false
             }
@@ -1726,8 +1661,6 @@ var captableController = function(
             return true
         }
     };
-
-    //Captable Delete Issue Modal
 
     $scope.tourclose = function () {
         $scope.sideToggle = false;
@@ -1812,12 +1745,11 @@ var captableController = function(
         $scope.capMulti = false;
     };
 
-    $scope.dateoptions = function (trans) {
+    $scope.dateoptions = function(trans) {
         var options = [];
         angular.forEach(trans, function (row) {
             options.push(row);
         });
-
         return options;
     };
 
@@ -1846,7 +1778,8 @@ var captableController = function(
                 }
             });
             if (number < 0 && newTran.type == "Option") {
-                $scope.$emit("notification:fail", "Cannot have a negative amount for options");
+                $scope.$emit("notification:fail",
+                        "Cannot have a negative amount for options");
                 return;
             }
             $scope.ct.trans.push(newTran);
@@ -1854,8 +1787,7 @@ var captableController = function(
             for (var i = 0; i < $scope.activeTran.length; i++) {
                 if (i + 1 == $scope.activeTran.length) {
                     $scope.activeTran[i].active = true;
-                }
-                else {
+                } else {
                     $scope.activeTran[i].active = false;
                 }
             }
@@ -1875,8 +1807,8 @@ var captableController = function(
     $scope.mReset = function () {
         angular.forEach($scope.ct.rows, function (row) {
             if (row.name == $scope.activeTran[0].investor) {
-                row[$scope.activeTran[0].issue]['u'] = row[$scope.activeTran[0].issue]['ukey'];
-                row[$scope.activeTran[0].issue]['a'] = row[$scope.activeTran[0].issue]['akey'];
+                row[$scope.activeTran[0].issue].u = row[$scope.activeTran[0].issue].ukey;
+                row[$scope.activeTran[0].issue].a = row[$scope.activeTran[0].issue].akey;
             }
         });
     };
@@ -1906,13 +1838,17 @@ var captableController = function(
 
     $scope.alterEmail = function() {
         if ($scope.newEmail != "") {
-            SWBrijj.proc('ownership.update_row_share', $scope.newEmail, $scope.oldEmail, $scope.activeInvestorName).then(function (data) {
+            SWBrijj.proc('ownership.update_row_share',
+                         $scope.newEmail,
+                         $scope.oldEmail,
+                         $scope.activeInvestorName)
+            .then(function(data) {
                 $scope.lastsaved = Date.now();
                 angular.forEach($scope.ct.rows, function (row) {
                     if (row.name == $scope.activeInvestorName) {
-                        $scope.$emit("notification:success", "Email address updated");
-                        row.email = $scope.newEmail;
-                        row.emailkey = row.email;
+                        $scope.$emit("notification:success",
+                                     "Email address updated");
+                        row.emailkey = row.email = $scope.newEmail;
                         $scope.activeInvestorEmail = $scope.newEmail;
                     }
                 });
@@ -1940,8 +1876,7 @@ var captableController = function(
     $scope.emailCheck = function (bool, person) {
         if (bool) {
             return !person;
-        }
-        else {
+        } else {
             return false;
         }
     };
@@ -1962,8 +1897,7 @@ var captableController = function(
             if (!row.permission) {
                 row.permission = "Personal"
             }
-        }
-        else {
+        } else {
             row.send = false;
             row.permission = null
         }
@@ -1975,7 +1909,10 @@ var captableController = function(
     $scope.sendInvites = function () {
         angular.forEach($scope.ct.rows, function (row) {
             if (row.send == true) {
-                SWBrijj.procm("ownership.share_captable", row.email.toLowerCase(), row.name).then(function (data) {
+                SWBrijj.procm("ownership.share_captable",
+                              row.email.toLowerCase(),
+                              row.name)
+                .then(function(data) {
                     if (row.permission == "Full") {
                         SWBrijj.proc('ownership.update_investor_captable', row.email.toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
@@ -2026,12 +1963,16 @@ var captableController = function(
         return re.test(email);
     };
 
-    // Prevents the share button from being clickable until a send button has been clicked and an address filled out
+    // Prevents the share button from being clickable until
+    // a send button has been clicked and an address filled out
     $scope.checkInvites = function () {
         var checkcontent = false;
         var checksome = false;
         angular.forEach($scope.ct.rows, function(row) {
-            if (row.send == true && (row.email != null && row.email != "" && $scope.fieldCheck(row.email))) {
+            if (row.send == true &&
+                    (row.email != null &&
+                     row.email != "" &&
+                     $scope.fieldCheck(row.email))) {
                 checkcontent = true;
             }
             if (row.send == true) {
@@ -2043,10 +1984,11 @@ var captableController = function(
             if (matches == null) {
                 matches = ["", people];
             }
-            if (matches[1] != null && matches[1] != "" && $scope.fieldCheck(matches[1])) {
+            if (matches[1] != null &&
+                    matches[1] != "" &&
+                    $scope.fieldCheck(matches[1])) {
                 checkcontent = true;
-            }
-            else {
+            } else {
                 checkcontent = false;
             }
             if (people) {
@@ -2070,17 +2012,13 @@ var captableController = function(
     $scope.tourfunc = function() {
         if ($scope.tourstate > 4) {
             $scope.tourstate = 0;
-        }
-        else if ($scope.tourstate == 1) {
+        } else if ($scope.tourstate == 1) {
             $(".captable.tableView > tbody > tr:nth-child(3) > td:nth-child(3) input:first-of-type").focus();
-        }
-        else if ($scope.tourstate == 2) {
+        } else if ($scope.tourstate == 2) {
             $(".tableView.captable th > input:first-of-type").focus();
-        }
-        else if ($scope.tourstate == 3) {
+        } else if ($scope.tourstate == 3) {
             $scope.sideToggle = false;
-        }
-        else if ($scope.tourstate == 4) {
+        } else if ($scope.tourstate == 4) {
             $(".captable.tableView > tbody > tr:nth-child(3) > td:nth-child(4) input:first-of-type").focus();
         }
     };
@@ -2088,27 +2026,24 @@ var captableController = function(
     $scope.kissTour = function() {
         _kmq.push(['record', 'CT Tour Started']);
     };
-
     $scope.moveTour = function() {
         $scope.tourstate += 1;
         $scope.tourfunc();
     };
-
     $scope.gotoTour = function(x) {
         $scope.tourstate = parseInt(x);
         $scope.tourfunc();
     };
-
     $scope.closeTour = function() {
         $scope.tourstate = 0;
         $scope.tourshow = false;
     };
 
     $scope.tourNotification = function() {
-        $scope.$emit("notification:success", "Great! Just repeat for all securities, and share when you're ready.");
+        $scope.$emit("notification:success",
+                     $scope.tourmessages.success);
     };
 
-    // Modal for changing access type
     $scope.accessmodalUp = function (person) {
         $scope.capAccess = true;
         angular.forEach($scope.userstatuses, function(user) {
@@ -2138,9 +2073,9 @@ var captableController = function(
             });
             $scope.$emit("notification:success", "Successfully changed permissions");
         }).except(function(x) {
-                void(x);
-                $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-            });
+            void(x);
+            $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+        });
     };
 
     $scope.shareopts = {
@@ -2345,12 +2280,12 @@ var captableController = function(
         var startindex = $scope.ct.rows.indexOf(row);
         var number = splitvalues.length;
         for (var i = 0; i < number; i++) {
-            if (!$scope.ct.rows[startindex] || $scope.ct.rows[startindex].editable == "0") {
-                break
-            }
-            else {
+            if (!$scope.ct.rows[startindex] ||
+                    $scope.ct.rows[startindex].editable == "0") {
+                break;
+            } else {
                 splitvalues[i] = calculate.cleannumber(splitvalues[i]);
-                if (calculate.isNumber(splitvalues[i]) && isNaN(parseFloat($scope.ct.rows[startindex][key][type]))) {
+                if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.rows[startindex][key][type])) {
                     var anewTran = captable.newTransaction(key,
                                         $scope.ct.rows[startindex].name);
                     anewTran.active = false;
@@ -2358,8 +2293,7 @@ var captableController = function(
                     if (type == "u") {
                         anewTran.units = splitvalues[i];
                         anewTran.unitskey = splitvalues[i];
-                    }
-                    else {
+                    } else {
                         anewTran.amount = splitvalues[i];
                         anewTran.paid = splitvalues[i];
                         anewTran.paidkey = splitvalues[i];

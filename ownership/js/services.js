@@ -417,7 +417,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 var cell = row[issue.issue];
                 if (cell !== undefined &&
                     issue.type == "Debt" &&
-                    !calculate.isNumber(cell.u) &&
+                    (!calculate.isNumber(cell.u) || cell.u === 0) &&
                     calculate.isNumber(cell.a))
                 {
                     cell.x = calculate.debt(captable.rows,
@@ -672,7 +672,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }
     }
     this.autocalcThirdTranValue = autocalcThirdTranValue;
-
 });
 
 // Captable functions for basic mathematics.
@@ -1701,7 +1700,10 @@ ownership.value('displayCopy', {
             "transactions are tucked away here",
         issuecog:
             "Additional details for securities and " +
-            "transactions are tucked away here"
+            "transactions are tucked away here",
+        success:
+            "Great! Just repeat for all securities, and share when "
+            + "you're ready."
     },
     captabletips: {
         premoneyval:
