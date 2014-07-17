@@ -1,6 +1,6 @@
 'use strict';
 
-function annotationController($scope, $element, $rootScope, $document, Annotations, User, $timeout) {
+function annotationController($scope, $element, $rootScope, $document, Annotations, User, $timeout, SWBrijj) {
     function applyLineBreaks(oTextarea) {
         // TODO: rewrite as an ngModel validator
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
@@ -180,6 +180,20 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         $document.unbind('mouseup', $scope.mouseup);
         return false;
     };
+    
+    $scope.ocrHighlighted = function () {
+        var x = $scope.annot.position.coords.x;
+        var y = $scope.annot.position.coords.y + 10;
+        var w = $scope.annot.position.size.width;
+        var h = $scope.annot.position.size.height;
+        var sW = $scope.annot.position.docPanel.width;
+        console.log($scope.annot.position);
+        var page = $scope.annot.page;
+        SWBrijj.document_OCR_segment($scope.doc.doc_id, page, x, y, w, h, sW).then(
+            function (data) {
+                console.log(data);
+            }).except(function (s) {console.log(x);});
+    };
 
     $scope.newmouseup = function(ev) {
         if (document.detachEvent) {
@@ -196,6 +210,10 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
             }
             $scope.getme = true;
         });
+        if ($scope.annot.type == 'highlight')
+        {
+            $scope.ocrHighlighted();
+        }
         return false;
     };
 
@@ -213,7 +231,11 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         var dprt = dpr.top - dp.offsetTop; // top of document itself
         $scope.startX = ev.clientX - dprl + 5; // mouse start positions relative to the box/pad
         var bb = $element[0].querySelector("textarea");
-        $scope.startY = ev.clientY - dprt - (parseInt(bb.style.height)/2); // TODO can we get 6 dynamically?
+        $scope.startY = ev.clientY - dprt; // TODO can we get 6 dynamically?
+        if (bb.style.height)
+        {
+            $scope.startY = $scope.startY - (parseInt(bb.style.height)/2);
+        }
         $scope.initialMouseX = ev.clientX;
         $scope.initialMouseY = ev.clientY;
         $scope.initialScrollX = document.documentElement.scrollLeft;
@@ -330,6 +352,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
 
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
+    $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
     $scope.$watch('annot.position.coords', function(new_coords) {
         if (new_coords) {
@@ -340,8 +363,16 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
 
     $scope.$watch('annot.position.size', function(new_size) {
         if (new_size) {
-            $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
-            $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            if ($scope.annot.type == 'text')
+            {
+                $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
+                $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            }
+            else if ($scope.annot.type == 'highlight')
+            {
+                $scope.annotationHighlightStyle.width = (new_size.width) + "px";
+                $scope.annotationHighlightStyle.height = (new_size.height) + "px";
+            }
         }
     }, true);
 
@@ -371,4 +402,4 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     $scope.user = User;
 }
 
-annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User", "$timeout"];
+annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User", "$timeout", "SWBrijj"];

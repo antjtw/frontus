@@ -313,6 +313,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             adjusted.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true";
             adjusted.width = "150";
         };
+        
+        $scope.setNextAnnotationType = function (type) {
+            $rootScope.nextAnnotationType = type;
+        };
 
         $scope.leave = function() {
             // TODO: save notes / smartdoc data

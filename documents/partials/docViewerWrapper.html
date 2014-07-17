@@ -2,6 +2,30 @@
 <script src="/cmn/spin.js"></script>
 <div class="container dynamic-page">
     <subnav>
+        <div class="box-button pull-left"
+             ng-click="setNextAnnotationType('text');"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe602;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Text</span>
+                </li>
+            </ul>
+        </div>
+        <div class="box-button pull-left"
+             ng-click="setNextAnnotationType('highlight');"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe602;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Highlight</span>
+                </li>
+            </ul>
+        </div>
         <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
         <div class="box-button pull-right"
              ng-click="leave();"

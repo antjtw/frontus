@@ -258,7 +258,7 @@ Annotation.prototype = {
         position.push(this.position.docPanel.width); // document page width
         position.push(this.position.docPanel.height); // document page height
         json.push(position);
-        json.push("text");
+        json.push(this.type);
         json.push([this.val]);
         json.push([this.fontsize]);
         json.push({
