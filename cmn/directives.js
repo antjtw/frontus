@@ -26,7 +26,7 @@ m.directive('groupPeople', function(){
             var firstGroup = [];
  
 
-            $scope.parseGroups = function(){              console.log("where are my groups");
+            $scope.parseGroups = function(){              
                 SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
                     console.log($scope.myUserGroups)
