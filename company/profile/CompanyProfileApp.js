@@ -487,6 +487,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         }
                     });
                 });
+                // SWBrijj.tblm()
                 SWBrijj.tblm('account.profile', ['email']).then(function(me) {
                     angular.forEach($scope.people, function(person) {
                         if (person.email == me[0].email)
@@ -497,10 +498,25 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
                     });
                     $scope.setLastLogins();
+                    $scope.setGroups();
                 });
                 $scope.sort = 'name';
             });
+            // console.log($scope.people)
         });
+
+        $scope.setGroups = function(){
+            SWBrijj.tblm('account.my_user_role').then(function(group){
+                angular.forEach($scope.people, function(person){
+                    angular.forEach(group, function(group){
+                        if(group.email == person.email){
+                            person.groups = group.groups;
+
+                        };
+                    });
+                });
+            });
+        };
 
 
    
@@ -617,7 +633,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     var toDelete = $scope.groupPeople.indexOf(person)
                     $scope.groupPeople.splice(toDelete, 1);
                 }
-                console.log($scope.groupPeople.length);  
+                console.log($scope.groupPeople);  
             }
             
         };

@@ -10,6 +10,7 @@ m.directive('groupPeople', function(){
 
 
             $scope.groupName = ""
+            // $scope.jsonString = JSON.stringify($scope.groupName);
 
             $scope.createGroup = function(string){
                 if(string.length == 0){
@@ -55,7 +56,6 @@ m.directive('groupPeople', function(){
                             if(user.groups==null){
                                 // noGroup[user.email] = user.role;
                                 noGroup.push(user.email, user.role);
-                                console.log(noGroup);
                                 manyNoGroup.push(noGroup)
                             }
                             else {
@@ -65,8 +65,6 @@ m.directive('groupPeople', function(){
                            
                         });
                         console.log("array", $scope.manyNoGroup);
-                        
-                       
                     
                     }).except(function(data){
                         console.log("error")
@@ -74,10 +72,19 @@ m.directive('groupPeople', function(){
                 });
                 var array = JSON.stringify(manyNoGroup);
                 console.log(array)
-                $scope.addFirstGroup(array, $scope.groupName)
+                var json = JSON.stringify($scope.groupName)
+                $scope.addFirstGroup(array, json)
                 console.log(manyNoGroup); 
                 console.log(manyWithGroup);   
             };
+
+            $scope.updateGroups = function(){
+                if(manyNoGroup.length > 0 && $scope.groupName.length > 0){
+                    var noGroupArray = JSON.stringify(manyNoGroup);
+                    $scope.addFirstGroup(array, $scope.groupName);
+                }
+
+            }
 
             $scope.showUserRoles = function(){
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
