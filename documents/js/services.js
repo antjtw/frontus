@@ -52,8 +52,13 @@ docs.service('basics', function () {
 docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", function(Annotations, SWBrijj, $q, $rootScope) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
+    var transaction_attributes_callback = null;
     SWBrijj.transaction_attributes().then(function(data) {
         transaction_attributes = data;
+        // callback in case the a document tried to initalize before this call returned
+        if (transaction_attributes_callback) {
+            transaction_attributes_callback();
+        }
     });
     var defaultTypes = [
         {name: "Text", display: "Text"},
@@ -83,17 +88,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         return issue;
     }
     function updateAnnotationTypes(issue_type, transaction_type, type_list) {
-        var viable_actions = transaction_attributes[issue_type].actions;
-        var fields = viable_actions[transaction_type].fields;
-        type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
-        var tmp_array = [];
-        for (var field in fields) {
-            var f = fields[field];
-            tmp_array.push({name: f.name, display: f.display_name, required: f.required});
+        // transaction_attributes may not be defined yet (race condition on initialization)
+        function reallyDo() {
+            var viable_actions = transaction_attributes[issue_type].actions;
+            var fields = viable_actions[transaction_type].fields;
+            type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
+            var tmp_array = [];
+            for (var field in fields) {
+                var f = fields[field];
+                tmp_array.push({name: f.name, display: f.display_name, required: f.required});
+            }
+            // add new types onto the end (in one action, without changing the reference, for performance reasons)
+            var args = [type_list.length, 0].concat(tmp_array);
+            Array.prototype.splice.apply(type_list, args);
         }
-        // add new types onto the end (in one action, without changing the reference, for performance reasons)
-        var args = [type_list.length, 0].concat(tmp_array);
-        Array.prototype.splice.apply(type_list, args);
+        if (transaction_attributes) {
+            reallyDo();
+        } else {
+            transactions_attributes_callback = reallyDo;
+        }
     }
 
     /// Document object definition
