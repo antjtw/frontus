@@ -32,8 +32,9 @@ m.directive('groupPeople', function(){
                 });
             }
 
-            $scope.addToGroups = function(string){
-
+            $scope.addToGroups = function(oldString, newString){
+                string1 = JSON.parse(oldString)
+                return string1 + ", " + newString;
             }
 
 
@@ -63,9 +64,12 @@ m.directive('groupPeople', function(){
                                 hasGroup.push(user.email, user.role);
                                 $scope.manyHasGroup.push(hasGroup);
                                 console.log(typeof user.groups)
-                                var newString = user.groups.concat($scope.groupName) 
+                                // var newString = JSON.parse(user.groups).concat($scope.groupName) 
+                                // console.log(typeof newString)
                                 var array1 = JSON.stringify($scope.manyHasGroup);
-                                var json1 = JSON.stringify(newString);
+                                var json1 = JSON.stringify($scope.addToGroups(user.groups, $scope.groupName));
+                                console.log(json1);
+                                console.log(typeof json1)
                                 $scope.updateGroup(array1, json1);
                             }
                            
