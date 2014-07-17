@@ -1,14 +1,15 @@
-
-// Need to catch x:({javaClassName:"net.r0kit.brijj.BrijjServlet$NotLoggedIn",message:"Not Logged In"}) on all the exceptions
-var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState, captable) {
-
+var captableController = function($scope, $rootScope, $location, $parse,
+                                  SWBrijj, calculate, switchval, sorting,
+                                  navState, captable, displayCopy) {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
         return;
     }
+    console.log(displayCopy);
     var company = navState.company;
-    $scope.ct = captable.getCapTable();
     $scope.currentCompany = company;
+    
+    $scope.ct = captable.getCapTable();
 
     // Set the view toggles to their defaults
     $scope.radioModel = "Edit";
@@ -19,50 +20,17 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
 
-    // Tour options
     $scope.tourshow = false;
     $scope.tourstate = 0;
-    $scope.tourmessages = {};
-    $scope.tourmessages.intro = "Hover over these icons to reveal helpful info about your table";
-    $scope.tourmessages.share = "When you’re finished, share your cap table with others";
-    $scope.tourmessages.view = "When you’re not editing, click here for the best view of your data";
-    $scope.tourmessages.sidebar = "Additional details for securites and transactions are tucked away here";
-    $scope.tourmessages.issuecog = "Additional details for securites and transactions are tucked away here";
-
-    // Captable tooltips
-    $scope.captabletips = {};
-    $scope.captabletips.premoneyval = "The valuation before taking in money in this round";
-    $scope.captabletips.postmoneyval = "The sum of the pre-money valuation and the total money paid into this round";
-    $scope.captabletips.ppshare = "The price at which each share was purchased";
-    $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
-    $scope.captabletips.liquidpref = "The minimum return multiple each investor is guaranteed on a liquidity event";
-    $scope.captabletips.partpref = "Allows an investor to collect their liquidation preference AND stock on a liquidity event";
-    $scope.captabletips.dragalong = "When a majority shareholder enters a sale, minority shareholders are also forced sell their shares";
-    $scope.captabletips.tagalong = "When a majority shareholder enters a sale, minority shareholders have the right to join the deal and sell their shares";
-    $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
-    $scope.captabletips.totalgranted = "The sum total of shares granted";
-    $scope.captabletips.price = "The price each granted share can be purchased at when vested";
-    $scope.captabletips.pricewarrant = "The price each granted share can be purchased at";
-    $scope.captabletips.terms = "The total number of months until fully vested";
-    $scope.captabletips.vestingbegins = "Months until the vesting cliff % is vested";
-    $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
-    $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
-    $scope.captabletips.price = "The price at which each granted share can be purchased when vested";
-    $scope.captabletips.valcap = "The maximum pre-money valuation at which the debt notes convert to equity";
-    $scope.captabletips.valcapsafe = "The maximum pre-money valuation at which the safe converts to equity";
-    $scope.captabletips.interestrate = "The rate that interest accrues on this debt";
-    $scope.captabletips.discount = "The percentage discount applied upon conversion";
-    $scope.captabletips.term = "The term of the note before expiration";
-    $scope.captabletips.termwarrant = "The term of the warrant before expiration";
-    $scope.captabletips.common = "Indicates that a security is common stock";
-    $scope.captabletips.paripassu = "Liquidation proceeds are distributed in proportion to each series’ share of preference, instead of by seniority.";
-    $scope.captabletips.evidence = "Tie documents to items in your captable.";
-    $scope.captabletips.permissions = "Share just personal holdings, or the full cap table";
+    $scope.tourmessages = displayCopy.tourmessages;
+    $scope.tourUp = function () {
+        $scope.tourModal = true;
+    };
+    
+    $scope.captabletips = displayCopy.captabletips;
 
     $scope.activityView = "ownership.company_activity_feed";
     $scope.tabs = [{'title': "Information"}, {'title': "Activity"}];
-
-
 
     // Variables for the select boxes to limit the selections to the available database types
     $scope.issuetypes = [];
@@ -73,11 +41,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.evidence_object = null;
     $scope.evidenceOrder = 'docname';
     $scope.evidenceNestedOrder = 'name';
-
-    $scope.tourUp = function () {
-        $scope.tourModal = true;
-    };
-
 
     $scope.extraPeople = [];
 
@@ -118,7 +81,6 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     $scope.investorOrder = "name";
     $scope.sideToggleName = "Hide";
     $('.tour-box').affix({});
-
 
     SWBrijj.tblm("ownership.clean_company_access").then(function (data) {
         Intercom('update', {company : {'captable_shares':data.length}});
@@ -895,7 +857,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
     // Save transaction function
     // TODO refactor
     $scope.saveTran = function (transaction) {
-        //Triggers the multi modal if more than one transaction exists
+        // Triggers the multi modal if more than one transaction exists
         if (transaction.length > 1) {
             angular.forEach($scope.ct.rows, function (row) {
                 if (row.name == transaction[0].investor) {
@@ -925,52 +887,29 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                 }
             });
             return
+        } else if (isArray(transaction)) {
+            transaction = transaction[0];
         }
-        // Moves on to the main saving process
-        else {
-            if (isArray(transaction)) {
-                transaction = transaction[0];
-            }
-        }
-        // Remove any commas added to the numbers
-        if (transaction.units) {
-            transaction.units = calculate.cleannumber(transaction.units);
-        }
-        if (transaction.amount) {
-            transaction.amount = calculate.cleannumber(transaction.amount);
-        }
-        if (!(/^(\d+)*(\.\d+)*$/.test(transaction.units)) && transaction.units != null && transaction.units != "") {
-            transaction.units = transaction.unitskey;
-        }
-        if (!(/^(\d+)*(\.\d+)*$/.test(transaction.amount)) && transaction.amount != null && transaction.amount != "") {
-            transaction.amount = transaction.paidkey;
-        }
-        // Bail out if insufficient data has been added for the transaction
-        if (transaction == undefined || isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && isNaN(parseInt(transaction.tran_id))) {
-            return
-        }
-        // Delete the transaction if an existing transaction has had all its information removed
-        if (isNaN(parseFloat(transaction.units)) && isNaN(parseFloat(transaction.amount)) && !isNaN(parseInt(transaction.tran_id))) {
-            $scope.tranDeleteUp(transaction);
-            return
-        }
-        // Not quite enough information to save
-        else if (transaction['issue'] == undefined || (isNaN(parseFloat(transaction['units'])) && isNaN(parseFloat(transaction['amount'])))) {
-            return
-        }
-        // We have enough info to begin the saving process
+        // FIXME all validation / data massaging should be done in 1 function
+        transaction.units = calculate.cleannumber(transaction.units);
+        transaction.amount = calculate.cleannumber(transaction.amount);
+
+        transaction.units = calculate.undoIf(calculate.numberIsInvalid,
+                                             transaction.units, transaction.unitskey);
+        transaction.amount = calculate.undoIf(calculate.numberIsInvalid,
+                                              transaction.amount, transaction.paidkey);
+
+        if (captable.tranIsInvalid(transaction)) { return }
         else {
             if (transaction.type == "Option" && transaction.units < 0) {
                 transaction.units = transaction.unitskey;
                 $scope.$emit("notification:fail", "Cannot have a negative number of shares");
                 return
-            }
-            else if (transaction.amount < 0) {
+            } else if (transaction.amount < 0) {
                 transaction.amount = transaction.paidkey;
                 $scope.$emit("notification:fail", "Cannot have a negative amount for options");
                 return
-            }
-            else {
+            } else {
                 var d1 = transaction['date'].toUTCString();
                 if (transaction['tran_id'] == undefined) {
                     transaction['tran_id'] = '';
@@ -1018,7 +957,36 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
                         transaction.amount = parseFloat(transaction.units) * parseFloat(transaction.ppshare);
                     }
                 }
-                SWBrijj.proc('ownership.update_transaction', String(transaction['tran_id']), transaction['email'], transaction['investor'], transaction['issue'], transaction['units'], d1, transaction['type'], transaction['amount'], calculate.toFloat(transaction['premoney']), calculate.toFloat(transaction['postmoney']), calculate.toFloat(transaction['ppshare']), calculate.toFloat(transaction['totalauth']), partpref, transaction.liquidpref, transaction['optundersec'], calculate.toFloat(transaction['price']), calculate.toFloat(transaction['terms']), vestcliffdate, calculate.toFloat(transaction['vestcliff']), transaction['vestfreq'], transaction['debtundersec'], calculate.toFloat(transaction['interestrate']), transaction['interestratefreq'], calculate.toFloat(transaction['valcap']), calculate.toFloat(transaction['discount']), calculate.toFloat(transaction['term']), dragalong, tagalong).then(function (data) {
+                SWBrijj.proc('ownership.update_transaction',
+                        String(transaction['tran_id']),
+                        transaction['email'],
+                        transaction['investor'],
+                        transaction['issue'],
+                        transaction['units'],
+                        d1,
+                        transaction['type'],
+                        transaction['amount'],
+                        calculate.toFloat(transaction['premoney']),
+                        calculate.toFloat(transaction['postmoney']),
+                        calculate.toFloat(transaction['ppshare']),
+                        calculate.toFloat(transaction['totalauth']),
+                        partpref,
+                        transaction.liquidpref,
+                        transaction['optundersec'],
+                        calculate.toFloat(transaction['price']),
+                        calculate.toFloat(transaction['terms']),
+                        vestcliffdate,
+                        calculate.toFloat(transaction['vestcliff']),
+                        transaction['vestfreq'],
+                        transaction['debtundersec'],
+                        calculate.toFloat(transaction['interestrate']),
+                        transaction['interestratefreq'],
+                        calculate.toFloat(transaction['valcap']),
+                        calculate.toFloat(transaction['discount']),
+                        calculate.toFloat(transaction['term']),
+                        dragalong,
+                        tagalong)
+                .then(function (data) {
                     var returneddata = data[1][0].split("!!!");
                     $scope.lastsaved = Date.now();
                     var tempunits = 0;

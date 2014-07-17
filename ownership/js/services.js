@@ -285,6 +285,12 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         return captable.issues.filter(function(el) {return el.issue==issuekey;})[0];
     }
     this.getIssue = getIssue;
+    function tranIsInvalid(tran) {
+        return tran === undefined ||
+            tran.issue === undefined ||
+            (isNaN(parseFloat(tran.units)) && isNaN(parseFloat(tran.amount)));
+    }
+    this.tranIsInvalid = tranIsInvalid;
     function addTranToCell(tran) {
         angular.forEach(captable.rows, function (row) {
             if (row.name == tran.investor) {
@@ -1274,10 +1280,18 @@ ownership.service('calculate', function () {
         return convertTran.newtran;
     };
 
+    this.undoIf = function(fn, cur, prev) {
+        return fn(cur) ? prev : cur;
+    };
+    this.numberIsInvalid = function(num) {
+        return !(/^(\d+)*(\.\d+)*$/.test(num)) && num != null && num != "";
+    };
     this.cleannumber = function(potentialnumber) {
-        var finalnumber = String(potentialnumber).replace(/\,/g,'');
-        finalnumber = String(finalnumber).replace(/\$/g , '');
-        return finalnumber
+        if (potentialnumber) {
+            var finalnumber = String(potentialnumber).replace(/\,/g,'');
+            finalnumber = String(finalnumber).replace(/\$/g , '');
+            return finalnumber
+        }
     };
 
     // Converts strings to boolean
@@ -1534,3 +1548,94 @@ app.run(function ($rootScope) {
 function hidePopover() {
     angular.element('.popover').hide();
 }
+
+ownership.value('displayCopy', {
+    tourmessages: {
+        intro:
+            "Hover over these icons to reveal helpful info " +
+            "about your table",
+        share:
+            "When you’re finished, share your cap table with " +
+            "others",
+        view:
+            "When you’re not editing, click here for the best "+
+            "view of your data",
+        sidebar:
+            "Additional details for securities and " +
+            "transactions are tucked away here",
+        issuecog:
+            "Additional details for securities and " +
+            "transactions are tucked away here"
+    },
+    captabletips: {
+        premoneyval:
+            "The valuation before taking money in this round",
+        postmoneyval:
+            "The sum of the pre-money valuation and the "+
+            "total money paid into this round",
+        ppshare:
+            "The price at which each share was purchased",
+        totalauth:
+            "The sum total of shares authorized " +
+            "to be issued",
+        liquidpref:
+            "The minimum return multiple each investor " +
+            "is guaranteed on a liquidity event",
+        partpref:
+            "Allows an investor to collect their liquidation "
+            + "preference AND stock on a liquidity event",
+        dragalong:
+            "When a majority shareholder enters a sale, " +
+            "minority shareholders are also forced to sell "+
+            "their shares",
+        tagalong:
+            "When a majority shareholder enters a sale, " +
+            "minority shareholders have the right to join " +
+            "the deal and sell their shares",
+        optundersec:
+            "The security each granted share will convert "
+            + "to upon exercise",
+        totalgranted:
+            "The sum total of shares granted",
+        price:
+            "The price at which each granted share can be "
+            + "purchased at when vested",
+        pricewarrant:
+            "The price each granted share can be purchased at",
+        terms:
+            "The total number of months until fully vested",
+        vestingbegins:
+            "Months until the vesting cliff % is vested",
+        vestcliff:
+            "The percentage of granted shares that are considered "
+            + "vested on the cliff date",
+        vestfreq:
+            "The frequency that granted shares vest after the "
+            + "cliff date, distributed evenly by frequency until "
+            + "the vesting term ends",
+        valcap:
+            "The maximum pre-money valuation at which the debt "
+            + "notes convert to equity",
+        valcapsafe:
+            "The maximum pre-money valuation at which the safe "
+            + "converts to equity",
+        interestrate:
+            "The rate that interest accrus on this debt",
+        discount:
+            "The percentage discount applied upon conversion",
+        term:
+            "The term of the note before expiration",
+        termwarrant:
+            "The term of the warrant before expiration",
+        common:
+            "Indicates that a security is common stock",
+        paripassu:
+            "Liquidation proceeds are distributed in proportion "
+            + "to each series’ share of preference, instead of "
+            + "by seniority",
+        evidence:
+            "Tie documents to items in your captable",
+        permissions:
+            "Share just personal holdings, or the full cap table"
+    }
+});
