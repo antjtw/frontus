@@ -12,27 +12,19 @@ m.directive('groupPeople', function(){
             $scope.groupName = ""
             // $scope.jsonString = JSON.stringify($scope.groupName);
 
-            $scope.createGroup = function(string){
-                if(string.length == 0){
-                    console.log("empty string");
+            // $scope.createGroup = function(string){
+            //     if(string.length == 0){
+            //         console.log("empty string");
                    
-                }
-                else{
-                    $scope.newGroup = JSON.stringify(string)
-                    console.log($scope.newGroup);
-                };
-            };
-
-            // $scope.readToAddGroup = function(){
-            //     if($scope.groupName.length > 0 && $scope.manyWithGroup.length > 0 || $scope.manyNoGroup.length >0){
-            //         return true;
             //     }
-            //     else {
-            //         return false;
-            //     }
-            // }
+            //     else{
+            //         $scope.newGroup = JSON.stringify(string)
+            //         console.log($scope.newGroup);
+            //     };
+            // };
 
-            $scope.addFirstGroup = function(array, json){
+
+            $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
                    console.log("added group");
                 }).except(function(x){
@@ -41,8 +33,8 @@ m.directive('groupPeople', function(){
             }
 
 
-            var manyNoGroup = [];
-            var manyWithGroup = [];
+            $scope.manyNoGroup = [];
+            $scope.manyHasGroup = [];
             $scope.checkGroups = function(person){
                 // var manyNoGroup = [];
                 angular.forEach(person, function(info){              
@@ -56,34 +48,57 @@ m.directive('groupPeople', function(){
                             if(user.groups==null){
                                 // noGroup[user.email] = user.role;
                                 noGroup.push(user.email, user.role);
-                                manyNoGroup.push(noGroup)
+                                $scope.manyNoGroup.push(noGroup)
+                                console.log($scope.manyNoGroup)
+                                var array = JSON.stringify($scope.manyNoGroup);
+                                var json = JSON.stringify($scope.groupName)
+                                $scope.updateGroup(array, json)
+                //     var json = JSON.stringify($scope.groupName);
+                //     console.log(json)
+                //     $scope.updateGroup(array, json)
+
                             }
-                            else {
+                            else if(user.groups != null){
                                 hasGroup.push(user.email, user.role);
-                                manyWithGroup.push(hasGroup)
+                                $scope.manyHasGroup.push(hasGroup);
+                                console.log("has a group");
+                                console.log(hasGroup);
                             }
                            
-                        });
-                        console.log("array", $scope.manyNoGroup);
-                    
+                        });           
                     }).except(function(data){
                         console.log("error")
                     });
                 });
-                var array = JSON.stringify(manyNoGroup);
-                console.log(array)
-                var json = JSON.stringify($scope.groupName)
-                $scope.addFirstGroup(array, json)
-                console.log(manyNoGroup); 
-                console.log(manyWithGroup);   
+                // var array = JSON.stringify(manyNoGroup);
+                // var json = JSON.stringify($scope.groupName)
+                // $scope.performUpate();
+                // $scope.addFirstGroup(array, json)
+                // console.log(manyNoGroup); 
+                // console.log(manyWithGroup);   
             };
 
-            $scope.updateGroups = function(){
-                if(manyNoGroup.length > 0 && $scope.groupName.length > 0){
-                    var noGroupArray = JSON.stringify(manyNoGroup);
-                    $scope.addFirstGroup(array, $scope.groupName);
-                }
-
+            $scope.performUpate = function(people){
+                $scope.checkGroups(people);
+                console.log("Perform update");
+                console.log($scope.manyNoGroup.length);
+                console.log($scope.manyHasGroup.length);
+                // if(manyNoGroup.length > 0){
+                //     console.log("adding new groups")
+                //     console.log(manyNoGroup)
+                //     var array = JSON.stringify(manyNoGroup);
+                //     var json = JSON.stringify($scope.groupName);
+                //     console.log(json)
+                //     $scope.updateGroup(array, json)
+                // }
+                // else if (manyWithGroup.length > 0){
+                //     var array = JSON.stringify(manyNoGroup);
+                //     var json = JSON.stringify($scope.groupName);
+                //     $scope.updateGroup(array,json)
+                // }
+                // else{
+                //     console.log("other")
+                // }
             }
 
             $scope.showUserRoles = function(){
