@@ -272,7 +272,7 @@ address {
     font-family: 'FS Elliot Web Thin', sans-serif !important;
 }
 
-.static .feature-block.dark-feature h2 > a {
+.static .feature-block.feature-permission h3 > a {
     font-family: 'FS Elliot Web Thin', sans-serif !important;
     font-size: 20px;
     line-height: 28px;

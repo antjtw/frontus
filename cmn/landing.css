@@ -368,6 +368,7 @@ h3.key-sub-header {
         position: absolute;
         top: 0;
         left: 140px;
+        text-align: left;
     }
 
     .section-icon-trio > ul > li > span:nth-child(3), .section-icon-trio.single-icon > ul > li > span:nth-child(3) {
@@ -379,6 +380,10 @@ h3.key-sub-header {
         padding: 0;
         float: right;
         margin-top: 35px;
+    }
+
+    .section-icon-trio > ul > li > span:nth-child(3).double-text {
+        margin-top: 60px;
     }
 
     .learn-more-section > div > div {
@@ -414,7 +419,7 @@ h3.key-sub-header {
     }
 
     h2.key-header {
-        margin-top: 20px;
+        margin-top: 40px;
         font-size: 32px;
         line-height: 36px;
         padding: 0 20px;
@@ -429,6 +434,10 @@ h3.key-sub-header {
         width: -moz-calc(50% - 1px);
         width: -webkit-calc(50% - 1px);
         width: calc(50% - 1px);
+    }
+
+    .section-icon-trio {
+        margin: 40px auto 0 auto;
     }
 
 
