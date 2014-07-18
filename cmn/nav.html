@@ -68,9 +68,9 @@
     <div ng-if="!navState.userid" class="external-subnav hidden-phone" ng-class="{'scrolleddown': scrolled}">
         <div class="centered-menu">
             <ul ng-show="navState.path.indexOf('/features/') == -1">
-                <li><a href="#fundraising" du-smooth-scroll du-scrollspy>Fundraising</a></li>
-                <li><a href="#funding" du-smooth-scroll du-scrollspy>Post-funding</a></li>
-                <li><a href="#hiring" du-smooth-scroll du-scrollspy>Hiring</a></li>
+                <li><a href="#fundraising" offset="100" du-smooth-scroll du-scrollspy>Fundraising</a></li>
+                <li><a href="#funding" offset="100" du-smooth-scroll du-scrollspy>Post-funding</a></li>
+                <li><a href="#hiring" offset="100" du-smooth-scroll du-scrollspy>Hiring</a></li>
                 <li><a href="#security" du-smooth-scroll du-scrollspy>Security</a></li>
             </ul>
             <ul ng-show="navState.path.indexOf('/features/') != -1">
