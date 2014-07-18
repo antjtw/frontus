@@ -186,6 +186,10 @@ h3.key-sub-header {
     overflow: auto;
 }
 
+.section-icon-trio.second {
+    margin: 80px auto 80px auto;
+}
+
 .section-icon-trio > ul {
 
 }
@@ -241,6 +245,11 @@ h3.key-sub-header {
     margin: 80px 0;
 }
 
+.regular-header {
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+}
+
 @media (max-width: 767px) {
     .section-icon-trio > ul > li {
         -moz-box-sizing: border-box;
@@ -292,9 +301,17 @@ h3.key-sub-header {
         color: #1d2c3c;
         font-size: 18px;
     }
+
+    .section-icon-trio.second {
+        margin: 0 auto 80px auto;
+    }
 }
 
 @media (max-width: 480px) {
+
+    .regular-header {
+        margin: 80px auto 40px auto;
+    }
 
     h2.key-header {
         margin-top: 20px;

@@ -4,10 +4,6 @@ var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj',
 
   $routeProvider.
       when('/features/', {
-          controller: 'FeaturesCtrl',
-          templateUrl:'/features/partials/overview.html'
-      }).
-      when('/features/cap', {
           controller: 'FeaturesCapCtrl',
           templateUrl:'/features/partials/captable.html'
       }).
@@ -43,6 +39,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
         } else {
             $scope.variablewidth = 760;
         }
+
+        $rootScope.scrolled = true;
 
         $scope.addCommas = function(num) {
             var split = num.split('.');
@@ -230,6 +228,8 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 $scope.deleteIssue(issue);
             });
         };
+
+        $rootScope.scrolled = true;
 
 
         $scope.captabletips = {};

@@ -576,7 +576,7 @@ div.fixednav{
     display:block;
     float:left;
     list-style:none;
-    margin-right: 40px;
+    margin: 0 20px;
     line-height: 30px;
     padding:0;
     position:relative;
@@ -768,6 +768,10 @@ ul.nav-logo > li > a > img {
     color: #A5A5A5;
     font-family: 'FS Elliot Web Bold', sans-serif;
     letter-spacing: 0.1em;
+}
+
+.topnav .content-pages .nav > li > a.active {
+    color: #1d2c3c;
 }
 
 .scrolleddown .topnav .content-pages .nav > li > a {

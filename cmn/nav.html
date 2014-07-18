@@ -7,12 +7,12 @@
             <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
                 <div class="content-pages">
                     <ul ng-hide="navState.userid" class="hidden-phone nav">
-                        <li> <a target="_self" href="/features">
-                            Features
+                        <li> <a ng-class="{'active': navState.path.indexOf('/features/') != -1}" target="_self" href="/features">
+                            Tour
                         </a>
 
                         </li>
-                        <li> <a target="_self" href="/pricing">
+                        <li> <a ng-class="{'active': navState.path.indexOf('/pricing/') != -1}" target="_self" href="/pricing">
                             Pricing
                         </a>
 
@@ -67,11 +67,15 @@
     </div>
     <div ng-if="!navState.userid" class="external-subnav hidden-phone" ng-class="{'scrolleddown': scrolled}">
         <div class="centered-menu">
-            <ul>
+            <ul ng-show="navState.path.indexOf('/features/') == -1">
                 <li><a href="#fundraising" du-smooth-scroll du-scrollspy>Fundraising</a></li>
                 <li><a href="#funding" du-smooth-scroll du-scrollspy>Post-funding</a></li>
                 <li><a href="#hiring" du-smooth-scroll du-scrollspy>Hiring</a></li>
                 <li><a href="#security" du-smooth-scroll du-scrollspy>Security</a></li>
+            </ul>
+            <ul ng-show="navState.path.indexOf('/features/') != -1">
+                <li><a href="/features/" ng-class="{'active': navState.path.indexOf('/features/convertible-notes') == -1}">Cap Table</a></li>
+                <li><a href="/features/convertible-notes/" ng-class="{'active': navState.path.indexOf('/features/convertible-notes') != -1}">Modeling</a></li>
             </ul>
         </div>
     </div>
