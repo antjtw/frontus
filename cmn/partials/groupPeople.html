@@ -17,7 +17,7 @@
 
 <div ng-repeat="myUserGroup in myUserGroups | unique: 'json_array_elements'">
   <div class="check-box-side">
-    <button class="check-box-button" ng-class="{'selected': groupIs(myUserGroup.json_array_elements)}" ng-click="selectGroup(myUserGroup.json_array_elements)">
+    <button class="check-box-button" ng-class="{'selected': groupIs(myUserGroup.json_array_elements, people)}" ng-click="selectGroup(myUserGroup.json_array_elements); preselectGroup(person)">
         <span data-icon="&#xe023;" aria-hidden="true"></span>
       </button>
   </div>
@@ -32,7 +32,7 @@
     <div class="sidebarFooter">
 
         <div class="preview-message" 
-            ng-click="createGroups(people); showUserRoles(); myGroups()">
+            ng-click="createGroups(people); myGroups()">
             Group 
         </div>
 

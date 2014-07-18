@@ -35,9 +35,19 @@ m.directive('groupPeople', function(){
             };
             $scope.parseGroups();
 
+            $scope.preselectGroup = function(person){
+                angular.forEach(person, function(info){
+                    // $scope.selectedGroup.concat(info.groups);
+                    for(i = 0; i++; i < info.groups.length){
+                        $scope.selectedGroup.push(info.groups[i]);
+                    };
+                });
+                console.log($scope.selectedGroup);
+            };
+
              
 
-            $scope.groupIs = function(group){
+            $scope.groupIs = function(group){              
                 return $scope.selectedGroup.indexOf(group) != -1;
             };
 
@@ -77,29 +87,20 @@ m.directive('groupPeople', function(){
                         $scope.myGroups = data;
                         angular.forEach($scope.myGroups, function(group){
                             console.log(group.groups)
-                        })
-                    })
-                })
-            }
 
-            // $scope.removeGroup = function(person, newGroup){
-            //     angular.forEach(person, function(info)){
-            //         SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
-            //             $scope.myGroups = data;
-            //             console.log($scope.myGroups);
-            //         })
-            //     }
+                        });
+                    });
+                });
+            };
 
-
-            // }
 
             $scope.createGroups = function(person){
-                $scope.removeGroup(person)
+
                 if($scope.groupName.length > 0){
                     $scope.checkGroups(person, $scope.groupName)
                 }
                 else if($scope.selectedGroup.length > 0){
-                    $scope.checkGroups(person, oldGroups.toString());
+                    $scope.checkGroups(person, oldGroups);
                 }
                 else {
                     console.log("nothing to add")
@@ -110,7 +111,8 @@ m.directive('groupPeople', function(){
 
 
             $scope.checkGroups = function(person, text){ 
-                angular.forEach(person, function(info){              
+                angular.forEach(person, function(info){ 
+                    console.log(info.groups)             
                     var email = info.email                 
                     var noGroup = [];
                     var hasGroup = [];
