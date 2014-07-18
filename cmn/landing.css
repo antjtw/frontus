@@ -154,6 +154,10 @@ h3 {
     background-position: 0 -270px;
 }
 
+.large-icon.useu-icon {
+    background-position: -270px 0;
+}
+
 .photo-icon {
     width: 135px;
     height: 135px;
@@ -181,13 +185,17 @@ h2.key-header {
 }
 
 h3.key-sub-header {
-    max-width: 600px;
+    max-width: 800px;
     margin: 10px auto 0 auto;
     text-align: center;
 }
 
 .home-banner h2.key-header {
     margin-top: 0;
+}
+
+.home-banner h3.key-sub-header {
+    max-width: 600px;
 }
 
 .home-banner .headline-image {
@@ -255,8 +263,13 @@ h3.key-sub-header {
     margin: 80px auto 80px auto;
 }
 
-.section-icon-trio > ul {
+.section-icon-trio.single-icon > ul > li {
+    width: 100%;
+}
 
+.section-icon-trio.single-icon > ul > li > span:nth-child(3) {
+    max-width: 300px;
+    margin: 20px auto 0 auto;
 }
 
 .section-icon-trio > ul > li {
@@ -357,7 +370,7 @@ h3.key-sub-header {
         left: 140px;
     }
 
-    .section-icon-trio > ul > li > span:nth-child(3) {
+    .section-icon-trio > ul > li > span:nth-child(3), .section-icon-trio.single-icon > ul > li > span:nth-child(3) {
         display: inline-block;
         text-align: left;
         width: -moz-calc(100% - 100px);
