@@ -587,6 +587,11 @@ div.fixednav{
     text-transform: uppercase;
     font-family: 'FS Elliot Web Bold', sans-serif;
     font-size: 12px;
+    color: #A5A5A5;
+}
+
+.external-subnav > div.centered-menu ul li > a:hover {
+    color: #666666;
 }
 
 .external-subnav > div.centered-menu ul li > a.active {
@@ -707,6 +712,21 @@ ul.nav-logo > li > a > img {
     text-align: center;
 }
 
+.topnav .nav > li.login-link > a {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #A5A5A5;
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.1em;
+    width: 100px;
+    text-align: right;
+}
+
+.topnav .nav.nav-item > li.login-link > a:hover {
+    background-color: transparent;
+    color: #666666;
+}
+
 .topnav .content-pages {
     display: inline-block;
     width: 100%;
@@ -745,7 +765,7 @@ ul.nav-logo > li > a > img {
     margin-right: 0;
     text-transform: uppercase;
     font-size: 14px;
-    color: #C6C6C6;
+    color: #A5A5A5;
     font-family: 'FS Elliot Web Bold', sans-serif;
     letter-spacing: 0.1em;
 }
@@ -775,10 +795,7 @@ ul.nav-logo > li > a > img {
     margin-top: -5px;
 }
 
-.topnav .nav.nav-item > li > a:hover {
-    background-color: rgb(52, 73, 94);
-    color: #FFFFFF !important;
-}
+
 .topnav .nav li.dropdown.open > .dropdown-toggle {
     background-color: #3397da;
     color: #FFFFFF !important;

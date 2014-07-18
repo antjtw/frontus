@@ -2,66 +2,6 @@
      ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
 
 <div class="fixednav">
-    <div collapse="isCollapsed">
-        <div class="well well-large">
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span12 text-center">
-                        <div id="Login-form" class="navlogin">
-                            <form>
-                                <fieldset> <span>Email Address</span>
-
-                                    <input type="text" class="loginInput" autocomplete="off"
-                                    tabindex="1" autocapitalize="off" name="username" ng-model="username"> <span>Password</span>
-
-                                    <input class="loginInput" autocomplete="off" tabindex="2"
-                                    name="password" type="password" ng-model="password">
-                                    <br class="visible-below-1024">
-                                    <div class="standard-button top-login">
-                                        <button class="btn" ng-disabled="!(fieldCheck(username) && password);" ng-click="doLogin()">Log In</button>
-                                    </div> <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
-
-                                    <span class="forgotLog"><a target="_self" href="/login/forgot">Forgot Password?</a></span>
-
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div collapse="isRegisterCollapsed" class="collapse-well">
-        <div class="well well-large">
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span12 text-center">
-                        <div class="navlogin" ng-hide="registertoggle">
-                            <form>
-                                <fieldset> <span>Email Address</span>
-
-                                    <input type="text" class="registerInput" autocomplete="off"
-                                    tabindex="4" autocapitalize="off" name="username" ng-model="registeremail">
-                                    <div class="standard-button">
-                                        <button class="btn" ng-disabled="!fieldCheck(registeremail);" ng-click="companySelfRegister()">Sign Up</button>
-                                    </div> <a class="pointer" ng-click="toggleLogin('register')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
-
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div class="navlogin register-message" ng-show="registertoggle">
-                            <div>
-                                 <h2>Thanks for signing up to use Sharewave!</h2>
-
-                                <p>Please check your email to complete your registration.</p>
-                            </div> <span class="pointer" data-icon="&#xe00f;" aria-hidden="true" ng-click="toggleLogin('register')"></span>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="overall-nav" ng-class="{navBarLoggedOut:!navState.userid, navBarLoggedIn:navState.userid, 'scrolleddown': scrolled}">
         <div class="navbar topnav row-fluid" ng-class="{navheight:!navState.userid}">
             <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
@@ -74,6 +14,11 @@
                         </li>
                         <li> <a target="_self" href="/pricing">
                             Pricing
+                        </a>
+
+                        </li>
+                        <li> <a target="_self" href="http://blog.sharewave.com">
+                            Blog
                         </a>
 
                         </li>
@@ -110,8 +55,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isCollapsed}">
-                        <button class="btn" ng-click="toggleLogin('login')">Log In</button>
+                    <li class="hidden-phone login-link" ng-hide="navState.userid">
+                        <a target="_self" href="/login">Log In</a>
                     </li>
                 </ul>
 
@@ -120,7 +65,7 @@
             </div>
         </div>
     </div>
-    <div ng-if="!navState.userid" class="external-subnav" ng-class="{'scrolleddown': scrolled}">
+    <div ng-if="!navState.userid" class="external-subnav hidden-phone" ng-class="{'scrolleddown': scrolled}">
         <div class="centered-menu">
             <ul>
                 <li><a href="#fundraising" du-smooth-scroll du-scrollspy>Fundraising</a></li>

@@ -125,7 +125,7 @@ h2.key-header {
 }
 
 h3.key-sub-header {
-    width: 600px;
+    max-width: 600px;
     margin: 20px auto 0 auto;
     text-align: center;
 }
@@ -163,17 +163,21 @@ h3.key-sub-header {
 }
 
 .section-full-image {
-    width: 984px;
+    max-width: 984px;
     margin: 80px auto 0 auto;
 }
 
 .section-full-image.smaller-image {
-    width: 850px;
+    max-width: 850px;
 }
 
-.home-icons-section, .home-image-section {
+.home-icons-section {
     margin-top: 80px;
     overflow: auto;
+}
+
+.home-image-section {
+    margin-top: 80px;
 }
 
 .section-icon-trio {
@@ -235,5 +239,81 @@ h3.key-sub-header {
     display: inline-block;
     text-align: center;
     margin: 80px 0;
+}
+
+@media (max-width: 767px) {
+    .section-icon-trio > ul > li {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0 40px 30px 40px;
+        position: relative;
+    }
+
+    .section-icon-trio > ul > li > span:nth-child(1) {
+        display: inline-block;
+    }
+
+    .section-icon-trio > ul > li > span:nth-child(2) {
+        position: absolute;
+        top: 0;
+        left: 140px;
+    }
+
+    .section-icon-trio > ul > li > span:nth-child(3) {
+        display: inline-block;
+        text-align: left;
+        width: -moz-calc(100% - 100px);
+        width: -webkit-calc(100% - 100px);
+        width: calc(100% - 100px);
+        padding: 0;
+        float: right;
+        margin-top: 35px;
+    }
+
+    .learn-more-section > div > div {
+        width: 100%;
+        margin: 40px 0 0 0;
+    }
+
+    .learn-more-section > div > div:last-of-type {
+        margin: 40px 0 40px 0;
+    }
+
+    .mobile-help-section {
+        width: 135px;
+        margin: 20px auto 0 auto;
+        text-align: center;
+    }
+
+    .mobile-help-section > div:nth-child(2) {
+        margin-top: 10px;
+        color: #1d2c3c;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    h2.key-header {
+        margin-top: 20px;
+        font-size: 32px;
+        line-height: 36px;
+        padding: 0 20px;
+    }
+
+    h3.key-sub-header {
+        padding: 0 20px;
+        font-size: 18px;
+    }
+
+    .home-banner .bottom-icons > li {
+        width: -moz-calc(50% - 1px);
+        width: -webkit-calc(50% - 1px);
+        width: calc(50% - 1px);
+    }
+
+
 }
 
