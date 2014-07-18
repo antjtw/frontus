@@ -180,23 +180,6 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         $document.unbind('mouseup', $scope.mouseup);
         return false;
     };
-    
-    $scope.ocrHighlighted = function () {
-        var x = $scope.annot.position.coords.x;
-        var y = $scope.annot.position.coords.y;
-        var w = $scope.annot.position.size.width;
-        var h = $scope.annot.position.size.height;
-        var sW = $scope.annot.position.docPanel.width;
-        var page = $scope.annot.page;
-        SWBrijj.document_OCR_segment($scope.doc.doc_id, page, x, y, w, h, sW).then(
-            function (data) {
-                if ($scope.annot.val == '')
-                {
-                    $scope.annot.val = data;
-                    //$document.getElementById('highlightContents').value = data;
-                }
-            }).except(function (s) {console.log(x);});
-    };
 
     $scope.newmouseup = function(ev) {
         if (document.detachEvent) {
@@ -215,7 +198,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         });
         if ($scope.annot.type == 'highlight')
         {
-            $scope.ocrHighlighted();
+            Annotations.ocrHighlighted($scope.doc.doc_id, $scope.annot);
         }
         return false;
     };

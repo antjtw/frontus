@@ -2,7 +2,13 @@
     <h6 data-icon="&#xe009;" ng-click="page_visible[page.page] = !(page_visible[page.page] == undefined || page_visible[page.page])"> Page {{page.page}}</h6>
     <div ng-repeat="annotation in doc.annotations | filter: {page: page.page} | orderBy: 'position.coords.y'" data-icon="&#xe60d;" class="annotmark"
      ng-class="{mine: annotation.forRole($root.navState.role), complete: annotation.filled(user.signaturePresent, $root.navState.role), incomplete: (annotation.required && !annotation.filled(user.signaturePresent, $root.navState.role)), active: annotation == active.annotation}"
-     ng-if="page_visible[page.page] == undefined || page_visible[page.page]"
+     ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type == 'text')"
+     ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
+        {{attributeLabel(annotation.whattype)}}
+    </div>
+    <div ng-repeat="annotation in doc.annotations | filter: {page: page.page} | orderBy: 'position.coords.y'" data-icon="&#xe60f;" class="annotmark"
+     ng-class="{mine: annotation.forRole($root.navState.role), complete: annotation.filled(user.signaturePresent, $root.navState.role), incomplete: (annotation.required && !annotation.filled(user.signaturePresent, $root.navState.role)), active: annotation == active.annotation}"
+     ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type == 'highlight')"
      ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
         {{attributeLabel(annotation.whattype)}}
     </div>

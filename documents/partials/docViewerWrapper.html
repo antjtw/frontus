@@ -4,24 +4,22 @@
     <subnav>
         <div class="box-button pull-left"
              ng-click="setNextAnnotationType('text');"
-             data-placement="bottom">
+             data-placement="bottom"
+             ng-class="{selected: getNextAnnotationType() == 'text'}">
             <ul>
                 <li>
-                    <span data-icon="&#xe602;" aria-hidden="true"></span>
-                </li>
-                <li>
-                    <span>Text</span>
+                    <span data-icon="&#xe60d;" aria-hidden="true"></span>
+                    <span>Marker</span>
                 </li>
             </ul>
         </div>
         <div class="box-button pull-left"
              ng-click="setNextAnnotationType('highlight');"
-             data-placement="bottom">
+             data-placement="bottom"
+             ng-class="{selected: getNextAnnotationType() == 'highlight'}">
             <ul>
                 <li>
-                    <span data-icon="&#xe602;" aria-hidden="true"></span>
-                </li>
-                <li>
+                    <span data-icon="&#xe60f;" aria-hidden="true"></span>
                     <span>Highlight</span>
                 </li>
             </ul>

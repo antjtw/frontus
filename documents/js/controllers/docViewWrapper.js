@@ -317,6 +317,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.setNextAnnotationType = function (type) {
             $rootScope.nextAnnotationType = type;
         };
+        
+        $scope.getNextAnnotationType = function() {
+            return $rootScope.nextAnnotationType;
+        };
 
         $scope.leave = function() {
             // TODO: save notes / smartdoc data

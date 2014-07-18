@@ -409,4 +409,18 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     this.investorAttribute = function(attribute) {
         return investor_attributes[attribute] || "";
     };
+    
+    this.ocrHighlighted = function(doc_id, annot) {
+        if ((annot.type != 'highlight') || (annot.val != ''))
+            return;
+        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y, 
+            annot.position.size.width, annot.position.size.height, annot.position.docPanel.width).then(
+            function (data) {
+                if (annot.val == '')
+                {
+                    annot.val = data;
+                    //$document.getElementById('highlightContents').value = data;
+                }
+            }).except(function (x) {console.log(x);});
+    };
 }]);
