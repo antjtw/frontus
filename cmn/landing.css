@@ -251,6 +251,16 @@ h3.key-sub-header {
 }
 
 @media (max-width: 767px) {
+
+    .home-banner {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding-top: 80px;
+        height: 600px;
+        position: relative;
+    }
+
     .section-icon-trio > ul > li {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
