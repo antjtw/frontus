@@ -31,8 +31,8 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
     }
 ]);
 
-app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
+app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState) {
 
         if (window.innerWidth < 1024) {
             $scope.variablewidth = window.innerWidth;
@@ -41,6 +41,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
         }
 
         $rootScope.scrolled = true;
+        navState.path = document.location.pathname;
 
         $scope.addCommas = function(num) {
             var split = num.split('.');
@@ -207,8 +208,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
     }
 ]);
 
-app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
+app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState) {
 
         $scope.gotopage = function (link) {
             $location.url("/features/" + link);
@@ -230,6 +231,8 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         };
 
         $rootScope.scrolled = true;
+        navState.path = document.location.pathname;
+        console.log(navState.path);
 
 
         $scope.captabletips = {};

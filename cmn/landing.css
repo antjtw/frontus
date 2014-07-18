@@ -134,6 +134,26 @@ h3 {
     background-position: -180px -90px;
 }
 
+.large-icon.confusing-icon {
+    background-position: -270px -270px;
+}
+
+.large-icon.options-icon {
+    background-position: -90px -360px;
+}
+
+.large-icon.versioning-icon {
+    background-position: -180px -270px;
+}
+
+.large-icon.download-icon {
+    background-position: -90px -270px;
+}
+
+.large-icon.security-icon {
+    background-position: 0 -270px;
+}
+
 .photo-icon {
     width: 135px;
     height: 135px;
@@ -162,8 +182,17 @@ h2.key-header {
 
 h3.key-sub-header {
     max-width: 600px;
-    margin: 20px auto 0 auto;
+    margin: 10px auto 0 auto;
     text-align: center;
+}
+
+.home-banner h2.key-header {
+    margin-top: 0;
+}
+
+.home-banner .headline-image {
+    margin: 40px auto 0 auto;
+    width: 400px;
 }
 
 .home-banner .bottom-icons {
@@ -297,6 +326,10 @@ h3.key-sub-header {
         position: relative;
     }
 
+    .home-banner h2.key-header {
+        margin-top: 40px;
+    }
+
     .section-icon-trio > ul > li {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
@@ -304,6 +337,14 @@ h3.key-sub-header {
         width: 100%;
         padding: 0 40px 30px 40px;
         position: relative;
+    }
+    
+    .section-icon-trio.pricing-trio > ul > li {
+        padding: 0 20px 30px 20px;
+    }
+
+    .section-icon-trio.pricing-trio > ul > li > span:nth-child(2) {
+        left: 120px;
     }
 
     .section-icon-trio > ul > li > span:nth-child(1) {

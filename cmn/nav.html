@@ -28,7 +28,7 @@
                     <li>
                         <a ng-click="gotohome();">
                             <img class="small-logo" ng-show="navState.userid" src="/img/logo-wht.png" />
-                            <img ng-hide="navState.userid" src="/img/logo-large.png" />
+                            <img ng-hide="navState.userid" src="/img/logo-blue_v2.png" />
                         </a>
                     </li>
                 </ul>
@@ -74,8 +74,8 @@
                 <li><a href="#security" du-smooth-scroll du-scrollspy>Security</a></li>
             </ul>
             <ul ng-show="navState.path.indexOf('/features/') != -1">
-                <li><a href="/features/" ng-class="{'active': navState.path.indexOf('/features/convertible-notes') == -1}">Cap Table</a></li>
-                <li><a href="/features/convertible-notes/" ng-class="{'active': navState.path.indexOf('/features/convertible-notes') != -1}">Modeling</a></li>
+                <li><a href="/features/">Cap Table</a></li>
+                <li><a href="/features/convertible-notes/">Modeling</a></li>
             </ul>
         </div>
     </div>
