@@ -24,6 +24,7 @@ m.directive('groupPeople', function(){
             $scope.selectedGroup = [];
             var newGroups = [];
             var firstGroup = [];
+            var oldGroups = []
  
 
             $scope.parseGroups = function(){              
@@ -43,13 +44,15 @@ m.directive('groupPeople', function(){
             $scope.selectGroup = function(group){
                 if($scope.selectedGroup.indexOf(group)=== -1){
                     $scope.selectedGroup.push(group);
+                    oldGroups.push(JSON.parse(group));
                 }
                 else {
                     var toDelete = $scope.selectedGroup.indexOf(group)
                     $scope.selectedGroup.splice(toDelete, 1);
+                    oldGroups.splice(toDelete, 1)
                 }
                 return $scope.selectedGroup;
-                console.log($scope.selectedGroup);  
+                // console.log($scope.selectedGroup);  
             };
 
 
@@ -68,13 +71,38 @@ m.directive('groupPeople', function(){
 
             }
 
+            $scope.removeGroup = function(person){
+                angular.forEach(person, function(info){
+                    SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
+                        $scope.myGroups = data;
+                        angular.forEach($scope.myGroups, function(group){
+                            console.log(group.groups)
+                        })
+                    })
+                })
+            }
+
+            // $scope.removeGroup = function(person, newGroup){
+            //     angular.forEach(person, function(info)){
+            //         SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
+            //             $scope.myGroups = data;
+            //             console.log($scope.myGroups);
+            //         })
+            //     }
+
+
+            // }
+
             $scope.createGroups = function(person){
+                $scope.removeGroup(person)
                 if($scope.groupName.length > 0){
                     $scope.checkGroups(person, $scope.groupName)
                 }
                 else if($scope.selectedGroup.length > 0){
-                    // console.log("oldies")
-                    $scope.checkGroups(person, $scope.selectedGroup.join());
+                    $scope.checkGroups(person, oldGroups.toString());
+                }
+                else {
+                    console.log("nothing to add")
                 }
             }
 
@@ -98,11 +126,20 @@ m.directive('groupPeople', function(){
                             }
                             else if(user.groups != null){
                                 var array = JSON.parse(user.groups);
-                                array.push(text);
-                                hasGroup.push(user.email, user.role);
-                                $scope.manyHasGroup.push(hasGroup);
-                                console.log($scope.manyHasGroup);
-                                $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
+                                console.log(array)
+                                console.log("array")
+                                if(array.indexOf(text) == -1){
+                                    array.push(text);
+                                    console.log(array)
+                                    hasGroup.push(user.email, user.role);
+                                    $scope.manyHasGroup.push(hasGroup);
+                                    console.log($scope.manyHasGroup);
+                                    $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
+                                }
+                                else {
+                                    console.log("already in the group")
+                                }
+                               
                             }
                            
                         });           
@@ -114,12 +151,7 @@ m.directive('groupPeople', function(){
 
             };
 
-            // $scope.performUpate = function(people){
-            //     $scope.checkGroups(people);
-            //     console.log("Perform update");
-            //     console.log($scope.manyNoGroup.length);
-            //     console.log($scope.manyHasGroup.length);
-            // }
+
 
             $scope.showUserRoles = function(){
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
