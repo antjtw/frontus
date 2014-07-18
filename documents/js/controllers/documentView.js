@@ -4,7 +4,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User) {
         $scope.annots = [];
         $scope.signatureprocessing = false;
-        $rootScope.nextAnnotationType = 'text';
 
         $scope.$watch('docId', function(new_doc_id) {
             $scope.doc = Documents.getDoc(new_doc_id); // gets blank doc for now ...
@@ -560,7 +559,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 a.position.size.width = 0;
                 a.position.size.height = 0;
                 a.initDrag = event;
-                a.type = $rootScope.nextAnnotationType;
+                a.type = $scope.nextAnnotationType;
                 if (a.type == 'highlight')
                 {
                     a.whosign = 'Issuer';

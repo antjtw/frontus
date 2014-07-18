@@ -4,6 +4,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         'navState', 'Annotations', 'Documents', 'User', '$q',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
+        $scope.nextAnnotationType = 'text';
 
         $scope.setTab = function() {
             if ($scope.actionNeeded() || $scope.prepareable()) {
@@ -315,11 +316,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
         
         $scope.setNextAnnotationType = function (type) {
-            $rootScope.nextAnnotationType = type;
-        };
-        
-        $scope.getNextAnnotationType = function() {
-            return $rootScope.nextAnnotationType;
+            $scope.nextAnnotationType = type;
         };
 
         $scope.leave = function() {
