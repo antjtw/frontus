@@ -7,10 +7,6 @@ var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj',
           controller: 'FeaturesCapCtrl',
           templateUrl:'/features/partials/captable.html'
       }).
-      when('/features/doc', {
-          controller: 'FeaturesCtrl',
-          templateUrl:'/features/partials/documents.html'
-      }).
       when('/features/debt', {
           controller: 'FeaturesDebtCtrl',
           templateUrl:'/features/partials/debt.html'
