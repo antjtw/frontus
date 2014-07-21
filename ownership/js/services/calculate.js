@@ -458,8 +458,8 @@ ownership.service('calculate', function () {
         var totalpercentage = 0;
         for (var i = 0, l = issuekeys.length; i < l; i++) {
             if (row.cells[issuekeys[i]] != undefined) {
-                if (row.cells[issuekeys[i]]['x'] != undefined) {
-                    percentage = percentage + row.cells[issuekeys[i]]['x'];
+                if (row.cells[issuekeys[i]].x != undefined) {
+                    percentage = percentage + row.cells[issuekeys[i]].x;
                 }
             }
         }
@@ -480,8 +480,8 @@ ownership.service('calculate', function () {
     this.totalShares = function (rows) {
         var total = 0;
         angular.forEach(rows, function (row) {
-            for (var key in row) {
-                if (row.hasOwnProperty(key)) {
+            for (var key in row.cells) {
+                if (row.cells.hasOwnProperty(key)) {
                     if (row.cells[key] != null) {
                         if (!isNaN(parseFloat(row.cells[key]['u'])) && String(key) != "$$hashKey") {
                             total = total + parseFloat(row.cells[key]['u']);
