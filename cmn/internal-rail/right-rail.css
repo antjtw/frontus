@@ -47,6 +47,10 @@ button.right-rail-button.showRightTab {
     background-color: #F1F1F1;
 }
 
+.span4.capright.side-content {
+    background-color: #FFFFFF;
+}
+
 .slidingcss25 {
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;

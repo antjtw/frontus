@@ -159,6 +159,8 @@ table.docLibrary > tbody > tr:first-child > td {
     margin-right: 20px;
 }
 
+
+
 .status-showing td {
     background-color: #f1f1f1;
 }
@@ -654,13 +656,10 @@ textarea.email-text {
     float: right;
     margin-left: 0;
     width: 350px;
-    border-left: 6px solid white;
     padding-left: 20px;
     padding-right: 40px;
 }
-.company-list .span4.capright.showSharebar {
-    border-left: 6px solid #E3E3E3;
-}
+
 .company-list .right-bar-header {
     letter-spacing: 1px;
 }
@@ -1323,7 +1322,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 
 .docPanel {
     width: 100%;
-    height: 1165px;
     background-size: contain !important;
     background-repeat: no-repeat;
     background-position: top center;
@@ -1822,6 +1820,22 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     color: #C44032;
 }
 
+help-tab > div {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+help-tab > div > p {
+    margin-bottom: 10px;
+    width: 250px;
+    line-height: 20px;
+}
+
+help-tab > div > p > span {
+    color: #1d2c3c;
+    display: block;
+}
+
 .docinfo {
     margin: 0 20px;
 }
@@ -1835,7 +1849,7 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     vertical-align: top;
     margin-left: 5px;
     display: inline-block;
-    width: 270px;
+    width: 255px;
 }
 
 .docinfo .inforow .tags {
@@ -1875,4 +1889,41 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     padding-bottom: 30px;
     border-bottom: 1px solid #E3E3E3;
     font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.docinfo .investor-views {
+    margin-top: 10px;
+    margin-left: 35px;
+}
+
+.docinfo .investor-views > span {
+    color: #1d2c3c;
+    cursor: pointer;
+}
+
+.docinfo .investor-views > span.toggle-icon {
+    vertical-align: -10%;
+}
+
+.docinfo .investor-views ul {
+    margin-left: 19px;
+}
+
+.docinfo .investor-views ul > li {
+    margin-top: 10px;
+}
+
+.docinfo .investor-views ul > li:first-of-type {
+    margin-top: 5px;
+}
+
+.docinfo .investor-views ul > li > span:first-of-type {
+    display: block;
+    color: #666666;
+}
+
+.docinfo .investor-views ul > li > span:last-of-type {
+    font-size: 12px;
+    line-height: 12px;
+    display: block;
 }

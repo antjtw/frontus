@@ -25,7 +25,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.updateDocPanelSize = function(img_width, img_height) {
             var dp = $('.docPanel');
             if (dp) {
-                dp.height((dp.width()/img_width)*$scope.img_eight);
+                dp.height((dp.width()/img_width)*img_height);
                 $scope.dp.width = dp.width();
                 $scope.dp.height = dp.height();
             }

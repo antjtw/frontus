@@ -1847,7 +1847,7 @@
             <tr>
                 <th class="left"></th>
                 <th class="left">
-                    Document Name
+                    <span class="padding-left-ten">Document Name</span>
                 </th>
                 <th class="left">Tags</th>
             </tr>
@@ -1855,7 +1855,7 @@
         <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceOrder" ng-if="!doc.investor && !doc.doc_id">
             <tr class="empty-row"/>
             <tr>
-                <td ng-click="toggleShown(doc)" class="pointer">
+                <td ng-click="toggleShown(doc)" class="pointer status-toggle" ng-class="{'status-toggle-on': (doc.shown)}">
                     <div>
                         <span class="toggle-icon" ng-hide="doc.shown" data-icon="&#xe017;" aria-hidden="true"></span>
                         <span class="toggle-icon" ng-show="doc.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
@@ -1863,7 +1863,7 @@
                 </td>
                 <td ng-click="viewEvidence(doc)">
                     <ul>
-                        <li title="{{doc.docname}}">{{doc.docname}}</li>
+                        <li title="{{doc.docname}}"><span class="padding-left-ten">{{doc.docname}}</span></li>
                     </ul>
                 </td>
                 <td>
@@ -1877,7 +1877,7 @@
             <tr class="version" ng-show="doc.shown">
                 <td/>
                 <td>
-                    <div>
+                    <div class="padding-left-ten">
                         <button class="check-box-button" ng-class="{selected:isEvidence(doc)}" ng-click="toggleForEvidence(doc);">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
@@ -1893,7 +1893,7 @@
                 class="version" ng-show="doc.shown">
                 <td/>
                 <td>
-                    <div>
+                    <div class="padding-left-ten">
                         <button class="check-box-button" ng-class="{selected:isEvidence(invdoc)}" ng-click="toggleForEvidence(invdoc);">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
