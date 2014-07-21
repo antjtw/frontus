@@ -2,7 +2,7 @@
 <script src="/cmn/spin.js"></script>
 <div class="container dynamic-page">
     <subnav>
-        <div ng-if="navState.role == 'issuer'">
+        <div ng-if="(navState.role == 'issuer') && (drawTime()) && (doc.issue)">
             <div class="box-button pull-left"
                  ng-click="setNextAnnotationType('text');"
                  data-placement="bottom"

@@ -151,6 +151,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             });
             return promise.promise;
         },
+        annotable: function(role) {
+            if (role == "investor")
+                return this.investorCanAnnotate();
+            else if (role == "issuer")
+                //does not include if the document is being prepared
+                return this.issuerCanAnnotate();
+        },
+        investorCanAnnotate: function() {
+            return (this.when_signed && this.signature_deadline && this.signature_flow===2);
+        },
+        issuerCanAnnotate: function() {//does not include if the document is being prepared
+            return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
+        },
     };
 
     /// Document service definition

@@ -467,6 +467,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
             });
         };
+        
+        $scope.drawTime = function() {
+            return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && $rootScope.navState.role == "investor"));
+        };
 
         $scope.getData();
     }
