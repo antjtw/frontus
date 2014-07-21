@@ -35,12 +35,11 @@ m.directive('groupPeople', function(){
             $scope.parseGroups = function(){              
               SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
+                    console.log($scope.myUserGroups);
                     angular.forEach($scope.myUserGroups, function(info){
-                        console.log(info);
                         var a = info.json_array_elements;
-                        console.log(a)
-                        var b = a.replace(/\"/g, "");
-                        console.log(b);
+                        console.log(JSON.parse(a));
+                        var b = JSON.parse(a);
                         $scope.groupData.push(new indGroup(b));
                
                     })
@@ -84,15 +83,6 @@ m.directive('groupPeople', function(){
 
             };
 
-            // $scope.preselectGroup = function(person){
-            //     angular.forEach(person, function(info){
-            //         // $scope.selectedGroup.concat(info.groups);
-            //         for(i = 0; i++; i < info.groups.length){
-            //             $scope.selectedGroup.push(info.groups[i]);
-            //         };
-            //     });
-            //     console.log($scope.selectedGroup);
-            // };
 
              
 
@@ -115,32 +105,7 @@ m.directive('groupPeople', function(){
             };
 
 
-            // $scope.addGroups = function(person){
-            //     $scope.createGroups(person)
-            //     console.log($scope.groupName.length)
-            //     if($scope.groupName.length > 0){
-            //         angular.forEach($scope.manyNoGroup, function(thing){
-            //             console.log(thing)
-            //         });
-            //         console.log($scope.manyNoGroup);
-            //     }
-            //     else{
-            //         console.log("what?")
-            //     }
 
-            // }
-
-            // $scope.removeGroup = function(person){
-            //     angular.forEach(person, function(info){
-            //         SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
-            //             $scope.myGroups = data;
-            //             angular.forEach($scope.myGroups, function(group){
-            //                 console.log(group.groups)
-
-            //             });
-            //         });
-            //     });
-            // };
 
 
             $scope.createGroups = function(person){
@@ -154,6 +119,24 @@ m.directive('groupPeople', function(){
                     console.log("nothing to add")
                 }
             }
+
+            $scope.printData = function(){
+                console.log("printData")
+                SWBrijj.tblm('account.my_user_role', ['groups']).then(function(data){
+                    console.log(data);
+                    $scope.myData = data;
+                    angular.forEach($scope.myData, function(d){
+                        console.log(JSON.parse(d.groups));
+
+                    })
+                }).except(function(data){
+                    console.log('error')
+                });
+              
+                
+            };
+
+
 
 
 
@@ -171,7 +154,7 @@ m.directive('groupPeople', function(){
                                 noGroup.push(user.email, user.role);
                                 firstGroup.push(text);
                                 $scope.manyNoGroup.push(noGroup);
-                                $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(firstGroup));
+                                $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(['hi elizabeth']));
                                 console.log("addedGroup")
                             }
                             else if(user.groups != null){

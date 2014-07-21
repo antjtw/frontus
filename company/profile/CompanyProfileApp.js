@@ -506,18 +506,41 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         });
 
         $scope.setGroups = function(){
-            SWBrijj.tblm('account.my_user_role').then(function(group){
-                angular.forEach($scope.people, function(person){
-                    angular.forEach(group, function(group){
-                        if(group.email == person.email){
-                            person.groups = group.groups;
-                 
-
-                        };
+            angular.forEach($scope.people, function(person){
+                SWBrijj.tblmm('account.my_user_role', "email", person.email).then(function(data){
+                    $scope.myGroups = data;
+                    angular.forEach($scope.myGroups, function(myGroups){
+                        if(myGroups.groups != null){
+                            var array = JSON.parse(myGroups.groups);
+                            person.groups = array.join(", ");
+                            console.log(typeof myGroups.groups);
+                        }
+                        else {
+                            console.log("no groups");
+                        }
+                        
+                        
                     });
+                 
                 });
             });
         };
+
+        // $scope.setGroups = function(){
+        //     SWBrijj.tblm('account.my_user_role').then(function(group){
+        //         angular.forEach($scope.people, function(person){
+        //             angular.forEach(group, function(inds){
+        //                 if(group.email == person.email){
+        //                     var a = group.groups
+        //                     console.log(typeof group.groups);
+        //                     person.groups = group.groups;
+                 
+
+        //                 };
+        //             });
+        //         });
+        //     });
+        // };
 
 
    
