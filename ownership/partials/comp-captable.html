@@ -712,8 +712,8 @@
                                    placeholder="{{grantbyIssue(key)}}"
                                    ui-event="{focus : 'getActiveTransaction(row.name, key)',
                                                blur : 'saveTran(activeTran)'}"
-                                   ng-change="tranChangeU(row[key]['u'], key)"
-                                   ng-model='row[key]["u"]'
+                                   ng-change="tranChangeU(row[key].u, key)"
+                                   ng-model='row[key].u'
                                    onpaste="return false"
                                    ng-paste="numberPaste($event, row, key, 'u');"
                                    onkeydown="testForEnter();">
@@ -725,8 +725,8 @@
                                    placeholder="paid"
                                    ui-event="{focus : 'getActiveTransaction(row.name, key)',
                                                blur : 'saveTran(activeTran)'}"
-                                   ng-change="tranChangeA(row[key]['a'])"
-                                   ng-model='row[key]["a"]'
+                                   ng-change="tranChangeA(row[key].a)"
+                                   ng-model='row[key].a'
                                    onpaste="return false"
                                    ng-paste="numberPaste($event, row, key, 'a');"
                                    onkeydown="testForEnter();">

@@ -32,61 +32,6 @@ ownership.service('calculate', function () {
         return leftover;
     };
 
-    // Calculate and update the unissued rows on the captable
-    // TODO refactor using above AND move to captable service
-    this.unissued = function (rows, issues, issuename) {
-        var keepgoing = true;
-        var deleterow = -1;
-        var leftovers;
-        angular.forEach(issues, function (issue) {
-            if (issue.issue == issuename) {
-                if (isNumber(issue.totalauth)) {
-                    leftovers = issue.totalauth;
-                    angular.forEach(rows, function(row) {
-                        if (issue.issue in row &&
-                                row.nameeditable !== 0 &&
-                                isNumber(row[issue.issue].u)) {
-                            leftovers -= row[issue.issue].u;
-                        }
-                    });
-                }
-            }
-        });
-        angular.forEach(issues, function(issue) {
-            if (issue.optundersec == issuename &&
-                    isNumber(issue.totalauth)) {
-                leftovers -= issue.totalauth;
-            }
-        });
-        var shares = {"u": leftovers,
-                      "ukey": leftovers,
-                      "x": null};
-        angular.forEach(rows, function (row) {
-            if (keepgoing) {
-                if (row.name == issuename + " (unissued)") {
-                    keepgoing = false;
-                    if (leftovers !== 0) {
-                        row[issuename] = shares;
-                    } else {
-                        deleterow = rows.indexOf(row);
-                    }
-                }
-            }
-        });
-        if (keepgoing !== false) {
-            if (isNumber(leftovers) && leftovers !== 0) {
-                rows.splice(-1, 0, {"name": issuename + " (unissued)",
-                                    "editable": 0,
-                                    "nameeditable": 0});
-                rows[rows.length - 2][issuename] = shares;
-            }
-        }
-        if (deleterow > -1) {
-            rows.splice(deleterow, 1);
-        }
-        return rows;
-    };
-
     // Simple summation checking that the added value is a number.
     this.sum = function (current, additional) {
         if ((!current || !isNumber(current)) &&

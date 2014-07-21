@@ -1,5 +1,13 @@
 var ownership = angular.module('ownerServices');
 
+/*
+ * u, ukey and a, akey refer to units and amount
+ * 'key' is actually the backup/previous/undo value
+ * TODO implement 'key' values as a stack with generic undo facility
+ * TODO do not add cells directly to row object
+ *      create row.cells array
+ *      removes weird bugs when issue name collides with js property
+ */
 CapTable = function() {
     this.vInvestors = [];
     this.issuekeys = [];
@@ -33,13 +41,17 @@ Issue = function() {
     this.name = "";
     this.date = new Date(2100, 1, 1);
 };
+// if nameeditable == 0 then it's not a real investor row (unissued rows)
 Row = function() {
     this.name = "";
     this.editable = "0";
+    this.nameeditable = null;
 };
+// TODO should issue_type be here?
 Cell = function() {
     this.u = this.ukey = null;
     this.a = this.akey = null;
+    this.x = null; // TODO what is x used for? it's always null
 };
 
 ownership.service('captable',
@@ -307,9 +319,13 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         });
         return row;
     }
-    function addRow() {
+    function addRow(idx) {
         var row = newRow();
-        captable.rows.push(row);
+        if (idx) {
+            captable.rows.splice(idx, 0, row);
+        } else {
+            captable.rows.push(row);
+        }
         return row;
     }
     function newTransaction(issuekey, investor) {
@@ -321,11 +337,41 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     this.newTransaction = newTransaction;
     function getIssue(issuekey) {
-        return captable.issues.filter(function(el) {
-            return el.issue==issuekey;
-        })[0];
+        return captable.issues
+            .filter(function(el) {
+                return el.issue==issuekey;
+            })[0];
     }
     this.getIssue = getIssue;
+    function cellsForIssue(iss) {
+        var cells = [];
+        angular.forEach(captable.rows, function(row) {
+            if (iss.issue in row && row.nameeditable !== 0) {
+                cells.push(row[iss.issue]);
+            }
+        });
+        return cells;
+    }
+    function derivativeIssues(underlying_issue) {
+        return captable.issues
+            .filter(function(iss) {
+                return iss.optundersec == underlying_issue.issuename;
+            });
+    }
+    function unitsGranted(iss, dilute) {
+        var num_granted = cellsForIssue(iss).reduce(
+            function(prev, cur, index, arr) {
+                return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
+            }, 0);
+        if (dilute) {
+            num_granted += derivativeIssues(iss).reduce(
+                function(prev, cur, index, arr) {
+                    return prev +
+                calculate.isNumber(cur.totalauth) ? cur.totalauth : 0;
+                }, 0);
+        }
+        return num_granted;
+    }
     function tranIsInvalid(tran) {
         if (tran === undefined || tran.issue === undefined ||
                 (isNaN(parseFloat(tran.units)) &&
@@ -431,11 +477,33 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     this.calculateDebtCells = calculateDebtCells;
     function generateUnissuedRows() {
-        angular.forEach(captable.issues, function (issue) {
-            // FIXME there has to be a way to simplify
-            captable.rows = calculate.unissued(captable.rows,
-                                               captable.issues,
-                                               String(issue.issue));
+        angular.forEach(captable.issues, function(iss) {
+            if (!calculate.isNumber(iss.totalauth)) return;
+            var total = iss.totalauth;
+            var num_granted = unitsGranted(iss, true);
+            var leftovers = total - num_granted;
+            var unissued_cell = nullCell();
+            unissued_cell.u = unissued_cell.ukey = leftovers;
+            var unissued_row = captable.rows.filter(
+                function(el) {
+                    return el.name == iss.issue + " (unissued)";
+                })[0];
+            if (unissued_row) {
+                if (leftovers !== 0) {
+                    unissued_row[iss.issue] = unissued_cell;
+                } else {
+                    captable.rows.splice(
+                        captable.rows.indexOf(unissued_row), 1);
+                }
+            } else {
+                if (leftovers !== 0) {
+                    unissued_row = addRow(-1);
+                    unissued_row.name = iss.issue + " (unissued)";
+                    unissued_row.editable = 0;
+                    unissued_row.nameeditable = 0;
+                    unissued_row[iss.issue] = unissued_cell;
+                }
+            }
         });
     }
     this.generateUnissuedRows = generateUnissuedRows;
@@ -607,7 +675,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         pingIntercomIfCaptableStarted();
         populateListOfInvestorsWithoutAccessToTheCaptable();
 
-        console.log(captable);
+        console.log(captable.rows);
     }
     var issuetypes = [];
     this.getIssueTypes = function() {return issuetypes;};
