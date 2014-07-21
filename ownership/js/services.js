@@ -412,6 +412,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         });
     }
     function calculateDebtCells() {
+        // FIXME why does calculate.debt return null?!?
+        // return immediately.
         angular.forEach(captable.rows, function (row) {
             angular.forEach(captable.issues, function (issue) {
                 var cell = row[issue.issue];
@@ -697,84 +699,92 @@ ownership.service('calculate', function () {
     this.whatsleft = function (total, issue, rows) {
         var leftover = total;
         angular.forEach(rows, function (row) {
-            if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
-                leftover = leftover - row[issue.issue]['u'];
+            if (issue.issue in row &&
+                    row.nameeditable !== 0 &&
+                    this.isNumber(row[issue.issue].u)) {
+                leftover -= row[issue.issue].u;
             }
         });
-        return leftover
+        return leftover;
     };
 
     // Calculate and update the unissued rows on the captable
+    // TODO refactor using above AND move to captable service
     this.unissued = function (rows, issues, issuename) {
         var keepgoing = true;
         var deleterow = -1;
         var leftovers;
         angular.forEach(issues, function (issue) {
             if (issue.issue == issuename) {
-                if (!isNaN(parseFloat(issue.totalauth))) {
+                if (this.isNumber(issue.totalauth)) {
                     leftovers = issue.totalauth;
-                    angular.forEach(rows, function (row) {
-                        if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
-                            leftovers = leftovers - row[issue.issue]['u'];
+                    angular.forEach(rows, function(row) {
+                        if (issue.issue in row &&
+                                row.nameeditable !== 0 &&
+                                this.isNumber(row[issue.issue].u)) {
+                            leftovers -= row[issue.issue].u;
                         }
                     });
                 }
             }
         });
-
         angular.forEach(issues, function(issue) {
-            if (issue.optundersec == issuename && !isNaN(parseFloat(issue.totalauth))) {
-                leftovers = leftovers - issue.totalauth;
+            if (issue.optundersec == issuename &&
+                    this.isNumber(issue.totalauth)) {
+                leftovers -= issue.totalauth;
             }
         });
-
-        var shares = {"u": leftovers, "ukey": leftovers, "x": null};
+        var shares = {"u": leftovers,
+                      "ukey": leftovers,
+                      "x": null};
         angular.forEach(rows, function (row) {
             if (keepgoing) {
                 if (row.name == issuename + " (unissued)") {
                     keepgoing = false;
-                    if (leftovers != 0) {
+                    if (leftovers !== 0) {
                         row[issuename] = shares;
-                    }
-                    else {
+                    } else {
                         deleterow = rows.indexOf(row);
                     }
                 }
             }
         });
-        if (keepgoing != false) {
-            if (!isNaN(parseFloat(leftovers)) && leftovers != 0) {
-                rows.splice(-1, 0, {"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
-                rows[(rows.length) - 2][issuename] = shares;
+        if (keepgoing !== false) {
+            if (this.isNumber(leftovers) && leftovers !== 0) {
+                rows.splice(-1, 0, {"name": issuename + " (unissued)",
+                                    "editable": 0,
+                                    "nameeditable": 0});
+                rows[rows.length - 2][issuename] = shares;
             }
         }
         if (deleterow > -1) {
             rows.splice(deleterow, 1);
         }
-        return rows
+        return rows;
     };
 
     // Simple summation checking that the added value is a number.
     this.sum = function (current, additional) {
-        if ((!current || isNaN(parseFloat(current))) && !isNaN(parseFloat(additional))) {
+        if ((!current || !this.isNumber(current)) &&
+                this.isNumber(additional)) {
             current = 0;
         }
-        if (!isNaN(parseFloat(additional))) {
-            return (current + parseFloat(additional));
-        }
-        else {
+        if (this.isNumber(additional)) {
+            return current + parseFloat(additional);
+        } else {
             return current;
         }
     };
 
-    // Calculates the debt for the captable based on transactions with paid but no shares. Must be called on each row.
+    // Calculates the debt for the captable based on transactions
+    // with paid but no shares. Must be called on each row.
     this.debt = function (rows, issue, row) {
         return null;
-/*        var mon = parseFloat(issue.premoney);
+        /*
+        var mon = parseFloat(issue.premoney);
         if (isNaN(parseFloat(mon))) {
             return null
-        }
-        else {
+        } else {
             angular.forEach(rows, function (r) {
                 if (r[issue.issue] != undefined) {
                     if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r[issue.issue]['a']))) {
@@ -783,21 +793,30 @@ ownership.service('calculate', function () {
                 }
             });
         }
-        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)*/
+        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)
+        */
     };
 
-    // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array.
+    // Calculates the vested amounts for the grant table.
+    // This takes in the row array and returns the new row array.
+    // TODO break up and move to captable service
     this.vested = function (rows, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
             var vestbegin = angular.copy(tran.vestingbegins);
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+            if (this.isNumber(tran.vestcliff) &&
+                    this.isNumber(tran.terms) &&
+                    tran.vestfreq !== null &&
+                    tran.date !== null &&
+                    vestbegin !== null)
+            {
                 if (Date.compare(Date.today(), vestbegin) > -1) {
-                    if (!isNaN(parseFloat(vesting[tran.investor]))) {
-                        vesting[tran.investor] = vesting[tran.investor] + (tran.units * (tran.vestcliff / 100));
-                    }
-                    else {
-                        vesting[tran.investor] = (tran.units * (tran.vestcliff / 100));
+                    if (this.isNumber(vesting[tran.investor])) {
+                        vesting[tran.investor] +=
+                            tran.units * (tran.vestcliff / 100);
+                    } else {
+                        vesting[tran.investor] = 
+                            tran.units * (tran.vestcliff / 100);
                     }
                     var cycleDate = angular.copy(tran.date);
                     var remainingterm = angular.copy(tran.terms);
@@ -807,7 +826,9 @@ ownership.service('calculate', function () {
                     }
                     remainingterm = remainingterm;
                     var finalDate = vestbegin.addMonths(remainingterm);
-                    var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                    var monthlyperc = (100 - tran.vestcliff) /
+                                                    remainingterm;
+                    // TODO make into filter
                     var x = 1;
                     if (tran.vestfreq == "monthly") {
                         x = 1;
@@ -825,12 +846,15 @@ ownership.service('calculate', function () {
                     } else {
                         cycleDate.addMonths(x);
                     }
-                    while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                        vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
+                    while (Date.compare(Date.today(), cycleDate) > -1 &&
+                               Date.compare(finalDate.addDays(1),
+                                            cycleDate) > -1)
+                    {
+                        vesting[tran.investor] +=
+                            (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
-                        }
-                        else {
+                        } else {
                             cycleDate.addMonths(x);
                         }
                     }
@@ -839,8 +863,7 @@ ownership.service('calculate', function () {
         });
         angular.forEach(rows, function (row) {
             if (!isNaN(vesting[row.name])) {
-                var result =Math.round(vesting[row.name]*1000)/1000
-                row.vested = result;
+                row.vested = Math.round(vesting[row.name]*1000)/1000;
                 if (parseFloat(row.vested) > (parseFloat(row.granted)-parseFloat(row.forfeited))) {
                     row.vested = (parseFloat(row.granted)-parseFloat(row.forfeited));
                 }
@@ -850,15 +873,24 @@ ownership.service('calculate', function () {
     };
 
     // Calculates vested on each transaction returning dictionary of date:amount vested
+    // TODO move to captable service
     this.tranvested = function (tran) {
         var tranvested = [];
         var vestbegin = angular.copy(tran.vestingbegins);
-        var maxunits = parseFloat(tran.units) - parseFloat(tran.forfeited);
+        var maxunits = parseFloat(tran.units) -
+                           parseFloat(tran.forfeited);
         var vestedunits = 0;
-        if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+        if (this.isNumber(tran.vestcliff) &&
+                this.isNumber(tran.terms) &&
+                tran.vestfreq !== null &&
+                tran.date !== null &&
+                vestbegin !== null)
+        {
             var cycleDate = angular.copy(tran.date).add(1).days();
             if (Date.compare(Date.today(), vestbegin) > -1) {
-                tranvested.push({"date" : angular.copy(vestbegin), "units" : (tran.units * (tran.vestcliff / 100))});
+                tranvested.push({"date" : angular.copy(vestbegin),
+                                 "units" : tran.units *
+                                           (tran.vestcliff / 100)});
                 vestedunits += (tran.units * (tran.vestcliff / 100));
             }
             if (vestedunits > maxunits) {
@@ -872,33 +904,29 @@ ownership.service('calculate', function () {
             }
             cycleDate.add(-1).days();
             var finalDate = vestbegin.addMonths(remainingterm);
-            var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+            var monthlyperc = (100 - tran.vestcliff) / remainingterm;
             var x = 1;
             if (tran.vestfreq == "monthly") {
-                x = 1
-            }
-            else if (tran.vestfreq == "weekly") {
-                x = 0.25
-            }
-            else if (tran.vestfreq == "bi-weekly") {
-                x = 0.5
-            }
-            else if (tran.vestfreq == "quarterly") {
+                x = 1;
+            } else if (tran.vestfreq == "weekly") {
+                x = 0.25;
+            } else if (tran.vestfreq == "bi-weekly") {
+                x = 0.5;
+            } else if (tran.vestfreq == "quarterly") {
                 x = 3;
-            }
-            else if (tran.vestfreq == "yearly") {
+            } else if (tran.vestfreq == "yearly") {
                 x = 12;
             }
             finalDate.add(-1).days();
             while (Date.compare(finalDate, cycleDate) > -1) {
                 if (x < 1) {
                     cycleDate.addWeeks(x * 4);
-                }
-                else {
+                } else {
                     cycleDate.addMonths(x);
                 }
                 if (Date.compare(Date.today(), cycleDate) > -1) {
-                    tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
+                    tranvested.push({"date" : angular.copy(cycleDate),
+                                     "units" : (x * ((monthlyperc / 100) * tran.units))});
                     vestedunits += (x * ((monthlyperc / 100) * tran.units));
                     if (vestedunits > maxunits) {
                         var diff = vestedunits - maxunits;
@@ -912,6 +940,7 @@ ownership.service('calculate', function () {
     };
 
     // Calculates the vested amounts for the
+    // TODO move to captable service
     this.detailedvested = function (rows, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
@@ -1067,14 +1096,14 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        return [myvested,tranvested];
+        return [myvested, tranvested];
     };
 
     // Generates the diluted rows
     this.dilution = function (rows, issues) {
         var dilutedRows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != undefined) {
+            if (row.name !== undefined) {
                 var something = null;
                 var temprow = {"name": row.name, "email": row.email};
                 angular.forEach(issues, function (issue) {
@@ -1154,6 +1183,7 @@ ownership.service('calculate', function () {
     };
 
     // Returns the percentage ownership for each shareholder
+    // TODO refactor
     this.sharePercentage = function (row, rows, issuekeys, sharesum, totalshares) {
         var percentage = 0;
         var totalpercentage = 0;
@@ -1176,6 +1206,7 @@ ownership.service('calculate', function () {
         return (percentage + (sharesum / totalshares * (100 - totalpercentage)));
     };
 
+    // // TODO refactor
     // Calculates total shares for the captable
     this.totalShares = function (rows) {
         var total = 0;
@@ -1340,6 +1371,7 @@ ownership.service('calculate', function () {
 
     this.debtinterest = function(convertTran) {
         if (convertTran.date && convertTran.tran.date && convertTran.tran.interestrate && convertTran.tran.interestratefreq && convertTran.tran.amount) {
+            // TODO move to filter
             var x =1;
             switch (convertTran.tran.interestratefreq)
             {
@@ -1388,6 +1420,7 @@ ownership.service('calculate', function () {
 
 
 
+    // TODO fix this
     this.conversion = function(convertTran) {
         if (convertTran.method == "Valuation") {
             var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? (parseFloat(convertTran.tran.discount)/100) : 0;
