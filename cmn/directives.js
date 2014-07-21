@@ -24,12 +24,28 @@ m.directive('groupPeople', function(){
             $scope.selectedGroup = [];
             var newGroups = [];
             var firstGroup = [];
-            var oldGroups = []
- 
+            var oldGroups = [];
+            $scope.allGroups = [];
+            
+            function indGroup(group){
+                    this.group = group;
+                };
+
+    
 
             $scope.parseGroups = function(){              
                 SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
+                    angular.forEach($scope.myUserGroups, function(info){
+                        console.log(info);
+                        var a = info.json_array_elements;
+                        console.log(a)
+                        var b = a.replace(/\"/g, "");
+                        console.log(b);
+                        $scope.allGroups.push(new indGroup(b));
+                        // console.log("hello")
+                    })
+                    console.log($scope.allGroups);
                     console.log($scope.myUserGroups)
                 })
             };
@@ -81,26 +97,25 @@ m.directive('groupPeople', function(){
 
             }
 
-            $scope.removeGroup = function(person){
-                angular.forEach(person, function(info){
-                    SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
-                        $scope.myGroups = data;
-                        angular.forEach($scope.myGroups, function(group){
-                            console.log(group.groups)
+            // $scope.removeGroup = function(person){
+            //     angular.forEach(person, function(info){
+            //         SWBrijj.tblmm("account.my_user_role", "email", info.email).then(function(data){
+            //             $scope.myGroups = data;
+            //             angular.forEach($scope.myGroups, function(group){
+            //                 console.log(group.groups)
 
-                        });
-                    });
-                });
-            };
+            //             });
+            //         });
+            //     });
+            // };
 
 
             $scope.createGroups = function(person){
-
                 if($scope.groupName.length > 0){
                     $scope.checkGroups(person, $scope.groupName)
                 }
                 else if($scope.selectedGroup.length > 0){
-                    $scope.checkGroups(person, oldGroups);
+                    $scope.checkGroups(person, oldGroups.join());
                 }
                 else {
                     console.log("nothing to add")
