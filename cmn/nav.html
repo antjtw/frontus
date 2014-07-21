@@ -74,8 +74,8 @@
                 <li><a href="#security" du-smooth-scroll du-scrollspy>Security</a></li>
             </ul>
             <ul ng-show="navState.path.indexOf('/features/') != -1">
-                <li><a href="/features/">Cap Table</a></li>
-                <li><a href="/features/convertible-notes/">Modeling</a></li>
+                <li><a href="/features/" ng-class="{'active': whichpage == 'captable'}">Cap Table</a></li>
+                <li><a href="/features/convertible-notes/" ng-class="{'active': whichpage == 'modeling'}">Modeling</a></li>
             </ul>
         </div>
     </div>
