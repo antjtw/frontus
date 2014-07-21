@@ -234,6 +234,8 @@ h3.key-sub-header {
     text-transform: uppercase;
     font-size: 12px;
     line-height: 14px;
+    font-family:'FS Elliot Web Bold', sans-serif !important;
+    letter-spacing: 0.1em;
 }
 
 .section-full-image {
