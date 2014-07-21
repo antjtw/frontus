@@ -22,18 +22,24 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
         SWBrijj.tblmm("document.my_counterpart_document_library_view", queryParam, queryVal).then(function(data) {
             angular.forEach(data, function(version) {
+                console.log(version)
                 if (version.last_event_activity == 'finalized') {
                     version.last_event_activity = 'approved';
                 }
                 version.statusRank = basics.eventRank({activity: version.last_event_activity});
                 version.doc = $scope.doc;
+                // console.log($scope.doc)
                 $scope.versions.push(version);
             });
         });
+
     };
     if ($scope.doc.shown) {
         $scope.loadVersions();
+        console.log($scope.doc)
     }
+
+
 
     $scope.versionsVisible = function(doc) {
         var total = doc.version_count;
@@ -70,7 +76,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return "All documents archived";
         } else if (total == doc.complete_count && hide_completed) {
             return "All documents completed";
-        } else if (total == (doc.archive_count + doc.complete_count) && (!show_archived && hide_completed)) {
+        } else if (total == (doc.archive_count + doc.complete_count - doc.archive_complete_count) && (!show_archived && hide_completed)) {
             return "All documents are archived or completed";
         } else {
             return num + " / " + display_total + " completed";

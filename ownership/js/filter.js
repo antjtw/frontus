@@ -62,7 +62,7 @@ ownership.filter('rowviewList', function () {
 // Returns the unissued rows for the captable view
 ownership.filter('unissuedrowviewList', function () {
     return function (row) {
-        return (row[0].name != "" && row[0].editable == 0) ? row : [];
+        return (row[0].name !== "" && row[0].editable === 0) ? row : [];
     };
 });
 
@@ -103,8 +103,7 @@ ownership.filter('fromNowSort', function () {
                 return 0;
             });
         }
-
-        return events
+        return events;
     };
 });
 
@@ -123,8 +122,8 @@ ownership.filter('uneditIssue', function () {
 
 ownership.filter('falseCheck', function () {
     return function (word) {
-        if (word == false) {
-            return "No"
+        if (word === false) {
+            return "No";
         }
         else return word;
     };
@@ -133,7 +132,7 @@ ownership.filter('falseCheck', function () {
 ownership.filter('nameoremail', function () {
     return function (event) {
         return (event.name) ? event.name : event.email;
-    }
+    };
 });
 
 ownership.filter('icon', function() {
@@ -147,11 +146,23 @@ ownership.filter('icon', function() {
         else if (activity == "rejected") return "icon-circle-delete";
         else if (activity == "countersigned") return "icon-countersign";
         else return "hunh?";
-    }
+    };
 });
 
 ownership.filter('received', function () {
     return function (activity) {
         return (activity == "received") ? "was sent" : activity;
-    }
+    };
+});
+
+ownership.filter('issueUnitLabel', function() {
+    return function(iss) {
+        if (iss.type == "Option") {
+            return "options";
+        } else if (iss.type == "Warrant") {
+            return "warrants";
+        } else {
+            return "shares";
+        }
+    };
 });

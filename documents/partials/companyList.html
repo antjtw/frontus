@@ -71,7 +71,7 @@
 <div class="row-fluid leftTabWindow">
 <div ng-style="viewportheight" ng-class="{leftFullTableBlock:state.hideSharebar, widthtransition25:oldSafari()}"
      class="span8 recipientInfo statusBlock leftBlock">
-<div class="row-fluid listcontainer" infinite-scroll="loaddocs()" infinite-scroll-distance="1" infinite-scroll-disabled="loadingDocs" infinite-scroll-parent="">
+<div class="row-fluid listcontainer">
 <table class="status-table" ng-show="documents.length===0 && viewBy==='document'">
     <tbody class="empty-table">
     <tr>
@@ -83,7 +83,7 @@
     </tr>
     </tbody>
 </table>
-<table class="status-table" ng-show="!investorDocs && viewBy==='name'">
+<table class="status-table" ng-show="!investorDocs && viewBy==='name'" >
     <tbody class="empty-table">
     <tr>
         <td>
@@ -92,7 +92,7 @@
     </tr>
     </tbody>
 </table>
-<table class="status-table" ng-show="documents.length!==0 && viewBy==='document'">
+<table class="status-table" ng-show="documents.length!==0 && viewBy==='document'" infinite-scroll="loaddocs()" infinite-scroll-distance="0" infinite-scroll-disabled="loadingDocs" infinite-scroll-container="scrollParent">
     <tbody>
     <tr>
         <th colspan="2" style="width: 40%" class="left doc-name-header" ng-click="setOrder('docname')">Document Name</th>
@@ -104,7 +104,7 @@
     <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
     </tbody>
 </table>
-<table class="status-table" ng-show="investorDocs && viewBy==='name'">
+<table class="status-table" ng-show="investorDocs && viewBy==='name'" infinite-scroll="loaddocs()" infinite-scroll-distance="0" infinite-scroll-disabled="loadingDocs" infinite-scroll-container="scrollParent">
     <tbody>
     <tr>
         <th colspan="2" class="left doc-name-header" ng-click="setInvestorOrder('display_name')">Name</th>
@@ -117,9 +117,11 @@
 </table>
 </div>
 </div>
+
+<!-- this is where you share a document -->
 <div ng-style="viewportheight" ng-show="!state.hideSharebar" ng-class="{rightNoTableBlock:state.hideSharebar,
                 showSharebar:!state.hideSharebar,
-                slidingcss25:oldSafari()}" class="span4 capright button-offset">
+                slidingcss25:oldSafari()}" class="side-content span4 capright button-offset">
     <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
     <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
     <div class="shareForm">
@@ -200,7 +202,6 @@
         </div>
     </div>
 </div>
-
 
 <div modal="updateTitleModal" close="modals.updateTitleClose()" options="opts">
     <div class="modalHeader">

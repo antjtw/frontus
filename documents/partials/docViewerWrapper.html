@@ -42,10 +42,11 @@
             <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" page-query-string="pageQueryString()" doc-id="docId" investor_attributes="investor_attributes"></doc-viewer>
             <internal-right-rail toggle-side="toggleSide">
                 <tabset>
-                    <tab heading="Annotations" ng-if="prepareable() || actionNeeded()">
+                    <tab active="annottab" heading="Annotations" ng-if="prepareable() || actionNeeded()">
                         <annotation-list doc="doc" active="active"></annotation-list>
+                        <help-tab doc="doc"></help-tab>
                     </tab>
-                    <tab heading="Information">
+                    <tab active="infotab" heading="Information">
                         <div class="docinfo">
                             <div class="docname" ng-if="doc.docname">
                                 <span>{{doc.docname}}</span>
@@ -61,9 +62,21 @@
                                 <span class="info" ng-if="navState.role == 'issuer'"><span>Delivered to {{doc.name}}</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Received</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
                             </div>
-                            <div class="inforow" ng-if="doc.last_viewed && navState.role == 'issuer' && !doc.when_signed">
+                            <div class="inforow" ng-if="doc.last_viewed && navState.role == 'issuer'">
                                 <span class="activity-icon doc-view-icon"></span>
                                 <span class="info"><span>Viewed by {{doc.name}}</span><span>{{doc.last_viewed  | date:settings.fulldate}}</span></span>
+
+                                <div class="investor-views" ng-if="doc.last_viewed && navState.role == 'issuer'">
+                                    <span class="toggle-icon" data-icon="&#xe034;"aria-hidden="true" ng-show="!showViews" ng-click = "showViews = !showViews"></span>
+                                    <span class="toggle-icon" data-icon="&#xe031;"aria-hidden="true" ng-show="showViews" ng-click = "showViews = !showViews"></span>
+                                    <span ng-click = "showViews = !showViews">Detailed Views</span>
+                                    <ul ng-show="showViews">
+                                        <li ng-repeat="view in docviews" ng-if="view.page > 0 && view.page <= doc.pages.length">
+                                            <span>Page {{view.page}}</span>
+                                            <span>{{view.max | date:settings.dateandtime}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="inforow" ng-if="doc.when_signed">
                                 <span class="activity-icon doc-sign-icon"></span>
@@ -71,7 +84,7 @@
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Signed</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
-                                <span class="activity-icon doc-countersign-icon"></span>
+                                <span class="activity-icon doc-final-icon"></span>
                                 <span class="info"><span>Approved</span><span>{{doc.when_countersigned  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_retracted">
