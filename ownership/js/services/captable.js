@@ -330,6 +330,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }
         return row;
     }
+    this.addRow = addRow;
     function newTransaction(issuekey, investor) {
         var tran = new Transaction();
         tran.new = "yes";
