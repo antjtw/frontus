@@ -73,30 +73,29 @@ m.directive('groupPeople', function(){
 
             };
 
+            // check boxes in view
             $scope.preSelectGroup = function(person){
                 console.log("test")
                 angular.forEach(person, function(info){
                     console.log(info.email);
-                    SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
-                        $scope.userRoles = data;
-                        console.log($scope.userRoles)
-                        angular.forEach($scope.userRoles, function(role){
-                            console.log(JSON.parse(role.groups));
-                            var preGroup = JSON.parse(role.groups);
-                            for(i = 0; i < preGroup.length; i++){
-                                $scope.selectedGroup.push(preGroup[i]);
-                                console.log(preGroup[i])
-                            }
+                    if(info.groups != undefined){
+                        SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
+                            $scope.myGroups = data;
+                                angular.forEach($scope.myGroups, function(role){
+                                    var preGroup = JSON.parse(role.groups);
+                                    for(i = 0; i < preGroup.length; i++){
+                                        $scope.selectedGroup.push(preGroup[i]);
+                                    }
+                                });
+                           
                         });
-                    });
+                    }
                 });
                 console.log($scope.selectedGroup)
                 return $scope.selectedGroup;
             }
             $scope.preSelectGroup($scope.people);
 
-
-             
 
             $scope.groupIs = function(group){              
                 return $scope.selectedGroup.indexOf(group) != -1;
@@ -114,7 +113,6 @@ m.directive('groupPeople', function(){
                     oldGroups.splice(toDelete, 1)
                 }
                 return $scope.selectedGroup;
-                // console.log($scope.selectedGroup);  
             };
 
 
@@ -153,7 +151,7 @@ m.directive('groupPeople', function(){
                                 noGroup.push(user.email, user.role);
                                 firstGroup.push(text);
                                 $scope.manyNoGroup.push(noGroup);
-                                $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(['hi elizabeth']));
+                                $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(firstGroup));
                                 console.log("addedGroup")
                             }
                             else if(user.groups != null){
@@ -162,10 +160,8 @@ m.directive('groupPeople', function(){
                                 console.log("array")
                                 if(array.indexOf(text) == -1){
                                     array.push(text);
-                                    console.log(array)
                                     hasGroup.push(user.email, user.role);
                                     $scope.manyHasGroup.push(hasGroup);
-                                    console.log($scope.manyHasGroup);
                                     $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
                                 }
                                 else {
