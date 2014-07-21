@@ -27,7 +27,13 @@
  <!--  <ul>
     <li>{{myUserGroup.json_array_elements}}</li>
   </ul> -->
-  <p ng-repeat="groupDatum in groupData">{{groupDatum.group}}</p>
+  <div ng-repeat="groupDatum in groupData | unique: 'group'">
+    <div class="check-box-side">
+      <button class="check-box-button" ng-class="{'selected': groupIs(groupDatum.group)}" ng-click="selectGroup(groupDatum.group)">
+         <span data-icon="&#xe023;" aria-hidden="true"></span>
+    </button>
+  </div>
+  <p>{{groupDatum.group}}</p>
 </div>
 
 

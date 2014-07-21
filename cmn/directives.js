@@ -28,13 +28,11 @@ m.directive('groupPeople', function(){
             $scope.groupData = [];
             
             function indGroup(group){
-                    this.group = group;
-                };
-
-    
+                this.group = group;
+            };
 
             $scope.parseGroups = function(){              
-                SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
+              SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
                     angular.forEach($scope.myUserGroups, function(info){
                         console.log(info);
@@ -43,7 +41,7 @@ m.directive('groupPeople', function(){
                         var b = a.replace(/\"/g, "");
                         console.log(b);
                         $scope.groupData.push(new indGroup(b));
-                        // console.log("hello")
+               
                     })
                     console.log($scope.eachGroups);
                     console.log($scope.myUserGroups)
@@ -51,15 +49,15 @@ m.directive('groupPeople', function(){
             };
             $scope.parseGroups();
 
-            $scope.preselectGroup = function(person){
-                angular.forEach(person, function(info){
-                    // $scope.selectedGroup.concat(info.groups);
-                    for(i = 0; i++; i < info.groups.length){
-                        $scope.selectedGroup.push(info.groups[i]);
-                    };
-                });
-                console.log($scope.selectedGroup);
-            };
+            // $scope.preselectGroup = function(person){
+            //     angular.forEach(person, function(info){
+            //         // $scope.selectedGroup.concat(info.groups);
+            //         for(i = 0; i++; i < info.groups.length){
+            //             $scope.selectedGroup.push(info.groups[i]);
+            //         };
+            //     });
+            //     console.log($scope.selectedGroup);
+            // };
 
              
 
@@ -70,7 +68,7 @@ m.directive('groupPeople', function(){
             $scope.selectGroup = function(group){
                 if($scope.selectedGroup.indexOf(group)=== -1){
                     $scope.selectedGroup.push(group);
-                    oldGroups.push(JSON.parse(group));
+                    oldGroups.push((group));
                 }
                 else {
                     var toDelete = $scope.selectedGroup.indexOf(group)
