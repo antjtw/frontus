@@ -23,10 +23,10 @@ ownership.service('calculate', function () {
     this.whatsleft = function (total, issue, rows) {
         var leftover = total;
         angular.forEach(rows, function (row) {
-            if (issue.issue in row &&
+            if (issue.issue in row.cells &&
                     row.nameeditable !== 0 &&
-                    isNumber(row[issue.issue].u)) {
-                leftover -= row[issue.issue].u;
+                    isNumber(row.cells[issue.issue].u)) {
+                leftover -= row.cells[issue.issue].u;
             }
         });
         return leftover;
@@ -55,14 +55,14 @@ ownership.service('calculate', function () {
             return null
         } else {
             angular.forEach(rows, function (r) {
-                if (r[issue.issue] != undefined) {
-                    if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r[issue.issue]['a']))) {
-                        mon = mon + parseFloat(r[issue.issue]['a']);
+                if (r.cells[issue.issue] != undefined) {
+                    if ((isNaN(parseFloat(r.cells[issue.issue]['u'])) || r.cells[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r.cells[issue.issue]['a']))) {
+                        mon = mon + parseFloat(r.cells[issue.issue]['a']);
                     }
                 }
             });
         }
-        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)
+        return ((parseFloat(row.cells[issue.issue]['a']) / parseFloat(mon)) * 100)
         */
     };
 
@@ -374,42 +374,42 @@ ownership.service('calculate', function () {
         angular.forEach(rows, function (row) {
             if (row.name !== undefined) {
                 var something = null;
-                var temprow = {"name": row.name, "email": row.email};
+                var temprow = {"name": row.name, "email": row.email, cells: []};
                 angular.forEach(issues, function (issue) {
                     if (issue.issue) {
-                        temprow[issue.issue] = {};
-                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row[issue.issue]['u'] > 0) {
-                            temprow[issue.issue] = row[issue.issue];
+                        temprow.cells[issue.issue] = {};
+                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row.cells[issue.issue]['u'] > 0) {
+                            temprow.cells[issue.issue] = row.cells[issue.issue];
                             something = true;
                         }
-                        if (row[issue.issue]['exercised'] && row.vested && row[issue.issue]['exercised'] > row.vested[issue.issue]) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                        if (row.cells[issue.issue]['exercised'] && row.vested && row.cells[issue.issue]['exercised'] > row.vested[issue.issue]) {
+                            if (row.cells[issue.issue]['u'] < row.cells[issue.issue]['exercised']) {
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
                             }
                             else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['exercised'];
                             }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
                             something = true;
                         }
-                        else if (row[issue.issue]['exercised'] && !row.vested) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                        else if (row.cells[issue.issue]['exercised'] && !row.vested) {
+                            if (row.cells[issue.issue]['u'] < row.cells[issue.issue]['exercised']) {
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
                             }
                             else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['exercised'];
                             }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
                             something = true;
                         }
                         else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
-                            if (row[issue.issue]['u'] < row.vested[issue.issue]) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            if (row.cells[issue.issue]['u'] < row.vested[issue.issue]) {
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
                             }
                             else {
-                                temprow[issue.issue]['u'] = row.vested[issue.issue];
+                                temprow.cells[issue.issue]['u'] = row.vested[issue.issue];
                             }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
                             something = true;
                         }
                     }
@@ -439,11 +439,11 @@ ownership.service('calculate', function () {
     // Calculates the Total Shares owned by an investor across all rounds
     this.shareSum = function (row) {
         var total = 0;
-        for (var key in row) {
-            if (row.hasOwnProperty(key)) {
-                if (row[key] != null) {
-                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
-                        total = total + parseFloat(row[key]['u']);
+        for (var key in row.cells) {
+            if (row.cells.hasOwnProperty(key)) {
+                if (row.cells[key] != null) {
+                    if (!isNaN(parseFloat(row.cells[key]['u'])) && String(key) != "$$hashKey") {
+                        total = total + parseFloat(row.cells[key]['u']);
                     }
                 }
             }
@@ -457,17 +457,17 @@ ownership.service('calculate', function () {
         var percentage = 0;
         var totalpercentage = 0;
         for (var i = 0, l = issuekeys.length; i < l; i++) {
-            if (row[issuekeys[i]] != undefined) {
-                if (row[issuekeys[i]]['x'] != undefined) {
-                    percentage = percentage + row[issuekeys[i]]['x'];
+            if (row.cells[issuekeys[i]] != undefined) {
+                if (row.cells[issuekeys[i]]['x'] != undefined) {
+                    percentage = percentage + row.cells[issuekeys[i]]['x'];
                 }
             }
         }
         for (var j = 0, a = rows.length; j < a; j++) {
             for (var i = 0, l = issuekeys.length; i < l; i++) {
-                if (rows[j][issuekeys[i]] != undefined) {
-                    if (rows[j][issuekeys[i]]['x'] != undefined) {
-                        totalpercentage = totalpercentage + rows[j][issuekeys[i]]['x'];
+                if (rows[j].cells[issuekeys[i]] != undefined) {
+                    if (rows[j].cells[issuekeys[i]]['x'] != undefined) {
+                        totalpercentage = totalpercentage + rows[j].cells[issuekeys[i]]['x'];
                     }
                 }
             }
@@ -482,9 +482,9 @@ ownership.service('calculate', function () {
         angular.forEach(rows, function (row) {
             for (var key in row) {
                 if (row.hasOwnProperty(key)) {
-                    if (row[key] != null) {
-                        if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
-                            total = total + parseFloat(row[key]['u']);
+                    if (row.cells[key] != null) {
+                        if (!isNaN(parseFloat(row.cells[key]['u'])) && String(key) != "$$hashKey") {
+                            total = total + parseFloat(row.cells[key]['u']);
                         }
                     }
                 }
@@ -497,8 +497,8 @@ ownership.service('calculate', function () {
     this.colTotal = function (header, rows, type) {
         var total = 0;
         for (var i = 0, a = rows.length; i < a; i++) {
-            if (rows[i][header]) {
-                var possfloat = parseFloat(rows[i][header][type]);
+            if (rows[i].cells[header]) {
+                var possfloat = parseFloat(rows[i].cells[header][type]);
                 if (!isNaN(possfloat) && String(header) != "$$hashKey") {
                     total += possfloat;
                 }
@@ -512,10 +512,10 @@ ownership.service('calculate', function () {
         var total = 0;
         angular.forEach(rows, function (row) {
             if (row.editable == "yes") {
-                for (var key in row) {
+                for (var key in row.cells) {
                     if (key == header) {
-                        if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
-                            total = total + parseFloat(row[key][type]);
+                        if (!isNaN(parseFloat(row.cells[key][type])) && String(key) != "$$hashKey") {
+                            total = total + parseFloat(row.cells[key][type]);
                         }
                     }
                 }
@@ -528,9 +528,9 @@ ownership.service('calculate', function () {
     this.totalPaid = function (rows) {
         var total = 0;
         angular.forEach(rows, function (row) {
-            for (var key in row) {
-                if (row[key] != null && !isNaN(parseFloat(row[key]['a'])) && String(key) != "$$hashKey") {
-                    total = total + parseFloat(row[key]['a']);
+            for (var key in row.cells) {
+                if (row.cells[key] != null && !isNaN(parseFloat(row.cells[key]['a'])) && String(key) != "$$hashKey") {
+                    total = total + parseFloat(row.cells[key]['a']);
                 }
             }
         });

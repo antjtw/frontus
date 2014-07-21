@@ -6,6 +6,7 @@ var ownership = angular.module('ownerServices');
  * TODO implement 'key' values as a stack with generic undo facility
  * TODO do not add cells directly to row object
  *      create row.cells array
+ *      look at updateCell
  *      removes weird bugs when issue name collides with js property
  */
 CapTable = function() {
@@ -46,6 +47,7 @@ Row = function() {
     this.name = "";
     this.editable = "0";
     this.nameeditable = null;
+    this.cells = {};
 };
 // TODO should issue_type be here?
 Cell = function() {
@@ -163,10 +165,10 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     function updateCell(tran, row) {
         var cell;
-        if (tran.issue in row) {
-            cell = row[tran.issue];
+        if (tran.issue in row.cells) {
+            cell = row.cells[tran.issue];
         } else {
-            cell = row[tran.issue] = {};
+            cell = row.cells[tran.issue] = {};
             cell.state = false;
         }
         cell.ukey = cell.u = calculate.sum(cell.u, tran.units);
@@ -315,7 +317,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function newRow() {
         var row = nullRow();
         angular.forEach(captable.issuekeys, function(k) {
-            row[k] = nullCell();
+            row.cells[k] = nullCell();
         });
         return row;
     }
@@ -346,8 +348,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function cellsForIssue(iss) {
         var cells = [];
         angular.forEach(captable.rows, function(row) {
-            if (iss.issue in row && row.nameeditable !== 0) {
-                cells.push(row[iss.issue]);
+            if (iss.issue in row.cells && row.nameeditable !== 0) {
+                cells.push(row.cells[iss.issue]);
             }
         });
         return cells;
@@ -408,8 +410,9 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         angular.forEach(captable.rows, function (row) {
             if (row.name == tran.investor) {
                 updateCell(tran, row);
-            } else if (!(tran.issue in row)) {
-                row[tran.issue] = nullCell();
+            } else if (!(tran.issue in row.cells)) {
+                // TODO can both just call updateCell?
+                row.cells[tran.issue] = nullCell();
             }
         });
     }
@@ -463,7 +466,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         // return immediately.
         angular.forEach(captable.rows, function (row) {
             angular.forEach(captable.issues, function (issue) {
-                var cell = row[issue.issue];
+                var cell = row.cells[issue.issue];
                 if (cell !== undefined &&
                     issue.type == "Debt" &&
                     (!calculate.isNumber(cell.u) || cell.u === 0) &&
@@ -490,7 +493,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 })[0];
             if (unissued_row) {
                 if (leftovers !== 0) {
-                    unissued_row[iss.issue] = unissued_cell;
+                    unissued_row.cells[iss.issue] = unissued_cell;
                 } else {
                     captable.rows.splice(
                         captable.rows.indexOf(unissued_row), 1);
@@ -501,7 +504,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                     unissued_row.name = iss.issue + " (unissued)";
                     unissued_row.editable = 0;
                     unissued_row.nameeditable = 0;
-                    unissued_row[iss.issue] = unissued_cell;
+                    unissued_row.cells[iss.issue] = unissued_cell;
                 }
             }
         });
@@ -510,8 +513,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function fillEmptyCells() {
         angular.forEach(captable.rows, function (row) {
             angular.forEach(captable.issuekeys, function (issuekey) {
-                if (!(issuekey in row)) {
-                    row[issuekey] = nullCell();
+                if (!(issuekey in row.cells)) {
+                    row.cells[issuekey] = nullCell();
                 }
             });
         });
@@ -675,7 +678,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         pingIntercomIfCaptableStarted();
         populateListOfInvestorsWithoutAccessToTheCaptable();
 
-        console.log(captable.rows);
+        console.log(captable);
     }
     var issuetypes = [];
     this.getIssueTypes = function() {return issuetypes;};

@@ -703,7 +703,7 @@
                         </span>
                     </span>
                     <span ng-switch on="row.editable">
-                        <span ng-class="{tranSelected:row[key].state}"
+                        <span ng-class="{tranSelected:row.cells[key].state}"
                               class="captablepair-box"
                               ng-switch-default>
                             <input ng-show="isDebt(key);"
@@ -712,8 +712,8 @@
                                    placeholder="{{grantbyIssue(key)}}"
                                    ui-event="{focus : 'getActiveTransaction(row.name, key)',
                                                blur : 'saveTran(activeTran)'}"
-                                   ng-change="tranChangeU(row[key].u, key)"
-                                   ng-model='row[key].u'
+                                   ng-change="tranChangeU(row.cells[key].u, key)"
+                                   ng-model='row.cells[key].u'
                                    onpaste="return false"
                                    ng-paste="numberPaste($event, row, key, 'u');"
                                    onkeydown="testForEnter();">
@@ -725,8 +725,8 @@
                                    placeholder="paid"
                                    ui-event="{focus : 'getActiveTransaction(row.name, key)',
                                                blur : 'saveTran(activeTran)'}"
-                                   ng-change="tranChangeA(row[key].a)"
-                                   ng-model='row[key].a'
+                                   ng-change="tranChangeA(row.cells[key].a)"
+                                   ng-model='row.cells[key].a'
                                    onpaste="return false"
                                    ng-paste="numberPaste($event, row, key, 'a');"
                                    onkeydown="testForEnter();">
@@ -736,12 +736,12 @@
                             <input disabled
                                    class="captablepair"
                                    placeholder="shares"
-                                   ng-model='row[key]["u"]'
+                                   ng-model='row.cells[key]["u"]'
                                    onkeydown="testForEnter();">
                             <input disabled
                                    class="captablepair"
                                    placeholder="paid"
-                                   ng-model='row[key]["a"]'
+                                   ng-model='row.cells[key]["a"]'
                                    onkeydown="testForEnter();">
                         </span>
                     </span>
@@ -770,14 +770,14 @@
                 </td>
                 <td ng-click="getActiveTransaction(row.name, key)"
                     class="tableFields"
-                    ng-class="{tranViewSelected:row[key].state,
-                               'hoverable':canHover(row[key])}"
+                    ng-class="{tranViewSelected:row.cells[key].state,
+                               'hoverable':canHover(row.cells[key])}"
                     ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(row[key]['u'])"
+                        <div ng-bind="formatAmount(row.cells[key]['u'])"
                              class="output clickable">
                         </div>
-                        <div ng-bind="formatDollarAmount(row[key]['a'])"
+                        <div ng-bind="formatDollarAmount(row.cells[key]['a'])"
                              class="output second clickable">
                         </div>
                     </span>
@@ -805,11 +805,11 @@
                     ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': !toggleView()}"
-                             ng-bind="formatAmount(row[key]['u'])"
+                             ng-bind="formatAmount(row.cells[key]['u'])"
                              class="output clickable">
                          </div>
                          <div ng-class="{'editview': !toggleView()}"
-                              ng-bind="formatDollarAmount(row[key]['a'])"
+                              ng-bind="formatDollarAmount(row.cells[key]['a'])"
                               class="output second clickable">
                          </div>
                     </span>
