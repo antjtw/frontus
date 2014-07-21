@@ -3,6 +3,39 @@
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
         'navState', 'Annotations', 'Documents', 'User', '$q',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
+        SWBrijj.tblm("ownership.transaction_database_types").then(function(x){
+            console.log(x);
+            $scope.transaction_types_mapping = {
+                "interestRate": "ownership.transaction.interstrate",
+                "evidence": "ownership.transaction.evidence",
+                "issue": "ownership.transactionissue",
+                //"date": {"tbl": "ownership.transaction", "attname": "date"}
+            };
+            $scope.transaction_db_types = {};
+            $scope.type_mappings = {
+                "int8": Number,
+                "int4": Number,
+                "float8": Number,
+                "varchar": String
+            };
+            for (var ind = 0; ind < x.length; ind++)
+            {
+                var key = x[ind]['tbl'] + "." + x[ind]['attname'];
+                console.log(key);
+                $scope.transaction_db_types[key] = x[ind];
+                console.log($scope.transaction_db_types);
+                $scope.transaction_db_types[key]['labels'] = JSON.parse($scope.transaction_db_types[key]['labels']);
+                if ($scope.transaction_db_types[key]['labels'][0] == null)
+                {
+                    $scope.transaction_db_types[key]['labels'] = null;
+                }
+                else
+                {
+                    $scope.transaction_db_types[key]['typname'] = "enum";
+                }
+            }
+            console.log($scope.transaction_db_types);
+        });
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
 
         $scope.setTab = function() {
