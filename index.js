@@ -1,4 +1,4 @@
-var app = angular.module('index', ['ngRoute', 'ui.bootstrap', 'brijj', 'nav', 'registerDirective']);
+var app = angular.module('index', ['ngRoute', 'ui.bootstrap', 'brijj', 'nav', 'registerDirective', 'duScroll']);
 
 
 
@@ -27,75 +27,24 @@ app.controller('IndexCtrl', ['$scope','$rootScope','$route','$location', '$route
             }
         });
 
-        if ($routeParams.video) {
-            $scope.modalUp();
-        }
         $scope.register = function() {
             document.location.href = "/pricing/";
         };
 
         $scope.toggle = false;
 
-        $scope.opts = {
-            backdropFade: true,
-            dialogFade:true,
-            dialogClass: 'externalmodal modal'
-        };
-
-        $scope.tellFriendUp = function () {
-            $scope.taf = {'yourname': "", 'sendEmail': "", 'customemessage': ""};
-            $scope.tafModal = true;
-        };
-
-        $scope.friendClose = function () {
-            $scope.tafModal = false;
-        };
-
-        $scope.tellafriend = function() {
-            console.log($scope.taf.yourname);
-            var cm = $scope.taf.custommessage ? $scope.taf.custommessage : "";
-            SWBrijj.tellafriend($scope.taf.yourname, $scope.taf.sendEmail, cm).then(function(x) {
-                void(x);
-                $scope.$emit('notification:success', 'Invitation sent!');
-            }).except(function (x) {
-                    $scope.$emit('notification:fail', 'Oops. Something went wrong.');
-                });
-        };
-
-        $('[data-typer-targets]').typer();
-
-        $scope.getpagetarget = function() {
-            var currentValue = $('#targetcontent')[0].innerText;
-            if (currentValue == undefined) {
-                currentValue = $('#targetcontent')[0].textContent;
-            }
-            if ("I want to keep track of our investors".startsWith(currentValue)) {
-                ga('send', 'event', 'homepage', 'hero-click', 'I want to keep track of our investors');
-                document.location.href = '/features/cap';
-            } else if ("I want to build a cap table".startsWith(currentValue)) {
-                ga('send', 'event', 'homepage', 'hero-click', 'I want to build a cap table');
-                document.location.href = '/features/cap';
-            } else if ("I want to share documents for e-signature".startsWith(currentValue)) {
-                ga('send', 'event', 'homepage', 'hero-click', 'I want to share documents for e-signature');
-                document.location.href = '/features/doc';
-            } else if ("I want to make sense of convertible notes".startsWith(currentValue)) {
-                ga('send', 'event', 'homepage', 'hero-click', 'I want to make sense of convertible notes');
-                document.location.href = '/features/convertible-notes';
-            } else if ("I want to grant options hassle free".startsWith(currentValue)) {
-                ga('send', 'event', 'homepage', 'hero-click', 'I want to grant options hassle free');
-                document.location.href = '/features/#options';
-            } else if ("I want to send updates to my investors".startsWith(currentValue)) {
-                ga('send', 'event', 'homepage', 'hero-click', 'I want to send updates to my investors');
-                document.location.href = '/features/#message';
-            }
-        }
-
     }]);
 
-if (typeof String.prototype.startsWith != 'function') {
-    // see below for better implementation!
-    String.prototype.startsWith = function (str){
-        return this.indexOf(str) == 0;
+app.directive("scroll", function ($window) {
+    return function(scope, element, attrs) {
+        angular.element($window).bind("scroll", function() {
+            if (this.pageYOffset >= ($( window ).height() - 80)) {
+                scope.scrolled = true;
+            } else {
+                scope.scrolled = false;
+            }
+            scope.$apply();
+        });
     };
-}
+});
 
