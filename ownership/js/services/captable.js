@@ -21,6 +21,13 @@ CapTable = function() {
     this.conversions = [];
     this.transfers = [];
 };
+NewCapTable = function() {
+    this.rows = [];
+    this.ledger_entries = [];
+    /* Securities (columns) are implicit from ledger entries
+     *
+     */
+};
 Transaction = function() {
     this.active = null;
     this.atype = null;
@@ -60,6 +67,8 @@ ownership.service('captable',
 function($rootScope, calculate, sorting, SWBrijj, $q) {
 
     var captable = new CapTable();
+    var _captable = new NewCapTable();
+
     this.getCapTable = function() {
         return captable;
     };
@@ -83,6 +92,19 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             attachEvidence(        results[6]);
 
             generateCaptable(      results[7]);
+        }, logErrorPromise);
+
+        $q.all([loadLedger(),
+                loadTransactionLog(),
+                loadRowNames()])
+        .then(function(results) {
+            _captable.ledger_entries = results[0];
+            _captable.transactions = results[1];
+            // get security list
+            _captable.investors = results[2];
+            _captable.cells = generateCells();
+
+            console.log(_captable);
         }, logErrorPromise);
     };
     this.loadCapTable();
@@ -159,6 +181,38 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             });
             initUI();
         }
+    }
+    function loadLedger() {
+        var promise = $q.defer();
+        SWBrijj.tblm('_ownership.my_company_ledger')
+        .then(function(entries) {
+            promise.resolve(entries);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function loadTransactionLog() {
+        var promise = $q.defer();
+        SWBrijj.tblm('_ownership.my_company_transactions')
+        .then(function(trans) {
+            promise.resolve(trans);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
+    function generateCells() {
+        var transactions = [];
+        var ledger_entries = [];
+        angular.forEach(_captable.investors, function(inv) {
+            angular.forEach(_captable.securities, function(sec) {
+                transactions = _captable.transaction
+                    .filter(function(tran) {
+                                return true;
+                    }); 
+                ledger_entries = _captable.ledger_entries
+                    .filter(function(ent) {
+                                return true;
+                    });
+            });
+        });
     }
     function initUI() {
         $rootScope.$broadcast('captable:initui');

@@ -344,12 +344,11 @@ var captableController = function(
                         }
                     }
                     angular.forEach($scope.ct.issues, function (x) {
-                        $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(x.issue));
+                        captable.generateUnissuedRows();
                         if (x.issue == issue.issue && issue.vestingbegins) {
                             x.vestingbegins = issue.vestingbegins;
                         }
                     });
-                    $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(issue.issue));
 
                     // In the case where the issue is changed and there are other issues that use it as the underlying
                     if (item == "issue") {
@@ -536,8 +535,6 @@ var captableController = function(
 
     $scope.tranChangeU = function (value, issue) {
         captable.generateUnissuedRows();
-        // is this necessary? shouldn't it have been caught above?
-        // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(issue));
         if ($scope.activeTran.length < 2) {
             $scope.activeTran[0].units = value;
         }
@@ -670,8 +667,6 @@ var captableController = function(
                 }
             });
             captable.generateUnissuedRows();
-            // is this necessary? shouldn't it have been caught above?
-            //$scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(tran.issue));
         });
     };
 
@@ -766,8 +761,6 @@ var captableController = function(
                         }
                     });
                     captable.generateUnissuedRows();
-                    // is this necessary? shouldn't it have been caught above?
-                    // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(tran.issue));
                 }
             });
 
@@ -960,8 +953,6 @@ var captableController = function(
                 });
 
                 captable.generateUnissuedRows();
-                // is this necessary? shouldn't it have been caught above?
-                // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(transaction.issue));
 
                 if (transaction.type == "Option" && calculate.isNumber(transaction.amount)) {
                     var modGrant = {"unit": null, "tran_id": transaction.tran_id, "date": (Date.today()), "action": "exercised", "investor": transaction.investor, "issue": transaction.issue};
@@ -1361,8 +1352,6 @@ var captableController = function(
             });
 
             captable.generateUnissuedRows();
-            // is this necessary? shouldn't it have been caught above?
-            // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(transaction.issue));
             captable.calculateDebtCells();
             //Calculate the total vested for each row
             $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
@@ -1486,14 +1475,12 @@ var captableController = function(
                     });
                 });
 
+                captable.generateUnissuedRows();
                 angular.forEach($scope.ct.issues, function (x) {
-                    $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(x.issue));
                     if (x.issue == issue.issue) {
                         x.ppshare = x.ppshare * ratio;
                     }
                 });
-
-                $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(issue.issue));
 
                 captable.calculateDebtCells();
                 //Calculate the total vested for each row
@@ -1602,8 +1589,6 @@ var captableController = function(
                     });
 
                     captable.generateUnissuedRows();
-                    // is this necessary? shouldn't it have been caught above?
-                    // $scope.ct.rows = calculate.unissued($scope.ct.rows, $scope.ct.issues, String(transaction.issue));
                     captable.calculateDebtCells();
                     //Calculate the total vested for each row
                     $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
