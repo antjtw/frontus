@@ -194,6 +194,10 @@ h3.key-sub-header {
     margin-top: 0;
 }
 
+h2.key-header.old-page {
+    margin-top: 40px;
+}
+
 .home-banner h3.key-sub-header {
     max-width: 600px;
 }
