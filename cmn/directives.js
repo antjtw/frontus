@@ -22,6 +22,7 @@ m.directive('groupPeople', function(){
             $scope.manyNoGroup = [];
             $scope.manyHasGroup = [];
             $scope.selectedGroup = [];
+            $scope.manyToRemove = [];
             var newGroups = [];
             var firstGroup = [];
             var oldGroups = [];
@@ -49,6 +50,40 @@ m.directive('groupPeople', function(){
             };
             $scope.parseGroups();
 
+            $scope.removeGroup = function(person){
+                var removeInfo = []
+                angular.forEach(person, function(info){
+                    SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
+                        $scope.myInfo = data;
+                        console.log($scope.myInfo);
+                        angular.forEach($scope.myInfo, function(elem){
+                            console.log(elem.groups)
+                            var elemGroups = JSON.parse(elem.groups);
+                            console.log(elemGroups);
+                            for(i = 0; i < $scope.selectedGroup.length; i++){
+                                console.log($scope.selectedGroup[i]);
+                                if(elemGroups.indexOf($scope.selectedGroup[i])== -1){
+                                    console.log("not a match");
+                                }
+                                else {
+                                    var toDelete = elemGroups.indexOf($scope.selectedGroup[i]);
+                                    elemGroups.splice(toDelete, 1);
+                                    var removeEmail = [];
+                                    removeInfo.push(elem.email, elem.role);
+                                    $scope.manyToRemove.push(removeInfo);
+                                    console.log($scope.manyToRemove);
+                                    $scope.updateGroup(JSON.stringify($scope.manyToRemove), JSON.stringify(elemGroups));
+                                    
+                                };
+                                console.log(elemGroups);
+                            };
+                        });
+                    });
+                   
+                });
+
+            };
+
             // $scope.preselectGroup = function(person){
             //     angular.forEach(person, function(info){
             //         // $scope.selectedGroup.concat(info.groups);
@@ -68,7 +103,7 @@ m.directive('groupPeople', function(){
             $scope.selectGroup = function(group){
                 if($scope.selectedGroup.indexOf(group)=== -1){
                     $scope.selectedGroup.push(group);
-                    oldGroups.push((group));
+                    oldGroups.push(group);
                 }
                 else {
                     var toDelete = $scope.selectedGroup.indexOf(group)
@@ -80,20 +115,20 @@ m.directive('groupPeople', function(){
             };
 
 
-            $scope.addGroups = function(person){
-                $scope.createGroups(person)
-                console.log($scope.groupName.length)
-                if($scope.groupName.length > 0){
-                    angular.forEach($scope.manyNoGroup, function(thing){
-                        console.log(thing)
-                    });
-                    console.log($scope.manyNoGroup);
-                }
-                else{
-                    console.log("what?")
-                }
+            // $scope.addGroups = function(person){
+            //     $scope.createGroups(person)
+            //     console.log($scope.groupName.length)
+            //     if($scope.groupName.length > 0){
+            //         angular.forEach($scope.manyNoGroup, function(thing){
+            //             console.log(thing)
+            //         });
+            //         console.log($scope.manyNoGroup);
+            //     }
+            //     else{
+            //         console.log("what?")
+            //     }
 
-            }
+            // }
 
             // $scope.removeGroup = function(person){
             //     angular.forEach(person, function(info){
