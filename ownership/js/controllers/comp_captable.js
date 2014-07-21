@@ -101,8 +101,8 @@ var captableController = function(
             row.state = false;
             angular.forEach($scope.ct.issues, function (issue) {
                 if (issue.issue) {
-                    if (row[issue.issue]) {
-                        row[issue.issue].state = false;
+                    if (row.cells[issue.issue]) {
+                        row.cells[issue.issue].state = false;
                     }
                     issue.state = false;
                 }
@@ -160,10 +160,10 @@ var captableController = function(
                     if (row.name == currenttran &&
                             currentcolumn == issue.issue &&
                             $scope.activeTran.length > 0) {
-                        row[currentcolumn].state = true;
+                        row.cells[currentcolumn].state = true;
                     }
-                    else if (row[issue.issue]) {
-                        row[issue.issue].state = false;
+                    else if (row.cells[issue.issue]) {
+                        row.cells[issue.issue].state = false;
                     } else {
                         issue.state = false;
                     }
@@ -336,8 +336,8 @@ var captableController = function(
                             if (row.name == issue.key + " (unissued)" && index == -1) {
                                 index = $scope.ct.rows.indexOf(row);
                             }
-                            row[issue.issue] = row[issue.key];
-                            delete row[issue.key];
+                            row.cells[issue.issue] = row.cells[issue.key];
+                            delete row.cells[issue.key];
                         });
                         if (index != -1) {
                             $scope.ct.rows.splice(index, 1);
@@ -367,12 +367,12 @@ var captableController = function(
                     }
                     // Recalculate the debt percentages, but only for 1 issue
                     angular.forEach($scope.ct.rows, function (row) {
-                        if (row[issue.issue] !== undefined) {
+                        if (row.cells[issue.issue] !== undefined) {
                             if (issue.type == "Debt" &&
-                                !calculate.isNumber(row[issue.issue].u) &&
-                                calculate.isNumber(row[issue.issue].a))
+                                !calculate.isNumber(row.cells[issue.issue].u) &&
+                                calculate.isNumber(row.cells[issue.issue].a))
                             {
-                                row[issue.issue].x = calculate.debt($scope.ct.rows, issue, row);
+                                row.cells[issue.issue].x = calculate.debt($scope.ct.rows, issue, row);
                             }
                         }
                     });
@@ -417,7 +417,7 @@ var captableController = function(
                     $scope.ct.issues.push(captable.nullIssue());
                     $scope.ct.issuekeys.push(issue.key);
                     angular.forEach($scope.ct.rows, function (row) {
-                        row[issue.key] = captable.nullCell();
+                        row.cells[issue.key] = captable.nullCell();
                     });
                     for (var i=0; i < $scope.ct.issues.length; i++) {
                         if ($scope.ct.issues[i] == issue) {
@@ -451,7 +451,7 @@ var captableController = function(
             });
             angular.forEach($scope.ct.rows, function (row) {
                 if (issue.key in row) {
-                    delete row[issue.key];
+                    delete row.cells[issue.key];
                 }
                 if (row.name == issue.key + " (unissued)") {
                     var index = $scope.ct.rows.indexOf(row);
@@ -652,19 +652,19 @@ var captableController = function(
             angular.forEach($scope.ct.rows, function (row) {
                 if (row.name === tran['investor']) {
                     if (!isNaN(tran.units)) {
-                        row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
-                        row[tran.issue]['ukey'] = row[tran.issue]['u']
-                        if (row[tran.issue]['u'] == 0) {
-                            row[tran.issue]['u'] = null;
-                            row[tran.issue]['ukey'] = null;
+                        row.cells[tran.issue]['u'] = row.cells[tran.issue]['u'] - tran.units;
+                        row.cells[tran.issue]['ukey'] = row.cells[tran.issue]['u']
+                        if (row.cells[tran.issue]['u'] == 0) {
+                            row.cells[tran.issue]['u'] = null;
+                            row.cells[tran.issue]['ukey'] = null;
                         }
                     }
                     if (!isNaN(tran.amount)) {
-                        row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
-                        row[tran.issue]['akey'] = row[tran.issue]['a']
-                        if (row[tran.issue]['a'] == 0) {
-                            row[tran.issue]['a'] = null;
-                            row[tran.issue]['akey'] = null;
+                        row.cells[tran.issue]['a'] = row.cells[tran.issue]['a'] - tran.amount;
+                        row.cells[tran.issue]['akey'] = row.cells[tran.issue]['a']
+                        if (row.cells[tran.issue]['a'] == 0) {
+                            row.cells[tran.issue]['a'] = null;
+                            row.cells[tran.issue]['akey'] = null;
                         }
                     }
                 }
@@ -748,19 +748,19 @@ var captableController = function(
                     angular.forEach($scope.ct.rows, function (row) {
                         if (row.name === tran['investor']) {
                             if (!isNaN(tran.units)) {
-                                row[tran.issue]['u'] = row[tran.issue]['u'] - tran.units;
-                                row[tran.issue]['ukey'] = row[tran.issue]['u']
-                                if (row[tran.issue]['u'] == 0) {
-                                    row[tran.issue]['u'] = null
-                                    row[tran.issue]['ukey'] = null
+                                row.cells[tran.issue]['u'] = row.cells[tran.issue]['u'] - tran.units;
+                                row.cells[tran.issue]['ukey'] = row.cells[tran.issue]['u']
+                                if (row.cells[tran.issue]['u'] == 0) {
+                                    row.cells[tran.issue]['u'] = null
+                                    row.cells[tran.issue]['ukey'] = null
                                 }
                             }
                             if (!isNaN(tran.amount)) {
-                                row[tran.issue]['a'] = row[tran.issue]['a'] - tran.amount;
-                                row[tran.issue]['akey'] = row[tran.issue]['a']
-                                if (row[tran.issue]['a'] == 0) {
-                                    row[tran.issue]['a'] = null
-                                    row[tran.issue]['akey'] = null
+                                row.cells[tran.issue]['a'] = row.cells[tran.issue]['a'] - tran.amount;
+                                row.cells[tran.issue]['akey'] = row.cells[tran.issue]['a']
+                                if (row.cells[tran.issue]['a'] == 0) {
+                                    row.cells[tran.issue]['a'] = null
+                                    row.cells[tran.issue]['akey'] = null
                                 }
                             }
                         }
@@ -829,17 +829,17 @@ var captableController = function(
             angular.forEach($scope.ct.rows, function (row) {
                 if (row.name == transaction[0].investor) {
                     // Deals with Changes in Units
-                    if (calculate.isNumber(row[transaction[0].issue]['u'])) {
-                        if (parseFloat(row[transaction[0].issue]['u']) != parseFloat(row[transaction[0].issue]['ukey'])) {
-                            var changed = (parseFloat(row[transaction[0].issue]['u']) - parseFloat(row[transaction[0].issue]['ukey']));
+                    if (calculate.isNumber(row.cells[transaction[0].issue]['u'])) {
+                        if (parseFloat(row.cells[transaction[0].issue]['u']) != parseFloat(row.cells[transaction[0].issue]['ukey'])) {
+                            var changed = (parseFloat(row.cells[transaction[0].issue]['u']) - parseFloat(row.cells[transaction[0].issue]['ukey']));
                             $scope.mmodalUp(changed, "u", transaction);
                             return
                         }
                     }
                     // Deals with changes in Price
-                    if (calculate.isNumber(row[transaction[0].issue]['a'])) {
-                        if (parseFloat(row[transaction[0].issue]['a']) != parseFloat(row[transaction[0].issue]['akey'])) {
-                            var changed = (parseFloat(row[transaction[0].issue]['a']) - parseFloat(row[transaction[0].issue]['akey']));
+                    if (calculate.isNumber(row.cells[transaction[0].issue]['a'])) {
+                        if (parseFloat(row.cells[transaction[0].issue]['a']) != parseFloat(row.cells[transaction[0].issue]['akey'])) {
+                            var changed = (parseFloat(row.cells[transaction[0].issue]['a']) - parseFloat(row.cells[transaction[0].issue]['akey']));
                             $scope.mmodalUp(changed, "a", transaction);
                             return
                         }
@@ -849,8 +849,8 @@ var captableController = function(
             // Reverts in the case where multitransaction rows are set to blank
             angular.forEach($scope.ct.rows, function(row) {
                 if (row.name == transaction[0].investor) {
-                    row[transaction[0].issue]['u'] = row[transaction[0].issue]['ukey'];
-                    row[transaction[0].issue]['a'] = row[transaction[0].issue]['akey'];
+                    row.cells[transaction[0].issue]['u'] = row.cells[transaction[0].issue]['ukey'];
+                    row.cells[transaction[0].issue]['a'] = row.cells[transaction[0].issue]['akey'];
                 }
             });
             return
@@ -945,12 +945,12 @@ var captableController = function(
                                 }
                                 if (tempunits === 0) {tempunits = null;}
                                 if (tempamount === 0) {tempamount = null;}
-                                row[tran.issue]['u'] = tempunits;
-                                row[tran.issue]['ukey'] = tempunits;
-                                row[tran.issue]['a'] = tempamount;
-                                row[tran.issue]['akey'] = tempamount;
+                                row.cells[tran.issue]['u'] = tempunits;
+                                row.cells[tran.issue]['ukey'] = tempunits;
+                                row.cells[tran.issue]['a'] = tempamount;
+                                row.cells[tran.issue]['akey'] = tempamount;
 
-                                row[tran.issue]['x'] = 0;
+                                row.cells[tran.issue]['x'] = 0;
 
                                 // setTransactionKeys
                                 //
@@ -1336,9 +1336,9 @@ var captableController = function(
             $scope.ct.trans.push(newtran);
 
             angular.forEach($scope.ct.rows, function (row) {
-                if (row[decrement.issue] && row.name == decrement.investor) {
-                    row[decrement.issue].u = row[decrement.issue].u - decrement.units;
-                    row[decrement.issue]['a'] = row[decrement.issue]['a'] - decrement.amount;
+                if (row.cells[decrement.issue] && row.name == decrement.investor) {
+                    row.cells[decrement.issue].u = row.cells[decrement.issue].u - decrement.units;
+                    row.cells[decrement.issue]['a'] = row.cells[decrement.issue]['a'] - decrement.amount;
                 }
                 angular.forEach($scope.ct.trans, function (tran) {
                     if (row.name == tran.investor) {
@@ -1350,11 +1350,11 @@ var captableController = function(
                             }
                             if (tempunits === 0) {tempunits = null;}
                             if (tempamount === 0) {tempamount = null;}
-                            row[tran.issue]['u'] = tempunits;
-                            row[tran.issue]['ukey'] = tempunits;
-                            row[tran.issue]['a'] = tempamount;
-                            row[tran.issue]['akey'] = tempamount;
-                            row[tran.issue]['x'] = 0;
+                            row.cells[tran.issue]['u'] = tempunits;
+                            row.cells[tran.issue]['ukey'] = tempunits;
+                            row.cells[tran.issue]['a'] = tempamount;
+                            row.cells[tran.issue]['akey'] = tempamount;
+                            row.cells[tran.issue]['x'] = 0;
                         }
                     }
                 });
@@ -1475,12 +1475,12 @@ var captableController = function(
                                 }
                                 if (tempunits === 0) {tempunits = null;}
                                 if (tempamount === 0) {tempamount = null;}
-                                row[tran.issue]['u'] = tempunits;
-                                row[tran.issue]['ukey'] = tempunits;
-                                row[tran.issue]['a'] = tempamount;
-                                row[tran.issue]['akey'] = tempamount;
+                                row.cells[tran.issue]['u'] = tempunits;
+                                row.cells[tran.issue]['ukey'] = tempunits;
+                                row.cells[tran.issue]['a'] = tempamount;
+                                row.cells[tran.issue]['akey'] = tempamount;
 
-                                row[tran.issue]['x'] = 0;
+                                row.cells[tran.issue]['x'] = 0;
                             }
                         }
                     });
@@ -1576,9 +1576,9 @@ var captableController = function(
                     $scope.ct.trans.push(newtran);
 
                     angular.forEach($scope.ct.rows, function (row) {
-                        if (row[decrement.issue] && row.name == decrement.investor) {
-                            row[decrement.issue].u = row[decrement.issue].u - decrement.units;
-                            row[decrement.issue]['a'] = row[decrement.issue]['a'] - decrement.amount;
+                        if (row.cells[decrement.issue] && row.name == decrement.investor) {
+                            row.cells[decrement.issue].u = row.cells[decrement.issue].u - decrement.units;
+                            row.cells[decrement.issue]['a'] = row.cells[decrement.issue]['a'] - decrement.amount;
                         }
                         angular.forEach($scope.ct.trans, function (tran) {
                             if (row.name == tran.investor) {
@@ -1590,12 +1590,12 @@ var captableController = function(
                                     }
                                     if (tempunits === 0) {tempunits = null;}
                                     if (tempamount === 0) {tempamount = null;}
-                                    row[tran.issue]['u'] = tempunits;
-                                    row[tran.issue]['ukey'] = tempunits;
-                                    row[tran.issue]['a'] = tempamount;
-                                    row[tran.issue]['akey'] = tempamount;
+                                    row.cells[tran.issue]['u'] = tempunits;
+                                    row.cells[tran.issue]['ukey'] = tempunits;
+                                    row.cells[tran.issue]['a'] = tempamount;
+                                    row.cells[tran.issue]['akey'] = tempamount;
 
-                                    row[tran.issue]['x'] = 0;
+                                    row.cells[tran.issue]['x'] = 0;
                                 }
                             }
                         });
@@ -1807,8 +1807,8 @@ var captableController = function(
     $scope.mReset = function () {
         angular.forEach($scope.ct.rows, function (row) {
             if (row.name == $scope.activeTran[0].investor) {
-                row[$scope.activeTran[0].issue].u = row[$scope.activeTran[0].issue].ukey;
-                row[$scope.activeTran[0].issue].a = row[$scope.activeTran[0].issue].akey;
+                row.cells[$scope.activeTran[0].issue].u = row.cells[$scope.activeTran[0].issue].ukey;
+                row.cells[$scope.activeTran[0].issue].a = row.cells[$scope.activeTran[0].issue].akey;
             }
         });
     };
@@ -2285,7 +2285,7 @@ var captableController = function(
                 break;
             } else {
                 splitvalues[i] = calculate.cleannumber(splitvalues[i]);
-                if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.rows[startindex][key][type])) {
+                if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.rows[startindex].cells[key][type])) {
                     var anewTran = captable.newTransaction(key,
                                         $scope.ct.rows[startindex].name);
                     anewTran.active = false;
