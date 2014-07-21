@@ -1,3 +1,4 @@
+'use strict';
 
 var docs = angular.module('docServices', []);
 
@@ -105,12 +106,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         if (transaction_attributes) {
             reallyDo();
         } else {
-            transactions_attributes_callback = reallyDo;
+            transaction_attributes_callback = reallyDo;
         }
     }
 
     /// Document object definition
-    Document = function() {
+    var Document = function() {
         this.annotations = [];
         this.annotation_types = angular.copy(defaultTypes);
     };
@@ -191,7 +192,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         },
         void: function() {
             var promise = $q.defer();
-            SWBrijj.document_investor_void($scope.doc_id, 1, "").then(function(data) {
+            SWBrijj.document_investor_void(this.doc_id, 1, "").then(function(data) {
                 promise.resolve(data);
             }).except(function(x) {
                 promise.rejecdt(x);
@@ -204,7 +205,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 // prevent email from going out with {{message}} variable unsubstituted
                 msg = "";
             }
-            SWBrijj.document_investor_void(this.doc_id, 0, message).then(function(data) {
+            SWBrijj.document_investor_void(this.doc_id, 0, msg).then(function(data) {
                 promise.resolve(data);
             }).except(function(x) {
                 promise.rejecdt(x);
@@ -235,7 +236,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     this.getDoc = function(doc_id) {
         if (doc_id === void(0)) {
             // we're probably uninitialized
-            d = new Document();
+            var d = new Document();
             return d;
         }
         if (!docs[doc_id]) {
@@ -279,7 +280,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
 
 // ANNOTATIONS
 
-Annotation = function() {
+var Annotation = function() {
     this.position = {
         coords: {
             //x: 0,
@@ -429,7 +430,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     };
 
     this.getIssuerNotesForUpload = function(doc_id) {
-        doc_notes = doc_annotations[doc_id];
+        var doc_notes = doc_annotations[doc_id];
         var notes = [];
         if (doc_notes) {
             angular.forEach(doc_notes, function (note) {
@@ -442,7 +443,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     };
 
     this.getInvestorNotesForUpload = function(doc_id) {
-        doc_notes = doc_annotations[doc_id];
+        var doc_notes = doc_annotations[doc_id];
         var notes = [];
         if (doc_notes) {
             angular.forEach(doc_notes, function (note) {
