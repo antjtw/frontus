@@ -125,7 +125,8 @@ app.directive('documentVersionRow', function() {
             version: '=',
             viewState: '=',
             type: '=',
-            modals: '='
+            modals: '=',
+            docShareState: '='
         },
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController

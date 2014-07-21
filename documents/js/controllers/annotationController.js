@@ -1,6 +1,6 @@
 'use strict';
 
-function annotationController($scope, $element, $document, Annotations, User, $timeout, navState) {
+function annotationController($scope, $element, $document, Annotations, User, $timeout, navState, SWBrijj) {
     $scope.navState = navState; // TODO: UI is very dependant on navState
 
     function applyLineBreaks(oTextarea) {
@@ -202,6 +202,10 @@ function annotationController($scope, $element, $document, Annotations, User, $t
             }
             $scope.getme = true;
         });
+        if ($scope.annot.type == 'highlight')
+        {
+            Annotations.ocrHighlighted($scope.doc.doc_id, $scope.annot);
+        }
         return false;
     };
 
@@ -219,7 +223,11 @@ function annotationController($scope, $element, $document, Annotations, User, $t
         var dprt = dpr.top - dp.offsetTop; // top of document itself
         $scope.startX = ev.clientX - dprl + 5; // mouse start positions relative to the box/pad
         var bb = $element[0].querySelector("textarea");
-        $scope.startY = ev.clientY - dprt - (parseInt(bb.style.height)/2); // TODO can we get 6 dynamically?
+        $scope.startY = ev.clientY - dprt; // TODO can we get 6 dynamically?
+        if (bb.style.height)
+        {
+            $scope.startY = $scope.startY - (parseInt(bb.style.height)/2);
+        }
         $scope.initialMouseX = ev.clientX;
         $scope.initialMouseY = ev.clientY;
         $scope.initialScrollX = document.documentElement.scrollLeft;
@@ -329,6 +337,7 @@ function annotationController($scope, $element, $document, Annotations, User, $t
 
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
+    $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
     $scope.$watch('annot.position.coords', function(new_coords) {
         if (new_coords) {
@@ -339,10 +348,20 @@ function annotationController($scope, $element, $document, Annotations, User, $t
 
     $scope.$watch('annot.position.size', function(new_size) {
         if (new_size) {
-            $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
-            $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            if ($scope.annot.type == 'text')
+            {
+                $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
+                $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            }
+            else if ($scope.annot.type == 'highlight')
+            {
+                $scope.annotationHighlightStyle.width = (new_size.width) + "px";
+                $scope.annotationHighlightStyle.height = (new_size.height) + "px";
+            }
         }
     }, true);
+    
+    
 
     $scope.$watch('annot.fontsize', function(new_fontsize) {
         if (new_fontsize) {
@@ -370,4 +389,4 @@ function annotationController($scope, $element, $document, Annotations, User, $t
     $scope.user = User;
 }
 
-annotationController.$inject = ["$scope", "$element", "$document", "Annotations", "User", "$timeout", "navState"];
+annotationController.$inject = ["$scope", "$element", "$document", "Annotations", "User", "$timeout", "navState", "SWBrijj"];

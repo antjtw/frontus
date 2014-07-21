@@ -2,6 +2,30 @@
 <script src="/cmn/spin.js"></script>
 <div class="container dynamic-page">
     <subnav>
+        <div ng-if="(navState.role == 'issuer') && (drawTime()) && (doc.issue)">
+            <div class="box-button pull-left"
+                 ng-click="setNextAnnotationType('text');"
+                 data-placement="bottom"
+                 ng-class="{selected: nextAnnotationType == 'text'}">
+                <ul>
+                    <li>
+                        <span data-icon="&#xe60d;" aria-hidden="true"></span>
+                        <span>Marker</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="box-button pull-left"
+                 ng-click="setNextAnnotationType('highlight');"
+                 data-placement="bottom"
+                 ng-class="{selected:  nextAnnotationType == 'highlight'}">
+                <ul>
+                    <li>
+                        <span data-icon="&#xe60f;" aria-hidden="true"></span>
+                        <span>Highlight</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
         <div class="box-button pull-right"
              ng-click="leave();"
@@ -84,7 +108,7 @@
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Signed</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
-                                <span class="activity-icon doc-countersign-icon"></span>
+                                <span class="activity-icon doc-final-icon"></span>
                                 <span class="info"><span>Approved</span><span>{{doc.when_countersigned  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_retracted">

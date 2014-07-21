@@ -227,6 +227,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 return (annot.whattype == annotType) && (annot.filled(false, $rootScope.navState.role));
             });
         },
+        annotable: function(role) {
+            if (role == "investor")
+                return this.investorCanAnnotate();
+            else if (role == "issuer")
+                //does not include if the document is being prepared
+                return this.issuerCanAnnotate();
+        },
+        investorCanAnnotate: function() {
+            return (!this.when_signed && this.signature_deadline && this.signature_flow===2);
+        },
+        issuerCanAnnotate: function() {//does not include if the document is being prepared
+            return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
+        },
     };
 
     /// Document service definition
@@ -342,7 +355,7 @@ Annotation.prototype = {
         position.push(this.position.docPanel.width); // document page width
         position.push(this.position.docPanel.height); // document page height
         json.push(position);
-        json.push("text");
+        json.push(this.type);
         json.push([this.val]);
         json.push([this.fontsize]);
         json.push({
@@ -492,5 +505,19 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     };
     this.investorAttribute = function(attribute) {
         return investor_attributes[attribute] || "";
+    };
+    
+    this.ocrHighlighted = function(doc_id, annot) {
+        if ((annot.type != 'highlight') || (annot.val != ''))
+            return;
+        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y, 
+            annot.position.size.width, annot.position.size.height, annot.position.docPanel.width).then(
+            function (data) {
+                if (annot.val == '')
+                {
+                    annot.val = data;
+                    //$document.getElementById('highlightContents').value = data;
+                }
+            }).except(function (x) {console.log(x);});
     };
 }]);

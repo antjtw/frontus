@@ -1,19 +1,23 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
-    <span class="dragger" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="$event.stopPropagation();">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, $root.navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
+    <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable($root.navState.role)" ng-mousedown="$event.stopPropagation();">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
     <span class="close-button" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe(); $event.stopPropagation()">
         <span data-icon="&#xe00f;"></span>
     </span>
     <div>
-        <fieldset>
+        <fieldset ng-if="annot.type == 'text'">
             <div class="textarea-container">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
         </fieldset>
+        <fieldset ng-if="annot.type == 'highlight'" >
+            <div ng-class="{'roundedcorners': $root.navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
+            </div>
+        </fieldset>
         <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == 'issuer' && getme && active.annotation == annot">
             <ul>
-                <li>
+                <li ng-if="annot.type == 'text'">
                     <ul>
                         <li>
                             <span>Who needs to complete?</span>
@@ -47,7 +51,19 @@
                         </select>
                     </ul>
                 </li>
-                <li>
+                <li ng-if = "annot.type == 'highlight'">
+                    <ul>
+                        <li>
+                            <span>Contents</span>
+                        </li>
+                        <li>
+                            <div class="textarea-container">
+                                <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="annot.val"/>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li ng-if = "annot.type == 'text'">
                     <ul class="required-row">
                         <li>
                             <button ng-class="{'selected':annot.required}" ng-click="annot.required = !annot.required" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>

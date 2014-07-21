@@ -221,19 +221,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.signatureURL = '/photo/user?id=signature:';
 
-        $scope.annotable = function() {
-            return ($scope.invq && $scope.investorCanAnnotate()) || (!$scope.invq && $scope.issuerCanAnnotate());
-        };
-
-        $scope.investorCanAnnotate = function() {
-            return (!$scope.lib.when_signed && $scope.lib.signature_deadline && $scope.lib.signature_flow===2);
-        };
-
-        $scope.issuerCanAnnotate = function() {
-            return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2) ||
-                   ($scope.lib && $scope.prepare);
-        };
-
         $scope.loadPages = function () {
             /** @name SWBrijj#tblmm * @function
              * @param {string}
@@ -405,7 +392,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  // TODO: migrate all uses of $scope.lib to $scope.doc
                  $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
                  $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
-                 $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
+                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || ($scope.lib && $scope.prepare); // requires $scope.lib
 
                  // TODO: move all of this to the Documents and Annotations services
                  if ($scope.lib.annotations) {
@@ -559,6 +546,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 a.position.size.width = 0;
                 a.position.size.height = 0;
                 a.initDrag = event;
+                a.type = $scope.nextAnnotationType;
+                if (a.type == 'highlight')
+                {
+                    a.whosign = 'Issuer';
+                }
                 if ($rootScope.navState.role == "issuer") {
                     a.investorfixed = true;
                 } else {
@@ -669,11 +661,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$on("$destroy", function( event ) {
             $window.onkeydown = null;
         });
-
-        $scope.drawTime = function() {
-            // TODO: check issuerCanAnnotate or investorCanAnnotate depending on role
-            return $scope.isAnnotable && $scope.lib && ((!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor"));
-        };
 
         $scope.user = User;
 
