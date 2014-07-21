@@ -159,8 +159,8 @@ h3 {
 }
 
 .photo-icon {
-    width: 135px;
-    height: 135px;
+    width: 150px;
+    height: 150px;
     display: inline-block;
     background-image:url('../img/landing/helpers.png');
 }
@@ -170,11 +170,11 @@ h3 {
 }
 
 .photo-icon.robbie-icon {
-    background-position: -135px 0;
+    background-position: -150px 0;
 }
 
 .photo-icon.liz-icon {
-    background-position: -270px 0;
+    background-position: -300px 0;
 }
 
 
