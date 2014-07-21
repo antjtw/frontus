@@ -131,14 +131,15 @@
 
         <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
             <tabset style="display:block;" ng-style="viewportheight">
+                <tab heading="Filter">
+                    <people-filter></people-filter>
+                </tab>
                 <tab heading = "Message Activity">
                     <div style="clear: both;">
                         <message-side></message-side>
                     </div>
                 </tab>
-                <tab heading="Filter">
-                    <people-filter></people-filter>
-                </tab>
+                
             </tabset>
         </internal-right-rail>
         <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
