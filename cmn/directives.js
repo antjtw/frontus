@@ -38,14 +38,10 @@ m.directive('groupPeople', function(){
                     console.log($scope.myUserGroups);
                     angular.forEach($scope.myUserGroups, function(info){
                         var a = info.json_array_elements;
-                        console.log(JSON.parse(a));
                         var b = JSON.parse(a);
                         $scope.groupData.push(new indGroup(b));
-               
-                    })
-                    console.log($scope.eachGroups);
-                    console.log($scope.myUserGroups)
-                })
+                    });
+                });
             };
             $scope.parseGroups();
 
@@ -54,11 +50,8 @@ m.directive('groupPeople', function(){
                 angular.forEach(person, function(info){
                     SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
                         $scope.myInfo = data;
-                        console.log($scope.myInfo);
                         angular.forEach($scope.myInfo, function(elem){
-                            console.log(elem.groups)
                             var elemGroups = JSON.parse(elem.groups);
-                            console.log(elemGroups);
                             for(i = 0; i < $scope.selectedGroup.length; i++){
                                 console.log($scope.selectedGroup[i]);
                                 if(elemGroups.indexOf($scope.selectedGroup[i])== -1){
@@ -70,11 +63,8 @@ m.directive('groupPeople', function(){
                                     var removeEmail = [];
                                     removeInfo.push(elem.email, elem.role);
                                     $scope.manyToRemove.push(removeInfo);
-                                    console.log($scope.manyToRemove);
-                                    $scope.updateGroup(JSON.stringify($scope.manyToRemove), JSON.stringify(elemGroups));
-                                    
+                                    $scope.updateGroup(JSON.stringify($scope.manyToRemove), JSON.stringify(elemGroups));                                   
                                 };
-                                console.log(elemGroups);
                             };
                         });
                     });
@@ -83,11 +73,34 @@ m.directive('groupPeople', function(){
 
             };
 
+            $scope.preSelectGroup = function(person){
+                console.log("test")
+                angular.forEach(person, function(info){
+                    console.log(info.email);
+                    SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
+                        $scope.userRoles = data;
+                        console.log($scope.userRoles)
+                        angular.forEach($scope.userRoles, function(role){
+                            console.log(JSON.parse(role.groups));
+                            var preGroup = JSON.parse(role.groups);
+                            for(i = 0; i < preGroup.length; i++){
+                                $scope.selectedGroup.push(preGroup[i]);
+                                console.log(preGroup[i])
+                            }
+                        });
+                    });
+                });
+                console.log($scope.selectedGroup)
+                return $scope.selectedGroup;
+            }
+            $scope.preSelectGroup($scope.people);
+
 
              
 
             $scope.groupIs = function(group){              
                 return $scope.selectedGroup.indexOf(group) != -1;
+                console.log($scope.selectedGroup);
             };
 
             $scope.selectGroup = function(group){
@@ -120,21 +133,7 @@ m.directive('groupPeople', function(){
                 }
             }
 
-            $scope.printData = function(){
-                console.log("printData")
-                SWBrijj.tblm('account.my_user_role', ['groups']).then(function(data){
-                    console.log(data);
-                    $scope.myData = data;
-                    angular.forEach($scope.myData, function(d){
-                        console.log(JSON.parse(d.groups));
-
-                    })
-                }).except(function(data){
-                    console.log('error')
-                });
-              
-                
-            };
+          
 
 
 
