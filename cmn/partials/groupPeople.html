@@ -15,16 +15,19 @@
     </div>
   </div>
 
-<div ng-repeat="myUserGroup in myUserGroups | unique: 'json_array_elements'">
+<!-- <div ng-repeat="myUserGroup in myUserGroups | unique: 'json_array_elements'">
   <div class="check-box-side">
     <button class="check-box-button" ng-class="{'selected': groupIs(myUserGroup.json_array_elements, people)}" ng-click="selectGroup(myUserGroup.json_array_elements); preselectGroup(person)">
         <span data-icon="&#xe023;" aria-hidden="true"></span>
       </button>
   </div>
-  <p>{{myUserGroup.json_array_elements}}</p>
+  <p>{{myUserGroup.json_array_elements}}</p> -->
+
+
  <!--  <ul>
     <li>{{myUserGroup.json_array_elements}}</li>
   </ul> -->
+  <p ng-repeat="groupDatum in groupData">{{groupDatum.group}}</p>
 </div>
 
 

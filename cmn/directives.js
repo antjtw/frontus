@@ -25,7 +25,7 @@ m.directive('groupPeople', function(){
             var newGroups = [];
             var firstGroup = [];
             var oldGroups = [];
-            $scope.allGroups = [];
+            $scope.groupData = [];
             
             function indGroup(group){
                     this.group = group;
@@ -42,10 +42,10 @@ m.directive('groupPeople', function(){
                         console.log(a)
                         var b = a.replace(/\"/g, "");
                         console.log(b);
-                        $scope.allGroups.push(new indGroup(b));
+                        $scope.groupData.push(new indGroup(b));
                         // console.log("hello")
                     })
-                    console.log($scope.allGroups);
+                    console.log($scope.eachGroups);
                     console.log($scope.myUserGroups)
                 })
             };
