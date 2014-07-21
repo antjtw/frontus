@@ -32,7 +32,7 @@
                 <tbody ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder">
                     <tr class="empty-row"/>
                     <tr ng-class="{selectedrow:doc.shown}">
-                        <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)">
+                        <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)" style="cursor: pointer">
                             <ul>
                             <li>
                                 <span bs-tooltip="showtooltip(doc.docname)">{{doc.docname | caplength:40}}</span>
