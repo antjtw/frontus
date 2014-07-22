@@ -41,7 +41,8 @@
         <div class="footer-headline-left">
             <div class = "standard-button green">
                 <button class="btn"
-                    ng-click="createGroups(people)"> 
+                    ng-click="createGroups(people)"
+                    ng-disabled="!readyToAdd()"> 
                     Confirm
                 </button>
             </div>

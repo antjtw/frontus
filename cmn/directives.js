@@ -124,6 +124,16 @@ m.directive('groupPeople', function(){
                 return $scope.selectedGroup;
             };
 
+            $scope.readyToAdd = function(){
+                if($scope.selectedGroup.length == 0 || $scope.groupName.length == 0){
+                    return false;
+                }
+                else {
+                    return false
+                };
+                
+            };
+
 
 
 
