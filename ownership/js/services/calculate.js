@@ -369,13 +369,13 @@ ownership.service('calculate', function () {
     };
 
     // Generates the diluted rows
-    this.dilution = function (rows, issues) {
+    this.dilution = function (rows, securities) {
         var dilutedRows = [];
         angular.forEach(rows, function (row) {
             if (row.name !== undefined) {
                 var something = null;
                 var temprow = {"name": row.name, "email": row.email, cells: []};
-                angular.forEach(issues, function (issue) {
+                angular.forEach(securities, function (issue) {
                     if (issue.issue) {
                         temprow.cells[issue.issue] = {};
                         if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row.cells[issue.issue]['u'] > 0) {
@@ -524,7 +524,7 @@ ownership.service('calculate', function () {
         return total;
     };
 
-    //Calculates the total money for all issues and transactions
+    //Calculates the total money for all securities and transactions
     this.totalPaid = function (rows) {
         var total = 0;
         angular.forEach(rows, function (row) {
@@ -538,23 +538,23 @@ ownership.service('calculate', function () {
     };
 
     //Returns the price per share for the most recent issue assuming such a value is given
-    this.pricePerShare = function (issues, finishedsorting) {
-        if (finishedsorting && issues[issues.length-2]) {
-            return issues[issues.length-2].ppshare;
+    this.pricePerShare = function (securities, finishedsorting) {
+        if (finishedsorting && securities[securities.length-2]) {
+            return securities[securities.length-2].ppshare;
         }
     };
 
     //Returns the price per share for the most recent issue assuming such a value is given
-    this.lastIssue = function (issues, finishedsorting) {
-        if (finishedsorting && issues[issues.length-2]) {
-            return issues[issues.length-2].date;
+    this.lastIssue = function (securities, finishedsorting) {
+        if (finishedsorting && securities[securities.length-2]) {
+            return securities[securities.length-2].date;
         }
     };
 
     //Returns the post money valuation for the most recent issue assuming such a value is given
-    this.lastPostMoney = function (issues, finishedsorting) {
-        if (finishedsorting && issues[issues.length-2]) {
-            return issues[issues.length-2].postmoney;
+    this.lastPostMoney = function (securities, finishedsorting) {
+        if (finishedsorting && securities[securities.length-2]) {
+            return securities[securities.length-2].postmoney;
         }
     };
 

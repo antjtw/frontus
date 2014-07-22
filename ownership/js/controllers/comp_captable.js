@@ -99,7 +99,7 @@ var captableController = function(
     function deselectAllCells() {
         angular.forEach($scope.ct.rows, function (row) {
             row.state = false;
-            angular.forEach($scope.ct.issues, function (issue) {
+            angular.forEach($scope.ct.securities, function (issue) {
                 if (issue.issue) {
                     if (row.cells[issue.issue]) {
                         row.cells[issue.issue].state = false;
@@ -155,7 +155,7 @@ var captableController = function(
         // select cell
         angular.forEach($scope.ct.rows, function (row) {
             row.state = false;
-            angular.forEach($scope.ct.issues, function (issue) {
+            angular.forEach($scope.ct.securities, function (issue) {
                 if (issue.issue) {
                     if (row.name == currenttran &&
                             currentcolumn == issue.issue &&
@@ -195,7 +195,7 @@ var captableController = function(
             $scope.sideBar = "home";
             $scope.activeIssue = undefined;
         } else {
-            angular.forEach($scope.ct.issues, function(issuefull) {
+            angular.forEach($scope.ct.securities, function(issuefull) {
                 if (issuefull.issue == issuekey) {
                     issue = issuefull;
                 }
@@ -270,7 +270,7 @@ var captableController = function(
     $scope.saveIssue = function (issue, item) {
         if (item == "issuekey") {
             item = "issue";
-            angular.forEach($scope.ct.issues, function(issuefull) {
+            angular.forEach($scope.ct.securities, function(issuefull) {
                 if (issuefull.issue == issue) {
                     issue = issuefull;
                 }
@@ -292,7 +292,7 @@ var captableController = function(
                 var common = calculate.strToBool(issue.common);
                 issue.vestingbegins = calculate.whenVestingBegins(issue);
                 if (issue.issue == "name") { issue.issue = "No name"; }
-                angular.forEach($scope.ct.issues, function (x) {
+                angular.forEach($scope.ct.securities, function (x) {
                     // Duplicate issue names are not allowed
                     if (x.issue !== "" && issue.issue == x.issue && x != issue) {
                         issue.issue = issue.issue + " (1)";
@@ -343,16 +343,16 @@ var captableController = function(
                             $scope.ct.rows.splice(index, 1);
                         }
                     }
-                    angular.forEach($scope.ct.issues, function (x) {
+                    angular.forEach($scope.ct.securities, function (x) {
                         captable.generateUnissuedRows();
                         if (x.issue == issue.issue && issue.vestingbegins) {
                             x.vestingbegins = issue.vestingbegins;
                         }
                     });
 
-                    // In the case where the issue is changed and there are other issues that use it as the underlying
+                    // In the case where the issue is changed and there are other securities that use it as the underlying
                     if (item == "issue") {
-                        angular.forEach($scope.ct.issues, function (keyissue) {
+                        angular.forEach($scope.ct.securities, function (keyissue) {
                             if (item == "issue" &&
                                     keyissue.optundersec &&
                                     keyissue.optundersec == issue.key) {
@@ -388,7 +388,7 @@ var captableController = function(
             } else {
                 var d1 = (Date.today()).toUTCString();
                 var expire = null;
-                if ($scope.ct.issues.length == 1 &&
+                if ($scope.ct.securities.length == 1 &&
                         (window.location.hostname == "www.sharewave.com"
                          || window.location.hostname == "sharewave.com"))
                 {
@@ -396,7 +396,7 @@ var captableController = function(
                     analytics.track('cap table creator');
                 }
                 if (issue.issue == "name") { issue.issue = "No name"; }
-                angular.forEach($scope.ct.issues, function (x) {
+                angular.forEach($scope.ct.securities, function (x) {
                     // Duplicate issue names are not allowed
                     if (x.issue !== "" &&
                             issue.issue == x.issue && x != issue) {
@@ -413,14 +413,14 @@ var captableController = function(
                 .then(function(data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue.issue;
-                    $scope.ct.issues.push(captable.nullIssue());
+                    $scope.ct.securities.push(captable.nullIssue());
                     $scope.ct.issuekeys.push(issue.key);
                     angular.forEach($scope.ct.rows, function (row) {
                         row.cells[issue.key] = captable.nullCell();
                     });
-                    for (var i=0; i < $scope.ct.issues.length; i++) {
-                        if ($scope.ct.issues[i] == issue) {
-                            $scope.$watch('issues['+i+']',
+                    for (var i=0; i < $scope.ct.securities.length; i++) {
+                        if ($scope.ct.securities[i] == issue) {
+                            $scope.$watch('securities['+i+']',
                                           $scope.issue_watch, true);
                         }
                     }
@@ -440,10 +440,10 @@ var captableController = function(
     $scope.deleteIssue = function (issue) {
         SWBrijj.proc('ownership.delete_issue', issue['key']).then(function (data) {
             $scope.lastsaved = Date.now();
-            angular.forEach($scope.ct.issues, function (oneissue) {
+            angular.forEach($scope.ct.securities, function (oneissue) {
                 if (oneissue.key == issue.key) {
-                    var index = $scope.ct.issues.indexOf(oneissue);
-                    $scope.ct.issues.splice(index, 1);
+                    var index = $scope.ct.securities.indexOf(oneissue);
+                    $scope.ct.securities.splice(index, 1);
                     var indexed = $scope.ct.issuekeys.indexOf(oneissue.key);
                     $scope.ct.issuekeys.splice(indexed, 1);
                 }
@@ -463,15 +463,15 @@ var captableController = function(
                     $scope.ct.trans.splice(index, 1);
                 }
             });
-            if ($scope.ct.issues.length === 0 || ($scope.ct.issues[$scope.ct.issues.length-1].name !== "")) {
-                $scope.ct.issues.push({"name": "", "date": new Date(2100, 1, 1)});
+            if ($scope.ct.securities.length === 0 || ($scope.ct.securities[$scope.ct.securities.length-1].name !== "")) {
+                $scope.ct.securities.push({"name": "", "date": new Date(2100, 1, 1)});
             }
             $scope.sideBar = "x";
         });
     };
 
     $scope.revertIssue = function (issue) {
-        angular.forEach($scope.ct.issues, function (x) {
+        angular.forEach($scope.ct.securities, function (x) {
             if (x.key == issue.key) {
                 x.issue = issue.key;
             }
@@ -509,14 +509,14 @@ var captableController = function(
                     "pariwith": null});
     };
 
-    $scope.availableKeys = function(issues, paripassu) {
+    $scope.availableKeys = function(securities, paripassu) {
         var list = [];
         var used = [];
         list.push("");
         angular.forEach(paripassu, function(pari) {
             used.push(pari.pariwith);
         });
-        angular.forEach(issues, function(issue) {
+        angular.forEach(securities, function(issue) {
             if (used.indexOf(issue) == -1) {
                 list.push(issue);
             }
@@ -1240,10 +1240,10 @@ var captableController = function(
         dialogClass: 'convertModal modal'
     };
 
-    // Filters the dropdown to only equity issues
-    $scope.justEquity = function(issues, tran) {
+    // Filters the dropdown to only equity securities
+    $scope.justEquity = function(securities, tran) {
         var list = [];
-        angular.forEach(issues, function(issue) {
+        angular.forEach(securities, function(issue) {
             if (issue.type == "Equity" && issue.issue != tran.issue) {
                 list.push(issue);
             }
@@ -1476,7 +1476,7 @@ var captableController = function(
                 });
 
                 captable.generateUnissuedRows();
-                angular.forEach($scope.ct.issues, function (x) {
+                angular.forEach($scope.ct.securities, function (x) {
                     if (x.issue == issue.issue) {
                         x.ppshare = x.ppshare * ratio;
                     }
@@ -1635,7 +1635,7 @@ var captableController = function(
 
     $scope.isDebt = function(key) {
         var done = true;
-        angular.forEach($scope.ct.issues, function(issue) {
+        angular.forEach($scope.ct.securities, function(issue) {
             if (key == issue.issue &&
                     (issue.type=="Debt" || issue.type=="Safe")) {
                 done = false
@@ -1707,9 +1707,9 @@ var captableController = function(
     };
 
     $scope.irevert = function (issue) {
-        for (var i = 0, l = $scope.ct.issues.length; i < l; i++) {
-            if ($scope.ct.issues[i].issue == issue.issue) {
-                $scope.ct.issues[i] = angular.copy($scope.issueRevert);
+        for (var i = 0, l = $scope.ct.securities.length; i < l; i++) {
+            if ($scope.ct.securities[i].issue == issue.issue) {
+                $scope.ct.securities[i] = angular.copy($scope.issueRevert);
                 $scope.activeIssue = angular.copy($scope.issueRevert);
             }
         };
@@ -1757,7 +1757,7 @@ var captableController = function(
             newTran.atype = 0;
             if (type == "u") { newTran.units = newTran.unitskey = number; }
             else { newTran.paid = newtran.paidkey = number; }
-            angular.forEach($scope.ct.issues, function (issue) {
+            angular.forEach($scope.ct.securities, function (issue) {
                 if (issue.issue == inIssue) {
                     newTran = captable.inheritAllDataFromIssue(newTran, issue);
                 }
@@ -1986,7 +1986,7 @@ var captableController = function(
     // Hides transaction fields for common stock
     $scope.commonstock = function(tran) {
         var common = false;
-        angular.forEach($scope.ct.issues, function(issue) {
+        angular.forEach($scope.ct.securities, function(issue) {
             if (issue.issue == tran.issue) {
                 common = issue.common ? true : false
             }
@@ -2079,7 +2079,7 @@ var captableController = function(
 
     $scope.grantbyIssue = function (key) {
         var type = "";
-        angular.forEach($scope.ct.issues, function(issue) {
+        angular.forEach($scope.ct.securities, function(issue) {
             if (issue.issue == key) {
                 type = $filter('issueUnitLabel')(issue);
             }
@@ -2128,7 +2128,7 @@ var captableController = function(
     //switches the sidebar based on the type of the issue
     $scope.dilution = function () {
         $scope.sideBar = 9;
-        $scope.dilutedRows = calculate.dilution($scope.ct.rows, $scope.ct.issues);
+        $scope.dilutedRows = calculate.dilution($scope.ct.rows, $scope.ct.securities);
     };
 
     //switches the sidebar based on the type of the issue
@@ -2179,17 +2179,17 @@ var captableController = function(
 
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {
-        return $scope.formatDollarAmount(calculate.pricePerShare($scope.ct.issues, $scope.finishedsorting));
+        return $scope.formatDollarAmount(calculate.pricePerShare($scope.ct.securities, $scope.finishedsorting));
     };
 
     // Last issue date for the sidebar In Brief section
     $scope.lastIssue = function() {
-        return calculate.lastIssue($scope.ct.issues, $scope.finishedsorting);
+        return calculate.lastIssue($scope.ct.securities, $scope.finishedsorting);
     };
 
     // Last issue date for the sidebar In Brief section
     $scope.lastPostMoney = function() {
-        return $scope.formatDollarAmount(calculate.lastPostMoney($scope.ct.issues, $scope.finishedsorting));
+        return $scope.formatDollarAmount(calculate.lastPostMoney($scope.ct.securities, $scope.finishedsorting));
     };
 
     //Watches constraining various values
@@ -2235,7 +2235,7 @@ var captableController = function(
     };
 
     $scope.issue_watch = function(newval, oldval) {
-        generic_watch(newval, oldval, $scope.ct.issues);
+        generic_watch(newval, oldval, $scope.ct.securities);
     };
 
     $scope.namePaste = function(ev, row) {
