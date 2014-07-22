@@ -113,12 +113,12 @@ m.directive('groupPeople', function(){
             $scope.selectGroup = function(group){
                 if($scope.selectedGroup.indexOf(group)=== -1){
                     $scope.selectedGroup.push(group);
-                    oldGroups.push(group);
+                    // oldGroups.push(group);
                 }
                 else {
                     var toDelete = $scope.selectedGroup.indexOf(group)
                     $scope.selectedGroup.splice(toDelete, 1);
-                    oldGroups.splice(toDelete, 1)
+                    // oldGroups.splice(toDelete, 1)
                 }
                 return $scope.selectedGroup;
             };
@@ -126,40 +126,90 @@ m.directive('groupPeople', function(){
 
 
 
-
             $scope.createGroups = function(person){
+                // var newGroups = [];
+                // condition1 -- only adding a group, don't check anything
                 if($scope.groupName.length > 0 && $scope.selectedGroup.length ==0){
-                    $scope.checkGroups(person, $scope.groupName)
-                    // add one group
+                    $scope.checkGroups(person, $scope.groupName);
                 }
-                // add or remove groups
-                else if($scope.selectedGroup.length > 0 && $scope.groupName.length == 0){
-                    $scope.personInfo(person);
-                    angular.forEach($scope.myInfo, function(elem){
-                        console.log(elem.groups);
-                        console.log("test")
-                        var elements = JSON.parse(elem.groups)
-                        console.log(elements);
-                        for(var i = 0; i < elements.length; i ++){
-                            if($scope.selectedGroup.indexOf(elements[i]) > -1){
-                                console.log('remove group');
-                                $scope.removeGroup(person);
+                // condition2--only adding an existing group
+                else if($scope.groupName.length == 0){
+                    console.log($scope.selectedGroup);
+                    console.log($scope.myInfo);
+                    angular.forEach($scope.myInfo, function(info){
+                        console.log(info.groups);
+                        var personGroups = JSON.parse(info.groups);
+                        console.log(personGroups);
+                        for(var i = 0; i < $scope.selectedGroup.length; i++){
+                            if(personGroups.indexOf($scope.selectedGroup[i]) > -1){
+                                 var toDelete =  personGroups.indexOf($scope.selectedGroup[i]);
+                                 personGroups.splice(toDelete, 1);
+                                 console.log(personGroups);
+
                             }
-                            else {
-                                $scope.checkGroups(person, oldGroups.join());
+                            else{
+                                personGroups.push($scope.selectedGroup[i]);
+                                console.log(personGroups)
                             }
                         }
-                    });
-                }
-                else if($scope.selectedGroup.length > 0 && $scope.groupName.length > 0){
-                    $scope.removeGroup(person);
-                    $scope.checkGroups(person, $scope.groupName);
+                        if($scope.groupName.length == 0){
+                            $scope.checkGroups(person, personGroups);
+                            console.log("adding or removing people with one fcn")
+                        }
 
+                    })
                 }
-                // else {
-                //     console.log("nothing to add")
-                // }
-            }
+                else{
+                    console.log("other situation");
+                }
+            };
+            // $scope.createGroups = function(person){
+            //     if($scope.groupName.length > 0 && $scope.selectedGroup.length ==0){
+            //         $scope.checkGroups(person, $scope.groupName)
+            //         // add one group
+            //     }
+            //     // add or remove groups
+            //     else if($scope.selectedGroup.length > 0 && $scope.selectedGroup.length > 0){
+            //         console.log("doing 2 things");
+            //         $scope.personInfo(person);
+            //         angular.forEach($scope.myInfo, function(elem){
+            //             console.log(elem.groups);
+            //             console.log("test")
+            //             var elements = JSON.parse(elem.groups);
+            //             // elements are the person's groups
+            //             console.log(elements);
+            //             for(var i = 0; i < elements.length; i ++){
+            //                 if($scope.selectedGroup.indexOf(elements[i]) > -1){
+            //                     // if it isn't in the person's group
+            //                     console.log('old remove');
+            //                     var toDelete =  elements.indexOf($scope.selectedGroup[i]);
+            //                     elements.splice(toDelete, 1);
+            //                     console.log("something to delete")
+            //                 }
+            //                 else if($scope.selectedGroup.indexOf(elements[i]) == -1){
+            //                     console.log("both");
+            //                     console.log("nothing to delete");
+
+            //                     // $scope.removeGroup(person);
+            //                     // $scope.checkGroups(person, oldGroups.join());
+            //                 }
+            //                 else {
+            //                     // $scope.checkGroups(person, oldGroups.join());
+            //                     console.log("only add")
+            //                 }
+            //             }
+            //         });
+            //     }
+            //     else if($scope.selectedGroup.length > 0 && $scope.groupName.length > 0){
+            //         $scope.removeGroup(person);
+            //         $scope.checkGroups(person, $scope.groupName);
+
+            //     }
+            //     // else {
+            //     //     console.log("nothing to add")
+            //     // }
+            // }
+
 
 
             $scope.checkGroups = function(person, text){                
@@ -167,7 +217,7 @@ m.directive('groupPeople', function(){
                 var hasGroup = [];
                 $scope.personInfo(person);
                 angular.forEach($scope.myInfo, function(user){
-                    if(user.groups==null){
+                    if(user.groups == null){
                         noGroup.push(user.email, user.role);
                         firstGroup.push(text);
                         $scope.manyNoGroup.push(noGroup);
@@ -175,18 +225,21 @@ m.directive('groupPeople', function(){
                         console.log("addedGroup")
                     }
                     else if(user.groups != null){
-                        var array = JSON.parse(user.groups);
-                        console.log(array)
-                        console.log("array")
-                        if(array.indexOf(text) == -1){
-                            array.push(text);
-                            hasGroup.push(user.email, user.role);
-                            $scope.manyHasGroup.push(hasGroup);
-                            $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
-                        }
-                        else {
-                            console.log("already in the group")
-                        }
+                        hasGroup.push(user.email, user.role);
+                        $scope.manyHasGroup.push(hasGroup);
+                        $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(text));
+                        // var array = JSON.parse(user.groups);
+                        // console.log(array)
+                        // console.log("array")
+                        // if(array.indexOf(text) == -1){
+                        //     array.push(text);
+                        //     hasGroup.push(user.email, user.role);
+                        //     $scope.manyHasGroup.push(hasGroup);
+                        //     $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
+                        // }
+                        // else {
+                        //     console.log("already in the group")
+                        // }
                        
                     }
                    

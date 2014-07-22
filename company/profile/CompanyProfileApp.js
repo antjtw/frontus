@@ -512,8 +512,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     angular.forEach($scope.myGroups, function(myGroups){
                         if(myGroups.groups != null){
                             var array = JSON.parse(myGroups.groups);
-                            person.groups = array.join(", ");
-                            console.log(typeof myGroups.groups);
+                            if(array.length > 1){
+                                person.groups = array.join(", ");
+                                console.log(typeof myGroups.groups);
+                            }
+                            else{
+                                person.groups = array.join();
+                            }
+                            
                         };
                     });
                 
