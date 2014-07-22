@@ -1,5 +1,5 @@
 <div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, $root.navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
-    <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable($root.navState.role)" ng-mousedown="$event.stopPropagation();">
+    <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable($root.navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
     <span class="close-button" ng-show="isAnnotable && investorFixed() && !doc.countersignable($root.navState.role)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe(); $event.stopPropagation()">
