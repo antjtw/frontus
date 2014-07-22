@@ -8,13 +8,19 @@ m.directive('groupPeople', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location){
 
+            $scope.unChecked = [];
+            // var newGroup = [];
             $scope.groupName = "";
+            $scope.manyGroup = [];
+            $scope.selectedGroup = [];
+            var newGroups = [];
+            $scope.groupData = [];
 
 
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
                    console.log("success!");
-                   $scope.$emit('success')
+                   $scope.$emit("notification:success", "Group Changed");
                    // $route.reload();
                 }).except(function(x){
                     console.log("failed to add group");
@@ -22,16 +28,13 @@ m.directive('groupPeople', function(){
             };
 
 
-            $scope.manyGroup = [];
-            $scope.selectedGroup = [];
-            var newGroups = [];
-            $scope.groupData = [];
+       
             
             function indGroup(group){
                 this.group = group;
             };
 
-            $scope.parseGroups = function(){              
+            $scope.parseGroups = function(){             
               SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
                     console.log($scope.myUserGroups);
@@ -55,8 +58,7 @@ m.directive('groupPeople', function(){
             $scope.personInfo($scope.people);
 
 
-            // check boxes in view
-            // will need to tie this to the person as the view changes, not sure if that will be a watch or adding a variable.  Will as for help on this.
+
             $scope.preSelectGroup = function(person){
                 angular.forEach(person, function(info){
                     console.log(info.email);
@@ -75,6 +77,13 @@ m.directive('groupPeople', function(){
                 return $scope.selectedGroup;
             }
             $scope.preSelectGroup($scope.people)
+
+            // $scope.$watch('people', function(newdata, olddata){
+            //     if(newdata){
+            //         $scope.preSelectGroup($scope.people);
+
+            //     }        
+            // });
             
 
 
@@ -91,7 +100,9 @@ m.directive('groupPeople', function(){
                     // oldGroups.push(group);
                 }
                 else {
-                    var toDelete = $scope.selectedGroup.indexOf(group)
+                    var toDelete = $scope.selectedGroup.indexOf(group);
+                    $scope.unChecked.push(group);
+                    console.log($scope.unChecked);
                     $scope.selectedGroup.splice(toDelete, 1);
                     // oldGroups.splice(toDelete, 1)
                 }
@@ -111,6 +122,8 @@ m.directive('groupPeople', function(){
 
 
 
+
+
             $scope.createGroups = function(person){
                 console.log(person);
                 console.log($scope.selectedGroup);
@@ -124,43 +137,66 @@ m.directive('groupPeople', function(){
                             console.log(info.groups);
                             myRole.push(info.email, info.role);
                             bigArray.push(myRole);
-                            console.log(myRole);
-                            console.log(bigArray);
                             if(info.groups != null){
                                 var personGroups = JSON.parse(info.groups);
                             }
                             else{
                                 var personGroups = []
                             }
-                            console.log(personGroups);
-                            if($scope.selectedGroup.length > 0){
-                                for(var i = 0; i < $scope.selectedGroup.length; i++){
-                                    if(personGroups.indexOf($scope.selectedGroup[i]) > -1){
-                                         var toDelete =  personGroups.indexOf($scope.selectedGroup[i]);
-                                         personGroups.splice(toDelete, 1);
-                                         console.log(personGroups);
-
-                                    }
-                                    else if(personGroups.indexOf($scope.selectedGroup[i])== -1){
-                                        personGroups.push($scope.selectedGroup[i]);
-                                        console.log(personGroups)
+                            if($scope.unChecked.length > 0){
+                                console.log($scope.unChecked);
+                                console.log($scope.selectedGroup);
+                                for(var i = 0; i < $scope.unChecked.length; i++){
+                                    console.log($scope.unChecked[i]);
+                                    if(personGroups.indexOf($scope.unChecked[i]) > -1){
+                                        var toDelete = personGroups.indexOf($scope.unChecked[i]);
+                                        personGroups.splice(toDelete, 1);                                        
+                                        console.log("to delete");
                                     };
-                                };  
+                                };
+                            };
+                            if($scope.selectedGroup.length > 0){
+                                console.log(personGroups);
+                                for(var i = 0; i < $scope.selectedGroup.length; i++){
+                                    if(personGroups.indexOf($scope.selectedGroup[i]) == -1){
+                                        personGroups.push($scope.selectedGroup[i]);
+                                    };
+                                };
                             };
                             if($scope.groupName.length > 0){
+                                console.log($scope.groupName)
                                 if(personGroups.indexOf($scope.groupName)== -1){
                                     personGroups.push($scope.groupName);
-                                    console.log(personGroups);
-                                    console.log(bigArray);
-                                    console.log("ready to add?");
                                 }
-                                else{
-                                    console.log("already in your group")
-                                };
                             }
-                            $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
+                            console.log(personGroups);
+
+                            // if($scope.selectedGroup.length > 0){
+                            //     for(var i = 0; i < $scope.selectedGroup.length; i++){
+                            //         if(personGroups.indexOf($scope.selectedGroup[i])== -1){
+                            //             personGroups.push($scope.selectedGroup[i]);
+                            //             var newGroups = personGroups;
+                            //             console.log(newGroups);
+                            //             console.log(personGroups);
+                            //             console.log("keepers or adders")
+                            //         };
+                            //     };  
+                            // };
+                             // $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(newGroups));
+                            // if($scope.groupName.length > 0){
+                            //     if(personGroups.indexOf($scope.groupName)== -1){
+                            //         personGroups.push($scope.groupName);
+                            //         console.log(personGroups);
+                            //         console.log(bigArray);
+                            //         console.log("ready to add?");
+                            //     }
+                            //     else{
+                            //         console.log("already in your group")
+                            //     };
+                            // }
+                            // $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
                             // else{
-                            //    $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
+                               $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
                             // }
 
                         });
