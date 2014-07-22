@@ -81,7 +81,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             var tmp_array = [];
             for (var field in fields) {
                 var f = fields[field];
-                tmp_array.push({name: f.name, display: f.display_name, required: f.required});
+                tmp_array.push({name: f.name, display: f.display_name, required: f.required, typename: f.typname, labels: f.labels});
             }
             // add new types onto the end (in one action, without changing the reference, for performance reasons)
             var args = [type_list.length, 0].concat(tmp_array);
@@ -490,11 +490,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     this.investorAttribute = function(attribute) {
         return investor_attributes[attribute] || "";
     };
-    
+
     this.ocrHighlighted = function(doc_id, annot) {
         if ((annot.type != 'highlight') || (annot.val != ''))
             return;
-        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y, 
+        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y,
             annot.position.size.width, annot.position.size.height, annot.position.docPanel.width).then(
             function (data) {
                 if (annot.val == '')

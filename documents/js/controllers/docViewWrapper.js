@@ -24,7 +24,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             "float8": numberCheck,
             "varchar": stringCheck
         };
-        
+
         SWBrijj.tblm("ownership.transaction_database_types").then(function(x){
             for (var ind = 0; ind < x.length; ind++)
             {
@@ -353,7 +353,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             adjusted.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true";
             adjusted.width = "150";
         };
-        
+
         $scope.setNextAnnotationType = function (type) {
             $scope.nextAnnotationType = type;
         };
@@ -506,9 +506,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
             });
         };
-        
+
         $scope.drawTime = function() {
-            return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && $rootScope.navState.role == "investor"));
+            return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && navState.role == "investor"));
         };
 
         $scope.getData();
