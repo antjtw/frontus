@@ -20,8 +20,6 @@ m.directive('groupPeople', function(){
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
                    console.log("success!");
-                   $scope.$emit("notification:success", "Group Changed");
-                   // $route.reload();
                 }).except(function(x){
                     console.log("failed to add group");
                 });
@@ -101,11 +99,13 @@ m.directive('groupPeople', function(){
                 }
                 else {
                     var toDelete = $scope.selectedGroup.indexOf(group);
-                    $scope.unChecked.push(group);
-                    console.log($scope.unChecked);
                     $scope.selectedGroup.splice(toDelete, 1);
-                    // oldGroups.splice(toDelete, 1)
-                }
+                    // console.log($scope.unChecked);
+                    if($scope.unChecked.indexOf(group)==-1){
+                        $scope.unChecked.push(group);
+                    }
+                };
+                console.log($scope.unChecked);
                 return $scope.selectedGroup;
             };
 
@@ -170,40 +170,14 @@ m.directive('groupPeople', function(){
                                 }
                             }
                             console.log(personGroups);
-
-                            // if($scope.selectedGroup.length > 0){
-                            //     for(var i = 0; i < $scope.selectedGroup.length; i++){
-                            //         if(personGroups.indexOf($scope.selectedGroup[i])== -1){
-                            //             personGroups.push($scope.selectedGroup[i]);
-                            //             var newGroups = personGroups;
-                            //             console.log(newGroups);
-                            //             console.log(personGroups);
-                            //             console.log("keepers or adders")
-                            //         };
-                            //     };  
-                            // };
-                             // $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(newGroups));
-                            // if($scope.groupName.length > 0){
-                            //     if(personGroups.indexOf($scope.groupName)== -1){
-                            //         personGroups.push($scope.groupName);
-                            //         console.log(personGroups);
-                            //         console.log(bigArray);
-                            //         console.log("ready to add?");
-                            //     }
-                            //     else{
-                            //         console.log("already in your group")
-                            //     };
-                            // }
-                            // $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
-                            // else{
-                               $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
-                            // }
+                            $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
 
                         });
                             
                     });
                 });
-               
+                $scope.$emit("notification:success", "Group Changed");
+                $route.reload();               
             };
 
             

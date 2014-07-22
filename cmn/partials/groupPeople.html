@@ -1,50 +1,49 @@
-<div class="composemssage">
+<div class="composemessage">
   <div class="sidebarHeader">
-    <span>CREATE GROUP</span>
+    <span>GROUP</span>
   </div>
 
   <div class="sidebarHeader">
     <span>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name</span>
   </div>
 
-  <div class="sidebarText">
-    <span>Group Name {{people}}</span>
-    <div>
-       <input type="text" ng-model="groupName">
-        </input>
-    </div>
-  </div>
-
-
   <div ng-repeat="groupDatum in groupData | unique: 'group'">
     <div class="check-box-side">
       <button class="check-box-button" ng-class="{'selected': groupIs(groupDatum.group)}" ng-click="selectGroup(groupDatum.group)">
          <span data-icon="&#xe023;" aria-hidden="true"></span>
-    </button>
+      </button>
+    </div>
+    <p>{{groupDatum.group}}</p>
   </div>
-  <p>{{groupDatum.group}}</p>
-</div>
 
 
+  <div class="sidebarText">
+    <span>New Group</span>
+    <div>
+       <input type="text" ng-model="groupName">
+      </input>
+    </div>
+  </div>
+<!-- </div> -->
 
+  <div class="sidebarFooter">
 
-
-    <div class="sidebarFooter">
-
-        <div class="preview-message" 
-            ng-click="preSelectGroup(people);">
-            preselect
+    <div class="footer-headline-left">
+        <div class = "standard-button green">
+            <button class="btn"
+                ng-click="createGroups(people)"
+                > 
+                Confirm
+            </button>
         </div>
+    </div>
 
-
-
-        <div class="footer-headline-left">
-            <div class = "standard-button green">
-                <button class="btn"
-                    ng-click="createGroups(people)"
-                    > 
-                    Confirm
-                </button>
-            </div>
-        </div>
+    <div class="footer-headline-right">
+      <div class= "standard-button white">
+        <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
