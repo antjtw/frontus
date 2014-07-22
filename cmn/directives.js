@@ -127,19 +127,22 @@ m.directive('groupPeople', function(){
 
 
             $scope.createGroups = function(person){
+                // text is always a string, not an array
                 // var newGroups = [];
                 // condition1 -- only adding a group, don't check anything
-                if($scope.groupName.length > 0 && $scope.selectedGroup.length ==0){
-                    $scope.checkGroups(person, $scope.groupName);
-                }
+                // if($scope.groupName.length > 0 && $scope.selectedGroup.length ==0){
+                //     $scope.checkGroups(person, $scope.groupName);
+                // }
                 // condition2--only adding an existing group
-                else if($scope.groupName.length == 0){
+                // else if($scope.groupName.length == 0){
+
                     console.log($scope.selectedGroup);
                     console.log($scope.myInfo);
                     angular.forEach($scope.myInfo, function(info){
                         console.log(info.groups);
                         var personGroups = JSON.parse(info.groups);
                         console.log(personGroups);
+
                         for(var i = 0; i < $scope.selectedGroup.length; i++){
                             if(personGroups.indexOf($scope.selectedGroup[i]) > -1){
                                  var toDelete =  personGroups.indexOf($scope.selectedGroup[i]);
@@ -152,16 +155,21 @@ m.directive('groupPeople', function(){
                                 console.log(personGroups)
                             }
                         }
-                        if($scope.groupName.length == 0){
-                            $scope.checkGroups(person, personGroups);
-                            console.log("adding or removing people with one fcn")
+                        if($scope.groupName.length > 0){
+                            if(personGroups.indexOf($scope.groupName)== -1){
+                                personGroups.push($scope.groupName);
+                                console.log(personGroups);
+                                $scope.checkGroups(person, personGroups);
+                            }
+                            // $scope.checkGroups(person, personGroups);
+                            // console.log("adding or removing people with one fcn")
                         }
 
-                    })
-                }
-                else{
-                    console.log("other situation");
-                }
+                    });
+                // }
+                // else{
+                //     console.log("other situation");
+                // }
             };
             // $scope.createGroups = function(person){
             //     if($scope.groupName.length > 0 && $scope.selectedGroup.length ==0){
@@ -227,15 +235,17 @@ m.directive('groupPeople', function(){
                     else if(user.groups != null){
                         hasGroup.push(user.email, user.role);
                         $scope.manyHasGroup.push(hasGroup);
-                        $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(text));
-                        // var array = JSON.parse(user.groups);
-                        // console.log(array)
+                        console.log("here")
+                        // $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(text));
+                        // var array = [];
+                        // array.push(text);
+                        // console.log(array);
                         // console.log("array")
                         // if(array.indexOf(text) == -1){
                         //     array.push(text);
                         //     hasGroup.push(user.email, user.role);
                         //     $scope.manyHasGroup.push(hasGroup);
-                        //     $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(array));
+                        $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(text));
                         // }
                         // else {
                         //     console.log("already in the group")
