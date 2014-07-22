@@ -176,7 +176,7 @@ m.directive('groupPeople', function(){
                                 };
                             }
                             else{
-                                $scope.checkGroups(person, personGroups);
+                               $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
                             }
 
                         });
