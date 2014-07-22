@@ -14,21 +14,17 @@ m.directive('groupPeople', function(){
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
                    console.log("success!");
-                   $route.reload();
+                   $scope.$emit('success')
+                   // $route.reload();
                 }).except(function(x){
                     console.log("failed to add group");
                 });
             };
 
 
-            $scope.manyNoGroup = [];
             $scope.manyGroup = [];
-            $scope.manyHasGroup = [];
             $scope.selectedGroup = [];
-            $scope.manyToRemove = [];
             var newGroups = [];
-            var firstGroup = [];
-            var oldGroups = [];
             $scope.groupData = [];
             
             function indGroup(group){
@@ -58,29 +54,6 @@ m.directive('groupPeople', function(){
             };
             $scope.personInfo($scope.people);
 
-            $scope.removeGroup = function(person){
-                var removeInfo = []
-                $scope.personInfo(person);
-                console.log($scope.myInfo);
-                angular.forEach($scope.myInfo, function(elem){
-                    var elemGroups = JSON.parse(elem.groups);
-                    for(i = 0; i < $scope.selectedGroup.length; i++){
-                        console.log($scope.selectedGroup[i]);
-                        if(elemGroups.indexOf($scope.selectedGroup[i])== -1){
-                            console.log("not a match");
-                        }
-                        else {
-                            var toDelete = elemGroups.indexOf($scope.selectedGroup[i]);
-                            elemGroups.splice(toDelete, 1);
-                            var removeEmail = [];
-                            removeInfo.push(elem.email, elem.role);
-                            $scope.manyToRemove.push(removeInfo);
-                            $scope.updateGroup(JSON.stringify($scope.manyToRemove), JSON.stringify(elemGroups)); 
-                            console.log("removed group")                                  
-                        };
-                    };
-                });
-            };
 
             // check boxes in view
             // will need to tie this to the person as the view changes, not sure if that will be a watch or adding a variable.  Will as for help on this.
@@ -101,6 +74,7 @@ m.directive('groupPeople', function(){
                 });
                 return $scope.selectedGroup;
             }
+            $scope.preSelectGroup($scope.people)
             
 
 
@@ -178,119 +152,25 @@ m.directive('groupPeople', function(){
                                     personGroups.push($scope.groupName);
                                     console.log(personGroups);
                                     console.log(bigArray);
-                                    console.log("ready to add?")
-                                    $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
+                                    console.log("ready to add?");
                                 }
                                 else{
                                     console.log("already in your group")
                                 };
                             }
-                            else{
-                               $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
-                            }
-
-                        });
+                            $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
+                            // else{
+                            //    $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
                             // }
-                            
-                        // }
-                        // else{
-                        //     console.log("other situation");
-                        // }
-                    });
-                });
-                // console.log($scope.myInfo);
-                // angular.forEach($scope.myInfo, function(info){
-                //     console.log(info.groups);
-                    // var personGroups = JSON.parse(info.groups);
-                    // console.log(personGroups);
-                    // for(var i = 0; i < $scope.selectedGroup.length; i++){
-                    //     if(personGroups.indexOf($scope.selectedGroup[i]) > -1){
-                    //          var toDelete =  personGroups.indexOf($scope.selectedGroup[i]);
-                    //          personGroups.splice(toDelete, 1);
-                    //          console.log(personGroups);
 
-                    //     }
-                    //     else{
-                    //         personGroups.push($scope.selectedGroup[i]);
-                    //         console.log(personGroups)
-                    //     }
-                    // }
-                    // if($scope.groupName.length > 0){
-                    //     if(personGroups.indexOf($scope.groupName)== -1){
-                    //         personGroups.push($scope.groupName);
-                    //         console.log(personGroups);
-                    //         $scope.checkGroups(person, personGroups);
-                    //     }
-                    //     else{
-                    //         console.log("already in your group")
-                    //     }
-                    //     // $scope.checkGroups(person, personGroups);
-                    //    // console.log("adding or removing people with one fcn")
-                    // }
-                    // else{
-                    //     $scope.checkGroups(person, personGroups);
-                    // }
-
-                // });
-                // }
-                // else{
-                //     console.log("other situation");
-                // }
-            };
-
-
-            // $scope.addGroups = function(ind, text){
-
-            // }
-            $scope.checkGroups = function(person, text){                
-                var noGroup = [];
-                var hasGroup = [];
-                var bigArray = [];
-                $scope.personInfo(person);
-                angular.forEach(person, function(info){
-                    SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
-                        console.log(data);
-                        $scope.userRole = data;
-                        angular.forEach($scope.userRole, function(user){
-                            noGroup.push(user.email, user.role);
-                            console.log(noGroup)
                         });
-                        
+                            
                     });
                 });
-                // angular.forEach($scope.myInfo, function(user){
-                //     console.log(user)
-                    // if(user.groups == null){
-                    //     noGroup.push(user.email, user.role);
-                    //     firstGroup.push(text);
-                    //     $scope.manyNoGroup.push(noGroup);
-                    //     $scope.updateGroup(JSON.stringify($scope.manyNoGroup), JSON.stringify(firstGroup));
-                    //     console.log("addedGroup")
-                    // }
-                    // else if(user.groups != null){
-                    //     hasGroup.push(user.email, user.role);
-                    //     $scope.manyHasGroup.push(hasGroup);
-                    //     console.log("here")
-                    //     // $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(text));
-                    //     // var array = [];
-                    //     // array.push(text);
-                    //     // console.log(array);
-                    //     // console.log("array")
-                    //     // if(array.indexOf(text) == -1){
-                    //     //     array.push(text);
-                    //     //     hasGroup.push(user.email, user.role);
-                    //     //     $scope.manyHasGroup.push(hasGroup);
-                    //     $scope.updateGroup(JSON.stringify($scope.manyHasGroup), JSON.stringify(text));
-                        // }
-                        // else {
-                        //     console.log("already in the group")
-                        // }
-                       
-                    // }
-                   
-                // });           
+               
             };
 
+            
 
 
             $scope.showUserRoles = function(){
