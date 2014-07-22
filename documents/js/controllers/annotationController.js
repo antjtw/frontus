@@ -1,8 +1,8 @@
 'use strict';
 
-function annotationController($scope, $element, $document, Annotations, User, $timeout, navState, SWBrijj) {
+function annotationController($scope, $rootScope, $element, $document, Annotations, User, $timeout, navState, SWBrijj) {
     $scope.navState = navState; // TODO: UI is very dependant on navState
-
+    $scope.transaction_types_mapping = $rootScope.transaction_types_mapping;
     function applyLineBreaks(oTextarea) {
         // TODO: rewrite as an ngModel validator
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
@@ -283,6 +283,7 @@ function annotationController($scope, $element, $document, Annotations, User, $t
     };
 
     $scope.openBox = function() {
+        console.log($scope.transaction_types_mapping);
         $scope.active.annotation = $scope.annot;
         if (navState.role == "issuer" && !$scope.doc.countersignable(navState.role)) {
             $scope.getme = true;
@@ -389,4 +390,4 @@ function annotationController($scope, $element, $document, Annotations, User, $t
     $scope.user = User;
 }
 
-annotationController.$inject = ["$scope", "$element", "$document", "Annotations", "User", "$timeout", "navState", "SWBrijj"];
+annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "User", "$timeout", "navState", "SWBrijj"];

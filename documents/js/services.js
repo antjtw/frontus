@@ -366,8 +366,14 @@ Annotation.prototype = {
         });
         return json;
     },
-    filled: function(signaturepresent, role) {
+    filled: function(signaturepresent, role, type_mappings) {
         // signature present comes from the account
+        console.log(type_mappings);
+        console.log(this.whattype);
+        if (type_mappings && (this.whattype in type_mappings))
+        {
+            return this.forRole(role) && type_mapping[this.whattype](this.val);
+        }
         return (this.forRole(role) &&
                 ((this.val && this.val.length > 0) ||
                  (this.whattype == "ImgSignature" && signaturepresent)));
