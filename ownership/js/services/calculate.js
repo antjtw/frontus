@@ -453,21 +453,21 @@ ownership.service('calculate', function () {
 
     // Returns the percentage ownership for each shareholder
     // TODO refactor
-    this.sharePercentage = function (row, rows, issuekeys, sharesum, totalshares) {
+    this.sharePercentage = function (row, rows, security_names, sharesum, totalshares) {
         var percentage = 0;
         var totalpercentage = 0;
-        for (var i = 0, l = issuekeys.length; i < l; i++) {
-            if (row.cells[issuekeys[i]] != undefined) {
-                if (row.cells[issuekeys[i]].x != undefined) {
-                    percentage = percentage + row.cells[issuekeys[i]].x;
+        for (var i = 0, l = security_names.length; i < l; i++) {
+            if (row.cells[security_names[i]] != undefined) {
+                if (row.cells[security_names[i]].x != undefined) {
+                    percentage = percentage + row.cells[security_names[i]].x;
                 }
             }
         }
         for (var j = 0, a = rows.length; j < a; j++) {
-            for (var i = 0, l = issuekeys.length; i < l; i++) {
-                if (rows[j].cells[issuekeys[i]] != undefined) {
-                    if (rows[j].cells[issuekeys[i]]['x'] != undefined) {
-                        totalpercentage = totalpercentage + rows[j].cells[issuekeys[i]]['x'];
+            for (var i = 0, l = security_names.length; i < l; i++) {
+                if (rows[j].cells[security_names[i]] != undefined) {
+                    if (rows[j].cells[security_names[i]]['x'] != undefined) {
+                        totalpercentage = totalpercentage + rows[j].cells[security_names[i]]['x'];
                     }
                 }
             }

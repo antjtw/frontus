@@ -25,7 +25,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
     $scope.issues = [];
-    $scope.issuekeys = [];
+    $scope.security_names = [];
     $scope.equityissues = [];
     $scope.possibleActions = ['exercised', 'forfeited'];
 
@@ -81,7 +81,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                         $scope.allissues[i]['trans'] = [];
                         $scope.issues.push($scope.allissues[i]);
                     }
-                    $scope.issuekeys.push($scope.allissues[i].issue);
+                    $scope.security_names.push($scope.allissues[i].issue);
                     if ($scope.allissues[i].type == "Equity") {
                         $scope.equityissues.push($scope.allissues[i].issue);
                     }
@@ -235,7 +235,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
             var activeAct = [];
 
             // Only the issues that are not the active transactions (for underlying issue)
-            var allowablekeys = angular.copy($scope.issuekeys);
+            var allowablekeys = angular.copy($scope.security_names);
             var index = allowablekeys.indexOf(currenttran.issue);
             allowablekeys.splice(index, 1);
             currenttran.allowKeys = allowablekeys;
@@ -291,7 +291,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
         issue.state = true;
 
         // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(issue.issue);
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
@@ -423,8 +423,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
                     $scope.issueRevert = angular.copy(issue);
 
-                    var index = $scope.issuekeys.indexOf(issue.key);
-                    $scope.issuekeys[index] = issue.issue;
+                    var index = $scope.security_names.indexOf(issue.key);
+                    $scope.security_names[index] = issue.issue;
                     issue.key = issue.issue;
                 });
             }
@@ -435,7 +435,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], calculate.toFloat(issue['price'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
-                    $scope.issuekeys.push(issue.key);
+                    $scope.security_names.push(issue.key);
                     $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
 
                     // Create the first empty underlying transaction
@@ -446,7 +446,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     newTran.vestingbegins = null;
                     issue.trans =[newTran];
 
-                    var allowablekeys = angular.copy($scope.issuekeys);
+                    var allowablekeys = angular.copy($scope.security_names);
                     var index = allowablekeys.indexOf(issue.issue);
                     allowablekeys.splice(index, 1);
                     $scope.allowKeys = allowablekeys;
@@ -467,8 +467,8 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if (oneissue['key'] == issue['key']) {
                     var index = $scope.issues.indexOf(oneissue);
                     $scope.issues.splice(index, 1);
-                    var indexed = $scope.issuekeys.indexOf(oneissue.key);
-                    $scope.issuekeys.splice(indexed, 1);
+                    var indexed = $scope.security_names.indexOf(oneissue.key);
+                    $scope.security_names.splice(indexed, 1);
                 }
             });
             $scope.sideBar = "x";

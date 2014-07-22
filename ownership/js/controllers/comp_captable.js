@@ -121,7 +121,7 @@ var captableController = function(
         $scope.activeTran = [];
         $scope.activeIssue = currentcolumn;
         $scope.activeInvestor = currenttran;
-        $scope.allowKeys = calculate.complement($scope.ct.issuekeys,
+        $scope.allowKeys = calculate.complement($scope.ct.security_names,
                                                 [currentcolumn]);
         // try finding the transaction
         var first = 0;
@@ -207,7 +207,7 @@ var captableController = function(
             deselectAllCells();
 
             issue.state = true;
-            $scope.allowKeys = calculate.complement($scope.ct.issuekeys,
+            $scope.allowKeys = calculate.complement($scope.ct.security_names,
                                                     [issuekey]);
             $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
             $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
@@ -380,8 +380,8 @@ var captableController = function(
                     //Calculate the total vested for each row
                     $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
 
-                    var index = $scope.ct.issuekeys.indexOf(issue.key);
-                    $scope.ct.issuekeys[index] = issue.issue;
+                    var index = $scope.ct.security_names.indexOf(issue.key);
+                    $scope.ct.security_names[index] = issue.issue;
                     issue.key = issue.issue;
                     $scope.hideTour = true;
                 });
@@ -414,7 +414,7 @@ var captableController = function(
                     $scope.lastsaved = Date.now();
                     issue.key = issue.issue;
                     $scope.ct.securities.push(captable.nullIssue());
-                    $scope.ct.issuekeys.push(issue.key);
+                    $scope.ct.security_names.push(issue.key);
                     angular.forEach($scope.ct.rows, function (row) {
                         row.cells[issue.key] = captable.nullCell();
                     });
@@ -424,7 +424,7 @@ var captableController = function(
                                           $scope.issue_watch, true);
                         }
                     }
-                    $scope.allowKeys = calculate.complement($scope.ct.issuekeys,
+                    $scope.allowKeys = calculate.complement($scope.ct.security_names,
                                                             [issue.issue]);
                     $scope.hideTour = true;
                 });
@@ -444,8 +444,8 @@ var captableController = function(
                 if (oneissue.key == issue.key) {
                     var index = $scope.ct.securities.indexOf(oneissue);
                     $scope.ct.securities.splice(index, 1);
-                    var indexed = $scope.ct.issuekeys.indexOf(oneissue.key);
-                    $scope.ct.issuekeys.splice(indexed, 1);
+                    var indexed = $scope.ct.security_names.indexOf(oneissue.key);
+                    $scope.ct.security_names.splice(indexed, 1);
                 }
             });
             angular.forEach($scope.ct.rows, function (row) {
@@ -771,7 +771,7 @@ var captableController = function(
                     $scope.ct.rows.splice(index, 1);
                     if ($scope.ct.rows.length <= 5) {
                         var values = {"name": "", "editable": "0"};
-                        angular.forEach($scope.ct.issuekeys, function (key) {
+                        angular.forEach($scope.ct.security_names, function (key) {
                             values[key] = captable.nullCell();
                         });
                         $scope.ct.rows.splice(index, 0, values);
@@ -1025,13 +1025,8 @@ var captableController = function(
         });
     };
 
-    $scope.canHover = function (row) {
-        if (row['u'] || row['a']) {
-            return true
-        }
-        else {
-            return false
-        }
+    $scope.canHover = function(cell) {
+        return cell.u || cell.a;
     };
 
     $scope.editViewToggle = function() {
@@ -2173,8 +2168,8 @@ var captableController = function(
 
     // Total percentage ownership for each shareholder row
     var sharePercentage = memoize(calculate.sharePercentage);
-    $scope.sharePercentage = function(row, rows, issuekeys) {
-        return sharePercentage(row, rows, issuekeys, shareSum(row), totalShares(rows));
+    $scope.sharePercentage = function(row, rows, security_names) {
+        return sharePercentage(row, rows, security_names, shareSum(row), totalShares(rows));
     };
 
     // Total percentage ownership for each shareholder row

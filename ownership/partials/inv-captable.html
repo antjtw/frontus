@@ -27,10 +27,10 @@
             </tr>
             <tr ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col" ng-show="fullview"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col" ng-show="fullview"><input class="input-right" disabled value="{{sharePercentage(row, rows, security_names) | number:3}}%"></td>
                 <td class="capsums-col" ng-hide="fullview"><input class="input-right" disabled value="{{myPercentage(everyone.percentage) | number:3}}%"></td>
                 <td ng-class="{tranViewSelected:row.state, 'hoverable':row.name}" class="viewName" ng-click="getActiveInvestor(row);">{{row.name}}</td>
-                <td class="tableFields" ng-click="getActiveTransaction(row.name, key)" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort">
+                <td class="tableFields" ng-click="getActiveTransaction(row.name, key)" ng-class="{tranViewSelected:row[key].state, 'hoverable':canHover(row[key])}" ng-repeat="key in security_names | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                         <div ng-bind="formatDollarAmount(row[key]['a'])" class="output second clickable"></div>
@@ -39,9 +39,9 @@
             </tr>
             <tr ng-repeat="row in rows track by $index" ng-show="fullview && ([row] | unissuedrowviewList).length > 0" class="unissued-rows">
                 <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                <td class="capsums-col"><input class="input-right" disabled value="{{sharePercentage(row, rows, security_names) | number:3}}%"></td>
                 <td class="viewName" ng-class="{hoverable:row.name}">{{row.name}}</td>
-                <td class="tableFields" ng-class="{hoverable: canHover(row[key])}" ng-repeat="key in issuekeys | orderBy:issueSort">
+                <td class="tableFields" ng-class="{hoverable: canHover(row[key])}" ng-repeat="key in security_names | orderBy:issueSort">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
                         <div ng-bind="formatDollarAmount(row[key]['a'])"class="output second clickable"></div>
@@ -53,7 +53,7 @@
                 <td><input disabled></td>
                 <td class="capsums-col"><input class="input-right" disabled value="{{everyone.percentage  | number:3}}%"></td>
                 <td class="viewName">Other Investors</td>
-                <td ng-repeat="key in issuekeys">
+                <td ng-repeat="key in security_names">
                 </td>
             </tr>
             <!-- Footer Total Row -->
@@ -61,7 +61,7 @@
                 <td>Total</td>
                 <td></td>
                 <td></td>
-                <td ng-repeat="one in issuekeys" ></td>
+                <td ng-repeat="one in security_names" ></td>
             </tr>
             <tr ng-show="fullview" class='tablefooter'>
                 <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>

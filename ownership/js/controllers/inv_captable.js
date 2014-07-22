@@ -11,7 +11,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     $scope.issuetypes = [];
     $scope.freqtypes = [];
-    $scope.issuekeys = [];
+    $scope.security_names = [];
     $scope.tf = ["yes", "no"];
     $scope.issues = [];
     $scope.issueSort = 'date';
@@ -35,7 +35,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
-            $scope.issuekeys.push($scope.issues[i].key);
+            $scope.security_names.push($scope.issues[i].key);
         };
 
         // Pivot shenanigans
@@ -203,7 +203,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
 
                     angular.forEach($scope.rows, function (row) {
-                        angular.forEach($scope.issuekeys, function (issuekey) {
+                        angular.forEach($scope.security_names, function (issuekey) {
                             if (issuekey in row) {
                             }
                             else {
@@ -214,12 +214,12 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
                     // Calculate the start percentage for sorting purposes
                     angular.forEach($scope.rows, function(row) {
-                        row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.issuekeys, shareSum(row), totalShares($scope.rows))
+                        row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.security_names, shareSum(row), totalShares($scope.rows))
                     });
 
 
                     $scope.issues.sort(sorting.issuedate);
-                    $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
+                    $scope.security_names = sorting.security_names($scope.security_names, $scope.issues);
                     $scope.rows.sort(sorting.basicrow());
 
                     SWBrijj.procm('ownership.get_everyone_else').then(function (x) {
@@ -249,7 +249,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         $scope.activeInvestor = currenttran;
 
         // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(currentcolumn);
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
@@ -306,7 +306,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
         issue.state = true;
 
         // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(issue.issue);
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
@@ -341,7 +341,7 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
         if (investor.name == "") {
             var values = {"name": "", "editable": "0"}
-            angular.forEach($scope.issuekeys, function (key) {
+            angular.forEach($scope.security_names, function (key) {
                 values[key] = {"u": null, "a": null};
             });
             $scope.rows.push(values);
@@ -420,8 +420,8 @@ var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switch
 
     // Total percentage ownership for each shareholder row
     var sharePercentage = memoize(calculate.sharePercentage);
-    $scope.sharePercentage = function(row, rows, issuekeys) {
-        return sharePercentage(row, rows, issuekeys, shareSum(row), totalShares(rows));
+    $scope.sharePercentage = function(row, rows, security_names) {
+        return sharePercentage(row, rows, security_names, shareSum(row), totalShares(rows));
     };
 
     // Total percentage ownership for each shareholder row

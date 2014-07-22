@@ -11,7 +11,7 @@ var ownership = angular.module('ownerServices');
  */
 CapTable = function() {
     this.vInvestors = [];
-    this.issuekeys = [];
+    this.security_names = [];
     this.securities = [];
     this.rows = [];
     this.uniquerows = [];
@@ -26,7 +26,7 @@ CapTable = function() {
 NewCapTable = function() {
     this.cells = {};
     this.rows = [];
-    this.issuekeys = []; //NOTE I hate this
+    this.security_names = [];
     this.securities = [];
     this.transactions = [];
     this.ledger_entries = [];
@@ -254,7 +254,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         security.insertion_date = tran.insertion_date;
         security.transaction.push(tran.transaction);
         security.attrs = tran.attrs;
-        _captable.issuekeys.push(security.name);
+        _captable.security_names.push(security.name);
 
         _captable.securities.push(security);
     }
@@ -352,7 +352,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     function setIssueKey(iss) {
         iss.key = iss.issue;
-        captable.issuekeys.push(iss.key);
+        captable.security_names.push(iss.key);
     }
     function reformatDate(obj) {
         obj.date = calculate.timezoneOffset(obj.date);
@@ -493,7 +493,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         return row;
     }
     function addRow(idx) {
-        var row = newRow(captable.issuekeys);
+        var row = newRow(captable.security_names);
         if (idx) {
             captable.rows.splice(idx, 0, row);
         } else {
@@ -684,7 +684,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     this.generateUnissuedRows = generateUnissuedRows;
     function fillEmptyCells() {
         angular.forEach(captable.rows, function (row) {
-            angular.forEach(captable.issuekeys, function (issuekey) {
+            angular.forEach(captable.security_names, function (issuekey) {
                 if (!(issuekey in row.cells)) {
                     row.cells[issuekey] = nullCell();
                 }
@@ -727,7 +727,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             row.startpercent =
                 calculate.sharePercentage(row,
                                           captable.rows,
-                                          captable.issuekeys,
+                                          captable.security_names,
                                           shareSum(row),
                                           totalShares(captable.rows));
         });
@@ -736,7 +736,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         // Sort the columns before finally showing them
         // Issues are sorted by date, rows by ownership within each issue
         captable.securities.sort(sorting.issuedate);
-        captable.issuekeys = sorting.issuekeys(captable.issuekeys,
+        captable.security_names = sorting.security_names(captable.security_names,
                                                captable.securities);
         captable.rows.sort(sorting.basicrow());
         do {

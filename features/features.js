@@ -265,7 +265,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         $scope.tf = ["yes", "no"];
         $scope.liquidpref = ['None','1X','2X', '3X'];
         // Empty variables for issues
-        $scope.issuekeys = [];
+        $scope.security_names = [];
         $scope.issues = [];
 
         $scope.settings = {};
@@ -286,7 +286,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         $scope.generateCaptable = function(names) {
             for (var i = 0, l = $scope.issues.length; i < l; i++) {
                 $scope.issues[i].key = $scope.issues[i].issue;
-                $scope.issuekeys.push($scope.issues[i].key);
+                $scope.security_names.push($scope.issues[i].key);
             }
 
             angular.forEach($scope.issues, function(issue) {
@@ -417,7 +417,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
 
 
             angular.forEach($scope.rows, function (row) {
-                angular.forEach($scope.issuekeys, function (issuekey) {
+                angular.forEach($scope.security_names, function (issuekey) {
                     if (issuekey in row) {
                     }
                     else {
@@ -427,20 +427,20 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             });
 
             angular.forEach($scope.rows, function(row) {
-                row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.issuekeys, shareSum(row), totalShares($scope.rows))
+                row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.security_names, shareSum(row), totalShares($scope.rows))
             });
 
 
             // Sort the columns before finally showing them
             // Issues are sorted by date, rows by ownership within each issue
             $scope.issues.sort(sorting.issuedate);
-            $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
+            $scope.security_names = sorting.security_names($scope.security_names, $scope.issues);
             $scope.rows.sort(sorting.basicrow());
 
             do
             {
                 var values = {"name": "", "editable": "0"};
-                angular.forEach($scope.issuekeys, function (key) {
+                angular.forEach($scope.security_names, function (key) {
                     values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
                 });
                 $scope.rows.push(values);
@@ -517,7 +517,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             $scope.activeIssue = currentcolumn;
             $scope.activeInvestor = currenttran;
             // Get the all the issues that aren't the current issue for the drop downs
-            var allowablekeys = angular.copy($scope.issuekeys);
+            var allowablekeys = angular.copy($scope.security_names);
             var index = allowablekeys.indexOf(currentcolumn);
             allowablekeys.splice(index, 1);
             $scope.allowKeys = allowablekeys;
@@ -632,7 +632,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 issue.state = true;
 
                 // Get the all the issues that aren't the current issue for the drop downs
-                var allowablekeys = angular.copy($scope.issuekeys);
+                var allowablekeys = angular.copy($scope.security_names);
                 var index = allowablekeys.indexOf(issue.issue);
                 allowablekeys.splice(index, 1);
                 $scope.allowKeys = allowablekeys;
@@ -669,7 +669,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
 
             if (investor.name == "" && rowindex >= 4) {
                 var values = {"name": "", "editable": "0"};
-                angular.forEach($scope.issuekeys, function (key) {
+                angular.forEach($scope.security_names, function (key) {
                     values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
                 });
                 $scope.rows.push(values);
@@ -888,7 +888,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
 
                     // Make sure we have a clean slate for everyone (including any new unissued rows
                     angular.forEach($scope.rows, function (row) {
-                        angular.forEach($scope.issuekeys, function (issuekey) {
+                        angular.forEach($scope.security_names, function (issuekey) {
                             if (issuekey in row) {
                             }
                             else {
@@ -901,8 +901,8 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
 
                     //Calculate the total vested for each row
 
-                    var index = $scope.issuekeys.indexOf(issue.key);
-                    $scope.issuekeys[index] = issue.issue;
+                    var index = $scope.security_names.indexOf(issue.key);
+                    $scope.security_names[index] = issue.issue;
                     issue.key = issue.issue;
                 }
 
@@ -918,12 +918,12 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
                     $scope.issues.push({name: "", "date": new Date(2100, 1, 1)});
-                    $scope.issuekeys.push(issue.key);
+                    $scope.security_names.push(issue.key);
                     angular.forEach($scope.rows, function (row) {
                         row[issue.key] = {"u": null, "a": null};
                     });
 
-                    var allowablekeys = angular.copy($scope.issuekeys);
+                    var allowablekeys = angular.copy($scope.security_names);
                     var index = allowablekeys.indexOf(issue.issue);
                     allowablekeys.splice(index, 1);
                     $scope.allowKeys = allowablekeys;
@@ -950,8 +950,8 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         };
 
         var sharePercentage = calculate.sharePercentage;
-        $scope.sharePercentage = function(row, rows, issuekeys) {
-            return sharePercentage(row, rows, issuekeys, shareSum(row), totalShares(rows));
+        $scope.sharePercentage = function(row, rows, security_names) {
+            return sharePercentage(row, rows, security_names, shareSum(row), totalShares(rows));
         };
 
         $scope.tranChangeU = function (value, issue) {
@@ -1196,7 +1196,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
 
                         // Make sure we have a clean slate for everyone (including any new unissued rows
                         angular.forEach($scope.rows, function (row) {
-                            angular.forEach($scope.issuekeys, function (issuekey) {
+                            angular.forEach($scope.security_names, function (issuekey) {
                                 if (issuekey in row) {
                                 }
                                 else {
@@ -1347,8 +1347,8 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 if (oneissue['key'] == issue['key']) {
                     var index = $scope.issues.indexOf(oneissue);
                     $scope.issues.splice(index, 1);
-                    var indexed = $scope.issuekeys.indexOf(oneissue.key);
-                    $scope.issuekeys.splice(indexed, 1);
+                    var indexed = $scope.security_names.indexOf(oneissue.key);
+                    $scope.security_names.splice(indexed, 1);
                 }
             });
             angular.forEach($scope.rows, function (row) {
@@ -1441,7 +1441,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                     $scope.rows.splice(index, 1);
                     if ($scope.rows.length <= 5) {
                         var values = {"name": "", "editable": "0"};
-                        angular.forEach($scope.issuekeys, function (key) {
+                        angular.forEach($scope.security_names, function (key) {
                             values[key] = {"u": null, "a": null, "ukey": null, "akey": null};
                         });
                         $scope.rows.splice(index, 0, values);

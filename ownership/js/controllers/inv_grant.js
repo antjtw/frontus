@@ -13,7 +13,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
     $scope.uniquerows = [];
     $scope.freqtypes = [];
     $scope.issues = [];
-    $scope.issuekeys = [];
+    $scope.security_names = [];
 
     $scope.optionView = "Security";
 
@@ -39,7 +39,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
                         $scope.allissues[i]['trans'] = [];
                         $scope.issues.push($scope.allissues[i]);
                     }
-                    $scope.issuekeys.push($scope.allissues[i].issue);
+                    $scope.security_names.push($scope.allissues[i].issue);
                 }
 
                 // Assign the grants to the respective transactions
@@ -137,7 +137,7 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
         var activeAct = [];
 
         // Only the issues that are not the active transactions (for underlying issue)
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(currenttran.issue);
         allowablekeys.splice(index, 1);
         currenttran.allowKeys = allowablekeys;

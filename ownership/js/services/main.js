@@ -53,7 +53,7 @@ ownership.service('switchval', function () {
 
 ownership.service('sorting', function () {
 
-    this.issuekeys = function (keys, issues) {
+    this.security_names = function (keys, issues) {
         var sorted = [];
         angular.forEach(issues, function (issue) {
             angular.forEach(keys, function (key) {

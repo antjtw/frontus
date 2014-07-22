@@ -649,7 +649,7 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in ct.issuekeys | orderBy:issueSort track by $index">
+                <td ng-repeat="one in ct.security_names | orderBy:issueSort track by $index">
                     <span>{{grantbyIssue(one)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -666,7 +666,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{sharePercentage(row, ct.rows, ct.issuekeys) || 0.000 | number:3}}%">
+                           value="{{sharePercentage(row, ct.rows, ct.security_names) || 0.000 | number:3}}%">
                 </td>
                 <td>
                     <span ng-class="{'box-highlight':tourstate==1}">
@@ -695,7 +695,7 @@
                         </span>
                     </span>
                 </td>
-                <td ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
+                <td ng-repeat="key in ct.security_names | orderBy:issueSort track by $index">
                     <span ng-class="{'tran-highlight':tourstate==4}">
                         <span class="next-button"
                               ng-click="closeTour(); tourNotification();">
@@ -760,7 +760,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%">
+                           value="{{sharePercentage(row, ct.rows, ct.security_names) | number:3}}%">
                 </td>
                 <td ng-class="{tranViewSelected:row.state,
                                'hoverable': row.name}"
@@ -772,7 +772,7 @@
                     class="tableFields"
                     ng-class="{tranViewSelected:row.cells[key].state,
                                'hoverable':canHover(row.cells[key])}"
-                    ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
+                    ng-repeat="key in ct.security_names | orderBy:issueSort track by $index">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(row.cells[key]['u'])"
                              class="output clickable">
@@ -796,13 +796,13 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{sharePercentage(row, ct.rows, ct.issuekeys) | number:3}}%">
+                           value="{{sharePercentage(row, ct.rows, ct.security_names) | number:3}}%">
                 </td>
                 <td class="viewName">
                     {{row.name}}
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.issuekeys | orderBy:issueSort track by $index">
+                    ng-repeat="key in ct.security_names | orderBy:issueSort track by $index">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': !toggleView()}"
                              ng-bind="formatAmount(row.cells[key]['u'])"
@@ -821,7 +821,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.issuekeys track by $index">
+                    ng-repeat="one in ct.security_names track by $index">
                 </td>
             </tr>
             <!-- Undiluted footer -->
@@ -839,7 +839,7 @@
                 <td class="tableFields">
                 </td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.issuekeys track by $index">
+                    ng-repeat="one in ct.security_names track by $index">
                     <span class="captablepair-box">
                         <div ng-bind="formatAmount(colTotal(one, ct.rows, 'u'))"
                              ng-class="{'editview': !toggleView()}"

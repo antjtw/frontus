@@ -45,7 +45,7 @@
                         <td class="input-right">Shares</td>
                         <td class="input-right">%</td>
                         <td></td>
-                        <td ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
+                        <td ng-repeat="one in security_names | orderBy:issueSort track by $index">
                             <span>{{grantbyIssue(one)}}</span>
                             <span>Total Paid</span>
                         </td>
@@ -54,7 +54,7 @@
                     <tr ng-if="!toggleView();" ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
                         <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
                         <td class="capsums-col"><input class="input-right" disabled
-                                                       value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
+                                                       value="{{sharePercentage(row, rows, security_names) || 0.000 | number:3}}%">
                         </td>
                         <td>
                             <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
@@ -73,7 +73,7 @@
                                 </span>
                               </span>
                         </td>
-                        <td ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
+                        <td ng-repeat="key in security_names | orderBy:issueSort track by $index">
                               <span ng-switch on="row.editable">
                                 <span ng-class="{tranSelected:row[key].state}" class="captablepair-box"
                                       ng-switch-default>
@@ -108,9 +108,9 @@
                         ng-show="([row] | unissuedrowviewList).length > 0">
                         <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
                         <td class="capsums-col"><input class="input-right" disabled
-                                                       value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                                                       value="{{sharePercentage(row, rows, security_names) | number:3}}%"></td>
                         <td class="viewName">{{row.name}}</td>
-                        <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
+                        <td class="tableFields" ng-repeat="key in security_names | orderBy:issueSort track by $index">
                                     <span class="captablepair-box">
                                         <div ng-class="{'editview': !toggleView()}"
                                              ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
@@ -125,14 +125,14 @@
                         <td class="tableFields">Total</td>
                         <td class="tableFields"></td>
                         <td class="tableFields"></td>
-                        <td class="tableFields" ng-repeat="one in issuekeys track by $index"></td>
+                        <td class="tableFields" ng-repeat="one in security_names track by $index"></td>
                     </tr>
                     <!-- Undiluted footer -->
                     <tr class='tablefooter'>
                         <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
                         <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
                         <td class="tableFields"></td>
-                        <td class="tableFields" ng-repeat="one in issuekeys track by $index">
+                        <td class="tableFields" ng-repeat="one in security_names track by $index">
                                     <span class="captablepair-box">
                                         <div ng-bind="formatAmount(colTotal(one, rows, 'u'))"
                                              ng-class="{'editview': !toggleView()}" class="output footer"></div>
