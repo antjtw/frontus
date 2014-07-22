@@ -113,7 +113,7 @@ active.filter('description', function() {
                 var url = '/app/documents/company-view?doc=' + ac.docid + "&page=1";
                 var urlperson = '';
                 if (ac.email != user) {
-                    urlperson = '&investor=' + ac.investor_docid;
+                    urlperson = '&investor=' + ac.email;
                 }
                 // Only link to undeleted documents
                 var doclink = "";
