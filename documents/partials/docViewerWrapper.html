@@ -133,8 +133,8 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
 
-                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Countersign" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.countersignable($root.navState.role)" disabled="unfilledAnnotation()">
-                            By clicking "Countersign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
+                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.countersignable($root.navState.role)" disabled="unfilledAnnotation()">
+                            By clicking "Approve", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
                         </doc-action>
 
                         <doc-action upgrade-warning="true" approve-action="finalizeDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.finalizable()">
