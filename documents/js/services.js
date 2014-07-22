@@ -72,22 +72,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
-    function mungeIssue(issue) {
-        // set the type of the issue appropriately (currently it's ambiguous based on type alone)
-        // TODO: remove once the ownership conversion is complete
-        if (issue.type == "Equity") {
-            if (issue.common) {
-                issue.type = "Equity Common";
-            } else {
-                issue.type = "Equity Preferred";
-            }
-        } else if (issue.type == "Debt") {
-            issue.type = "Convertible Debt";
-        }
-
-        delete issue.common;
-        return issue;
-    }
     function updateAnnotationTypes(issue_type, transaction_type, type_list) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
@@ -213,7 +197,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             return promise.promise;
         },
         setTransaction: function(issue) {
-            issue = mungeIssue(issue); // convert to future format
             this.issue = issue.issue;
             this.issue_type = issue.type;
             var viable_actions = transaction_attributes[this.issue_type].actions;
@@ -261,11 +244,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     };
 
     this.setDoc = function(doc_id, doc) {
-        if (doc.issue_type) {
-            // calculate the future issue type
-            // TODO: remove once ownership refactor goes in
-            doc.issue_type = mungeIssue({type: doc.issue_type, common: doc.issue_common}).type;
-        }
         var oldDoc = this.getDoc(doc_id);
         // we need to keep the object reference from the docs hash as we may have given to other controllers
         // extend will keep any other properties on it too. Copy might be better?
