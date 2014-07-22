@@ -53,7 +53,7 @@
 <div class="docViewer">
     <div class="docPanelContainer row-fluid">
         <div class="docPanel" ng-show="docId" ng-class="{'drawcursor': drawTime()}" data-back-img="{{pageImageUrl()}}" ng-mousedown="newnewBox($event)">
-            <annotation ng-repeat="annotation in annots | filter: {page: doc.currentPage} | orderBy: 'position.coords.y'"
+            <annotation ng-repeat="annotation in annots | filter: {page: doc.currentPage} : true | orderBy: 'position.coords.y'"
                         ng-if="annots && drawTime() || (lib.when_signed && !lib.when_countersigned && annotation.isCountersign())"
                         annot="annotation"
                         is-annotable="isAnnotable"

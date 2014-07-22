@@ -195,7 +195,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             SWBrijj.document_investor_void(this.doc_id, 1, "").then(function(data) {
                 promise.resolve(data);
             }).except(function(x) {
-                promise.rejecdt(x);
+                promise.reject(x);
             });
             return promise.promise;
         },
@@ -208,7 +208,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             SWBrijj.document_investor_void(this.doc_id, 0, msg).then(function(data) {
                 promise.resolve(data);
             }).except(function(x) {
-                promise.rejecdt(x);
+                promise.reject(x);
             });
             return promise.promise;
         },

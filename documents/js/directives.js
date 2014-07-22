@@ -252,14 +252,14 @@ app.directive('docAction', function() {
 
             $scope.approve = function(){
                 $scope.processing = true;
-                $scope.approveAction().catch(function(data) {
+                $scope.approveAction().finally(function() {
                     $scope.processing = false;
                 });
             };
 
             $scope.reject = function(){
                 $scope.processing = true;
-                $scope.rejectAction({message: $scope.rejectMessage}).catch(function(data) {
+                $scope.rejectAction({message: $scope.rejectMessage}).finally(function() {
                     $scope.processing = false;
                 });
             };
