@@ -2,7 +2,7 @@ var m = angular.module('commonDirectives', ['ui.select2', 'brijj', 'ui.filters']
 
 m.directive('groupPeople', function(){
     return {
-        scope: {people: '='},
+        scope: {people: "=people"},
         restrict: 'E',
         templateUrl:'/cmn/partials/groupPeople.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 
@@ -15,6 +15,7 @@ m.directive('groupPeople', function(){
             $scope.selectedGroup = [];
             var newGroups = [];
             $scope.groupData = [];
+            console.log($scope.people);
 
 
             $scope.updateGroup = function(array, json){
@@ -32,7 +33,8 @@ m.directive('groupPeople', function(){
                 this.group = group;
             };
 
-            $scope.parseGroups = function(){             
+            $scope.parseGroups = function(){
+            console.log($scope.people);             
               SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
                     console.log($scope.myUserGroups);
@@ -76,12 +78,9 @@ m.directive('groupPeople', function(){
             }
             $scope.preSelectGroup($scope.people)
 
-            // $scope.$watch('people', function(newdata, olddata){
-            //     if(newdata){
-            //         $scope.preSelectGroup($scope.people);
-
-            //     }        
-            // });
+            $scope.$watch('people', function(){
+                $scope.preSelectGroup($scope.people)     
+            }, true);
             
 
 

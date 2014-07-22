@@ -1,10 +1,11 @@
-<div class="composemessage">
+<div class="composemessage" style="padding-right: 30px">
   <div class="sidebarHeader">
+    {{people}}
     <span>GROUP</span>
   </div>
 
-  <div class="sidebarHeader">
-    <span>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name</span>
+  <div>
+    <p>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name</p>
   </div>
 
   <div ng-repeat="groupDatum in groupData | unique: 'group'">
@@ -15,6 +16,7 @@
     </div>
     <p>{{groupDatum.group}}</p>
   </div>
+  <br/>
 
 
   <div class="sidebarText">
@@ -26,24 +28,21 @@
   </div>
 <!-- </div> -->
 
-  <div class="sidebarFooter">
-
-    <div class="footer-headline-left">
-        <div class = "standard-button green">
-            <button class="btn"
-                ng-click="createGroups(people)"
-                > 
-                Confirm
-            </button>
-        </div>
-    </div>
-
-    <div class="footer-headline-right">
-      <div class= "standard-button white">
-        <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
-          Cancel
+  <div class="footer-headline-left">
+    <div class = "standard-button green">
+      <button class="btn"
+        ng-click="createGroups(people)"> 
+            Confirm
         </button>
       </div>
+  </div>
+
+  <div class="footer-headline-right">
+    <div class= "standard-button white">
+      <button class="btn" ng-click="$parent.toggleSide()">
+        Cancel
+      </button>
     </div>
   </div>
+
 </div>
