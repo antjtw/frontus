@@ -55,6 +55,7 @@ m.directive('groupPeople', function(){
                 });;
                 return $scope.myInfo;
             };
+            $scope.personInfo($scope.people);
 
             $scope.removeGroup = function(person){
                 var removeInfo = []
@@ -136,6 +137,7 @@ m.directive('groupPeople', function(){
                     $scope.personInfo(person);
                     angular.forEach($scope.myInfo, function(elem){
                         console.log(elem.groups);
+                        console.log("test")
                         var elements = JSON.parse(elem.groups)
                         console.log(elements);
                         for(var i = 0; i < elements.length; i ++){
