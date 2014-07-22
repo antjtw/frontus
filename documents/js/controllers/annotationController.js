@@ -85,16 +85,13 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
     }
 
-    var dragicon = $element.find("span.dragger");
-
     /* This is the drag - code -- its been moved to work on the drag widget */
     $scope.mousedown = function($event) {
+        console.log("Drag caught");
         $scope.initdrag($event);
+        $event.stopPropagation();
         return false;
     };
-
-    // TODO: shouldn't bind here, but ng-mousedown appears to not stop propagation
-    dragicon.bind('mousedown', $scope.mousedown);
 
     $scope.$watch('annot.val', function(newValue, oldValue) {
         // prevent issuers from filling in the investor values
@@ -361,8 +358,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         }
     }, true);
-    
-    
 
     $scope.$watch('annot.fontsize', function(new_fontsize) {
         if (new_fontsize) {

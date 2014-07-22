@@ -1784,7 +1784,7 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
-annotation-list div:last-child {
+annotation-list div.annotation-pages:last-child {
     margin-bottom: 20px;
 }
 
