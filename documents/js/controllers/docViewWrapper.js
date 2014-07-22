@@ -3,16 +3,12 @@
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
         'navState', 'Annotations', 'Documents', 'User', '$q',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
-        $rootScope.transaction_types_mapping = {
-            "interestRate": "ownership.transaction.interestrate",
-            "evidence": "ownership.transaction.evidence",
-            "issue": "ownership.transactionissue",
-            //"date": {"tbl": "ownership.transaction", "attname": "date"}
-        };
+        
         $rootScope.transaction_db_types = {};
         var numberCheck = function(val)
         {
-            return (typeof(val) == Number);
+            var num = Number(val);
+            return (!isNaN(num) && val.length > 0);
         };
         var stringCheck = function(val)
         {
@@ -24,24 +20,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             "float8": numberCheck,
             "varchar": stringCheck
         };
-        
-        SWBrijj.tblm("ownership.transaction_database_types").then(function(x){
-            for (var ind = 0; ind < x.length; ind++)
-            {
-                var key = x[ind]['tbl'] + "." + x[ind]['attname'];
-                $scope.transaction_db_types[key] = x[ind];
-                $scope.transaction_db_types[key]['labels'] = JSON.parse($scope.transaction_db_types[key]['labels']);
-                if ($scope.transaction_db_types[key]['labels'][0] == null)
-                {
-                    $scope.transaction_db_types[key]['labels'] = null;
-                }
-                else
-                {
-                    $scope.transaction_db_types[key]['typname'] = "enum";
-                }
-            }
-            console.log($scope.transaction_db_types);
-        });
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -503,7 +481,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.unfilledAnnotation = function() {
             return $scope.doc.annotations.some(function(annot) {
-                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
+                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role, $rootScope.type_mappings, $scope.doc.transaction_db_types));
             });
         };
         

@@ -550,7 +550,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 if (a.type == 'highlight')
                 {
                     a.whosign = 'Issuer';
-                    a.whattype = 'evidence';
                 }
                 if ($rootScope.navState.role == "issuer") {
                     a.investorfixed = true;
