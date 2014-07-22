@@ -60,7 +60,13 @@ m.directive('groupPeople', function(){
 
 
             $scope.preSelectGroup = function(person){
-                angular.forEach(person, function(info){
+                console.log("preselecting");
+                console.log(person.length);
+                if(person.length==0){
+                    $scope.selectedGroup = [];
+                }
+                else{
+                    angular.forEach(person, function(info){
                     console.log(info.email);
                     if(info.groups != undefined){
                         SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
@@ -68,18 +74,40 @@ m.directive('groupPeople', function(){
                             angular.forEach($scope.myGroups, function(role){
                                 var preGroup = JSON.parse(role.groups);
                                 for(i = 0; i < preGroup.length; i++){
-                                    $scope.selectedGroup.push(preGroup[i]);
+                                    if($scope.selectedGroup.indexOf(preGroup[i])=== -1){
+                                        console.log("to add");
+                                        console.log(preGroup[i]);
+                                        $scope.selectedGroup.push(preGroup[i]);
+                                        // preGroup.splice(i, 1);
+                                    }
+                                    else if($scope.selectedGroup.indexOf(preGroup[i]) > -1){
+                                        console.log(preGroup[i]);
+                                        console.log("match")
+                                        // var deleteMe = $scope.selectedGroup.indexOf(preGroup[i]);
+                                        // console.log(deleteMe);
+                                        // $scope.selectedGroup.splice(deleteMe, 1);
+                                    }
+                                    else {
+                                        console.log("is there a third option?")
+
+                                    }
+
                                 };
                             });                           
                         });
                     };
-                });
+                }); 
+                }
+
+              
                 return $scope.selectedGroup;
             }
-            $scope.preSelectGroup($scope.people)
+  
 
             $scope.$watch('people', function(){
-                $scope.preSelectGroup($scope.people)     
+                $scope.preSelectGroup($scope.people);
+                console.log("people changed");
+                console.log($scope.people);     
             }, true);
             
 
