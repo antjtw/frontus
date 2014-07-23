@@ -10,15 +10,16 @@ m.directive('groupPeople', function(){
 
             $scope.unChecked = [];
    
-            // var newGroup = [];
+            var newGroup = [];
             $scope.groupName = "";
             $scope.manyGroup = [];
             $scope.selectedGroup = [];
             var newGroups = [];
             $scope.groupData = [];
             console.log($scope.people);
-
-
+            var allGroups = [];
+            var totalGroups = []
+    
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
                    console.log("success!");
@@ -58,6 +59,25 @@ m.directive('groupPeople', function(){
             };
             $scope.personInfo($scope.people);
 
+            $scope.fromFront = function(person){
+                angular.forEach(person, function(info){
+                    // console.log(info.groups)
+                    var a = info.groups.split(", ");
+                    for(var i = 0; i < a.length; i++){
+                        console.log(a[i]);
+                        if(allGroups.indexOf(a[i])== -1){
+                            allGroups.push(a[i]);
+                        }
+                    }
+                    // console.log(allGroups);
+           
+                });
+                // console.log("still there?");
+                // console.log(allGroups);
+                return allGroups;
+               
+            };
+
 
 
             $scope.preSelectGroup = function(person){
@@ -87,98 +107,66 @@ m.directive('groupPeople', function(){
             }
             $scope.preSelectGroup($scope.people);
 
-            $scope.updateSelected = function(person){
-                console.log(person);
-                $scope.allGroups = [];
 
-                var toRemove =[];
-                // if(person.length==0){
 
-                //     // $scope.selectedGroup = [];
-                // }
-                // else{
-                    angular.forEach(person, function(ind){
-                        console.log(ind.email);
-                        SWBrijj.tblmm('account.my_user_groups', 'email', ind.email).then(function(data){
-                            console.log(data)
-                            var indGroups = data;
-                            console.log(indGroups);
-                            angular.forEach(indGroups, function(elem){
-                                console.log(JSON.parse(elem.json_array_elements));
-                                var a = JSON.parse(elem.json_array_elements)
-                                console.log(a);
-                                if($scope.allGroups.indexOf(a)==-1){
-                                    $scope.allGroups.push(a);
-                                }
-
-                                // if($scope.allgroups.indexOf(JSON.parse(elem.json_array_elements))==-1){
-                                //     console.log("too add ")
-                                //     // $scope.allGroups.push(JSON.parse(elem.json_array_elements));
-                                // }
-                                
-                            });
-                            // console.log("everything?--yes");
-                            // angular.forEach($scope.allGroups, function(elem){
-                            //     if($scope.selectedGroup.indexOf(elem)=== -1){
-                            //         console.log(elem);
-                            //         $scope.selectedGroup.push(elem);
-                            //     }
-                            //     else{
-                            //         console.log("other")
-                            //         console.log(elem);
-                            //     }
-                            // });
-                            // // angular.forEach($scope.selectedGroup, function(m){
-                            // //     if($scope.selectedGroup.indexOf(m)== -1){
-                            // //         console.log("who is this")
-                            // //         console.log(m);
-                            // //     }
-                            // // })
-                            // angular.forEach($scope.selectedGroup, function(g){
-                            //     if($scope.allGroups.indexOf(g)== -1){
-                            //         console.log(g);
-                            //         console.log("ho")
-                            //         toRemove.push(g);
-                            //         return toRemove;
-                            //     }
-                            // });
-                            // angular.forEach
-                            // for(var i = 0; i < toRemove.length; i++){
-                            //     var toDelete = $scope.selectedGroup.indexOf(toRemove[i]);
-                            //     $scope.selectedGroup.splice(toDelete);
-                            // }
-                            return toRemove;
-                            return $scope.allGroups;
-                            console.log(toRemove);
-                            console.log($scope.allGroups);
-                            console.log($scope.selectedGroup);
-
+            $scope.createAllGroups = function(person){  
+                console.log(person);              
+                var giantArray =[];
+                angular.forEach(person, function(ind){
+                    console.log(ind.email);
+                    SWBrijj.tblmm('account.my_user_groups', 'email', ind.email).then(function(data){
+                        $scope.allMyGroups = data;
+                        angular.forEach($scope.allMyGroups, function(info){
+                            var a = JSON.parse(info.json_array_elements)
+                            if(allGroups.indexOf(a)=== -1){
+                                allGroups.push(a)                                
+                            }
+                            console.log(allGroups);
                         });
-                        // // add groups
-                       
-                        // console.log($scope.allGroups);
-                        // console.log($scope.selectedGroup);
-                      
+                        console.log(allGroups);
+                        return allGroups
+                        giantArray.push(allGroups);
+                        
                     });
-                    // console.log("allgroups")
-                    // console.log($scope.allGroups);
-                // };
-
-                // return $scope.selectedGroup;
-
+                    console.log($scope.myTotalGroups);
+                });
+                console.log("test")
+                console.log(giantArray);
+                
+                // return $scope.myTotalGroups;
             };
 
-            $scope.changeGroups = function(person){
-                $scope.updateSelected(person);
-                console.log("check")
+            // $scope.changeGroups = function(person){
+            //     $scope.allGroups = [];
+            //     $scope.updateSelected(person);
+            //     console.log("check")
+            // }
+
+            // $scope.modifySelected = function(person){
+            //     $scope.createAllGroups(person);
+            //     console.log("test")
+            //     console.log($scope.myTotalGroups);
+            //     console.log("big array")
+            //     console.log($scope.createAllGroups(person));
+                
+            // }
+
+            $scope.modifyGroups = function(){
+                $scope.fromFront($scope.people);
+                var groupList = $scope.fromFront($scope.people);
+                angular.forEach(groupList, function(elem){
+                    console.log(elem);
+                })
+                console.log($scope.fromFront($scope.people))
             }
   
 
             $scope.$watch('people', function(){
-                // $scope.preSelectGroup($scope.people);
-                $scope.changeGroups($scope.people);
-                console.log("people changed");
-                console.log($scope.people);     
+                // $scope.fromFront($scope.people);
+                $scope.modifyGroups();
+
+                // $scope.createAllGroups($scope.people);
+                console.log("people changed");  
             }, true);
             
 
