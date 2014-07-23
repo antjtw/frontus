@@ -55,23 +55,32 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     var transaction_attributes = null;
     var transaction_attributes_callback = null;
     SWBrijj.transaction_attributes().then(function(data) {
-        var issue_type, action, field;
+        var issue_type, action_type, field_key;
         for (issue_type in data)
         {
-            for (action in data[issue_type].actions)
+            var issue = data[issue_type];
+            for (action_type in issue.actions)
             {
-                for (field in data[issue_type].actions[action].fields)
+                var action = issue.actions[action_type];
+                for (field_key in action.fields)
                 {
-                    var lbls = JSON.parse(data[issue_type].actions[action].fields[field].labels);
+                    var field = action.fields[field_key];
+                    var lbls = JSON.parse(field.labels);
+                    // Set up enums
                     if (lbls === null || lbls[0] === null)
                     {
                         lbls = null;
                     }
                     else
                     {
-                        data[issue_type].actions[action].fields[field].typname = "enum";
+                        field.typname = "enum";
                     }
-                    data[issue_type].actions[action].fields[field].labels = lbls;
+                    // Set up bools, fake them as enums for now
+                    if (field.typname == "bool") {
+                        field.typname = "enum";
+                        lbls = ["True", "False"];
+                    }
+                    field.labels = lbls;
                 }
             }
         }
