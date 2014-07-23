@@ -1954,3 +1954,24 @@ help-tab > div > p > span {
     line-height: 12px;
     display: block;
 }
+
+doc-transaction-details .select2-container {
+    width: 220px;
+}
+
+doc-transaction-details > div > span {
+    color: #1d2c3c;
+    display: inline-block;
+    width: 280px;
+    margin-bottom: 15px;
+}
+
+doc-transaction-details > div > button {
+    width: 68px;
+    height: 30px;
+    background-color: #19bb95;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 3px;
+    margin-left: 5px;
+}

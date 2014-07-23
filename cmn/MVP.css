@@ -4043,6 +4043,34 @@ button.icon-button:hover {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
+.select2-container {
+    height: 30px;
+}
+
+.select2-container .select2-choice .select2-arrow {
+    background-color: #FFFFFF;
+    background-image: none;
+    border-left: transparent;
+}
+
+.select2-container .select2-choice {
+    background-color: #FFFFFF;
+    background-image: none;
+    height: 30px;
+    line-height: 30px;
+}
+
+.select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #aaa;
+}
+
+.select2-container-active .select2-choice {
+    border: 1px solid #aaa;
+    box-shadow: none;
+}
+
 
 /* Dropdown */
 .menu_dropdown {

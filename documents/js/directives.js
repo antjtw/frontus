@@ -316,7 +316,7 @@ app.directive('docTransactionDetails', function() {
                             // TODO: filter to usable issue types
                             $scope.select2Options.data.push({
 				id: issue.issue,
-				text: 'Add to "' + issue.issue + '"',
+				text: 'Add to ' + issue.issue + '',
 				issue: issue
                             });
 			}
