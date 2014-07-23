@@ -114,7 +114,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             setDefaultText();
             setPlaceholder();
         }
-        // update type information
+        // update type information TODO: move to annotation service / object
         $scope.annot.type_info = $scope.doc.annotation_types.filter(function(type) {
             return type.name == $scope.annot.whattype;
         })[0];
@@ -136,6 +136,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             "float8": numberCheck,
             "varchar": stringCheck
         };
+        $scope.annot.type_info.check = type_mappings[$scope.annot.type_info.typename];
+        if ($scope.annot.type_info.required) {
+            $scope.annot.required = true;
+        }
     });
 
     var topLocation = function(elementHeight, mouseY) {

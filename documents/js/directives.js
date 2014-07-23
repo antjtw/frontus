@@ -156,6 +156,7 @@ app.directive('annotationList', ["User", function(User) {
                 $scope.attributeLabel = Annotations.attributeLabel;
 
                 $scope.user = User;
+                $scope.navState = navState;
             }
         ],
     };

@@ -76,7 +76,7 @@
                 <li ng-if = "annot.type == 'text'">
                     <ul class="required-row">
                         <li>
-                            <button ng-class="{'selected':annot.required}" ng-click="annot.required = !annot.required" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                            <button ng-class="{'selected':annot.required}" ng-click="annot.required = !annot.required" class="check-box-button" ng-disabled="annot.type_info.required"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </li>
                         <li class="required-text">
                             Required?

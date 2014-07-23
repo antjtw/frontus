@@ -92,7 +92,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
-    function updateAnnotationTypes(issue_type, transaction_type, type_list, db_types) {
+    function updateAnnotationTypes(issue_type, transaction_type, type_list) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
             var viable_actions = transaction_attributes[issue_type].actions;
@@ -106,12 +106,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             // add new types onto the end (in one action, without changing the reference, for performance reasons)
             var args = [type_list.length, 0].concat(tmp_array);
             Array.prototype.splice.apply(type_list, args);
-            if (typeof(db_types) != undefined)
-            {
-                var prop;
-                for (prop in db_types) { if (db_types.hasOwnProperty(prop)) { delete db_types[prop]; } }
-                for (prop in fields) { if (fields.hasOwnProperty(prop)) {db_types[prop] = fields[prop];}}
-            }
+            // TODO: remove duplicate types, favoring the transaction type
         }
         if (transaction_attributes) {
             reallyDo();
