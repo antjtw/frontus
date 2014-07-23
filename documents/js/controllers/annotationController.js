@@ -87,7 +87,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     /* This is the drag - code -- its been moved to work on the drag widget */
     $scope.mousedown = function($event) {
-        console.log("Drag caught");
         $scope.initdrag($event);
         $event.stopPropagation();
         return false;
@@ -95,7 +94,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.$watch('annot.val', function(newValue, oldValue) {
         // prevent issuers from filling in the investor values
-        if (navState.role == "issuer" && $scope.annot.whosign == "Investor") {
+        if (!$scope.annot.forRole(navState.role)) {
             $scope.annot.val = "";
         }
     });
@@ -285,8 +284,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.getme = true;
         }
         if ($scope.annot.whattype == "ImgSignature" &&
-            (($scope.annot.whosign == 'Investor' && navState.role == 'investor') ||
-             ($scope.annot.whosign == 'Issuer' && navState.role == 'issuer' && !$scope.doc.countersignable(navState.role)))) {
+            ($scope.annot.forRole(navState.role) && !$scope.doc.countersignable(navState.role))) {
             $scope.signaturestyle = {height: 180, width: 330 };
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.sigModalUp();
@@ -302,7 +300,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     function setDefaultText() {
         if ($scope.annot.val.length === 0) {
-            if ((navState.role == "issuer" && $scope.annot.whosign == "Issuer") || navState.role == "investor" && $scope.annot.whosign == "Investor") {
+            if ($scope.annot.forRole(navState.role)) {
                 $scope.annot.val = Annotations.investorAttribute([$scope.annot.whattype]);
             } else {
                 $scope.annot.val = "";

@@ -1,5 +1,5 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, $root.navState.role, $root.type_mappings, doc.transaction_db_types), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
-    <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable($root.navState.role)" ng-mousedown="mousedown($event);">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role, type_mappings, doc.transaction_db_types), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
+    <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
     <span class="close-button" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe(); $event.stopPropagation()">
@@ -7,17 +7,17 @@
     </span>
     <div>
         <fieldset ng-if="annot.type == 'text'">
-            <div class="textarea-container" ng-if="(doc.transaction_db_types[annot.whattype]['typname'] != 'enum') || (active.annotation != annot) || ($root.navState.role != annot.whosign.toLowerCase())">
+            <div class="textarea-container" ng-if="(doc.transaction_db_types[annot.whattype]['typname'] != 'enum') || (active.annotation != annot) || !annot.forRole(navState.role)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
-            <div ng-if="(doc.transaction_db_types[annot.whattype]['typname'] == 'enum') && (active.annotation == annot) && ($root.navState.role == annot.whosign.toLowerCase())">
+            <div ng-if="(doc.transaction_db_types[annot.whattype]['typname'] == 'enum') && (active.annotation == annot) && annot.forRole(navState.role))">
                 <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
                     <option ng-repeat="label in doc.transaction_db_types[annot.whattype]['labels']" value="{{label}}">{{label}}</option>
                 </select>
             </div>
         </fieldset>
         <fieldset ng-if="annot.type == 'highlight'" >
-            <div ng-class="{'roundedcorners': $root.navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
+            <div ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
             </div>
         </fieldset>
         <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == 'issuer' && getme && active.annotation == annot">
