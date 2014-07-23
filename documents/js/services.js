@@ -55,6 +55,26 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     var transaction_attributes = null;
     var transaction_attributes_callback = null;
     SWBrijj.transaction_attributes().then(function(data) {
+        var n1, n2, n3;
+        for (n1 in data)
+        {
+            for (n2 in data[n1]['actions'])
+            {
+                for (n3 in data[n1]['actions'][n2]['fields'])
+                {
+                    var lbls = JSON.parse(data[n1]['actions'][n2]['fields'][n3]['labels']);
+                    if (lbls[0] == null)
+                    {
+                        lbls = null;
+                    }
+                    else
+                    {
+                        data[n1]['actions'][n2]['fields'][n3]['typname'] = "enum";
+                    }
+                    data[n1]['actions'][n2]['fields'][n3]['labels'] = lbls;
+                }
+            }
+        }
         transaction_attributes = data;
         // callback in case the a document tried to initalize before this call returned
         if (transaction_attributes_callback) {
@@ -72,7 +92,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
-    function updateAnnotationTypes(issue_type, transaction_type, type_list) {
+    function updateAnnotationTypes(issue_type, transaction_type, type_list, db_types) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
             var viable_actions = transaction_attributes[issue_type].actions;
@@ -81,11 +101,17 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             var tmp_array = [];
             for (var field in fields) {
                 var f = fields[field];
-                tmp_array.push({name: f.name, display: f.display_name, required: f.required});
+                tmp_array.push({name: f.name, display: f.display_name, required: f.required, typename: f.typname, labels: f.labels});
             }
             // add new types onto the end (in one action, without changing the reference, for performance reasons)
             var args = [type_list.length, 0].concat(tmp_array);
             Array.prototype.splice.apply(type_list, args);
+            if (typeof(db_types) != undefined)
+            {
+                var prop;
+                for (prop in db_types) { if (db_types.hasOwnProperty(prop)) { delete db_types[prop]; } }
+                for (prop in fields) { if (fields.hasOwnProperty(prop)) {db_types[prop] = fields[prop];}}
+            }
         }
         if (transaction_attributes) {
             reallyDo();
@@ -98,6 +124,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     var Document = function() {
         this.annotations = [];
         this.annotation_types = angular.copy(defaultTypes);
+        this.transaction_db_types = {};
     };
 
     Document.prototype = {
@@ -199,11 +226,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         setTransaction: function(issue) {
             this.issue = issue.issue;
             this.issue_type = issue.type;
+            console.log(this.issue_type);
             var viable_actions = transaction_attributes[this.issue_type].actions;
             // documents can only create grants and purchases right now
             this.transaction_type = viable_actions.purchase ? "purchase" : "grant";
             SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
-            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
+            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types, this.transaction_db_types);
         },
         hasFilledAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
@@ -252,7 +280,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         oldDoc.pages = realPages;
         oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
         if (oldDoc.issue_type) {
-            updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types);
+            updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types, oldDoc.transaction_db_types);
         }
         if (oldDoc.tags) {
             try {
@@ -344,13 +372,11 @@ Annotation.prototype = {
         });
         return json;
     },
-    filled: function(signaturepresent, role, type_mappings) {
+    filled: function(signaturepresent, role, type_mappings, type_mappings2) {
         // signature present comes from the account
-        console.log(type_mappings);
-        console.log(this.whattype);
-        if (type_mappings && (this.whattype in type_mappings))
+        if (type_mappings && type_mappings2 && (this.whattype in type_mappings2) && (type_mappings2[this.whattype]['typname'] in type_mappings))
         {
-            return this.forRole(role) && type_mapping[this.whattype](this.val);
+            return this.forRole(role) && type_mappings[type_mappings2[this.whattype]['typname']](this.val);
         }
         return (this.forRole(role) &&
                 ((this.val && this.val.length > 0) ||
@@ -490,11 +516,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     this.investorAttribute = function(attribute) {
         return investor_attributes[attribute] || "";
     };
-    
+
     this.ocrHighlighted = function(doc_id, annot) {
         if ((annot.type != 'highlight') || (annot.val != ''))
             return;
-        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y, 
+        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y,
             annot.position.size.width, annot.position.size.height, annot.position.docPanel.width).then(
             function (data) {
                 if (annot.val == '')

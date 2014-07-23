@@ -8,7 +8,7 @@
             {{attributeLabel(annotation.whattype)}}
         </div>
         <div data-icon="&#xe60f;" class="annotmark"
-         ng-class="{mine: annotation.forRole($root.navState.role), complete: annotation.filled(user.signaturePresent, $root.navState.role), incomplete: (annotation.required && !annotation.filled(user.signaturePresent, $root.navState.role)), active: annotation == active.annotation}"
+         ng-class="{mine: annotation.forRole($root.navState.role), complete: annotation.filled(user.signaturePresent, $root.navState.role, $root.type_mappings, doc.transaction_db_types), incomplete: (annotation.required && !annotation.filled(user.signaturePresent, $root.navState.role, $root.type_mappings, doc.transaction_db_types)), active: annotation == active.annotation}"
          ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type == 'highlight')"
          ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
             {{attributeLabel(annotation.whattype)}}

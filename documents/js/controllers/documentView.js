@@ -550,7 +550,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 if (a.type == 'highlight')
                 {
                     a.whosign = 'Issuer';
-                    a.whattype = 'evidence';
                 }
                 if ($rootScope.navState.role == "issuer") {
                     a.investorfixed = true;
@@ -614,6 +613,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.saveNoteData = function(clicked) {
             var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
             var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
+            console.log(nd_iss);
+            console.log(nd_inv);
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?
