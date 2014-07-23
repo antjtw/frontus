@@ -502,7 +502,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 });
                 $scope.sort = 'name';
             });
-            // console.log($scope.people)
         });
 
         $scope.setGroups = function(){
@@ -513,7 +512,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         if(myGroups.groups != null){
                             var array = JSON.parse(myGroups.groups);
                             person.groups = array.join(", ");
-                            console.log(typeof myGroups.groups);
+
                         };
                     });
                 
@@ -617,7 +616,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             if($scope.sidebarPage == 'email'){
                 if ($scope.messageData.recipients.indexOf(person.email)=== -1){
                  $scope.messageData.recipients.push(person.email);
-                 // console.log($scope.messageData.recipients)
+                 
                  }
 
                 else {
@@ -633,9 +632,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 else {
                     var toDelete = $scope.groupPeople.indexOf(person)
                     $scope.groupPeople.splice(toDelete, 1);
-                }
-                console.log($scope.groupPeople);  
-            }
+                };
+            };
             
         };
         

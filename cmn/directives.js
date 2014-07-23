@@ -27,10 +27,7 @@ m.directive('groupPeople', function(){
                     console.log("failed to add group");
                 });
             };
-
-
-       
-            
+  
             function indGroup(group){
                 this.group = group;
             };
@@ -39,7 +36,6 @@ m.directive('groupPeople', function(){
             console.log($scope.people);             
               SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
-                    console.log($scope.myUserGroups);
                     angular.forEach($scope.myUserGroups, function(info){
                         var a = info.json_array_elements;
                         var b = JSON.parse(a);
@@ -48,16 +44,6 @@ m.directive('groupPeople', function(){
                 });
             };
             $scope.parseGroups();
-
-            // $scope.personInfo = function(person){
-            //     angular.forEach(person, function(info){
-            //         SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
-            //             $scope.myInfo = data;
-            //         });
-            //     });;
-            //     return $scope.myInfo;
-            // };
-            // $scope.personInfo($scope.people);
 
             $scope.fromFront = function(person){
                 var allGroups = [];
@@ -72,14 +58,12 @@ m.directive('groupPeople', function(){
                     };
        
                 });
-                console.log(allGroups);
                 return allGroups;              
             };
 
 
 
             $scope.preSelectGroup = function(person){
-                console.log("preselecting");
                 if(person.length==0){
                     $scope.selectedGroup = [];
                 }
@@ -92,7 +76,6 @@ m.directive('groupPeople', function(){
                                 var preGroup = JSON.parse(role.groups);
                                 for(i = 0; i < preGroup.length; i++){
                                     if($scope.selectedGroup.indexOf(preGroup[i])=== -1){
-                                        console.log("to add");
                                         $scope.selectedGroup.push(preGroup[i]);
                                     }
                                 };
@@ -107,45 +90,29 @@ m.directive('groupPeople', function(){
 
 
             $scope.modifyGroups = function(array){
-                console.log(array);
                 var indexDelete= []
-                // var groupList = $scope.fromFront($scope.people);
                 angular.forEach(array, function(elem){
                     if($scope.selectedGroup.indexOf(elem)===-1){
-                        console.log(elem);
                         $scope.selectedGroup.push(elem)
-                    }
-                    
+                    }                    
                 });
                 angular.forEach($scope.selectedGroup, function(group){
                     if(array.indexOf(group)==-1){
-                        console.log(group);
                         var toDelete = $scope.selectedGroup.indexOf(group);
                         indexDelete.push(toDelete)
-                        console.log(toDelete);
-                        // $scope.selectedGroup.splice(toDelete, 1);
                     };
                });
-                console.log(indexDelete);
                 for(i = 0; i < indexDelete.length; i++){
                     $scope.selectedGroup.splice(indexDelete[i])
-                }
-                console.log($scope.selectedGroup);
-               
-               
-            }
+                }               
+            };
   
 
             $scope.$watch('people', function(olddata, newdata){
                 if(newdata){
                      $scope.fromFront($scope.people);
                      $scope.modifyGroups($scope.fromFront($scope.people));
-                }
-               
-                // $scope.modifyGroups($scope.fromFront($scope.people));
-
-                // $scope.createAllGroups($scope.people);
-                console.log("people changed");  
+                };  
             }, true);
             
 
@@ -160,12 +127,10 @@ m.directive('groupPeople', function(){
             $scope.selectGroup = function(group){
                 if($scope.selectedGroup.indexOf(group)=== -1){
                     $scope.selectedGroup.push(group);
-                    // oldGroups.push(group);
                 }
                 else {
                     var toDelete = $scope.selectedGroup.indexOf(group);
                     $scope.selectedGroup.splice(toDelete, 1);
-                    // console.log($scope.unChecked);
                     if($scope.unChecked.indexOf(group)==-1){
                         $scope.unChecked.push(group);
                     }
