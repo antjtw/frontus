@@ -153,6 +153,7 @@ m.directive('groupPeople', function(){
 
             $scope.modifyGroups = function(array){
                 console.log(array);
+                var indexDelete= []
                 // var groupList = $scope.fromFront($scope.people);
                 angular.forEach(array, function(elem){
                     if($scope.selectedGroup.indexOf(elem)===-1){
@@ -160,7 +161,22 @@ m.directive('groupPeople', function(){
                         $scope.selectedGroup.push(elem)
                     }
                     
-                })
+                });
+                angular.forEach($scope.selectedGroup, function(group){
+                    if(array.indexOf(group)==-1){
+                        console.log(group);
+                        var toDelete = $scope.selectedGroup.indexOf(group);
+                        indexDelete.push(toDelete)
+                        console.log(toDelete);
+                        // $scope.selectedGroup.splice(toDelete, 1);
+                    };
+               });
+                console.log(indexDelete);
+                for(i = 0; i < indexDelete.length; i++){
+                    $scope.selectedGroup.splice(indexDelete[i])
+                }
+                console.log($scope.selectedGroup);
+               
                
             }
   
@@ -168,6 +184,7 @@ m.directive('groupPeople', function(){
             $scope.$watch('people', function(olddata, newdata){
                 if(newdata){
                      $scope.fromFront($scope.people);
+                     $scope.modifyGroups($scope.fromFront($scope.people));
                 }
                
                 // $scope.modifyGroups($scope.fromFront($scope.people));
