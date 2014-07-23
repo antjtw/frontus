@@ -1637,9 +1637,9 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 
 .sticky-menu {
     position: absolute;
-    background-color: #1D2C3C;
-    width: 190px;
-    margin: 10px 0 0 -95px;
+    background-color: rgba(29, 44, 60, 0.85);
+    width: 300px;
+    margin: 10px 0 0 -150px;
     left: 50%;
     border-radius: 3px;
     z-index: 5;
@@ -1651,10 +1651,10 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     height: 0;
     position: absolute;
     top: -8px;
-    left: 85px;
+    left: 145px;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid #1D2C3C;
+    border-bottom: 8px solid rgba(29, 44, 60, 0.85);
 }
 
 .sticky-menu > ul > li {
@@ -1666,7 +1666,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky .sticky-menu .select2-container {
-    width: 150px;
+    width: 260px;
 }
 
 .sticky .sticky-menu input {
@@ -1678,8 +1678,8 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
-    color: #FFFFFF;
-    font-size: 12px;
+    color: #C6C6C6;
+    font-size: 14px;
     text-transform: capitalize;
 }
 
@@ -1690,20 +1690,27 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky-menu .standard-button > button {
-    width: 42px;
-    margin-left: 10px;
+    width: 37px;
+    margin-left: 120px;
     background-color: transparent;
     padding: 0;
     min-height: 20px;
     line-height: 20px;
     box-shadow: none;
     color: #3498DB;
-    text-transform: uppercase;
-    font-size: 10px;
+    font-size: 14px;
 }
 
 .sticky-menu .standard-button > button:hover {
     color: #2980B9;
+}
+
+.sticky-menu .drop-selector .standard .dropdown-toggle {
+    width: 260px;
+}
+
+.sticky-menu .drop-selector .standard .dropdown-menu {
+    width: 264px;
 }
 
 
@@ -1978,4 +1985,29 @@ doc-transaction-details > div > button {
     color: #FFFFFF;
     border-radius: 3px;
     margin-left: 5px;
+}
+
+
+.required-fields {
+
+}
+
+.required-fields > span {
+    display: inline-block;
+    color: #666666;
+}
+
+.required-fields.field-completed > span {
+    color: #C6C6C6;
+}
+
+.required-fields > span:first-of-type {
+    width: 15px;
+    margin: 0 5px;
+}
+
+.required-fields > span:first-of-type > span {
+    color: #C6C6C6;
+    vertical-align: -14%;
+    font-size: 20px;
 }
