@@ -224,11 +224,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             return promise.promise;
         },
         setTransaction: function(issue) {
-<<<<<<< HEAD
-            console.log(issue);
-            issue = mungeIssue(issue); // convert to future format
-=======
->>>>>>> ee9e7b4696fde554f96b1d2220531d0f98296e7a
             this.issue = issue.issue;
             this.issue_type = issue.type;
             console.log(this.issue_type);
