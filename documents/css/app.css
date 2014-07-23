@@ -1995,9 +1995,54 @@ doc-transaction-details > div > button {
     margin-left: 5px;
 }
 
+/* Finished Animation */
 
-.required-fields {
+@-webkit-keyframes completerequired {
+    0% {
+        color: #666666;
+    }
+    50% {
+        color: #19bc96;
+    }
+    100% {
+        color: #C6C6C6;
+    }
+}
 
+@-moz-keyframes completerequired {
+    0% {
+        color: #666666;
+    }
+    50% {
+        color: #19bc96;
+    }
+    100% {
+        color: #C6C6C6;
+    }
+}
+
+@-o-keyframes completerequired {
+    0% {
+        color: #666666;
+    }
+    50% {
+        color: #19bc96;
+    }
+    100% {
+        color: #C6C6C6;
+    }
+}
+
+@keyframes completerequired {
+    0% {
+        color: #666666;
+    }
+    50% {
+        color: #19bc96;
+    }
+    100% {
+        color: #C6C6C6;
+    }
 }
 
 .required-fields > span {
@@ -2007,6 +2052,10 @@ doc-transaction-details > div > button {
 
 .required-fields.field-completed > span {
     color: #C6C6C6;
+    -webkit-animation: completerequired 1s; /* Safari 4+ */
+    -moz-animation:    completerequired 1s; /* Fx 5+ */
+    -o-animation:      completerequired 1s; /* Opera 12+ */
+    animation:         completerequired 1s;
 }
 
 .required-fields > span:first-of-type {
@@ -2018,4 +2067,8 @@ doc-transaction-details > div > button {
     color: #C6C6C6;
     vertical-align: -14%;
     font-size: 20px;
+    -webkit-animation: completerequired 1s; /* Safari 4+ */
+    -moz-animation:    completerequired 1s; /* Fx 5+ */
+    -o-animation:      completerequired 1s; /* Opera 12+ */
+    animation:         completerequired 1s;
 }
