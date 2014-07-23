@@ -1,4 +1,4 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
     <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
@@ -7,13 +7,16 @@
     </span>
     <div>
         <fieldset ng-if="annot.type == 'text'">
-            <div class="textarea-container" ng-if="(annot.type_info.typename != 'enum') || (active.annotation != annot) || !annot.forRole(navState.role)">
+            <div class="textarea-container" ng-if="(annot.type_info.typename != 'enum' && (!invq || annot.type_info.typename != 'date')) || active.annotation != annot || !annot.forRole(navState.role)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
             <div ng-if="(annot.type_info.typename == 'enum') && (active.annotation == annot) && annot.forRole(navState.role)">
                 <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
                     <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>
+            </div>
+            <div ng-if="annot.type_info.typename == 'date' && annot.forRole(navState.role) && navState.role == 'investor'">
+                <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle">
             </div>
         </fieldset>
         <fieldset ng-if="annot.type == 'highlight'" >
@@ -56,24 +59,34 @@
                         </select>
                     </ul>
                 </li>
-                <li ng-if = "annot.type == 'highlight'">
+                <li ng-if="annot.type == 'highlight' && annot.type_info.typename != 'date'">
                     <ul>
                         <li>
                             <span>Contents</span>
                         </li>
-                        <li ng-if = "annot.type_info.typename != 'enum'">
+                        <li ng-if="annot.type_info.typename != 'enum'">
                             <div class="textarea-container">
                                 <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="annot.val"/>
                             </div>
                         </li>
-                        <li ng-if = "annot.type_info.typename == 'enum'">
+                        <li ng-if="annot.type_info.typename == 'enum'">
                             <select ui-select2="select2Options" ng-model="annot.val">
                                 <option ng-repeat="annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>
                         </li>
                     </ul>
                 </li>
-                <li ng-if = "annot.type == 'text'">
+                <li ng-if="annot.type_info.typename == 'date' && annot.forRole(navState.role)">
+                    <ul>
+                        <li>
+                            <span>Contents</span>
+                        </li>
+                        <li>
+                            <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
+                        </li>
+                    </ul>
+                </li>
+                <li ng-if="annot.type == 'text'">
                     <ul class="required-row">
                         <li>
                             <button ng-class="{'selected':annot.required}" ng-click="annot.required = !annot.required" class="check-box-button" ng-disabled="annot.type_info.required"><span data-icon="&#xe023;" aria-hidden="true"></span></button>

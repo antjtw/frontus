@@ -91,7 +91,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         }
     });
     var defaultTypes = [
-        {name: "Text", display: "Text"},
+        {name: "Text", display: "Text", type_info: {}},
         {name: "Signature", display: "Signature Text"},
         {name: "ImgSignature", display: "Signature Image"},
         {name: "investorName", display: "Name"},
@@ -376,7 +376,8 @@ Annotation.prototype = {
     },
     filled: function(signaturepresent, role) {
         // signature present comes from the account
-        if (this.type_info.check) {
+        // TODO: validated data if type_info.typename == 'enum' || 'date'
+        if (this.type_info && this.type_info.check) {
             return this.forRole(role) && this.type_info.check(this.val);
         }
         return (this.forRole(role) &&
