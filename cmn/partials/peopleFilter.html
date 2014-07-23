@@ -35,8 +35,10 @@
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showGroups = !showGroups"></span>
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="showGroups" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showGroups = !showGroups"></span>
                                         <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
-                                        <div ng-show="showGroups" class="showGrouping">
-                                            <div class="tinycol">hi{{myGroups}}</div>
+                                        <div ng-show="showGroups" class="showGrouping" ng-repeat = "myGroup in myGroups">
+                                            <div class="tinycol">{{myGroup.ind_group}}</div>
+                                            <div class="tinycol left"> ({{myGroup.count}})
+                                            </div>
                                         </div>
                         
                                     </div>          

@@ -256,25 +256,21 @@ m.directive('peopleFilter', function(){
             };
             $scope.getUserRoles()
 
-            $scope.myGroups = [];
-            function groupInfo(groupName, count){
-                this.groupName = groupName;
-                this.count = 0;
+            // $scope.myGroups = [];
+            // function groupInfo(groupName, count){
+            //     this.groupName = groupName;
+            //     this.count = 0;
+            // }
+            $scope.getFilterCount = function(){
+                SWBrijj.tblm('account.ind_user_group', ['ind_group', 'count']).then(function(data){
+                    $scope.myGroups = data;
+                    angular.forEach($scope.myGroups, function(info){
+                        info.ind_group = info.ind_group.replace(/"/g, "")
+                    })
+                    console.log($scope.myGroups);
+                })
             }
-
-            // $scope.getUserGroups = function(){
-            //     SWBrijj.tblm('account.my_user_groups', ['json_array_elements']).then(function(data){
-            //         $scope.myElements = data;
-            //         angular.forEach($scope.myElements, function(elem){
-            //             if($scope.myGroups.groupName)
-            //             console.log(JSON.parse(elem.json_array_elements));
-            //             myGroups.push(JSON.parse(elem.json_array_elements));
-            //         })
-            //         console.log($scope.myElements);
-
-            //     });
-            // };
-            // $scope.getUserGroups();
+            $scope.getFilterCount();
 
 
 
