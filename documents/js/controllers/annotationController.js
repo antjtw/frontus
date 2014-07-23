@@ -360,6 +360,24 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.annotationSizeStyle = {};
     $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
+    $scope.enumBoxMode = function() {
+        // whether the annotation box should be a select2 dropdown
+        return $scope.annot.type_info &&
+               $scope.annot.type_info.typename == 'enum' &&
+               $scope.active.annotation == $scope.annot &&
+               $scope.annot.forRole(navState.role);
+    };
+
+    $scope.dateBoxMode = function() {
+        // whether the main annotation box should be a datepicker
+        // note that issuers see it in the blue popup, so it's always false for them
+        return $scope.annot.type_info &&
+               $scope.annot.type_info.typename == 'date' &&
+               $scope.active.annotation == $scope.annot &&
+               $scope.annot.forRole(navState.role) &&
+               navState.role == 'investor';
+    };
+
     $scope.$watch('annot.position.coords', function(new_coords) {
         if (new_coords) {
             $scope.annotationCoordsStyle.top = Math.max(0, new_coords.y) + "px";

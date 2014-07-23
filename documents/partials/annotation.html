@@ -6,16 +6,16 @@
         <span data-icon="&#xe00f;"></span>
     </span>
     <div>
-        <fieldset ng-if="annot.type == 'text'">
-            <div class="textarea-container" ng-if="(annot.type_info.typename != 'enum' && (!invq || annot.type_info.typename != 'date')) || active.annotation != annot || !annot.forRole(navState.role)">
-                <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
+        <fieldset ng-if="annot.type == 'text'" ng-click="$event.stopPropagation();" ng-mousedown="$event.stopPropagation();">
+            <div class="textarea-container" ng-if="!(enumBoxMode() || dateBoxMode())">
+                <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
-            <div ng-if="(annot.type_info.typename == 'enum') && (active.annotation == annot) && annot.forRole(navState.role)">
+            <div ng-if="enumBoxMode()">
                 <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
                     <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>
             </div>
-            <div ng-if="annot.type_info.typename == 'date' && annot.forRole(navState.role) && navState.role == 'investor'">
+            <div ng-if="dateBoxMode()">
                 <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle">
             </div>
         </fieldset>
