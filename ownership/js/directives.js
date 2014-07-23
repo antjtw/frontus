@@ -56,3 +56,22 @@ own.directive('d3Donut', ['d3', function(d3) {
         }
     };
 }]);
+
+// view only
+own.directive('securityDetails', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+            sec: '='
+        },
+        templateUrl: '/ownership/partials/securityDetails.html',
+        controller: ["$scope", "displayCopy",
+            function($scope, displayCopy) {
+                $scope.tips = displayCopy.captabletips;
+            }
+        ],
+    };
+}]);
+
+
+        

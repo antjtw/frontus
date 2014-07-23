@@ -4,10 +4,6 @@ var ownership = angular.module('ownerServices');
  * u, ukey and a, akey refer to units and amount
  * 'key' is actually the backup/previous/undo value
  * TODO implement 'key' values as a stack with generic undo facility
- * TODO do not add cells directly to row object
- *      create row.cells array
- *      look at updateCell
- *      removes weird bugs when issue name collides with js property
  */
 CapTable = function() {
     this.vInvestors = [];
@@ -20,16 +16,15 @@ CapTable = function() {
     this.paripassu = [];
     this.conversions = [];
     this.transfers = [];
-
-    this.cells = {};
 };
 NewCapTable = function() {
-    this.cells = {};
     this.rows = [];
     this.security_names = [];
     this.securities = [];
     this.transactions = [];
     this.ledger_entries = [];
+
+    this.cells = [];
 };
 Transaction = function() {
     this.active = null;
@@ -86,7 +81,9 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
 
     this.getCapTable = function() {
         return captable;
-        //return _captable;
+    };
+    this.getNewCapTable = function() {
+        return _captable;
     };
     this.loadCapTable = function() { 
         $q.all([loadIssues(),
@@ -120,14 +117,14 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 loadRowNames()])
         .then(function(results) {
             _captable.ledger_entries = results[0];
-            _captable.transactions   = results[1].map(parseTransaction);
+            _captable.transactions = results[1].map(parseTransaction);
             // FIXME also need email address associated with rows,
             //       if one is available
-            _captable.rows           = results[2].map(rowFromName);
-            generateCells();
+            _captable.rows = results[2].map(rowFromName);
+            generateCells(new Date());
             console.log(_captable);
-            if (_captable.cells != captable.cells ||
-                _captable.rows  != captable.rows) {
+            if (_captable.rows != captable.rows ||
+                _captable.securities != captable.securities) {
                 throw "captables don't match!";
             }
         }, logErrorPromise);
@@ -254,7 +251,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         security.insertion_date = tran.insertion_date;
         security.transaction.push(tran.transaction);
         security.attrs = tran.attrs;
-        _captable.security_names.push(security.name);
 
         _captable.securities.push(security);
     }
@@ -276,6 +272,32 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     function parseForfeit(tran) {
     }
+    function visibleInvestors() {
+        return _captable.cells
+            .filter(function(el) {
+                return true;})
+            .reduce(function(prev, cur, idx, arr) {
+                if (prev.indexOf(cur.investor) == -1) {
+                    prev.push(cur.investor);
+                }
+                return prev;}, []);
+    }
+    function visibleSecurities() {
+        return _captable.cells
+            .filter(function(el) {
+                return el.security !== "";})
+            .reduce(function(prev, cur, idx, arr) {
+                if (prev.indexOf(cur.security) == -1) {
+                    prev.push(cur.security);
+                }
+                return prev;}, []);
+    }
+    function rowFor(inv) {
+        return _captable.cells
+            .filter(function(cell) {
+                return cell.investor == inv;
+            });
+    }
     function setCellUnits(cell) {
     // FIXME this should depend on the type of security and transaction
         cell.u = cell.ukey = sum_ledger(cell.ledger_entries);
@@ -292,9 +314,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     function generateCells() {
         angular.forEach(_captable.rows, function(inv) {
-            if (!(inv.name in _captable.cells)) {
-                _captable.cells[inv.name] = {};
-            }
             angular.forEach(_captable.securities, function(sec) {
                 var cell = nullCell();
                 cell.transactions = _captable.transactions.filter(
@@ -310,12 +329,16 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 setCellUnits(cell);
                 setCellAmount(cell);
                 cell.security = sec.name;
-                _captable.cells[inv.name][sec.name] = cell;
+                cell.investor = inv.name;
+                _captable.cells.push(cell);
             });
         });
+        _captable.security_names = visibleSecurities();
+        _captable.investor_names = visibleInvestors();
+        // TODO set rows
     }
     function rowFromName(name) {
-        var row = newRow(_captable.securities);
+        var row = newRow();
         row.namekey = row.name = name.name;
         row.editable = "yes";
         return row;
@@ -848,14 +871,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         pingIntercomIfCaptableStarted();
         populateListOfInvestorsWithoutAccessToTheCaptable();
 
-        angular.forEach(captable.rows, function(row) {
-            if (!(row.name in captable.cells)) {
-                captable.cells[row.name] = {};
-            }
-            angular.forEach(row.cells, function(cell, sec) {
-                captable.cells[row.name][sec] = cell;
-            });
-        });
         console.log(captable);
     }
     var issuetypes = [];

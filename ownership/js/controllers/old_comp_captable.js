@@ -1,4 +1,4 @@
-var captableController = function(
+var oldCaptableController = function(
         $scope, $rootScope, $location, $parse, $filter, SWBrijj,
         calculate, switchval, sorting, navState, captable, displayCopy)
 {
@@ -9,7 +9,8 @@ var captableController = function(
     var company = navState.company;
     $scope.currentCompany = company;
     
-    $scope.ct = captable.getNewCapTable();
+    $scope.ct = captable.getCapTable();
+    $scope._ct = captable.getNewCapTable();
 
     // Set the view toggles to their defaults
     $scope.radioModel = "Edit";
@@ -187,26 +188,6 @@ var captableController = function(
         }
     };
 
-    $scope.selectSecurity = function(security_name) {
-        deselectAllCells();
-        if ($scope.toggleView() && $scope.selectedSecurity &&
-            $scope.selectedSecurity.name == security_name)
-        {
-            $scope.sideBar = "home";
-            $scope.selectedSecurity = null;
-        } else {
-            $scope.selectedSecurity = $scope.ct.securities
-                .filter(function(el) {
-                    return el.name == security_name;  
-                })[0];
-            $scope.sideBar = $scope.toggleView() ? 5 : 1;
-            $scope.securityRevert = angular.copy(
-                                        $scope.selectedSecurity);
-            $scope.allowKeys = calculate.complement(
-                    $scope.ct.security_names, [security_name]);
-        }
-    };
-    /*
     $scope.getActiveIssue = function (issuekey) {
         // selected issue == active issue
         if ($scope.toggleView() && $scope.activeIssue &&
@@ -240,7 +221,6 @@ var captableController = function(
             $scope.activeIssue.vestfreq = $scope.freqtypes[index];
         }
     };
-    */
 
     $scope.saveIssueAssign = function (issue, field, i) {
         if (i) { issue[field] = i; }
