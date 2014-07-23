@@ -3237,7 +3237,7 @@ button.icon-button:hover {
     line-height: 24px;
     min-height: 24px;
     display: block;
-    padding: 3px 20px 3px 10px;
+    padding: 3px 20px 3px 5px;
     clear: both;
     font-weight: normal;
     color: #333333;
@@ -4058,6 +4058,8 @@ button.icon-button:hover {
     background-image: none;
     height: 30px;
     line-height: 30px;
+    color: #666666;
+    padding-left: 10px;
 }
 
 .select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices {
@@ -4066,9 +4068,21 @@ button.icon-button:hover {
     border: 1px solid #aaa;
 }
 
+.select2-results .select2-result-label {
+    color: #666666;
+}
+
 .select2-container-active .select2-choice {
     border: 1px solid #aaa;
     box-shadow: none;
+}
+
+.select2-container .select2-choice .select2-arrow b {
+    background: url('/img/down-arrow-20x30.png');
+}
+
+.select2-container .select2-choice .select2-arrow {
+    right: 5px;
 }
 
 
