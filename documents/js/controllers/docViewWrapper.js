@@ -394,7 +394,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.countersignDocument = function() {
             return $scope.doc.countersign().then(
                 function(data) {
-                    $scope.$emit("notification:success", "Document countersigned");
+                    $scope.$emit("notification:success", "Document approved");
                     $scope.leave();
                 },
                 function(fail) {
