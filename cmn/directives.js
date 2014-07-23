@@ -88,44 +88,52 @@ m.directive('groupPeople', function(){
 
             $scope.updateSelected = function(person){
                 var allGroups = [];
+                var toRemove =[];
                 if(person.length==0){
+
                     // $scope.selectedGroup = [];
                 }
                 else{
                     angular.forEach(person, function(ind){
-                        console.log(ind.groups);
-                        var smGroup = ind.groups.split(", ");
-                        for(i =0; i < smGroup.length; i++){
-                            if(allGroups.indexOf(smGroup[i]) == -1){
-                                allGroups.push(smGroup[i]);
+                        console.log(ind.email);
+                        SWBrijj.tblmm('account.my_user_groups', 'email', ind.email).then(function(data){
+                            console.log(data)
+                            var indGroups = data;
+                            console.log(indGroups);
+                            angular.forEach(indGroups, function(elem){
+                                console.log(JSON.parse(elem.json_array_elements));
+                                allGroups.push(JSON.parse(elem.json_array_elements));
+                            });
+                            console.log(allGroups);
+                            // for(var y = 0; y < allGroups.length;)
+                            angular.forEach($scope.selectedGroup, function(thing){
+                                // console.log(thing);
+                                if(allGroups.indexOf(thing)== -1){
+                                    console.log(thing);
+                                    toRemove.push(thing);
+                                };
+                            });
+                            for(var i = 0; i < allGroups.length; i++){
+                                if($scope.selectedGroup.indexOf(allGroups[i])==-1){
+                                    $scope.selectedGroup.push(allGroups[i]);
+                                }
                             }
-                        }
-                        console.log(allGroups)
-                        // add groups
-                        for(y = 0; y < allGroups.length; y++){
-                            if($scope.selectedGroup.indexOf(allGroups[y]) == -1){
-                                console.log(allGroups[y]);
-                                console.log($scope.selectedGroup);
-                                $scope.selectedGroup.push(allGroups[y]);
-                            }
-                            // take this out later
-                            else if($scope.selectedGroup.indexOf(allGroups[y]) > -1){
-                                console.log(allGroups[y]);
-
-                            }
-                            // else if(allGroups.indexOf())
+                            console.log(toRemove);
                             console.log($scope.selectedGroup);
+                            // add groups
+                            // for(y = 0; y < allGroups.length; y++){
+                            //     console.log(allGroups[y]);
+                            //     // if()
+                            //     if($scope.selectedGroup.indexOf(allGroups[y]) == -1){
+                            //         $scope.selectedGroup.push(allGroups[y]);
+                            //     };
 
-                        }
-                        for(z = 0; z < $scope.selectedGroup.length; z++){
-                            if(allGroups.indexOf($scope.selectedGroup[z])== -1){
-                                console.log($scope.selectedGroup[z]);
-                                var toDelete = $scope.selectedGroup.indexOf($scope.selectedGroup[z]);
-                                console.log(toDelete);
-                                $scope.selectedGroup.splice(toDelete, 1);
-                                // $scope.selectedGroup.splice(deleteMe, 0);
-                            }
-                        }
+                            // };
+                            
+                        });
+                        // // add groups
+                       
+                  
                         console.log($scope.selectedGroup);
 
 
@@ -149,8 +157,8 @@ m.directive('groupPeople', function(){
                         // console.log(smGroup);
                         // console.log(allGroups);
                       
-                    })
-                }
+                    });
+                };
 
                 return $scope.selectedGroup;
 
