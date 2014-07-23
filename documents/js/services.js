@@ -55,23 +55,23 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     var transaction_attributes = null;
     var transaction_attributes_callback = null;
     SWBrijj.transaction_attributes().then(function(data) {
-        var n1, n2, n3;
-        for (n1 in data)
+        var issue_type, action, field;
+        for (issue_type in data)
         {
-            for (n2 in data[n1]['actions'])
+            for (action in data[issue_type].actions)
             {
-                for (n3 in data[n1]['actions'][n2]['fields'])
+                for (field in data[issue_type].actions[action].fields)
                 {
-                    var lbls = JSON.parse(data[n1]['actions'][n2]['fields'][n3]['labels']);
-                    if (lbls[0] == null)
+                    var lbls = JSON.parse(data[issue_type].actions[action].fields[field].labels);
+                    if (lbls === null || lbls[0] === null)
                     {
                         lbls = null;
                     }
                     else
                     {
-                        data[n1]['actions'][n2]['fields'][n3]['typname'] = "enum";
+                        data[issue_type].actions[action].fields[field].typname = "enum";
                     }
-                    data[n1]['actions'][n2]['fields'][n3]['labels'] = lbls;
+                    data[issue_type].actions[action].fields[field].labels = lbls;
                 }
             }
         }
