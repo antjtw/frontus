@@ -1670,7 +1670,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky .sticky-menu input {
-    width: 138px; /* 150 - 12px padding - 2px border. sizes set in bootstrap */
+    width: 248px; /* 150 - 12px padding - 2px border. sizes set in bootstrap */
 }
 
 .sticky-menu > ul > li:last-of-type > ul {
