@@ -62,14 +62,17 @@ m.directive('groupPeople', function(){
             $scope.fromFront = function(person){
                 var allGroups = [];
                 angular.forEach(person, function(info){
-                    // console.log(info.groups)
-                    var a = info.groups.split(", ");
-                    for(var i = 0; i < a.length; i++){
-                        if(allGroups.indexOf(a[i])== -1){
-                            allGroups.push(a[i]);
+                    if(info.groups != undefined){
+                        var a = info.groups.split(", ");
+                        for(var i = 0; i < a.length; i++){
+                            if(allGroups.indexOf(a[i])== -1){
+                                allGroups.push(a[i]);
+                            }
                         }
+                    // console.log(allGroups); 
                     }
-                    // console.log(allGroups);
+                    // console.log(info.groups)
+                  
            
                 });
                 // console.log("still there?");
