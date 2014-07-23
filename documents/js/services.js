@@ -92,22 +92,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
-    function mungeIssue(issue) {
-        // set the type of the issue appropriately (currently it's ambiguous based on type alone)
-        // TODO: remove once the ownership conversion is complete
-        if (issue.type == "Equity") {
-            if (issue.common) {
-                issue.type = "Equity Common";
-            } else {
-                issue.type = "Equity Preferred";
-            }
-        } else if (issue.type == "Debt") {
-            issue.type = "Convertible Debt";
-        }
-
-        delete issue.common;
-        return issue;
-    }
     function updateAnnotationTypes(issue_type, transaction_type, type_list, db_types) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
@@ -117,7 +101,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             var tmp_array = [];
             for (var field in fields) {
                 var f = fields[field];
-                tmp_array.push({name: f.name, display: f.display_name, required: f.required});
+                tmp_array.push({name: f.name, display: f.display_name, required: f.required, typename: f.typname, labels: f.labels});
             }
             // add new types onto the end (in one action, without changing the reference, for performance reasons)
             var args = [type_list.length, 0].concat(tmp_array);
@@ -240,8 +224,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             return promise.promise;
         },
         setTransaction: function(issue) {
+<<<<<<< HEAD
             console.log(issue);
             issue = mungeIssue(issue); // convert to future format
+=======
+>>>>>>> ee9e7b4696fde554f96b1d2220531d0f98296e7a
             this.issue = issue.issue;
             this.issue_type = issue.type;
             console.log(this.issue_type);
@@ -290,11 +277,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     };
 
     this.setDoc = function(doc_id, doc) {
-        if (doc.issue_type) {
-            // calculate the future issue type
-            // TODO: remove once ownership refactor goes in
-            doc.issue_type = mungeIssue({type: doc.issue_type, common: doc.issue_common}).type;
-        }
         var oldDoc = this.getDoc(doc_id);
         // we need to keep the object reference from the docs hash as we may have given to other controllers
         // extend will keep any other properties on it too. Copy might be better?
@@ -539,11 +521,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     this.investorAttribute = function(attribute) {
         return investor_attributes[attribute] || "";
     };
-    
+
     this.ocrHighlighted = function(doc_id, annot) {
         if ((annot.type != 'highlight') || (annot.val != ''))
             return;
-        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y, 
+        SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y,
             annot.position.size.width, annot.position.size.height, annot.position.docPanel.width).then(
             function (data) {
                 if (annot.val == '')

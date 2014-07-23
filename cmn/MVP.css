@@ -2591,6 +2591,48 @@ a.oldschool-link  {
     cursor: pointer;
     background-color: inherit;
 }
+
+.toggle-button {
+    height: 30px;
+    width: 87px;
+    cursor: pointer;
+    border: 1px solid #8D8D8D;
+}
+
+.toggle-button.selected {
+    background-color: #8D8D8D;
+}
+
+.toggle-button > ul > li {
+    line-height: 30px;
+}
+
+.toggle-button > ul > li > span:first-child {
+    vertical-align: -3%;
+}
+
+.toggle-button:first-of-type {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.toggle-button:last-of-type {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
     border-radius: 3px;

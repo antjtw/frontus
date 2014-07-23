@@ -3,7 +3,7 @@
 <div class="container dynamic-page">
     <subnav>
         <div ng-if="(navState.role == 'issuer') && (drawTime()) && (1)">
-            <div class="box-button pull-left"
+            <div class="toggle-button pull-left"
                  ng-click="setNextAnnotationType('text');"
                  data-placement="bottom"
                  ng-class="{selected: nextAnnotationType == 'text'}">
@@ -14,7 +14,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="box-button pull-left"
+            <div class="toggle-button pull-left"
                  ng-click="setNextAnnotationType('highlight');"
                  data-placement="bottom"
                  ng-class="{selected:  nextAnnotationType == 'highlight'}">
@@ -133,7 +133,7 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
 
-                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.countersignable($root.navState.role)" disabled="unfilledAnnotation()">
+                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.countersignable(navState.role)" disabled="unfilledAnnotation()">
                             By clicking "Approve", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
                         </doc-action>
 

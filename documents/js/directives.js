@@ -302,7 +302,7 @@ app.directive('docTransactionDetails', function() {
 
             // Get the company's Issues
             // TODO: issue / cap table service
-            SWBrijj.tblm('ownership.company_issue').then(function (data) {
+            SWBrijj.tblm('ownership.newtype_company_issue').then(function (data) {
                 $scope.issues = data;
             });
 
@@ -312,12 +312,14 @@ app.directive('docTransactionDetails', function() {
                     $scope.select2Options.data.splice(0);
                     $scope.select2Options.data.push(defaultSelectObj);
                     issues.forEach(function(issue) {
-                        // TODO: filter to usable issue types
-                        $scope.select2Options.data.push({
-                            id: issue.issue,
-                            text: 'Add to "' + issue.issue + '"',
-                            issue: issue
-                        });
+			if (issue.type) {
+                            // TODO: filter to usable issue types
+                            $scope.select2Options.data.push({
+				id: issue.issue,
+				text: 'Add to "' + issue.issue + '"',
+				issue: issue
+                            });
+			}
                     });
                     $scope.selectedIssue = defaultSelectObj;
                 }
