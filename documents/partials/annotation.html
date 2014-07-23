@@ -1,4 +1,4 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role, type_mappings, doc.transaction_db_types), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature':imageMine(), 'processing':signatureprocessing, 'otherperson': whosignssticky()}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle" ng-show="currentPage = annot.page">
     <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
@@ -7,12 +7,12 @@
     </span>
     <div>
         <fieldset ng-if="annot.type == 'text'">
-            <div class="textarea-container" ng-if="(doc.transaction_db_types[annot.whattype].typname != 'enum') || (active.annotation != annot) || !annot.forRole(navState.role)">
+            <div class="textarea-container" ng-if="(annot.type_info.typename != 'enum') || (active.annotation != annot) || !annot.forRole(navState.role)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
-            <div ng-if="(doc.transaction_db_types[annot.whattype].typname == 'enum') && (active.annotation == annot) && annot.forRole(navState.role)">
+            <div ng-if="(annot.type_info.typename == 'enum') && (active.annotation == annot) && annot.forRole(navState.role)">
                 <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
-                    <option ng-repeat="label in doc.transaction_db_types[annot.whattype].labels" value="{{label}}">{{label}}</option>
+                    <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>
             </div>
         </fieldset>
@@ -46,7 +46,7 @@
                         </li>
                     </ul>
                 </li>
-                <li ng-if = "annot.type == 'text'">
+                <li>
                     <ul>
                         <li>
                             <span>Type of Annotation?</span>
@@ -59,26 +59,16 @@
                 <li ng-if = "annot.type == 'highlight'">
                     <ul>
                         <li>
-                            <span>Type of Annotation?</span>
-                        </li>
-                        <select ui-select2="select2Options" ng-model="annot.whattype">
-                            <option ng-repeat="(type, val) in doc.transaction_db_types" value="{{type}}">{{type}}</option>
-                        </select>
-                    </ul>
-                </li>
-                <li ng-if = "annot.type == 'highlight'">
-                    <ul>
-                        <li>
                             <span>Contents</span>
                         </li>
-                        <li ng-if = "doc.transaction_db_types[annot.whattype].typname != 'enum'">
+                        <li ng-if = "annot.type_info.typename != 'enum'">
                             <div class="textarea-container">
                                 <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="annot.val"/>
                             </div>
                         </li>
-                        <li ng-if = "doc.transaction_db_types[annot.whattype].typname == 'enum'">
+                        <li ng-if = "annot.type_info.typename == 'enum'">
                             <select ui-select2="select2Options" ng-model="annot.val">
-                                <option ng-repeat="label in doc.transaction_db_types[annot.whattype].labels" value="{{label}}">{{label}}</option>
+                                <option ng-repeat="annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>
                         </li>
                     </ul>

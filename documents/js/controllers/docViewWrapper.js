@@ -3,23 +3,6 @@
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
         'navState', 'Annotations', 'Documents', 'User', '$q',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
-        
-        $rootScope.transaction_db_types = {};
-        var numberCheck = function(val)
-        {
-            var num = Number(val);
-            return (!isNaN(num) && val.length > 0);
-        };
-        var stringCheck = function(val)
-        {
-            return (typeof(val) == String) && (val.length > 0);
-        };
-        $rootScope.type_mappings = {
-            "int8": numberCheck,
-            "int4": numberCheck,
-            "float8": numberCheck,
-            "varchar": stringCheck
-        };
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -481,7 +464,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.unfilledAnnotation = function() {
             return $scope.doc.annotations.some(function(annot) {
-                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role, $rootScope.type_mappings, $scope.doc.transaction_db_types));
+                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
             });
         };
 

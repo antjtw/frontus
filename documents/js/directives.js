@@ -141,8 +141,8 @@ app.directive('annotationList', ["User", function(User) {
             active: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents", "User",
-            function($scope, $element, $rootScope, Annotations, Documents, User) {
+        controller: ["$scope", "$element", "navState", "Annotations", "Documents", "User",
+            function($scope, $element, navState, Annotations, Documents, User) {
                 $scope.$watch("doc", function(doc) {
                     // we want a new page_visible array for every doc
                     $scope.page_visible = [];

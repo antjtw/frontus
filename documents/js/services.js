@@ -124,7 +124,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     var Document = function() {
         this.annotations = [];
         this.annotation_types = angular.copy(defaultTypes);
-        this.transaction_db_types = {};
     };
 
     Document.prototype = {
@@ -226,12 +225,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         setTransaction: function(issue) {
             this.issue = issue.issue;
             this.issue_type = issue.type;
-            console.log(this.issue_type);
             var viable_actions = transaction_attributes[this.issue_type].actions;
             // documents can only create grants and purchases right now
             this.transaction_type = viable_actions.purchase ? "purchase" : "grant";
             SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
-            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types, this.transaction_db_types);
+            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
         },
         hasFilledAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
@@ -280,7 +278,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         oldDoc.pages = realPages;
         oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
         if (oldDoc.issue_type) {
-            updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types, oldDoc.transaction_db_types);
+            updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types);
         }
         if (oldDoc.tags) {
             try {
@@ -372,11 +370,10 @@ Annotation.prototype = {
         });
         return json;
     },
-    filled: function(signaturepresent, role, type_mappings, type_mappings2) {
+    filled: function(signaturepresent, role) {
         // signature present comes from the account
-        if (type_mappings && type_mappings2 && (this.whattype in type_mappings2) && (type_mappings2[this.whattype]['typname'] in type_mappings))
-        {
-            return this.forRole(role) && type_mappings[type_mappings2[this.whattype]['typname']](this.val);
+        if (this.type_info.check) {
+            return this.forRole(role) && this.type_info.check(this.val);
         }
         return (this.forRole(role) &&
                 ((this.val && this.val.length > 0) ||
@@ -518,12 +515,12 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     };
 
     this.ocrHighlighted = function(doc_id, annot) {
-        if ((annot.type != 'highlight') || (annot.val != ''))
+        if ((annot.type != 'highlight') || (annot.val !== ''))
             return;
         SWBrijj.document_OCR_segment(doc_id, annot.page, annot.position.coords.x, annot.position.coords.y,
             annot.position.size.width, annot.position.size.height, annot.position.docPanel.width).then(
             function (data) {
-                if (annot.val == '')
+                if (annot.val === '')
                 {
                     annot.val = data;
                     //$document.getElementById('highlightContents').value = data;

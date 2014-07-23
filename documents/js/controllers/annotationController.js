@@ -114,6 +114,28 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             setDefaultText();
             setPlaceholder();
         }
+        // update type information
+        $scope.annot.type_info = $scope.doc.annotation_types.filter(function(type) {
+            return type.name == $scope.annot.whattype;
+        })[0];
+        if (!$scope.annot.type_info) {
+            $scope.annot.type_info = {}; // TODO: probably need better defaults
+        }
+        var numberCheck = function(val)
+        {
+            var num = Number(val);
+            return (!isNaN(num) && val.length > 0);
+        };
+        var stringCheck = function(val)
+        {
+            return (typeof(val) == String) && (val.length > 0);
+        };
+        var type_mappings = {
+            "int8": numberCheck,
+            "int4": numberCheck,
+            "float8": numberCheck,
+            "varchar": stringCheck
+        };
     });
 
     var topLocation = function(elementHeight, mouseY) {
