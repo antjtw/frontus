@@ -1,7 +1,7 @@
 <div ng-hide="doc.issue">
     <span>Do you want to associate this document with a Cap Table transaction?</span>
     <input ui-select2="select2Options" ng-model="selectedIssue">
-    <button ng-click="doc.setTransaction(selectedIssue.issue);" ng-disabled="selectedIssue.id == 0">Next</button>
+    <button ng-click="doc.setTransaction(selectedIssue.issue);" ng-show="selectedIssue.id != 0" ng-disabled="selectedIssue.id == 0">Next</button>
 </div>
 <div ng-show="doc.issue">
     <span>Fields necessary to complete a {{doc.transaction_type}} for {{doc.issue}}</span>
