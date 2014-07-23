@@ -80,7 +80,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         if (transaction_attributes_callback) {
             transaction_attributes_callback();
         }
-        console.log(transaction_attributes);
     });
     var defaultTypes = [
         {name: "Text", display: "Text"},
@@ -112,8 +111,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     function updateAnnotationTypes(issue_type, transaction_type, type_list, db_types) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
-            console.log(issue_type);
-            console.log(transaction_type);
             var viable_actions = transaction_attributes[issue_type].actions;
             var fields = viable_actions[transaction_type].fields;
             type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
@@ -125,13 +122,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             // add new types onto the end (in one action, without changing the reference, for performance reasons)
             var args = [type_list.length, 0].concat(tmp_array);
             Array.prototype.splice.apply(type_list, args);
-            console.log("update");
             if (typeof(db_types) != undefined)
             {
                 var prop;
                 for (prop in db_types) { if (db_types.hasOwnProperty(prop)) { delete db_types[prop]; } }
                 for (prop in fields) { if (fields.hasOwnProperty(prop)) {db_types[prop] = fields[prop];}}
-                console.log(db_types);
             }
         }
         if (transaction_attributes) {

@@ -281,7 +281,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.openBox = function() {
         $scope.active.annotation = $scope.annot;
-        console.log($scope.doc.transaction_db_types);
         if (navState.role == "issuer" && !$scope.doc.countersignable(navState.role)) {
             $scope.getme = true;
         }

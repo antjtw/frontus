@@ -7,11 +7,11 @@
     </span>
     <div>
         <fieldset ng-if="annot.type == 'text'">
-            <div class="textarea-container" ng-if="doc.transaction_db_types[annot.whattype]['typname'] != 'enum'">
+            <div class="textarea-container" ng-if="(doc.transaction_db_types[annot.whattype]['typname'] != 'enum') || (active.annotation != annot) || ($root.navState.role != annot.whosign.toLowerCase())">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" ng-disabled="doc.countersignable(navState.role)" placeholder="{{val_placeholder}}" ui-event="{focus : 'openBox(this, $event)'}" style="resize:none" ng-keyup="addLineBreaks($event)" ng-mousedown="$event.stopPropagation();" wrap="off" ng-model="annot.val" class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
-            <div ng-if="doc.transaction_db_types[annot.whattype]['typname'] == 'enum'">
-                <select ui-select2="select2Options" ng-model="annot.val" ng-diabled="active.annotation != annot" ng-click="{focus : 'openBox(this, $event)'}">
+            <div ng-if="(doc.transaction_db_types[annot.whattype]['typname'] == 'enum') && (active.annotation == annot) && ($root.navState.role == annot.whosign.toLowerCase())">
+                <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
                     <option ng-repeat="label in doc.transaction_db_types[annot.whattype]['labels']" value="{{label}}">{{label}}</option>
                 </select>
             </div>
