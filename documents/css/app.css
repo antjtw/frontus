@@ -1635,6 +1635,14 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     border-radius: 0;
 }
 
+.sticky fieldset .select2-container .select2-choice {
+    height: 100%
+}
+
+.sticky fieldset .select2-container .select2-choice .select2-arrow b {
+    background-repeat: no-repeat;
+}
+
 .sticky-menu {
     position: absolute;
     background-color: rgba(29, 44, 60, 0.85);
