@@ -17,7 +17,7 @@ m.directive('groupPeople', function(){
             var newGroups = [];
             $scope.groupData = [];
             console.log($scope.people);
-            var allGroups = [];
+          
             var totalGroups = []
     
             $scope.updateGroup = function(array, json){
@@ -60,11 +60,11 @@ m.directive('groupPeople', function(){
             $scope.personInfo($scope.people);
 
             $scope.fromFront = function(person){
+                var allGroups = [];
                 angular.forEach(person, function(info){
                     // console.log(info.groups)
                     var a = info.groups.split(", ");
                     for(var i = 0; i < a.length; i++){
-                        console.log(a[i]);
                         if(allGroups.indexOf(a[i])== -1){
                             allGroups.push(a[i]);
                         }
@@ -73,7 +73,7 @@ m.directive('groupPeople', function(){
            
                 });
                 // console.log("still there?");
-                // console.log(allGroups);
+                console.log(allGroups);
                 return allGroups;
                
             };
@@ -151,19 +151,26 @@ m.directive('groupPeople', function(){
                 
             // }
 
-            $scope.modifyGroups = function(){
-                $scope.fromFront($scope.people);
-                var groupList = $scope.fromFront($scope.people);
-                angular.forEach(groupList, function(elem){
-                    console.log(elem);
+            $scope.modifyGroups = function(array){
+                console.log(array);
+                // var groupList = $scope.fromFront($scope.people);
+                angular.forEach(array, function(elem){
+                    if($scope.selectedGroup.indexOf(elem)===-1){
+                        console.log(elem);
+                        $scope.selectedGroup.push(elem)
+                    }
+                    
                 })
-                console.log($scope.fromFront($scope.people))
+               
             }
   
 
-            $scope.$watch('people', function(){
-                // $scope.fromFront($scope.people);
-                $scope.modifyGroups();
+            $scope.$watch('people', function(olddata, newdata){
+                if(newdata){
+                     $scope.fromFront($scope.people);
+                }
+               
+                // $scope.modifyGroups($scope.fromFront($scope.people));
 
                 // $scope.createAllGroups($scope.people);
                 console.log("people changed");  
