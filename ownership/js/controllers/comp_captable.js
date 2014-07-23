@@ -1046,8 +1046,26 @@ var captableController = function(
         });
     };
 
+    $scope.cellFor = function(inv, sec) {
+        return $scope.ct.cells
+            .filter(function(cell) {
+                return cell.investor == inv && cell.security == sec;
+            })[0];
+    };
+    $scope.rowFor = function(inv) {
+        return $scope.ct.cells
+            .filter(function(cell) {
+                return cell.investor == inv;
+            });
+    };
+    $scope.rowSum = function(inv) {
+        return $scope.rowFor(inv)
+            .reduce(function(prev, cur, idx, arr) {
+                return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
+            }, 0);
+    };
     $scope.canHover = function(cell) {
-        return cell.u || cell.a;
+        return cell && (cell.u || cell.a);
     };
 
     $scope.editViewToggle = function() {
@@ -2093,6 +2111,16 @@ var captableController = function(
         }
     };
 
+    $scope.securityUnitLabel = function(security_name) {
+        var type;
+        angular.forEach($scope.ct.securities, function(sec) {
+            if (sec.name == security_name) {
+                type = $filter('issueUnitLabel')(sec);
+            }
+        });
+        return type;
+    };
+    /*
     $scope.grantbyIssue = function (key) {
         var type = "";
         angular.forEach($scope.ct.securities, function(issue) {
@@ -2102,6 +2130,7 @@ var captableController = function(
         });
         return type
     };
+    */
 
     //switches the sidebar based on the type of the issue
     $scope.funcformatAmount = function (amount) {

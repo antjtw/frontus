@@ -1,3 +1,4 @@
+<!-- TODO formatDollarAmount is not in this scope, move to calculate -->
 <!-- Global Tab -->
 <div class="capGuide cap-overflow global">
     <p class="belowTitle">
@@ -24,7 +25,7 @@
         <span ng-bind="formatDollarAmount(sec.attrs.premoney)">
         </span>
         <span tooltip-placement="right"
-              tooltip="tips.premoneyval"
+              tooltip="{{tips.premoneyval}}"
               class="forTooltip">
             Pre-Money Valuation
         </span>
@@ -33,7 +34,7 @@
        class="belowTitle">
         <span ng-bind="formatDollarAmount(sec.attrs.postmoney)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.postmoneyval"
+              tooltip="{{tips.postmoneyval}}"
               class="forTooltip">
             Post-Money Valuation
         </span>
@@ -42,7 +43,7 @@
        class="belowTitle">
         <span ng-bind="formatDollarAmount(sec.attrs.ppshare)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.ppshare"
+              tooltip="{{tips.ppshare}}"
               class="forTooltip">
             Share Price
         </span>
@@ -51,7 +52,7 @@
        class="belowTitle">
         <span ng-bind="formatAmount(sec.attrs.totalauth)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.totalauth"
+            tooltip="{{tips.totalauth}}"
               class="forTooltip">
             Total Authorized
         </span>
@@ -60,7 +61,7 @@
        class="belowTitle">
         <span ng-bind="sec.attrs.liquidpref"></span>
         <span tooltip-placement="right"
-              tooltip="tips.liquidpref"
+            tooltip="{{tips.liquidpref}}"
               class="forTooltip">
             Liquidation Preference
         </span>
@@ -69,7 +70,7 @@
        class="belowTitle">
         <span ng-bind="sec.attrs.partpref"></span>
         <span tooltip-placement="right"
-              tooltip="tips.partpref"
+            tooltip="{{tips.partpref}}"
               class="forTooltip">
             Participating Preferred
         </span>
@@ -78,7 +79,7 @@
        class="belowTitle">
         <span ng-bind="sec.attrs.dragalong"></span>
         <span tooltip-placement="right"
-              tooltip="tips.dragalong"
+            tooltip="{{tips.dragalong}}"
               class="forTooltip">
             Drag Along
         </span>
@@ -87,17 +88,18 @@
        class="belowTitle">
         <span ng-bind="sec.attrs.tagalong"></span>
         <span tooltip-placement="right"
-              tooltip="tips.tagalong"
+            tooltip="{{tips.tagalong}}"
               class="forTooltip">
             Tag Along
         </span>
     </p>
+    <!-- FIXME this doesn't work -->
     <p ng-show="activeIssue.paripassu[0].pariwith"
        ng-repeat="pari in activeIssue.paripassu track by $index"
        class="belowTitle">
         <span ng-bind="pari.pariwith"></span>
         <span tooltip-placement="right"
-              tooltip="tips.paripassu"
+            tooltip="{{tips.paripassu}}"
               class="forTooltip">
             Pari Passu With
         </span>
@@ -105,11 +107,11 @@
 </div>
   <!-- Options Tab -->
 <div class="capGuide cap-overflow"
-     ng-show="trantype(sec.attrs.type, 'Option');">
+     ng-show="sec.attrs.security_type == 'Option'">
     <p ng-show="sec.attrs.optundersec" class="belowTitle">
         <span ng-bind="sec.attrs.optundersec"></span>
         <span tooltip-placement="right"
-              tooltip="tips.optundersec"
+            tooltip="{{tips.optundersec}}"
               class="forTooltip">
             Underlying Security
         </span>
@@ -117,7 +119,7 @@
     <p ng-show="sec.attrs.totalauth" class="belowTitle">
         <span ng-bind="formatAmount(sec.attrs.totalauth)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.totalauth"
+            tooltip="{{tips.totalauth}}"
               class="forTooltip">
             Total Authorized
         </span>
@@ -126,7 +128,7 @@
        class="belowTitle">
         <span ng-bind="formatAmount(totalGranted(sec.attrs.issue, ct.trans))"></span>
         <span tooltip-placement="right"
-              tooltip="tips.totalgranted"
+            tooltip="{{tips.totalgranted}}"
               class="forTooltip">
             Total Granted
         </span>
@@ -135,7 +137,7 @@
        class="belowTitle">
         <span ng-bind="formatDollarAmount(sec.attrs.price)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.price"
+            tooltip="{{tips.price}}"
               class="forTooltip">
             Strike Price
         </span>
@@ -143,7 +145,7 @@
     <p ng-show="sec.attrs.terms" class="belowTitle">
         <span ng-bind="sec.attrs.terms"></span>
         <span tooltip-placement="right"
-              tooltip="tips.terms" class="forTooltip">
+            tooltip="{{tips.terms}}" class="forTooltip">
             Vesting Term (Months)
         </span>
     </p>
@@ -151,7 +153,7 @@
        class="belowTitle">
         <span ng-bind="sec.attrs.vestingbeginsdisplay"></span>
         <span tooltip-placement="right"
-              tooltip="tips.vestingbegins"
+            tooltip="{{tips.vestingbegins}}"
               class="forTooltip">
             Vesting Cliff (Months)
         </span>
@@ -159,7 +161,7 @@
     <p ng-show="sec.attrs.vestcliff" class="belowTitle">
         <span ng-bind="sec.attrs.vestcliff"></span>
         <span tooltip-placement="right"
-              tooltip="tips.vestcliff"
+            tooltip="{{tips.vestcliff}}"
               class="forTooltip">
             Vesting Cliff %
         </span>
@@ -167,7 +169,7 @@
     <p ng-show="sec.attrs.vestfreq" class="belowTitle">
         <span ng-bind="sec.attrs.vestfreq"></span>
         <span tooltip-placement="right"
-              tooltip="tips.vesetfreq"
+            tooltip="{{tips.vesetfreq}}"
               class="forTooltip">
             Post Cliff Frequency
         </span>
@@ -176,11 +178,11 @@
 
   <!-- Debt tab -->
 <div class="capGuide cap-overflow"
-      ng-show="trantype(sec.attrs.type, 'Debt');">
+      ng-show="sec.attrs.security_type == 'Debt'">
     <p class="belowTitle" ng-show="sec.attrs.premoney">
         <span ng-bind="formatDollarAmount(sec.attrs.premoney)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.premoneyval"
+            tooltip="{{tips.premoneyval}}"
               class="forTooltip">
             Pre-Money Valuation
         </span>
@@ -188,7 +190,7 @@
     <p class="belowTitle" ng-show="sec.attrs.postmoney">
         <span ng-bind="formatDollarAmount(sec.attrs.postmoney)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.postmoneyval"
+            tooltip="{{tips.postmoneyval}}"
               class="forTooltip">
             Post-Money Valuation
         </span>
@@ -198,7 +200,7 @@
             {{sec.attrs.interestrate}}% {{sec.attrs.interestratefreq}}
         </span>
         <span tooltip-placement="right"
-               tooltip="tips.interestrate"
+            tooltip="{{tips.interestrate}}"
                class="forTooltip">
             Interest Rate
         </span>
@@ -206,7 +208,7 @@
     <p class="belowTitle" ng-show="sec.attrs.valcap">
         <span ng-bind="formatDollarAmount(sec.attrs.valcap)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.valcap"
+            tooltip="{{tips.valcap}}"
               class="forTooltip">
             Valuation Cap
         </span>
@@ -214,7 +216,7 @@
     <p class="belowTitle" ng-show="sec.attrs.discount">
         <span ng-bind="sec.attrs.discount"></span>
         <span tooltip-placement="right"
-              tooltip="tips.discount"
+            tooltip="{{tips.discount}}"
               class="forTooltip">
             Percent Discount
         </span>
@@ -222,7 +224,7 @@
      <p class="belowTitle" ng-show="sec.attrs.term">
         <span ng-bind="sec.attrs.term"></span>
         <span tooltip-placement="right"
-              tooltip="tips.term"
+            tooltip="{{tips.term}}"
               class="forTooltip">
             Term (Months)
         </span>
@@ -231,11 +233,11 @@
 
   <!-- Safe tab -->
 <div class="capGuide cap-overflow"
-     ng-show="trantype(sec.attrs.type, 'Safe');">
+     ng-show="sec.attrs.security_type == 'Safe'">
     <p class="belowTitle" ng-show="sec.attrs.valcap">
         <span ng-bind="formatDollarAmount(sec.attrs.valcap)"> </span>
         <span tooltip-placement="right"
-              tooltip="tips.valcap"
+              tooltip="{{tips.valcap}}"
               class="forTooltip">
             Valuation Cap
         </span>
@@ -243,7 +245,7 @@
     <p class="belowTitle" ng-show="sec.attrs.discount">
         <span ng-bind="sec.attrs.discount"></span>
         <span tooltip-placement="right"
-              tooltip="tips.discount"
+              tooltip="{{tips.discount}}"
               class="forTooltip">
             Percent Discount
         </span>
@@ -252,11 +254,11 @@
 
 <!-- Warrant tab -->
 <div class="capGuide cap-overflow"
-     ng-show="trantype(sec.attrs.type, 'Warrant');">
+     ng-show="sec.attrs.security_type == 'Warrant'">
     <p ng-show="sec.attrs.optundersec" class="belowTitle">
         <span ng-bind="sec.attrs.optundersec"></span>
         <span tooltip-placement="right"
-              tooltip="tips.optundersec"
+            tooltip="{{tips.optundersec}}"
               class="forTooltip">
             Underlying Security
         </span>
@@ -264,7 +266,7 @@
     <p class="belowTitle" ng-show="sec.attrs.term">
         <span ng-bind="sec.attrs.term"></span>
         <span tooltip-placement="right"
-              tooltip="tips.term"
+            tooltip="{{tips.term}}"
               class="forTooltip">
             Term (Months)
         </span>
@@ -272,7 +274,7 @@
     <p ng-show="sec.attrs.price"  class="belowTitle">
         <span ng-bind="formatDollarAmount(sec.attrs.price)"></span>
         <span tooltip-placement="right"
-              tooltip="tips.price"
+            tooltip="{{tips.price}}"
               class="forTooltip">
             Strike Price
         </span>

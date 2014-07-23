@@ -72,6 +72,41 @@ own.directive('securityDetails', [function() {
         ],
     };
 }]);
-
-
-        
+own.directive('editableSecurityDetails', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+            sec: '='
+        },
+        templateUrl: '/ownership/partials/editableSecurityDetails.html',
+        controller: ["$scope", "displayCopy",
+            function($scope, displayCopy) {
+                $scope.tips = displayCopy.captabletips;
+            }
+        ],
+    };
+}]);
+own.directive('cellDetails', [function() {
+    return {
+        restrict: 'EA',
+        scope: false,
+        templateUrl: '/ownership/partials/cellDetails.html',
+        controller: ["$scope", "displayCopy",
+            function($scope, displayCopy) {
+                $scope.tips = displayCopy.captabletips;
+            }
+        ],
+    };
+}]);
+own.directive('editableCellDetails', [function() {
+    return {
+        restrict: 'EA',
+        scope: false,
+        templateUrl: '/ownership/partials/editableCellDetails.html',
+        controller: ["$scope", "displayCopy",
+            function($scope, displayCopy) {
+                $scope.tips = displayCopy.captabletips;
+            }
+        ],
+    };
+}]);
