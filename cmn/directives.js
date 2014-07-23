@@ -61,13 +61,11 @@ m.directive('groupPeople', function(){
 
             $scope.preSelectGroup = function(person){
                 console.log("preselecting");
-                console.log(person.length);
                 if(person.length==0){
                     $scope.selectedGroup = [];
                 }
                 else{
                     angular.forEach(person, function(info){
-                    console.log(info.email);
                     if(info.groups != undefined){
                         SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
                             $scope.myGroups = data;
@@ -76,36 +74,75 @@ m.directive('groupPeople', function(){
                                 for(i = 0; i < preGroup.length; i++){
                                     if($scope.selectedGroup.indexOf(preGroup[i])=== -1){
                                         console.log("to add");
-                                        console.log(preGroup[i]);
                                         $scope.selectedGroup.push(preGroup[i]);
-                                        // preGroup.splice(i, 1);
                                     }
-                                    else if($scope.selectedGroup.indexOf(preGroup[i]) > -1){
-                                        console.log(preGroup[i]);
-                                        console.log("match")
-                                        // var deleteMe = $scope.selectedGroup.indexOf(preGroup[i]);
-                                        // console.log(deleteMe);
-                                        // $scope.selectedGroup.splice(deleteMe, 1);
-                                    }
-                                    else {
-                                        console.log("is there a third option?")
-
-                                    }
-
                                 };
                             });                           
                         });
                     };
                 }); 
                 }
-
-              
                 return $scope.selectedGroup;
+            }
+            $scope.preSelectGroup($scope.people);
+
+            $scope.updateSelected = function(person){
+                var allGroups = [];
+                if(person.length==0){
+                    // $scope.selectedGroup = [];
+                }
+                else{
+                    angular.forEach(person, function(ind){
+                        console.log(ind.groups);
+                        var smGroup = ind.groups.split(", ");
+                        for(i =0; i < smGroup.length; i++){
+                            if(allGroups.indexOf(smGroup[i]) == -1){
+                                allGroups.push(smGroup[i]);
+                            }
+                        }
+                        // add groups
+                        for(y = 0; y < allGroups.length; y++){
+                            if($scope.selectedGroup.indexOf(allGroups[y]) == -1){
+                                console.log(allGroups[y]);
+                                console.log($scope.selectedGroup);
+                                $scope.selectedGroup.push(allGroups[y]);
+                            }
+                            console.log($scope.selectedGroup);
+
+                        }
+
+
+                        // }
+
+                        // for(l = 0; l < allGroups.length; l++){
+                            // if($scope.unChecked.indexOf(allGroups[i]) != -1){
+                            //     console.log("unchecked")
+                            //     console.log(allGroups[i]);
+                            //     var toDelete = allGroups.indexOf(allGroups[i]);
+                            //     allGroups.splice(toDelete, 1)
+                            //     console.log(allGroups);
+                            // }
+                            // if($scope.selectedGroup.indexOf(allGroups[i])== -1){
+                            //     console.log(allGroups[i]);
+                            //     console.log("to add");
+                            //     $scope.selectedGroup.push(allGroups[i]);
+                            // }
+                        // }
+                        // console.log($scope.unChecked);
+                        // console.log(smGroup);
+                        // console.log(allGroups);
+                      
+                    })
+                }
+
+                return $scope.selectedGroup;
+
             }
   
 
             $scope.$watch('people', function(){
-                $scope.preSelectGroup($scope.people);
+                // $scope.preSelectGroup($scope.people);
+                $scope.updateSelected($scope.people);
                 console.log("people changed");
                 console.log($scope.people);     
             }, true);
