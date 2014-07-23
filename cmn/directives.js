@@ -100,6 +100,7 @@ m.directive('groupPeople', function(){
                                 allGroups.push(smGroup[i]);
                             }
                         }
+                        console.log(allGroups)
                         // add groups
                         for(y = 0; y < allGroups.length; y++){
                             if($scope.selectedGroup.indexOf(allGroups[y]) == -1){
@@ -107,9 +108,25 @@ m.directive('groupPeople', function(){
                                 console.log($scope.selectedGroup);
                                 $scope.selectedGroup.push(allGroups[y]);
                             }
+                            // take this out later
+                            else if($scope.selectedGroup.indexOf(allGroups[y]) > -1){
+                                console.log(allGroups[y]);
+
+                            }
+                            // else if(allGroups.indexOf())
                             console.log($scope.selectedGroup);
 
                         }
+                        for(z = 0; z < $scope.selectedGroup.length; z++){
+                            if(allGroups.indexOf($scope.selectedGroup[z])== -1){
+                                console.log($scope.selectedGroup[z]);
+                                var toDelete = $scope.selectedGroup.indexOf($scope.selectedGroup[z]);
+                                console.log(toDelete);
+                                $scope.selectedGroup.splice(toDelete, 1);
+                                // $scope.selectedGroup.splice(deleteMe, 0);
+                            }
+                        }
+                        console.log($scope.selectedGroup);
 
 
                         // }
