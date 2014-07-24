@@ -107,7 +107,7 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
             }
         }
         else {
-            $scope.annot.fontsize = 12;
+            $scope.annot.fontsize = 14;
         }
     });
 
