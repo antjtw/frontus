@@ -163,22 +163,17 @@ m.directive('groupPeople', function(){
                         angular.forEach(myInfo, function(about){
                             smallGroup.push(about.email, about.role);
                             bigGroup.push(smallGroup);
-                            console.log(about.groups);
-                            alert(about.groups);
                             if(about.groups == null || about.groups == "[]"){
                                 newGroupsArray = []
-                                console.log(newGroupsArray);
                             }
                             else if(about.groups != null){
                                 newGroupsArray = JSON.parse(about.groups);
-                                console.log(newGroupsArray);
                             };
 
                         });
                         if($scope.selectedGroup.length > 0){
                             angular.forEach($scope.selectedGroup, function(selected){
                                 if(newGroupsArray.indexOf(selected)==-1){
-                                    console.log(selected);
                                     newGroupsArray.push(selected);
                                    
                                 }
@@ -199,14 +194,13 @@ m.directive('groupPeople', function(){
                             console.log("hi")
                             if(newGroupsArray.indexOf($scope.groupName) == -1){
                                 newGroupsArray.push($scope.groupName);
-                                console.log(newGroupsArray);
                             }
                         }
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
                     })
                 });
-                // $route.reload();
+                $route.reload();
                 // $scope.$emit("notification:success", "Groups Changed")
                 // // }
                 // else{
