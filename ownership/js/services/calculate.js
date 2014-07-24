@@ -580,6 +580,14 @@ ownership.service('calculate', function () {
         return amount;
     };
 
+    var memformatamount = memoize(this.funcformatAmount);
+    this.formatAmount = function(amount) {
+        return memformatamount(amount);
+    };
+    this.formatDollarAmount = function(amount, settings) {
+        return this.formatMoneyAmount(memformatamount(amount), settings);
+    };
+
     var sizes = {0:'', 1:'K', 2:'M', 3:'B'};
     this.abrAmount = function(amount) {
         if (amount) {

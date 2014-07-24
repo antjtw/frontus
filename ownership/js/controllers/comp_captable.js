@@ -171,7 +171,26 @@ var captableController = function(
             });
         });
     }
-    $scope.getActiveTransaction = function (currenttran, currentcolumn) {
+    $scope.selectCell = function(inv, sec) {
+        $scope.currentTab = 'details';
+        $scope.sidebarstart = angular.copy($scope.sidebar);
+        $scope.cellRevert = angular.copy($scope.selectedCell);
+        if ($scope.selectedCell &&
+                $scope.selectedCell.investor == inv &&
+                $scope.selectedCell.security == sec) {
+            $scope.selectedCell = null;
+            $scope.sideBar = "home";
+            deselectAllCells();
+        } else {
+            $scope.selectedCell = $scope.cellFor(inv, sec);
+            $scope.sideBar = $scope.toggleView() ? 4 : 2;
+            $scope.allowKeys = calculate.complement(
+                    $scope.ct.security_names, [sec]);
+            console.log($scope.selectedCell);
+        }
+    };
+    /*
+    $scope.getActiveTransaction = function(currenttran, currentcolumn) {
         $scope.currentTab = 'details';
         $scope.sidebarstart = angular.copy($scope.sideBar);
         $scope.oldActive = angular.copy($scope.activeTran);
@@ -186,6 +205,7 @@ var captableController = function(
             selectTransaction(currenttran, currentcolumn);
         }
     };
+    */
 
     $scope.selectSecurity = function(security_name) {
         deselectAllCells();

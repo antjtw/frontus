@@ -289,7 +289,10 @@ p.captablepair {
     background: none;
 }
 
-.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields.hoverable:hover {
+.tableView.captable th.staticHeaders:hover,
+.tableView.captable td.viewName:hover,
+.tableView.captable td.tableFields.hoverable:hover,
+td:hover .hoverable {
     background-color: rgba(26, 188, 150, 0.1);
     cursor: pointer;
 }

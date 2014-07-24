@@ -89,7 +89,7 @@ own.directive('editableSecurityDetails', [function() {
 own.directive('cellDetails', [function() {
     return {
         restrict: 'EA',
-        scope: false,
+        scope: {cell: '='},
         templateUrl: '/ownership/partials/cellDetails.html',
         controller: ["$scope", "displayCopy",
             function($scope, displayCopy) {
@@ -101,11 +101,35 @@ own.directive('cellDetails', [function() {
 own.directive('editableCellDetails', [function() {
     return {
         restrict: 'EA',
-        scope: false,
+        scope: {cell: '='},
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "displayCopy",
             function($scope, displayCopy) {
                 $scope.tips = displayCopy.captabletips;
+            }
+        ],
+    };
+}]);
+own.directive('captableCell', [function() {
+    return {
+        restrict: 'E',
+        scope: {data: '=',
+                settings: '='},
+        templateUrl: '/ownership/partials/captableCell.html',
+        controller: ["$scope", "calculate",
+            function($scope, calculate) {
+            }
+        ],
+    };
+}]);
+own.directive('attributeList', [function() {
+    return {
+        restrict: 'E',
+        scope: {data: '=',
+                tips: '='},
+        templateUrl: '/ownership/partials/attributeList.html',
+        controller: ["$scope",
+            function($scope) {
             }
         ],
     };
