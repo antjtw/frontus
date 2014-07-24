@@ -203,7 +203,6 @@ m.directive('groupPeople', function(){
                         
                     })
                 });
-                $scope.selectedGroup = [];
                 // $scope.people = [];
             }
 
