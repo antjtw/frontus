@@ -314,6 +314,7 @@ internal-right-rail .tab-content {
 }
 
 internal-right-rail #bottom-part {
+    border-top: 1px solid #C6C6C6;
     background-color: #E3E3E3;
     position: absolute;
     bottom: 0;
