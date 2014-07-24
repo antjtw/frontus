@@ -132,7 +132,7 @@
         <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filter">
-                    <people-filter></people-filter>
+                    <people-filter selected-people="groupPeople"></people-filter>
                 </tab>
                 <tab heading = "Message Activity">
                     <div style="clear: both;">
@@ -146,7 +146,7 @@
                 <compose-message  recipients="messageData.recipients" ng-switch-when="email">
                 </compose-message>
                 <add-person ng-switch-when="people"></add-person>
-                <group-people ng-switch-when="group" people="groupPeople"></group-people>
+                <group-people ng-switch-when="group" people="groupPeople" set-groups = "setGroups()"></group-people>
         </div>
 
     </div>

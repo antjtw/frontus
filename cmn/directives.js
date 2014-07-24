@@ -109,15 +109,12 @@ m.directive('groupPeople', function(){
 
             };
 
- 
-  
-
             $scope.$watch('people', function(){
                     // this is working and letting me know whenever groups change
                     if($scope.people.length > 0){
                         var peopleArray = $scope.fromFront($scope.people);
                         $scope.modifyGroups(peopleArray);
-                        console.log($scope.selectedGroup);  
+                         
                     }
                     else{
                         $scope.selectedGroup = [];
@@ -200,14 +197,7 @@ m.directive('groupPeople', function(){
                         
                     })
                 });
-                $route.reload();
-                // $scope.$emit("notification:success", "Groups Changed")
-                // // }
-                // else{
-                //     $scope.$emit("notification:failure", "Nothing to change")
-                // }
-                
-                
+               
 
             }
 
@@ -226,12 +216,13 @@ m.directive('groupPeople', function(){
 })
 m.directive('peopleFilter', function(){
     return {
-        scope: {people: '='},
+        scope: {ppl: '=selectedPeople'},
         restrict: 'E',
         templateUrl:'/cmn/partials/peopleFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
+         
             $scope.getContacts = function(){
                 var promise = $q.defer();
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -249,28 +240,25 @@ m.directive('peopleFilter', function(){
                         $scope.myRoles = data;
                         $scope.myAdmins = $scope.myRoles.length 
                         $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins
-                        console.log($scope.myRoles);
+
                     });
                    
                 });
             };
             $scope.getUserRoles()
 
-            // $scope.myGroups = [];
-            // function groupInfo(groupName, count){
-            //     this.groupName = groupName;
-            //     this.count = 0;
-            // }
+
             $scope.getFilterCount = function(){
                 SWBrijj.tblm('account.ind_user_group', ['ind_group', 'count']).then(function(data){
                     $scope.myGroups = data;
                     angular.forEach($scope.myGroups, function(info){
                         info.ind_group = info.ind_group.replace(/"/g, "")
-                    })
-                    console.log($scope.myGroups);
-                })
-            }
+                    });
+                });
+            };
             $scope.getFilterCount();
+
+
 
 
 

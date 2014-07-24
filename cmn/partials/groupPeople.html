@@ -29,7 +29,7 @@
 
     <div class = "standard-button green">
       <button class="btn"
-        ng-click="createGroups(people)"> 
+        ng-click="createGroups(people); $parent.createPeople(); $parent.toggleSide()"> 
             Confirm
         </button>
       </div>

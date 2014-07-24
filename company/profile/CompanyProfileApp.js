@@ -470,39 +470,57 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             hidePopover();
         });
 
-        SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
-            $scope.people = x;
-            SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
-                angular.forEach(admins, function(admin) {
-                    angular.forEach($scope.people, function(person) {
-                        if (person.name) {
-                            person.selector = person.name + "  (" + person.email +")";
-                        }
-                        else {
-                            person.selector = "(" + person.email+")";
-                        }
 
-                        if (person.email == admin.email) {
-                            person.role = "issuer";
-                        }
-                    });
-                });
-                // SWBrijj.tblm()
-                SWBrijj.tblm('account.profile', ['email']).then(function(me) {
-                    angular.forEach($scope.people, function(person) {
-                        if (person.email == me[0].email)
-                            person.hideLock = true;
-                        if (!person.name) {
-                            person.name = person.email;
-                        }
 
+        $scope.createPeople = function(){
+            SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
+                $scope.people = x;
+                SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
+                    angular.forEach(admins, function(admin) {
+                        angular.forEach($scope.people, function(person) {
+                            if (person.name) {
+                                person.selector = person.name + "  (" + person.email +")";
+                            }
+                            else {
+                                person.selector = "(" + person.email+")";
+                            }
+
+                            if (person.email == admin.email) {
+                                person.role = "issuer";
+                            }
+                        });
                     });
-                    $scope.setLastLogins();
-                    $scope.setGroups();
+                    // SWBrijj.tblm()
+                    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+                        angular.forEach($scope.people, function(person) {
+                            if (person.email == me[0].email)
+                                person.hideLock = true;
+                            if (!person.name) {
+                                person.name = person.email;
+                            }
+
+                        });
+                        $scope.setLastLogins();
+                        $scope.setGroups();
+                    });
+                    $scope.sort = 'name';
                 });
-                $scope.sort = 'name';
             });
-        });
+        };
+        $scope.createPeople();
+
+        $scope.allGroups = function(){
+            SWBrijj.tblm('account.my_user_groups', ['json_array_elements']).then(function(data){
+                $scope.myGroups = data;
+                console.log($scope.myGroups);
+
+            });
+        };
+        $scope.allGroups();
+
+        // $scope.$watch('myGroups', function(){
+        //     $scope.setGroups()
+        // }  true);
 
         $scope.setGroups = function(){
             angular.forEach($scope.people, function(person){
@@ -597,7 +615,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
         
         //want the email directive to bind to this property in the controller
-
         $scope.personIs = function(person){
             if($scope.sidebarPage=='email'){
                 return $scope.messageData.recipients.indexOf(person.email) != -1;
