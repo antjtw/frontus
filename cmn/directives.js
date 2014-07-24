@@ -129,6 +129,12 @@ m.directive('groupPeople', function(){
                 console.log($scope.selectedGroup);
             };
 
+            $scope.clearPeople = function(array){
+                while(array.length > 0){
+                    array.pop();
+                }
+            }
+
            
 
             $scope.selectGroup = function(group){
@@ -197,8 +203,8 @@ m.directive('groupPeople', function(){
                         
                     })
                 });
-               
-
+                $scope.selectedGroup = [];
+                // $scope.people = [];
             }
 
 

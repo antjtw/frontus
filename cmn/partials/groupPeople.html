@@ -1,4 +1,5 @@
 <div class="composemessage" style="padding-right: 30px">
+  {{people}}
   <div class="sidebarHeader">
     <span>GROUP</span>
   </div>
@@ -29,7 +30,7 @@
 
     <div class = "standard-button green">
       <button class="btn"
-        ng-click="createGroups(people); $parent.createPeople(); $parent.toggleSide()"> 
+        ng-click="createGroups(people); $parent.createPeople(); $parent.toggleSide(); clearPeople(people)"> 
             Confirm
         </button>
       </div>
