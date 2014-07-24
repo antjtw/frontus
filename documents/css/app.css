@@ -1978,14 +1978,14 @@ doc-transaction-details .select2-container {
     width: 220px;
 }
 
-doc-transaction-details > div > span {
+doc-transaction-details > div > div > span {
     color: #1d2c3c;
     display: inline-block;
     width: 280px;
     margin-bottom: 15px;
 }
 
-doc-transaction-details > div > button {
+doc-transaction-details > div > div > button {
     width: 68px;
     height: 30px;
     background-color: #19bb95;
@@ -1999,59 +1999,48 @@ doc-transaction-details > div > button {
 
 @-webkit-keyframes completerequired {
     0% {
-        color: #666666;
-    }
-    50% {
-        color: #19bc96;
+        color: #E74C3C;
     }
     100% {
-        color: #C6C6C6;
+        color: #19bc96;
     }
 }
 
 @-moz-keyframes completerequired {
     0% {
-        color: #666666;
-    }
-    50% {
-        color: #19bc96;
+        color: #E74C3C;
     }
     100% {
-        color: #C6C6C6;
+        color: #19bc96;
     }
 }
 
 @-o-keyframes completerequired {
     0% {
-        color: #666666;
-    }
-    50% {
-        color: #19bc96;
+        color: #E74C3C;
     }
     100% {
-        color: #C6C6C6;
+        color: #19bc96;
     }
 }
 
 @keyframes completerequired {
     0% {
-        color: #666666;
-    }
-    50% {
-        color: #19bc96;
+        color: #E74C3C;
     }
     100% {
-        color: #C6C6C6;
+        color: #19bc96;
     }
 }
 
 .required-fields > span {
     display: inline-block;
-    color: #666666;
+    color: #E74C3C;
+    text-transform: capitalize;
 }
 
 .required-fields.field-completed > span {
-    color: #C6C6C6;
+    color: #19bc96;
     -webkit-animation: completerequired 1s; /* Safari 4+ */
     -moz-animation:    completerequired 1s; /* Fx 5+ */
     -o-animation:      completerequired 1s; /* Opera 12+ */
@@ -2064,11 +2053,25 @@ doc-transaction-details > div > button {
 }
 
 .required-fields > span:first-of-type > span {
-    color: #C6C6C6;
+    color: #19bc96;
     vertical-align: -14%;
     font-size: 20px;
     -webkit-animation: completerequired 1s; /* Safari 4+ */
     -moz-animation:    completerequired 1s; /* Fx 5+ */
     -o-animation:      completerequired 1s; /* Opera 12+ */
     animation:         completerequired 1s;
+}
+
+.fields-progress {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #1d2c3c;
+    padding: 20px;
+}
+
+.fields-progress > span {
+    color: #FFFFFF;
+    font-size: 14px;
+    margin-bottom: 5px;
 }
