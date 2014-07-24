@@ -62,7 +62,7 @@ own.directive('securityDetails', [function() {
     return {
         restrict: 'EA',
         scope: {
-            sec: '='
+            sec: '=',
         },
         templateUrl: '/ownership/partials/securityDetails.html',
         controller: ["$scope", "displayCopy",
@@ -139,9 +139,13 @@ own.directive('transactionAttributes', [function() {
         scope: {data: '=',
                 settings: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-        controller: ["$scope", "captable",
-            function($scope, captable) {
+        controller: ["$scope", "captable", "displayCopy",
+            function($scope, captable, displayCopy) {
                 $scope.displayAttr = captable.displayAttr;
+                $scope.tips = displayCopy.captabletips;
+                $scope.hasTip = function(key) {
+                    return key in $scope.tips;
+                };
             }
         ],
     };

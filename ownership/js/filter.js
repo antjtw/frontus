@@ -168,32 +168,33 @@ ownership.filter('issueUnitLabel', function() {
 });
 
 ownership.filter('formatAmount', function() {
-    return function(amount, settings) {
-        if (amount && !isNaN(amount)) {
+    return function(amount, settings, key) {
+        var nums = ["units", "forfeited", "amount"];
+        var moneys = ["ppshare", "price", "effectivepps", "valcap"]; 
+        if (!amount || (typeof(amount)!="string" && isNaN(amount))) {
+            amount = null;
+        } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
             var n = amount.toString().split(".");
             //Comma-fies the first part
             n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             // Caps decimals to 3 places
             if (n[1] && n[1].length > 4) {
                 n[1] = n[1].substring(0,3);
-            }
-            // Takes a .x and makes it .x0
+            } // Takes a .x and makes it .x0
             else if (n[1] && n[1].length == 1) {
                 n[1] = n[1] + "0";
             }
             //Combines the two sections
             amount = n.join(".");
-            if (settings) {
+
+            if (settings && moneys.indexOf(key) !== -1) {
                 var currencydictionary =
                     {'EUR': '€', 'GBP': '£', 'USD': '$'};
                 var symbol = settings &&
                     currencydictionary[settings.currency] ?
-                        currencydictionary[settings.currency] : '$'
+                        currencydictionary[settings.currency] : '$';
                 amount = symbol + amount;
             }
-        }
-        else {
-            amount = null;
         }
         return amount;
     };
