@@ -129,6 +129,16 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         }
     });
 
+    $scope.unusedType = function(type) {
+        // only want to filter transaction types that are already in used
+        // we use type.required to determine if it's a transaction type or default type
+        if (type.required === undefined) {
+            return true;
+        } else {
+            return !$scope.doc.hasAnnotationType(type.name);
+        }
+    };
+
     var topLocation = function(elementHeight, mouseY) {
         var docPanel = document.querySelector('.docPanel');
         var topEdge = docPanel.offsetTop;

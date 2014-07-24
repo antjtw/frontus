@@ -245,6 +245,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 return (annot.whattype == annotType) && (annot.filled(false, $rootScope.navState.role));
             });
         },
+        hasAnnotationType: function(annotType) {
+            return this.annotations.some(function(annot) {
+                return (annot.whattype == annotType);
+            });
+        },
         numFieldsRequired: function() {
             var num = 0;
             angular.forEach(this.annotation_types, function(annot) {

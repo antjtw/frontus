@@ -29,7 +29,7 @@
             <div ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
             </div>
         </fieldset>
-        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-show="navState.role == 'issuer' && getme && active.annotation == annot">
+        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot">
             <ul>
                 <li ng-if="annot.type == 'text'">
                     <ul>
@@ -61,7 +61,7 @@
                             <span>Annotation Type</span>
                         </li>
                         <select ui-select2="select2Options" ng-model="annot.whattype">
-                            <option ng-repeat="type in doc.annotation_types" value="{{type.name}}">{{type.display}}</option>
+                            <option ng-repeat="type in doc.annotation_types | filter: unusedType" value="{{type.name}}">{{type.display}}</option>
                         </select>
                     </ul>
                 </li>
