@@ -395,6 +395,11 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 return el.evidence==tran.evidence;
             });
         });
+        angular.forEach(_captable.transactions, function(tran) {
+            tran.evidence_data = data.filter(function(el) {
+                return el.evidence==tran.evidence;
+            });
+        });
         // TODO implement for securities
     }
     function setIssueKey(iss) {

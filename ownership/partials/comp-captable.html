@@ -706,7 +706,7 @@
                                    style="width:140px;"
                                    ng-model="row.name"
                                    ng-change="nameChangeLR(row)"
-                                   ui-event="{focus: 'getActiveInvestor(row)',
+                                   ui-event="{focus: 'selectInvestor(row.name)',
                                                blur: 'updateRow(row)'}"
                                    onpaste="return false"
                                    ng-paste="namePaste($event, row);"
@@ -788,28 +788,12 @@
                            disabled
                            value="{{sharePercentage(row, ct.rows, ct.security_names) | number:3}}%">
                 </td>
-                <td ng-class="{tranViewSelected:row.state,
+                <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
                     class="viewName tableFields"
-                    ng-click="getActiveInvestor(row);">
+                    ng-click="selectInvestor(row.name);">
                     {{row.name}}
                 </td>
-                <!--
-                <td ng-click="getActiveTransaction(row.name, key)"
-                    class="tableFields"
-                    ng-class="{tranViewSelected:selectedCell==cellFor(row.name, key),
-                               'hoverable':canHover(cellFor(row.name, key))}"
-                    ng-repeat="key in ct.security_names track by $index">
-                    <span class="captablepair-box">
-                        <div ng-bind="formatAmount(cellFor(row.name, key).u)"
-                             class="output clickable">
-                        </div>
-                        <div ng-bind="formatDollarAmount(cellFor(row.name, key).a)"
-                             class="output second clickable">
-                        </div>
-                    </span>
-                </td>
-                -->
                 <td ng-click="selectCell(row.name, key)"
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key,
@@ -923,41 +907,41 @@
                     <span class="capGuide in-brief"
                           ng-switch-when="3">
                         <div class="headsection row-fluid tabbed company-info">
-                                <h1><img ng-src="{{ navState.company && '/photo/user?id='+activeInvestorEmail || '' }}">{{activeInvestorName}}</h1>
+                                <h1><img ng-src="{{ navState.company && '/photo/user?id='+selectedInvestor.email || '' }}">{{selectedInvestor.name}}</h1>
                         </div>
-                        <div ng-show="userDict[activeInvestorEmail]" class="summary-bar">
-                            <div ng-show="userDict[activeInvestorEmail].lastlogin" class="belowTitle">
+                        <div ng-show="userDict[selectedInvestor.email]" class="summary-bar">
+                            <div ng-show="userDict[selectedInvestor.email].lastlogin" class="belowTitle">
                                 <img src="/img/activity/login.png">
                                 <div>
-                                    <span>{{userDict[activeInvestorEmail].lastlogin | date:settings.shortdate}}</span><span>Last Login</span>
+                                    <span>{{userDict[selectedInvestor.email].lastlogin | date:settings.shortdate}}</span><span>Last Login</span>
                                 </div>
                             </div>
-                            <div ng-show="userDict[activeInvestorEmail].received" class="belowTitle">
+                            <div ng-show="userDict[selectedInvestor.email].received" class="belowTitle">
                                 <img src="/img/activity/received.png">
                                 <div>
-                                    <span>{{userDict[activeInvestorEmail].received | date:settings.shortdate}}</span><span>Delivered</span>
+                                    <span>{{userDict[selectedInvestor.email].received | date:settings.shortdate}}</span><span>Delivered</span>
                                 </div>
                             </div>
-                            <div ng-show="userDict[activeInvestorEmail].viewed" class="belowTitle">
+                            <div ng-show="userDict[selectedInvestor.email].viewed" class="belowTitle">
                                 <img src="/img/activity/view.png">
                                 <div>
-                                    <span>{{userDict[activeInvestorEmail].viewed | date:settings.shortdate}}</span><span>Last Viewed</span>
+                                    <span>{{userDict[selectedInvestor.email].viewed | date:settings.shortdate}}</span><span>Last Viewed</span>
                                 </div>
                             </div>
                             <div class="belowTitle">
                                 <img src="/img/activity/permissions.png">
                                 <div>
-                                    <span>{{userDict[activeInvestorEmail].level}}</span><span>Permissions</span>
+                                    <span>{{userDict[selectedInvestor.email].level}}</span><span>Permissions</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="profile-link" ng-show="userDict[activeInvestorEmail]" ng-click="gotoProfile(activeInvestorEmail, activeInvestorRealName);">
+                        <div class="profile-link" ng-show="userDict[selectedInvestor.email]" ng-click="gotoProfile(selectedInvestor.email, selectedInvestor.name);">
                             <span data-icon="&#xe001;" aria-hidden="true"></span>
                             <span>View Full Profile</span>
                         </div>
 
-                        <div ng-show="!companyIsZombie() && !userDict[activeInvestorEmail]" class="share-link">
+                        <div ng-show="!companyIsZombie() && !userDict[selectedInvestor.email]" class="share-link">
                             <div ng-click="companyIsZombie() || modalUp();" class="profile-link">
                                 <span data-icon="&#xe604;" aria-hidden="true"></span>
                                 <span>Share with Investor</span>

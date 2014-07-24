@@ -109,72 +109,11 @@ var captableController = function(
             });
         });
     }
-    function deselectTransaction(currenttran, currentcolumn) {
-        $scope.activeTran = [];
-        $scope.activeIssue = undefined;
-        $scope.activeInvestor = undefined;
-        $scope.sideBar = "home";
-        deselectAllCells();
-    }
-    function selectTransaction(currenttran, currentcolumn) {
-        $scope.sideBar = $scope.toggleView() ? 4 : 2;
-        $scope.activeTran = [];
-        $scope.activeIssue = currentcolumn;
-        $scope.activeInvestor = currenttran;
-        $scope.allowKeys = calculate.complement($scope.ct.security_names,
-                                                [currentcolumn]);
-        // try finding the transaction
-        var first = 0;
-        angular.forEach($scope.ct.trans, function (tran) {
-            if (tran.investor == currenttran && tran.issue == currentcolumn) {
-                if (first === 0) {
-                    tran.active = true;
-                    first = first + 1;
-                }
-                tran.partpref = calculate.booltoYN(tran, 'partpref', $scope.tf);
-                tran.dragalong = calculate.booltoYN(tran, 'dragalong', $scope.tf);
-                tran.tagalong = calculate.booltoYN(tran, 'tagalong', $scope.tf);
-                $scope.activeTran.push(tran);
-            }
-        });
-        // try creating a new transaction
-        if ($scope.activeTran.length < 1 && !$scope.toggleView()) {
-            var anewTran = captable.newTransaction(currentcolumn,
-                                                   $scope.activeInvestor);
-            $scope.ct.trans.push(anewTran);
-            $scope.activeTran.push(anewTran);
-        }
-
-        // give up
-        if ($scope.activeTran.length < 1 && $scope.toggleView()) {
-            $scope.activeIssue = undefined;
-            $scope.activeInvestor = undefined;
-            $scope.sideBar = "home";
-        }
-
-        // select cell
-        angular.forEach($scope.ct.rows, function (row) {
-            row.state = false;
-            angular.forEach($scope.ct.securities, function (issue) {
-                if (issue.issue) {
-                    if (row.name == currenttran &&
-                            currentcolumn == issue.issue &&
-                            $scope.activeTran.length > 0) {
-                        row.cells[currentcolumn].state = true;
-                    }
-                    else if (row.cells[issue.issue]) {
-                        row.cells[issue.issue].state = false;
-                    } else {
-                        issue.state = false;
-                    }
-                }
-            });
-        });
-    }
     $scope.selectCell = function(inv, sec) {
         $scope.currentTab = 'details';
         $scope.sidebarstart = angular.copy($scope.sidebar);
         $scope.cellRevert = angular.copy($scope.selectedCell);
+        $scope.selectedSecurity = $scope.selectedInvestor = null;
         if ($scope.selectedCell &&
                 $scope.selectedCell.investor == inv &&
                 $scope.selectedCell.security == sec) {
@@ -188,26 +127,9 @@ var captableController = function(
                     $scope.ct.security_names, [sec]);
         }
     };
-    /*
-    $scope.getActiveTransaction = function(currenttran, currentcolumn) {
-        $scope.currentTab = 'details';
-        $scope.sidebarstart = angular.copy($scope.sideBar);
-        $scope.oldActive = angular.copy($scope.activeTran);
-        // selected transaction == active transaction
-        if ($scope.toggleView() &&
-                $scope.oldActive &&
-                $scope.oldActive[0] &&
-                $scope.oldActive[0].investorkey == currenttran &&
-                $scope.oldActive[0].key == currentcolumn) {
-            deselectTransaction(currenttran, currentcolumn);
-        } else {
-            selectTransaction(currenttran, currentcolumn);
-        }
-    };
-    */
-
     $scope.selectSecurity = function(security_name) {
         deselectAllCells();
+        $scope.selectedCell = $scope.selectedInvestor = null;
         if ($scope.toggleView() && $scope.selectedSecurity &&
             $scope.selectedSecurity.name == security_name)
         {
@@ -225,42 +147,21 @@ var captableController = function(
                     $scope.ct.security_names, [security_name]);
         }
     };
-    /*
-    $scope.getActiveIssue = function (issuekey) {
-        // selected issue == active issue
-        if ($scope.toggleView() && $scope.activeIssue &&
-                $scope.activeIssue.issue == issuekey) {
-            deselectAllCells();
+    $scope.selectInvestor = function(investor_name) {
+        $scope.selectedCell = $scope.selectedSecurity = null;
+        deselectAllCells();
+        if ($scope.toggleView() && $scope.selectedInvestor &&
+                $scope.selectedInvestor.name == investor_name) {
             $scope.sideBar = "home";
-            $scope.activeIssue = undefined;
+            $scope.selectedInvestor = null;
         } else {
-            angular.forEach($scope.ct.securities, function(issuefull) {
-                if (issuefull.issue == issuekey) {
-                    issue = issuefull;
-                }
-            });
-            $scope.sideBar = $scope.toggleView() ? 5 : 1;
-            $scope.activeIssue = issue;
-            $scope.issueRevert = angular.copy(issue);
-
-            deselectAllCells();
-
-            issue.state = true;
-            $scope.allowKeys = calculate.complement($scope.ct.security_names,
-                                                    [issuekey]);
-            $scope.activeIssue.partpref = calculate.booltoYN($scope.activeIssue, 'partpref', $scope.tf);
-            $scope.activeIssue.dragalong = calculate.booltoYN($scope.activeIssue, 'dragalong', $scope.tf);
-            $scope.activeIssue.tagalong = calculate.booltoYN($scope.activeIssue, 'tagalong', $scope.tf);
-            if (String($scope.activeIssue.date).indexOf("Mon Feb 01 2100") !== -1) {
-                $scope.activeIssue.date = (Date.today());
-            }
-            // Set Freq Value for Angularjs Select
-            var index = $scope.freqtypes.indexOf(issue.vestfreq);
-            $scope.activeIssue.vestfreq = $scope.freqtypes[index];
+            $scope.selectedInvestor = $scope.ct.rows
+                .filter(function(el) {
+                    return el.name == investor_name;
+                })[0];
+            $scope.sideBar = 3;
         }
     };
-    */
-
     $scope.saveIssueAssign = function (issue, field, i) {
         if (i) { issue[field] = i; }
         $scope.saveIssueCheck(issue, field);
@@ -585,34 +486,6 @@ var captableController = function(
             $scope.activeTran[0].amount = value;
         }
     };
-
-    $scope.getActiveInvestor = function (investor) {
-        //selected investor == active investor
-        if ($scope.toggleView() && investor.name && investor.name == $scope.activeInvestorName) {
-            deselectAllCells();
-            $scope.sideBar = "home";
-            $scope.activeInvestorName = undefined;
-            $scope.activeInvestorEmail = undefined;
-        } else {
-            $scope.sideBar = 3;
-            deselectAllCells();
-            investor.state = true;
-
-            var rowindex = $scope.ct.rows.indexOf(investor);
-            if (investor.name === "" && rowindex >= 4) {
-                captable.addRow();
-            }
-            $scope.activeInvestorName = investor.name;
-            $scope.activeInvestorEmail = investor.email;
-            angular.forEach($scope.userstatuses, function(user) {
-                if (investor.email == user.email) {
-                    $scope.activeInvestorRealName = user.name;
-                }
-            });
-            $scope.activeInvestorNameKey = angular.copy(investor.name);
-        }
-    };
-
     $scope.nameChangeLR = function (investor) {
         $scope.activeInvestorName = investor.name;
         if ((investor.name).length > 0) {
