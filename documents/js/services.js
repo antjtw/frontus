@@ -91,7 +91,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         }
     });
     var defaultTypes = [
-        {name: "Text", display: "Text", type_info: {}},
+        {name: "Text", display: "Text"},
         {name: "Signature", display: "Signature Text"},
         {name: "ImgSignature", display: "Signature Image"},
         {name: "investorName", display: "Name"},
@@ -348,6 +348,10 @@ var Annotation = function() {
     this.whosign = "Investor";
     this.whattype = "Text";
     this.required = true;
+    this.type_info = {
+        name: "text",
+        display: "Text"
+    };
 };
 
 Annotation.prototype = {
@@ -508,14 +512,12 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
 
     // Fetch the investor attributes
     var investor_attributes = {};
-    var attributelabels = {};
 
     $rootScope.$watch('person', function(person) {
         if (person) {
             SWBrijj.tblm('smartdoc.my_profile').then(function(inv_attributes) {
                 angular.forEach(inv_attributes, function(attr) {
                     investor_attributes[attr.attribute] = attr.answer;
-                    attributelabels[attr.attribute] = attr.label;
                 });
                 investor_attributes.investorName = angular.copy(person.name);
                 investor_attributes.investorState = angular.copy(person.state);
@@ -527,20 +529,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
             });
         }
-        attributelabels.investorName = "Name";
-        attributelabels.investorState = "State";
-        attributelabels.investorCountry = "Country";
-        attributelabels.investorStreet = "Address";
-        attributelabels.investorPhone = "Phone";
-        attributelabels.investorEmail = "Email";
-        attributelabels.investorPostalcode = "Zip code";
-        attributelabels.signatureDate = "Date";
-        attributelabels.ImgSignature = "Signature Image";
-        attributelabels.Signature = "Signature Text";
     });
-    this.attributeLabel = function(attribute) {
-        return attributelabels[attribute] || attribute;
-    };
     this.investorAttribute = function(attribute) {
         return investor_attributes[attribute] || "";
     };

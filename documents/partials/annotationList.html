@@ -5,13 +5,13 @@
          ng-class="{mine: annotation.forRole(navState.role), complete: annotation.filled(user.signaturePresent, navState.role), incomplete: (annotation.required && !annotation.filled(user.signaturePresent, navState.role)), active: annotation == active.annotation}"
          ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type == 'text')"
          ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
-            {{attributeLabel(annotation.whattype)}}
+            {{annotation.type_info.display}}
         </div>
         <div data-icon="&#xe60f;" class="annotmark"
          ng-class="{mine: annotation.forRole(navState.role), complete: annotation.filled(user.signaturePresent, navState.role), incomplete: (annotation.required && !annotation.filled(user.signaturePresent, navState.role)), active: annotation == active.annotation}"
          ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type == 'highlight')"
          ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
-            {{attributeLabel(annotation.whattype)}}
+            {{annotation.type_info.display}}
         </div>
     </div>
 </div>
