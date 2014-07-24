@@ -64,10 +64,10 @@ m.directive('groupPeople', function(){
 
 
             $scope.preSelectGroup = function(person){
-                if(person.length==0){
-                    $scope.selectedGroup = [];
-                }
-                else{
+                // if(person.length==0){
+                //     $scope.selectedGroup = [];
+                // }
+                // else{
                     angular.forEach(person, function(info){
                     if(info.groups != undefined){
                         SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
@@ -83,7 +83,7 @@ m.directive('groupPeople', function(){
                         });
                     };
                 }); 
-                }
+                // }
                 return $scope.selectedGroup;
             }
             $scope.preSelectGroup($scope.people);
@@ -97,7 +97,7 @@ m.directive('groupPeople', function(){
                     }                    
                 });
                 angular.forEach($scope.selectedGroup, function(group){
-                    if(array.indexOf(group)==-1){
+                    if(array.indexOf(group)=== -1){
                         console.log(group)
                         var toDelete = $scope.selectedGroup.indexOf(group);
                         // indexDelete.push(toDelete);
@@ -107,31 +107,12 @@ m.directive('groupPeople', function(){
 
                });
                 
-                // if(indexDelete.length > 0){
-                //     $scope.removeSelected(indexDelete);
-                //     console.log(indexDelete);
-                //     angular.forEach(indexDelete, function(ind){
-                //         console.log(ind);
-                //         $scope.selectedGroup.splice(ind, 1);
-                //     });
-                //     console.log($scope.selectedGroup);
-                // }
              
-                return $scope.selectedGroup; 
+                // return $scope.selectedGroup; 
 
             };
 
-            // $scope.removeSelected = function(indexes){
-            //     var i = remove.length;
-            //     while(i--){
-            //         if()
-            //     }
-            //     angular.forEach(indexes, function(ind){
-            //         $scope.selectedGroup.splice(ind, 1);
-            //     });
-            //     console.log($scope.selectedGroup);
-            //     // return $scope.selectedGroup;
-            // }
+ 
   
 
             $scope.$watch('people', function(){
@@ -168,15 +149,7 @@ m.directive('groupPeople', function(){
                 return $scope.selectedGroup;
             };
 
-            $scope.readyToAdd = function(){
-                if($scope.selectedGroup.length == 0 || $scope.groupName.length == 0){
-                    return false;
-                }
-                else {
-                    return false
-                };
-                
-            };
+      
 
 
 
@@ -186,6 +159,7 @@ m.directive('groupPeople', function(){
             $scope.createGroups = function(person){
                 console.log(person);
                 console.log($scope.selectedGroup);
+                console.log($scope.selectedGroup.length);
                 angular.forEach(person, function(info){
                     SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
                         var myInfo = data;
@@ -198,36 +172,36 @@ m.directive('groupPeople', function(){
                             bigArray.push(myRole);
                             if(info.groups != null){
                                 var personGroups = JSON.parse(info.groups);
-                            }
-                            else{
-                                var personGroups = []
-                            }
-                            if($scope.unChecked.length > 0){
-                                console.log($scope.unChecked);
-                                console.log($scope.selectedGroup);
-                                for(var i = 0; i < $scope.unChecked.length; i++){
-                                    console.log($scope.unChecked[i]);
-                                    if(personGroups.indexOf($scope.unChecked[i]) > -1){
-                                        var toDelete = personGroups.indexOf($scope.unChecked[i]);
-                                        personGroups.splice(toDelete, 1);                                        
-                                        console.log("to delete");
+                                if($scope.unChecked.length > 0){
+                                    console.log($scope.unChecked);
+                                    console.log($scope.selectedGroup);
+                                    for(var i = 0; i < $scope.unChecked.length; i++){
+                                        console.log($scope.unChecked[i]);
+                                        if(personGroups.indexOf($scope.unChecked[i]) > -1){
+                                            var toDelete = personGroups.indexOf($scope.unChecked[i]);
+                                            personGroups.splice(toDelete, 1);                                        
+                                            console.log("to delete");
+                                        };
+                                    };
+                                };
+                                if($scope.selectedGroup.length > 0){
+                                    console.log(personGroups);
+                                    for(var i = 0; i < $scope.selectedGroup.length; i++){
+                                        if(personGroups.indexOf($scope.selectedGroup[i]) == -1){
+                                            personGroups.push($scope.selectedGroup[i]);
+                                        };
                                     };
                                 };
                             };
-                            if($scope.selectedGroup.length > 0){
-                                console.log(personGroups);
-                                for(var i = 0; i < $scope.selectedGroup.length; i++){
-                                    if(personGroups.indexOf($scope.selectedGroup[i]) == -1){
-                                        personGroups.push($scope.selectedGroup[i]);
-                                    };
-                                };
-                            };
-                            if($scope.groupName.length > 0){
-                                console.log($scope.groupName)
-                                if(personGroups.indexOf($scope.groupName)== -1){
-                                    personGroups.push($scope.groupName);
-                                }
-                            }
+                            // if($scope.groupName.length > 0){
+                            //     if(personGroups.length == 0){
+                            //         alert($scope.groupName)
+                            //     }
+                            //     alert($scope.groupName);
+                            //     if(personGroups.indexOf($scope.groupName)== -1){
+                            //         personGroups.push($scope.groupName);
+                            //     }
+                            // }
                             console.log(personGroups);
                             $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
 
