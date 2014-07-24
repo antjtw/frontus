@@ -1,19 +1,17 @@
 <div class="composemessage" style="padding-right: 30px">
   <div class="sidebarHeader">
-    <span>GROUP{{people}}</span>
+    <span>GROUP</span>
   </div>
 
   <div>
     <p>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name</p>
   </div>
 
-  <div ng-repeat="groupDatum in groupData | unique: 'group'">
-    <div class="check-box-side">
-      <button class="check-box-button" ng-class="{'selected': groupIs(groupDatum.group)}" ng-click="selectGroup(groupDatum.group)">
+  <div ng-repeat="groupDatum in groupData | unique: 'group'" class="group_button">
+      <button class="check-box-button group" ng-class="{'selected': groupIs(groupDatum.group)}" ng-click="selectGroup(groupDatum.group)" style="margin-right: 20px">
          <span data-icon="&#xe023;" aria-hidden="true"></span>
       </button>
-    </div>
-    <p>{{groupDatum.group}}</p>
+    <span class="check_group">{{groupDatum.group}}</span>
   </div>
   <br/>
 
@@ -28,6 +26,7 @@
 <!-- </div> -->
 
   <div class="footer-headline-left">
+
     <div class = "standard-button green">
       <button class="btn"
         ng-click="createGroups(people)"> 

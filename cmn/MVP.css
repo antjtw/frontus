@@ -4648,4 +4648,11 @@ textarea.email-text {
     text-align: right;
 }
 
+.group_button{
+    line-height: 30px;
+}
+
+.check-box-button.group > span.check_group{
+    margin-right: 20px;
+}
 
