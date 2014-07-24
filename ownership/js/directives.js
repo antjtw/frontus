@@ -89,11 +89,16 @@ own.directive('editableSecurityDetails', [function() {
 own.directive('cellDetails', [function() {
     return {
         restrict: 'EA',
-        scope: {cell: '='},
+        scope: {cell: '=',
+                currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/cellDetails.html',
-        controller: ["$scope", "displayCopy",
-            function($scope, displayCopy) {
+        controller: ["$scope", "$rootScope", "displayCopy", "calculate",
+            function($scope, $rootScope, displayCopy, calculate) {
+                $scope.settings = $rootScope.settings;
                 $scope.tips = displayCopy.captabletips;
+                $scope.switchCapTab = function(tab) {
+                    $scope.currentTab = tab;
+                };
             }
         ],
     };
@@ -101,11 +106,16 @@ own.directive('cellDetails', [function() {
 own.directive('editableCellDetails', [function() {
     return {
         restrict: 'EA',
-        scope: {cell: '='},
+        scope: {cell: '=',
+                currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "displayCopy",
-            function($scope, displayCopy) {
+        controller: ["$scope", "$rootScope", "displayCopy",
+            function($scope, $rootScope, displayCopy) {
+                $scope.settings = $rootScope.settings;
                 $scope.tips = displayCopy.captabletips;
+                $scope.switchCapTab = function(tab) {
+                    $scope.currentTab = tab;
+                };
             }
         ],
     };
@@ -122,14 +132,16 @@ own.directive('captableCell', [function() {
         ],
     };
 }]);
-own.directive('attributeList', [function() {
+own.directive('transactionAttributes', [function() {
     return {
         restrict: 'E',
+        replace: true,
         scope: {data: '=',
-                tips: '='},
-        templateUrl: '/ownership/partials/attributeList.html',
-        controller: ["$scope",
-            function($scope) {
+                settings: '='},
+        templateUrl: '/ownership/partials/transactionAttributes.html',
+        controller: ["$scope", "captable",
+            function($scope, captable) {
+                $scope.displayAttr = captable.displayAttr;
             }
         ],
     };

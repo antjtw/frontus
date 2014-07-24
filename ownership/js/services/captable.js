@@ -114,13 +114,15 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function loadNewCapTable() {
         $q.all([loadLedger(),
                 loadTransactionLog(),
-                loadRowNames()])
+                loadRowNames(),
+                loadAttributes()])
         .then(function(results) {
             _captable.ledger_entries = results[0];
             _captable.transactions = results[1].map(parseTransaction);
             // FIXME also need email address associated with rows,
             //       if one is available
             _captable.rows = results[2].map(rowFromName);
+            _captable.attributes = results[3];
             generateCells(new Date());
             console.log(_captable);
             if (_captable.rows != captable.rows ||
@@ -220,6 +222,15 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }).except(logErrorPromise);
         return promise.promise;
     }
+    function loadAttributes() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.transaction_attributes',
+                     ['name', 'display_name'])
+        .then(function(attrs) {
+            promise.resolve(attrs);
+        }).except(logErrorPromise);
+        return promise.promise;
+    }
     /* Based on the type of each transaction,
      * generate the relevant data types.
      *
@@ -298,13 +309,26 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 return cell.investor == inv;
             });
     }
+    function cellPrimaryMeasure(cell) {
+        return calculate.primaryMeasure( cellSecurityType(cell) );
+    }
+    function cellSecurityType(cell) {
+        if (cell.security) {
+            return _captable.securities
+                .filter(function(el) {
+                    return el && el.name == cell.security && el.attrs;
+                })[0].attrs.security_type;
+        }
+    }
     function setCellUnits(cell) {
-    // FIXME this should depend on the type of security and transaction
-        cell.u = cell.ukey = sum_ledger(cell.ledger_entries);
+        if (cellPrimaryMeasure(cell) == "units") {
+            cell.u = cell.ukey = sum_ledger(cell.ledger_entries);
+        }
     }
     function setCellAmount(cell) {
-    // FIXME this should depend on the type of security
-        cell.a = cell.akey = sum_ledger(cell.ledger_entries);
+        if (cellPrimaryMeasure(cell) == "amount") {
+            cell.a = cell.akey = sum_ledger(cell.ledger_entries);
+        }
     }
     function sum_ledger(entries) {
         return entries.reduce(
@@ -326,10 +350,10 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                         return ent.investor == inv.name &&
                                ent.security == sec.name;
                     });
-                setCellUnits(cell);
-                setCellAmount(cell);
                 cell.security = sec.name;
                 cell.investor = inv.name;
+                setCellUnits(cell);
+                setCellAmount(cell);
                 _captable.cells.push(cell);
             });
         });
@@ -939,4 +963,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }
     }
     this.autocalcThirdTranValue = autocalcThirdTranValue;
+    this.displayAttr = function(key) {
+        return _captable.attributes.filter(
+                function(el) { return el.name==key; })[0].display_name;
+    };
 });

@@ -166,3 +166,48 @@ ownership.filter('issueUnitLabel', function() {
         }
     };
 });
+
+ownership.filter('formatAmount', function() {
+    return function(amount, settings) {
+        if (amount && !isNaN(amount)) {
+            var n = amount.toString().split(".");
+            //Comma-fies the first part
+            n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // Caps decimals to 3 places
+            if (n[1] && n[1].length > 4) {
+                n[1] = n[1].substring(0,3);
+            }
+            // Takes a .x and makes it .x0
+            else if (n[1] && n[1].length == 1) {
+                n[1] = n[1] + "0";
+            }
+            //Combines the two sections
+            amount = n.join(".");
+            if (settings) {
+                var currencydictionary =
+                    {'EUR': '€', 'GBP': '£', 'USD': '$'};
+                var symbol = settings &&
+                    currencydictionary[settings.currency] ?
+                        currencydictionary[settings.currency] : '$'
+                amount = symbol + amount;
+            }
+        }
+        else {
+            amount = null;
+        }
+        return amount;
+    };
+});
+
+ownership.filter('transactionAttributesForDisplay', function() {
+    return function(attr) {
+        var hide_attrs = ["physical", "security", "security_type"];
+        var res = {};
+        angular.forEach(attr, function(val, key) {
+            if (hide_attrs.indexOf(key) === -1) {
+                res[key] = val;
+            }
+        });
+        return res;
+    };
+});

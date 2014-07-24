@@ -910,13 +910,15 @@
                             sec="selectedSecurity">
                     </span>
                     <span ng-switch-when="2">
-                        <editable-cell-details cell="selectedCell">
+                        <editable-cell-details cell="selectedCell"
+                                               currenttab="currentTab">
                     </span>
                     <span ng-switch-when="5">
                         <security-details sec="selectedSecurity">
                     </span>
                     <span ng-switch-when="4">
-                        <cell-details cell="selectedCell">
+                        <cell-details cell="selectedCell"
+                                      currenttab="currentTab">
                     </span>
                     <span class="capGuide in-brief"
                           ng-switch-when="3">

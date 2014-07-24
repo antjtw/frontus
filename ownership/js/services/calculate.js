@@ -4,6 +4,21 @@ var ownership = angular.module('ownerServices');
 // FIXME make into library of pure functions
 ownership.service('calculate', function () {
 
+    this.primaryMeasure = function(sec_type) {
+        switch (sec_type) {
+            case "Equity Common":
+            case "Equity Preferred":
+            case "Option":
+            case "Warrant":
+                return "units";
+            case "Debt":
+            case "Convertible Debt":
+            case "Safe":
+                return "amount";
+        }
+        return null;
+    };
+
     this.whenVestingBegins = function(obj) {
         if (isNumber(obj.vestingbeginsdisplay, 10)) {
             return angular.copy(obj.date).addMonths(

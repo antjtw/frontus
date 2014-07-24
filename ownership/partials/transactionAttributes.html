@@ -1,0 +1,15 @@
+<div class="capTab">
+    <div class="capGuide cap-overflow global">
+        <p ng-repeat="(key, val) in data
+                      | transactionAttributesForDisplay"
+           class="belowTitle">
+            <span>{{val}}</span>
+            <span>
+                {{displayAttr(key)}}
+            </span>
+        </p>
+    </div>
+</div>
+
+
+

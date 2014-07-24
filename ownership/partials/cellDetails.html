@@ -19,7 +19,7 @@
     <div class="standard-button btn-group darkgray">
         <button class="btn"
                 ng-click="switchCapTab('details');"
-                ng-class="{on:currentTab=='details'}">
+                ng-class="{on: currentTab=='details'}">
             <span data-icon="&#xe01e;" aria-hidden="true">
                 Details
             </span>
@@ -32,64 +32,85 @@
             </span>
         </button>
     </div>
+    <transaction-attributes data="tran.attrs"
+                            settings="settings"
+                            ng-switch-when="details">
+    <!--
     <div class="capTab" ng-switch-when="details">
         <!-- Global Tab -->
         <div class="capGuide cap-overflow global">
-            <p ng-show="tran.investor" class="belowTitle">
-                <span ng-bind="tran.investor"></span>
+            <p ng-show="tran.attrs.investor" class="belowTitle">
+                <span>
+                    {{tran.attrs.investor}}
+                </span>
                 <span>Investor</span>
             </p>
-            <p ng-show="tran.units" class="belowTitle">
-                <span ng-bind="formatAmount(tran.units)"></span>
-                <span>{{grantbyIssue(tran.issue)}}</span>
+            <p ng-show="tran.attrs.units" class="belowTitle">
+                <span>
+                    {{tran.attrs.units | formatAmount}}
+                </span>
+                <span>{{grantbyIssue(tran.attrs.security)}}</span>
             </p>
             <p ng-show="tran.forfeited" class="belowTitle">
-                <span ng-bind="formatAmount(tran.forfeited)"></span>
+                <span>
+                    {{tran.forfeited | formatAmount}}
+                </span>
                 <span>Forfeit</span>
             </p>
-            <p ng-show="tran.amount" class="belowTitle">
-                <span ng-bind="formatDollarAmount(tran.amount)"></span>
+            <p ng-show="tran.attrs.amount" class="belowTitle">
+                <span>{{tran.attrs.amount | formatAmount:settings}}
+                </span>
                 <span>Total Paid</span>
             </p>
         </div>
 
         <!-- Equity Tab -->
         <div class="capGuide cap-overflow"
-             ng-show="trantype(tran.type, 'Equity');">
-            <p ng-show="tran.ppshare" class="belowTitle">
-                <span ng-bind="formatDollarAmount(tran.ppshare)"></span>
+             ng-show="trantype(tran.attrs.security_type, 'Equity');">
+            <p ng-show="tran.attrs.ppshare" class="belowTitle">
+                <span>
+                    {{tran.attrs.ppshare | formatAmount:settings}}
+                </span>
                 <span tooltip-placement="right"
                       tooltip="The price at which each share was purchased"
                       class="forTooltip">
                     Share Price
                 </span>
             </p>
-            <p ng-show="tran.liquidpref" class="belowTitle">
-                <span ng-bind="tran.liquidpref"></span>
+            <p ng-show="tran.attrs.liquidpref" class="belowTitle">
+                <span>
+                    {{tran.attrs.liquidpref}}
+                </span>
                 <span tooltip-placement="right"
                       tooltip="{{tips.liquidpref}}"
                       class="forTooltip">
                     Liquidation Preference
                 </span>
             </p>
-            <p ng-show="tran.partpref" class="belowTitle">
-                <span ng-bind="tran.partpref"></span>
+            <p ng-show="tran.attrs.partpref" class="belowTitle">
+                <span>
+                    {{tran.attrs.partpref}}
+                </span>
                 <span tooltip-placement="right"
                       tooltip="{{tips.partpref}}"
                       class="forTooltip">
                     Participating Preferred
                 </span>
             </p>
-            <p ng-show="tran.dragalong"  class="belowTitle">
-                <span ng-bind="tran.dragalong"></span>
+            <p ng-show="tran.attrs.dragalong"  class="belowTitle">
+                <span>
+                    {{tran.attrs.dragalong}}
+                </span>
                 <span tooltip-placement="right"
                       tooltip="{{tips.dragalong}}"
                       class="forTooltip">
                     Drag Along
                 </span>
             </p>
-            <p ng-show="tran.tagalong"  class="belowTitle">
-                <span ng-bind="tran.tagalong"></span>
+            <p ng-show="tran.attrs.tagalong"  class="belowTitle">
+                <span>
+                    {{tran.attrs.tagalong}}
+                </span>
                 <span tooltip-placement="right"
                       tooltip="{{tips.tagalong}}"
                       class="forTooltip">
@@ -99,96 +120,116 @@
         </div>
         <!-- Option Tab -->
         <div class="capGuide cap-overflow"
-             ng-show="trantype(tran.type, 'Option');">
-            <p ng-show="tran.optundersec" class="belowTitle">
-                <span ng-bind="tran.optundersec"></span>
+             ng-show="trantype(tran.attrs.security_type, 'Option');">
+            <p ng-show="tran.attrs.optundersec" class="belowTitle">
+                <span>
+                    {{tran.attrs.optundersec}}
+                </span>
                 <span tooltip-placement="right"
                       tooltip="{{tips.optundersec}}"
                       class="forTooltip">
                     Underlying Security
                 </span>
             </p>
-            <p ng-show="tran.price" class="belowTitle">
-                <span ng-bind="formatDollarAmount(tran.price)"></span>
+            <p ng-show="tran.attrs.price" class="belowTitle">
+                <span>
+                    {{tran.attrs.price | formatAmount:settings}}
+                </span>
                 <span tooltip-placement="right"
                       tooltip="{{tips.price}}"
                       class="forTooltip">
                     Strike Price
                 </span>
             </p>
-            <p ng-show="tran.terms" class="belowTitle">
-                <span ng-bind="tran.terms"></span>
+            <p ng-show="tran.attrs.terms" class="belowTitle">
+                <span>
+                    {{tran.attrs.terms}}
+                </span>
                 <span tooltip-placement="right" tooltip="The total number of months until fully vested" class="forTooltip">Vesting Term (months)
                 </span>
             </p>
 
-            <p ng-show="tran.vestingbeginsdisplay" class="belowTitle">
-                <span ng-bind="tran.vestingbeginsdisplay"></span>
+            <p ng-show="tran.attrs.vestingbeginsdisplay" class="belowTitle">
+                <span>
+                    {{tran.attrs.vestingbeginsdisplay}}
+                </span>
                     <span tooltip-placement="right" tooltip="Months until the vesting cliff % is vested" class="forTooltip">Vesting Cliff (months)
                 </span>
                 </p>
 
-            <p ng-show="tran.vestcliff" class="belowTitle">
-                <span ng-bind="tran.vestcliff"></span>
+            <p ng-show="tran.attrs.vestcliff" class="belowTitle">
+                <span>
+                    {{tran.attrs.vestcliff}}
+                </span>
                 <span tooltip-placement="right" tooltip="The percentage of granted shares that are considered vested on the cliff date" class="forTooltip">Vesting Cliff %
             </span>
             </p>
 
 
-            <p ng-show="tran.vestfreq" class="belowTitle">
-                <span ng-bind="tran.vestfreq"></span>
+            <p ng-show="tran.attrs.vestfreq" class="belowTitle">
+                <span>
+                    {{tran.attrs.vestfreq}}
+                </span>
                 <span tooltip-placement="right" tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends" class="forTooltip">Post Cliff Frequency
                     </span>
                     </p>
 
         </div>
         <!-- Debt Tab -->
-        <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Debt');">
-            <p ng-show="tran.interestrate" class="belowTitle">
-                <span>{{tran.interestrate}}% {{tran.interestratefreq}}</span>
+        <div class="capGuide cap-overflow" ng-show="trantype(tran.attrs.security_type, 'Debt');">
+            <p ng-show="tran.attrs.interestrate" class="belowTitle">
+                <span>{{tran.attrs.interestrate}}% {{tran.attrs.interestratefreq}}
+                </span>
                 <span tooltip-placement="right" tooltip="The rate that interest accrues on this debt" class="forTooltip">Interest Rate
                 </span>
             </p>
-            <p ng-show="tran.valcap" class="belowTitle">
-                <span ng-bind="formatDollarAmount(tran.valcap)"></span>
+            <p ng-show="tran.attrs.valcap" class="belowTitle">
+                <span ng-bind="calculate.formatDollarAmount(tran.attrs.valcap)">
+                </span>
                 <span tooltip-placement="right" tooltip="The maximum pre-money valuation at which the debt notes convert to equity" class="forTooltip">Valuation Cap
                 </span>
             </p>
-            <p ng-show="tran.discount" class="belowTitle">
-                <span ng-bind="tran.discount"></span>
+            <p ng-show="tran.attrs.discount" class="belowTitle">
+                <span ng-bind="tran.attrs.discount">
+                </span>
                 <span tooltip-placement="top" tooltip="The percentage discount applied to the next round">Percent Discount
                 </span>
             </p>
-            <p ng-show="tran.term" class="belowTitle">
-                <span ng-bind="tran.term"></span>
+            <p ng-show="tran.attrs.term" class="belowTitle">
+                <span ng-bind="tran.attrs.term">
+                </span>
                 <span tooltip-placement="top" tooltip="The term of the note before expiration">Term (months)
                 </span>
             </p>
         </div>
         <!-- Safe Tab -->
-        <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Safe');">
-            <p ng-show="tran.valcap" class="belowTitle">
-                <span ng-bind="formatDollarAmount(tran.valcap)"></span>
+        <div class="capGuide cap-overflow" ng-show="trantype(tran.attrs.security_type, 'Safe');">
+            <p ng-show="tran.attrs.valcap" class="belowTitle">
+                <span ng-bind="calculate.formatDollarAmount(tran.attrs.valcap)">
+                </span>
                 <span tooltip-placement="right" tooltip="The maximum pre-money valuation at which the safe converts to equity" class="forTooltip">Valuation Cap
                 </span>
             </p>
 
-            <p ng-show="tran.discount" class="belowTitle">
-                <span ng-bind="tran.discount"></span>
+            <p ng-show="tran.attrs.discount" class="belowTitle">
+                <span ng-bind="tran.attrs.discount">
+                </span>
                 <span tooltip-placement="right" class="forTooltip" tooltip="The percentage discount applied to the next round">Percent Discount
                 </span>
             </p>
         </div>
         <!-- Warrant Tab -->
-        <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Warrant');">
-            <p ng-show="tran.term" class="belowTitle">
-            <span ng-bind="tran.term"></span>
+        <div class="capGuide cap-overflow" ng-show="trantype(tran.attrs.security_type, 'Warrant');">
+            <p ng-show="tran.attrs.term" class="belowTitle">
+            <span ng-bind="tran.attrs.term">
+            </span>
             <span tooltip-placement="right" class="forTooltip" tooltip="The term of the warrant before expiration">Term (months)
         </span>
         </p>
 
-            <p ng-show="tran.price" class="belowTitle">
-            <span ng-bind="formatDollarAmount(tran.price)"></span>
+            <p ng-show="tran.attrs.price" class="belowTitle">
+            <span ng-bind="calculate.formatDollarAmount(tran.attrs.price)">
+            </span>
             <span tooltip-placement="right" class="forTooltip" tooltip="The price each granted share can be purchased at">Strike Price
         </span>
         </p>
@@ -214,6 +255,7 @@
             </ul>
         </div>
     </div>
+    -->
     <div class="capTab" ng-switch-when="documents">
         <div ng-if="tran.evidence_data.length==0" class="linkedDocuments viewOnly">
             Connect documents that support this transaction by clicking Edit above.

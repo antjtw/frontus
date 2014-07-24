@@ -186,7 +186,6 @@ var captableController = function(
             $scope.sideBar = $scope.toggleView() ? 4 : 2;
             $scope.allowKeys = calculate.complement(
                     $scope.ct.security_names, [sec]);
-            console.log($scope.selectedCell);
         }
     };
     /*
