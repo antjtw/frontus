@@ -136,6 +136,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         // we use type.required to determine if it's a transaction type or default type
         if (type.required === undefined) {
             return true;
+        } else if (type.name == $scope.annot.type_info.name) {
+            // want to show ourselves in the dropdown
+            return true;
         } else {
             return !$scope.doc.hasAnnotationType(type.name);
         }
@@ -395,8 +398,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if (focus) {
             // using $timeout to avoid nested $digests
             $timeout(function() {
-                // could call openBox(), but want the actual pointer to be focused on the textarea
                 $element.find('textarea').focus();
+                $scope.openBox();
             });
         }
         delete $scope.annot.focus;
