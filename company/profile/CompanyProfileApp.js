@@ -509,11 +509,21 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 SWBrijj.tblmm('account.my_user_role', "email", person.email).then(function(data){
                     $scope.myGroups = data;
                     angular.forEach($scope.myGroups, function(myGroups){
-                        if(myGroups.groups != null){
-                            var array = JSON.parse(myGroups.groups);
-                            person.groups = array.join(", ");
-
-                        };
+                       
+                        if(myGroups.groups == null){
+                            person.groups = null;
+                        }
+                        else if(myGroups.groups == '[]'){
+                            person.groups = null;
+                        }
+                        else {
+                            person.groups = JSON.parse(myGroups.groups).join(", ");
+                        }
+                        // if(myGroups.groups != null){
+                        //     alert(myGroups.group);
+                        //     var array = JSON.parse(myGroups.groups);
+                        //     person.groups = array.join(", ");
+                        // };
                     });
                 
                 });
