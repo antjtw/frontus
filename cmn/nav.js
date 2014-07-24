@@ -216,6 +216,10 @@ navm.controller('NavCtrl',
                 $location.url(page);
             }
         };
+        $scope.persistentNavGoToPage = function(page) {
+            _kmq.push(['record', 'Persistent Notification', {'Message': $rootScope.paymentMessage}]);
+            $scope.gotoPage(page);
+        };
 
         $scope.toggleSubmenu = function(tab) {
             if ($scope.navhover && $scope.submenu == tab) {
