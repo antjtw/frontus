@@ -468,6 +468,22 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             });
         };
 
+        $scope.numAnnotations = function() {
+            var num = 0;
+            angular.forEach($scope.doc.annotations, function(annot) {
+                num += annot.required && annot.forRole(navState.role) ? 1 : 0;
+            });
+            return num
+        };
+
+        $scope.numAnnotationsComplete = function() {
+            var num = 0;
+            angular.forEach($scope.doc.annotations, function(annot) {
+                num += annot.required && annot.forRole(navState.role) && annot.filled(User.signaturePresent, navState.role) ? 1 : 0;
+            });
+            return num
+        };
+
         $scope.drawTime = function() {
             return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && navState.role == "investor"));
         };
