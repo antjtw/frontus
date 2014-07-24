@@ -245,6 +245,27 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 return (annot.whattype == annotType) && (annot.filled(false, $rootScope.navState.role));
             });
         },
+        numFieldsRequired: function() {
+            var num = 0;
+            angular.forEach(this.annotation_types, function(annot) {
+                num += annot.required ? 1 : 0;
+            });
+            return num
+        },
+        numFieldsComplete: function() {
+            var num = 0;
+            var annotations = this.annotations;
+            angular.forEach(this.annotation_types, function(types) {
+                if (types.required) {
+                    angular.forEach(annotations, function(annot) {
+                        if (annot.whattype == types.name) {
+                            num += annot.filled(false, $rootScope.navState.role) || !annot.forRole($rootScope.navState.role) ? 1 : 0;
+                        }
+                    });
+                }
+            });
+            return num;
+        },
         annotable: function(role) {
             if (role == "investor")
                 return this.investorCanAnnotate();
