@@ -98,13 +98,20 @@ m.directive('groupPeople', function(){
                 angular.forEach($scope.selectedGroup, function(group){
                     if(array.indexOf(group)=== -1){
                         console.log(group)
-                        var toDelete = $scope.selectedGroup.indexOf(group);
-                        // indexDelete.push(toDelete);
-                        $scope.selectedGroup.splice(toDelete);
-
+                        indexDelete.push($scope.selectedGroup.indexOf(group));
                     };
-
+                    
                });
+                console.log("to be deleted");
+                console.log(indexDelete);
+                if(indexDelete.length > 0){
+                    for(var i = indexDelete.length -1; i >= 0; i--){
+                        $scope.selectedGroup.splice(indexDelete[i], 1);
+                    };
+                };
+                // for(var i = indexDelete.length -1; i >=0; i--){
+                //         $scope.selectedGroup.splice(indexDelete[i], 1);
+                //     }// 
                 
              
                 // return $scope.selectedGroup; 
@@ -116,10 +123,15 @@ m.directive('groupPeople', function(){
 
             $scope.$watch('people', function(){
                     // this is working and letting me know whenever groups change
-                    var peopleArray = $scope.fromFront($scope.people);
-                    console.log(peopleArray);
-                    $scope.modifyGroups(peopleArray);
-                    console.log($scope.selectedGroup);  
+                    if($scope.people.length > 0){
+                        var peopleArray = $scope.fromFront($scope.people);
+                        $scope.modifyGroups(peopleArray);
+                        console.log($scope.selectedGroup);  
+                    }
+                    else{
+                        $scope.selectedGroup = [];
+                    }
+                    
                     // $scope.fromFront($scope.people);
                     // $scope.modifyGroups($scope.fromFront($scope.people));
             }, true);
@@ -150,8 +162,6 @@ m.directive('groupPeople', function(){
 
       
             $scope.createGroups = function(person){
-                
-                 
                 angular.forEach(person, function(info){
                     SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
                         var myInfo = data
@@ -159,7 +169,8 @@ m.directive('groupPeople', function(){
                         var smallGroup = [];
                         var bigGroup = [];
                         var newGroupsArray = []; 
-                        var myOldGroups = ""  
+                        var myOldGroups = "" 
+                        var deleteInx = []; 
                         // big group will be the first parameter for passing in a new group
                         angular.forEach(myInfo, function(about){
                             smallGroup.push(about.email, about.role);
@@ -174,124 +185,40 @@ m.directive('groupPeople', function(){
                             };
 
                         });
-                        // add a first group
-                        if($scope.unChecked.length === 0 && $scope.groupName.length > 0 && $scope.selectedGroup.length === 0){
-                            newGroupsArray.push($scope.groupName);
-                            $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
+                        if($scope.selectedGroup.length > 0){
+                            angular.forEach($scope.selectedGroup, function(selected){
+                                if(newGroupsArray.indexOf(selected)==-1){
+                                    console.log(selected);
+                                    newGroupsArray.push(selected);
+                                   
+                                }
+                            })
                         }
-                        // add a second group from text box only
-                        // else if($scope.unChecked.length === 0 && $scope.groupName.length > 0 && scope.selectedGroup.length > 0){
-                        //     if(newGroupsArray.indexOf($scope.groupName)== -1){
-                        //         newGroupsArray.push(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
-                        //     }
-                            
-
-                        // }
-                        // remove a group
-                        else if($scope.unChecked.length > 0 && $scope.groupName.length === 0 && $scope.selectedGroup.length ===0){
-                            console.log($scope.unChecked); 
+                        if($scope.unChecked.length > 0){
                             angular.forEach($scope.unChecked, function(unChecked){
                                 if(newGroupsArray.indexOf(unChecked) > -1){
-                                    var toDelete = newGroupsArray.indexOf(unChecked);
-                                    newGroupsArray.splice(toDelete);
-
+                                     var toDelete = newGroupsArray.indexOf(unChecked);
+                                     deleteInx.push(toDelete);
                                 };
-                                $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
-                            })
-                            alert(myOldGroups); 
-
+                            });
+                            for(var i = deleteInx.length -1; i >=0; i--){
+                                newGroupsArray.splice(deleteInx[i], 1);
+                            }
                         }
-                    
-                        
+                        if($scope.groupName.length > 0){
+                            console.log("hi")
+                            if(newGroupsArray.indexOf($scope.groupName) == -1){
+                                newGroupsArray.push($scope.groupName);
+                                console.log(newGroupsArray);
+                            }
+                        }
+                        $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
                     })
                 })
 
             }
 
-
-
-
-
-
-            // $scope.createGroups = function(person){
-            //     console.log(person);
-            //     console.log($scope.selectedGroup);
-            //     console.log($scope.selectedGroup.length);
-            //     angular.forEach(person, function(info){
-            //         SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
-            //             var myInfo = data;
-            //             var myRole = [];
-            //             var bigArray = []
-            //             console.log(myInfo);
-            //             angular.forEach(myInfo, function(info){
-            //                 console.log(info.groups);
-            //                 myRole.push(info.email, info.role);
-            //                 bigArray.push(myRole);
-            //                 if(info.groups != null){
-            //                     var personGroups = JSON.parse(info.groups);
-            //                     if($scope.unChecked.length > 0){
-            //                         console.log($scope.unChecked);
-            //                         console.log($scope.selectedGroup);
-            //                         for(var i = 0; i < $scope.unChecked.length; i++){
-            //                             console.log($scope.unChecked[i]);
-            //                             if(personGroups.indexOf($scope.unChecked[i]) > -1){
-            //                                 var toDelete = personGroups.indexOf($scope.unChecked[i]);
-            //                                 personGroups.splice(toDelete, 1)
-            //                                 console.log("to delete");
-            //                             };
-            //                         };
-            //                         $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
-            //                     };
-            //                     if($scope.selectedGroup.length > 0){
-            //                         console.log(personGroups);
-            //                         for(var i = 0; i < $scope.selectedGroup.length; i++){
-            //                             if(personGroups.indexOf($scope.selectedGroup[i]) == -1){
-            //                                 personGroups.push($scope.selectedGroup[i]);
-            //                             };
-            //                         };
-            //                     };
-
-            //                 };
-            //                 if(info.groups == null || info.groups == [""]){
-            //                     // alert("No groups");
-            //                     // myRole.push(info.email, info.role);
-            //                     // bigArray.push(myRole);
-            //                     if($scope.groupName.length == 0){
-            //                         alert("nothing to add");
-            //                     }
-            //                     else if($scope.groupName.length >= 1){
-            //                         alert("something to add");
-            //                         myRole.push(info.email, info.role);
-            //                         bigArray.push(myRole);
-            //                         var myNewGroup = [];
-            //                         myNewGroup.push($scope.groupName);
-            //                         $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(myNewGroup));
-
-
-            //                     }
-            //                 }
-            //                 else(alert(info.groups));
-            //                 // if($scope.groupName.length > 0){
-            //                 //     if(personGroups.length == 0){
-            //                 //         alert($scope.groupName)
-            //                 //     }
-            //                 //     alert($scope.groupName);
-            //                 //     if(personGroups.indexOf($scope.groupName)== -1){
-            //                 //         personGroups.push($scope.groupName);
-            //                 //     }
-            //                 // }
-            //                 // $scope.updateGroup(JSON.stringify(bigArray), JSON.stringify(personGroups));
-
-            //             });
-                            
-            //         });
-            //     });
-            //     // $scope.$emit("notification:success", "Group Changed");
-            //     // $route.reload();               
-            // };
-
-            
 
 
             $scope.showUserRoles = function(){

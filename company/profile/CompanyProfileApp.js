@@ -519,11 +519,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         else {
                             person.groups = JSON.parse(myGroups.groups).join(", ");
                         }
-                        // if(myGroups.groups != null){
-                        //     alert(myGroups.group);
-                        //     var array = JSON.parse(myGroups.groups);
-                        //     person.groups = array.join(", ");
-                        // };
                     });
                 
                 });
