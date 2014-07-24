@@ -296,7 +296,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if ($scope.annot.whattype == "ImgSignature" &&
             ($scope.annot.forRole(navState.role) && !$scope.doc.countersignable(navState.role))) {
             $scope.signaturestyle = {height: 180, width: 330 };
-            $scope.signatureURL = '/photo/user?id=signature:';
             $scope.sigModalUp();
         }
     };

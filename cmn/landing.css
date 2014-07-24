@@ -158,6 +158,10 @@ h3 {
     background-position: -270px 0;
 }
 
+.large-icon.dropbox-icon {
+    background-position: -270px -90px;
+}
+
 .photo-icon {
     width: 150px;
     height: 150px;
@@ -275,7 +279,16 @@ h2.key-header.old-page {
 
 .section-icon-trio.single-icon > ul > li > span:nth-child(3) {
     max-width: 300px;
-    margin: 20px auto 0 auto;
+    margin: 0 auto 0 auto;
+}
+
+.section-icon-trio.double-icon > ul > li {
+    width: 50%;
+}
+
+.section-icon-trio.double-icon > ul > li > span:nth-child(3) {
+    max-width: 300px;
+    margin: 0 auto 0 auto;
 }
 
 .section-icon-trio > ul > li {
@@ -349,7 +362,7 @@ h2.key-header.old-page {
         margin-top: 40px;
     }
 
-    .section-icon-trio > ul > li {
+    .section-icon-trio > ul > li, .section-icon-trio.double-icon > ul > li {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
@@ -378,7 +391,7 @@ h2.key-header.old-page {
         margin-top: 10px;
     }
 
-    .section-icon-trio > ul > li > span:nth-child(3), .section-icon-trio.single-icon > ul > li > span:nth-child(3) {
+    .section-icon-trio > ul > li > span:nth-child(3), .section-icon-trio.single-icon > ul > li > span:nth-child(3), .section-icon-trio.double-icon > ul > li > span:nth-child(3) {
         display: inline-block;
         text-align: left;
         width: -moz-calc(100% - 100px);
