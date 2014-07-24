@@ -235,6 +235,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
             updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
         },
+        hasOtherPartyAnnotation: function(annotType) {
+            return this.annotations.some(function(annot) {
+                return (annot.whattype == annotType) && !annot.forRole($rootScope.navState.role);
+            });
+        },
         hasFilledAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
                 return (annot.whattype == annotType) && (annot.filled(false, $rootScope.navState.role));
