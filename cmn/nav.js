@@ -217,7 +217,7 @@ navm.controller('NavCtrl',
             }
         };
         $scope.persistentNavGoToPage = function(page) {
-            _kmq.push(['record', 'Persistent Notification', {'Message': $rootScope.paymentMessage}]);
+            _kmq.push(['record', 'Persistent Notification', {'Message': $rootScope.paymentmessage}]);
             $scope.gotoPage(page);
         };
 
