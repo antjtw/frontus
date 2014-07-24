@@ -59,27 +59,15 @@
                         </select>
                     </ul>
                 </li>
-                <li ng-if="annot.type == 'highlight' && annot.type_info.typename != 'date'">
+                <li ng-if="((annot.type_info.typename == 'date' || annot.type_info.typename == 'enum') && annot.forRole(navState.role)) || annot.type == 'highlight'">
                     <ul>
                         <li>
                             <span>Contents</span>
                         </li>
-                        <li ng-if="annot.type_info.typename != 'enum'">
+                        <li ng-if="annot.type == 'highlight' && annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'">
                             <div class="textarea-container">
                                 <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="annot.val"/>
                             </div>
-                        </li>
-                        <li ng-if="annot.type_info.typename == 'enum'">
-                            <select ui-select2="select2Options" ng-model="annot.val">
-                                <option ng-repeat="annot.type_info.labels" value="{{label}}">{{label}}</option>
-                            </select>
-                        </li>
-                    </ul>
-                </li>
-                <li ng-if="(annot.type_info.typename == 'date' || annot.type_info.typename == 'enum') && annot.forRole(navState.role)">
-                    <ul>
-                        <li>
-                            <span>Contents</span>
                         </li>
                         <li ng-if="annot.type_info.typename == 'date'">
                             <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
