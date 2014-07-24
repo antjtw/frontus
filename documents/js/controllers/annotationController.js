@@ -100,6 +100,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     });
 
     $scope.$watch('annot.whattype', function(newval, oldval) {
+        if (newval != oldval) { // don't run this on the first $watch call
+            $scope.annot.val = ""; // clear out value since the type changed
+            setDefaultText();
+        }
         if (newval == "Signature") {
             $scope.annot.fontsize = 18;
             if ($scope.annot.position.size.height < 37) {
@@ -109,9 +113,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         else {
             $scope.annot.fontsize = 12;
         }
-        if (newval != oldval) {
-            $scope.annot.val = ""; // clear out value since the type changed
-            setDefaultText();
+        if (newval == 'date' && $scope.annot.val === "") {
+            // an empty string causes oddities in the date picker
+            $scope.annot.val = null;
         }
         // update type information TODO: move to annotation service / object
         $scope.annot.type_info = $scope.doc.annotation_types.filter(function(type) {
@@ -120,22 +124,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if (!$scope.annot.type_info) {
             $scope.annot.type_info = {name: $scope.annot.whattype, display: $scope.annot.whattype}; // TODO: probably need better defaults
         }
-        var numberCheck = function(val)
-        {
-            var num = Number(val);
-            return (!isNaN(num) && val.length > 0);
-        };
-        var stringCheck = function(val)
-        {
-            return (typeof(val) == String) && (val.length > 0);
-        };
-        var type_mappings = {
-            "int8": numberCheck,
-            "int4": numberCheck,
-            "float8": numberCheck,
-            "varchar": stringCheck
-        };
-        $scope.annot.type_info.check = type_mappings[$scope.annot.type_info.typename];
         if ($scope.annot.type_info.required) {
             $scope.annot.required = true;
         }

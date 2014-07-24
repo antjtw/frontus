@@ -17,6 +17,7 @@
             </div>
             <div ng-if="enumBoxMode()">
                 <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
+                    <option></option>
                     <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>
             </div>
@@ -79,6 +80,7 @@
                         </li>
                         <li ng-if="annot.type_info.typename == 'enum'">
                             <select ui-select2="select2Options" ng-model="annot.val">
+                                <option></option>
                                 <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>
                         </li>
