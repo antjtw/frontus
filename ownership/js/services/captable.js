@@ -68,7 +68,7 @@ Row = function() {
 Cell = function() {
     this.u = this.ukey = null;
     this.a = this.akey = null;
-    this.x = null; // TODO what is x used for? it's always null
+    this.x = null; // percentage
     this.transactions = [];
     this.security = null;
 };

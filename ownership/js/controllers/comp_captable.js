@@ -941,7 +941,9 @@ var captableController = function(
     $scope.cellFor = function(inv, sec) {
         return $scope.ct.cells
             .filter(function(cell) {
-                return cell.investor == inv && cell.security == sec;
+                return cell.investor == inv &&
+                       cell.security == sec &&
+                       (cell.a || cell.u);
             })[0];
     };
     $scope.rowFor = function(inv) {
