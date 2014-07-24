@@ -150,7 +150,7 @@ m.directive('groupPeople', function(){
 
       
             $scope.createGroups = function(person){
-                if($scope.selectedGroup.length > 0 || $scope.unChecked.length > 0 || $scope.selectedGroup.length > 0){
+                // if($scope.selectedGroup.length > 0 || $scope.unChecked.length > 0 || $scope.selectedGroup.length > 0){
                     angular.forEach(person, function(info){
                     SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
                         var myInfo = data;
@@ -163,11 +163,13 @@ m.directive('groupPeople', function(){
                         angular.forEach(myInfo, function(about){
                             smallGroup.push(about.email, about.role);
                             bigGroup.push(smallGroup);
-                            if(about.groups == null){
+                            console.log(about.groups);
+                            alert(about.groups);
+                            if(about.groups == null || about.groups == "[]"){
                                 newGroupsArray = []
                                 console.log(newGroupsArray);
                             }
-                            else{
+                            else if(about.groups != null){
                                 newGroupsArray = JSON.parse(about.groups);
                                 console.log(newGroupsArray);
                             };
@@ -204,12 +206,12 @@ m.directive('groupPeople', function(){
                         
                     })
                 });
-                $route.reload();
-                $scope.$emit("notification:success", "Groups Changed")
-                }
-                else{
-                    $scope.$emit("notification:failure", "Nothing to change")
-                }
+                // $route.reload();
+                // $scope.$emit("notification:success", "Groups Changed")
+                // // }
+                // else{
+                //     $scope.$emit("notification:failure", "Nothing to change")
+                // }
                 
                 
 
