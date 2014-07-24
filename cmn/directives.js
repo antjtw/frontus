@@ -98,21 +98,50 @@ m.directive('groupPeople', function(){
                 });
                 angular.forEach($scope.selectedGroup, function(group){
                     if(array.indexOf(group)==-1){
+                        console.log(group)
                         var toDelete = $scope.selectedGroup.indexOf(group);
-                        indexDelete.push(toDelete)
+                        // indexDelete.push(toDelete);
+                        $scope.selectedGroup.splice(toDelete);
+
                     };
+
                });
-                for(i = 0; i < indexDelete.length; i++){
-                    $scope.selectedGroup.splice(indexDelete[i])
-                }               
+                
+                // if(indexDelete.length > 0){
+                //     $scope.removeSelected(indexDelete);
+                //     console.log(indexDelete);
+                //     angular.forEach(indexDelete, function(ind){
+                //         console.log(ind);
+                //         $scope.selectedGroup.splice(ind, 1);
+                //     });
+                //     console.log($scope.selectedGroup);
+                // }
+             
+                return $scope.selectedGroup; 
+
             };
+
+            // $scope.removeSelected = function(indexes){
+            //     var i = remove.length;
+            //     while(i--){
+            //         if()
+            //     }
+            //     angular.forEach(indexes, function(ind){
+            //         $scope.selectedGroup.splice(ind, 1);
+            //     });
+            //     console.log($scope.selectedGroup);
+            //     // return $scope.selectedGroup;
+            // }
   
 
-            $scope.$watch('people', function(olddata, newdata){
-                if(newdata){
-                     $scope.fromFront($scope.people);
-                     $scope.modifyGroups($scope.fromFront($scope.people));
-                };  
+            $scope.$watch('people', function(){
+                    // this is working and letting me know whenever groups change
+                    var peopleArray = $scope.fromFront($scope.people);
+                    console.log(peopleArray);
+                    $scope.modifyGroups(peopleArray);
+                    console.log($scope.selectedGroup);  
+                    // $scope.fromFront($scope.people);
+                    // $scope.modifyGroups($scope.fromFront($scope.people));
             }, true);
             
 
