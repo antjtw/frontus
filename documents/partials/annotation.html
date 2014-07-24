@@ -11,9 +11,9 @@
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
                           placeholder="{{(annot.forRole(navState.role) ? navState.name : 'Recipient') + ' ' + annot.type_info.display}}"
-                          ui-event="{focus : 'openBox(this, $event)'}" style="resize:none"
-                          ng-keyup="addLineBreaks($event)" ng-model="annot.val"
-                          class="row-fluid" ng-style="annotationSizeStyle"/>
+                          ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum'"
+                          ng-keyup="addLineBreaks($event)" ng-model="annot.val" style="resize:none"
+                          class="row-fluid" ng-style="annotationSizeStyle" ng-click="openBox()"/>
             </div>
             <div ng-if="enumBoxMode()">
                 <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">

@@ -1635,6 +1635,11 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     border-radius: 0;
 }
 
+.sticky textarea[readonly] {
+    background-color: #fff;
+    cursor: pointer;
+}
+
 .sticky fieldset .select2-container .select2-choice {
     height: 100%
 }
