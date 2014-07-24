@@ -149,6 +149,11 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
                     </div>
+                    <div ng-if="invq && doc.signable()" class="fields-progress">
+                        <span ng-show="numAnnotationsComplete() != numAnnotations()">{{numAnnotationsComplete()}}/{{numAnnotations()}} Complete</span>
+                        <span ng-show="numAnnotationsComplete() == numAnnotations()">Document is ready to sign!</span>
+                        <meter cur="numAnnotationsComplete()" tot="numAnnotations()"></meter>
+                    </div>
                 </div>
                 <div id="bottom-part" ng-if="prepareable()">
                     <doc-transaction-details doc="doc"></doc-transaction-details>
