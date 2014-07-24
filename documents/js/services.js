@@ -386,12 +386,17 @@ Annotation.prototype = {
     filled: function(signaturepresent, role) {
         // signature present comes from the account
         // TODO: validated data if type_info.typename == 'enum' || 'date'
-        if (this.type_info && this.type_info.check) {
-            return this.forRole(role) && this.type_info.check(this.val);
+        if (!this.forRole(role)) {
+            return false;
         }
-        return (this.forRole(role) &&
-                ((this.val && this.val.length > 0) ||
-                 (this.whattype == "ImgSignature" && signaturepresent)));
+        var type = this.type_info.typename;
+        if (["int8", "int4", "float8"].indexOf(type) != -1) {
+            var num = Number(this.val);
+            return (!isNaN(num) && this.val.length > 0);
+        } else {
+            return ((this.val && this.val.length > 0) ||
+                    (this.whattype == "ImgSignature" && signaturepresent));
+        }
     },
     isCountersign: function() {
         return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature");

@@ -120,22 +120,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if (!$scope.annot.type_info) {
             $scope.annot.type_info = {name: $scope.annot.whattype, display: $scope.annot.whattype}; // TODO: probably need better defaults
         }
-        var numberCheck = function(val)
-        {
-            var num = Number(val);
-            return (!isNaN(num) && val.length > 0);
-        };
-        var stringCheck = function(val)
-        {
-            return (typeof(val) == String) && (val.length > 0);
-        };
-        var type_mappings = {
-            "int8": numberCheck,
-            "int4": numberCheck,
-            "float8": numberCheck,
-            "varchar": stringCheck
-        };
-        $scope.annot.type_info.check = type_mappings[$scope.annot.type_info.typename];
         if ($scope.annot.type_info.required) {
             $scope.annot.required = true;
         }
