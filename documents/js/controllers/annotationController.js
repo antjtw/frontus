@@ -100,6 +100,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     });
 
     $scope.$watch('annot.whattype', function(newval, oldval) {
+        if (newval != oldval) { // don't run this on the first $watch call
+            $scope.annot.val = ""; // clear out value since the type changed
+            setDefaultText();
+        }
         if (newval == "Signature") {
             $scope.annot.fontsize = 18;
             if ($scope.annot.position.size.height < 37) {
@@ -109,9 +113,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         else {
             $scope.annot.fontsize = 12;
         }
-        if (newval != oldval) {
-            $scope.annot.val = ""; // clear out value since the type changed
-            setDefaultText();
+        if (newval == 'date' && $scope.annot.val === "") {
+            // an empty string causes oddities in the date picker
+            $scope.annot.val = null;
         }
         // update type information TODO: move to annotation service / object
         $scope.annot.type_info = $scope.doc.annotation_types.filter(function(type) {
