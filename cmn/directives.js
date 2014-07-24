@@ -54,8 +54,6 @@ m.directive('messageSide', function(){
            }
 
             $rootScope.$on('new:message', function(x){
-                console.log(x);
-                console.log("test")
                 $scope.newMessages();
 
                 // setTimeout($scope.newMessages, 5500);
@@ -74,18 +72,15 @@ m.directive('messageSide', function(){
             $scope.getLogins = function(){
                 SWBrijj.tblm('global.user_tracker').then(function(data){
                     $scope.logins = data  
-                    console.log($scope.logins)              
                 })
-            }
+            };
             $scope.getLogins();
 
 
             $scope.getFeed = function(){
                 SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
-                    console.log($scope.msgstatus)
                     $scope.msgstatus = data;
                     $scope.getNumber = $scope.msgstatus.length;
-                    console.log($scope.getNumber)
                     $scope.getLogs();
                     $scope.getLogins();
 
@@ -171,7 +166,6 @@ m.directive('messageSide', function(){
                                     }
                                 })
                                 angular.forEach($scope.logins, function(login){
-                                    console.log($scope.logins)
                                     if(login.email == value.tox){
                                         myEvents[i].foo.forEach(function(elem){
                                             elem.login = login.logintime;

@@ -38,6 +38,7 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
 
         $rootScope.scrolled = true;
         navState.path = document.location.pathname;
+        $rootScope.whichpage = "modeling";
 
         $scope.addCommas = function(num) {
             var split = num.split('.');
@@ -228,7 +229,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
 
         $rootScope.scrolled = true;
         navState.path = document.location.pathname;
-        console.log(navState.path);
+        $rootScope.whichpage = "captable";
 
 
         $scope.captabletips = {};

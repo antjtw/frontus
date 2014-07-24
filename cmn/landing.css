@@ -158,9 +158,13 @@ h3 {
     background-position: -270px 0;
 }
 
+.large-icon.dropbox-icon {
+    background-position: -270px -90px;
+}
+
 .photo-icon {
-    width: 135px;
-    height: 135px;
+    width: 150px;
+    height: 150px;
     display: inline-block;
     background-image:url('../img/landing/helpers.png');
 }
@@ -170,18 +174,18 @@ h3 {
 }
 
 .photo-icon.robbie-icon {
-    background-position: -135px 0;
+    background-position: -150px 0;
 }
 
 .photo-icon.liz-icon {
-    background-position: -270px 0;
+    background-position: -300px 0;
 }
 
 
 
 h2.key-header {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 120px;
 }
 
 h3.key-sub-header {
@@ -192,6 +196,10 @@ h3.key-sub-header {
 
 .home-banner h2.key-header {
     margin-top: 0;
+}
+
+h2.key-header.old-page {
+    margin-top: 40px;
 }
 
 .home-banner h3.key-sub-header {
@@ -234,11 +242,13 @@ h3.key-sub-header {
     text-transform: uppercase;
     font-size: 12px;
     line-height: 14px;
+    font-family:'FS Elliot Web Bold', sans-serif !important;
+    letter-spacing: 0.1em;
 }
 
 .section-full-image {
     max-width: 984px;
-    margin: 80px auto 0 auto;
+    margin: 40px auto 0 auto;
 }
 
 .section-full-image.smaller-image {
@@ -250,17 +260,17 @@ h3.key-sub-header {
 }
 
 .home-image-section {
-    margin-top: 80px;
+    margin-top: 120px;
 }
 
 .section-icon-trio {
     max-width: 1024px;
-    margin: 40px auto 0 auto;
+    margin: 20px auto 0 auto;
     overflow: auto;
 }
 
 .section-icon-trio.second {
-    margin: 80px auto 80px auto;
+    margin: 40px auto 40px auto;
 }
 
 .section-icon-trio.single-icon > ul > li {
@@ -269,7 +279,16 @@ h3.key-sub-header {
 
 .section-icon-trio.single-icon > ul > li > span:nth-child(3) {
     max-width: 300px;
-    margin: 20px auto 0 auto;
+    margin: 0 auto 0 auto;
+}
+
+.section-icon-trio.double-icon > ul > li {
+    width: 50%;
+}
+
+.section-icon-trio.double-icon > ul > li > span:nth-child(3) {
+    max-width: 300px;
+    margin: 0 auto 0 auto;
 }
 
 .section-icon-trio > ul > li {
@@ -284,7 +303,7 @@ h3.key-sub-header {
 }
 
 .section-icon-trio > ul > li > span:nth-child(2) {
-    margin-top: 10px;
+    margin-top: 20px;
     display: block;
     text-align: center;
     font-size: 20px;
@@ -294,7 +313,7 @@ h3.key-sub-header {
 }
 
 .section-icon-trio > ul > li > span:nth-child(3) {
-    margin-top: 20px;
+    margin-top: 0;
     padding: 0 30px;
     display: block;
     text-align: center;
@@ -343,7 +362,7 @@ h3.key-sub-header {
         margin-top: 40px;
     }
 
-    .section-icon-trio > ul > li {
+    .section-icon-trio > ul > li, .section-icon-trio.double-icon > ul > li {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
@@ -369,9 +388,10 @@ h3.key-sub-header {
         top: 0;
         left: 140px;
         text-align: left;
+        margin-top: 10px;
     }
 
-    .section-icon-trio > ul > li > span:nth-child(3), .section-icon-trio.single-icon > ul > li > span:nth-child(3) {
+    .section-icon-trio > ul > li > span:nth-child(3), .section-icon-trio.single-icon > ul > li > span:nth-child(3), .section-icon-trio.double-icon > ul > li > span:nth-child(3) {
         display: inline-block;
         text-align: left;
         width: -moz-calc(100% - 100px);

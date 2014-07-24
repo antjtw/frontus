@@ -1487,6 +1487,21 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     border-bottom-right-radius: 3px;
 }
 
+.draggable div > textarea.highlightContents {
+    opacity: 1;
+    width: 100%;
+    padding: 0;
+    resize: vertical;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
 .draggable div > textarea.roundedcorners {
     -webkit-border-top-left-radius: 3px;
     -webkit-border-bottom-left-radius: 3px;
@@ -1765,7 +1780,7 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
-annotation-list div:last-child {
+annotation-list div.annotation-pages:last-child {
     margin-bottom: 20px;
 }
 
@@ -1790,6 +1805,14 @@ annotation-list .annotmark {
     margin-top: 5px;
     margin-left: 25px;
     cursor: pointer;
+}
+
+annotation-list .textIcon {
+    data-icon: &#xe60d;
+}
+
+annotation-list .annotmark.mine.complete.highlightIcon {
+    data-icon: &#xe60f;
 }
 
 annotation-list .annotmark:hover, annotation-list .annotmark.active {

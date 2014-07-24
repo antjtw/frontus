@@ -74,15 +74,15 @@
                 <li><a href="#security" du-smooth-scroll du-scrollspy>Security</a></li>
             </ul>
             <ul ng-show="navState.path.indexOf('/features/') != -1">
-                <li><a href="/features/">Cap Table</a></li>
-                <li><a href="/features/convertible-notes/">Modeling</a></li>
+                <li><a href="/features/" ng-class="{'active': whichpage == 'captable'}">Cap Table</a></li>
+                <li><a href="/features/convertible-notes/" ng-class="{'active': whichpage == 'modeling'}">Modeling</a></li>
             </ul>
         </div>
     </div>
     <div ng-if="persistentNotification"
          class="persistentNotification pointer"
          ng-animate="'animate'"
-         ng-click="gotoPage('/app/company/profile/?setup')">
+         ng-click="persistentNavGoToPage('/app/company/profile/?setup')">
         <div>
             <div class="pull-left">
                 <span>
@@ -90,7 +90,7 @@
                 </span>
             </div>
             <div class="standard-button red pull-right">
-                <button class="btn" ng-click="gotoPage('/app/company/profile/?setup')">
+                <button class="btn" ng-click="persistentNavGoToPage('/app/company/profile/?setup')">
                     Select Plan
                 </button>
             </div>

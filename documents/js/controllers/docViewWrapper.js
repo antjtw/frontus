@@ -4,6 +4,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         'navState', 'Annotations', 'Documents', 'User', '$q',
     function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
+        $scope.nextAnnotationType = 'text';
 
         $scope.setTab = function() {
             if ($scope.actionNeeded() || $scope.prepareable()) {
@@ -313,6 +314,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             adjusted.src = "/photo/docpg?" + $scope.pageQueryString() + "&page=" + $scope.pageForModal + "&thumb=true";
             adjusted.width = "150";
         };
+        
+        $scope.setNextAnnotationType = function (type) {
+            $scope.nextAnnotationType = type;
+        };
 
         $scope.leave = function() {
             // TODO: save notes / smartdoc data
@@ -461,6 +466,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.annotations.some(function(annot) {
                 return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
             });
+        };
+        
+        $scope.drawTime = function() {
+            return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && $rootScope.navState.role == "investor"));
         };
 
         $scope.getData();
