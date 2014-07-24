@@ -32,12 +32,13 @@
             </span>
         </button>
     </div>
-    <transaction-attributes data="tran.attrs"
-                            settings="settings"
-                            ng-switch-when="details">
+    <div class="capTab">
+        <transaction-attributes data="tran.attrs"
+                                settings="settings"
+                                ng-switch-when="details">
+    </div>
     <!--
     <div class="capTab" ng-switch-when="details">
-        <!-- Global Tab -->
         <div class="capGuide cap-overflow global">
             <p ng-show="tran.attrs.investor" class="belowTitle">
                 <span>
@@ -63,8 +64,6 @@
                 <span>Total Paid</span>
             </p>
         </div>
-
-        <!-- Equity Tab -->
         <div class="capGuide cap-overflow"
              ng-show="trantype(tran.attrs.security_type, 'Equity');">
             <p ng-show="tran.attrs.ppshare" class="belowTitle">
@@ -118,7 +117,6 @@
                 </span>
             </p>
         </div>
-        <!-- Option Tab -->
         <div class="capGuide cap-overflow"
              ng-show="trantype(tran.attrs.security_type, 'Option');">
             <p ng-show="tran.attrs.optundersec" class="belowTitle">
@@ -175,7 +173,6 @@
                     </p>
 
         </div>
-        <!-- Debt Tab -->
         <div class="capGuide cap-overflow" ng-show="trantype(tran.attrs.security_type, 'Debt');">
             <p ng-show="tran.attrs.interestrate" class="belowTitle">
                 <span>{{tran.attrs.interestrate}}% {{tran.attrs.interestratefreq}}
@@ -202,7 +199,6 @@
                 </span>
             </p>
         </div>
-        <!-- Safe Tab -->
         <div class="capGuide cap-overflow" ng-show="trantype(tran.attrs.security_type, 'Safe');">
             <p ng-show="tran.attrs.valcap" class="belowTitle">
                 <span ng-bind="calculate.formatDollarAmount(tran.attrs.valcap)">
@@ -218,7 +214,6 @@
                 </span>
             </p>
         </div>
-        <!-- Warrant Tab -->
         <div class="capGuide cap-overflow" ng-show="trantype(tran.attrs.security_type, 'Warrant');">
             <p ng-show="tran.attrs.term" class="belowTitle">
             <span ng-bind="tran.attrs.term">

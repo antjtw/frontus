@@ -1,5 +1,3 @@
-<!-- TODO formatDollarAmount is not in this scope, move to calculate -->
-<!-- Global Tab -->
 <div class="capGuide cap-overflow global">
     <p class="belowTitle">
         <span ng-bind="sec.name"> </span>
@@ -17,7 +15,8 @@
         <span>Security Type</span>
     </p>
 </div>
-<!-- Equity Tab -->
+<transaction-attributes data="sec.attrs" settings="settings"/>
+<!--
 <div class="capGuide cap-overflow"
      ng-show="sec.attrs.security_type=='Equity'">
     <p ng-show="sec.attrs.premoney"
@@ -105,7 +104,6 @@
         </span>
     </p>
 </div>
-  <!-- Options Tab -->
 <div class="capGuide cap-overflow"
      ng-show="sec.attrs.security_type == 'Option'">
     <p ng-show="sec.attrs.optundersec" class="belowTitle">
@@ -176,7 +174,6 @@
     </p>
 </div>
 
-  <!-- Debt tab -->
 <div class="capGuide cap-overflow"
       ng-show="sec.attrs.security_type == 'Debt'">
     <p class="belowTitle" ng-show="sec.attrs.premoney">
@@ -231,7 +228,6 @@
     </p>
 </div>
 
-  <!-- Safe tab -->
 <div class="capGuide cap-overflow"
      ng-show="sec.attrs.security_type == 'Safe'">
     <p class="belowTitle" ng-show="sec.attrs.valcap">
@@ -252,7 +248,6 @@
     </p>
 </div>
 
-<!-- Warrant tab -->
 <div class="capGuide cap-overflow"
      ng-show="sec.attrs.security_type == 'Warrant'">
     <p ng-show="sec.attrs.optundersec" class="belowTitle">
@@ -280,3 +275,4 @@
         </span>
     </p>
 </div>
+-->
