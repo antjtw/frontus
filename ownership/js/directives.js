@@ -123,11 +123,11 @@ own.directive('editableCellDetails', [function() {
 own.directive('captableCell', [function() {
     return {
         restrict: 'E',
-        scope: {data: '=',
-                settings: '='},
+        scope: {data: '='},
         templateUrl: '/ownership/partials/captableCell.html',
-        controller: ["$scope", "calculate",
-            function($scope, calculate) {
+        controller: ["$scope", "$rootScope", "calculate",
+            function($scope, $rootScope, calculate) {
+                $scope.settings = $rootScope.settings;
             }
         ],
     };

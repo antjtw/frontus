@@ -169,8 +169,9 @@ ownership.filter('issueUnitLabel', function() {
 
 ownership.filter('formatAmount', function() {
     return function(amount, settings, key) {
-        var nums = ["units", "forfeited", "amount"];
-        var moneys = ["ppshare", "price", "effectivepps", "valcap"]; 
+        var nums = ["units", "forfeited"];
+        var moneys = ["ppshare", "price", "effectivepps",
+                      "valcap", "amount"]; 
         if (!amount || (typeof(amount)!="string" && isNaN(amount))) {
             amount = null;
         } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {

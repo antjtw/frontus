@@ -7,9 +7,9 @@
          class="output second clickable"></div>
     -->
     <div class="output clickable">
-        {{data.u}}
+        {{data.u | formatAmount:settings:'units'}}
     </div>
     <div class="output second clickable">
-        {{data.a}}
+        {{data.a | formatAmount:settings:'amount'}}
     </div>
 </span>
