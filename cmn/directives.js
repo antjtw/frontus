@@ -97,24 +97,15 @@ m.directive('groupPeople', function(){
                 });
                 angular.forEach($scope.selectedGroup, function(group){
                     if(array.indexOf(group)=== -1){
-                        console.log(group)
                         indexDelete.push($scope.selectedGroup.indexOf(group));
                     };
                     
                });
-                console.log("to be deleted");
-                console.log(indexDelete);
                 if(indexDelete.length > 0){
                     for(var i = indexDelete.length -1; i >= 0; i--){
                         $scope.selectedGroup.splice(indexDelete[i], 1);
                     };
                 };
-                // for(var i = indexDelete.length -1; i >=0; i--){
-                //         $scope.selectedGroup.splice(indexDelete[i], 1);
-                //     }// 
-                
-             
-                // return $scope.selectedGroup; 
 
             };
 
@@ -131,9 +122,7 @@ m.directive('groupPeople', function(){
                     else{
                         $scope.selectedGroup = [];
                     }
-                    
-                    // $scope.fromFront($scope.people);
-                    // $scope.modifyGroups($scope.fromFront($scope.people));
+                   
             }, true);
             
 
@@ -156,16 +145,15 @@ m.directive('groupPeople', function(){
                         $scope.unChecked.push(group);
                     }
                 };
-                console.log($scope.unChecked);
                 return $scope.selectedGroup;
             };
 
       
             $scope.createGroups = function(person){
-                angular.forEach(person, function(info){
+                if($scope.selectedGroup.length > 0 || $scope.unChecked.length > 0 || $scope.selectedGroup.length > 0){
+                    angular.forEach(person, function(info){
                     SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
-                        var myInfo = data
-                        console.log(myInfo);
+                        var myInfo = data;
                         var smallGroup = [];
                         var bigGroup = [];
                         var newGroupsArray = []; 
@@ -215,7 +203,15 @@ m.directive('groupPeople', function(){
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
                     })
-                })
+                });
+                $route.reload();
+                $scope.$emit("notification:success", "Groups Changed")
+                }
+                else{
+                    $scope.$emit("notification:failure", "Nothing to change")
+                }
+                
+                
 
             }
 
