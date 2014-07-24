@@ -282,7 +282,6 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
             (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') ||
              ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer' && !$scope.doc.countersignable($rootScope.navState.role)))) {
             $scope.signaturestyle = {height: 180, width: 330 };
-            $scope.signatureURL = '/photo/user?id=signature:';
             $scope.sigModalUp();
         }
     };
