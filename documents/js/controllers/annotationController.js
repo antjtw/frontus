@@ -112,14 +112,13 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if (newval != oldval) {
             $scope.annot.val = ""; // clear out value since the type changed
             setDefaultText();
-            setPlaceholder();
         }
         // update type information TODO: move to annotation service / object
         $scope.annot.type_info = $scope.doc.annotation_types.filter(function(type) {
             return type.name == $scope.annot.whattype;
         })[0];
         if (!$scope.annot.type_info) {
-            $scope.annot.type_info = {}; // TODO: probably need better defaults
+            $scope.annot.type_info = {name: $scope.annot.whattype, display: $scope.annot.whattype}; // TODO: probably need better defaults
         }
         var numberCheck = function(val)
         {
@@ -291,19 +290,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $document.bind('mouseup', $scope.newmouseup);
     };
 
-    $scope.imageMine = function() {
-        var role = navState.role;
-        var whosign = $scope.annot.whosign;
-        return (role == "issuer" && whosign == "Issuer") ||
-               (role == "investor" && whosign == "Investor") ? true : false;
-    };
-    $scope.whosignssticky = function() {
-        var role = navState.role;
-        var whosign = $scope.annot.whosign;
-        return (role == "issuer" && whosign == "Investor") ||
-               (role == "investor" && whosign == "Issuer") ? true : false;
-    };
-
     $scope.openBox = function() {
         $scope.active.annotation = $scope.annot;
         if (navState.role == "issuer" && !$scope.doc.countersignable(navState.role)) {
@@ -316,13 +302,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.sigModalUp();
         }
     };
-
-    function setPlaceholder() {
-        $scope.whosignlabel = ($scope.annot.whosign == "Investor") ? "Recipient" : navState.name;
-        $scope.whattypelabel = Annotations.attributeLabel($scope.annot.whattype);
-        $scope.val_placeholder = $scope.whosignlabel + " " + $scope.whattypelabel;
-    }
-    setPlaceholder();
 
     function setDefaultText() {
         if ($scope.annot.val.length === 0) {
@@ -338,7 +317,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.annot.whosign = value;
         $scope.annot.val = "";
         setDefaultText();
-        setPlaceholder();
     };
 
     $scope.addLineBreaks = function($event) {
