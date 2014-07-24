@@ -33,7 +33,7 @@
                 <li ng-if="annot.type == 'text'">
                     <ul>
                         <li>
-                            <span>Who needs to complete?</span>
+                            <span>To be completed by</span>
                         </li>
                         <li>
                             <ul class="dropdown-list drop-selector">
@@ -57,7 +57,7 @@
                 <li>
                     <ul>
                         <li>
-                            <span>Type of Annotation?</span>
+                            <span>Annotation Type</span>
                         </li>
                         <select ui-select2="select2Options" ng-model="annot.whattype">
                             <option ng-repeat="type in doc.annotation_types" value="{{type.name}}">{{type.display}}</option>
