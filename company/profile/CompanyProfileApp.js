@@ -4,7 +4,7 @@ app.controller('CompContactCtrl',
         'payments', '$route', '$filter', '$location', '$http',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
                  payments, $route, $filter, $location, $http) {
-            if (navState.role == 'investor') {
+            if (navState.role === 'investor') {
                 document.location.href = "/app/home";
                 return;
             }
@@ -475,6 +475,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.createPeople = function(){
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
                 $scope.people = x;
+                console.log($scope.people);
                 SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                     angular.forEach(admins, function(admin) {
                         angular.forEach($scope.people, function(person) {
@@ -505,18 +506,20 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     });
                     $scope.sort = 'name';
                 });
+                console.log($scope.people);
+                $scope.allPeople = $scope.people;
             });
         };
         $scope.createPeople();
+
 
         $scope.allGroups = function(){
             SWBrijj.tblm('account.my_user_groups', ['json_array_elements']).then(function(data){
                 $scope.myGroups = data;
                 console.log($scope.myGroups);
-
             });
         };
-        $scope.allGroups();
+        // $scope.allGroups();
 
         // $scope.$watch('myGroups', function(){
         //     $scope.setGroups()
@@ -526,8 +529,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             angular.forEach($scope.people, function(person){
                 SWBrijj.tblmm('account.my_user_role', "email", person.email).then(function(data){
                     $scope.myGroups = data;
-                    angular.forEach($scope.myGroups, function(myGroups){
-                       
+                    angular.forEach($scope.myGroups, function(myGroups){                       
                         if(myGroups.groups == null){
                             person.groups = null;
                         }

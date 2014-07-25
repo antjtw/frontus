@@ -221,7 +221,7 @@ m.directive('groupPeople', function(){
 })
 m.directive('peopleFilter', function(){
     return {
-        scope: {ppl: '=selectedPeople'},
+        scope: {people: '=people'},
         restrict: 'E',
         templateUrl:'/cmn/partials/peopleFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
