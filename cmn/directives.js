@@ -146,7 +146,10 @@ m.directive('groupPeople', function(){
                     $scope.selectedGroup.splice(toDelete, 1);
                     if($scope.unChecked.indexOf(group)==-1){
                         $scope.unChecked.push(group);
-                    }
+                    };
+                    console.log($scope.unChecked);
+
+                    
                 };
                 return $scope.selectedGroup;
             };
@@ -186,12 +189,12 @@ m.directive('groupPeople', function(){
                             angular.forEach($scope.unChecked, function(unChecked){
                                 if(newGroupsArray.indexOf(unChecked) > -1){
                                      var toDelete = newGroupsArray.indexOf(unChecked);
+                                     console.log(unChecked);
                                      deleteInx.push(toDelete);
+                                     newGroupsArray.splice(toDelete, 1)
                                 };
                             });
-                            for(var i = deleteInx.length -1; i >=0; i--){
-                                newGroupsArray.splice(deleteInx[i], 1);
-                            }
+                            console.log(newGroupsArray);
                         }
                         if($scope.groupName.length > 0){
                             console.log("hi")
