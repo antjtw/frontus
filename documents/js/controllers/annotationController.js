@@ -293,8 +293,18 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $document.bind('mouseup', $scope.newmouseup);
     };
 
+    $scope.setDatepickerCurrent = function(ev) {
+        // use timeout so we're certain to be set after openBox for this click;
+        $timeout(function() {
+            $scope.active.datepicker = ev.target;
+        });
+    };
+
     $scope.openBox = function() {
         $scope.active.annotation = $scope.annot;
+        // kill any open datepicker if needed
+        $($scope.active.datepicker).datepicker("hide");
+        $scope.active.datepicker = null;
         if (navState.role == "issuer" && !$scope.doc.countersignable(navState.role)) {
             $scope.getme = true;
         }

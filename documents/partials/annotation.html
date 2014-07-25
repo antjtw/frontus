@@ -22,7 +22,7 @@
                 </select>
             </div>
             <div ng-if="dateBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle">
+                <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)">
             </div>
         </fieldset>
         <fieldset ng-if="annot.type == 'highlight'" >
