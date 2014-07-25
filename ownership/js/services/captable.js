@@ -319,13 +319,14 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         return calculate.primaryMeasure( cellSecurityType(cell) );
     }
     function cellSecurityType(cell) {
-        if (cell.security) {
+        if (cell && cell.security) {
             return captable.securities
                 .filter(function(el) {
                     return el && el.name == cell.security && el.attrs;
                 })[0].attrs.security_type;
         }
     }
+    this.cellSecurityType = cellSecurityType;
     function setCellUnits(cell) {
         if (cellPrimaryMeasure(cell) == "units") {
             cell.u = cell.ukey = sum_ledger(cell.ledger_entries);

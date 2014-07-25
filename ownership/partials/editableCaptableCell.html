@@ -1,0 +1,47 @@
+<span ng-switch on="editable">
+    <span ng-class="{tranSelected:
+                        selectedCell
+                        && selectedCell.investor == data.investor
+                        && selectedCell.security == data.security}"
+          class="captablepair-box"
+          ng-switch-default>
+        <input ng-if="!isDebt(data);"
+               class="captablepair first-box"
+               maxlength="18"
+               placeholder="{{captable.cellSecurityType(key)
+                              | securityUnitLabel}}"
+               ui-event="{focus: 'selectCell(data)',
+                           blur: 'saveTran(activeTran)'}"
+               ng-change="tranChangeU(data.u, data.security)"
+               ng-model='data.u'
+               onpaste="return false"
+               ng-paste="numberPaste($event, row, data.security, 'u');"
+               onkeydown="testForEnter();">
+        <input ng-if="isDebt(data);"
+               class="captablepair default-pointer first-box"
+               disabled>
+        <input class="captablepair last-box"
+               maxlength="18"
+               placeholder="paid"
+               ui-event="{focus : 'selectCell(data)',
+                           blur : 'saveTran(activeTran)'}"
+               ng-change="tranChangeA(data.a)"
+               ng-model='data.a'
+               onpaste="return false"
+               ng-paste="numberPaste($event, row, data.security, 'a');"
+               onkeydown="testForEnter();">
+    </span>
+    <span class="captablepair-box"
+          ng-switch-when="0">
+        <input disabled
+               class="captablepair"
+               placeholder="shares"
+               ng-model='data.u'
+               onkeydown="testForEnter();">
+        <input disabled
+               class="captablepair"
+               placeholder="paid"
+               ng-model='data.a'
+               onkeydown="testForEnter();">
+    </span>
+</span>

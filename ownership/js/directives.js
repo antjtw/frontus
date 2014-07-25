@@ -132,6 +132,28 @@ own.directive('captableCell', [function() {
         ],
     };
 }]);
+own.directive('editableCaptableCell', [function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {data: '=',
+                editable: '=',
+                selectedCell: '=selectedCell'},
+        templateUrl: '/ownership/partials/editableCaptableCell.html',
+        controller: ["$scope", "$rootScope", "calculate", "captable",
+            function($scope, $rootScope, calculate, captable) {
+                $scope.settings = $rootScope.settings;
+                $scope.captable = captable;
+                $scope.isDebt = function(cell) {
+                    if (!cell) return;
+                    var type = captable.cellSecurityType($scope.data);
+                    console.log(type);
+                    return type == "Debt" || type == "Safe";
+                };
+            }
+        ],
+    };
+}]);
 own.directive('transactionAttributes', [function() {
     return {
         restrict: 'E',

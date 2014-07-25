@@ -765,7 +765,7 @@ var captableController = function(
             transaction = transaction[0];
         }
         // FIXME all validation / data massaging should be done in 1 function
-        captable.massageTransactionValues(transaction);
+        //captable.massageTransactionValues(transaction);
 
         if (captable.tranIsInvalid(transaction)) { return }
         else {
@@ -2015,17 +2015,6 @@ var captableController = function(
         });
         return type;
     };
-    /*
-    $scope.grantbyIssue = function (key) {
-        var type = "";
-        angular.forEach($scope.ct.securities, function(issue) {
-            if (issue.issue == key) {
-                type = $filter('issueUnitLabel')(issue);
-            }
-        });
-        return type
-    };
-    */
 
     //switches the sidebar based on the type of the issue
     $scope.funcformatAmount = function (amount) {

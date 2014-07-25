@@ -166,6 +166,18 @@ ownership.filter('issueUnitLabel', function() {
         }
     };
 });
+ownership.filter('securityUnitLabel', function() {
+    return function(sec_type) {
+        switch (sec_type) {
+            case "Option":
+                return "options";
+            case "Warrant":
+                return "warrants";
+            default:
+                return "shares";
+        }
+    };
+});
 
 ownership.filter('formatAmount', function() {
     return function(amount, settings, key) {

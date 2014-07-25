@@ -720,56 +720,18 @@
                         </span>
                     </span>
                 </td>
-                <td ng-repeat="key in ct.security_names | orderBy:issueSort track by $index">
+                <td ng-repeat="key in ct.security_names
+                               | orderBy:issueSort track by $index">
                     <span ng-class="{'tran-highlight':tourstate==4}">
                         <span class="next-button"
                               ng-click="closeTour(); tourNotification();">
                             Done!
                         </span>
                     </span>
-                    <span ng-switch on="row.editable">
-                        <span ng-class="{tranSelected:row.cells[key].state}"
-                              class="captablepair-box"
-                              ng-switch-default>
-                            <input ng-show="isDebt(key);"
-                                   class="captablepair first-box"
-                                   maxlength="18"
-                                   placeholder="{{grantbyIssue(key)}}"
-                                   ui-event="{focus : 'getActiveTransaction(row.name, key)',
-                                               blur : 'saveTran(activeTran)'}"
-                                   ng-change="tranChangeU(row.cells[key].u, key)"
-                                   ng-model='row.cells[key].u'
-                                   onpaste="return false"
-                                   ng-paste="numberPaste($event, row, key, 'u');"
-                                   onkeydown="testForEnter();">
-                            <input ng-hide="isDebt(key);"
-                                   class="captablepair default-pointer first-box"
-                                   disabled>
-                            <input class="captablepair last-box"
-                                   maxlength="18"
-                                   placeholder="paid"
-                                   ui-event="{focus : 'getActiveTransaction(row.name, key)',
-                                               blur : 'saveTran(activeTran)'}"
-                                   ng-change="tranChangeA(row.cells[key].a)"
-                                   ng-model='row.cells[key].a'
-                                   onpaste="return false"
-                                   ng-paste="numberPaste($event, row, key, 'a');"
-                                   onkeydown="testForEnter();">
-                        </span>
-                        <span class="captablepair-box"
-                              ng-switch-when="0">
-                            <input disabled
-                                   class="captablepair"
-                                   placeholder="shares"
-                                   ng-model='row.cells[key]["u"]'
-                                   onkeydown="testForEnter();">
-                            <input disabled
-                                   class="captablepair"
-                                   placeholder="paid"
-                                   ng-model='row.cells[key]["a"]'
-                                   onkeydown="testForEnter();">
-                        </span>
-                    </span>
+                    <editable-captable-cell
+                        data="cellFor(row.name, key)"
+                        editable="row.editable"
+                        selected-cell="selectedCell">
                 </td>
             </tr>
             </tbody>
@@ -799,8 +761,7 @@
                                hoverable: cellFor(row.name, key).a
                                           || cellFor(row.name, key).u}"
                     ng-repeat="key in ct.security_names track by $index">
-                    <captable-cell data="cellFor(row.name, key)"
-                                   settings="settings">
+                    <captable-cell data="cellFor(row.name, key)">
                 </td>
             </tr>
             </tbody>
