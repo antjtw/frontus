@@ -10,7 +10,7 @@
             <div class="textarea-container" ng-if="!(enumBoxMode() || dateBoxMode())">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
-                          placeholder="{{(annot.forRole(navState.role) ? navState.name : 'Recipient') + ' ' + annot.type_info.display}}"
+                          placeholder="{{annot.type_info.display}}"
                           ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum'"
                           ng-keyup="addLineBreaks($event)" ng-model="annot.val" style="resize:none"
                           class="row-fluid" ng-style="annotationSizeStyle" ng-click="openBox()"/>
