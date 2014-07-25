@@ -222,15 +222,17 @@ m.directive('groupPeople', function(){
 m.directive('peopleFilter', function(){
     return {
         scope: {people: '=people',
-                filter: '=filter'},
+                filterParam: '=filterParam'},
         restrict: 'E',
         templateUrl:'/cmn/partials/peopleFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
-            $scope.showParam = function(){
-                alert($scope.filter);
-            }
+          
+
+            $scope.$watch('filterParam', function(){
+                alert($scope.filterParam)
+            }, true)
 
             $scope.getContacts = function(){
                 var promise = $q.defer();

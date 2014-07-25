@@ -464,9 +464,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.filterParam = ""
         $scope.showParam = function(){
-            alert($scope.filterParam);
+            alert("my param" + $scope.filterParam);
         }
-        $scope.showParam;
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {

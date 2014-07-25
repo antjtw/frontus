@@ -13,6 +13,7 @@
                             <input type="text" class="search-box" ng-model="filterText">
                             
                         </div>
+                       hi {{filterParam}}
                     </div>
             <!--         admin dropdowns -->
                     <div class="pull-left" ng-show="groupPeople.length > 0">
@@ -132,7 +133,7 @@
         <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filter">
-                    <people-filter people="allPeople" filter="filterParam"></people-filter>
+                    <people-filter people="allPeople" filter-param="filterParam"></people-filter>
                 </tab>
                 <tab heading = "Message Activity">
                     <div style="clear: both;">
