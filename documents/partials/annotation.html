@@ -6,7 +6,7 @@
         <span data-icon="&#xe00f;"></span>
     </span>
     <div>
-        <fieldset ng-if="annot.type == 'text'" ng-click="openBox() && $event.stopPropagation();" ng-mousedown="$event.stopPropagation();" ng-style="annotationSizeStyle" ng-mouseenter="boxHover = true" ng-mouseleave="boxHover = false">
+        <fieldset ng-if="annot.type == 'text'" ng-click="openBox() && $event.stopPropagation();" ng-mousedown="$event.stopPropagation();" ng-mouseenter="boxHover = true" ng-mouseleave="boxHover = false">
             <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode()) && (boxHover || active.annotation == annot)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
