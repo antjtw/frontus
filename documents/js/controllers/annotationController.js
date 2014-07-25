@@ -106,29 +106,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                 setDefaultText();
             }
         }
-        if (newval == "Signature") {
-            $scope.annot.fontsize = 18;
-            if ($scope.annot.position.size.height < 37) {
-                $scope.annot.position.size.height = 37;
-            }
-        }
-        else {
-            $scope.annot.fontsize = 12;
-        }
-        if (newval == 'date' && $scope.annot.val === "") {
-            // an empty string causes oddities in the date picker
-            $scope.annot.val = null;
-        }
-        // update type information TODO: move to annotation service / object
-        $scope.annot.type_info = $scope.doc.annotation_types.filter(function(type) {
-            return type.name == $scope.annot.whattype;
-        })[0];
-        if (!$scope.annot.type_info) {
-            $scope.annot.type_info = {name: $scope.annot.whattype, display: $scope.annot.whattype}; // TODO: probably need better defaults
-        }
-        if ($scope.annot.type_info.required) {
-            $scope.annot.required = true;
-        }
+        // update type information
+        $scope.annot.updateTypeInfo($scope.doc.annotation_types);
     });
 
     $scope.unusedType = function(type) {

@@ -409,6 +409,26 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             name: "text",
             display: "Text"
         };
+
+        var annot = this;
+        $rootScope.$watch(function() {
+            return annot.whattype;
+        }, function(new_type, old_type) {
+            if (new_type == "Signature") {
+                annot.fontsize = 18;
+                if (annot.position.size.height < 37) {
+                    annot.position.size.height = 37;
+                }
+            }
+            else {
+                annot.fontsize = 12;
+            }
+            if (new_type == 'date' && this.val === "") {
+                // an empty string causes oddities in the date picker
+                annot.val = null;
+            }
+
+        });
     };
 
     Annotation.prototype = {
@@ -487,6 +507,19 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         forRole: function(role) {
             return ((this.whosign == "Issuer" && role == "issuer") ||
                     (this.whosign == "Investor" && role == "investor"));
+        },
+        updateTypeInfo: function(annotation_types) {
+            // called when either whattype (via annotationController) or our doc annotation_types change
+            var annot = this;
+            this.type_info = annotation_types.filter(function(type) {
+                return type.name == annot.whattype;
+            })[0];
+            if (!this.type_info) {
+                this.type_info = {name: this.whattype, display: this.whattype}; // TODO: probably need better defaults
+            }
+            if (this.type_info.required) {
+                this.required = true;
+            }
         },
     };
 
