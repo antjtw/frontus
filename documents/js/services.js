@@ -351,112 +351,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
 
 // ANNOTATIONS
 
-var Annotation = function() {
-    this.position = {
-        coords: {
-            //x: 0,
-            //y: 0,
-        },
-        size: {
-            //width: 0,
-            //height: 0
-        },
-        docPanel: {
-            // width: 928, (.docViewer, see app.css)
-            // height: 1201ish (calculated)
-        }
-    };
-    this.type = "text";
-    this.val = '';
-    this.fontsize = 12;
-    this.whosign = "Investor";
-    this.whattype = "Text";
-    this.required = true;
-    this.type_info = {
-        name: "text",
-        display: "Text"
-    };
-};
-
-Annotation.prototype = {
-    // to and from JSON hear doesn't refer to actual json, just the intermediary (legacy) format used for transport
-    parseFromJson: function(json) {
-        this.page = json[0][0];
-        this.position = {
-            coords: {
-                x: json[0][1][0],
-                y: json[0][1][1]
-            },
-            size: {
-                width: json[0][2][2],
-                height: json[0][2][3]
-            },
-            docPanel: {
-                // we probably shouldn't trust these numbers
-                // reset them based on current docpanel size,
-                // and let user move annotations if needed
-                width: json[0][3],
-                height: json[0][4]
-            }
-        };
-        this.type = json[1];
-        this.val = json[2][0];
-        this.fontsize = json[3][0];
-        this.investorfixed = json[4].investorfixed;
-        this.whosign = json[4].whosign;
-        this.whattype = json[4].whattype;
-        this.required = json[4].required;
-        return this;
-    },
-    toJson: function() {
-        var json = [];
-        var position = [];
-        position.push(this.page);
-        position.push([this.position.coords.x, this.position.coords.y, 0, 0]);
-        position.push([0, 0, this.position.size.width, this.position.size.height]);
-        position.push(this.position.docPanel.width); // document page width
-        position.push(this.position.docPanel.height); // document page height
-        json.push(position);
-        json.push(this.type);
-        if (this.val != null) {
-            json.push([this.val]);
-        } else {
-            json.push([""]);
-        }
-        json.push([this.fontsize]);
-        json.push({
-            investorfixed: this.investorfixed,
-            whosign: this.whosign,
-            whattype: this.whattype,
-            required: this.required
-        });
-        return json;
-    },
-    filled: function(signaturepresent, role) {
-        // signature present comes from the account
-        if (!this.forRole(role)) {
-            return false;
-        }
-        var type = this.type_info.typename;
-        if (["int8", "int4", "float8"].indexOf(type) != -1) {
-            var num = Number(this.val);
-            return (!isNaN(num) && this.val.length > 0);
-        } else if (type == "enum") {
-            return this.type_info.labels.indexOf(this.val) != -1;
-        } else {
-            return ((this.val && this.val.length > 0) ||
-                    (this.whattype == "ImgSignature" && signaturepresent));
-        }
-    },
-    isCountersign: function() {
-        return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature");
-    },
-    forRole: function(role) {
-        return ((this.whosign == "Issuer" && role == "issuer") ||
-                (this.whosign == "Investor" && role == "investor"));
-    },
-};
-
 docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootScope) {
     // data structure contents
     // aa -> [annot0...annotn-1]
@@ -490,6 +384,115 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     //
     // [i][4] other -> investorfixed, whosign, whattype, and required
 
+    var Annotation = function() {
+        this.position = {
+            coords: {
+                //x: 0,
+                //y: 0,
+            },
+            size: {
+                //width: 0,
+                //height: 0
+            },
+            docPanel: {
+                // width: 928, (.docViewer, see app.css)
+                // height: 1201ish (calculated)
+            }
+        };
+        this.type = "text";
+        this.val = '';
+        this.fontsize = 12;
+        this.whosign = "Investor";
+        this.whattype = "Text";
+        this.required = true;
+        this.type_info = {
+            name: "text",
+            display: "Text"
+        };
+    };
+
+    Annotation.prototype = {
+        // to and from JSON hear doesn't refer to actual json, just the intermediary (legacy) format used for transport
+        parseFromJson: function(json) {
+            this.page = json[0][0];
+            this.position = {
+                coords: {
+                    x: json[0][1][0],
+                    y: json[0][1][1]
+                },
+                size: {
+                    width: json[0][2][2],
+                    height: json[0][2][3]
+                },
+                docPanel: {
+                    // we probably shouldn't trust these numbers
+                    // reset them based on current docpanel size,
+                    // and let user move annotations if needed
+                    width: json[0][3],
+                    height: json[0][4]
+                }
+            };
+            this.type = json[1];
+            this.val = json[2][0];
+            this.fontsize = json[3][0];
+            this.investorfixed = json[4].investorfixed;
+            this.whosign = json[4].whosign;
+            this.whattype = json[4].whattype;
+            this.required = json[4].required;
+            return this;
+        },
+        toJson: function() {
+            var json = [];
+            var position = [];
+            position.push(this.page);
+            position.push([this.position.coords.x, this.position.coords.y, 0, 0]);
+            position.push([0, 0, this.position.size.width, this.position.size.height]);
+            position.push(this.position.docPanel.width); // document page width
+            position.push(this.position.docPanel.height); // document page height
+            json.push(position);
+            json.push(this.type);
+            if (this.val != null) {
+                json.push([this.val]);
+            } else {
+                json.push([""]);
+            }
+            json.push([this.fontsize]);
+            json.push({
+                investorfixed: this.investorfixed,
+                whosign: this.whosign,
+                whattype: this.whattype,
+                required: this.required
+            });
+            return json;
+        },
+        filled: function(signaturepresent, role) {
+            // signature present comes from the account
+            if (!this.forRole(role)) {
+                return false;
+            }
+            var type = this.type_info.typename;
+            if (["int8", "int4", "float8"].indexOf(type) != -1) {
+                var num = Number(this.val);
+                return (!isNaN(num) && this.val.length > 0);
+            } else if (type == "enum") {
+                return this.type_info.labels.indexOf(this.val) != -1;
+            } else {
+                return ((this.val && this.val.length > 0) ||
+                        (this.whattype == "ImgSignature" && signaturepresent));
+            }
+        },
+        isCountersign: function() {
+            return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature");
+        },
+        forRole: function(role) {
+            return ((this.whosign == "Issuer" && role == "issuer") ||
+                    (this.whosign == "Investor" && role == "investor"));
+        },
+    };
+
+    this.createBlankAnnotation = function() {
+        return new Annotation();
+    };
 
     var doc_annotations = {};
 
