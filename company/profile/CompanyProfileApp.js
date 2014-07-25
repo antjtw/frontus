@@ -462,6 +462,12 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.sidebarPage = null;
         // $scope.hideRail = false;
 
+        $scope.filterParam = ""
+        $scope.showParam = function(){
+            alert($scope.filterParam);
+        }
+        $scope.showParam;
+
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
                 x.preventDefault();
@@ -488,6 +494,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
                             if (person.email == admin.email) {
                                 person.role = "issuer";
+                            }
+                            if(person.email != admin.email){
+                                person.role = "investor";
                             }
                         });
                     });

@@ -221,19 +221,17 @@ m.directive('groupPeople', function(){
 })
 m.directive('peopleFilter', function(){
     return {
-        scope: {people: '=people'},
+        scope: {people: '=people',
+                filter: '=filter'},
         restrict: 'E',
         templateUrl:'/cmn/partials/peopleFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
-
-            $scope.selectedParam = ""
-
             $scope.showParam = function(){
-                alert($scope.selectedParam);
+                alert($scope.filter);
             }
-         
+
             $scope.getContacts = function(){
                 var promise = $q.defer();
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
