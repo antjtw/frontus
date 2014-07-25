@@ -1841,6 +1841,7 @@ annotation-list .annotmark {
     margin-top: 5px;
     margin-left: 25px;
     cursor: pointer;
+    text-transform: capitalize;
 }
 
 annotation-list .textIcon {
