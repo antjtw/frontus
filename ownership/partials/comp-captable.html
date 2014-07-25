@@ -825,11 +825,11 @@
                     ng-repeat="key in ct.security_names | orderBy:issueSort track by $index">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': !toggleView()}"
-                             ng-bind="formatAmount(row.cells[key]['u'])"
+                             ng-bind="key"
                              class="output clickable">
                          </div>
                          <div ng-class="{'editview': !toggleView()}"
-                              ng-bind="formatDollarAmount(row.cells[key]['a'])"
+                              ng-bind="key"
                               class="output second clickable">
                          </div>
                     </span>
@@ -855,6 +855,7 @@
                     <input class="input-right"
                            disabled
                            value="100.00%">
+                    <!-- should we actually calculate this? -->
                 </td>
                 <td class="tableFields">
                 </td>
@@ -863,11 +864,11 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': !toggleView()}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one)}}
+                            {{captable.securityTotalUnits(one) | formatAmount:settings:'units'}}
                         </div>
-                        <div ng-bind="formatDollarAmount(colTotal(one, ct.rows, 'a'))"
-                             ng-class="{'editview': !toggleView()}"
+                        <div ng-class="{'editview': !toggleView()}"
                              class="output second footer">
+                            {{captable.securityTotalAmount(one) | formatAmount:settings:'amount'}}
                         </div>
                     </span>
                 </td>
