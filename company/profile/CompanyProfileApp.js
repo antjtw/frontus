@@ -462,10 +462,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.sidebarPage = null;
         // $scope.hideRail = false;
 
-        $scope.filterParam = ""
-        $scope.showParam = function(){
-            alert("my param" + $scope.filterParam);
-        }
+        $scope.filterParam = {};
+        
+
 
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {

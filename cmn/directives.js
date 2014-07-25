@@ -228,11 +228,12 @@ m.directive('peopleFilter', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
+            $scope.assignFilter = function(assignMe){
+                $scope.filterParam.param = assignMe;
+            }
           
 
-            $scope.$watch('filterParam', function(){
-                alert($scope.filterParam)
-            }, true)
+  
 
             $scope.getContacts = function(){
                 var promise = $q.defer();

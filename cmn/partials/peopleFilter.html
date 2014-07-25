@@ -17,7 +17,7 @@
                                         <span style="cursor:pointer" ng-click = "showRoles= !showRoles">Roles</span>
                                         <div ng-show = "!showRoles" class="showGrouping">
                             
-                                            <div class="tinycol" ng-click="filter = 'issuer'" style="cursor:pointer">Admins</div>
+                                            <div class="tinycol" ng-click="assignFilter('investor')" style="cursor:pointer">Admins</div>
                                             <div class="tinycol left">({{myAdmins}})</div>
                                      
                                             <div class="tinycol" ng-click="filterParam = 'investor'" style="cursor:pointer"> Shareholders</div>
@@ -40,7 +40,7 @@
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" style="cursor:pointer" style="cursor:pointer" ng-click = "showGroups = !showGroups"></span>
                                         <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
                                         <div ng-show="!showGroups" class="showGrouping" ng-repeat = "myGroup in myGroups">
-                                            <div class="tinycol" ng-click="$parent.filterParam = myGroup.ind_group" style="cursor:pointer">{{myGroup.ind_group}}</div>
+                                            <div class="tinycol" ng-click="assignFilter(myGroup.ind_group)" style="cursor:pointer">{{myGroup.ind_group}}</div>
                                             <div class="tinycol left"> ({{myGroup.count}})
                                             </div>
                                         </div>
