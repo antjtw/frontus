@@ -484,7 +484,8 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.exportVersionPdf = function() {
             $scope.$emit("notification:success", "Export in progress.");
-            SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, true).then(function(url) {
+            var truthiness = navState.role == "investor" ? false : true;
+            SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, truthiness).then(function(url) {
                 document.location.href = url;
             }).except(function(x) {
                     console.log(x);
