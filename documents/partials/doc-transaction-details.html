@@ -7,7 +7,7 @@
 </div>
 <div ng-show="doc.issue">
     <div class="bottom-padded">
-        <span>Fields necessary to complete a {{doc.transaction_type}} for {{doc.issue}}</span>
+        <span>Fields necessary to add a cap table entry into {{doc.issue}}</span>
         <div class="required-fields" ng-class="{'field-completed': (doc.hasFilledAnnotation(field.name) || doc.hasOtherPartyAnnotation(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required">
             <span><span data-icon="&#xe052;" ng-show="doc.hasFilledAnnotation(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
             <span>{{field.display}}</span>

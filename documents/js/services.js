@@ -271,6 +271,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             });
             return num;
         },
+        dropdownDisplay: function(type) {
+            if (type.required) {
+                return type.display + " (Required)"
+            } else {
+                return type.display
+            }
+        },
+        annotationOrder: function(type) {
+            if (type.display == "Text") {
+                return 0
+            }
+            else if (type.required) {
+                return 0 + type.display
+            } else if (type.required == false) {
+                return 1 + type.display
+            } else {
+                return 2 + type.display
+            }
+        },
         annotable: function(role) {
             if (role == "investor")
                 return this.investorCanAnnotate();
