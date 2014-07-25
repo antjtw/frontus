@@ -63,7 +63,6 @@ m.directive('groupPeople', function(){
 
             $scope.doNotCheck = function(person){
                 var deleteArray = [];
-                console.log($scope.fromFront(person));
                 var allGroups = $scope.fromFront(person);
                 angular.forEach(person, function(elem){
                     var elemGroup = elem.groups.split(", ");
@@ -73,39 +72,22 @@ m.directive('groupPeople', function(){
                         }
                     });
                            
-                })
-                console.log(deleteArray);         
+                })       
                 return deleteArray;
             }
-            $scope.doNotCheck($scope.people);
-           //  $scope.groupsToRemove = function(person){
-           //      console.log($scope.fromFront(person));
-           //      var checkGroups = $scope.fromFront(person);
-           //      var toRemove = []
-           //      console.log(checkGroups);
-           //      angular.forEach(person, function(thing){
-           //          if(thing.groups != undefined){
-           //              SWBrijj.tblmm('account.my_user_role', 'email', thing.email).then(function(data){
-           //                  var myGroups = data;
-           //                  angular.forEach(myGroups, function(gr){
-           //                      var preGroup = JSON.parse(gr.groups);
-           //                      angular.forEach(checkGroups, function(group){
-           //                          if(preGroup.indexOf(group)=== -1){
-           //                              toRemove.push(group);
-           //                          };
-           //                      });
+            // $scope.doNotCheck($scope.people);
 
-           //                  });
-           //                  console.log(toRemove);                        
-           //              })
-                        
-           //          }
-           //      });
-           //    console.log(toRemove)
-           //  }
-           // $scope.groupsToRemove($scope.people);
-
-
+            $scope.checkBox = function(person){
+                var removeGroups = $scope.doNotCheck(person);
+                var allGroups = $scope.fromFront(person);
+                angular.forEach(allGroups, function(group){
+                    if(removeGroups.indexOf(group) === -1){
+                        $scope.selectedGroup.push(group);
+                    };
+                });
+                return($scope.selectedGroup)
+            }
+            $scope.checkBox($scope.people);
 
 
 
