@@ -1640,6 +1640,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     cursor: pointer;
     /* prevent highlight on creation */
     user-select: none;
+    -ms-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
 }
