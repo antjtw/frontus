@@ -400,7 +400,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                          var temp_annots = JSON.parse($scope.lib.iss_annotations);
                          temp_annots.forEach(function(annot) {
                              // TODO: we're creating an Annotation object and destroying it for no good reason
-                             var tmp = Annotations.createBlankAnnotation().parseFromJson(annot);
+                             var tmp = Annotations.createBlankAnnotation().parseFromJson(annot, $scope.doc.annotation_types);
                              if (tmp.isCountersign()) {
                                  annots.push(annot);
                              }
@@ -413,7 +413,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              }
                          }
                      }
-                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
+                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots, $scope.doc.annotation_types);
                      var sticky;
                      for (var i = 0; i < annots.length; i++) {
                          var annot = annots[i];

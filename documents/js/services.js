@@ -128,6 +128,15 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     var Document = function() {
         this.annotations = [];
         this.annotation_types = angular.copy(defaultTypes);
+
+        var doc = this;
+        $rootScope.$watch(function() {
+            return doc.annotation_types;
+        }, function(new_attrs) {
+            doc.annotations.forEach(function(annot) {
+                annot.updateTypeInfo(new_attrs);
+            });
+        });
     };
 
     Document.prototype = {
@@ -234,6 +243,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             this.transaction_type = viable_actions.purchase ? "purchase" : "grant";
             SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
             updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
+            this.annotations.forEach(function(annot) {
+                annot.updateTypeInfo(this.annotation_types);
+            });
         },
         hasOtherPartyAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
@@ -333,6 +345,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
         if (oldDoc.issue_type) {
             updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types);
+            oldDoc.annotations.forEach(function(annot) {
+                annot.updateTypeInfo(oldDoc.annotation_types);
+            });
         }
         if (oldDoc.tags) {
             try {
@@ -433,7 +448,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
 
     Annotation.prototype = {
         // to and from JSON hear doesn't refer to actual json, just the intermediary (legacy) format used for transport
-        parseFromJson: function(json) {
+        parseFromJson: function(json, annotation_types) {
             this.page = json[0][0];
             this.position = {
                 coords: {
@@ -459,6 +474,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             this.whosign = json[4].whosign;
             this.whattype = json[4].whattype;
             this.required = json[4].required;
+            this.updateTypeInfo(annotation_types);
             return this;
         },
         toJson: function() {
@@ -539,7 +555,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         return doc_annotations[doc_id];
     };
 
-    this.setDocAnnotations = function(doc_id, annotations) {
+    this.setDocAnnotations = function(doc_id, annotations, annotation_types) {
         if (!doc_annotations[doc_id]) {
             doc_annotations[doc_id] = [];
         } else {
@@ -548,7 +564,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
         }
         annotations.forEach(function(annot) {
-            var new_annot = (new Annotation()).parseFromJson(annot);
+            var new_annot = (new Annotation()).parseFromJson(annot, annotation_types);
             doc_annotations[doc_id].push(new_annot);
         });
         return doc_annotations[doc_id];
