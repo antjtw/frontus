@@ -279,7 +279,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             }
         },
         annotationOrder: function(type) {
-            if (type.required) {
+            if (type.display == "Text") {
+                return 0
+            }
+            else if (type.required) {
                 return 0 + type.display
             } else if (type.required == false) {
                 return 1 + type.display
