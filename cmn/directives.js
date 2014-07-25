@@ -227,6 +227,12 @@ m.directive('peopleFilter', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
+
+            $scope.selectedParam = ""
+
+            $scope.showParam = function(){
+                alert($scope.selectedParam);
+            }
          
             $scope.getContacts = function(){
                 var promise = $q.defer();
