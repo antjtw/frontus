@@ -230,11 +230,9 @@ m.directive('peopleFilter', function(){
 
             $scope.assignFilter = function(assignMe){
                 $scope.filterParam.param = assignMe;
+                console.log(assignMe);
             }
           
-
-  
-
             $scope.getContacts = function(){
                 var promise = $q.defer();
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -244,7 +242,6 @@ m.directive('peopleFilter', function(){
                 });
                 return promise.promise
             };
-            // $scope.getContacts();
             // thing is scope.mycontacts because that is what the promise resolves
             $scope.getUserRoles = function(){
                 SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){

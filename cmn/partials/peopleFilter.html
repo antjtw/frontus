@@ -1,9 +1,6 @@
 <div class="row-fluid">
 <div class="message-side">
-   <!--  <div ng-repeat = "person in people">
-        {{person.role}}
-    </div> -->
-    {{people}}
+
 
  <div class="messages tabbable">            
     <ul class="activity-feed2">
@@ -17,10 +14,10 @@
                                         <span style="cursor:pointer" ng-click = "showRoles= !showRoles">Roles</span>
                                         <div ng-show = "!showRoles" class="showGrouping">
                             
-                                            <div class="tinycol" ng-click="assignFilter('investor')" style="cursor:pointer">Admins</div>
+                                            <div class="tinycol" ng-click="assignFilter('issuer')" style="cursor:pointer">Admins</div>
                                             <div class="tinycol left">({{myAdmins}})</div>
                                      
-                                            <div class="tinycol" ng-click="filterParam = 'investor'" style="cursor:pointer"> Shareholders</div>
+                                            <div class="tinycol" ng-click="assignFilter()" style="cursor:pointer"> Shareholders</div>
                                             <div class="tinycol left"> ({{myShareholders}})
                                             </div>
 
