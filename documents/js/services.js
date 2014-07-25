@@ -226,7 +226,7 @@ Annotation = function() {
     };
     this.type = "text";
     this.val = '';
-    this.fontsize = 12;
+    this.fontsize = 14;
     this.whosign = "Investor";
     this.whattype = "Text";
     this.required = true;
