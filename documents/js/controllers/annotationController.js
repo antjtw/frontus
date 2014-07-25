@@ -345,7 +345,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         // note that issuers see it in the blue popup, so it's always false for them
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'enum' &&
-               $scope.active.annotation == $scope.annot &&
                $scope.annot.forRole(navState.role)&&
                navState.role == 'investor';
     };
@@ -355,7 +354,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         // note that issuers see it in the blue popup, so it's always false for them
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'date' &&
-               $scope.active.annotation == $scope.annot &&
                $scope.annot.forRole(navState.role) &&
                navState.role == 'investor';
     };
