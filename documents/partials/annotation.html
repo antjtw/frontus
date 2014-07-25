@@ -16,7 +16,7 @@
                           class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <select ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
+                <select class="height-force" ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
                     <option></option>
                     <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>

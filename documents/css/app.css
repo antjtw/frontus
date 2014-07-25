@@ -2090,3 +2090,8 @@ doc-transaction-details > div > div > button {
     margin-bottom: 5px;
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
+
+
+.select2-container.height-force {
+    height: 30px !important;
+}
