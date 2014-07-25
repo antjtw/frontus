@@ -1638,6 +1638,10 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 .sticky textarea[readonly] {
     background-color: #fff;
     cursor: pointer;
+    /* prevent highlight on creation */
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 .sticky fieldset .select2-container .select2-choice {
