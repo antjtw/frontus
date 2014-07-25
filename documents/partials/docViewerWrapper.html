@@ -39,6 +39,18 @@
                 </li>
             </ul>
         </div>
+        <div ng-show="completeDoc()" class="box-button pull-right"
+             ng-click="downloadPDF();"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe007;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Download</span>
+                </li>
+            </ul>
+        </div>
     </subnav>
     <div modal="tourModal" close="tourclose();" options="touropts">
         <div class="modal-title">
