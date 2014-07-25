@@ -101,7 +101,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.$watch('annot.whattype', function(newval, oldval) {
         if (newval != oldval) { // don't run this on the first $watch call
-            if ($scope.annot.type != highlight && newval != "date") {
+            if ($scope.annot.type != 'highlight' && newval != "date") {
                 $scope.annot.val = ""; // clear out value since the type changed
                 setDefaultText();
             }
