@@ -232,7 +232,16 @@ m.directive('peopleFilter', function(){
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
 
             $scope.assignFilter = function(assignMe){
-                $scope.filterParam.param = assignMe;
+                if($scope.filterParam.param ===undefined){
+                    $scope.filterParam.param = assignMe;
+                }
+                else if($scope.filterParam.param != assignMe){
+                    $scope.filterParam.param = assignMe;
+                }
+                else if($scope.filterParam.param == assignMe){
+                    $scope.filterParam.param = undefined;
+                }
+                console.log($scope.filterParam.param)
                 console.log(assignMe);
             }
           

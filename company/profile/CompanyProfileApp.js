@@ -494,7 +494,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                                 person.role = "issuer";
                             }
                             if(person.email != admin.email){
-                                person.role = "investor";
+                                person.role = "shareholder";
                             }
                         });
                     });
