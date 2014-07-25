@@ -16,8 +16,8 @@ m.directive('groupPeople', function(){
             $scope.selectedGroup = [];
             var newGroups = [];
             $scope.groupData = [];
-            console.log($scope.people);
-            var totalGroups = []
+            var totalGroups = [];
+            var arrayRemove = []
     
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
@@ -61,31 +61,52 @@ m.directive('groupPeople', function(){
             };
 
 
-
-            $scope.preSelectGroup = function(person){
-                // if(person.length==0){
-                //     $scope.selectedGroup = [];
-                // }
-                // else{
-                    angular.forEach(person, function(info){
-                    if(info.groups != undefined){
-                        SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
-                            $scope.myGroups = data;
-                            angular.forEach($scope.myGroups, function(role){
-                                var preGroup = JSON.parse(role.groups);
-                                for(i = 0; i < preGroup.length; i++){
-                                    if($scope.selectedGroup.indexOf(preGroup[i])=== -1){
-                                        $scope.selectedGroup.push(preGroup[i]);
-                                    }
-                                };
-                            });                           
-                        });
-                    };
-                }); 
-                // }
-                return $scope.selectedGroup;
+            $scope.doNotCheck = function(person){
+                var deleteArray = [];
+                console.log($scope.fromFront(person));
+                var allGroups = $scope.fromFront(person);
+                angular.forEach(person, function(elem){
+                    var elemGroup = elem.groups.split(", ");
+                    angular.forEach(allGroups, function(gr){
+                        if(elemGroup.indexOf(gr)==-1){
+                            deleteArray.push(gr);
+                        }
+                    });
+                           
+                })
+                console.log(deleteArray);         
+                return deleteArray;
             }
-            $scope.preSelectGroup($scope.people);
+            $scope.doNotCheck($scope.people);
+           //  $scope.groupsToRemove = function(person){
+           //      console.log($scope.fromFront(person));
+           //      var checkGroups = $scope.fromFront(person);
+           //      var toRemove = []
+           //      console.log(checkGroups);
+           //      angular.forEach(person, function(thing){
+           //          if(thing.groups != undefined){
+           //              SWBrijj.tblmm('account.my_user_role', 'email', thing.email).then(function(data){
+           //                  var myGroups = data;
+           //                  angular.forEach(myGroups, function(gr){
+           //                      var preGroup = JSON.parse(gr.groups);
+           //                      angular.forEach(checkGroups, function(group){
+           //                          if(preGroup.indexOf(group)=== -1){
+           //                              toRemove.push(group);
+           //                          };
+           //                      });
+
+           //                  });
+           //                  console.log(toRemove);                        
+           //              })
+                        
+           //          }
+           //      });
+           //    console.log(toRemove)
+           //  }
+           // $scope.groupsToRemove($scope.people);
+
+
+
 
 
             $scope.modifyGroups = function(array){
@@ -109,18 +130,21 @@ m.directive('groupPeople', function(){
 
             };
 
-            $scope.$watch('people', function(){
-                    // this is working and letting me know whenever groups change
-                    if($scope.people.length > 0){
-                        var peopleArray = $scope.fromFront($scope.people);
-                        $scope.modifyGroups(peopleArray);
+            // $scope.$watch('people', function(newdata, olddata){
+            //         // this is working and letting me know whenever groups change
+            //         if(newdata){
+            //             if($scope.people.length > 0){
+            //             var peopleArray = $scope.fromFront($scope.people);
+            //             $scope.modifyGroups(peopleArray);
                          
-                    }
-                    else{
-                        $scope.selectedGroup = [];
-                    }
+            //             }
+            //                 else{
+            //                     $scope.selectedGroup = [];
+            //                 } 
+            //         }
                    
-            }, true);
+                   
+            // }, true);
             
 
 
