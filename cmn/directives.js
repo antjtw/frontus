@@ -65,14 +65,17 @@ m.directive('groupPeople', function(){
                 var deleteArray = [];
                 var allGroups = $scope.fromFront(person);
                 angular.forEach(person, function(elem){
-                    var elemGroup = elem.groups.split(", ");
-                    angular.forEach(allGroups, function(gr){
-                        if(elemGroup.indexOf(gr)==-1){
-                            deleteArray.push(gr);
-                        }
-                    });
+                    if(elem.groups != null && elem.groups != undefined){
+                        var elemGroup = elem.groups.split(", ");
+                        angular.forEach(allGroups, function(gr){
+                            if(elemGroup.indexOf(gr)==-1){
+                                deleteArray.push(gr);
+                            }
+                        });  
+                    };
+                    
                            
-                })       
+                });       
                 return deleteArray;
             }
             // $scope.doNotCheck($scope.people);
@@ -112,21 +115,20 @@ m.directive('groupPeople', function(){
 
             };
 
-            // $scope.$watch('people', function(newdata, olddata){
-            //         // this is working and letting me know whenever groups change
-            //         if(newdata){
-            //             if($scope.people.length > 0){
-            //             var peopleArray = $scope.fromFront($scope.people);
-            //             $scope.modifyGroups(peopleArray);
+            $scope.$watch('people', function(newdata, olddata){
+                    // this is working and letting me know whenever groups change
+                    if(newdata){
+                        if($scope.people.length > 0){
+                            $scope.checkBox($scope.people);
                          
-            //             }
-            //                 else{
-            //                     $scope.selectedGroup = [];
-            //                 } 
-            //         }
+                        }
+                            else{
+                                $scope.selectedGroup = [];
+                            } 
+                    }
                    
                    
-            // }, true);
+            }, true);
             
 
 
