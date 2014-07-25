@@ -2095,3 +2095,11 @@ doc-transaction-details > div > div > button {
 .select2-container.height-force {
     height: 30px !important;
 }
+
+.redrequired .select2-container .select2-choice, .redrequired input {
+    border-color: #E74C3C;
+}
+
+.redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input {
+    border-color: #1ABC96;
+}
