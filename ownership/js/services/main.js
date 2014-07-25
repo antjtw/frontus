@@ -239,6 +239,11 @@ ownership.value('displayCopy', {
         postmoneyval:
             "The sum of the pre-money valuation and the "+
             "total money paid into this round",
+        premoney:
+            "The valuation before taking money in this round",
+        postmoney:
+            "The sum of the pre-money valuation and the "+
+            "total money paid into this round",
         ppshare:
             "The price at which each share was purchased",
         totalauth:

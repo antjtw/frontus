@@ -451,8 +451,8 @@ ownership.service('calculate', function () {
         return number;
     };
 
-    // Calculates the Total Shares owned by an investor across all rounds
-    this.shareSum = function (row) {
+    // TODO must refactor this for sharePercentage to work
+    this.shareSum = function(row) {
         var total = 0;
         for (var key in row.cells) {
             if (row.cells.hasOwnProperty(key)) {
@@ -466,49 +466,21 @@ ownership.service('calculate', function () {
         return total;
     };
 
-    // Returns the percentage ownership for each shareholder
-    // TODO refactor
-    this.sharePercentage = function (row, rows, security_names, sharesum, totalshares) {
-        var percentage = 0;
-        var totalpercentage = 0;
-        for (var i = 0, l = security_names.length; i < l; i++) {
-            if (row.cells[security_names[i]] != undefined) {
-                if (row.cells[security_names[i]].x != undefined) {
-                    percentage = percentage + row.cells[security_names[i]].x;
-                }
-            }
-        }
-        for (var j = 0, a = rows.length; j < a; j++) {
-            for (var i = 0, l = security_names.length; i < l; i++) {
-                if (rows[j].cells[security_names[i]] != undefined) {
-                    if (rows[j].cells[security_names[i]]['x'] != undefined) {
-                        totalpercentage = totalpercentage + rows[j].cells[security_names[i]]['x'];
-                    }
-                }
-            }
-        }
-        return (percentage + (sharesum / totalshares * (100 - totalpercentage)));
+    /*
+    this.sharePercentage = function (sharesum, totalshares) {
+        return (sharesum / totalshares * 100);
     };
+    */
 
-    // // TODO refactor
-    // Calculates total shares for the captable
-    this.totalShares = function (rows) {
-        var total = 0;
-        angular.forEach(rows, function (row) {
-            for (var key in row.cells) {
-                if (row.cells.hasOwnProperty(key)) {
-                    if (row.cells[key] != null) {
-                        if (!isNaN(parseFloat(row.cells[key]['u'])) && String(key) != "$$hashKey") {
-                            total = total + parseFloat(row.cells[key]['u']);
-                        }
-                    }
-                }
-            }
-        });
-        return total;
-    };
+    function totalShares(cells) {
+        return cells.reduce(function(prev, cur, idx, arr) {
+            return prev + isNumber(cur.u) ? cur.u : 0;
+        }, 0);
+    }
+    this.totalShares = totalShares;
 
     //Calculates the total for a column, will do either shares or money depending
+    //// TODO this won't work
     this.colTotal = function (header, rows, type) {
         var total = 0;
         for (var i = 0, a = rows.length; i < a; i++) {

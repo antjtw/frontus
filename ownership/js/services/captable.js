@@ -76,15 +76,18 @@ Cell = function() {
 ownership.service('captable',
 function($rootScope, calculate, sorting, SWBrijj, $q) {
 
-    var captable = new CapTable();
-    var _captable = new NewCapTable();
+//    var captable = new CapTable();
+    var captable = new NewCapTable();
 
+    /*
     this.getCapTable = function() {
         return captable;
     };
+    */
     this.getNewCapTable = function() {
-        return _captable;
+        return captable;
     };
+    /*
     this.loadCapTable = function() { 
         $q.all([loadIssues(),
                 loadTransactions(),
@@ -110,6 +113,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
 
     };
     this.loadCapTable();
+    */
 
     function loadNewCapTable() {
         $q.all([loadLedger(),
@@ -117,21 +121,20 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 loadRowNames(),
                 loadAttributes()])
         .then(function(results) {
-            _captable.ledger_entries = results[0];
-            _captable.transactions = results[1].map(parseTransaction);
+            captable.ledger_entries = results[0];
+            captable.transactions = results[1].map(parseTransaction);
             // FIXME also need email address associated with rows,
             //       if one is available
-            _captable.rows = results[2].map(rowFromName);
-            _captable.attributes = results[3];
+            // FIXME sort rows and columns
+            captable.rows = results[2].map(rowFromName);
+            captable.attributes = results[3];
             generateCells(new Date());
-            console.log(_captable);
-            if (_captable.rows != captable.rows ||
-                _captable.securities != captable.securities) {
-                throw "captables don't match!";
-            }
+            console.log(captable);
         }, logErrorPromise);
     }
+    loadNewCapTable();
 
+    /*
     function loadIssues() {
         var promise = $q.defer();
         SWBrijj.tblm('ownership.company_issue')
@@ -180,6 +183,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }).except(logErrorPromise);
         return promise.promise;
     }
+    */
     function loadEvidence() {
         var promise = $q.defer();
         SWBrijj.tblm('ownership.my_company_evidence')
@@ -196,6 +200,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }).except(logErrorPromise);
         return promise.promise;
     }
+    /* FIXME reimplement
     function handleTransactions(trans) {
         if (Object.keys(trans).length === 0 &&
             Modernizr.testProp('pointerEvents'))
@@ -206,6 +211,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             initUI();
         }
     }
+    */
     function loadLedger() {
         var promise = $q.defer();
         SWBrijj.tblm('_ownership.my_company_ledger')
@@ -263,7 +269,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         security.transaction.push(tran.transaction);
         security.attrs = tran.attrs;
 
-        _captable.securities.push(security);
+        captable.securities.push(security);
     }
     function parseRetireSecurity(tran) {
     }
@@ -284,7 +290,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function parseForfeit(tran) {
     }
     function visibleInvestors() {
-        return _captable.cells
+        return captable.cells
             .filter(function(el) {
                 return true;})
             .reduce(function(prev, cur, idx, arr) {
@@ -294,7 +300,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 return prev;}, []);
     }
     function visibleSecurities() {
-        return _captable.cells
+        return captable.cells
             .filter(function(el) {
                 return el.security !== "";})
             .reduce(function(prev, cur, idx, arr) {
@@ -304,7 +310,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 return prev;}, []);
     }
     function rowFor(inv) {
-        return _captable.cells
+        return captable.cells
             .filter(function(cell) {
                 return cell.investor == inv;
             });
@@ -314,7 +320,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     function cellSecurityType(cell) {
         if (cell.security) {
-            return _captable.securities
+            return captable.securities
                 .filter(function(el) {
                     return el && el.name == cell.security && el.attrs;
                 })[0].attrs.security_type;
@@ -328,6 +334,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function setCellAmount(cell) {
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = cell.akey = sum_ledger(cell.ledger_entries);
+        } else {
+            cell.a = cell.akey = sum_transactions(cell.transactions);
         }
     }
     function sum_ledger(entries) {
@@ -336,16 +344,19 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                    return prev + (cur.credit - cur.debit); 
                 }, 0);
     }
+    function sum_transactions(trans) {
+        return trans.reduce(sumTransactionAmount, 0);
+    }
     function generateCells() {
-        angular.forEach(_captable.rows, function(inv) {
-            angular.forEach(_captable.securities, function(sec) {
+        angular.forEach(captable.rows, function(inv) {
+            angular.forEach(captable.securities, function(sec) {
                 var cell = nullCell();
-                cell.transactions = _captable.transactions.filter(
+                cell.transactions = captable.transactions.filter(
                     function(tran) {
                         return tran.attrs.investor == inv.name &&
                                tran.attrs.security == sec.name;
                     });
-                cell.ledger_entries = _captable.ledger_entries.filter(
+                cell.ledger_entries = captable.ledger_entries.filter(
                     function(ent) {
                         return ent.investor == inv.name &&
                                ent.security == sec.name;
@@ -354,11 +365,11 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 cell.investor = inv.name;
                 setCellUnits(cell);
                 setCellAmount(cell);
-                _captable.cells.push(cell);
+                captable.cells.push(cell);
             });
         });
-        _captable.security_names = visibleSecurities();
-        _captable.investor_names = visibleInvestors();
+        captable.security_names = visibleSecurities();
+        captable.investor_names = visibleInvestors();
         // TODO set rows
     }
     function rowFromName(name) {
@@ -395,7 +406,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 return el.evidence==tran.evidence;
             });
         });
-        angular.forEach(_captable.transactions, function(tran) {
+        angular.forEach(captable.transactions, function(tran) {
             tran.evidence_data = data.filter(function(el) {
                 return el.evidence==tran.evidence;
             });
@@ -532,7 +543,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         // on the rightmost side of the table
         sec.date = new Date(2100, 1, 1);
         captable.securities.push(sec);
-        _captable.securities.push(sec);
+        captable.securities.push(sec);
     }
     function nullRow() {
         return new Row();
@@ -744,45 +755,35 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         });
     }
     this.fillEmptyCells = fillEmptyCells;
-    //switches the sidebar based on the type of the issue
-    function funcformatAmount(amount) {
-        return calculate.funcformatAmount(amount);
+    function totalOwnershipUnits() {
+        return captable.cells.reduce(sumCellUnits, 0);
     }
-
-    var memformatamount = memoize(funcformatAmount);
-    function formatAmount(amount) {
-        return memformatamount(amount);
+    this.totalOwnershipUnits = totalOwnershipUnits;
+    this.investorOwnershipPercentage = function(inv) {
+        var x = captable.cells
+            .filter(function(el) { return el.investor == inv; })
+            .reduce(sumCellUnits, 0);
+        return x / totalOwnershipUnits() * 100;
+    };
+    this.securityTotalUnits = function(sec) {
+        return captable.cells
+            .filter(function(el) { return el.security == sec; })
+            .reduce(sumCellUnits, 0);
+    };
+    this.securityTotalAmount = function(sec) {
+        return captable.cells
+            .filter(function(el) { return el.security == sec; })
+            .reduce(sumCellAmount, 0);
+    };
+    function sumCellUnits(prev, cur, idx, arr) {
+        return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
     }
-    // Total Shares in captable
-    var totalShares = memoize(calculate.totalShares);
-    function totalShares(rows) {
-        return formatAmount(totalShares(rows));
+    function sumCellAmount(prev, cur, idx, arr) {
+        return prev + (calculate.isNumber(cur.a) ? cur.a : 0);
     }
-
-    function formatDollarAmount(amount) {
-        var output = calculate.formatMoneyAmount(memformatamount(amount),
-                                                 $rootScope.settings);
-        return (output);
-    }
-    // Total Shares | Paid for an issue column (type is either u or a)
-    var totalPaid = memoize(calculate.totalPaid);
-    function totalPaid(rows) {
-        return formatDollarAmount(totalPaid(rows));
-    }
-    // Total Shares for a shareholder row
-    var shareSum = memoize(calculate.shareSum);
-    function shareSum(row) {
-        return formatAmount(shareSum(row));
-    }
-    function calculateInvestorPercentages() {
-        angular.forEach(captable.rows, function(row) {
-            row.startpercent =
-                calculate.sharePercentage(row,
-                                          captable.rows,
-                                          captable.security_names,
-                                          shareSum(row),
-                                          totalShares(captable.rows));
-        });
+    function sumTransactionAmount(prev, cur, idx, arr) {
+        return prev + (calculate.isNumber(cur.attrs.amount) ?
+                          cur.attrs.amount : 0);
     }
     function prepareForDisplay() {
         // Sort the columns before finally showing them
@@ -969,7 +970,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     this.autocalcThirdTranValue = autocalcThirdTranValue;
     this.displayAttr = function(key) {
-        return _captable.attributes.filter(
+        return captable.attributes.filter(
                 function(el) { return el.name==key; })[0].display_name;
     };
 });

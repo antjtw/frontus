@@ -51,10 +51,6 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'captableController',
             templateUrl: '/ownership/partials/comp-captable.html'
         }).
-        when('/app/ownership/old-company-captable', {
-            controller: 'oldCaptableController',
-            templateUrl: '/ownership/partials/old-comp-captable.html'
-        }).
         when('/app/ownership/ledger', {
             controller: 'ledgerController',
             templateUrl: '/ownership/partials/ledger.html'

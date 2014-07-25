@@ -10,6 +10,7 @@ var captableController = function(
     $scope.currentCompany = company;
     
     $scope.ct = captable.getNewCapTable();
+    $scope.captable = captable;
 
     // Set the view toggles to their defaults
     $scope.radioModel = "Edit";
@@ -2080,11 +2081,12 @@ var captableController = function(
         return calculate.numShareholders($scope.ct.rows);
     };
 
-    // Total Shares in captable
+    /*
     var totalShares = memoize(calculate.totalShares)
     $scope.totalShares = function(rows) {
         return $scope.formatAmount(totalShares(rows));
     };
+    */
 
     // Total Shares | Paid for an issue column (type is either u or a)
     var totalPaid = memoize(calculate.totalPaid);
@@ -2110,11 +2112,12 @@ var captableController = function(
         return colTotal(header, rows, type);
     };
 
-    // Total percentage ownership for each shareholder row
+    /*
     var sharePercentage = memoize(calculate.sharePercentage);
-    $scope.sharePercentage = function(row, rows, security_names) {
-        return sharePercentage(row, rows, security_names, shareSum(row), totalShares(rows));
+    $scope.sharePercentage = function(row, rows) {
+        return sharePercentage(shareSum(row), totalShares(rows));
     };
+    */
 
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {

@@ -690,7 +690,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{sharePercentage(row, ct.rows, ct.security_names) || 0.000 | number:3}}%">
+                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
                 </td>
                 <td>
                     <span ng-class="{'box-highlight':tourstate==1}">
@@ -783,10 +783,9 @@
                            value="{{rowSum(row.name)}}">
                 </td>
                 <td class="capsums-col">
-                    <!-- FIXME doesn't work -->
                     <input class="input-right"
                            disabled
-                           value="{{sharePercentage(row, ct.rows, ct.security_names) | number:3}}%">
+                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
@@ -817,7 +816,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{sharePercentage(row, ct.rows, ct.security_names) | number:3}}%">
+                           value="{{captable.investorOwnershipPercentage(row.name) | number:3}}%">
                 </td>
                 <td class="viewName">
                     {{row.name}}
@@ -850,7 +849,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{totalShares(ct.rows);}}">
+                           value="{{captable.totalOwnershipUnits();}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -862,9 +861,9 @@
                 <td class="tableFields"
                     ng-repeat="one in ct.security_names track by $index">
                     <span class="captablepair-box">
-                        <div ng-bind="formatAmount(colTotal(one, ct.rows, 'u'))"
-                             ng-class="{'editview': !toggleView()}"
+                        <div ng-class="{'editview': !toggleView()}"
                              class="output footer">
+                            {{captable.securityTotalUnits(one)}}
                         </div>
                         <div ng-bind="formatDollarAmount(colTotal(one, ct.rows, 'a'))"
                              ng-class="{'editview': !toggleView()}"
@@ -977,10 +976,10 @@
                                         <span ng-bind="totalPaid(ct.rows)"></span><span>Total Invested</span>
                                     </div>
                                 </div>
-                                <div ng-show="totalShares(ct.rows)" class="belowTitle">
+                                <div ng-show="captable.totalOwnershipUnits()" class="belowTitle">
                                     <img src="/img/activity/sharews.png">
                                     <div>
-                                        <span ng-bind="totalShares(ct.rows)"></span><span>Fully Diluted Units</span>
+                                        <span ng-bind="captable.totalOwnershipUnits()"></span><span>Fully Diluted Units</span>
                                     </div>
                                 </div>
                                 <div ng-show="numShareholders()" class="belowTitle">
