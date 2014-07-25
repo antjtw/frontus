@@ -1475,7 +1475,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     resize: both;
     opacity: 0.7;
     border: 1px solid #FFBA00;
-    color: #2980B9;
+    color: #000000;
 
     -webkit-border-top-right-radius: 3px;
     -webkit-border-bottom-right-radius: 3px;
