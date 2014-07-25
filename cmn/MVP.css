@@ -4085,6 +4085,11 @@ button.icon-button:hover {
     right: 5px;
 }
 
+.select2-dropdown-open .select2-choice {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
 
 /* Dropdown */
 .menu_dropdown {

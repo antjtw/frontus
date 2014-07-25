@@ -60,8 +60,8 @@
                         <li>
                             <span>Annotation Type</span>
                         </li>
-                        <select ui-select2="select2Options" ng-model="annot.whattype">
-                            <option ng-repeat="type in doc.annotation_types | filter: unusedType" value="{{type.name}}">{{type.display}}</option>
+                        <select class="annotation-dropdown" ui-select2="select2Options" ng-model="annot.whattype">
+                            <option ng-class="{'dropdown-required': type.required}" class="annotation-dropdown-item"  ng-repeat="type in doc.annotation_types | filter: unusedType | orderBy:doc.annotationOrder" value="{{type.name}}">{{doc.dropdownDisplay(type)}}</option>
                         </select>
                     </ul>
                 </li>
