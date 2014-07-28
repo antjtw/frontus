@@ -4675,12 +4675,13 @@ textarea.email-text {
 }
 
 .noGroups{
+    margin-top: 9px;
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
-    border: 1px dashed #666; 
+    border: 1px dashed #C7C7C7; 
     width: 200px;
 }
 
