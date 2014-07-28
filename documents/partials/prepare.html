@@ -12,11 +12,11 @@
                     <span>Copy Status</span>
                 </div>
                 <div ng-repeat="investor in doc.preparedFor" class="docPrepRow">
-                    <span><input ui-select2="select2Options" ng-model="investor"></span>
+                    <span><input ui-select2="select2Options" ng-model="investor.display" ng-change="updateInvestor(investor)"></span>
                     <span><a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&prepare=true&investor=" + investor.investor}}'>Edit</a></span>
                 </div>
                 <div class="docPrepRow">
-                    <span><input type="text" ui-select2="select2Options" ng-model="newInvestor" style="width: 300px;" ng-change="addInvestor()"></span>
+                    <span><input type="text" ui-select2="select2Options" ng-model="newInvestor" ng-change="addInvestor()"></span>
                     <span></span>
                 </div>
             </div>

@@ -315,6 +315,63 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         issuerCanAnnotate: function() {//does not include if the document is being prepared
             return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
         },
+        getPreparedFor: function() {
+            if (!this.preparedFor) {
+                this.preparedFor = [];
+                var doc = this;
+                SWBrijj.tblm('document.my_personal_preparations').then(function(data) {
+                    data.forEach(function(investor_prep) {
+                        // add id and text fields to make select2 happy
+                        investor_prep.display = {id: investor_prep.investor, text: investor_prep.investor};
+                        doc.preparedFor.push(investor_prep);
+                    });
+                });
+            }
+            return this.preparedFor;
+        },
+        addPreparedFor: function(investor) {
+            var doc = this;
+            SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
+                doc.preparedFor.push({display: {id: investor, text: investor}, investor: investor, doc_id: doc.doc_id});
+            }).except(function(error) {
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
+        updatePreparedFor: function(old_investor, new_investor) {
+            var doc = this;
+            SWBrijj.update('document.my_personal_preparations', {investor: new_investor}, {doc_id: this.doc_id, investor: old_investor}).then(function(result){
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.investor = new_investor;
+                        // TODO: ensure investor_prep.display.text is right (might need investor name)
+                    }
+                });
+            }).except(function(error) {
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.display = {id: old_investor, text: old_investor};
+                    }
+                });
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
+        deletePreparedFor: function(old_investor) {
+            var doc = this;
+            SWBrijj.delete_one('document.my_personal_preparations', {doc_id: this.doc_id, investor: old_investor}).then(function(result) {
+                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
+                    if (investor_prep.investor == old_investor) {
+                        arr.splice(idx, 1);
+                    }
+                });
+            }).except(function(error) {
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.display = {id: old_investor, text: old_investor};
+                    }
+                });
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
     };
 
     /// Document service definition
