@@ -8,6 +8,7 @@ html, body {
     margin: 0 !important;
     background-color: rgb(255, 255, 255);
     font-family:'FS Elliot Web Regular', sans-serif;
+    -webkit-font-smoothing: antialiased;
     /* The html and body elements cannot have any padding or margin. */
 }
 body {
