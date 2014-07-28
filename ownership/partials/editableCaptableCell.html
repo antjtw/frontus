@@ -1,4 +1,5 @@
 <span ng-switch on="editable">
+    <!-- TODO saveCell -->
     <span ng-class="{tranSelected:
                         selectedCell
                         && selectedCell.investor == data.investor
@@ -12,7 +13,6 @@
                               | securityUnitLabel}}"
                ui-event="{focus: 'selectCell(data)',
                            blur: 'saveTran(activeTran)'}"
-               ng-change="tranChangeU(data.u, data.security)"
                ng-model='data.u'
                onpaste="return false"
                ng-paste="numberPaste($event, row, data.security, 'u');"
@@ -25,7 +25,6 @@
                placeholder="paid"
                ui-event="{focus : 'selectCell(data)',
                            blur : 'saveTran(activeTran)'}"
-               ng-change="tranChangeA(data.a)"
                ng-model='data.a'
                onpaste="return false"
                ng-paste="numberPaste($event, row, data.security, 'a');"
@@ -33,6 +32,7 @@
     </span>
     <span class="captablepair-box"
           ng-switch-when="0">
+        <!-- should placeholder call securityUnitLabel filter? -->
         <input disabled
                class="captablepair"
                placeholder="shares"

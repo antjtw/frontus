@@ -52,7 +52,7 @@ ownership.service('switchval', function () {
 });
 
 ownership.service('sorting', function () {
-
+    /*
     this.security_names = function (keys, issues) {
         var sorted = [];
         angular.forEach(issues, function (issue) {
@@ -64,7 +64,6 @@ ownership.service('sorting', function () {
         });
         return sorted;
     };
-
     this.issuedate = function (a, b) {
         if (a.date < b.date)
             return -1;
@@ -76,6 +75,14 @@ ownership.service('sorting', function () {
             if (a.created > b.created)
                 return 1;
         }
+        return 0;
+    };
+    */
+    this.security_date = function(a, b) {
+        if (a.effective_date < b.effective_date) return 1;
+        if (a.effective_date > b.effective_date) return -1;
+        if (a.insertion_date < b.insertion_date) return 1;
+        if (a.insertion_date > b.insertion_date) return -1;
         return 0;
     };
 

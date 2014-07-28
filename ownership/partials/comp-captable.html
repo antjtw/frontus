@@ -637,7 +637,8 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="sec in ct.security_names">
+                <th ng-repeat="sec in ct.securities
+                    | orderBy:['effective_date', 'insertion_date']:true">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
                               ng-click="moveTour();">
@@ -648,7 +649,7 @@
                            class="capEditHeaders"
                            ui-event="{focus: 'selectSecurity(sec)',
                                        blur: 'saveIssue(sec, \'issue\')'}"
-                           ng-model="sec"
+                           ng-model="sec.name"
                            onkeydown="testForEnter();">
                 </th>
             </tr>
@@ -659,9 +660,10 @@
                 <th ng-class="{tranViewSelected:
                                    sec==selectedSecurity.name}"
                     class="staticHeaders"
-                    ng-repeat="sec in ct.security_names"
-                    ng-click="selectSecurity(sec)">
-                    <span>{{sec}}</span>
+                    ng-repeat="sec in ct.securities
+                    | orderBy:['effective_date', 'insertion_date']:true"
+                    ng-click="selectSecurity(sec.name)">
+                    <span>{{sec.name}}</span>
                     <span class="next-button"
                           ng-click="moveTour();">
                         Next
@@ -673,14 +675,15 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in ct.security_names | orderBy:issueSort track by $index">
-                    <span>{{securityUnitLabel(one)}}</span>
+                <td ng-repeat="one in ct.securities
+                | orderBy:['effective_date', 'insertion_date']:true">
+                    <span>{{securityUnitLabel(one.name)}}</span>
                     <span>Total Paid</span>
                 </td>
             </tr>
             <!-- Editable rows -->
             <tbody ng-if="!toggleView();">
-            <tr ng-repeat="row in ct.rows track by $index"
+            <tr ng-repeat="row in ct.rows | orderBy:'percentage()':true"
                 ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col">
                     <input class="input-right"
@@ -720,8 +723,8 @@
                         </span>
                     </span>
                 </td>
-                <td ng-repeat="key in ct.security_names
-                               | orderBy:issueSort track by $index">
+                <td ng-repeat="key in ct.securities
+                | orderBy:['effective_date', 'insertion_date']:true">
                     <span ng-class="{'tran-highlight':tourstate==4}">
                         <span class="next-button"
                               ng-click="closeTour(); tourNotification();">
@@ -729,7 +732,7 @@
                         </span>
                     </span>
                     <editable-captable-cell
-                        data="cellFor(row.name, key)"
+                        data="cellFor(row.name, key.name)"
                         editable="row.editable"
                         selected-cell="selectedCell">
                 </td>
@@ -738,7 +741,7 @@
             <!-- Un-editable view -->
             <!-- Regular Rows -->
             <tbody ng-if="toggleView()">
-            <tr ng-repeat="row in ct.rows | rowviewList track by $index">
+            <tr ng-repeat="row in ct.rows | orderBy:'percentage()':true">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
@@ -755,19 +758,20 @@
                     ng-click="selectInvestor(row.name);">
                     {{row.name}}
                 </td>
-                <td ng-click="selectCell(row.name, key)"
+                <td ng-click="selectCell(row.name, key.name)"
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key,
-                               hoverable: cellFor(row.name, key).a
-                                          || cellFor(row.name, key).u}"
-                    ng-repeat="key in ct.security_names track by $index">
-                    <captable-cell data="cellFor(row.name, key)">
+                               hoverable: cellFor(row.name, key.name).a
+                                          || cellFor(row.name, key.name).u}"
+                    ng-repeat="key in ct.securities
+                | orderBy:['effective_date', 'insertion_date']:true">
+                    <captable-cell data="cellFor(row.name, key.name)">
                 </td>
             </tr>
             </tbody>
             <!-- Unissued Rows -->
             <tr class="unissued-rows"
-                ng-repeat="row in ct.rows track by $index"
+                ng-repeat="row in ct.rows | orderBy:'percentage()':true"
                 ng-show="([row] | unissuedrowviewList).length > 0">
                 <td class="capsums-col">
                     <input class="input-right"
@@ -782,8 +786,10 @@
                 <td class="viewName">
                     {{row.name}}
                 </td>
+                <!-- TODO orderBy -->
                 <td class="tableFields"
-                    ng-repeat="key in ct.security_names | orderBy:issueSort track by $index">
+                    ng-repeat="key in ct.securities
+                | orderBy:['effective_date', 'insertion_date']:true">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': !toggleView()}"
                              ng-bind="key"
@@ -802,7 +808,8 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.security_names track by $index">
+                    ng-repeat="one in ct.securities
+                | orderBy:['effective_date', 'insertion_date']:true">
                 </td>
             </tr>
             <!-- Undiluted footer -->
@@ -816,20 +823,20 @@
                     <input class="input-right"
                            disabled
                            value="100.00%">
-                    <!-- should we actually calculate this? -->
                 </td>
                 <td class="tableFields">
                 </td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.security_names track by $index">
+                    ng-repeat="one in ct.securities
+                | orderBy:['effective_date', 'insertion_date']:true">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': !toggleView()}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one) | formatAmount:settings:'units'}}
+                            {{captable.securityTotalUnits(one.security) | formatAmount:settings:'units'}}
                         </div>
                         <div ng-class="{'editview': !toggleView()}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one) | formatAmount:settings:'amount'}}
+                            {{captable.securityTotalAmount(one.security) | formatAmount:settings:'amount'}}
                         </div>
                     </span>
                 </td>

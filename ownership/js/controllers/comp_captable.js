@@ -46,6 +46,7 @@ var captableController = function(
     // Initialize a few visible variables
     $scope.investorOrder = "name";
     $scope.sideToggleName = "Hide";
+    $scope.sorting = sorting;
     $('.tour-box').affix({});
 
     // TODO get this in a service
@@ -481,7 +482,6 @@ var captableController = function(
             $scope.activeTran[0].units = value;
         }
     };
-
     $scope.tranChangeA = function (value) {
         if ($scope.activeTran.length < 2) {
             $scope.activeTran[0].amount = value;
@@ -732,6 +732,7 @@ var captableController = function(
     // TODO refactor
     $scope.saveTran = function (transaction) {
         // Triggers the multi modal if more than one transaction exists
+        /*
         if (transaction.length > 1) {
             angular.forEach($scope.ct.rows, function (row) {
                 if (row.name == transaction[0].investor) {
@@ -900,6 +901,7 @@ var captableController = function(
                 console.log(x);
             });
         }
+        */
     };
 
     // Function for saving grant. Used on the captable when paid is updated from the captable on an option
@@ -2170,6 +2172,8 @@ var captableController = function(
     };
 
     $scope.namePaste = function(ev, row) {
+        alert('refactor namePaste');
+        /*
         var pastednames = ev.originalEvent.clipboardData.getData('text/plain');
         var splitnames = pastednames.split("\n");
         var startindex = $scope.ct.rows.indexOf(row);
@@ -2188,9 +2192,12 @@ var captableController = function(
         }
         captable.addRow();
         return false;
+        */
     };
 
     $scope.numberPaste = function(ev, row, key, type) {
+        alert('refactor numberPaste');
+        /*
         var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
         var splitvalues = pastedvalues.split("\n");
         var startindex = $scope.ct.rows.indexOf(row);
@@ -2235,6 +2242,7 @@ var captableController = function(
             }
         }
         return false;
+        */
     };
 
 };

@@ -87,34 +87,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     this.getNewCapTable = function() {
         return captable;
     };
-    /*
-    this.loadCapTable = function() { 
-        $q.all([loadIssues(),
-                loadTransactions(),
-                loadGrants(),
-                loadPariPassu(),
-                loadConversions(),
-                loadTransfers(),
-                loadEvidence(),
-                loadRowNames()])
-        .then(function(results) {
-            captable.securities  = results[0];
-            captable.trans       = results[1];
-            handleTransactions(    results[1]);
-            captable.grants      = results[2];
-            captable.paripassu   = results[3];
-            captable.conversions = results[4];
-            captable.transfers   = results[5];
-            attachEvidence(        results[6]);
-
-            generateCaptable(      results[7]);
-            loadNewCapTable();
-        }, logErrorPromise);
-
-    };
-    this.loadCapTable();
-    */
-
     function loadNewCapTable() {
         $q.all([loadLedger(),
                 loadTransactionLog(),
@@ -134,56 +106,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     }
     loadNewCapTable();
 
-    /*
-    function loadIssues() {
-        var promise = $q.defer();
-        SWBrijj.tblm('ownership.company_issue')
-        .then(function(securities) {
-            promise.resolve(securities);
-        }).except(logErrorPromise);
-        return promise.promise;
-    }
-    function loadTransactions() {
-        var promise = $q.defer();
-        SWBrijj.tblm('ownership.company_transaction')
-        .then(function(trans) {
-            promise.resolve(trans);
-        }).except(logErrorPromise);
-        return promise.promise;
-    }
-    function loadGrants() {
-        var promise = $q.defer();
-        SWBrijj.tblm('ownership.company_grants')
-        .then(function(grants) {
-            promise.resolve(grants);
-        }).except(logErrorPromise);
-        return promise.promise;
-    }
-    function loadPariPassu() {
-        var promise = $q.defer();
-        SWBrijj.tblm('ownership.company_paripassu')
-        .then(function(paripassu) {
-            promise.resolve(paripassu);
-        }).except(logErrorPromise);
-        return promise.promise;
-    }
-    function loadConversions() {
-        var promise = $q.defer();
-        SWBrijj.tblm('ownership.company_conversion')
-        .then(function(conversions) {
-            promise.resolve(conversions);
-        }).except(logErrorPromise);
-        return promise.promise;
-    }
-    function loadTransfers() {
-        var promise = $q.defer();
-        SWBrijj.tblm('ownership.company_transfer')
-        .then(function(transfers) {
-            promise.resolve(transfers);
-        }).except(logErrorPromise);
-        return promise.promise;
-    }
-    */
     function loadEvidence() {
         var promise = $q.defer();
         SWBrijj.tblm('ownership.my_company_evidence')
@@ -368,9 +290,12 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
                 setCellAmount(cell);
                 captable.cells.push(cell);
             });
+            inv.percentage = function() {
+                return investorOwnershipPercentage(inv.name);
+            };
         });
-        captable.security_names = visibleSecurities();
-        captable.investor_names = visibleInvestors();
+        //captable.security_names = visibleSecurities();
+        //captable.investor_names = visibleInvestors();
         // TODO set rows
     }
     function rowFromName(name) {
@@ -760,12 +685,13 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         return captable.cells.reduce(sumCellUnits, 0);
     }
     this.totalOwnershipUnits = totalOwnershipUnits;
-    this.investorOwnershipPercentage = function(inv) {
+    function investorOwnershipPercentage(inv) {
         var x = captable.cells
             .filter(function(el) { return el.investor == inv; })
             .reduce(sumCellUnits, 0);
         return x / totalOwnershipUnits() * 100;
-    };
+    }
+    this.investorOwnershipPercentage = investorOwnershipPercentage;
     this.securityTotalUnits = function(sec) {
         return captable.cells
             .filter(function(el) { return el.security == sec; })
