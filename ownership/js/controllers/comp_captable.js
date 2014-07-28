@@ -123,6 +123,7 @@ var captableController = function(
             $scope.sideBar = "home";
             deselectAllCells();
         } else {
+            // TODO refactor to take cell directly
             $scope.selectedCell = $scope.cellFor(inv, sec);
             $scope.sideBar = $scope.toggleView() ? 4 : 2;
             $scope.allowKeys = calculate.complement(
@@ -138,6 +139,7 @@ var captableController = function(
             $scope.sideBar = "home";
             $scope.selectedSecurity = null;
         } else {
+            // TODO refactor to take security and use it directly
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
                     return el.name == security_name;  
@@ -157,6 +159,7 @@ var captableController = function(
             $scope.sideBar = "home";
             $scope.selectedInvestor = null;
         } else {
+            // TODO refactor to take investor directly
             $scope.selectedInvestor = $scope.ct.rows
                 .filter(function(el) {
                     return el.name == investor_name;

@@ -91,15 +91,17 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         $q.all([loadLedger(),
                 loadTransactionLog(),
                 loadRowNames(),
-                loadAttributes()])
+                loadAttributes(),
+                loadEvidence()])
         .then(function(results) {
             captable.ledger_entries = results[0];
             captable.transactions = results[1].map(parseTransaction);
+            handleTransactions(captable.transactions);
             // FIXME also need email address associated with rows,
             //       if one is available
-            // FIXME sort rows and columns
             captable.rows = results[2].map(rowFromName);
             captable.attributes = results[3];
+            attachEvidence(results[4]);
             generateCells(new Date());
             console.log(captable);
         }, logErrorPromise);
@@ -122,7 +124,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }).except(logErrorPromise);
         return promise.promise;
     }
-    /* FIXME reimplement
     function handleTransactions(trans) {
         if (Object.keys(trans).length === 0 &&
             Modernizr.testProp('pointerEvents'))
@@ -133,7 +134,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             initUI();
         }
     }
-    */
     function loadLedger() {
         var promise = $q.defer();
         SWBrijj.tblm('_ownership.my_company_ledger')
@@ -327,17 +327,11 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         }
     }
     function attachEvidence(data) {
-        angular.forEach(captable.trans, function(tran) {
-            tran.evidence_data = data.filter(function(el) {
-                return el.evidence==tran.evidence;
-            });
-        });
         angular.forEach(captable.transactions, function(tran) {
             tran.evidence_data = data.filter(function(el) {
                 return el.evidence==tran.evidence;
             });
         });
-        // TODO implement for securities
     }
     function setIssueKey(iss) {
         iss.key = iss.issue;
@@ -466,9 +460,8 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function addSecurity() {
         var sec = nullSecurity();
         // Silly future date so that the issue always appears
-        // on the rightmost side of the table
-        sec.date = new Date(2100, 1, 1);
-        captable.securities.push(sec);
+        // on the leftmost side of the table
+        sec.insertion_date = new Date(2100, 1, 1);
         captable.securities.push(sec);
     }
     function nullRow() {
@@ -577,6 +570,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
             }
         });
     }
+    /*
     function processTransaction(tran) {
         reformatDate(tran);
         setTransactionKeys(tran);
@@ -585,6 +579,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         addTranToRows(tran); // incorporate transaction's investor
         addTranToCell(tran);
     }
+    */
     function attachPariPassu(securities, links) {
         angular.forEach(securities, function(iss) {
             iss.paripassu = [];
@@ -712,6 +707,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         return prev + (calculate.isNumber(cur.attrs.amount) ?
                           cur.attrs.amount : 0);
     }
+    /*
     function prepareForDisplay() {
         // Sort the columns before finally showing them
         // Issues are sorted by date, rows by ownership within each issue
@@ -730,6 +726,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
         addSecurity();
         return true;
     }
+    */
     function attachWatches() {
         for (var i=0; i < captable.trans.length; i++) {
             $rootScope.$watch('trans['+i+']', transaction_watch, true);
@@ -812,6 +809,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     function issue_watch(newval, oldval) {
         generic_watch(newval, oldval, captable.securities);
     }
+    /*
     function generateCaptable(names) {
         angular.forEach(captable.securities, processIssue);
         incorporateGrantsIntoTransactions(captable.grants, captable.trans);
@@ -830,6 +828,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
 
         console.log(captable);
     }
+    */
     var issuetypes = [];
     this.getIssueTypes = function() {return issuetypes;};
     function loadIssueTypes() {
@@ -899,5 +898,10 @@ function($rootScope, calculate, sorting, SWBrijj, $q) {
     this.displayAttr = function(key) {
         return captable.attributes.filter(
                 function(el) { return el.name==key; })[0].display_name;
+    };
+    this.isDebt = function(cell) {
+        if (!cell) return;
+        var type = cellSecurityType(cell);
+        return type == "Debt" || type == "Safe";
     };
 });

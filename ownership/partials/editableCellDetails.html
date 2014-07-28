@@ -1,55 +1,97 @@
-<accordion ng-class="{'lessmargin': (activeTran.length == 1)}" class="transaction-accordion" close-others="true">
-<accordion-group is-open="tran.active" is-disabled="singleTransaction(activeTran);" ng-hide="windowToggle && !tran.active"
-                 ng-repeat="tran in activeTran | orderBy:'date' track by $index" ng-switch on="currentTab">
+<accordion ng-class="{'lessmargin': (activeTran.length == 1)}"
+           class="transaction-accordion"
+           close-others="true">
+<accordion-group is-open="tran.active"
+                 is-disabled="singleTransaction(activeTran);"
+                 ng-hide="windowToggle && !tran.active"
+                 ng-repeat="tran in transactions
+                | orderBy:'date' track by $index"
+                ng-switch on="currentTab">
     <accordion-heading>
-        <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && activeTran.length > 1"></span>
-        <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1" ng-click="editEvidence()"></span>
-        <span ng-click="editEvidence()">{{tran.date | date:settings.shortdate}} Transaction</span>
+        <span data-icon="&#xe031;"
+              aria-hidden="true"
+              ng-show="tran.active && activeTran.length > 1">
+        </span>
+        <span data-icon="&#xe034;"
+              aria-hidden="true"
+              ng-show="!tran.active && activeTran.length > 1"
+              ng-click="editEvidence()">
+        </span>
+        <span ng-click="editEvidence()">
+            {{tran.date | date:settings.shortdate}} Transaction
+        </span>
     </accordion-heading>
 
     <div class="standard-button btn-group darkgray">
-        <button class="btn" ng-click="switchCapTab('details');" ng-class="{on:currentTab=='details'}">
-            <span data-icon="&#xe01e;" aria-hidden="true">Details</span>
+        <button class="btn"
+                ng-click="switchCapTab('details');"
+                ng-class="{on:currentTab=='details'}">
+            <span data-icon="&#xe01e;" aria-hidden="true">
+                Details
+            </span>
         </button>
-        <button class="btn" ng-click="switchCapTab('documents');" ng-class="{on:currentTab=='documents'}">
-            <span data-icon="&#xe60e;" aria-hidden="true">Evidence</span>
+        <button class="btn"
+                ng-click="switchCapTab('documents');"
+                ng-class="{on:currentTab=='documents'}">
+            <span data-icon="&#xe60e;" aria-hidden="true">
+                Evidence
+            </span>
         </button>
     </div>
 
     <div class="capTab" ng-switch-when="details">
         <!-- Global Tab -->
         <div class="capGuide global">
-
             <div class="rightTitle security-type">
                 <span>Investor</span>
                 <span class="locked-security">
                     {{tran.investor}}
                 </span>
 
-                <div ng-click="transferSharesUp(activeTran);" ng-show="activeTran[0].type == 'Equity'">
+                <div ng-click="transferSharesUp(activeTran);"
+                     ng-show="activeTran[0].type == 'Equity'">
                     <span data-icon="&#xe60a;" aria-hidden="true"></span>
                     <span>Transfer</span>
                 </div>
 
-                <div ng-click="convertSharesUp(activeTran);" ng-show="activeTran[0].type == 'Debt'">
+                <div ng-click="convertSharesUp(activeTran);"
+                     ng-show="activeTran[0].type == 'Debt'">
                     <span data-icon="&#xe60c;" aria-hidden="true"></span>
                     <span>Convert</span>
                 </div>
             </div>
 
-            <p class="rightTitle"><span>Date</span><input ng-disabled="toggleView();" id="date{{tran.$$hashKey}}"
-                                                          ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
-                                                          ng-change="saveTranDate(tran, 'date')"
-                                                          type="text" ng-model="tran.date" data-date-format={{settings.lowercasedate}} bs-datepicker>
-
+            <p class="rightTitle">
+                <span>Date</span>
+                <input ng-disabled="toggleView();"
+                       id="date{{tran.$$hashKey}}"
+                       ui-event="{keydown:'saveTranDate(tran, \'date\', $event)', blur:'saveTranDate(tran, \'date\', \'blur\')'}"
+                       ng-change="saveTranDate(tran, 'date')"
+                       type="text"
+                       ng-model="tran.date"
+                       data-date-format={{settings.lowercasedate}}
+                       bs-datepicker>
             </p>
-
-            <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input ng-disabled="toggleView();"
-                                                                                         maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
-                                                                                         ng-model="tran.units" onkeydown="testForEnter();"></p>
-
-            <p class="rightTitle"><span>Total Paid</span><input ng-disabled="toggleView();"
-                                                                maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
+            <p class="rightTitle"
+               ng-hide="tran.type =='Debt' || tran.type == 'Safe'">
+                <span>
+                    {{grantbyIssue(tran.issue)}}
+                </span>
+                <input ng-disabled="toggleView();"
+                       maxlength="18"
+                       class="signless"
+                       ui-event="{blur : 'saveTran(tran)'}"
+                       ng-model="tran.units"
+                       onkeydown="testForEnter();">
+            </p>
+            <p class="rightTitle">
+                <span>Total Paid</span>
+                <input ng-disabled="toggleView();"
+                       maxlength="18"
+                       ui-event="{blur : 'saveTran(tran)'}"
+                       ng-model="tran.amount"
+                       onkeydown="testForEnter();">
+            </p>
         </div>
 
         <div class="capGuide top10">

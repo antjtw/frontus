@@ -37,21 +37,26 @@
                                 settings="settings"
                                 ng-switch-when="details">
     </div>
+    <!-- FIXME looking at wrong object -->
     <div class="capTab" ng-switch-when="documents">
-        <div ng-if="tran.evidence_data.length==0" class="linkedDocuments viewOnly">
+        <div ng-if="tran.evidence_data.length==0"
+             class="linkedDocuments viewOnly">
             Connect documents that support this transaction by clicking Edit above.
         </div>
-        <div ng-if="tran.evidence_data.length>0" class="linkedDocuments viewOnly">
+        <div ng-if="tran.evidence_data.length>0"
+             class="linkedDocuments viewOnly">
             <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
                 <ul class="pull-left">
                     <li>
-                    <span ng-click="viewEvidence(doc)">{{doc.docname}}
-                </span>
-                </li>
+                        <span ng-click="viewEvidence(doc)">
+                            {{doc.docname}}
+                        </span>
+                    </li>
                     <li ng-if="doc.name||doc.investor">
-                    <span>{{doc.name || doc.investor}}'s version
-                </span>
-                </li>
+                        <span>
+                            {{doc.name || doc.investor}}'s version
+                        </span>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -647,7 +647,7 @@
                     </span>
                     <input placeholder="Add Security"
                            class="capEditHeaders"
-                           ui-event="{focus: 'selectSecurity(sec)',
+                           ui-event="{focus: 'selectSecurity(sec.name)',
                                        blur: 'saveIssue(sec, \'issue\')'}"
                            ng-model="sec.name"
                            onkeydown="testForEnter();">
@@ -760,7 +760,7 @@
                 </td>
                 <td ng-click="selectCell(row.name, key.name)"
                     class="tableFields"
-                    ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key,
+                    ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
                                hoverable: cellFor(row.name, key.name).a
                                           || cellFor(row.name, key.name).u}"
                     ng-repeat="key in ct.securities
