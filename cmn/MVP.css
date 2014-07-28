@@ -4677,20 +4677,23 @@ textarea.email-text {
 }
 
 .noGroups{
-
     padding-left: 20px;
     padding-right: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
-
-  
     text-align: center;
     border: 1px dashed #C7C7C7; 
     width: 200px;
+    margin-left: 20px;
 }
 
 .noGroups span{
     color: #3498DB;
     cursor: pointer;
 }
+
+.noGroups span:last-of-type{
+    position:relative;
+    top: 3px;
+} 
 
