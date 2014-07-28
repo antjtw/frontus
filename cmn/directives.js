@@ -47,14 +47,15 @@ m.directive('groupPeople', function(){
             $scope.fromFront = function(person){
                 var allGroups = [];
                 angular.forEach(person, function(info){
-                    if(info.groups != undefined){
-                        var a = info.groups.split(", ");
-                        for(var i = 0; i < a.length; i++){
-                            if(allGroups.indexOf(a[i])== -1){
-                                allGroups.push(a[i]);
-                            };
-                        };
-                    };
+                    SWBrijj.tblmm('account.my_user_role', 'info.email', email)
+                    // if(info.groups != undefined){
+                    //     var a = info.groups.split(", ");
+                    //     for(var i = 0; i < a.length; i++){
+                    //         if(allGroups.indexOf(a[i])== -1){
+                    //             allGroups.push(a[i]);
+                    //         };
+                    //     };
+                    // };
        
                 });
                 return allGroups;              
@@ -191,14 +192,17 @@ m.directive('groupPeople', function(){
                         angular.forEach(myInfo, function(about){
                             smallGroup.push(about.email, about.role);
                             bigGroup.push(smallGroup);
+                            console.log(bigGroup);
                             if(about.groups == null || about.groups == "[]"){
                                 newGroupsArray = []
                             }
                             else if(about.groups != null){
                                 newGroupsArray = JSON.parse(about.groups);
+                                
                             };
 
                         });
+                        console.log(newGroupsArray);
                         if($scope.selectedGroup.length > 0){
                             angular.forEach($scope.selectedGroup, function(selected){
                                 if(newGroupsArray.indexOf(selected)==-1){
@@ -294,7 +298,6 @@ m.directive('peopleFilter', function(){
             $scope.getFilterCount = function(){
                 SWBrijj.tblm('account.ind_user_group', ['ind_group', 'count']).then(function(data){
                     $scope.myGroups = data;
-                    console.log($scope.myGroups);
                     angular.forEach($scope.myGroups, function(info){
                         info.ind_group = info.ind_group.replace(/"/g, "")
                     });

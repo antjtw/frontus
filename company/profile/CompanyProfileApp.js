@@ -479,7 +479,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.createPeople = function(){
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
                 $scope.people = x;
-                console.log($scope.people);
                 SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                     angular.forEach(admins, function(admin) {
                         angular.forEach($scope.people, function(person) {
@@ -493,7 +492,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             if (person.email == admin.email) {
                                 person.role = "issuer";
                             }
-                            if(person.email != admin.email){
+                            else if(person.email != admin.email && person.role != 'issuer'){
                                 person.role = "shareholder";
                             }
                         });

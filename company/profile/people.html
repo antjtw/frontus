@@ -107,7 +107,8 @@
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
                         </ul>
                     </td>
-                    <td style="width: 200px"><span ng-show="person.role=='issuer'">Admin</span></td>
+                    <td style="width: 200px"><span>
+                        <span ng-show="person.role=='issuer'">Admin</span></td>
                     <td><span>{{person.groups}}</span></td>
                     <td style="width:50px;">
                         <ul class="dropdown-list" ng-if="sidebarPage != 'email'">
