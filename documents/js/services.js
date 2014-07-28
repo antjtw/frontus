@@ -104,8 +104,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     function updateAnnotationTypes(issue_type, transaction_type, type_list) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
-            var viable_actions = transaction_attributes[issue_type].actions;
-            var fields = viable_actions[transaction_type].fields;
+            if (issue_type) {
+                var viable_actions = transaction_attributes[issue_type].actions;
+                var fields = viable_actions[transaction_type].fields;
+            } else {
+                fields = [];
+            }
             type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
             var tmp_array = [];
             for (var field in fields) {
@@ -241,6 +245,16 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             var viable_actions = transaction_attributes[this.issue_type].actions;
             // documents can only create grants and purchases right now
             this.transaction_type = viable_actions.purchase ? "purchase" : "grant";
+            SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
+            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
+            this.annotations.forEach(function(annot) {
+                annot.updateTypeInfo(this.annotation_types);
+            });
+        },
+        unsetTransaction: function() {
+            this.issue = null;
+            this.issue_type = null;
+            this.transaction_type = null;
             SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
             updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
             this.annotations.forEach(function(annot) {
