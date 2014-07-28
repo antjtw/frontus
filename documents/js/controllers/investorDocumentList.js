@@ -108,7 +108,7 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
         };
         $scope.exportVersionToPdf = function(doc) {
             $scope.$emit("notification:success", "Export in progress.");
-            SWBrijj.genInvestorPdf('sharewave-'+doc.doc_id+'-'+doc.investor+'.pdf', 'application/pdf', doc.doc_id, false).then(function(url) {
+            SWBrijj.genInvestorPdf('sharewave-'+doc.doc_id+'-'+doc.investor+'.pdf', 'application/pdf', doc.doc_id, false, !$scope.docIsComplete(doc)).then(function(url) {
                 document.location.href = url;
             }).except(function(x) {
                 console.log(x);
