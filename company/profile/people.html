@@ -90,7 +90,7 @@
 
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: filterParam.param track by $id($index)">
+                    <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: filterParam.param:true track by $id($index)">
                     <tr class="empty-row"></tr>
                     
                       
