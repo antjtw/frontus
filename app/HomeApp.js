@@ -79,8 +79,7 @@ app.config(function($routeProvider, $locationProvider){
         }).
         when('/app/documents/prepare', {
             templateUrl: '/documents/partials/prepare.html',
-            controller: 'DocumentPrepareController',
-            reloadOnSearch: false
+            controller: 'DocumentPrepareController'
         }).
         when('/app/documents/company-status', {
             templateUrl: '/documents/partials/companyStatus.html',

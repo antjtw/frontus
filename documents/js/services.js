@@ -285,21 +285,21 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         },
         dropdownDisplay: function(type) {
             if (type.required) {
-                return type.display + " (Required)"
+                return type.display + " (Required)";
             } else {
-                return type.display
+                return type.display;
             }
         },
         annotationOrder: function(type) {
             if (type.display == "Text") {
-                return 0
+                return 0;
             }
             else if (type.required) {
-                return 0 + type.display
+                return 0 + type.display;
             } else if (type.required == false) {
-                return 1 + type.display
+                return 1 + type.display;
             } else {
-                return 2 + type.display
+                return 2 + type.display;
             }
         },
         annotable: function(role) {
@@ -318,12 +318,13 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
     };
 
     /// Document service definition
-    // TODO: probably need to distinguish between originals and investor versions
+    // TODO: need to distinguish between originals and investor versions
     var docs = {};
 
     this.getDoc = function(doc_id) {
         if (doc_id === void(0)) {
             // we're probably uninitialized
+            // TODO: fetch the actual document
             var d = new Document();
             return d;
         }

@@ -5,7 +5,20 @@
     <div class="row-fluid">
         <div class="leftTabWindow" ng-style="viewportheight">
             <div class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}">
-                <span>Hello World!</span>
+                <h1>Shareholder Terms</h1>
+                <span>Enter your shareholder's emails below. Prepare their copy with specific terms.</span>
+                <div class="docPrepRow header">
+                    <span>Recipient</span>
+                    <span>Copy Status</span>
+                </div>
+                <div ng-repeat="investor in doc.preparedFor" class="docPrepRow">
+                    <span><input ui-select2="select2Options" ng-model="investor"></span>
+                    <span><a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&prepare=true&investor=" + investor.investor}}'>Edit</a></span>
+                </div>
+                <div class="docPrepRow">
+                    <span><input type="text" ui-select2="select2Options" ng-model="newInvestor" style="width: 300px;" ng-change="addInvestor()"></span>
+                    <span></span>
+                </div>
             </div>
             <!-- <internal-right-rail toggle-side="toggleSide">
                 <tabset>
