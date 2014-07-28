@@ -180,3 +180,16 @@ own.directive('transactionAttributes', [function() {
         ],
     };
 }]);
+own.directive('editableTransactionAttributes', [function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: false,
+        templateUrl: '/ownership/partials/editableTransactionAttributes.html',
+        controller: ["$scope", "captable", "displayCopy",
+            function($scope, captable, displayCopy) {
+                console.log($scope);
+            }
+        ],
+    };
+}]);

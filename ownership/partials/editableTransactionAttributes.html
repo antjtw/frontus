@@ -1,0 +1,50 @@
+<div class="capGuide top10">
+
+    <p class="rightTitle">
+        <span>label</span>
+        <input ng-model>
+        <span ng-if="tooltip"></span>
+    </p>
+
+    <div class="rightTitle double">
+        <span></span>
+        <ul class="dropdown-list drop-selector">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle">
+                    {{}}
+                    <span class="invisible-drop">'</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="i in ___">
+                        <a ng-click="setIt(i)">
+                            {{i}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <span ng-if="not security type"
+              class="tooltip-icon"
+              data-icon="&#xe044;"
+              aria-hidden="true"
+              data-placement="top"
+              bs-tooltip="tips.__">
+        </span>
+        <span ng-if="Security type"
+              class="locked-security" ng-hide="typeLocked(sec);">
+            {{sec.type}}
+        </span>
+        <span ng-if="SEcurity type"
+              ng-show="trantype(sec.type, 'Equity');"
+              class="common-toggle">
+            <button ng-class="{'selected':sec.common}"
+                    ng-click="toggleCommon(sec)"
+                    ng-model="sec.common"
+                    class="check-box-button">
+                <span data-icon="&#xe023;" aria-hidden="true"></span>
+            </button>
+            <span>Common</span>
+        </span>
+    </div>
+
+</div>
