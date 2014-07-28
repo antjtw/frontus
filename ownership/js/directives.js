@@ -89,8 +89,12 @@ own.directive('editableSecurityDetails', [function() {
         controller: ["$scope", "displayCopy", "captable",
             function($scope, displayCopy, captable) {
                 $scope.tips = displayCopy.captabletips;
-                $scope.transactions = $scope.sec.transaction.map(
-                console.log($scope.sec);
+                $scope.ct = captable.getNewCapTable();
+                $scope.transactions = $scope.ct.transactions
+                    .filter(function(el) {
+                        return el.transaction == $scope.sec.transaction;
+                    });
+                console.log($scope);
             }
         ],
     };
