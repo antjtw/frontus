@@ -87,7 +87,10 @@ m.directive('groupPeople', function(){
                 console.log(allGroups);
                 angular.forEach(person, function(ind){
                     console.log(ind.groups);
-                    var indArray = ind.groups.split(", ")
+                    if(ind.groups != null && ind.groups != undefined){
+                        var indArray = ind.groups.split(", ")
+                    }
+                    
                     console.log(indArray);
                     angular.forEach($scope.selectedGroup, function(group){
                         if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
