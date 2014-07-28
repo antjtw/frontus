@@ -39,7 +39,7 @@
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                                         <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
-                                        <div ng-show="!showGroups && myGroups.length == 0">
+                                        <div ng-show="!showGroups && myGroups.length == 0" style="padding-left: 24px">
                                             <div class="noGroups">Oh hey, looks like you haven't grouped people yet<br/>
                                                 <span ng-click="$parent.toggleSide('group')">Start Grouping</span>
                                             </div>

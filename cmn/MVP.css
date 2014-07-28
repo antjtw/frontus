@@ -1494,6 +1494,10 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: left;
     padding-left: 20px;
 }
+
+.activity-feed2 li.event.roles > div:first-of-type >div.noGroups{
+    padding-left: 40px;
+}
     
 
 .activity-icon {
