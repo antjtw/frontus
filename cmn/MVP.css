@@ -1495,9 +1495,7 @@ ul.spaced-list > li:nth-child(odd) {
     padding-left: 20px;
 }
 
-.activity-feed2 li.event.roles > div:first-of-type >div.noGroups{
-    padding-left: 40px;
-}
+
     
 
 .activity-icon {
@@ -4658,8 +4656,8 @@ textarea.email-text {
 }
 
 .instructions{
-    margin-top: 30px;
-    margin-bottom: 20px;
+   /* margin-top: 30px;*/
+/*    margin-bottom: 20px;*/
 }
 
 .check-box-button.group > span.check_group{
@@ -4679,11 +4677,11 @@ textarea.email-text {
 }
 
 .noGroups{
-    margin-top: 9px;
+
     padding-left: 20px;
     padding-right: 30px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+
+  
     text-align: center;
     border: 1px dashed #C7C7C7; 
     width: 200px;
