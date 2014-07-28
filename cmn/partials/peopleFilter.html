@@ -39,8 +39,14 @@
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                                         <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
-                                        <div ng-show="!showGroups" class="select_role" ng-repeat = "myGroup in myGroups">
-                                            <div ng-if="myGroups.length == 0" class="tinycol">Oh hey, looks like you haven't grouped people yet</div>
+                                        <div ng-show="!showGroups && myGroups.length == 0">
+                                            <div class="noGroups">Oh hey, looks like you haven't grouped people yet<br/>
+                                                <span ng-click="$parent.toggleSide('group')">Start Grouping</span>
+                                            </div>
+
+                                        </div>
+                                        <div ng-show="!showGroups && myGroups.length > 0" class="select_role" ng-repeat = "myGroup in myGroups">
+                                          
                                             <div class="select_role tinycol" ng-click="assignFilter(myGroup.ind_group)" ng-class="{'picked': filterParam.param==myGroup.ind_group}">{{myGroup.ind_group}}</div>
                                             <div class="select_role tinycol left" ng-class="{'picked': filterParam.param==myGroup.count}"> ({{myGroup.count}})
                                             </div>

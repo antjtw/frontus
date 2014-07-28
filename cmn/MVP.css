@@ -4674,5 +4674,13 @@ textarea.email-text {
     cursor: pointer;
 }
 
+.noGroups{
+    padding-left: 20px;
+    text-align: center;
+}
 
+.noGroups span{
+    color: #3498DB;
+    cursor: pointer;
+}
 
