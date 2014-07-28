@@ -2101,7 +2101,7 @@ doc-transaction-details > div > div > button {
     height: 30px !important;
 }
 
-.redrequired .select2-container .select2-choice, .redrequired input {
+.redrequired .select2-container .select2-choice {
     border-color: #E74C3C;
 }
 
