@@ -394,7 +394,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.countersignDocument = function() {
             return $scope.doc.countersign().then(
                 function(data) {
-                    $scope.$emit("notification:success", "Document approved");
+                    if ($scope.doc.issue) {
+                        $scope.$emit("notification:success", "Document approved & cap table entry added");
+                    } else {
+                        $scope.$emit("notification:success", "Document approved");
+                    }
                     $scope.leave();
                 },
                 function(fail) {
