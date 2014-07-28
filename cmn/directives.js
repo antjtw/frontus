@@ -69,7 +69,9 @@ m.directive('groupPeople', function(){
                         var elemGroup = elem.groups.split(", ");
                         angular.forEach(allGroups, function(gr){
                             if(elemGroup.indexOf(gr)==-1){
+                                console.log(gr);
                                 deleteArray.push(gr);
+
                             }
                         });  
                     };
@@ -77,56 +79,57 @@ m.directive('groupPeople', function(){
                            
                 });       
                 return deleteArray;
+            };
+            // run this when you already have groups that are checked
+            $scope.toUncheck = function(person){
+                var uncheckGroup = []
+                var allGroups = $scope.fromFront(person)
+                console.log(allGroups);
+                angular.forEach(person, function(ind){
+                    console.log(ind.groups);
+                    var indArray = ind.groups.split(", ")
+                    console.log(indArray);
+                    angular.forEach($scope.selectedGroup, function(group){
+                        if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
+                            console.log(group);
+                            uncheckGroup.push($scope.selectedGroup.indexOf(group));
+                        }
+
+                    })
+                })
+            return uncheckGroup;
+
             }
             // $scope.doNotCheck($scope.people);
 
             $scope.checkBox = function(person){
+                var unCheck =  $scope.toUncheck(person);
                 var removeGroups = $scope.doNotCheck(person);
                 var allGroups = $scope.fromFront(person);
                 angular.forEach(allGroups, function(group){
-                    if(removeGroups.indexOf(group) === -1){
+                    if(removeGroups.indexOf(group) === -1 && $scope.selectedGroup.indexOf(group)== -1){
                         $scope.selectedGroup.push(group);
                     };
                 });
+                console.log($scope.selectedGroup);
+                if(unCheck.length > 0){
+                    for(var i = unCheck.length - 1; i >=0; i--){
+                        $scope.selectedGroup.splice(unCheck[i], 1)
+                    }
+                }
                 return($scope.selectedGroup)
             }
-            $scope.checkBox($scope.people);
-
-
-
-            $scope.modifyGroups = function(array){
-                var indexDelete= []
-                angular.forEach(array, function(elem){
-                    if($scope.selectedGroup.indexOf(elem)===-1){
-                        $scope.selectedGroup.push(elem)
-                    }                    
-                });
-                angular.forEach($scope.selectedGroup, function(group){
-                    if(array.indexOf(group)=== -1){
-                        indexDelete.push($scope.selectedGroup.indexOf(group));
-                    };
-                    
-               });
-                if(indexDelete.length > 0){
-                    for(var i = indexDelete.length -1; i >= 0; i--){
-                        $scope.selectedGroup.splice(indexDelete[i], 1);
-                    };
-                };
-
-            };
-
-            $scope.$watch('people', function(newdata, olddata){
-                    // this is working and letting me know whenever groups change
-                    if(newdata){
-                        if($scope.people.length > 0){
-                            $scope.checkBox($scope.people);
-                         
-                        }
-                            else{
-                                $scope.selectedGroup = [];
-                            } 
-                    }
-                   
+           
+            $scope.$watch('people', function(){
+                    // this is working and letting me know whenever groups change  
+                if($scope.people.length > 0){
+                    $scope.checkBox($scope.people);
+                    console.log("people are changing");
+                 
+                }
+                else{
+                    $scope.selectedGroup = [];
+                }                    
                    
             }, true);
             
