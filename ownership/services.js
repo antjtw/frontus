@@ -173,7 +173,11 @@ ownership.service('calculate', function () {
     this.tranvested = function (tran) {
         var tranvested = [];
         var vestbegin = angular.copy(tran.vestingbegins);
-        var maxunits = parseFloat(tran.units) - parseFloat(tran.forfeited);
+        var maxunits = parseFloat(tran.units);
+        if (!isNaN(parseFloat(tran.forfeited))) {
+            maxunits -= parseFloat(tran.forfeited);
+        }
+
         var vestedunits = 0;
         if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
             var cycleDate = angular.copy(tran.date).add(1).days();
