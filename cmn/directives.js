@@ -96,13 +96,12 @@ m.directive('groupPeople', function(){
                             }
                         })
                     }
-                    else{
-                        for(i = 0; i < $scope.selectedGroup.length; i++){
-                            console.log(i);
-                            uncheckGroup.push()
-                        }
-                    }
-                   console.log(uncheckGroup);
+                    // else{
+                    //     for(i = 0; i < $scope.selectedGroup.length; i++){
+                    //         console.log(i);
+                    //         uncheckGroup.push()
+                    //     }
+                    // }
                     
                     
                 })
@@ -119,10 +118,8 @@ m.directive('groupPeople', function(){
                     if(removeGroups.indexOf(group) === -1 && $scope.selectedGroup.indexOf(group)== -1){
                     $scope.selectedGroup.push(group);
                     };
-                    console.log(group)
                 });
                 if(unCheck.length > 0){
-                    console.log(unCheck)
                     for(var i = unCheck.length - 1; i >=0; i--){
                         $scope.selectedGroup.splice(unCheck[i], 1)
                     }
@@ -141,8 +138,7 @@ m.directive('groupPeople', function(){
                             $scope.checkBox($scope.people);
                         }
                     })
-                   
-                    console.log($scope.people);    
+                      
                 }
                 else{
                     $scope.selectedGroup = [];
