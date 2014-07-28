@@ -70,10 +70,13 @@ m.directive('groupPeople', function(){
                         angular.forEach(allGroups, function(gr){
                             if(elemGroup.indexOf(gr)==-1){
                                 deleteArray.push(gr);
-
                             }
                         });  
-                    };
+                    }
+                    else if(elem.groups == null){
+                        deleteArray = allGroups
+                    }
+
                     
                            
                 });       
@@ -86,15 +89,22 @@ m.directive('groupPeople', function(){
                 angular.forEach(person, function(ind){
                     if(ind.groups != null && ind.groups != undefined){
                         var indArray = ind.groups.split(", ")
+                        angular.forEach($scope.selectedGroup, function(group){
+                            if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
+                                uncheckGroup.push($scope.selectedGroup.indexOf(group));
+                                console.log(group);
+                            }
+                        })
                     }
-                    
-                    console.log(indArray);
-                    angular.forEach($scope.selectedGroup, function(group){
-                        if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
-                            uncheckGroup.push($scope.selectedGroup.indexOf(group));
+                    else{
+                        for(i = 0; i < $scope.selectedGroup.length; i++){
+                            console.log(i);
+                            uncheckGroup.push()
                         }
-
-                    })
+                    }
+                   console.log(uncheckGroup);
+                    
+                    
                 })
             return uncheckGroup;
 
@@ -107,10 +117,12 @@ m.directive('groupPeople', function(){
                 var allGroups = $scope.fromFront(person);
                 angular.forEach(allGroups, function(group){
                     if(removeGroups.indexOf(group) === -1 && $scope.selectedGroup.indexOf(group)== -1){
-                        $scope.selectedGroup.push(group);
+                    $scope.selectedGroup.push(group);
                     };
+                    console.log(group)
                 });
                 if(unCheck.length > 0){
+                    console.log(unCheck)
                     for(var i = unCheck.length - 1; i >=0; i--){
                         $scope.selectedGroup.splice(unCheck[i], 1)
                     }
@@ -121,8 +133,16 @@ m.directive('groupPeople', function(){
             $scope.$watch('people', function(){
                     // this is working and letting me know whenever groups change  
                 if($scope.people.length > 0){
-                    $scope.checkBox($scope.people);
-                 
+                    angular.forEach($scope.people, function(ind){
+                        if(ind.groups == undefined){
+                            $scope.selectedGroup = [];
+                        }
+                        else{
+                            $scope.checkBox($scope.people);
+                        }
+                    })
+                   
+                    console.log($scope.people);    
                 }
                 else{
                     $scope.selectedGroup = [];
