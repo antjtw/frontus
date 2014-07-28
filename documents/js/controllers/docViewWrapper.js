@@ -473,7 +473,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             angular.forEach($scope.doc.annotations, function(annot) {
                 num += annot.required && annot.forRole(navState.role) ? 1 : 0;
             });
-            return num
+            return num;
         };
 
         $scope.numAnnotationsComplete = function() {
@@ -481,15 +481,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             angular.forEach($scope.doc.annotations, function(annot) {
                 num += annot.required && annot.forRole(navState.role) && annot.filled(User.signaturePresent, navState.role) ? 1 : 0;
             });
-            return num
+            return num;
         };
 
         $scope.drawTime = function() {
             return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && navState.role == "investor"));
-        };
-
-        $scope.docCompleted = function() {
-            console.log(doc);
         };
 
         $scope.downloadOriginalPdf = function() {
@@ -525,7 +521,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.completeDoc = function() {
-            return $scope.versionIsComplete($scope.doc) || !$scope.doc.investor
+            return $scope.versionIsComplete($scope.doc) || !$scope.doc.investor;
+        };
+
+        $scope.goToPreparation = function() {
+            $location.url('/app/documents/prepare?doc=' + $scope.doc.doc_id);
         };
 
         $scope.getData();

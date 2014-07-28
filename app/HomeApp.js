@@ -77,6 +77,11 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'DocumentViewWrapperController',
             reloadOnSearch: false
         }).
+        when('/app/documents/prepare', {
+            templateUrl: '/documents/partials/prepare.html',
+            controller: 'DocumentPrepareController',
+            reloadOnSearch: false
+        }).
         when('/app/documents/company-status', {
             templateUrl: '/documents/partials/companyStatus.html',
             controller: 'CompanyDocumentStatusController'
@@ -1044,4 +1049,3 @@ function memoize( fn ) {
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
-

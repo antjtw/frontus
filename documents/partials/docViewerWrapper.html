@@ -51,6 +51,17 @@
                 </li>
             </ul>
         </div>
+        <div class="box-button pull-right" ng-if="prepareable()"
+            ng-click="goToPreparation();">
+            <ul>
+                <li>
+                    <span data-icon="&#xe60b;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Prepare</span>
+                </li>
+            </ul>
+        </div>
     </subnav>
     <div modal="tourModal" close="tourclose();" options="touropts">
         <div class="modal-title">
