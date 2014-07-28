@@ -202,7 +202,6 @@ m.directive('groupPeople', function(){
                             console.log(newGroupsArray);
                         }
                         if($scope.groupName.length > 0){
-                            console.log("hi")
                             if(newGroupsArray.indexOf($scope.groupName) == -1){
                                 newGroupsArray.push($scope.groupName);
                             }
