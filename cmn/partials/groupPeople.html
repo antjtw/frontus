@@ -1,10 +1,10 @@
 <div class="composemessage" style="padding-right: 30px">
-  <div class="sidebarHeader">
+  <div class="sidebarHeader" style="padding-bottom: 0px">
     <span>GROUP</span>
   </div>
 
-  <div>
-    <p>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name</p>
+  <div class="instructions">
+    <p>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name.</p>
   </div>
 
   <div ng-repeat="groupDatum in groupData | unique: 'group'" class="group_button">
@@ -25,7 +25,7 @@
   </div>
 <!-- </div> -->
 
-  <div class="footer-headline-left">
+  <div class="footer-headline-left" style="padding-top: 20px">
 
     <div class = "standard-button green">
       <button class="btn"
@@ -35,7 +35,7 @@
       </div>
   </div>
 
-  <div class="footer-headline-right">
+  <div class="footer-headline-right" style="padding-top: 20px">
     <div class= "standard-button white">
       <button class="btn" ng-click="$parent.toggleSide(); clearPeople(people)">
         Cancel

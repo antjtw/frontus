@@ -4653,6 +4653,11 @@ textarea.email-text {
     line-height: 30px;
 }
 
+.instructions{
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
 .check-box-button.group > span.check_group{
     margin-right: 20px;
 
