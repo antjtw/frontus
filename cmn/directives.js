@@ -47,19 +47,36 @@ m.directive('groupPeople', function(){
             $scope.fromFront = function(person){
                 var allGroups = [];
                 angular.forEach(person, function(info){
-                    SWBrijj.tblmm('account.my_user_role', 'info.email', email)
-                    // if(info.groups != undefined){
-                    //     var a = info.groups.split(", ");
-                    //     for(var i = 0; i < a.length; i++){
-                    //         if(allGroups.indexOf(a[i])== -1){
-                    //             allGroups.push(a[i]);
-                    //         };
-                    //     };
-                    // };
+                //     SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
+                //         console.log(data);
+                //         var eachGroups = data;
+                //         angular.forEach(eachGroups, function(group){
+                //             console.log(group.groups);
+                //             if(group.groups != null && group.groups != undefined){
+                //                 var myGroups = JSON.parse(group.groups)
+                //                 for(var i = 0; i < myGroups.length; i ++){
+                //                     if(allGroups.indexOf(myGroups[i])==-1){
+                //                         allGroups.push(myGroups[i]);
+                //                     }
+                //                     console.log(allGroups)
+                //                 }
+                                
+                //             }
+                //         })
+                //     })
+                    if(info.groups != undefined){
+                        var a = info.groups.split(", ");
+                        for(var i = 0; i < a.length; i++){
+                            if(allGroups.indexOf(a[i])== -1){
+                                allGroups.push(a[i]);
+                            };
+                        };
+                    };
        
                 });
                 return allGroups;              
             };
+            // $scope.fromFront($scope.people);
 
 
             $scope.doNotCheck = function(person){
@@ -97,13 +114,7 @@ m.directive('groupPeople', function(){
                             }
                         })
                     }
-                    // else{
-                    //     for(i = 0; i < $scope.selectedGroup.length; i++){
-                    //         console.log(i);
-                    //         uncheckGroup.push()
-                    //     }
-                    // }
-                    
+
                     
                 })
             return uncheckGroup;

@@ -4676,7 +4676,12 @@ textarea.email-text {
 
 .noGroups{
     padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
+    border: 1px dashed #666; 
+    width: 200px;
 }
 
 .noGroups span{
