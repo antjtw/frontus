@@ -115,7 +115,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return summary.docname;
         } else if (summary.type == "investor") {
             return summary.name || summary.email;
-        }
+        };
     };
 
 
@@ -123,11 +123,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     $scope.getShareType = function(doc) {
         if (!doc) {return 0;}
         if (!doc.signature_flow && !doc.template_id) {
-            if  (!doc.is_prepared) {
-                doc.signature_flow = 0;
-            } else {
-                doc.signature_flow = 2;
-            }
+            doc.signature_flow = 0;
         } else if (!doc.signature_flow && doc.template_id) {
             doc.signature_flow = -1;
         }
