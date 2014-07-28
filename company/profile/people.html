@@ -110,7 +110,7 @@
                     <td style="width: 200px"><span ng-show="person.role=='issuer'">Admin</span></td>
                     <td><span>{{person.groups}}</span></td>
                     <td style="width:50px;">
-                        <ul ng-show="person.lastlogin" class="dropdown-list" ng-hide="sidebarPage == 'email'">
+                        <ul class="dropdown-list" ng-if="sidebarPage != 'email'">
                             <li class="dropdown standard menu-drop">
                                 <a class="dropdown-toggle">
                                     <span data-icon="&#xe011;" aria-hidden="true"></span>
