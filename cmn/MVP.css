@@ -4577,6 +4577,7 @@ textarea.email-text {
 
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
+    cursor: pointer;
 }
 
 .messages .activity-feed2 li.event:first-of-type {
@@ -4656,5 +4657,17 @@ textarea.email-text {
     margin-right: 20px;
 
 }
+.select_role{
+    cursor: pointer;
+}
+.select_role.picked{
+    color: #666;
+}
 
-\
+.select_role:hover {
+    color: #666;
+    cursor: pointer;
+}
+
+
+
