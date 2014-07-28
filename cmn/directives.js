@@ -218,9 +218,11 @@ m.directive('groupPeople', function(){
                             console.log(newGroupsArray);
                         }
                         if($scope.groupName.length > 0){
+                            // console.log(newGroupsArray)
                             if(newGroupsArray.indexOf($scope.groupName) == -1){
                                 newGroupsArray.push($scope.groupName);
                             }
+                            console.log(newGroupsArray)
                         }
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
@@ -292,6 +294,7 @@ m.directive('peopleFilter', function(){
             $scope.getFilterCount = function(){
                 SWBrijj.tblm('account.ind_user_group', ['ind_group', 'count']).then(function(data){
                     $scope.myGroups = data;
+                    console.log($scope.myGroups);
                     angular.forEach($scope.myGroups, function(info){
                         info.ind_group = info.ind_group.replace(/"/g, "")
                     });
