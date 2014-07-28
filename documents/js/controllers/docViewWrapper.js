@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', 'User', '$q',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q) {
+        'navState', 'Annotations', 'Documents', 'User', '$q', 'basics',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q, basics) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -486,6 +486,46 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.drawTime = function() {
             return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && navState.role == "investor"));
+        };
+
+        $scope.docCompleted = function() {
+            console.log(doc);
+        };
+
+        $scope.downloadOriginalPdf = function() {
+            SWBrijj.procd('sharewave-' + $scope.doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', $scope.doc.doc_id.toString()).then(function(url) {
+                document.location.href = url;
+            });
+        };
+
+        $scope.exportVersionPdf = function() {
+            $scope.$emit("notification:success", "Export in progress.");
+            var truthiness = navState.role == "investor" ? false : true;
+            SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, truthiness).then(function(url) {
+                document.location.href = url;
+            }).except(function(x) {
+                    console.log(x);
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                });
+        };
+
+        $scope.downloadPDF = function() {
+            if ($scope.doc.investor) {
+                $scope.exportVersionPdf();
+            } else {
+                $scope.downloadOriginalPdf();
+            }
+        };
+
+        $scope.versionIsComplete = function(version) {
+            return basics.isCompleteSigned(version)
+                || basics.isCompleteViewed(version)
+                || basics.isCompleteVoided(version)
+                || version.when_retracted;
+        };
+
+        $scope.completeDoc = function() {
+            return $scope.versionIsComplete($scope.doc) || !$scope.doc.investor
         };
 
         $scope.getData();

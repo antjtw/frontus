@@ -210,20 +210,22 @@ ownership.service('calculate', function () {
                 x = 12;
             }
             finalDate.add(-1).days();
-            while (Date.compare(finalDate, cycleDate) > -1) {
-                if (x < 1) {
-                    cycleDate.addWeeks(x * 4);
-                }
-                else {
-                    cycleDate.addMonths(x);
-                }
-                if (Date.compare(Date.today(), cycleDate) > -1) {
-                    tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
-                    vestedunits += (x * ((monthlyperc / 100) * tran.units));
-                    if (vestedunits > maxunits) {
-                        var diff = vestedunits - maxunits;
-                        tranvested[tranvested.length-1].units -= diff;
-                        return tranvested;
+            if (vestedunits < maxunits) {
+                while (Date.compare(finalDate, cycleDate) > -1) {
+                    if (x < 1) {
+                        cycleDate.addWeeks(x * 4);
+                    }
+                    else {
+                        cycleDate.addMonths(x);
+                    }
+                    if (Date.compare(Date.today(), cycleDate) > -1) {
+                        tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
+                        vestedunits += (x * ((monthlyperc / 100) * tran.units));
+                        if (vestedunits > maxunits) {
+                            var diff = vestedunits - maxunits;
+                            tranvested[tranvested.length-1].units -= diff;
+                            return tranvested;
+                        }
                     }
                 }
             }

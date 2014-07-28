@@ -436,7 +436,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 }
             }
             else {
-                annot.fontsize = 12;
+                annot.fontsize = 14;
             }
             if (new_type == 'date' && this.val === "") {
                 // an empty string causes oddities in the date picker
