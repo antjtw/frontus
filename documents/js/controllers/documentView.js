@@ -400,7 +400,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                          var temp_annots = JSON.parse($scope.lib.iss_annotations);
                          temp_annots.forEach(function(annot) {
                              // TODO: we're creating an Annotation object and destroying it for no good reason
-                             var tmp = new Annotation().parseFromJson(annot);
+                             var tmp = Annotations.createBlankAnnotation().parseFromJson(annot, $scope.doc.annotation_types);
                              if (tmp.isCountersign()) {
                                  annots.push(annot);
                              }
@@ -413,7 +413,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              }
                          }
                      }
-                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
+                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots, $scope.doc.annotation_types);
                      var sticky;
                      for (var i = 0; i < annots.length; i++) {
                          var annot = annots[i];
@@ -536,7 +536,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                var a = new Annotation();
+                var a = Annotations.createBlankAnnotation();
                 a.page = $scope.doc.currentPage;
                 a.position.docPanel = $scope.dp;
                 a.position.size.width = 0;

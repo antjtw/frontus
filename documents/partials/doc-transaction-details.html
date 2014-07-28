@@ -1,0 +1,22 @@
+<div class="bottom-padded" ng-hide="doc.issue">
+    <div>
+    <span>Do you want to associate this document with a Cap Table transaction?</span>
+    <input ui-select2="select2Options" ng-model="selectedIssue">
+    <button ng-click="doc.setTransaction(selectedIssue.issue);" ng-show="selectedIssue.id != 0" ng-disabled="selectedIssue.id == 0">Next</button>
+    </div>
+</div>
+<div ng-show="doc.issue">
+    <div class="bottom-padded">
+        <span>Fields necessary to add a cap table entry into {{doc.issue}}</span>
+        <div class="required-fields" ng-class="{'field-completed': (doc.hasFilledAnnotation(field.name) || doc.hasOtherPartyAnnotation(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required">
+            <span><span data-icon="&#xe052;" ng-show="doc.hasFilledAnnotation(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
+            <span>{{field.display}}</span>
+            <span ng-show="doc.hasOtherPartyAnnotation(field.name)"> (Recipient Will Complete)</span>
+        </div>
+    </div>
+    <div class="fields-progress">
+        <span ng-show="doc.numFieldsComplete() != doc.numFieldsRequired()">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} Complete</span>
+        <span ng-show="doc.numFieldsComplete() == doc.numFieldsRequired()">Document is ready to go!</span>
+        <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
+    </div>
+</div>

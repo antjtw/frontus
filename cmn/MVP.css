@@ -2591,6 +2591,48 @@ a.oldschool-link  {
     cursor: pointer;
     background-color: inherit;
 }
+
+.toggle-button {
+    height: 30px;
+    width: 87px;
+    cursor: pointer;
+    border: 1px solid #8D8D8D;
+}
+
+.toggle-button.selected {
+    background-color: #8D8D8D;
+}
+
+.toggle-button > ul > li {
+    line-height: 30px;
+}
+
+.toggle-button > ul > li > span:first-child {
+    vertical-align: -3%;
+}
+
+.toggle-button:first-of-type {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.toggle-button:last-of-type {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
     border-radius: 3px;
@@ -3195,7 +3237,7 @@ button.icon-button:hover {
     line-height: 24px;
     min-height: 24px;
     display: block;
-    padding: 3px 20px 3px 10px;
+    padding: 3px 20px 3px 5px;
     clear: both;
     font-weight: normal;
     color: #333333;
@@ -3999,6 +4041,53 @@ button.icon-button:hover {
 
 .select2-container-multi .select2-choices .select2-search-field input {
     font-family: 'FS Elliot Web Regular', sans-serif;
+}
+
+.select2-container {
+    height: 30px;
+}
+
+.select2-container .select2-choice .select2-arrow {
+    background-color: #FFFFFF;
+    background-image: none;
+    border-left: transparent;
+}
+
+.select2-container .select2-choice {
+    background-color: #FFFFFF;
+    background-image: none;
+    height: 30px;
+    line-height: 30px;
+    color: #666666;
+    padding-left: 10px;
+}
+
+.select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #aaa;
+}
+
+.select2-results .select2-result-label {
+    color: #666666;
+}
+
+.select2-container-active .select2-choice {
+    border: 1px solid #aaa;
+    box-shadow: none;
+}
+
+.select2-container .select2-choice .select2-arrow b {
+    background: url('/img/down-arrow-20x30.png');
+}
+
+.select2-container .select2-choice .select2-arrow {
+    right: 5px;
+}
+
+.select2-dropdown-open .select2-choice {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 
