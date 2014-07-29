@@ -213,7 +213,7 @@ navm.controller('NavCtrl',
             if (document.URL.indexOf("app") == -1) {
                 document.location.href = page;
             } else {
-                $location.url(page);
+                $location.url(encodeURIComponent(page));
             }
         };
         $scope.persistentNavGoToPage = function(page) {

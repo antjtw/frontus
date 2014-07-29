@@ -589,7 +589,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             var link;
             link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
             if (link) {
-                $location.url(link);
+                $location.url(encodeURIComponent(link));
             }
         };
 

@@ -165,7 +165,7 @@ app.controller('CompanyOneStep',
             }
         };
         $scope.gotoPage = function(url) {
-            $location.url(url);
+            $location.url(encodeURIComponent(url));
         };
         $scope.getPaymentToken = function(status, response) {
             if (response.error) {

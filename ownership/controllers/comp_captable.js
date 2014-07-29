@@ -1678,7 +1678,8 @@ app.controller('captableController',
             if (!$scope.toggleView()) {
                 $scope.viewme = ['investor', ev.doc_id];
             } else {
-                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1')
+                console.log(ev.investor);
+                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+encodeURIComponent(ev.investor)+'&page=1')
             }
         } else if (ev.original != null) {
             if (!$scope.toggleView()) {
@@ -2714,7 +2715,7 @@ app.controller('captableController',
         var link;
         link = (name ? ((navState.userid != email) ? '/app/company/profile/view?id=' + email : '/app/account/profile/') : '');
         if (link) {
-            $location.url(link);
+            $location.url(encodeURIComponent(link));
         }
     };
 
