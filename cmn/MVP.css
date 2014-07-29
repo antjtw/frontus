@@ -4865,6 +4865,10 @@ textarea.email-text {
 
 
 /*Filter sidebar*/
+
+.messages .activity-feed2 li.event.roles{
+    margin-right: 0px;
+}
 .tinycol{
     display: inline-block;
     width: 40%;
@@ -4892,8 +4896,10 @@ textarea.email-text {
     cursor: pointer;
 }
 .select_role.picked{
+    color: red;
     color: #666;
 }
+
 
 .select_role:hover {
     color: #666;
