@@ -17,7 +17,8 @@ m.directive('groupPeople', function(){
             var newGroups = [];
             $scope.groupData = [];
             var totalGroups = [];
-            var arrayRemove = []
+            var arrayRemove = [];
+            $scope.allTheGroups = [];
     
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
@@ -31,8 +32,7 @@ m.directive('groupPeople', function(){
                 this.group = group;
             };
 
-            $scope.parseGroups = function(){
-            console.log($scope.people);             
+            $scope.parseGroups = function(){        
               SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
                     angular.forEach($scope.myUserGroups, function(info){
@@ -46,24 +46,8 @@ m.directive('groupPeople', function(){
 
             $scope.fromFront = function(person){
                 var allGroups = [];
+
                 angular.forEach(person, function(info){
-                //     SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
-                //         console.log(data);
-                //         var eachGroups = data;
-                //         angular.forEach(eachGroups, function(group){
-                //             console.log(group.groups);
-                //             if(group.groups != null && group.groups != undefined){
-                //                 var myGroups = JSON.parse(group.groups)
-                //                 for(var i = 0; i < myGroups.length; i ++){
-                //                     if(allGroups.indexOf(myGroups[i])==-1){
-                //                         allGroups.push(myGroups[i]);
-                //                     }
-                //                     console.log(allGroups)
-                //                 }
-                                
-                //             }
-                //         })
-                //     })
                     if(info.groups != undefined){
                         var a = info.groups.split(", ");
                         for(var i = 0; i < a.length; i++){
@@ -110,13 +94,11 @@ m.directive('groupPeople', function(){
                         angular.forEach($scope.selectedGroup, function(group){
                             if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
                                 uncheckGroup.push($scope.selectedGroup.indexOf(group));
-                                console.log(group);
-                            }
-                        })
-                    }
-
+                            };
+                        });
+                    };
                     
-                })
+                });
             return uncheckGroup;
 
             }
@@ -209,11 +191,12 @@ m.directive('groupPeople', function(){
                             }
                             else if(about.groups != null){
                                 newGroupsArray = JSON.parse(about.groups);
+                                console.log(newGroupsArray);
                                 
                             };
 
                         });
-                        console.log(newGroupsArray);
+                        
                         if($scope.selectedGroup.length > 0){
                             angular.forEach($scope.selectedGroup, function(selected){
                                 if(newGroupsArray.indexOf(selected)==-1){

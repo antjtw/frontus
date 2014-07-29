@@ -4880,8 +4880,8 @@ textarea.email-text {
 }
 
 .instructions{
-   /* margin-top: 30px;*/
-/*    margin-bottom: 20px;*/
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .check-box-button.group > span.check_group{
