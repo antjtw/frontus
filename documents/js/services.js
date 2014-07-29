@@ -455,7 +455,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     //
     // [i][3] style -> font size -- anything else?
     //
-    // [i][4] other -> investorfixed, whosign, whattype, and required
+    // [i][4] other -> investorfixed, whosign, whattype, required, and id
 
     var Annotation = function() {
         this.position = {
@@ -478,10 +478,12 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         this.whosign = "Investor";
         this.whattype = "Text";
         this.required = true;
+        this.id = generateAnnotationId();
         this.type_info = {
             name: "text",
             display: "Text"
         };
+        this.pristine = false;
 
         var annot = this;
         $rootScope.$watch(function() {
@@ -532,6 +534,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             this.whosign = json[4].whosign;
             this.whattype = json[4].whattype;
             this.required = json[4].required;
+            this.id = json[4].id;
+            if (!this.id) {
+                this.id = generateAnnotationId();
+            }
+            this.pristine = true; // used to tell if value has changed since server load. mostly useful when preparing for an individual
             this.updateTypeInfo(annotation_types);
             return this;
         },
@@ -545,7 +552,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             position.push(this.position.docPanel.height); // document page height
             json.push(position);
             json.push(this.type);
-            if (this.val != null) {
+            if (this.val !== null) {
                 json.push([this.val]);
             } else {
                 json.push([""]);
@@ -555,7 +562,8 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 investorfixed: this.investorfixed,
                 whosign: this.whosign,
                 whattype: this.whattype,
-                required: this.required
+                required: this.required,
+                id: this.id
             });
             return json;
         },
@@ -601,6 +609,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         return new Annotation();
     };
 
+    function generateAnnotationId() {
+        // needs to return an id that's unique to this document
+        return Date.now().toString() + "id" + Math.floor(Math.random()*100000);
+    }
+
     var doc_annotations = {};
 
     this.getDocAnnotations = function(doc_id) {
@@ -618,7 +631,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             doc_annotations[doc_id] = [];
         } else {
             // clear out any existing annotations
-            // TODO: should check for dupes and update instead
             doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
         }
         annotations.forEach(function(annot) {
@@ -687,7 +699,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 if (annot.val === '')
                 {
                     annot.val = data;
-                    //$document.getElementById('highlightContents').value = data;
                 }
             }).except(function (x) {console.log(x);});
     };
