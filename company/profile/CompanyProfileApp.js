@@ -599,9 +599,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
-            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
+            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + encodeURIComponent(person.email) : '/app/account/profile/') : '');
             if (link) {
-                $location.url(encodeURIComponent(link));
+                $location.url(link);
             }
         };
 
