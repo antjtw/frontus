@@ -109,10 +109,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             $scope.invq = false;
 
             $scope.prepare = ($routeParams.prepare==='true') ? true : false;
-            $scope.counterparty = !! $scope.urlInves;
+            var counterparty = !! $scope.urlInves;
 
             $scope.pageQueryString = function() {
-                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
+                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + counterparty;
             };
 
             $scope.getVersion = function(doc) {
@@ -122,13 +122,8 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                  * @type {Date} */
 
                  SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
-                        $scope.docviews = data;
-                        /* Should not be required
-                        angular.forEach($scope.docviews, function(view) {
-                            view.max = view.max.addMinutes(-view.max.getTimezoneOffset())
-                        });
-                        */
-                    }).except(function(x) {
+                     $scope.docviews = data;
+                 }).except(function(x) {
                      console.log(x);
                  });
                 $scope.docId = doc.doc_id;
@@ -138,13 +133,14 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             };
 
             $scope.getOriginal = function() {
-                $scope.counterparty = false;
+                counterparty = false;
                 $scope.docId = $scope.docKey;
                 $scope.library = "document.my_company_library";
                 $scope.pages = "document.my_company_codex";
                 var z = $location.search();
-                delete z['investor'];
+                delete z.investor;
                 $location.search(z);
+                $scope.prepareFor = $routeParams.investorid; // investor id, if we're doing an investor specific preparation
                 $scope.initDocView();
 
                 $scope.checkProcessing();
@@ -159,7 +155,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                         field = "doc_id";
                         tempdocid = parseInt($scope.urlInves);
                     }
-                    if ($scope.counterparty) {
+                    if (counterparty) {
                         SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
                             if (flag) {
                                 $scope.getVersion(data[0]);

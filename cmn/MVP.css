@@ -1675,6 +1675,14 @@ ul.spaced-list > li:nth-child(odd) {
     background-position: 0 -30px;
 }
 
+.activity-icon.zoom-icon {
+    background-position: -60px -30px;
+}
+
+.activity-icon.people-icon {
+    background-position: -150px -30px;
+}
+
 .activity-icon.page-icon {
     background-position: -210px -30px;
 }
@@ -2056,7 +2064,7 @@ li.no-activity {
 }
 
 .link{
-   cursor: pointer; 
+   cursor: pointer;
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
@@ -4810,7 +4818,7 @@ textarea.email-text {
     padding-top: 12px;
 }
 
-.span4.capright.sidecontent{ 
+.span4.capright.sidecontent{
     padding-right: 0;
 }
 
@@ -4826,7 +4834,7 @@ textarea.email-text {
 
 .span4.capright.side{
     padding-right: 0px;
-} 
+}
 
 .scrollable-docs {
     max-height: 500px;
@@ -4846,14 +4854,12 @@ textarea.email-text {
 .recipients.details{
     font-size: 12px;
     padding-left: 1.5em;
-    padding-bottom: 1em; 
+    padding-bottom: 1em;
 }
 
 
 
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
-    cursor: pointer; 
+    cursor: pointer;
 }
-
-
