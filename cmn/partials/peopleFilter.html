@@ -39,13 +39,13 @@
                                         <span data-icon="&#xe034;"aria-hidden="true" ng-show="showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                                         <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                                         <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
+
                                         <div ng-if="!showGroups && myGroups.length == 0" ng-click="$parent.$parent.toggleSide('group')">
                                             <div class="noGroups status-toggle">Want to save time when sharing and messaging?<br/>
                                                 <span>Start Grouping</span>
                                                 <span data-icon="&#xe016;" aria-hidden="true"></span>
                                             </div>
                                         </div>
-
                                         
 
                                         <div ng-if="!showGroups && myGroups.length > 0" ng-repeat = "myGroup in myGroups">
