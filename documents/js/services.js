@@ -249,7 +249,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
             this.annotations.forEach(function(annot) {
                 annot.updateTypeInfo(this.annotation_types);
-            });
+            }, this);
         },
         unsetTransaction: function() {
             this.issue = null;
@@ -299,21 +299,21 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         },
         dropdownDisplay: function(type) {
             if (type.required) {
-                return type.display + " (Required)"
+                return type.display + " (Required)";
             } else {
-                return type.display
+                return type.display;
             }
         },
         annotationOrder: function(type) {
             if (type.display == "Text") {
-                return 0
+                return 0;
             }
             else if (type.required) {
-                return 0 + type.display
+                return 0 + type.display;
             } else if (type.required == false) {
-                return 1 + type.display
+                return 1 + type.display;
             } else {
-                return 2 + type.display
+                return 2 + type.display;
             }
         },
         annotable: function(role) {
@@ -329,15 +329,73 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         issuerCanAnnotate: function() {//does not include if the document is being prepared
             return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
         },
+        getPreparedFor: function() {
+            if (!this.preparedFor) {
+                this.preparedFor = [];
+                var doc = this;
+                SWBrijj.tblm('document.my_personal_preparations').then(function(data) {
+                    data.forEach(function(investor_prep) {
+                        // add id and text fields to make select2 happy
+                        investor_prep.display = {id: investor_prep.investor, text: investor_prep.investor};
+                        doc.preparedFor.push(investor_prep);
+                    });
+                });
+            }
+            return this.preparedFor;
+        },
+        addPreparedFor: function(investor) {
+            var doc = this;
+            SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
+                doc.preparedFor.push({display: {id: investor, text: investor}, investor: investor, doc_id: doc.doc_id});
+            }).except(function(error) {
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
+        updatePreparedFor: function(old_investor, new_investor) {
+            var doc = this;
+            SWBrijj.update('document.my_personal_preparations', {investor: new_investor}, {doc_id: this.doc_id, investor: old_investor}).then(function(result){
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.investor = new_investor;
+                        // TODO: ensure investor_prep.display.text is right (might need investor name)
+                    }
+                });
+            }).except(function(error) {
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.display = {id: old_investor, text: old_investor};
+                    }
+                });
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
+        deletePreparedFor: function(old_investor) {
+            var doc = this;
+            SWBrijj.delete_one('document.my_personal_preparations', {doc_id: this.doc_id, investor: old_investor}).then(function(result) {
+                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
+                    if (investor_prep.investor == old_investor) {
+                        arr.splice(idx, 1);
+                    }
+                });
+            }).except(function(error) {
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.display = {id: old_investor, text: old_investor};
+                    }
+                });
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
     };
 
     /// Document service definition
-    // TODO: probably need to distinguish between originals and investor versions
+    // TODO: need to distinguish between originals and investor versions
     var docs = {};
 
     this.getDoc = function(doc_id) {
         if (doc_id === void(0)) {
             // we're probably uninitialized
+            // TODO: fetch the actual document
             var d = new Document();
             return d;
         }
@@ -411,7 +469,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     //
     // [i][3] style -> font size -- anything else?
     //
-    // [i][4] other -> investorfixed, whosign, whattype, and required
+    // [i][4] other -> investorfixed, whosign, whattype, required, and id
 
     var Annotation = function() {
         this.position = {
@@ -434,10 +492,12 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         this.whosign = "Investor";
         this.whattype = "Text";
         this.required = true;
+        this.id = generateAnnotationId();
         this.type_info = {
             name: "text",
             display: "Text"
         };
+        this.pristine = false;
 
         var annot = this;
         $rootScope.$watch(function() {
@@ -488,6 +548,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             this.whosign = json[4].whosign;
             this.whattype = json[4].whattype;
             this.required = json[4].required;
+            this.id = json[4].id;
+            if (!this.id) {
+                this.id = generateAnnotationId();
+            }
+            this.pristine = true; // used to tell if value has changed since server load. mostly useful when preparing for an individual
             this.updateTypeInfo(annotation_types);
             return this;
         },
@@ -501,7 +566,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             position.push(this.position.docPanel.height); // document page height
             json.push(position);
             json.push(this.type);
-            if (this.val != null) {
+            if (this.val !== null) {
                 json.push([this.val]);
             } else {
                 json.push([""]);
@@ -511,7 +576,8 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 investorfixed: this.investorfixed,
                 whosign: this.whosign,
                 whattype: this.whattype,
-                required: this.required
+                required: this.required,
+                id: this.id
             });
             return json;
         },
@@ -557,6 +623,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         return new Annotation();
     };
 
+    function generateAnnotationId() {
+        // needs to return an id that's unique to this document
+        return Date.now().toString() + "id" + Math.floor(Math.random()*100000);
+    }
+
     var doc_annotations = {};
 
     this.getDocAnnotations = function(doc_id) {
@@ -574,7 +645,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             doc_annotations[doc_id] = [];
         } else {
             // clear out any existing annotations
-            // TODO: should check for dupes and update instead
             doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
         }
         annotations.forEach(function(annot) {
@@ -643,7 +713,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 if (annot.val === '')
                 {
                     annot.val = data;
-                    //$document.getElementById('highlightContents').value = data;
                 }
             }).except(function (x) {console.log(x);});
     };
