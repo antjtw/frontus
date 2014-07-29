@@ -39,7 +39,6 @@ m.directive('groupPeople', function(){
                     angular.forEach($scope.myUserGroups, function(info){
                         var a = info.json_array_elements;
                         var b = JSON.parse(a);
-                        console.log(b)
                         $scope.groupData.push(new indGroup(b));
                     });
                 });
@@ -118,13 +117,11 @@ m.directive('groupPeople', function(){
                         angular.forEach($scope.selectedGroup, function(group){
                             if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
                                 uncheckGroup.push($scope.selectedGroup.indexOf(group));
-                                console.log(group);
-                            }
-                        })
-                    }
-
+                            };
+                        });
+                    };
                     
-                })
+                });
             return uncheckGroup;
 
             }
