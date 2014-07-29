@@ -61,10 +61,9 @@
                                 </div>
                                 
 
-                                <div ng-if="!showGroups && myGroups.length > 0" ng-repeat = "myGroup in myGroups" class="select_role">
-                                    <div class="select_role tinycol" ng-click="assignFilter(myGroup.ind_group)" ng-class="{'picked': filterParam.param==myGroup.ind_group}">{{myGroup.ind_group}}</div>
-                                    <div class="select_role tinycol left" ng-class="{'picked': filterParam.param==myGroup.count}"> ({{myGroup.count}})
-                                    </div>
+                                <div ng-if="!showGroups && myGroups.length > 0" ng-repeat = "myGroup in myGroups" class="select_role" ng-click="assignFilter(myGroup.ind_group)">
+                                    <div class="select_role tinycol"  ng-class="{'picked': filterParam.param==myGroup.ind_group}">{{myGroup.ind_group}}</div>
+                                    <div class="select_role tinycol left" ng-class="{'picked': filterParam.param==myGroup.ind_group}"> ({{myGroup.count}})</div>
                                 </div>
                 
                             </div>          

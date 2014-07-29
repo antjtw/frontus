@@ -4672,8 +4672,10 @@ textarea.email-text {
     cursor: pointer;
 }
 .select_role.picked{
+    color: red;
     color: #666;
 }
+
 
 .select_role:hover {
     color: #666;
