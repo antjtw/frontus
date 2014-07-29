@@ -1,0 +1,117 @@
+.summary-bar {
+	padding-left: 30px;
+	margin-top: 80px;
+	
+}
+.summary-bar > div > div:last-child {
+	padding-left: 35px;
+	padding-bottom: 2px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	border-bottom: 2px solid;
+	border-color: #CAC9C9;
+	width: 250px;
+	font-size: 12px;
+}
+.summary-bar > div > div > span:first-child {
+	position: absolute;
+	bottom: 16px;
+	color: black;
+	font-size: 15px;
+	left: 35px;
+	top: 14px;
+}
+.belowTitle {
+	position: relative;
+}
+
+#first-item{
+	border-top: 2px solid;
+	border-color: #CAC9C9;
+	width: 285px;
+	padding-top: 10px;
+}
+.tabbable > ul > li {
+	border-left: 1px solid;
+	border-color: #CAC9C9;
+}
+.tab-content > div > div > span {
+	margin-left: 35px;
+	position: relative;
+	top: 10px;
+	color: black;
+		
+}
+.tab-content > div > div > span > a {
+	color: black;
+	margin-left: 5px;
+	position: relative;
+	top: -2px;
+}
+
+.address-area {
+	margin: 10px;
+	margin-left: 80px;
+}
+.span6 > div > img {
+	margin-bottom: -15px;
+}
+.span6 > div {
+	margin: 30px;
+}
+.span6 > div > h2 {
+	margin-left: 50px;
+	margin-top: -20px;
+}
+.span6 > div > h2 > span {
+	font-size: 20px;
+	margin: 3px;
+}
+#doc-button {
+	margin-top: 100px;
+}
+#own-button {
+	margin-left: 23px;
+}
+.body-box > div:first-child > div > div{
+	float: left;
+	margin: 50px;
+	margin-left: calc(45%-80px)
+	
+}
+#add-investments {
+	position: absolute;
+	left: calc(50% - 116px);
+	top: 0px;
+}
+#share-ownership {
+	position: absolute;
+	right: 25px;
+	top: 0px;
+}
+.span12 > div:last-child > div:last-child {
+	position: relative;
+}
+.span12 > div:last-child > div:last-child > div > div > div > img {
+	margin-left: 5px;
+} 
+#arrow1 {
+	position: absolute;
+	left: calc(25% + 37px);
+	top: 90px;
+}
+#arrow2 {
+	position: absolute;
+	left: calc(75% - 74px);
+	top: 90px;
+}
+#start-now {
+	margin-left: 80px
+}
+#a_home_own_pre {
+	position: absolute;
+	left: calc(50% - 75px);
+	top: 250px;
+}
+
+	
