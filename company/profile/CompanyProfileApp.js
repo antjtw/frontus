@@ -481,7 +481,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else if($scope.filterParam.param == undefined){
                 return person
             }
-            else if(person.groupsArray.indexOf($scope.filterParam.param) > -1){
+            else if(person.groupsArray != undefined && person.groupsArray.indexOf($scope.filterParam.param) > -1){
                 return person.groups;
             }
         }
