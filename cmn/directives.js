@@ -242,11 +242,17 @@ m.directive('groupPeople', function(){
                             console.log(newGroupsArray);
                         }
                         if($scope.groupName.length > 0){
-                            // console.log(newGroupsArray)
-                            if(newGroupsArray.indexOf($scope.groupName) == -1){
+                            var checkNew = []
+                            angular.forEach($scope.groupData, function(data){
+                                    checkNew.push(data.group);
+                                });
+                            if(newGroupsArray.indexOf($scope.groupName) == -1 && checkNew.indexOf($scope.groupName)== -1){
                                 newGroupsArray.push($scope.groupName);
                             }
-                            console.log(newGroupsArray)
+                            else{
+                                console.log("already in group")
+                            }
+                            
                         }
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
