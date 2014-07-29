@@ -142,7 +142,7 @@ var statusController = function ($scope, $rootScope, SWBrijj, $location, navStat
         var link;
         link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id='+person.email : '/app/account/profile/') : '');
         if (link) {
-            $location.url(encodeURIComponent(link));
+            $location.url(link);
         }
     };
 

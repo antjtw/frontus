@@ -2715,7 +2715,7 @@ app.controller('captableController',
         var link;
         link = (name ? ((navState.userid != email) ? '/app/company/profile/view?id=' + email : '/app/account/profile/') : '');
         if (link) {
-            $location.url(encodeURIComponent(link));
+            $location.url(link);
         }
     };
 
