@@ -59,35 +59,31 @@ m.directive('groupPeople', function(){
             };
             $scope.fromFront($scope.people);
 
-            var backGroups = []  
+             
             // $scope.fromBack = function(person){
-                              
+            //     var backGroups = []             
             //     angular.forEach(person, function(info){
-                    
             //         console.log(info.email);
-            //         SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
+            //         SWBrijj.tblmm('account.my_user_groups', 'email', info.email).then(function(data){
             //             var ppl = data;
+            //             console.log(ppl);
             //             angular.forEach(ppl, function(ind){
-            //                 var inGroup = JSON.parse(ind.groups)
-            //                 for(i = 0; i<inGroup.length; i++){
-            //                     backGroups.push(inGroup[i]);
+            //                 console.log(JSON.parse(ind.json_array_elements))
+            //                 if(backGroups.indexOf(JSON.parse(ind.json_array_elements))== -1){
+            //                     backGroups.push(JSON.parse(ind.json_array_elements));
             //                 }
-            //                 // angular.forEach(JSON.parse(ind.groups), function(gr){
-            //                 //    backGroups.push(gr)
-            //                 //    console.log(gr);
-            //                 //    console.log(JSON.parse(ind.groups))
-            //                 // });
-            //             });
-            //             console.log(backGroups);
+            //                 console.log(backGroups);
+
+            //             })
             //         })
             //     })
             //     return backGroups
+            //     alert($scope.backGroups)
             // };
 
             // $scope.testFcn = function(person){
             //     console.log(person);
             //     $scope.fromBack(person);
-            //     console.log($scope.fromBack(person))
             // }
             // $scope.testFcn($scope.people);
 
