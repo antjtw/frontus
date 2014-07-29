@@ -159,6 +159,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                         field = "doc_id";
                         tempdocid = parseInt($scope.urlInves);
                     }
+                    SWBrijj.tblmm("ownership.doc_evidence", "doc_id", tempdocid).then(function(data) {
+                        $scope.doctrans = data;
+                    });
                     if ($scope.counterparty) {
                         SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
                             if (flag) {

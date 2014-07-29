@@ -2117,3 +2117,84 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 .redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input, .greenrequired .select2-container .select2-choice, .greenrequired input  {
     border-color: #1ABC96;
 }
+
+/* Transaction Directive */
+
+.transaction-accordion.lessmargin .delete-link.blue-link {
+    margin-left: 5px;
+}
+
+.transaction-accordion .accordion-heading {
+    padding: 0;
+}
+
+.transaction-accordion .accordion-heading .accordion-toggle {
+    padding: 11px 12px;
+}
+
+.transaction-accordion .accordion-heading > a > span:not(:last-of-type),
+.transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
+    vertical-align: -10%;
+    color: #1E2D3D;
+}
+
+.transaction-accordion.lessmargin .capGuide,
+.transaction-accordion.lessmargin .linkedDocuments,
+.transaction-accordion.lessmargin .btn-group {
+    padding-left: 0;
+}
+.transaction-accordion .btn-group,
+.transaction-accordion .linkedDocuments {
+    padding-left: 20px;
+}
+
+.transaction-accordion .accordion-heading > a > span:last-of-type {
+    color: #1E2D3D;
+}
+
+.transaction-accordion .accordion-group {
+    border-bottom: none;
+}
+
+.transaction-accordion .accordion-inner {
+    border-top: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.transaction-accordion .capGuide.global {
+    margin-top: 0;
+}
+
+.transaction-accordion .accordion {
+    margin-top: 20px;
+}
+
+p.belowTitle {
+    display: inline-block;
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+.belowTitle > span:first-child {
+    display: block;
+    color: #1E2D3D;
+}
+
+.belowTitle > span:last-of-type {
+    display: block;
+    width: auto;
+    text-transform: capitalize;
+    font-size: 12px;
+    color: #8D8D8D;
+
+}
+
+.belowTitle span.forTooltip {
+    display: inline-block;
+}
+
+.capTab {
+    margin-top: 0;
+}
