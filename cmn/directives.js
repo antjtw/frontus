@@ -16,9 +16,7 @@ m.directive('groupPeople', function(){
             $scope.selectedGroup = [];
             var newGroups = [];
             $scope.groupData = [];
-            var totalGroups = [];
             var arrayRemove = [];
-            $scope.allTheGroups = [];
     
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
@@ -46,7 +44,6 @@ m.directive('groupPeople', function(){
 
             $scope.fromFront = function(person){
                 var allGroups = [];
-
                 angular.forEach(person, function(info){
                     if(info.groups != undefined){
                         var a = info.groups.split(", ");
@@ -60,7 +57,39 @@ m.directive('groupPeople', function(){
                 });
                 return allGroups;              
             };
-            // $scope.fromFront($scope.people);
+            $scope.fromFront($scope.people);
+
+            var backGroups = []  
+            // $scope.fromBack = function(person){
+                              
+            //     angular.forEach(person, function(info){
+                    
+            //         console.log(info.email);
+            //         SWBrijj.tblmm('account.my_user_role', 'email', info.email).then(function(data){
+            //             var ppl = data;
+            //             angular.forEach(ppl, function(ind){
+            //                 var inGroup = JSON.parse(ind.groups)
+            //                 for(i = 0; i<inGroup.length; i++){
+            //                     backGroups.push(inGroup[i]);
+            //                 }
+            //                 // angular.forEach(JSON.parse(ind.groups), function(gr){
+            //                 //    backGroups.push(gr)
+            //                 //    console.log(gr);
+            //                 //    console.log(JSON.parse(ind.groups))
+            //                 // });
+            //             });
+            //             console.log(backGroups);
+            //         })
+            //     })
+            //     return backGroups
+            // };
+
+            // $scope.testFcn = function(person){
+            //     console.log(person);
+            //     $scope.fromBack(person);
+            //     console.log($scope.fromBack(person))
+            // }
+            // $scope.testFcn($scope.people);
 
 
             $scope.doNotCheck = function(person){
