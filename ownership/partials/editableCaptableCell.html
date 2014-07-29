@@ -11,7 +11,7 @@
                maxlength="18"
                placeholder="{{captable.cellSecurityType(key)
                               | securityUnitLabel}}"
-               ui-event="{focus: 'selectCell(data)',
+               ui-event="{focus: 'selectCell(data.investor, data.security)',
                            blur: 'saveTran(activeTran)'}"
                ng-model='data.u'
                onpaste="return false"
@@ -23,7 +23,7 @@
         <input class="captablepair last-box"
                maxlength="18"
                placeholder="paid"
-               ui-event="{focus : 'selectCell(data)',
+               ui-event="{focus : 'selectCell(data.investor, data.security)',
                            blur : 'saveTran(activeTran)'}"
                ng-model='data.a'
                onpaste="return false"

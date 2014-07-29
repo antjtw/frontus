@@ -74,7 +74,7 @@ Cell = function() {
 };
 
 ownership.service('captable',
-function($rootScope, calculate, sorting, SWBrijj, $q) {
+function($rootScope, calculate, sorting, SWBrijj, $q, attributes) {
 
 //    var captable = new CapTable();
     var captable = new NewCapTable();

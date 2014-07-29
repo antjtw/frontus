@@ -715,12 +715,12 @@ div.rightTitle {
     position: relative;
 }
 
-div.rightTitle.double > span, p.rightTitle.double > span {
+div.rightTitle.double > span, div.rightTitle.double > span {
     line-height: 14px;
     margin-top: 2px;
 }
 
-div.rightTitle.double > ul, p.rightTitle.double > input {
+div.rightTitle.double > ul, div.rightTitle.double > input {
     vertical-align: top;
 }
 
@@ -827,7 +827,7 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     background-color: #E3E3E3;
 }
 
-p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
+div.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     display: inline-block;
     width: 24px;
@@ -842,12 +842,12 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     color: #C6C6C6;
 }
 
-p.rightTitle {
+div.rightTitle {
     position: relative;
     margin: 0 0 5px;
 }
 
-p.rightTitle.common-toggle span.tooltip-icon + .tooltip {
+div.rightTitle.common-toggle span.tooltip-icon + .tooltip {
     left: -23px !important;
 }
 

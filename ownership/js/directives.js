@@ -151,6 +151,7 @@ own.directive('editableCaptableCell', [function() {
         replace: true,
         scope: {data: '=',
                 editable: '=',
+                selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
         controller: ["$scope", "$rootScope", "calculate", "captable",
@@ -184,11 +185,16 @@ own.directive('editableTransactionAttributes', [function() {
     return {
         restrict: 'E',
         replace: true,
-        scope: false,
-        templateUrl: '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$scope", "captable", "displayCopy",
-            function($scope, captable, displayCopy) {
-                console.log($scope);
+        scope: {data: '='},
+        templateUrl:
+            '/ownership/partials/editableTransactionAttributes.html',
+        controller: ["$scope", "captable", "displayCopy", "attributes",
+            function($scope, captable, displayCopy, attributes) {
+                var attrs = attributes.getAttrs();
+                console.log(attrs);
+                console.log($scope.data);
+                $scope.label = function(attr) {
+                };
             }
         ],
     };

@@ -1,8 +1,8 @@
-<accordion ng-class="{'lessmargin': (activeTran.length == 1)}"
+<accordion ng-class="{'lessmargin': (transactions.length == 1)}"
            class="transaction-accordion"
            close-others="true">
 <accordion-group is-open="tran.active"
-                 is-disabled="singleTransaction(activeTran);"
+                 is-disabled="transactions.length==1"
                  ng-hide="windowToggle && !tran.active"
                  ng-repeat="tran in transactions
                             | orderBy:'date' track by $index"
@@ -10,11 +10,11 @@
     <accordion-heading>
         <span data-icon="&#xe031;"
               aria-hidden="true"
-              ng-show="tran.active && activeTran.length > 1">
+              ng-show="tran.active && transactions.length > 1">
         </span>
         <span data-icon="&#xe034;"
               aria-hidden="true"
-              ng-show="!tran.active && activeTran.length > 1"
+              ng-show="!tran.active && transactions.length > 1"
               ng-click="editEvidence()">
         </span>
         <span ng-click="editEvidence()">
@@ -40,22 +40,22 @@
     </div>
 
     <div class="capTab" ng-switch-when="details">
-        <!-- Global Tab -->
         <div class="capGuide global">
             <div class="rightTitle security-type">
                 <span>Investor</span>
                 <span class="locked-security">{{tran.investor}}</span>
                 <div ng-click="transferSharesUp(activeTran);"
-                     ng-show="activeTran[0].type == 'Equity'">
+                     ng-show="tran.attrs.security_type == 'Equity'">
                     <span data-icon="&#xe60a;" aria-hidden="true"></span>
                     <span>Transfer</span>
                 </div>
                 <div ng-click="convertSharesUp(activeTran);"
-                     ng-show="activeTran[0].type == 'Debt'">
+                     ng-show="tran.attrs.security_type == 'Debt'">
                     <span data-icon="&#xe60c;" aria-hidden="true"></span>
                     <span>Convert</span>
                 </div>
             </div>
+            <!--
             <p class="rightTitle">
                 <span>Date</span>
                 <input ng-disabled="toggleView();"
@@ -88,7 +88,10 @@
                        ng-model="tran.amount"
                        onkeydown="testForEnter();">
             </p>
+            -->
         </div>
+        <editable-transaction-attributes data="tran">
+        <!--
         <div class="capGuide top10">
             <p ng-show="tran.forfeited" class="rightTitle">
                 <span>Forfeit</span>
@@ -101,7 +104,6 @@
                        onkeydown="testForEnter();">
             </p>
         </div>
-        <!-- Equity Tab -->
         <div class="capGuide top10"
              ng-show="trantype(tran.type, 'Equity');">
             <p class="rightTitle">
@@ -208,7 +210,6 @@
                 </span>
             </div>
         </div>
-        <!-- Option Tab -->
         <div class="capGuide top10"
              ng-show="trantype(tran.type, 'Option');">
             <p class="rightTitle">
@@ -288,7 +289,6 @@
                 </span>
             </div>
         </div>
-        <!-- Debt Tab -->
         <div class="capGuide top10"
              ng-show="trantype(tran.type, 'Debt');">
             <div class="rightTitle interest-rate">
@@ -359,7 +359,6 @@
                 </span>
             </p>
         </div>
-        <!-- Safe Tab -->
         <div class="capGuide top10"
              ng-show="trantype(tran.type, 'Safe');">
             <p style="display:inline-block" class="rightTitle">
@@ -389,7 +388,6 @@
                 </span>
             </p>
         </div>
-        <!-- Warrant Tab -->
         <div class="capGuide top10"
              ng-show="trantype(tran.type, 'Warrant');">
             <p class="rightTitle">
@@ -419,6 +417,7 @@
                 </span>
             </p>
         </div>
+        -->
         <span class="blue-link delete-link"
               data-icon="&#xe00c;"
               ng-click="tranDeleteUp(tran);">

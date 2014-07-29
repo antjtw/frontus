@@ -225,3 +225,25 @@ ownership.filter('transactionAttributesForDisplay', function() {
         return res;
     };
 });
+
+ownership.filter('attributeInputTypes', function() {
+    return function(tp) {
+        switch(tp) {
+            case "transaction_type":
+                return list;
+            case "liquidpref":
+                return list;
+            case "interestratefreq":
+            case "vestfreq":
+                return list;
+            case "date":
+                return "date_picker";
+            case "common":
+                return "checkbox";
+
+
+            default:
+                return "text_field";
+        }
+    };
+});

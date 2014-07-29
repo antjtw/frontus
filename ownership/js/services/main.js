@@ -3,6 +3,7 @@ var ownership = angular.module('ownerServices', []);
 ownership.service('switchval', function () {
 
     // Toggles the sidebar based on the type of the issue
+    /*
     this.trantype = function (type, activetype) {
         if (activetype == "Option" && type == "Option") {
             return true;
@@ -23,6 +24,7 @@ ownership.service('switchval', function () {
             return false;
         }
     };
+    */
 
     this.typeswitch = function (tran) {
         if (tran.type = "Option") {
@@ -51,33 +53,47 @@ ownership.service('switchval', function () {
     };
 });
 
-ownership.service('sorting', function () {
-    /*
-    this.security_names = function (keys, issues) {
-        var sorted = [];
-        angular.forEach(issues, function (issue) {
-            angular.forEach(keys, function (key) {
-                if (issue.issue == key) {
-                    sorted.push(key);
-                }
-            });
+ownership.service('attributes',
+function(SWBrijj, $q, $filter, displayCopy) {
+    // Answers the question:
+    //   How do I display a fact about a transaction attribute?
+    var tips = displayCopy.captabletips;
+    var attrs = {};
+    init();
+    this.getAttrs = function() { return attrs; };
+    function init() { loadAttributes().then(handleAttrs); }
+    function handleAttrs(data) {
+        angular.forEach(data, function(el) {
+            if (!attrs[el.type])
+            {
+                attrs[el.type] = {};
+            }
+            if (!attrs[el.type][el.action])
+            {
+                attrs[el.type][el.action] = {};
+            }
+            if (!attrs[el.type][el.action][el.name])
+            {
+                attrs[el.type][el.action][el.name] =
+                    {required: el.required,
+                     display_name: el.display_name,
+                     description: el.name in tips ? tips[el.name] : null,
+                     input_type:
+                        $filter('attributeInputTypes')(el.input_type)};
+            }
         });
-        return sorted;
-    };
-    this.issuedate = function (a, b) {
-        if (a.date < b.date)
-            return -1;
-        if (a.date > b.date)
-            return 1;
-        if (a.date = b.date) {
-            if (a.created < b.created)
-                return -1;
-            if (a.created > b.created)
-                return 1;
-        }
-        return 0;
-    };
-    */
+    }
+    function loadAttributes() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.transaction_attributes')
+        .then(function(attrs) {
+            promise.resolve(attrs);
+        });
+        return promise.promise;
+    }
+});
+
+ownership.service('sorting', function () {
     this.security_date = function(a, b) {
         if (a.effective_date < b.effective_date) return 1;
         if (a.effective_date > b.effective_date) return -1;
@@ -85,70 +101,9 @@ ownership.service('sorting', function () {
         if (a.insertion_date > b.insertion_date) return -1;
         return 0;
     };
-
-    /*    // Sorts the rows by issue type from earliest to latest
-     this.row = function (prop) {
-     return function (a, b) {
-     var i = 0;
-     // Working for the earliest issue to the latest
-     while (i < prop.length) {
-
-     // Filters out the unissued shares lines
-     if (a['nameeditable'] == 0) {
-     if (b['nameeditable'] == 0) {
-     if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-     return 1;
-     if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-     return -1;
-     }
-     return -1
-     }
-     if (b['nameeditable'] == 0) {
-     if (a['nameeditable'] == 0) {
-     if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-     return -1;
-     if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-     return 1;
-     }
-     return -1
-     }
-     // Ranks the adjacent rows and returns the order for the pair
-     if (a[prop[i]]['u'] < b[prop[i]]['u'])
-     return 1;
-     if (a[prop[i]]['u'] > b[prop[i]]['u'])
-     return -1;
-     i++
-     }
-     return 0;
-     }
-     };*/
-
-    // Sorts the rows by greatest ownership
-    this.basicrow = function () {
-        return function (a, b) {
-            if (a.startpercent > b.startpercent) return -1
-            else if (b.startpercent > a.startpercent) return 1
-            else return 0;
-        }
-    };
-
 });
 
 app.run(function ($rootScope) {
-
-    $rootScope.rowOrdering = function (row) {
-        var total = 0;
-        for (var key in row) {
-            if (row.hasOwnProperty(key)) {
-                if (key != "name") {
-                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
-                        total = total + parseFloat(row[key]['u']);
-                    }
-                }
-            }
-        }
-        return -total;
-    };
 
 //Calculates total grants in each issue
     $rootScope.totalGranted = function (issue, trans) {
