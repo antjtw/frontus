@@ -182,14 +182,22 @@ own.directive('editableTransactionAttributes', [function() {
         scope: {data: '='},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$scope", "captable", "attributes",
-            function($scope, captable, attributes) {
+        controller: ["$scope", "$filter", "captable", "attributes",
+    // TODO
+    //   -  dropdowns
+    //   -  sorting
+            function($scope, $filter, captable, attributes) {
                 var attrs = attributes.getAttrs();
-                $scope.label = function(attr) {
+                $scope.keys = function() {
+                    return Object.keys($scope.data.attrs)
+                        .sort(function(x1, x2) {
+                            return $filter('sortAttributeTypes')(x1) -
+                            $filter('sortAttributeTypes')(x2);
+                    });
                 };
                 function key_display_info(key) {
                     return attrs[$scope.data.attrs.security_type]
-                                [$scope.data.kind][key];
+                                [$scope.data.kind][key] || {};
                 }
                 function inputType(key) {
                     return key_display_info(key).input_type;
@@ -207,6 +215,7 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
+                $scope.sortAttributeTypes = $filter('sortAttributeTypes');
             }
         ],
     };

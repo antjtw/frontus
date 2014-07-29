@@ -5,23 +5,23 @@
               when security_type is switched the visible attrs
               should automatically change
     -->
-    <div ng-repeat="(key, val) in data.attrs | orderBy:'key'"
+    <div ng-repeat="key in keys()"
          class="rightTitle"
-         ng-class="{double: key.input_type!='text_field'}">
+         ng-class="{double: inputType(key)!='text_field'}">
         <span ng-class="{'locked-security': key=='security_type'}">
             {{key}}
         </span>
         <input ng-if="useTextField(key)"
                id="date{{data.attrs.$$hashKey}}"
-               ng-change="saveIt(key, val)"
-               ui-event="{keydown: 'saveIt(key, val, $event)',
-                          blur: 'saveIt(key, val, $event)'}"
+               ng-change="saveIt(key, data.attrs[key])"
+               ui-event="{keydown: 'saveIt(key, data.attrs[key], $event)',
+                          blur: 'saveIt(key, data.attrs[key], $event)'}"
                type="text"
-               ng-model="val">
+               ng-model="data.attrs[key]">
         <ul ng-if="useDropdown(key)">
             <li class="dropdown standard">
             <a class="dropdown-toggle">
-                {{val}}
+                {{data.attrs[key]}}
                 <span class="invisible-drop">'</span>
             </a>
             <ul class="dropdown-menu">

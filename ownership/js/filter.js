@@ -249,3 +249,32 @@ ownership.filter('attributeInputTypes', function() {
         }
     };
 });
+ownership.filter('sortAttributeTypes', function() {
+    var orderedAttributes = ["security",
+                             "effective_date",
+                             "security_type",
+                             "units",
+                             "amount",
+                             "ppshare",
+                             "liquidpref",
+                             "partpref",
+                             "dragalong",
+                             "tagalong",
+                             "price",
+                             "terms",
+                             "vestingbegins",
+                             "vestcliff",
+                             "vestfreq",
+                             "interestratefreq",
+                             "valcap",
+                             "discount",
+                             "term",
+                             "valcapsafe",
+                             "discount",
+                             "term"];
+    return function(tp) {
+        var res = orderedAttributes.indexOf(tp);
+        console.log(tp, res);
+        return res === -1 ? orderedAttributes.length+1 : res;
+    };
+});

@@ -2,30 +2,6 @@ var ownership = angular.module('ownerServices', []);
 
 ownership.service('switchval', function () {
 
-    // Toggles the sidebar based on the type of the issue
-    /*
-    this.trantype = function (type, activetype) {
-        if (activetype == "Option" && type == "Option") {
-            return true;
-        }
-        else if (activetype == "Debt" && type == "Debt") {
-            return true;
-        }
-        else if (activetype == "Equity" && type == "Equity") {
-            return true;
-        }
-        else if (activetype == "Safe" && type == "Safe") {
-            return true;
-        }
-        else if (activetype == "Warrant" && type == "Warrant") {
-            return true;
-        }
-        else {
-            return false;
-        }
-    };
-    */
-
     this.typeswitch = function (tran) {
         if (tran.type = "Option") {
             tran.atype = 1;
