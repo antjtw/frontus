@@ -5,14 +5,14 @@
     </span>
 </div>
 
-<div class="main">
+<div class="bottom-padded main">
     <span class="title">{{!rejectMode ? approveVerb : rejectVerb}} Document</span>
     <br>
     <span class="body" ng-show="!rejectMode" ng-transclude></span>
     <textarea ng-show="rejectMode" ng-model="rejectMessage" class="messageText" rows="3" placeholder="Explain the reason for rejecting this document."></textarea>
 </div>
 
-<div ng-show="!rejectMode">
+<div class="sides-padded" ng-show="!rejectMode">
     <div class="standard-button docViewerAction">
         <button class="btn"
                 ng-disabled="processing || disabled()"
@@ -24,7 +24,7 @@
         <a class="green" ng-click="rejectMode=true" ng-show="rejectable">Reject?</a>
     </div>
 </div>
-<div ng-show="rejectMode">
+<div class="sides-padded" ng-show="rejectMode">
     <div class="modeSwitch">
         <a class="green" ng-click="rejectMode=false">{{approveVerb}}?</a>
     </div>

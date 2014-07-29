@@ -4,16 +4,8 @@ var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj',
 
   $routeProvider.
       when('/features/', {
-          controller: 'FeaturesCtrl',
-          templateUrl:'/features/partials/overview.html'
-      }).
-      when('/features/cap', {
           controller: 'FeaturesCapCtrl',
           templateUrl:'/features/partials/captable.html'
-      }).
-      when('/features/doc', {
-          controller: 'FeaturesCtrl',
-          templateUrl:'/features/partials/documents.html'
       }).
       when('/features/debt', {
           controller: 'FeaturesDebtCtrl',
@@ -35,14 +27,18 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
     }
 ]);
 
-app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
+app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState) {
 
         if (window.innerWidth < 1024) {
             $scope.variablewidth = window.innerWidth;
         } else {
             $scope.variablewidth = 760;
         }
+
+        $rootScope.scrolled = true;
+        navState.path = document.location.pathname;
+        $rootScope.whichpage = "modeling";
 
         $scope.addCommas = function(num) {
             var split = num.split('.');
@@ -209,8 +205,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
     }
 ]);
 
-app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting) {
+app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState) {
 
         $scope.gotopage = function (link) {
             $location.url("/features/" + link);
@@ -230,6 +226,10 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 $scope.deleteIssue(issue);
             });
         };
+
+        $rootScope.scrolled = true;
+        navState.path = document.location.pathname;
+        $rootScope.whichpage = "captable";
 
 
         $scope.captabletips = {};

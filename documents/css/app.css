@@ -67,7 +67,7 @@ h2.large-h2 {
 }
 
 .draggable textarea {
-    font-family: Helvetica, sans-serif;
+    font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
 .subnav-controls.flush-controls {
@@ -1322,7 +1322,6 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 
 .docPanel {
     width: 100%;
-    height: 1165px;
     background-size: contain !important;
     background-repeat: no-repeat;
     background-position: top center;
@@ -1476,7 +1475,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     resize: both;
     opacity: 0.7;
     border: 1px solid #FFBA00;
-    color: #2980B9;
+    color: #000000;
 
     -webkit-border-top-right-radius: 3px;
     -webkit-border-bottom-right-radius: 3px;
@@ -1486,6 +1485,21 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+}
+
+.draggable div > textarea.highlightContents {
+    opacity: 1;
+    width: 100%;
+    padding: 0;
+    resize: vertical;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 .draggable div > textarea.roundedcorners {
@@ -1621,11 +1635,29 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     border-radius: 0;
 }
 
+.sticky textarea[readonly] {
+    background-color: #fff;
+    cursor: pointer;
+    /* prevent highlight on creation */
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.sticky fieldset .select2-container .select2-choice {
+    height: 100%
+}
+
+.sticky fieldset .select2-container .select2-choice .select2-arrow b {
+    background-repeat: no-repeat;
+}
+
 .sticky-menu {
     position: absolute;
-    background-color: #1D2C3C;
-    width: 190px;
-    margin: 10px 0 0 -95px;
+    background-color: rgba(29, 44, 60, 0.85);
+    width: 300px;
+    margin: 10px 0 0 -150px;
     left: 50%;
     border-radius: 3px;
     z-index: 5;
@@ -1637,10 +1669,10 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     height: 0;
     position: absolute;
     top: -8px;
-    left: 85px;
+    left: 145px;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid #1D2C3C;
+    border-bottom: 8px solid rgba(29, 44, 60, 0.85);
 }
 
 .sticky-menu > ul > li {
@@ -1651,13 +1683,21 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
     margin-top: 15px;
 }
 
+.sticky .sticky-menu .select2-container {
+    width: 260px;
+}
+
+.sticky .sticky-menu input {
+    width: 248px; /* 150 - 12px padding - 2px border. sizes set in bootstrap */
+}
+
 .sticky-menu > ul > li:last-of-type > ul {
     margin-bottom: 20px;
 }
 
 .sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
-    color: #FFFFFF;
-    font-size: 12px;
+    color: #C6C6C6;
+    font-size: 14px;
     text-transform: capitalize;
 }
 
@@ -1668,20 +1708,35 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky-menu .standard-button > button {
-    width: 42px;
-    margin-left: 10px;
+    width: 37px;
+    margin-left: 120px;
     background-color: transparent;
     padding: 0;
     min-height: 20px;
     line-height: 20px;
     box-shadow: none;
     color: #3498DB;
-    text-transform: uppercase;
-    font-size: 10px;
+    font-size: 14px;
 }
 
 .sticky-menu .standard-button > button:hover {
     color: #2980B9;
+}
+
+.sticky-menu .drop-selector .standard .dropdown-toggle {
+    width: 260px;
+}
+
+.sticky-menu .drop-selector .standard .dropdown-menu {
+    width: 264px;
+}
+
+.annotation-dropdown-item > div, .annotation-dropdown .select2-chosen {
+    text-transform: capitalize;
+}
+
+.dropdown-required.select2-result > div.select2-result-label {
+    color: #E74C3C;
 }
 
 
@@ -1766,7 +1821,7 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
-annotation-list div:last-child {
+annotation-list div.annotation-pages:last-child {
     margin-bottom: 20px;
 }
 
@@ -1791,6 +1846,15 @@ annotation-list .annotmark {
     margin-top: 5px;
     margin-left: 25px;
     cursor: pointer;
+    text-transform: capitalize;
+}
+
+annotation-list .textIcon {
+    data-icon: &#xe60d;
+}
+
+annotation-list .annotmark.mine.complete.highlightIcon {
+    data-icon: &#xe60f;
 }
 
 annotation-list .annotmark:hover, annotation-list .annotmark.active {
@@ -1927,4 +1991,129 @@ help-tab > div > p > span {
     font-size: 12px;
     line-height: 12px;
     display: block;
+}
+
+doc-transaction-details .select2-container {
+    width: 220px;
+}
+
+doc-transaction-details > div > div > span {
+    color: #1d2c3c;
+    display: inline-block;
+    width: 280px;
+    margin-bottom: 15px;
+}
+
+doc-transaction-details > div > div > button {
+    width: 68px;
+    height: 30px;
+    background-color: #19bb95;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+
+doc-transaction-details > div > div > span > span.back-button {
+    color: #3498DB;
+    cursor: pointer;
+}
+
+doc-transaction-details > div > div > span > span.back-button:hover {
+    color: #2980B9;
+}
+
+/* Finished Animation */
+
+@-webkit-keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+@-moz-keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+@-o-keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+@keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+.required-fields > span {
+    display: inline-block;
+    color: #E74C3C;
+    text-transform: capitalize;
+}
+
+.required-fields.field-completed > span {
+    color: #19bc96;
+    -webkit-animation: completerequired 1s; /* Safari 4+ */
+    -moz-animation:    completerequired 1s; /* Fx 5+ */
+    -o-animation:      completerequired 1s; /* Opera 12+ */
+    animation:         completerequired 1s;
+}
+
+.required-fields > span:first-of-type {
+    width: 15px;
+    margin: 0 5px;
+}
+
+.required-fields > span:first-of-type > span {
+    color: #19bc96;
+    vertical-align: -14%;
+    font-size: 20px;
+    -webkit-animation: completerequired 1s; /* Safari 4+ */
+    -moz-animation:    completerequired 1s; /* Fx 5+ */
+    -o-animation:      completerequired 1s; /* Opera 12+ */
+    animation:         completerequired 1s;
+}
+
+.fields-progress {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #1d2c3c;
+    padding: 20px;
+}
+
+.fields-progress > span {
+    color: #FFFFFF;
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+
+.select2-container.height-force {
+    height: 30px !important;
+}
+
+.redrequired .content-section .select2-container .select2-choice, .redrequired .content-section input {
+    border-color: #E74C3C;
+}
+
+.redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input, .greenrequired .select2-container .select2-choice, .greenrequired input  {
+    border-color: #1ABC96;
 }

@@ -503,6 +503,10 @@ h2 {
 .navBarLoggedOut {
     height:80px;
 }
+
+.navBarLoggedOut.scrolleddown {
+    height: 40px;
+}
 .navpadding {
     padding: 0 20px 0 20px;
 }
@@ -528,7 +532,7 @@ div.fixednav{
 }
 
 .fixednavoffset {
-    margin-top: 60px;
+    margin-top: 80px;
 }
 
 .topnav {
@@ -538,8 +542,92 @@ div.fixednav{
     background-color: rgb(30, 45, 61);
 }
 
+.external-subnav {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: 30px;
+    background-color: rgb(30, 45, 61);
+    -webkit-transition: top 0.2s ease-in-out;
+    -moz-transition: top 0.2s ease-in-out;
+    -o-transition: top 0.2s ease-in-out;
+    transition: top 0.2s ease-in-out;
+    background-color: rgba(255,255,255, 1);
+    border-bottom: 1px solid #C6C6C6;
+}
+
+.external-subnav > div.centered-menu {
+    float:left;
+    width:100%;
+    overflow:hidden;
+    position:relative;
+}
+.external-subnav > div.centered-menu ul {
+    clear:left;
+    float:left;
+    list-style:none;
+    margin:0;
+    padding:0;
+    position:relative;
+    left:50%;
+    text-align:center;
+}
+.external-subnav > div.centered-menu ul li {
+    display:block;
+    float:left;
+    list-style:none;
+    margin: 0 20px;
+    line-height: 30px;
+    padding:0;
+    position:relative;
+    right:50%;
+}
+
+.external-subnav > div.centered-menu ul li > a {
+    text-transform: uppercase;
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    font-size: 12px;
+    color: #A5A5A5;
+}
+
+.external-subnav > div.centered-menu ul li > a:hover {
+    color: #666666;
+}
+
+.external-subnav > div.centered-menu ul li > a.active {
+    color: #1d2c3c;
+}
+
+.scrolleddown.external-subnav {
+    top: 41px;
+}
+
+.navBarLoggedOut .topnav {
+    background-color: rgba(255,255,255, 1);
+    border-bottom: 1px solid #C6C6C6;
+    -webkit-transition: height 0.2s ease-in-out;
+    -moz-transition: height 0.2s ease-in-out;
+    -o-transition: height 0.2s ease-in-out;
+    transition: height 0.2s ease-in-out;
+}
+
 .topnav.navheight {
     height: 80px;
+}
+
+.scrolleddown .topnav.navheight {
+    height: 40px;
+}
+
+.navBarLoggedOut .topnav.navheight > div > ul.nav-logo, .navBarLoggedOut .topnav .content-pages .nav > li > a, .navBarLoggedOut .topnav.navheight > div > ul.nav-item {
+    -webkit-transition: margin 0.2s ease-in-out;
+    -moz-transition: margin 0.2s ease-in-out;
+    -o-transition: margin 0.2s ease-in-out;
+    transition: margin 0.2s ease-in-out;
+}
+
+.scrolleddown .topnav.navheight > div > ul.nav-logo, .scrolleddown .topnav .content-pages .nav > li > a, .scrolleddown .topnav.navheight > div > ul.nav-item {
+    margin-top: 0;
 }
 
 .topnav.navheight > div > ul.nav-logo {
@@ -553,6 +641,7 @@ ul.nav-logo > li > a > img {
 
 .topnav.navheight > div > ul.nav-item {
     margin-top: 18px;
+    display: inline-block;
 }
 
 .topnav.navheight > div > ul.nav-item > li {
@@ -623,10 +712,50 @@ ul.nav-logo > li > a > img {
     text-align: center;
 }
 
-.topnav .nav.content-pages {
+.topnav .nav > li.login-link > a {
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #A5A5A5;
+    font-family: 'FS Elliot Web Bold', sans-serif;
+    letter-spacing: 0.1em;
+    width: 100px;
+    text-align: right;
 }
 
-.topnav .nav.content-pages > li > a {
+.topnav .nav.nav-item > li.login-link > a:hover {
+    background-color: transparent;
+    color: #666666;
+}
+
+.topnav .content-pages {
+    display: inline-block;
+    width: 100%;
+    position: fixed;
+    left: 0;
+
+}
+
+.topnav .content-pages .nav {
+    clear:left;
+    float:left;
+    list-style:none;
+    margin:0;
+    padding:0;
+    position:relative;
+    left:50%;
+    text-align:center;
+}
+
+.topnav .content-pages .nav > li {
+    display:block;
+    float:left;
+    list-style:none;
+    padding:0;
+    position:relative;
+    right:50%;
+}
+
+.topnav .content-pages .nav > li > a {
     text-align: center;
     padding: 0 20px;
     width: auto;
@@ -636,13 +765,21 @@ ul.nav-logo > li > a > img {
     margin-right: 0;
     text-transform: uppercase;
     font-size: 14px;
-    color: #C6C6C6;
+    color: #A5A5A5;
     font-family: 'FS Elliot Web Bold', sans-serif;
     letter-spacing: 0.1em;
 }
 
-.topnav .nav.content-pages > li > a:hover {
-   color: #FFFFFF;
+.topnav .content-pages .nav > li > a.active {
+    color: #1d2c3c;
+}
+
+.scrolleddown .topnav .content-pages .nav > li > a {
+    margin-top: 0;
+}
+
+.topnav .content-pages .nav > li > a:hover {
+   color: #666666;
 }
 
 .topnav .nav.nav-logo > li > a {
@@ -662,10 +799,7 @@ ul.nav-logo > li > a > img {
     margin-top: -5px;
 }
 
-.topnav .nav.nav-item > li > a:hover {
-    background-color: rgb(52, 73, 94);
-    color: #FFFFFF !important;
-}
+
 .topnav .nav li.dropdown.open > .dropdown-toggle {
     background-color: #3397da;
     color: #FFFFFF !important;
@@ -2201,6 +2335,7 @@ a.oldschool-link  {
     -ms-animation: leftTabSlideIn 0.25s linear;
     -o-animation: leftTabSlideIn 0.25s linear;
     animation: leftTabSlideIn 0.25s linear;
+    position: relative;
 }
 .leftTabWindow.showRightTab {
     margin-left: calc(-100% + 350px);
@@ -2465,6 +2600,48 @@ a.oldschool-link  {
     cursor: pointer;
     background-color: inherit;
 }
+
+.toggle-button {
+    height: 30px;
+    width: 87px;
+    cursor: pointer;
+    border: 1px solid #8D8D8D;
+}
+
+.toggle-button.selected {
+    background-color: #8D8D8D;
+}
+
+.toggle-button > ul > li {
+    line-height: 30px;
+}
+
+.toggle-button > ul > li > span:first-child {
+    vertical-align: -3%;
+}
+
+.toggle-button:first-of-type {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.toggle-button:last-of-type {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
     border-radius: 3px;
@@ -2724,6 +2901,7 @@ ul.nav.dropdown-list.notifications > .dropdown.standard.menu-drop > a.dropdown-t
 
 .overall-nav {
     z-index: 999;
+    position: relative;
 }
 
 .topnav .nav.dropdown-list.notifications > li > ul {
@@ -3068,7 +3246,7 @@ button.icon-button:hover {
     line-height: 24px;
     min-height: 24px;
     display: block;
-    padding: 3px 20px 3px 10px;
+    padding: 3px 20px 3px 5px;
     clear: both;
     font-weight: normal;
     color: #333333;
@@ -3872,6 +4050,53 @@ button.icon-button:hover {
 
 .select2-container-multi .select2-choices .select2-search-field input {
     font-family: 'FS Elliot Web Regular', sans-serif;
+}
+
+.select2-container {
+    height: 30px;
+}
+
+.select2-container .select2-choice .select2-arrow {
+    background-color: #FFFFFF;
+    background-image: none;
+    border-left: transparent;
+}
+
+.select2-container .select2-choice {
+    background-color: #FFFFFF;
+    background-image: none;
+    height: 30px;
+    line-height: 30px;
+    color: #666666;
+    padding-left: 10px;
+}
+
+.select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #aaa;
+}
+
+.select2-results .select2-result-label {
+    color: #666666;
+}
+
+.select2-container-active .select2-choice {
+    border: 1px solid #aaa;
+    box-shadow: none;
+}
+
+.select2-container .select2-choice .select2-arrow b {
+    background: url('/img/down-arrow-20x30.png');
+}
+
+.select2-container .select2-choice .select2-arrow {
+    right: 5px;
+}
+
+.select2-dropdown-open .select2-choice {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 

@@ -2,78 +2,38 @@
      ng-animate="'fade'" ng-click="notification.visible = false" ng-bind="notification.message"></div>
 
 <div class="fixednav">
-    <div collapse="isCollapsed">
-        <div class="well well-large">
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span12 text-center">
-                        <div id="Login-form" class="navlogin">
-                            <form>
-                                <fieldset> <span>Email Address</span>
-
-                                    <input type="text" class="loginInput" autocomplete="off"
-                                    tabindex="1" autocapitalize="off" name="username" ng-model="username"> <span>Password</span>
-
-                                    <input class="loginInput" autocomplete="off" tabindex="2"
-                                    name="password" type="password" ng-model="password">
-                                    <br class="visible-below-1024">
-                                    <div class="standard-button top-login">
-                                        <button class="btn" ng-disabled="!(fieldCheck(username) && password);" ng-click="doLogin()">Log In</button>
-                                    </div> <a class="pointer" ng-click="toggleLogin('login')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
-
-                                    <span class="forgotLog"><a target="_self" href="/login/forgot">Forgot Password?</a></span>
-
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div collapse="isRegisterCollapsed" class="collapse-well">
-        <div class="well well-large">
-            <div class="container">
-                <div class="row-fluid">
-                    <div class="span12 text-center">
-                        <div class="navlogin" ng-hide="registertoggle">
-                            <form>
-                                <fieldset> <span>Email Address</span>
-
-                                    <input type="text" class="registerInput" autocomplete="off"
-                                    tabindex="4" autocapitalize="off" name="username" ng-model="registeremail">
-                                    <div class="standard-button">
-                                        <button class="btn" ng-disabled="!fieldCheck(registeremail);" ng-click="companySelfRegister()">Sign Up</button>
-                                    </div> <a class="pointer" ng-click="toggleLogin('register')"><span data-icon="&#xe00f;" aria-hidden="true"></span></a>
-
-                                </fieldset>
-                            </form>
-                        </div>
-                        <div class="navlogin register-message" ng-show="registertoggle">
-                            <div>
-                                 <h2>Thanks for signing up to use Sharewave!</h2>
-
-                                <p>Please check your email to complete your registration.</p>
-                            </div> <span class="pointer" data-icon="&#xe00f;" aria-hidden="true" ng-click="toggleLogin('register')"></span>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="overall-nav" ng-class="{navBarLoggedOut:isCollapsed || !navState.userid, navBarLoggedIn:navState.userid}">
+    <div class="overall-nav" ng-class="{navBarLoggedOut:!navState.userid, navBarLoggedIn:navState.userid, 'scrolleddown': scrolled}">
         <div class="navbar topnav row-fluid" ng-class="{navheight:!navState.userid}">
             <div ng-class="{navbounder:navState.userid, navpadding:!navState.userid}">
+                <div class="content-pages">
+                    <ul ng-hide="navState.userid" class="hidden-phone nav">
+                        <li> <a ng-class="{'active': navState.path.indexOf('/features/') != -1}" target="_self" href="/features">
+                            Tour
+                        </a>
+
+                        </li>
+                        <li> <a ng-class="{'active': navState.path.indexOf('/pricing/') != -1}" target="_self" href="/pricing">
+                            Pricing
+                        </a>
+
+                        </li>
+                        <li> <a target="_self" href="http://blog.sharewave.com">
+                            Blog
+                        </a>
+
+                        </li>
+                    </ul>
+                </div>
                 <ul class="nav pull-left nav-logo">
                     <li>
                         <a ng-click="gotohome();">
                             <img class="small-logo" ng-show="navState.userid" src="/img/logo-wht.png" />
-                            <img ng-hide="navState.userid" src="/img/logo-large.png" />
+                            <img ng-hide="navState.userid" src="/img/logo-blue_v2.png" />
                         </a>
                     </li>
                 </ul>
                 <span ng-show="navState.userid" class='nav-company-name'><span>/</span>   {{navState.name}}</span>
+
                 <ul class="nav pull-right nav-item dropdown-list">
                     <li class="dropdown standard menu-drop" ng-show="navState.userid">
                         <a class="dropdown-toggle nav-photo">
@@ -95,33 +55,34 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="hidden-phone" ng-hide="navState.userid" ng-class="{'showarrow':!isCollapsed}">
-                        <div class="standard-button small-standard-button blue" ng-show="!navState.userid">
-                            <button class="btn" ng-click="toggleLogin('login')">Log In</button>
-                        </div>
+                    <li class="hidden-phone login-link" ng-hide="navState.userid">
+                        <a target="_self" href="/login">Log In</a>
                     </li>
                 </ul>
-                <ul ng-hide="navState.userid" class="hidden-phone nav pull-right content-pages">
-                    <li> <a target="_self" href="/features">
-                        Features
-                    </a>
 
-                    </li>
-                    <li> <a target="_self" href="/pricing">
-                        Pricing
-                    </a>
-
-                    </li>
-                </ul>
                 <ul class="nav pull-right nav-item dropdown-list notifications" notifications
                 notes="notes"></ul>
             </div>
         </div>
     </div>
+    <div ng-if="!navState.userid" class="external-subnav hidden-phone" ng-class="{'scrolleddown': scrolled}">
+        <div class="centered-menu">
+            <ul ng-show="navState.path.indexOf('/features/') == -1">
+                <li><a href="#fundraising" offset="100" du-smooth-scroll du-scrollspy>Fundraising</a></li>
+                <li><a href="#funding" offset="100" du-smooth-scroll du-scrollspy>Post-funding</a></li>
+                <li><a href="#hiring" offset="100" du-smooth-scroll du-scrollspy>Hiring</a></li>
+                <li><a href="#security" du-smooth-scroll du-scrollspy>Security</a></li>
+            </ul>
+            <ul ng-show="navState.path.indexOf('/features/') != -1">
+                <li><a href="/features/" ng-class="{'active': whichpage == 'captable'}">Cap Table</a></li>
+                <li><a href="/features/convertible-notes/" ng-class="{'active': whichpage == 'modeling'}">Modeling</a></li>
+            </ul>
+        </div>
+    </div>
     <div ng-if="persistentNotification"
          class="persistentNotification pointer"
          ng-animate="'animate'"
-         ng-click="gotoPage('/app/company/profile/?setup')">
+         ng-click="persistentNavGoToPage('/app/company/profile/?setup')">
         <div>
             <div class="pull-left">
                 <span>
@@ -129,7 +90,7 @@
                 </span>
             </div>
             <div class="standard-button red pull-right">
-                <button class="btn" ng-click="gotoPage('/app/company/profile/?setup')">
+                <button class="btn" ng-click="persistentNavGoToPage('/app/company/profile/?setup')">
                     Select Plan
                 </button>
             </div>

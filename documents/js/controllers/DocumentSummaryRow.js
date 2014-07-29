@@ -22,7 +22,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
         SWBrijj.tblmm("document.my_counterpart_document_library_view", queryParam, queryVal).then(function(data) {
             angular.forEach(data, function(version) {
-                console.log(version)
                 if (version.last_event_activity == 'finalized') {
                     version.last_event_activity = 'approved';
                 }
@@ -36,7 +35,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
     if ($scope.doc.shown) {
         $scope.loadVersions();
-        console.log($scope.doc)
     }
 
 
