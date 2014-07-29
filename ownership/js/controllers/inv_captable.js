@@ -1,4 +1,4 @@
-var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location,
+var invCaptableController = function ($scope, $parse, SWBrijj, calculate, switchval, $routeParams, $rootScope, $location,
     navState) {
 
     if (navState.role == 'issuer') {

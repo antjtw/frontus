@@ -183,10 +183,29 @@ own.directive('editableTransactionAttributes', [function() {
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
         controller: ["$scope", "captable", "attributes",
-            function($scope, captable, displayCopy, attributes) {
+            function($scope, captable, attributes) {
                 var attrs = attributes.getAttrs();
-                console.log($scope.data);
                 $scope.label = function(attr) {
+                };
+                function key_display_info(key) {
+                    return attrs[$scope.data.attrs.security_type]
+                                [$scope.data.kind][key];
+                }
+                function inputType(key) {
+                    return key_display_info(key).input_type;
+                }
+                this.inputType = inputType;
+                $scope.description = function(key) {
+                    return key_display_info(key).description;
+                };
+                $scope.hasDescription = function(key) {
+                    return $scope.description(key)!==null;
+                };
+                $scope.useTextField = function(key) {
+                    return inputType(key) == "text_field";
+                };
+                $scope.useDropdown = function(key) {
+                    return isArray(inputType(key));
                 };
             }
         ],

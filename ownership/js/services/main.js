@@ -93,16 +93,6 @@ function(SWBrijj, $q, $filter, displayCopy) {
     }
 });
 
-ownership.service('sorting', function () {
-    this.security_date = function(a, b) {
-        if (a.effective_date < b.effective_date) return 1;
-        if (a.effective_date > b.effective_date) return -1;
-        if (a.insertion_date < b.insertion_date) return 1;
-        if (a.insertion_date > b.insertion_date) return -1;
-        return 0;
-    };
-});
-
 app.run(function ($rootScope) {
 
 //Calculates total grants in each issue

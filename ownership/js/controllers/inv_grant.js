@@ -1,5 +1,5 @@
 // Grants page controller
-var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope, navState) {
+var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval, $rootScope, navState) {
 
     if (navState.role == 'issuer') {
         $location.path('/company-grants');

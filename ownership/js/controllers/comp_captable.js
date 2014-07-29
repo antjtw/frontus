@@ -1,6 +1,6 @@
 var captableController = function(
         $scope, $rootScope, $location, $parse, $filter, SWBrijj,
-        calculate, switchval, sorting, navState, captable, displayCopy)
+        calculate, switchval, navState, captable, displayCopy)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -46,7 +46,6 @@ var captableController = function(
     // Initialize a few visible variables
     $scope.investorOrder = "name";
     $scope.sideToggleName = "Hide";
-    $scope.sorting = sorting;
     $('.tour-box').affix({});
 
     // TODO get this in a service

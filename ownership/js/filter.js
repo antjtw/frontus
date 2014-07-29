@@ -228,11 +228,15 @@ ownership.filter('transactionAttributesForDisplay', function() {
 
 ownership.filter('attributeInputTypes', function() {
     return function(tp) {
+        // TODO
+        // literally return the list of accepted types for dropdowns
         switch(tp) {
+            case "security_type":
+                return ["Warrant", "Option", "Safe",
+                        "Equity Preferred", "Equity Common", "Debt",
+                        "Convertible Debt"];
             case "transaction_type":
-                return list;
             case "liquidpref":
-                return list;
             case "interestratefreq":
             case "vestfreq":
                 return list;
@@ -240,8 +244,6 @@ ownership.filter('attributeInputTypes', function() {
                 return "date_picker";
             case "common":
                 return "checkbox";
-
-
             default:
                 return "text_field";
         }
