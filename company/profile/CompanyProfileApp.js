@@ -537,13 +537,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         else if(myGroups.groups == '[]'){
                             person.groups = null;
                         }
+                        else if(JSON.parse(myGroups.groups)==""){
+                            person.groups = null;
+                        }
                         else {
+                            console.log(JSON.parse(myGroups.groups))
+                            console.log(myGroups.groups);
                             // var pgroup = JSON.parse(myGroups.groups);
                             // var pArray = pgroup.join(", ");
                             // console.log(pArray)
-                            person.group_arrays = JSON.parse(myGroups.groups);
-                            person.groups = JSON.parse(myGroups.groups).sort().join(", ")
-                            console.log(person.groups);
+                            person.groups = JSON.parse(myGroups.groups).sort().join(", ");
+                            // console.log(person.groups);
                         }
                     });
                 
