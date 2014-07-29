@@ -16,9 +16,7 @@ m.directive('groupPeople', function(){
             $scope.selectedGroup = [];
             var newGroups = [];
             $scope.groupData = [];
-            var totalGroups = [];
             var arrayRemove = [];
-            $scope.allTheGroups = [];
     
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
@@ -46,7 +44,6 @@ m.directive('groupPeople', function(){
 
             $scope.fromFront = function(person){
                 var allGroups = [];
-
                 angular.forEach(person, function(info){
                     if(info.groups != undefined){
                         var a = info.groups.split(", ");
@@ -60,7 +57,35 @@ m.directive('groupPeople', function(){
                 });
                 return allGroups;              
             };
-            // $scope.fromFront($scope.people);
+            $scope.fromFront($scope.people);
+
+             
+            // $scope.fromBack = function(person){
+            //     var backGroups = []             
+            //     angular.forEach(person, function(info){
+            //         console.log(info.email);
+            //         SWBrijj.tblmm('account.my_user_groups', 'email', info.email).then(function(data){
+            //             var ppl = data;
+            //             console.log(ppl);
+            //             angular.forEach(ppl, function(ind){
+            //                 console.log(JSON.parse(ind.json_array_elements))
+            //                 if(backGroups.indexOf(JSON.parse(ind.json_array_elements))== -1){
+            //                     backGroups.push(JSON.parse(ind.json_array_elements));
+            //                 }
+            //                 console.log(backGroups);
+
+            //             })
+            //         })
+            //     })
+            //     return backGroups
+            //     alert($scope.backGroups)
+            // };
+
+            // $scope.testFcn = function(person){
+            //     console.log(person);
+            //     $scope.fromBack(person);
+            // }
+            // $scope.testFcn($scope.people);
 
 
             $scope.doNotCheck = function(person){
