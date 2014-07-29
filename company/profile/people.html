@@ -67,7 +67,7 @@
                     <tbody ng-repeat="person in people | orderBy: sort | filter: filterText track by $id($index)">
                     <tr class="empty-row"></tr>
                     
-                      
+                    <tr>
                     <td style="width:400px" class="shareholder-column docname-column" ng-click=" sidebarPage || gotoPerson(person)">      
                         <div ng-if="sidebarPage == 'email'" class="check-box-side">
                             <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="emailRecipient(person)">
