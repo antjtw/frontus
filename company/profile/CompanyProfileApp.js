@@ -551,6 +551,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             });
         };
 
+        
+
 
 
         $scope.setLastLogins = function() {
