@@ -161,8 +161,11 @@ ownership.service('calculate', function () {
     this.tranvested = function (tran) {
         var tranvested = [];
         var vestbegin = angular.copy(tran.vestingbegins);
-        var maxunits = parseFloat(tran.units) -
-                           parseFloat(tran.forfeited);
+        var maxunits = parseFloat(tran.units);
+        if (!isNaN(parseFloat(tran.forfeited))) {
+            maxunits -= parseFloat(tran.forfeited);
+        }
+
         var vestedunits = 0;
         if (isNumber(tran.vestcliff) &&
                 isNumber(tran.terms) &&
@@ -202,20 +205,22 @@ ownership.service('calculate', function () {
                 x = 12;
             }
             finalDate.add(-1).days();
-            while (Date.compare(finalDate, cycleDate) > -1) {
-                if (x < 1) {
-                    cycleDate.addWeeks(x * 4);
-                } else {
-                    cycleDate.addMonths(x);
-                }
-                if (Date.compare(Date.today(), cycleDate) > -1) {
-                    tranvested.push({"date" : angular.copy(cycleDate),
-                                     "units" : (x * ((monthlyperc / 100) * tran.units))});
-                    vestedunits += (x * ((monthlyperc / 100) * tran.units));
-                    if (vestedunits > maxunits) {
-                        var diff = vestedunits - maxunits;
-                        tranvested[tranvested.length-1].units -= diff;
-                        return tranvested;
+            if (vestedunits < maxunits) {
+                while (Date.compare(finalDate, cycleDate) > -1) {
+                    if (x < 1) {
+                        cycleDate.addWeeks(x * 4);
+                    }
+                    else {
+                        cycleDate.addMonths(x);
+                    }
+                    if (Date.compare(Date.today(), cycleDate) > -1) {
+                        tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
+                        vestedunits += (x * ((monthlyperc / 100) * tran.units));
+                        if (vestedunits > maxunits) {
+                            var diff = vestedunits - maxunits;
+                            tranvested[tranvested.length-1].units -= diff;
+                            return tranvested;
+                        }
                     }
                 }
             }
