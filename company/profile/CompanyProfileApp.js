@@ -474,6 +474,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             hidePopover();
         });
 
+        $scope.isParam = function(person){
+            if($scope.filterParam.param == person.role){
+                return person.role
+            }
+            else if($scope.filterParam.param == undefined){
+                return person
+            }
+            else if(person.groupsArray != undefined && person.groupsArray.indexOf($scope.filterParam.param) > -1){
+                return person.groups;
+            }
+        }
 
 
         $scope.createPeople = function(){
@@ -541,8 +552,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             person.groups = null;
                         }
                         else {
-                            console.log(JSON.parse(myGroups.groups))
+                            console.log(JSON.parse(myGroups.groups));
                             console.log(myGroups.groups);
+                            person.groupsArray = JSON.parse(myGroups.groups);
                             // var pgroup = JSON.parse(myGroups.groups);
                             // var pArray = pgroup.join(", ");
                             // console.log(pArray)

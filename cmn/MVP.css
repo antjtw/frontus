@@ -4922,6 +4922,11 @@ textarea.email-text {
     cursor: pointer;
 }
 
+.all_groups{
+    color: #8D8D8D;
+    padding-left: 20px;
+}
+
 .noGroups span:last-of-type{
     position:relative;
     top: 3px;

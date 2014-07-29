@@ -294,6 +294,8 @@ m.directive('peopleFilter', function(){
                     $scope.filterParam.param = undefined;
                 }
             }
+
+           
           
             $scope.getContacts = function(){
                 var promise = $q.defer();
@@ -328,6 +330,8 @@ m.directive('peopleFilter', function(){
                 });
             };
             $scope.getFilterCount();
+
+
 
             // add a watch later to update the user roles as well
 
