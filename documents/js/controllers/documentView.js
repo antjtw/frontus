@@ -391,6 +391,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || ($scope.lib && $scope.prepare); // requires $scope.lib
 
                  // TODO: move all of this to the Documents and Annotations services
+                 // TODO: should load all annotations all of the time, and vary how they're displayed
                  if ($scope.lib.annotations) {
                      // restoreNotes
                      var annots = [];
@@ -406,7 +407,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              }
                          });
                      } else {
-                         if ($scope.drawTime()) { // if it's not drawTime or counterSigntime, then there should be no annotations anywhere
+                         if ($scope.drawTime() || $scope.$parent.prepareFor) { // if it's not drawTime or counterSigntime, then there should be no annotations anywhere
                              annots = JSON.parse($scope.lib.annotations);
                              if (data.iss_annotations) {
                                  annots = annots.concat(JSON.parse(data.iss_annotations));

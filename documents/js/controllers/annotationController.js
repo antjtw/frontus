@@ -335,7 +335,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'enum' &&
                $scope.annot.forRole(navState.role)&&
-               navState.role == 'investor';
+               (navState.role == 'investor' ||
+                $scope.prepareFor);
     };
 
     $scope.dateBoxMode = function() {
@@ -344,7 +345,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'date' &&
                $scope.annot.forRole(navState.role) &&
-               navState.role == 'investor';
+               (navState.role == 'investor' ||
+                $scope.prepareFor);
     };
 
     $scope.$watch('annot.position.coords', function(new_coords) {

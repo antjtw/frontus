@@ -29,7 +29,7 @@
             <div ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
             </div>
         </fieldset>
-        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot">
+        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot && !prepareFor">
             <ul>
                 <li ng-if="annot.type == 'text'">
                     <ul>

@@ -35,11 +35,11 @@
                     <span data-icon="&#xe602;" aria-hidden="true"></span>
                 </li>
                 <li>
-                    <span><span ng-if="prepareable() || actionNeeded()">Save &amp; </span>Exit</span>
+                    <span><span ng-if="prepareable() || prepareFor || actionNeeded()">Save &amp; </span>Exit</span>
                 </li>
             </ul>
         </div>
-        <div ng-show="!prepareable()" class="box-button pull-right"
+        <div ng-show="!prepareFor && !prepareable()" class="box-button pull-right"
              ng-click="downloadPDF();"
              data-placement="bottom">
             <ul>
@@ -48,6 +48,17 @@
                 </li>
                 <li>
                     <span>Download</span>
+                </li>
+            </ul>
+        </div>
+        <div class="box-button pull-right" ng-if="prepareable()"
+            ng-click="goToPreparation();">
+            <ul>
+                <li>
+                    <span data-icon="&#xe60b;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Prepare</span>
                 </li>
             </ul>
         </div>
@@ -78,7 +89,7 @@
             <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" page-query-string="pageQueryString()" doc-id="docId" investor_attributes="investor_attributes"></doc-viewer>
             <internal-right-rail toggle-side="toggleSide">
                 <tabset>
-                    <tab active="annottab" heading="Annotations" ng-if="prepareable() || actionNeeded()">
+                    <tab active="annottab" heading="Annotations" ng-if="prepareable() || prepareFor || actionNeeded()">
                         <annotation-list doc="doc" active="active"></annotation-list>
                         <help-tab doc="doc"></help-tab>
                     </tab>
@@ -92,6 +103,10 @@
                                 <span class="tags">
                                     <span ng-repeat="t in doc.tags">{{t}}</span>
                                 </span>
+                            </div>
+                            <div class="inforow" ng-if="prepareFor">
+                                <span class="activity-icon people-icon"></span>
+                                <span>Preparing for: {{prepareFor}}</span>
                             </div>
                             <div class="inforow" ng-if="doc.when_shared">
                                 <span class="activity-icon doc-share-icon"></span>
@@ -170,7 +185,7 @@
                         <meter cur="numAnnotationsComplete()" tot="numAnnotations()"></meter>
                     </div>
                 </div>
-                <div id="bottom-part" ng-if="prepareable()">
+                <div id="bottom-part" ng-if="prepareable() || (prepareFor && doc.issue)">
                     <doc-transaction-details doc="doc"></doc-transaction-details>
                 </div>
             </internal-right-rail>
