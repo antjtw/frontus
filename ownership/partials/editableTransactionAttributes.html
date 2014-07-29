@@ -1,10 +1,10 @@
 <div class="capGuide top10">
-    <div ng-repeat="(key, val) in data
+    <div ng-repeat="(key, val) in data.attrs
                     | transactionAttributesForDisplay"
          class="rightTitle"
          ng-class="{double: key.input_type!='text_field'}">
         <span ng-class="{'locked-security': key=='security_type'}">
-            {{data}}
+            {{key}}
         </span>
         <input ng-if="key.input_type=='text_field'">
         <ul ng-if="">
@@ -27,7 +27,6 @@
                   data-placement="top"
                   bs-tooltip="{{key.description}}">
             </span>
-
         </ul>
     </div>
 </div>

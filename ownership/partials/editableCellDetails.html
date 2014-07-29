@@ -1,20 +1,20 @@
-<accordion ng-class="{'lessmargin': (transactions.length == 1)}"
+<accordion ng-class="{'lessmargin': (cell.transactions.length == 1)}"
            class="transaction-accordion"
            close-others="true">
 <accordion-group is-open="tran.active"
-                 is-disabled="transactions.length==1"
+                 is-disabled="cell.transactions.length==1"
                  ng-hide="windowToggle && !tran.active"
-                 ng-repeat="tran in transactions
+                 ng-repeat="tran in cell.transactions
                             | orderBy:'date' track by $index"
                 ng-switch on="currentTab">
     <accordion-heading>
         <span data-icon="&#xe031;"
               aria-hidden="true"
-              ng-show="tran.active && transactions.length > 1">
+              ng-show="tran.active && cell.transactions.length > 1">
         </span>
         <span data-icon="&#xe034;"
               aria-hidden="true"
-              ng-show="!tran.active && transactions.length > 1"
+              ng-show="!tran.active && cell.transactions.length > 1"
               ng-click="editEvidence()">
         </span>
         <span ng-click="editEvidence()">

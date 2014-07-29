@@ -51,7 +51,7 @@ Security = function() {
     this.name = "";
     this.effective_date = null;
     this.insertion_date = null;
-    this.transaction = [];
+    this.transactions = [];
 };
 // if nameeditable == 0 then it's not a real investor row (unissued rows)
 Row = function() {
@@ -188,7 +188,7 @@ function($rootScope, calculate, sorting, SWBrijj, $q, attributes) {
         security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
         security.insertion_date = tran.insertion_date;
-        security.transaction.push(tran.transaction);
+        security.transactions.push(tran);
         security.attrs = tran.attrs;
 
         captable.securities.push(security);

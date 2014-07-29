@@ -94,7 +94,6 @@ own.directive('editableSecurityDetails', [function() {
                     .filter(function(el) {
                         return el.transaction == $scope.sec.transaction;
                     });
-                console.log($scope);
             }
         ],
     };
@@ -167,11 +166,10 @@ own.directive('transactionAttributes', [function() {
     return {
         restrict: 'E',
         replace: true,
-        scope: {data: '=',
-                settings: '='},
+        scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-        controller: ["$scope", "captable", "displayCopy",
-            function($scope, captable, displayCopy) {
+        controller: ["$scope", "$rootScope", "captable", "displayCopy",
+            function($scope, $rootScope, captable, displayCopy) {
                 $scope.displayAttr = captable.displayAttr;
                 $scope.tips = displayCopy.captabletips;
                 $scope.hasTip = function(key) {
@@ -191,7 +189,6 @@ own.directive('editableTransactionAttributes', [function() {
         controller: ["$scope", "captable", "displayCopy", "attributes",
             function($scope, captable, displayCopy, attributes) {
                 var attrs = attributes.getAttrs();
-                console.log(attrs);
                 console.log($scope.data);
                 $scope.label = function(attr) {
                 };
