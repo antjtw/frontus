@@ -32,8 +32,7 @@ m.directive('groupPeople', function(){
                 this.group = group;
             };
 
-            $scope.parseGroups = function(){
-            console.log($scope.people);             
+            $scope.parseGroups = function(){        
               SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
                     angular.forEach($scope.myUserGroups, function(info){
@@ -45,31 +44,9 @@ m.directive('groupPeople', function(){
             };
             $scope.parseGroups();
 
-            // This function does not work
-            // $scope.allGroupsArray = function(person){
-            //     angular.forEach(person, function(ind){
-            //         SWBrijj.tblmm('account.my_user_role', 'email', ind.email).then(function(data){
-            //             var indGroup = data;
-            //             angular.forEach(indGroup, function(gr){
-            //                 var groupsArray = JSON.parse(gr.groups);
-            //                 for(i = 0; i < groupsArray.length; i++){
-            //                     if($scope.allTheGroups.indexOf(groupsArray[i])== -1){
-            //                         $scope.allTheGroups.push(groupsArray[i])
-            //                     }
-            //                 }
-                           
-            //             })
-
-            //         })
-            //     })
-            //     return $scope.allTheGroups
-            // };
-            // $scope.allGroupsArray($scope.people);
-
-
-
             $scope.fromFront = function(person){
                 var allGroups = [];
+
                 angular.forEach(person, function(info){
                     if(info.groups != undefined){
                         var a = info.groups.split(", ");
