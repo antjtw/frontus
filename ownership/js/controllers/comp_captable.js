@@ -98,19 +98,6 @@ var captableController = function(
             $scope.tourUp();
         }
     }
-    function deselectAllCells() {
-        angular.forEach($scope.ct.rows, function (row) {
-            row.state = false;
-            angular.forEach($scope.ct.securities, function (issue) {
-                if (issue.issue) {
-                    if (row.cells[issue.issue]) {
-                        row.cells[issue.issue].state = false;
-                    }
-                    issue.state = false;
-                }
-            });
-        });
-    }
     $scope.selectCell = function(inv, sec) {
         $scope.currentTab = 'details';
         $scope.sidebarstart = angular.copy($scope.sidebar);
@@ -121,7 +108,7 @@ var captableController = function(
                 $scope.selectedCell.security == sec) {
             $scope.selectedCell = null;
             $scope.sideBar = "home";
-            deselectAllCells();
+            //deselectAllCells();
         } else {
             // TODO refactor to take cell directly
             $scope.selectedCell = $scope.cellFor(inv, sec);
@@ -131,7 +118,7 @@ var captableController = function(
         }
     };
     $scope.selectSecurity = function(security_name) {
-        deselectAllCells();
+        //deselectAllCells();
         $scope.selectedCell = $scope.selectedInvestor = null;
         if ($scope.toggleView() && $scope.selectedSecurity &&
             $scope.selectedSecurity.name == security_name)
@@ -153,7 +140,7 @@ var captableController = function(
     };
     $scope.selectInvestor = function(investor_name) {
         $scope.selectedCell = $scope.selectedSecurity = null;
-        deselectAllCells();
+        //deselectAllCells();
         if ($scope.toggleView() && $scope.selectedInvestor &&
                 $scope.selectedInvestor.name == investor_name) {
             $scope.sideBar = "home";
@@ -971,7 +958,7 @@ var captableController = function(
     $scope.editViewToggle = function() {
         $scope.maintoggle = !$scope.maintoggle;
         $scope.radioModel = $scope.maintoggle ? "Edit" : "View";
-        deselectAllCells();
+        //deselectAllCells();
     };
 
     $scope.tabvisible = function(tab) {
@@ -995,11 +982,6 @@ var captableController = function(
         });
         return total;
     };
-
-    $scope.singleTransaction = function(trans) {
-        return (trans.length == 1);
-    };
-
     // TODO refactor and rename
     $scope.toggleView = function () {
         if ($scope.maintoggle) {

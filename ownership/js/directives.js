@@ -64,7 +64,36 @@ own.directive('d3Donut', ['d3', function(d3) {
     };
 }]);
 
-// view only
+own.directive('captableCell', [function() {
+    return {
+        restrict: 'E',
+        scope: {data: '='},
+        templateUrl: '/ownership/partials/captableCell.html',
+        controller: ["$scope", "$rootScope", "calculate",
+            function($scope, $rootScope, calculate) {
+                $scope.settings = $rootScope.settings;
+            }
+        ],
+    };
+}]);
+own.directive('editableCaptableCell', [function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {data: '=',
+                editable: '=',
+                selectCell: '=selectCell',
+                selectedCell: '=selectedCell'},
+        templateUrl: '/ownership/partials/editableCaptableCell.html',
+        controller: ["$scope", "$rootScope", "calculate", "captable",
+            function($scope, $rootScope, calculate, captable) {
+                $scope.settings = $rootScope.settings;
+                $scope.captable = captable;
+                $scope.isDebt = captable.isDebt;
+            }
+        ],
+    };
+}]);
 own.directive('securityDetails', [function() {
     return {
         restrict: 'EA',
@@ -90,10 +119,6 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable) {
                 $scope.tips = displayCopy.captabletips;
                 $scope.ct = captable.getNewCapTable();
-                $scope.transactions = $scope.ct.transactions
-                    .filter(function(el) {
-                        return el.transaction == $scope.sec.transaction;
-                    });
             }
         ],
     };
@@ -132,42 +157,13 @@ own.directive('editableCellDetails', [function() {
         ],
     };
 }]);
-own.directive('captableCell', [function() {
-    return {
-        restrict: 'E',
-        scope: {data: '='},
-        templateUrl: '/ownership/partials/captableCell.html',
-        controller: ["$scope", "$rootScope", "calculate",
-            function($scope, $rootScope, calculate) {
-                $scope.settings = $rootScope.settings;
-            }
-        ],
-    };
-}]);
-own.directive('editableCaptableCell', [function() {
-    return {
-        restrict: 'E',
-        replace: true,
-        scope: {data: '=',
-                editable: '=',
-                selectCell: '=selectCell',
-                selectedCell: '=selectedCell'},
-        templateUrl: '/ownership/partials/editableCaptableCell.html',
-        controller: ["$scope", "$rootScope", "calculate", "captable",
-            function($scope, $rootScope, calculate, captable) {
-                $scope.settings = $rootScope.settings;
-                $scope.captable = captable;
-                $scope.isDebt = captable.isDebt;
-            }
-        ],
-    };
-}]);
 own.directive('transactionAttributes', [function() {
     return {
         restrict: 'E',
         replace: true,
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
+    // TODO refactor to use attributes service
         controller: ["$scope", "$rootScope", "captable", "displayCopy",
             function($scope, $rootScope, captable, displayCopy) {
                 $scope.displayAttr = captable.displayAttr;
@@ -186,7 +182,7 @@ own.directive('editableTransactionAttributes', [function() {
         scope: {data: '='},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$scope", "captable", "displayCopy", "attributes",
+        controller: ["$scope", "captable", "attributes",
             function($scope, captable, displayCopy, attributes) {
                 var attrs = attributes.getAttrs();
                 console.log($scope.data);

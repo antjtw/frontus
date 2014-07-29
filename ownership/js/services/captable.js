@@ -4,7 +4,6 @@ var ownership = angular.module('ownerServices');
  * u, ukey and a, akey refer to units and amount
  * 'key' is actually the backup/previous/undo value
  * TODO implement 'key' values as a stack with generic undo facility
- */
 CapTable = function() {
     this.vInvestors = [];
     this.security_names = [];
@@ -17,6 +16,7 @@ CapTable = function() {
     this.conversions = [];
     this.transfers = [];
 };
+ */
 NewCapTable = function() {
     this.rows = [];
     this.security_names = [];
@@ -43,10 +43,12 @@ Transaction = function() {
     this.key = 'undefined';
     this.convert = [];
 };
+/*
 Issue = function() {
     this.name = "";
     this.date = new Date(2100, 1, 1);
 };
+*/
 Security = function() {
     this.name = "";
     this.effective_date = null;
@@ -58,7 +60,7 @@ Row = function() {
     this.name = "";
     this.editable = "0";
     this.nameeditable = null;
-    this.cells = {};
+    this.transactions = [];
 };
 // TODO should issue_type be here?
 // I want more data in the cells.
@@ -97,8 +99,6 @@ function($rootScope, calculate, sorting, SWBrijj, $q, attributes) {
             captable.ledger_entries = results[0];
             captable.transactions = results[1].map(parseTransaction);
             handleTransactions(captable.transactions);
-            // FIXME also need email address associated with rows,
-            //       if one is available
             captable.rows = results[2].map(rowFromName);
             captable.attributes = results[3];
             attachEvidence(results[4]);
@@ -294,14 +294,14 @@ function($rootScope, calculate, sorting, SWBrijj, $q, attributes) {
                 return investorOwnershipPercentage(inv.name);
             };
         });
-        //captable.security_names = visibleSecurities();
-        //captable.investor_names = visibleInvestors();
-        // TODO set rows
     }
     function rowFromName(name) {
         var row = newRow();
         row.namekey = row.name = name.name;
         row.editable = "yes";
+        row.transactions = captable.transactions
+            .filter(function(el) {return el.attrs.investor == row.name;});
+        // TODO row.email = ______
         return row;
     }
     function initUI() {
