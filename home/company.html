@@ -138,7 +138,7 @@
 								<span>{{company.address}}</span>
 							</div>
 							<div>
-								<span>{{company.city}}<span ng-show="company.city && (company.state || company.zipcode">, </span>{{company.state}}<span> </span>{{company.zipcode}}
+								<span>{{company.city}}<span ng-show="company.city && (company.state || company.zipcode)">, </span>{{company.state}}<span> </span>{{company.zipcode}}
 							</div>
 						</div>
                     </div>
@@ -168,7 +168,9 @@
 					</div>
                 </tab>
                 <tab heading = "Activity">
-                	<div activity-feed user='navState.userid' type="iss" view="activityView"></div>
+                	<div ng-style="viewportheight">
+                		<div activity-feed user='navState.userid' type="iss" view="activityView"></div>
+                	</div>
                 </tab>
             </tabset>
         </internal-right-rail>
