@@ -92,13 +92,13 @@
                                         <th colspan="2" class="left" ng-click="setOrder('statusRank')">
                                             Status
                                         </th>
-                                        <th/>
+                                        <th></th>
                                     </tr>
                                 </tbody>
                                 <tbody ng-repeat="doc in docs | orderBy:docOrder">
-                                    <tr class="empty-row"/>
+                                    <tr class="empty-row"></tr>
                                     <tr>
-                                        <td class="shareholder-column docname-column" ng-click="viewInvestorCopy(doc)">
+                                        <td class="shareholder-column docname-column pointer" ng-click="viewInvestorCopy(doc)">
                                             <ul>
                                                 <li>{{doc.docname | caplength:50}}</li>
                                                 <li>{{doc.signature_status}}</li>
@@ -108,7 +108,7 @@
                                             <div ng-show="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
                                             <div ng-hide="docIsComplete(doc)" class="circle yellow" aria-hidden="true"></div>
                                         </td>
-                                        <td class="shareholder-column status-column pointer" ng-click="viewVersionStatus(doc)">
+                                        <td class="shareholder-column status-column pointer" ng-click="viewInvestorCopy(doc)">
                                             <ul>
                                                 <li>{{shortStatus(doc)}}</li>
                                             </ul>
