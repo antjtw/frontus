@@ -250,11 +250,11 @@ app.controller('CompanyCtrl',
                         $scope.docsummary.sig = 0;
                         $scope.docsummary.counter = 0;
                         angular.forEach(sharedocs, function(doc) {
-                            if (doc.signature_status == "countersigned by issuer (awaiting investor confirmation)" ||
-                                doc.signature_status == "signature requested (awaiting investor)") {
+                            if ((doc.signature_status == "countersigned by issuer (awaiting investor confirmation)" ||
+                                doc.signature_status == "signature requested (awaiting investor)") && (doc.when_retracted == null)) {
                                 $scope.docsummary.sig += 1;
                             }
-                            else if (doc.signature_status == "signed by investor (awaiting countersignature)") {
+                            else if ((doc.signature_status == "signed by investor (awaiting countersignature)") && (doc.when_retracted == null)) {
                                 $scope.docsummary.counter += 1;
                             }
                         });

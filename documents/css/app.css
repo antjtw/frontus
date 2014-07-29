@@ -2014,6 +2014,15 @@ doc-transaction-details > div > div > button {
     margin-left: 5px;
 }
 
+doc-transaction-details > div > div > span > span.back-button {
+    color: #3498DB;
+    cursor: pointer;
+}
+
+doc-transaction-details > div > div > span > span.back-button:hover {
+    color: #2980B9;
+}
+
 /* Finished Animation */
 
 @-webkit-keyframes completerequired {
