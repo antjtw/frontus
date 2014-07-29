@@ -1,10 +1,10 @@
 <div class="composemessage" style="padding-right: 30px">
   <div class="sidebarHeader" style="padding-bottom: 0px">
-    <span>GROUP</span>
+    <span>GROUPS</span>
   </div>
 
   <div class="instructions">
-    <p>Select the contacts you would like to add to this group. To remove individuals from a group, just unselect the group name.</p>
+    <p>Select people to the left to add or remove from groups.</p>
   </div>
 
   <div ng-repeat="groupDatum in groupData | unique: 'group'" class="group_button">
@@ -17,7 +17,7 @@
 
 
   <div class="sidebarText">
-    <span>New Group</span>
+    <span>Create a New Group</span>
     <div>
        <input type="text" ng-model="groupName">
       </input>
