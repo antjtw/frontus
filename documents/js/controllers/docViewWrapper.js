@@ -337,7 +337,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 if ($rootScope.lastPage.indexOf("company-status") !== -1) {
                     $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
                 }
-                $location.url($rootScope.lastPage);
+                $location.url(encodeURIComponent($rootScope.lastPage));
             } else if ($scope.invq) {
                 $location.url('/documents/investor-list');
             } else {

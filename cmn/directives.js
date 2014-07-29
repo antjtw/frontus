@@ -65,7 +65,7 @@ m.directive('messageSide', function(){
                 var link;
                 link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
                 if (link) {
-                $location.url(link);
+                $location.url(encodeURIComponent(link));
                 }
             };
 
@@ -189,7 +189,7 @@ m.directive('messageSide', function(){
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + person.email 
-                    $location.url(link);
+                    $location.url(encodeURIComponent(link));
                 }
                       
             };    

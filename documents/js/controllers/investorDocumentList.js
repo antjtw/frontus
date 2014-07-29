@@ -98,7 +98,7 @@ app.controller('InvestorDocumentListController', ['$scope', 'SWBrijj', '$locatio
             var link;
             if (doc.template_id && !doc.when_signed) link = "/app/documents/investor-view?template=" + doc.template_id + "&subid=" + doc.doc_id;
             else link = "/app/documents/investor-view?doc=" + doc.doc_id;
-            $location.url(link);
+            $location.url(encodeURIComponent(link));
         };
 
         $scope.exportOriginalToPdf = function(doc) {

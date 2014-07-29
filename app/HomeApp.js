@@ -487,7 +487,7 @@ app.controller('CompanyCtrl',
             };
 
             $scope.gotopage = function (link){
-                $location.url(link);
+                $location.url(encodeURIComponent(link));
             };
 
             // Service functions
@@ -800,7 +800,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
         };
 
         $scope.gotopage = function (link){
-            $location.url(link);
+            $location.url(encodeURIComponent(link));
         };
 
         // Flipping tiles functionality
