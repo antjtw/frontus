@@ -310,7 +310,7 @@ internal-right-rail .tab-content {
     position: absolute;
     top: 40px;
     bottom: 0;
-    width: 100%;
+    width: calc(100%-1px);
 }
 
 internal-right-rail #bottom-part {
