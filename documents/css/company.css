@@ -76,7 +76,7 @@
 .body-box > div:first-child > div > div{
 	float: left;
 	margin: 50px;
-	margin-left: calc(45%-80px)
+	margin-bottom: 30px;
 	
 }
 #add-investments {
@@ -114,4 +114,12 @@
 	top: 250px;
 }
 
-	
+.maincontent {
+	background-color: #CAC9C9;
+}
+.body-box {
+ 	background-color: white;
+}
+h1 {
+font-size: 17px;
+}
