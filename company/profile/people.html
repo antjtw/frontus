@@ -84,17 +84,17 @@
                     
                         <th class="button" ng-click="sortBy('name')"><span class="title">Name</span></th>
                         <th class="button" ng-click="sortBy('role')"><span class="title">Role</span></th>
-                        <th class="button" ng-click="sortBy('group')"><span class="title">Group</span></th>
+                        <th class="button" ng-click="sortBy('groups')"><span class="title">Group</span></th>
                         <th></th>
                     <!--     <th></th> -->
 
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: filterParam.param track by $id($index)">
+                    <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: filterParam.param:strict track by $id($index)">
                     <tr class="empty-row"></tr>
                     
                       
-                    <td style="width:300px" class="shareholder-column docname-column" ng-click=" sidebarPage=='email'"> 
+                    <td style="width:300px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
 
                    <!--  check boxes      -->
                         <div class="check-box-side">
