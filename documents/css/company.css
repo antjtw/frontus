@@ -113,5 +113,8 @@
 	left: calc(50% - 75px);
 	top: 250px;
 }
+.maincontent {
+	background-color: #CAC9C9
+}
 
 	
