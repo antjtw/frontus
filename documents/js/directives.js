@@ -185,6 +185,7 @@ app.directive('annotation', function() {
             doc: "=",
             removeannot: "&",
             sigModalUp: "&",
+            prepareFor: "=",
             active: "=",
         },
         replace: true,

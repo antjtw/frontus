@@ -245,7 +245,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
             this.annotations.forEach(function(annot) {
                 annot.updateTypeInfo(this.annotation_types);
-            });
+            }, this);
         },
         hasOtherPartyAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
