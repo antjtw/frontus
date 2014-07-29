@@ -525,11 +525,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 console.log($scope.myGroups);
             });
         };
-        // $scope.allGroups();
-
-        // $scope.$watch('myGroups', function(){
-        //     $scope.setGroups()
-        // }  true);
 
         $scope.setGroups = function(){
             angular.forEach($scope.people, function(person){
@@ -546,7 +541,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             // var pgroup = JSON.parse(myGroups.groups);
                             // var pArray = pgroup.join(", ");
                             // console.log(pArray)
-                            person.groups = JSON.parse(myGroups.groups).sort().join(", ");
+                            person.group_arrays = JSON.parse(myGroups.groups);
+                            person.groups = JSON.parse(myGroups.groups).sort().join(", ")
+                            console.log(person.groups);
                         }
                     });
                 
