@@ -1,4 +1,7 @@
-var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
+app.controller('noteController',
+    ['$scope', '$rootScope', '$location', '$parse', 'SWBrijj', 'calculate',
+        function($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
+
     $scope.variablewidth = 800;
     $rootScope.greypage = true;
 
@@ -228,4 +231,4 @@ var noteController = function ($scope, $rootScope, $location, $parse, SWBrijj, c
     };
 
     $scope.conversion("start");
-};
+}]);

@@ -138,6 +138,9 @@
                             </div>
                         </div>
                     </tab>
+                    <tab heading="Transactions" ng-if="doctrans.length > 0">
+                        <doc-transaction-list trans="doctrans"></doc-transaction-list>
+                    </tab>
                 </tabset>
                 <div id="bottom-part" class="confirmPanelContainer" ng-if="actionNeeded()">
                     <div class="confirmPanel">

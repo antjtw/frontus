@@ -1,5 +1,7 @@
 // Grants page controller
-var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting, navState) {
+app.controller('grantController',
+    ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj', 'calculate', 'switchval', 'sorting', 'navState',
+        function($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting, navState) {
     $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
@@ -1117,7 +1119,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     // add tooltip info to fix issue
 
 
-};
+}]);
 
 // Returns only the real transactions (not the empty ones)
 app.filter('noempty', function () {
