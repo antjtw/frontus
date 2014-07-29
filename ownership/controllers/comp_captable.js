@@ -1,6 +1,8 @@
 
 // Need to catch x:({javaClassName:"net.r0kit.brijj.BrijjServlet$NotLoggedIn",message:"Not Logged In"}) on all the exceptions
-var captableController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState) {
+app.controller('captableController',
+    ['$scope', '$rootScope', '$location', '$parse', 'SWBrijj', 'calculate', 'switchval', 'sorting', 'navState',
+        function($scope, $rootScope, $location, $parse, SWBrijj, calculate, switchval, sorting, navState) {
 
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -2978,7 +2980,7 @@ var captableController = function ($scope, $rootScope, $location, $parse, SWBrij
         return false;
     };
 
-};
+}]);
 
 // IE fix to remove enter to submit form
 function testForEnter()
