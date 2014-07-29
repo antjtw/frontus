@@ -45,6 +45,7 @@ m.directive('groupPeople', function(){
             $scope.fromFront = function(person){
                 var allGroups = [];
                 angular.forEach(person, function(info){
+                    console.log(person)
                     if(info.groups != undefined){
                         var a = info.groups.split(", ");
                         for(var i = 0; i < a.length; i++){
@@ -286,8 +287,6 @@ m.directive('peopleFilter', function(){
                 else if($scope.filterParam.param == assignMe){
                     $scope.filterParam.param = undefined;
                 }
-                console.log($scope.filterParam.param)
-                console.log(assignMe);
             }
           
             $scope.getContacts = function(){
