@@ -2327,6 +2327,7 @@ a.oldschool-link  {
     -ms-animation: leftTabSlideIn 0.25s linear;
     -o-animation: leftTabSlideIn 0.25s linear;
     animation: leftTabSlideIn 0.25s linear;
+    position: relative;
 }
 .leftTabWindow.showRightTab {
     margin-left: calc(-100% + 350px);
