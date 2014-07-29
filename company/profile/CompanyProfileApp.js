@@ -520,6 +520,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         });
                         $scope.setLastLogins();
                         $scope.setGroups();
+                        $scope.resetFilter();
                     });
                     $scope.sort = 'name';
                 });
@@ -529,7 +530,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
         $scope.createPeople();
 
-
+        $scope.resetFilter = function(){
+            $scope.filterParam.param = undefined;
+        }
         $scope.allGroups = function(){
             SWBrijj.tblm('account.my_user_groups', ['json_array_elements']).then(function(data){
                 $scope.myGroups = data;

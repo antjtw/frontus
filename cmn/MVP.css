@@ -4773,6 +4773,7 @@ textarea.email-text {
 
 .secondbar {
     right: -350px;
+/*    position: relative;*/
 }
 
 /*//Message sidebar*/

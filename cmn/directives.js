@@ -179,6 +179,8 @@ m.directive('groupPeople', function(){
                 }
             }
 
+         
+
            
 
             $scope.selectGroup = function(group){
