@@ -1,3 +1,5 @@
+'use strict';
+
 var service = angular.module('commonServices', ['brijj']);
 
 service.filter('caplength', function () {
@@ -191,10 +193,37 @@ service.factory('myPayments', function($q, payments) {
 
 service.service('User', ['SWBrijj', function(SWBrijj) {
     this.signaturePresent = false;
-    u = this; // save "this" context for procm callback
+    var u = this; // save "this" context for procm callback
     SWBrijj.procm('account.have_signature').then(function(sig) {
         u.signaturePresent = sig[0].have_signature;
     });
+}]);
+
+service.service('Investor', ['SWBrijj', function(SWBrijj) {
+    this.investors = [];
+    this.names = {};
+    var inv_service = this;
+    SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var inv = {id: data[i].email};
+            if (data[i].name) {
+                inv.text = data[i].name + "  (" + data[i].email +")";
+                inv_service.names[data[i].email] = data[i].name;
+            } else {
+                inv.text = data[i].email;
+            }
+            inv_service.investors.push(inv);
+        }
+    });
+
+    this.getDisplay = function(identifier) {
+        if (this.names[identifier]) {
+            return this.names[identifier];
+        } else {
+            return this.identifier;
+        }
+    };
+
 }]);
 
 // service.service('Messages', ['SWBrijj', function(SWBrijj) {
