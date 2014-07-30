@@ -186,8 +186,9 @@
             <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addAdminModalClose()"></span>
         </div>
         <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
-            <span>Are you sure you want to add 
-                <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}<span><span ng-show=" ! $last">, </span> as an admin?</span>
+           Are you sure you want to add 
+                <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}
+                <span ng-show=" ! $last">, </span></span>as admin?
             <div class="spacer20"></div>
             <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
                 <span>

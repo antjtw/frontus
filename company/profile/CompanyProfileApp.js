@@ -643,11 +643,18 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.removeAdminModalOpen = function(ppl) {
             $scope.selectedToRevokes = [];
             angular.forEach(ppl, function(ind){
-                $scope.selectedToRevokes.push(ind.email);
+                if(ind.email != $scope.navState.userid){ 
+                    $scope.selectedToRevokes.push(ind.email);
+                }
+                else if($scope.navState.userid==ind.email){
+                    console.log("error!")
+                }
+                else{
+                    console.log("hmmmm")
+                }
+                
             })
-            // $scope.selectedToRevoke = $scope.selectedToRevokeArray.join(", ");
-
-            // $scope.selectedToRevoke = email;
+            
             $scope.removeAdminModal = true;
         };
 
@@ -661,7 +668,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             angular.forEach(person, function(ind){
                 $scope.selectedToAdds.push(ind.email)
             });
-            
+            console.log($scope.selectedToAdds)
             // $scope.selectedToAdd = email;
             $scope.addAdminModal = true;
         };
@@ -727,22 +734,25 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
 
-        $scope.revoke_admin = function() {
-            SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function(x) {
-                void(x);
-                $rootScope.billing.usage.admins_total -= 1;
-                $scope.$emit("notification:success", "Admin Removed");
-                $route.reload();
-            }).except(function(x) {
-                    void(x);
-                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-                });
-            $scope.selectedToRevoke = "";
-        };
+        // $scope.revoke_admin = function() {
+        //     angular.forEach($scope.selectedToRevokes, function(elem){
+        //         SWBrijj.proc('account.revoke_admin', elem, navState.company).then(function(x) {
+        //             void(x);
+        //             $rootScope.billing.usage.admins_total -= 1;
+        //         }).except(function(x) {
+        //             void(x);
+        //             $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+        //         });
+        //     $scope.$emit("notification:success", "Admin Removed");
+        //     // $route.reload();
+        //     // $scope.selectedToRevokes = [];
+
+        //     })
+            
+        // };
 
         $scope.add_admin = function() {
             angular.forEach($scope.selectedToAdds, function(elem){
-                alert(elem);
                  SWBrijj.proc('account.create_admin', elem.toLowerCase()).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.admins_total += 1;
@@ -752,7 +762,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
             });
-            // $scope.$emit("notification:success", "Admin Added");
+            $scope.$emit("notification:success", "Admin Added");
            
         };
 
