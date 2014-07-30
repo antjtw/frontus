@@ -25,6 +25,7 @@ app.controller('DocumentPrepareController',
             },
             placeholder: 'Add Investor',
             createSearchChoice: function(text) {
+                // if text was a legit user, would already be in the list, so don't check Investor service
                 return {id: text, text: text};
             }
         };

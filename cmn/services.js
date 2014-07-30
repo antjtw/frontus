@@ -202,28 +202,32 @@ service.service('User', ['SWBrijj', function(SWBrijj) {
 service.service('Investor', ['SWBrijj', function(SWBrijj) {
     this.investors = [];
     this.names = {};
+    this.displays = {};
     var inv_service = this;
     SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
         for (var i = 0; i < data.length; i++) {
-            var inv = {id: data[i].email};
             if (data[i].name) {
-                inv.text = data[i].name + "  (" + data[i].email +")";
                 inv_service.names[data[i].email] = data[i].name;
-            } else {
-                inv.text = data[i].email;
+                inv_service.getDisplay(data[i].email).text = inv_service.getDisplayText(data[i].email); // overwrite old value if exists
             }
-            inv_service.investors.push(inv);
+            inv_service.investors.push(inv_service.getDisplay(data[i].email));
         }
     });
 
-    this.getDisplay = function(identifier) {
+    this.getDisplayText = function(identifier) {
         if (this.names[identifier]) {
-            return this.names[identifier];
+            return this.names[identifier] + " (" + identifier + ")";
         } else {
-            return this.identifier;
+            return identifier;
         }
     };
 
+    this.getDisplay = function(identifier) {
+        if (!this.displays[identifier]) {
+            this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier)};
+        }
+        return this.displays[identifier];
+    };
 }]);
 
 // service.service('Messages', ['SWBrijj', function(SWBrijj) {
