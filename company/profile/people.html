@@ -27,7 +27,7 @@
                                         <p class="button" ng-if="addOrRemove=='shareholder'" ng-click="addAdminModalOpen(groupPeople)">Make Admin</p>
                                     </li>
                                     <li>
-                                        <p class="button" ng-if="addOrRemove =='issuer'">Remove Admin</p>
+                                        <p class="button" ng-if="addOrRemove =='issuer'" ng-click="removeAdminModalOpen(groupPeople)">Remove Admin</p>
                                     </li>
                                     <li>
                                         <p class="button" ng-click="companyIsZombie() || toggleSide('group'); clearRecipient();">Group</a>
@@ -167,7 +167,8 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="removeAdminModalClose()"></span>
     </div>
     <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
-        <span>Are you sure you want to remove {{selectedToRevoke}} as an admin?</span>
+        Are you sure you want to remove 
+        <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}<span ng-show=" ! $last">, </span></span> as an admin?
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
