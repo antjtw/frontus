@@ -15,16 +15,16 @@
                         </div>
                     </div>
             <!--         admin dropdowns -->
-                    <div class="pull-left" ng-show="groupPeople.length > 0 && sidebarPage != 'group'">
+                    <div class="pull-left" ng-show="groupPeople.length > 0">
                         <!-- <div class="standard-button darkgray">
-                            <button class="btn" ng-click="companyIsZombie()|| toggleSide('group'); clearRecipient()">Group</button>
+                          <button class="btn" ng-click="companyIsZombie()|| toggleSide('group'); clearRecipient()">Group</button>
                         </div> -->
                         <ul class="dropdown-list drop-selector">
                             <li class="dropdown standard"> 
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">More</a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <p class="button" ng-if="addOrRemove=='shareholder'">Make admin</p>
+                                        <p class="button" ng-if="addOrRemove=='shareholder'" ng-click="addAdminModalOpen(groupPeople)">Make Admin</p>
                                     </li>
                                     <li>
                                         <p class="button" ng-if="addOrRemove =='issuer'">Remove Admin</p>

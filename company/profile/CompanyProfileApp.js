@@ -649,8 +649,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.removeAdminModal = false;
         };
 
-        $scope.addAdminModalOpen = function(email) {
-            $scope.selectedToAdd = email;
+        $scope.addAdminModalOpen = function(person) {
+            console.log(person); 
+            $scope.selectedToAddArray = []
+            angular.forEach(person, function(ind){
+                $scope.selectedToAddArray.push(ind.email)
+            });
+            $scope.selectedToAdd = $scope.selectedToAddArray.join(", ")
+            // $scope.selectedToAdd = email;
             $scope.addAdminModal = true;
         };
 
@@ -729,15 +735,19 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.add_admin = function() {
-            SWBrijj.proc('account.create_admin', $scope.selectedToAdd.toLowerCase()).then(function(x) {
-                void(x);
-                $rootScope.billing.usage.admins_total += 1;
-                $scope.$emit("notification:success", "Admin Added");
-                $route.reload();
-            }).except(function(x) {
+            angular.forEach($scope.selectedToAddArray, function(elem){
+                alert(elem);
+                 SWBrijj.proc('account.create_admin', elem.toLowerCase()).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.admins_total += 1;
+                    $route.reload();
+                }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
+            });
+            // $scope.$emit("notification:success", "Admin Added");
+           
         };
 
         // email sidebar
