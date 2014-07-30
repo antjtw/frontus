@@ -1,10 +1,10 @@
-<accordion ng-class="{'lessmargin': (activeTran.length == 1)}" class="transaction-accordion" close-others="true">
+<accordion ng-class="{'lessmargin': (trans.length == 1)}" class="transaction-accordion" close-others="true">
     <accordion-group is-open="tran.active" is-disabled="singleTransaction(trans);"
                      ng-repeat="tran in trans | orderBy:'date' track by $index" ng-switch on="currentTab">
         <accordion-heading>
-            <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && activeTran.length > 1"></span>
-            <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && activeTran.length > 1"></span>
-            <span>{{tran.investor}}'s {{tran.date | date:settings.shortdate}} Transaction</span>
+            <span data-icon="&#xe031;" aria-hidden="true" ng-show="tran.active && trans.length > 1"></span>
+            <span data-icon="&#xe034;" aria-hidden="true" ng-show="!tran.active && trans.length > 1"></span>
+            <span><span>{{tran.investor}}</span><span>{{tran.date | date:settings.shortdate}}</span></span>
         </accordion-heading>
 
 
@@ -85,6 +85,10 @@
                 <p ng-show="tran.price" class="belowTitle"><span ng-bind="formatDollarAmount(tran.price)"></span><span tooltip-placement="right" class="forTooltip" tooltip="The price each granted share can be purchased at">Strike Price</span></p>
 
             </div>
+        </div>
+
+        <div class="profile-link pointer" ng-click="gotoCaptable()"><span data-icon="&#xe001;" aria-hidden="true"></span>
+            <span>View Cap Table</span>
         </div>
     </accordion-group>
 </accordion>

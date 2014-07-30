@@ -2134,7 +2134,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 
 .transaction-accordion .accordion-heading > a > span:not(:last-of-type),
 .transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
-    vertical-align: -10%;
+    vertical-align: 90%;
     color: #1E2D3D;
 }
 
@@ -2150,6 +2150,18 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
     color: #1E2D3D;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+    display: inline-block;
+}
+
+.transaction-accordion .accordion-heading > a > span:last-of-type > span:first-of-type {
+    font-size: 20px;
+    display: block;
+}
+
+.transaction-accordion .accordion-heading > a > span:last-of-type > span:last-of-type {
+    color: #8D8D8D;
+    font-size: 12px;
 }
 
 .transaction-accordion .accordion-group {
@@ -2191,10 +2203,37 @@ p.belowTitle {
 
 }
 
+.capGuide {
+    display: block;
+    padding: 0 0 0 20px;
+}
+
 .belowTitle span.forTooltip {
     display: inline-block;
 }
 
 .capTab {
     margin-top: 0;
+}
+
+div.profile-link {
+    margin-bottom: 5px;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    border: none !important;
+    color: #1E2D3D;
+}
+
+div.profile-link:hover {
+    background-color: #E3E3E3;
+}
+
+div.profile-link > span {
+    display: inline-block;
+}
+
+div.profile-link > span:first-of-type {
+    vertical-align: -16%;
 }
