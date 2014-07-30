@@ -1,4 +1,350 @@
-var m = angular.module('commonDirectives', ['ui.select2', 'brijj']);
+var m = angular.module('commonDirectives', ['ui.select2', 'brijj', 'ui.filters']);
+
+m.directive('groupPeople', function(){
+    return {
+        scope: {people: "=people"},
+        restrict: 'E',
+        templateUrl:'/cmn/partials/groupPeople.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location){
+
+            $scope.unChecked = [];
+   
+            var newGroup = [];
+            $scope.groupName = "";
+            $scope.manyGroup = [];
+            $scope.selectedGroup = [];
+            var newGroups = [];
+            $scope.groupData = [];
+            var arrayRemove = [];
+    
+            $scope.updateGroup = function(array, json){
+                SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
+                   console.log("success!");
+                }).except(function(x){
+                    console.log("failed to add group");
+                });
+            };
+  
+            function indGroup(group){
+                this.group = group;
+            };
+
+            $scope.parseGroups = function(){        
+              SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
+                    $scope.myUserGroups = data;
+                    angular.forEach($scope.myUserGroups, function(info){
+                        var a = info.json_array_elements;
+                        var b = JSON.parse(a);
+                        $scope.groupData.push(new indGroup(b));
+                    });
+                });
+            };
+            $scope.parseGroups();
+
+            $scope.fromFront = function(person){
+                var allGroups = [];
+                angular.forEach(person, function(info){
+                    console.log(person)
+                    if(info.groups != undefined){
+                        var a = info.groups.split(", ");
+                        for(var i = 0; i < a.length; i++){
+                            if(allGroups.indexOf(a[i])== -1){
+                                allGroups.push(a[i]);
+                            };
+                        };
+                    };
+       
+                });
+                return allGroups;              
+            };
+            $scope.fromFront($scope.people);
+
+             
+            // $scope.fromBack = function(person){
+            //     var backGroups = []             
+            //     angular.forEach(person, function(info){
+            //         console.log(info.email);
+            //         SWBrijj.tblmm('account.my_user_groups', 'email', info.email).then(function(data){
+            //             var ppl = data;
+            //             console.log(ppl);
+            //             angular.forEach(ppl, function(ind){
+            //                 console.log(JSON.parse(ind.json_array_elements))
+            //                 if(backGroups.indexOf(JSON.parse(ind.json_array_elements))== -1){
+            //                     backGroups.push(JSON.parse(ind.json_array_elements));
+            //                 }
+            //                 console.log(backGroups);
+
+            //             })
+            //         })
+            //     })
+            //     return backGroups
+            //     alert($scope.backGroups)
+            // };
+
+            // $scope.testFcn = function(person){
+            //     console.log(person);
+            //     $scope.fromBack(person);
+            // }
+            // $scope.testFcn($scope.people);
+
+
+            $scope.doNotCheck = function(person){
+                var deleteArray = [];
+                var allGroups = $scope.fromFront(person);
+                angular.forEach(person, function(elem){
+                    if(elem.groups != null && elem.groups != undefined){
+                        var elemGroup = elem.groups.split(", ");
+                        angular.forEach(allGroups, function(gr){
+                            if(elemGroup.indexOf(gr)==-1){
+                                deleteArray.push(gr);
+                            }
+                        });  
+                    }
+                    else if(elem.groups == null){
+                        deleteArray = allGroups
+                    }
+
+                    
+                           
+                });       
+                return deleteArray;
+            };
+            // run this when you already have groups that are checked
+            $scope.toUncheck = function(person){
+                var uncheckGroup = []
+                var allGroups = $scope.fromFront(person)
+                angular.forEach(person, function(ind){
+                    if(ind.groups != null && ind.groups != undefined){
+                        var indArray = ind.groups.split(", ")
+                        angular.forEach($scope.selectedGroup, function(group){
+                            if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
+                                uncheckGroup.push($scope.selectedGroup.indexOf(group));
+                            };
+                        });
+                    };
+                    
+                });
+            return uncheckGroup;
+
+            }
+            // $scope.doNotCheck($scope.people);
+
+            $scope.checkBox = function(person){
+                var unCheck =  $scope.toUncheck(person);
+                var removeGroups = $scope.doNotCheck(person);
+                var allGroups = $scope.fromFront(person);
+                angular.forEach(allGroups, function(group){
+                    if(removeGroups.indexOf(group) === -1 && $scope.selectedGroup.indexOf(group)== -1){
+                    $scope.selectedGroup.push(group);
+                    };
+                });
+                if(unCheck.length > 0){
+                    for(var i = unCheck.length - 1; i >=0; i--){
+                        $scope.selectedGroup.splice(unCheck[i], 1)
+                    }
+                }
+                return($scope.selectedGroup)
+            }
+           
+            $scope.$watch('people', function(){
+                    // this is working and letting me know whenever groups change  
+                if($scope.people.length > 0){
+                    angular.forEach($scope.people, function(ind){
+                        if(ind.groups == undefined){
+                            $scope.selectedGroup = [];
+                        }
+                        else{
+                            $scope.checkBox($scope.people);
+                        }
+                    })
+                      
+                }
+                else{
+                    $scope.selectedGroup = [];
+                }                    
+                   
+            }, true);
+            
+
+
+            $scope.groupIs = function(group){
+                return $scope.selectedGroup.indexOf(group) != -1;
+                console.log($scope.selectedGroup);
+            };
+
+            $scope.clearPeople = function(array){
+                while(array.length > 0){
+                    array.pop();
+                }
+            }
+
+         
+
+           
+
+            $scope.selectGroup = function(group){
+                if($scope.selectedGroup.indexOf(group)=== -1){
+                    $scope.selectedGroup.push(group);
+                }
+                else {
+                    var toDelete = $scope.selectedGroup.indexOf(group);
+                    $scope.selectedGroup.splice(toDelete, 1);
+                    if($scope.unChecked.indexOf(group)==-1){
+                        $scope.unChecked.push(group);
+                        console.log($scope.unChecked)
+                    };
+                    
+                };
+                return $scope.selectedGroup;
+            };
+
+      
+            $scope.createGroups = function(person){
+                // if($scope.selectedGroup.length > 0 || $scope.unChecked.length > 0 || $scope.selectedGroup.length > 0){
+                    angular.forEach(person, function(info){
+                        var bigGroup = [];
+                        var newGroupsArray = []; 
+                        var myOldGroups = "" 
+                        var deleteInx = []; 
+                        SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
+                            var myInfo = data;
+                            if(myInfo.length == 0){
+                                bigGroup.push([info.email, 'investor'])
+                                newGroupsArray = [];
+                            }
+                            else{
+                                angular.forEach(myInfo, function(thing){
+                                    bigGroup.push([thing.email, thing.role])
+                                    if(thing.groups == null || thing.groups == undefined){
+                                        newGroupsArray = []
+                                    }
+                                    else{
+                                        newGroupsArray = JSON.parse(thing.groups);
+                                    }
+                                    
+                                })
+                            };                        
+                            if($scope.selectedGroup.length > 0){
+                                angular.forEach($scope.selectedGroup, function(selected){
+                                    if(newGroupsArray.indexOf(selected)==-1){
+                                        newGroupsArray.push(selected);
+                                    }
+                                    
+                                })
+                            }
+                            if($scope.unChecked.length > 0){
+                                angular.forEach($scope.unChecked, function(unChecked){
+                                    if(newGroupsArray.indexOf(unChecked) > -1){
+                                         var toDelete = newGroupsArray.indexOf(unChecked);
+                                         deleteInx.push(toDelete);
+                                         newGroupsArray.splice(toDelete, 1);
+                                    };
+                                });
+                                console.log(newGroupsArray);
+                            }
+                            if($scope.groupName.length > 0){
+                                var checkNew = []
+                                angular.forEach($scope.groupData, function(data){
+                                        checkNew.push(data.group);
+                                    });
+                                if(newGroupsArray.indexOf($scope.groupName) == -1 && checkNew.indexOf($scope.groupName)== -1){
+                                    newGroupsArray.push($scope.groupName);
+                                }
+                                else{
+                                    console.log("already in group");
+                                }
+                                
+                            }
+                        $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
+                        
+                    })
+                });
+               
+            }
+
+
+
+            $scope.showUserRoles = function(){
+                SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
+                    $scope.myUserRoles = data;
+                    console.log($scope.myUserRoles);
+                });
+            };
+
+            
+        }]
+    }
+})
+m.directive('peopleFilter', function(){
+    return {
+        scope: {people: '=people',
+                filterParam: '=filterParam'},
+        restrict: 'E',
+        templateUrl:'/cmn/partials/peopleFilter.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q',
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q){
+
+            $scope.assignFilter = function(assignMe){
+                if($scope.filterParam.param ===undefined){
+                    $scope.filterParam.param = assignMe;
+                }
+                else if($scope.filterParam.param != assignMe){
+                    $scope.filterParam.param = assignMe;
+                }
+                else if($scope.filterParam.param == assignMe){
+                    $scope.filterParam.param = undefined;
+                }
+            }
+
+           
+          
+            $scope.getContacts = function(){
+                var promise = $q.defer();
+                SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                    $scope.myContacts = data;
+                    promise.resolve($scope.myContacts);
+                    console.log($scope.myContacts);
+                });
+                return promise.promise
+            };
+            // thing is scope.mycontacts because that is what the promise resolves
+            $scope.getUserRoles = function(){
+                SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
+                    $scope.getContacts().then(function(){
+                        $scope.myRoles = data;
+                        $scope.myAdmins = $scope.myRoles.length 
+                        $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins
+
+                    });
+                   
+                });
+            };
+            $scope.getUserRoles()
+
+
+            $scope.getFilterCount = function(){
+                SWBrijj.tblm('account.ind_user_group', ['ind_group', 'count']).then(function(data){
+                    $scope.myGroups = data;
+                    angular.forEach($scope.myGroups, function(info){
+                        info.ind_group = info.ind_group.replace(/"/g, "")
+                    });
+                });
+            };
+            $scope.getFilterCount();
+
+
+
+            // add a watch later to update the user roles as well
+
+            $scope.$watch('people', function(){
+                $scope.getFilterCount();
+            }, true)
+
+
+        }]
+    }
+})
 
 m.directive('messageSide', function(){
     return {
@@ -71,7 +417,7 @@ m.directive('messageSide', function(){
 
             $scope.getLogins = function(){
                 SWBrijj.tblm('global.user_tracker').then(function(data){
-                    $scope.logins = data  
+                    $scope.logins = data;
                 })
             };
             $scope.getLogins();

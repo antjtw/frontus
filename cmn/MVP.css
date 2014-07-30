@@ -1624,6 +1624,14 @@ ul.spaced-list > li:nth-child(odd) {
     vertical-align: top;
 }
 
+.activity-feed2 li.event.roles > div:first-of-type{
+    text-align: left;
+    padding-left: 20px;
+}
+
+
+    
+
 .activity-icon {
     width: 30px;
     height: 30px;
@@ -4765,6 +4773,7 @@ textarea.email-text {
 
 .secondbar {
     right: -350px;
+/*    position: relative;*/
 }
 
 /*//Message sidebar*/
@@ -4796,6 +4805,8 @@ textarea.email-text {
 
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
+    cursor: pointer;
+    padding-right: 10px;
 }
 
 .messages .activity-feed2 li.event:first-of-type {
@@ -4850,11 +4861,77 @@ textarea.email-text {
     padding-bottom: 1em; 
 }
 
-
-
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
     cursor: pointer; 
 }
 
+
+/*Filter sidebar*/
+
+.messages .activity-feed2 li.event.roles{
+    margin-right: 0px;
+}
+.tinycol{
+    display: inline-block;
+    width: 40%;
+    padding-left: 20px;
+    margin-left: 10px;
+}
+
+.tinycol.left{
+    text-align: right;
+    padding-left: 10px;
+}
+
+.group_button{
+    line-height: 30px;
+}
+
+.instructions{
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.check-box-button.group > span.check_group{
+    margin-right: 20px;
+
+}
+.select_role{
+    cursor: pointer;
+}
+.select_role.picked{
+    color: #666;
+}
+
+.select_role:hover {
+    color: #666;
+    cursor: pointer;
+}
+
+.noGroups{
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px dashed #C7C7C7; 
+    width: 200px;
+    margin-left: 20px;
+}
+
+.noGroups span{
+    color: #3498DB;
+    cursor: pointer;
+}
+
+.select_role.all_people{
+    color: #1E2D3D;
+}
+
+
+.noGroups span:last-of-type{
+    position: relative;
+    top: 3px;
+} 
 
