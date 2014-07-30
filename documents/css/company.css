@@ -126,5 +126,6 @@ font-size: 17px;
 }
 .tabbable .tab-content {
 	border-left: 1px solid #CAC9C9;
+	background-color: #F1F1F1;
 }
 
