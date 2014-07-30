@@ -624,8 +624,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.addOrRemoveAdmin = function(people){
             var selectRole = $scope.sortRolesForAdd(people)
+            console.log(selectRole)
             if(selectRole.length === 1){
-                return selectRole[0]
+                // return selectRole[0]
+                $scope.addOrRemove = selectRole[0]
             }
             
         }
