@@ -1605,7 +1605,10 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
-    margin-top: 40px;
+
+}
+.activity-feel2 > div > li:first-child {
+	margin-top: 40px;
 }
 
 .activity-feed2 li.event {
