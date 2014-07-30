@@ -432,48 +432,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             if (document.location.href.indexOf('-view') != -1) {
-                var ndx_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
-                var ndx_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
-                /** @name $scope#lib#annotations
-                 * @type {[Object]}
-                 */
-                /*
-                 if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable){
-                 console.log("OH NO!!!");
-                 return; // no changes
-                 }
-                 */
-
-                /** @name SWBrijj#_sync
-                 * @function
-                 * @param {string}
-                 * @param {string}
-                 * @param {string}
-                 * @param {...}
-                 */
-                // This is a synchronous save
-                /** @name $scope#lib#original
-                 * @type {int} */
-                if (!$scope.template_original && !$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.doc.countersignable($rootScope.navState.role)) {
-                    var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
-                    if (!res) alert('failed to save annotations');
-                }
-                // TODO: should call saveSmartdocData
-                if ($scope.template_original && $scope.prepareable($scope.lib)) {
-                    var res2 = SWBrijj._sync('SWBrijj', 'proc',
-                        ["account.company_attribute_update",
-                            "name",
-                            $scope.used_attributes.companyName
-                        ]
-                    );
-                    var res3 = SWBrijj._sync('SWBrijj', 'proc',
-                        ["account.company_attribute_update",
-                            "state",
-                            $scope.used_attributes.companyState
-                        ]
-                    );
-                    if (!res2 || !res3) alert('failed to save annotations');
-                }
+                $scope.saveNoteData();
+                $scope.saveSmartdocData();
             }
 
         });
@@ -614,6 +574,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?
                 return;
+            }
+            if ($scope.$parent.prepareFor) {
+                $scope.doc.savePreparation($scope.$parent.prepareFor);
             }
             if (!$scope.isAnnotable) return;
             if ($scope.html) {

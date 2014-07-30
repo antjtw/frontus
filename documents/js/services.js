@@ -386,6 +386,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
         },
+        savePreparation: function(investor) {
+            var notes = [];
+            angular.forEach(this.annotations, function(note) {
+                if (note.whosign == "Issuer" && !note.pristine) {
+                    notes.push({id: note.id, val: note.val});
+                }
+            });
+            SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
+                // do nothing, successful save
+            }).except(function(error) {
+                $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+            });
+        }
     };
 
     /// Document service definition

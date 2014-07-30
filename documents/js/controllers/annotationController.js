@@ -96,6 +96,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         // prevent issuers from filling in the investor values
         if (!$scope.annot.forRole(navState.role)) {
             $scope.annot.val = "";
+        } else if ($scope.annot.pristine && newValue != oldValue) {
+            $scope.annot.pristine = false;
         }
     });
 
