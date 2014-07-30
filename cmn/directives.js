@@ -417,7 +417,7 @@ m.directive('messageSide', function(){
 
             $scope.getLogins = function(){
                 SWBrijj.tblm('global.user_tracker').then(function(data){
-                    $scope.logins = data              
+                    $scope.logins = data;
                 });
             };
             $scope.getLogins();
