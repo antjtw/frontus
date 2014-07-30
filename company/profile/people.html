@@ -16,26 +16,25 @@
                     </div>
             <!--         admin dropdowns -->
                     <div class="pull-left" ng-show="groupPeople.length > 0&& sidebarPage != 'group'">
-                        <div class="standard-button darkgray">
+                        <!-- <div class="standard-button darkgray">
                             <button class="btn" ng-click="companyIsZombie()|| toggleSide('group'); clearRecipient()">Group</button>
-                        </div>
-                        <!-- <ul class="dropdown-list drop-selector">
+                        </div> -->
+                        <ul class="dropdown-list drop-selector">
                             <li class="dropdown standard"> 
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">More
-                             </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">More</a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                    <a class="button">Make admin</a>
-                                </li>
-                                <li>
-                                    <a class="button">Remove Admin</a>
-                                </li>
-                                <li>
-                                    <p class="button" ng-click="companyIsZombie() || toggleSide('group'); clearRecipient();">Group</a>
-                                </li>
+                                        <p class="button" ng-show="addOrRemoveAdmin(groupPeople)=='shareholder'">Make admin</p>
+                                    </li>
+                                    <li>
+                                        <p class="button" ng-show="addOrRemoveAdmin(groupPeople)=='issuer'">Remove Admin</p>
+                                    </li>
+                                    <li>
+                                        <p class="button" ng-click="companyIsZombie() || toggleSide('group'); clearRecipient();">Group</a>
+                                    </li>
                                 </ul>
                             </li>
-                        </ul> -->
+                        </ul>
                     </div>
                   <!--   </div> -->
 
@@ -161,7 +160,7 @@
 </div>
 
 
-<!-- admin toolbar -->
+<!-- admin toolbar, these are the modals themselves that open -->
 <div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
     <div class="modalHeader">
         <span>Remove administrator</span>
@@ -179,6 +178,7 @@
         </div>
     </div>
 </div>
+
     <div modal="addAdminModal" close="addAdminModalClose()" options="narrowopts">
         <div class="modalHeader">
             <span>Add administrator</span>

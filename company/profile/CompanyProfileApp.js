@@ -611,6 +611,25 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.adminModal = true;
         };
 
+        $scope.sortRolesForAdd = function(people){
+            var roles = []
+            angular.forEach(people, function(person){
+                if(roles.indexOf(person.role)== -1){
+                    roles.push(person.role);
+                }
+                
+            });
+            return roles
+        }
+
+        $scope.addOrRemoveAdmin = function(people){
+            var selectRole = $scope.sortRolesForAdd(people)
+            if(selectRole.length === 1){
+                return selectRole[0]
+            }
+            
+        }
+
        
 
         $scope.adminModalClose = function() {
