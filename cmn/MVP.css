@@ -4932,7 +4932,7 @@ textarea.email-text {
 }
 
 .noGroups span:last-of-type{
-    position:relative;
-    top: 20px;
+    position: relative;
+    top: 3px;
 } 
 
