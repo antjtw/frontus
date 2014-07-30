@@ -52,6 +52,9 @@ var captableController = function(
     $scope.redo = function() {
         History.redo(selectedThing(), $scope);
     };
+    $scope.revert = function() {
+        History.revert(selectedThing(), $scope);
+    };
 
     // Sorting variables
     $scope.issueSort = 'date';

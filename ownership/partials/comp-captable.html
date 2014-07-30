@@ -615,12 +615,37 @@
         </ul>
     </div>
     <div class="box-button pull-right"
-         ng-click="undo()">
-         Undo
+         ng-click="revert()">
+        <ul>
+            <li>
+                <span data-icon="&#xe136;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>Revert</span>
+            </li>
+        </ul>
     </div>
     <div class="box-button pull-right"
          ng-click="redo()">
-         Redo
+        <ul>
+            <li>
+                <span data-icon="&#xe004;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>Redo</span>
+            </li>
+        </ul>
+    </div>
+    <div class="box-button pull-right"
+         ng-click="undo()">
+        <ul>
+            <li>
+                <span data-icon="&#xe005;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>Undo</span>
+            </li>
+        </ul>
     </div>
     <div class="evidenceSearch" ng-if="windowToggle">
         <span>Search</span>
