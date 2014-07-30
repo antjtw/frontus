@@ -185,9 +185,9 @@ own.directive('editableTransactionAttributes', [function() {
         controller: ["$scope", "$filter", "captable", "attributes",
     // TODO
     //   -  dropdowns
-    //   -  sorting
             function($scope, $filter, captable, attributes) {
                 var attrs = attributes.getAttrs();
+                $scope.attrs = attrs;
                 $scope.keys = function() {
                     return Object.keys($scope.data.attrs)
                         .sort(function(x1, x2) {
@@ -215,7 +215,6 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
-                $scope.sortAttributeTypes = $filter('sortAttributeTypes');
             }
         ],
     };

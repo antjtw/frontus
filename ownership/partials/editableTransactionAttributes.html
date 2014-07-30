@@ -25,7 +25,7 @@
                 <span class="invisible-drop">'</span>
             </a>
             <ul class="dropdown-menu">
-                <li ng-repeat="i in inputType(key)">
+                <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].input_type">
                     <a ng-click="setIt(i)">
                         {{i}}
                     </a>

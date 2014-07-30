@@ -8,8 +8,8 @@ CapTable = function() {
     this.vInvestors = [];
     this.security_names = [];
     this.securities = [];
-    this.rows = [];
-    this.uniquerows = [];
+    this.investors = [];
+    this.uniqueinvestors = [];
     this.trans = [];
     this.grants = [];
     this.paripassu = [];
@@ -18,8 +18,7 @@ CapTable = function() {
 };
  */
 NewCapTable = function() {
-    this.rows = [];
-    this.security_names = [];
+    this.investors = [];
     this.securities = [];
     this.transactions = [];
     this.ledger_entries = [];
@@ -55,7 +54,7 @@ Security = function() {
     this.insertion_date = null;
     this.transactions = [];
 };
-// if nameeditable == 0 then it's not a real investor row (unissued rows)
+// if nameeditable == 0 then it's not a real investor row (unissued investors)
 Row = function() {
     this.name = "";
     this.editable = "0";
@@ -99,7 +98,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             captable.ledger_entries = results[0];
             captable.transactions = results[1].map(parseTransaction);
             handleTransactions(captable.transactions);
-            captable.rows = results[2].map(rowFromName);
+            captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
             attachEvidence(results[4]);
             generateCells(new Date());
@@ -271,7 +270,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         return trans.reduce(sumTransactionAmount, 0);
     }
     function generateCells() {
-        angular.forEach(captable.rows, function(inv) {
+        angular.forEach(captable.investors, function(inv) {
             angular.forEach(captable.securities, function(sec) {
                 var cell = nullCell();
                 cell.transactions = captable.transactions.filter(
@@ -425,9 +424,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         tran.tagalong = issue.tagalong;
     }
     function addTranToRows(tran) {
-        if (captable.uniquerows.indexOf(tran.investor) == -1) {
-            captable.uniquerows.push(tran.investor);
-            angular.forEach(captable.rows, function(row) {
+        if (captable.uniqueinvestors.indexOf(tran.investor) == -1) {
+            captable.uniqueinvestors.push(tran.investor);
+            angular.forEach(captable.investors, function(row) {
                 if (row.namekey == tran.investor) {
                     row.email = tran.email;
                     row.emailkey = tran.email;
@@ -477,9 +476,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     function addRow(idx) {
         var row = newRow(captable.security_names);
         if (idx) {
-            captable.rows.splice(idx, 0, row);
+            captable.investors.splice(idx, 0, row);
         } else {
-            captable.rows.push(row);
+            captable.investors.push(row);
         }
         return row;
     }
@@ -501,7 +500,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     this.getIssue = getIssue;
     function cellsForIssue(iss) {
         var cells = [];
-        angular.forEach(captable.rows, function(row) {
+        angular.forEach(captable.investors, function(row) {
             if (iss.issue in row.cells && row.nameeditable !== 0) {
                 cells.push(row.cells[iss.issue]);
             }
@@ -561,7 +560,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     }
     this.massageTransactionValues = massageTransactionValues;
     function addTranToCell(tran) {
-        angular.forEach(captable.rows, function (row) {
+        angular.forEach(captable.investors, function (row) {
             if (row.name == tran.investor) {
                 updateCell(tran, row);
             } else if (!(tran.issue in row.cells)) {
@@ -620,7 +619,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     function calculateDebtCells() {
         // FIXME why does calculate.debt return null?!?
         // return immediately.
-        angular.forEach(captable.rows, function (row) {
+        angular.forEach(captable.investors, function (row) {
             angular.forEach(captable.securities, function (issue) {
                 var cell = row.cells[issue.issue];
                 if (cell !== undefined &&
@@ -628,7 +627,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
                     (!calculate.isNumber(cell.u) || cell.u === 0) &&
                     calculate.isNumber(cell.a))
                 {
-                    cell.x = calculate.debt(captable.rows,
+                    cell.x = calculate.debt(captable.investors,
                                             issue, row);
                 }
             });
@@ -643,7 +642,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             var leftovers = total - num_granted;
             var unissued_cell = nullCell();
             unissued_cell.u = unissued_cell.ukey = leftovers;
-            var unissued_row = captable.rows.filter(
+            var unissued_row = captable.investors.filter(
                 function(el) {
                     return el.name == iss.issue + " (unissued)";
                 })[0];
@@ -651,8 +650,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
                 if (leftovers !== 0) {
                     unissued_row.cells[iss.issue] = unissued_cell;
                 } else {
-                    captable.rows.splice(
-                        captable.rows.indexOf(unissued_row), 1);
+                    captable.investors.splice(
+                        captable.investors.indexOf(unissued_row), 1);
                 }
             } else {
                 if (leftovers !== 0) {
@@ -667,7 +666,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     }
     this.generateUnissuedRows = generateUnissuedRows;
     function fillEmptyCells() {
-        angular.forEach(captable.rows, function (row) {
+        angular.forEach(captable.investors, function (row) {
             angular.forEach(captable.security_names, function (issuekey) {
                 if (!(issuekey in row.cells)) {
                     row.cells[issuekey] = nullCell();
@@ -710,17 +709,17 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     /*
     function prepareForDisplay() {
         // Sort the columns before finally showing them
-        // Issues are sorted by date, rows by ownership within each issue
+        // Issues are sorted by date, investors by ownership within each issue
         captable.securities.sort(sorting.issuedate);
         captable.security_names = sorting.security_names(captable.security_names,
                                                captable.securities);
-        captable.rows.sort(sorting.basicrow());
+        captable.investors.sort(sorting.basicrow());
         do {
             addRow();
-        } while (captable.rows.length < 5);
+        } while (captable.investors.length < 5);
 
         //Calculate the total vested for each row
-        captable.rows = calculate.detailedvested(captable.rows, captable.trans);
+        captable.investors = calculate.detailedvested(captable.investors, captable.trans);
 
         // Add extra blank issue, which will create a new one when clicked.
         addSecurity();
@@ -754,7 +753,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     }
     function populateListOfInvestorsWithoutAccessToTheCaptable() {
         var emailedalready = [];
-        angular.forEach(captable.rows, function (row) {
+        angular.forEach(captable.investors, function (row) {
             if (row.emailkey !== null) {
                 emailedalready.push(row.emailkey);
             }
@@ -869,7 +868,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     }
     loadEligibleEvidence();
     function setTransactionEmail(tran) {
-        angular.forEach(captable.rows, function (row) {
+        angular.forEach(captable.investors, function (row) {
             if ((row.name == tran.investor) && row.email) {
                 tran.email = row.email;
             }

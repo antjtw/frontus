@@ -236,10 +236,11 @@ ownership.filter('attributeInputTypes', function() {
                         "Equity Preferred", "Equity Common", "Debt",
                         "Convertible Debt"];
             case "transaction_type":
+                return [];
             case "liquidpref":
             case "interestratefreq":
             case "vestfreq":
-                return list;
+                return [];
             case "date":
                 return "date_picker";
             case "common":
@@ -274,7 +275,6 @@ ownership.filter('sortAttributeTypes', function() {
                              "term"];
     return function(tp) {
         var res = orderedAttributes.indexOf(tp);
-        console.log(tp, res);
         return res === -1 ? orderedAttributes.length+1 : res;
     };
 });

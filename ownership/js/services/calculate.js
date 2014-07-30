@@ -34,10 +34,10 @@ ownership.service('calculate', function () {
         return isNaN(parseFloat(value)) ? null : parseFloat(value);
     };
 
-    // The remainder calculated for outstanding units rows.
-    this.whatsleft = function (total, issue, rows) {
+    // The remainder calculated for outstanding units investors.
+    this.whatsleft = function (total, issue, investors) {
         var leftover = total;
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (issue.issue in row.cells &&
                     row.nameeditable !== 0 &&
                     isNumber(row.cells[issue.issue].u)) {
@@ -62,14 +62,14 @@ ownership.service('calculate', function () {
 
     // Calculates the debt for the captable based on transactions
     // with paid but no shares. Must be called on each row.
-    this.debt = function (rows, issue, row) {
+    this.debt = function (investors, issue, row) {
         return null;
         /*
         var mon = parseFloat(issue.premoney);
         if (isNaN(parseFloat(mon))) {
             return null
         } else {
-            angular.forEach(rows, function (r) {
+            angular.forEach(investors, function (r) {
                 if (r.cells[issue.issue] != undefined) {
                     if ((isNaN(parseFloat(r.cells[issue.issue]['u'])) || r.cells[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r.cells[issue.issue]['a']))) {
                         mon = mon + parseFloat(r.cells[issue.issue]['a']);
@@ -84,7 +84,7 @@ ownership.service('calculate', function () {
     // Calculates the vested amounts for the grant table.
     // This takes in the row array and returns the new row array.
     // TODO break up and move to captable service
-    this.vested = function (rows, trans) {
+    this.vested = function (investors, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
             var vestbegin = angular.copy(tran.vestingbegins);
@@ -145,7 +145,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (!isNaN(vesting[row.name])) {
                 row.vested = Math.round(vesting[row.name]*1000)/1000;
                 if (parseFloat(row.vested) > (parseFloat(row.granted)-parseFloat(row.forfeited))) {
@@ -153,7 +153,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        return rows;
+        return investors;
     };
 
     // Calculates vested on each transaction returning dictionary of date:amount vested
@@ -230,7 +230,7 @@ ownership.service('calculate', function () {
 
     // Calculates the vested amounts for the
     // TODO move to captable service
-    this.detailedvested = function (rows, trans) {
+    this.detailedvested = function (investors, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
             var vestbegin = angular.copy(tran.vestingbegins)
@@ -288,7 +288,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (vesting[row.name]) {
                 row.vested = {}
                 for (var issue in vesting[row.name]) {
@@ -299,7 +299,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        return rows
+        return investors
     };
 
     this.myvested = function (trans) {
@@ -388,10 +388,10 @@ ownership.service('calculate', function () {
         return [myvested, tranvested];
     };
 
-    // Generates the diluted rows
-    this.dilution = function (rows, securities) {
+    // Generates the diluted investors
+    this.dilution = function (investors, securities) {
         var dilutedRows = [];
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (row.name !== undefined) {
                 var something = null;
                 var temprow = {"name": row.name, "email": row.email, cells: []};
@@ -445,10 +445,10 @@ ownership.service('calculate', function () {
 
 
 
-    // Returns the number of shareholders (rows -1 for the empty row)
-    this.numShareholders = function (rows) {
+    // Returns the number of shareholders (investors -1 for the empty row)
+    this.numShareholders = function (investors) {
         var number = 0
-        angular.forEach(rows, function(row) {
+        angular.forEach(investors, function(row) {
             if (row.editable == "yes") {
                 number += 1
             }
@@ -486,11 +486,11 @@ ownership.service('calculate', function () {
 
     //Calculates the total for a column, will do either shares or money depending
     //// TODO this won't work
-    this.colTotal = function (header, rows, type) {
+    this.colTotal = function (header, investors, type) {
         var total = 0;
-        for (var i = 0, a = rows.length; i < a; i++) {
-            if (rows[i].cells[header]) {
-                var possfloat = parseFloat(rows[i].cells[header][type]);
+        for (var i = 0, a = investors.length; i < a; i++) {
+            if (investors[i].cells[header]) {
+                var possfloat = parseFloat(investors[i].cells[header][type]);
                 if (!isNaN(possfloat) && String(header) != "$$hashKey") {
                     total += possfloat;
                 }
@@ -500,9 +500,9 @@ ownership.service('calculate', function () {
     };
 
     //Calculates the total for a column, without unissued shares
-    this.colTotalIssued = function (header, rows, type) {
+    this.colTotalIssued = function (header, investors, type) {
         var total = 0;
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (row.editable == "yes") {
                 for (var key in row.cells) {
                     if (key == header) {
@@ -517,9 +517,9 @@ ownership.service('calculate', function () {
     };
 
     //Calculates the total money for all securities and transactions
-    this.totalPaid = function (rows) {
+    this.totalPaid = function (investors) {
         var total = 0;
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             for (var key in row.cells) {
                 if (row.cells[key] != null && !isNaN(parseFloat(row.cells[key]['a'])) && String(key) != "$$hashKey") {
                     total = total + parseFloat(row.cells[key]['a']);

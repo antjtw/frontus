@@ -55,6 +55,23 @@
                     <span>Convert</span>
                 </div>
             </div>
+            <div class="rightTitle double">
+                <span>Transaction Type</span>
+                <ul>
+                    <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{data.kind}}
+                        <span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in attrs[data.attrs.security_type]">
+                            <a ng-click="setIt(i)">
+                                {{i}}
+                            </a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
         </div>
         <editable-transaction-attributes data="tran">
         <span class="blue-link delete-link"

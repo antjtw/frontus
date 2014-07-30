@@ -55,9 +55,10 @@ function(SWBrijj, $q, $filter, displayCopy) {
                      display_name: el.display_name,
                      description: el.name in tips ? tips[el.name] : null,
                      input_type:
-                        $filter('attributeInputTypes')(el.input_type)};
+                        $filter('attributeInputTypes')(el.name)};
             }
         });
+        console.log(attrs);
     }
     function loadAttributes() {
         var promise = $q.defer();
@@ -115,9 +116,9 @@ app.run(function ($rootScope) {
     };
 
 //Calculates total vested in column
-    $rootScope.totalVestedAction = function (rows) {
+    $rootScope.totalVestedAction = function (investors) {
         var total = 0;
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (!isNaN(parseFloat(row.vested))) {
                 total = total + parseFloat(row.vested);
             }

@@ -146,7 +146,7 @@ var captableController = function(
             $scope.selectedInvestor = null;
         } else {
             // TODO refactor to take investor directly
-            $scope.selectedInvestor = $scope.ct.rows
+            $scope.selectedInvestor = $scope.ct.investors
                 .filter(function(el) {
                     return el.name == investor_name;
                 })[0];
@@ -261,18 +261,18 @@ var captableController = function(
                     var oldissue = issue.key;
                     var index = -1;
 
-                    // Fires only when you change the issue name to update the rows
-                    // Removes unissued rows with the old name, new named ones get added further down
+                    // Fires only when you change the issue name to update the investors
+                    // Removes unissued investors with the old name, new named ones get added further down
                     if (issue.issue != issue.key) {
-                        angular.forEach($scope.ct.rows, function (row) {
+                        angular.forEach($scope.ct.investors, function (row) {
                             if (row.name == issue.key + " (unissued)" && index == -1) {
-                                index = $scope.ct.rows.indexOf(row);
+                                index = $scope.ct.investors.indexOf(row);
                             }
                             row.cells[issue.issue] = row.cells[issue.key];
                             delete row.cells[issue.key];
                         });
                         if (index != -1) {
-                            $scope.ct.rows.splice(index, 1);
+                            $scope.ct.investors.splice(index, 1);
                         }
                     }
                     angular.forEach($scope.ct.securities, function (x) {
@@ -297,20 +297,20 @@ var captableController = function(
                         });
                     }
                     // Recalculate the debt percentages, but only for 1 issue
-                    angular.forEach($scope.ct.rows, function (row) {
+                    angular.forEach($scope.ct.investors, function (row) {
                         if (row.cells[issue.issue] !== undefined) {
                             if (issue.type == "Debt" &&
                                 !calculate.isNumber(row.cells[issue.issue].u) &&
                                 calculate.isNumber(row.cells[issue.issue].a))
                             {
-                                row.cells[issue.issue].x = calculate.debt($scope.ct.rows, issue, row);
+                                row.cells[issue.issue].x = calculate.debt($scope.ct.investors, issue, row);
                             }
                         }
                     });
                     captable.fillEmptyCells();
                     $scope.issueRevert = angular.copy(issue);
                     //Calculate the total vested for each row
-                    $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
+                    $scope.ct.investors = calculate.detailedvested($scope.ct.investors, $scope.ct.trans);
 
                     var index = $scope.ct.security_names.indexOf(issue.key);
                     $scope.ct.security_names[index] = issue.issue;
@@ -347,7 +347,7 @@ var captableController = function(
                     issue.key = issue.issue;
                     $scope.ct.securities.push(captable.nullIssue());
                     $scope.ct.security_names.push(issue.key);
-                    angular.forEach($scope.ct.rows, function (row) {
+                    angular.forEach($scope.ct.investors, function (row) {
                         row.cells[issue.key] = captable.nullCell();
                     });
                     for (var i=0; i < $scope.ct.securities.length; i++) {
@@ -380,13 +380,13 @@ var captableController = function(
                     $scope.ct.security_names.splice(indexed, 1);
                 }
             });
-            angular.forEach($scope.ct.rows, function (row) {
+            angular.forEach($scope.ct.investors, function (row) {
                 if (issue.key in row) {
                     delete row.cells[issue.key];
                 }
                 if (row.name == issue.key + " (unissued)") {
-                    var index = $scope.ct.rows.indexOf(row);
-                    $scope.ct.rows.splice(index, 1);
+                    var index = $scope.ct.investors.indexOf(row);
+                    $scope.ct.investors.splice(index, 1);
                 }
             });
             angular.forEach($scope.ct.trans, function(tran) {
@@ -479,13 +479,13 @@ var captableController = function(
     $scope.nameChangeLR = function (investor) {
         $scope.activeInvestorName = investor.name;
         if ((investor.name).length > 0) {
-            angular.forEach($scope.ct.rows, function (row) {
+            angular.forEach($scope.ct.investors, function (row) {
                 if (row.name == investor.name) {
                     row.editable = "yes";
                 }
             });
         } else {
-            angular.forEach($scope.ct.rows, function (row) {
+            angular.forEach($scope.ct.investors, function (row) {
                 if (row.name == investor.name) {
                     row.editable = "0";
                 }
@@ -496,7 +496,7 @@ var captableController = function(
         $scope.activeInvestorName = investor.name;
     };
     $scope.deletePersonButton = function (name) {
-        angular.forEach($scope.ct.rows, function (row) {
+        angular.forEach($scope.ct.investors, function (row) {
             if (row.name == name) {
                 $scope.rmodalUp(row);
             }
@@ -549,7 +549,7 @@ var captableController = function(
                 $scope.ct.trans.push(anewTran);
                 $scope.activeTran.push(anewTran);
             }
-            angular.forEach($scope.ct.rows, function (row) {
+            angular.forEach($scope.ct.investors, function (row) {
                 if (row.name === tran['investor']) {
                     if (!isNaN(tran.units)) {
                         row.cells[tran.issue]['u'] = row.cells[tran.issue]['u'] - tran.units;
@@ -590,15 +590,15 @@ var captableController = function(
             return;
         }
 
-        var rowindex = $scope.ct.rows.indexOf(investor);
+        var rowindex = $scope.ct.investors.indexOf(investor);
 
         if (investor.name === "" && rowindex >= 4) {
-            var index = $scope.ct.rows.indexOf(investor);
-            $scope.ct.rows.splice(index, 1);
+            var index = $scope.ct.investors.indexOf(investor);
+            $scope.ct.investors.splice(index, 1);
             return;
         }
         // TODO this same thing is implemented elsewhere
-        angular.forEach($scope.ct.rows, function (row) {
+        angular.forEach($scope.ct.investors, function (row) {
             if (investor.name !== "" &&
                     investor.name == row.name && investor != row) {
                 investor.name = investor.name + " (1)";
@@ -612,21 +612,21 @@ var captableController = function(
                          investor.name)
             .then(function (data) {
                 $scope.lastsaved = Date.now();
-                var index = $scope.ct.rows.indexOf(investor);
+                var index = $scope.ct.investors.indexOf(investor);
                 angular.forEach($scope.ct.trans, function (tran) {
                     if (tran.investor == investor.namekey) {
                         tran.investor = investor.name;
                     }
                 });
                 if (investor.name) {
-                    $scope.ct.rows[index].namekey = investor.name;
+                    $scope.ct.investors[index].namekey = investor.name;
                 }
             });
         }
     };
 
     $scope.revertPerson = function (investor) {
-        angular.forEach($scope.ct.rows, function (row) {
+        angular.forEach($scope.ct.investors, function (row) {
             if (row.namekey == investor) {
                 row.name = row.namekey;
                 $scope.nameChangeLR(row);
@@ -643,7 +643,7 @@ var captableController = function(
                 if (tran.investor == investor) {
                     var index = $scope.ct.trans.indexOf(tran);
                     $scope.ct.trans.splice(index, 1);
-                    angular.forEach($scope.ct.rows, function (row) {
+                    angular.forEach($scope.ct.investors, function (row) {
                         if (row.name === tran['investor']) {
                             if (!isNaN(tran.units)) {
                                 row.cells[tran.issue]['u'] = row.cells[tran.issue]['u'] - tran.units;
@@ -668,16 +668,16 @@ var captableController = function(
             });
 
             // TODO what's this?
-            angular.forEach($scope.ct.rows, function (row) {
+            angular.forEach($scope.ct.investors, function (row) {
                 if (row.namekey == investor) {
-                    var index = $scope.ct.rows.indexOf(row);
-                    $scope.ct.rows.splice(index, 1);
-                    if ($scope.ct.rows.length <= 5) {
+                    var index = $scope.ct.investors.indexOf(row);
+                    $scope.ct.investors.splice(index, 1);
+                    if ($scope.ct.investors.length <= 5) {
                         var values = {"name": "", "editable": "0"};
                         angular.forEach($scope.ct.security_names, function (key) {
                             values[key] = captable.nullCell();
                         });
-                        $scope.ct.rows.splice(index, 0, values);
+                        $scope.ct.investors.splice(index, 0, values);
                     }
                 }
             });
@@ -723,7 +723,7 @@ var captableController = function(
         // Triggers the multi modal if more than one transaction exists
         /*
         if (transaction.length > 1) {
-            angular.forEach($scope.ct.rows, function (row) {
+            angular.forEach($scope.ct.investors, function (row) {
                 if (row.name == transaction[0].investor) {
                     // Deals with Changes in Units
                     if (calculate.isNumber(row.cells[transaction[0].issue]['u'])) {
@@ -743,8 +743,8 @@ var captableController = function(
                     }
                 }
             });
-            // Reverts in the case where multitransaction rows are set to blank
-            angular.forEach($scope.ct.rows, function(row) {
+            // Reverts in the case where multitransaction investors are set to blank
+            angular.forEach($scope.ct.investors, function(row) {
                 if (row.name == transaction[0].investor) {
                     row.cells[transaction[0].issue]['u'] = row.cells[transaction[0].issue]['ukey'];
                     row.cells[transaction[0].issue]['a'] = row.cells[transaction[0].issue]['akey'];
@@ -810,7 +810,7 @@ var captableController = function(
                 var tempunits = 0;
                 var tempamount = 0;
                 // update cells (captable service -> updateCell(t,r)
-                angular.forEach($scope.ct.rows, function (row) {
+                angular.forEach($scope.ct.investors, function (row) {
                     angular.forEach($scope.ct.trans, function (tran) {
                         if (row.name == tran.investor &&
                                 row.name == newinvestor) {
@@ -881,7 +881,7 @@ var captableController = function(
                     $scope.saveGrant(modGrant);
                 }
                 captable.calculateDebtCells();
-                $scope.ct.rows = calculate.detailedvested($scope.ct.rows,
+                $scope.ct.investors = calculate.detailedvested($scope.ct.investors,
                                                           $scope.ct.trans);
                 captable.fillEmptyCells();
             }).except(function(x) {
@@ -1241,7 +1241,7 @@ var captableController = function(
             $scope.ct.trans.splice(index, 1);
             $scope.ct.trans.push(newtran);
 
-            angular.forEach($scope.ct.rows, function (row) {
+            angular.forEach($scope.ct.investors, function (row) {
                 if (row.cells[decrement.issue] && row.name == decrement.investor) {
                     row.cells[decrement.issue].u = row.cells[decrement.issue].u - decrement.units;
                     row.cells[decrement.issue]['a'] = row.cells[decrement.issue]['a'] - decrement.amount;
@@ -1269,7 +1269,7 @@ var captableController = function(
             captable.generateUnissuedRows();
             captable.calculateDebtCells();
             //Calculate the total vested for each row
-            $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
+            $scope.ct.investors = calculate.detailedvested($scope.ct.investors, $scope.ct.trans);
 
             captable.fillEmptyCells();
             $scope.$emit("notification:success", "Conversion Successful");
@@ -1366,7 +1366,7 @@ var captableController = function(
                          }
                      }
                  });
-                angular.forEach($scope.ct.rows, function (row) {
+                angular.forEach($scope.ct.investors, function (row) {
                     var tempunits = 0;
                     var tempamount = 0;
                     angular.forEach($scope.ct.trans, function (tran) {
@@ -1399,7 +1399,7 @@ var captableController = function(
 
                 captable.calculateDebtCells();
                 //Calculate the total vested for each row
-                $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
+                $scope.ct.investors = calculate.detailedvested($scope.ct.investors, $scope.ct.trans);
 
                 captable.fillEmptyCells();
                 $scope.$emit("notification:success", "Split Successful");
@@ -1477,7 +1477,7 @@ var captableController = function(
                     newtran.amount = decrement.amount;
                     $scope.ct.trans.push(newtran);
 
-                    angular.forEach($scope.ct.rows, function (row) {
+                    angular.forEach($scope.ct.investors, function (row) {
                         if (row.cells[decrement.issue] && row.name == decrement.investor) {
                             row.cells[decrement.issue].u = row.cells[decrement.issue].u - decrement.units;
                             row.cells[decrement.issue]['a'] = row.cells[decrement.issue]['a'] - decrement.amount;
@@ -1506,7 +1506,7 @@ var captableController = function(
                     captable.generateUnissuedRows();
                     captable.calculateDebtCells();
                     //Calculate the total vested for each row
-                    $scope.ct.rows = calculate.detailedvested($scope.ct.rows, $scope.ct.trans);
+                    $scope.ct.investors = calculate.detailedvested($scope.ct.investors, $scope.ct.trans);
 
                     captable.fillEmptyCells();
                     $scope.$emit("notification:success",
@@ -1705,7 +1705,7 @@ var captableController = function(
     };
 
     $scope.mReset = function () {
-        angular.forEach($scope.ct.rows, function (row) {
+        angular.forEach($scope.ct.investors, function (row) {
             if (row.name == $scope.activeTran[0].investor) {
                 row.cells[$scope.activeTran[0].issue].u = row.cells[$scope.activeTran[0].issue].ukey;
                 row.cells[$scope.activeTran[0].issue].a = row.cells[$scope.activeTran[0].issue].akey;
@@ -1744,7 +1744,7 @@ var captableController = function(
                          $scope.activeInvestorName)
             .then(function(data) {
                 $scope.lastsaved = Date.now();
-                angular.forEach($scope.ct.rows, function (row) {
+                angular.forEach($scope.ct.investors, function (row) {
                     if (row.name == $scope.activeInvestorName) {
                         $scope.$emit("notification:success",
                                      "Email address updated");
@@ -1786,7 +1786,7 @@ var captableController = function(
     };
 
     $scope.turnOnShares = function () {
-        angular.forEach($scope.ct.rows, function (row) {
+        angular.forEach($scope.ct.investors, function (row) {
             row.send = $scope.selectAll;
         });
     };
@@ -1807,7 +1807,7 @@ var captableController = function(
     var regExp = /\(([^)]+)\)/;
     // Send the share invites from the share modal
     $scope.sendInvites = function () {
-        angular.forEach($scope.ct.rows, function (row) {
+        angular.forEach($scope.ct.investors, function (row) {
             if (row.send == true) {
                 SWBrijj.procm("ownership.share_captable",
                               row.email.toLowerCase(),
@@ -1868,7 +1868,7 @@ var captableController = function(
     $scope.checkInvites = function () {
         var checkcontent = false;
         var checksome = false;
-        angular.forEach($scope.ct.rows, function(row) {
+        angular.forEach($scope.ct.investors, function(row) {
             if (row.send == true &&
                     (row.email != null &&
                      row.email != "" &&
@@ -2043,7 +2043,7 @@ var captableController = function(
     //switches the sidebar based on the type of the issue
     $scope.dilution = function () {
         $scope.sideBar = 9;
-        $scope.dilutedRows = calculate.dilution($scope.ct.rows, $scope.ct.securities);
+        $scope.dilutedRows = calculate.dilution($scope.ct.investors, $scope.ct.securities);
     };
 
     //switches the sidebar based on the type of the issue
@@ -2053,20 +2053,20 @@ var captableController = function(
 
     // Number of shareholders
     $scope.numShareholders = function() {
-        return calculate.numShareholders($scope.ct.rows);
+        return calculate.numShareholders($scope.ct.investors);
     };
 
     /*
     var totalShares = memoize(calculate.totalShares)
-    $scope.totalShares = function(rows) {
-        return $scope.formatAmount(totalShares(rows));
+    $scope.totalShares = function(investors) {
+        return $scope.formatAmount(totalShares(investors));
     };
     */
 
     // Total Shares | Paid for an issue column (type is either u or a)
     var totalPaid = memoize(calculate.totalPaid);
-    $scope.totalPaid = function(rows) {
-        return $scope.formatDollarAmount(totalPaid(rows));
+    $scope.totalPaid = function(investors) {
+        return $scope.formatDollarAmount(totalPaid(investors));
     };
 
     // Total Shares for a shareholder row
@@ -2077,20 +2077,20 @@ var captableController = function(
 
     // Total Shares | Paid for an issue column (type is either u or a)
     var colTotalIssued = memoize(calculate.colTotalIssued);
-    $scope.colTotalIssued = function(header, rows, type) {
-        return colTotalIssued(header, rows, type);
+    $scope.colTotalIssued = function(header, investors, type) {
+        return colTotalIssued(header, investors, type);
     };
 
     // Total Shares | Paid for an issue column (type is either u or a)
     var colTotal = memoize(calculate.colTotal);
-    $scope.colTotal = function(header, rows, type) {
-        return colTotal(header, rows, type);
+    $scope.colTotal = function(header, investors, type) {
+        return colTotal(header, investors, type);
     };
 
     /*
     var sharePercentage = memoize(calculate.sharePercentage);
-    $scope.sharePercentage = function(row, rows) {
-        return sharePercentage(shareSum(row), totalShares(rows));
+    $scope.sharePercentage = function(row, investors) {
+        return sharePercentage(shareSum(row), totalShares(investors));
     };
     */
 
@@ -2160,18 +2160,18 @@ var captableController = function(
         /*
         var pastednames = ev.originalEvent.clipboardData.getData('text/plain');
         var splitnames = pastednames.split("\n");
-        var startindex = $scope.ct.rows.indexOf(row);
+        var startindex = $scope.ct.investors.indexOf(row);
         var number = splitnames.length;
         for (var i = 0; i < number; i++) {
-            if (!$scope.ct.rows[startindex]) {
+            if (!$scope.ct.investors[startindex]) {
                 captable.addRow()
                     .editable = "yes";
             }
-            if ($scope.ct.rows[startindex].editable == "0") {
-                $scope.ct.rows[startindex].editable = "yes";
+            if ($scope.ct.investors[startindex].editable == "0") {
+                $scope.ct.investors[startindex].editable = "yes";
             }
-            $scope.ct.rows[startindex].name = splitnames[i];
-            $scope.updateRow($scope.ct.rows[startindex]);
+            $scope.ct.investors[startindex].name = splitnames[i];
+            $scope.updateRow($scope.ct.investors[startindex]);
             startindex += 1;
         }
         captable.addRow();
@@ -2184,17 +2184,17 @@ var captableController = function(
         /*
         var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
         var splitvalues = pastedvalues.split("\n");
-        var startindex = $scope.ct.rows.indexOf(row);
+        var startindex = $scope.ct.investors.indexOf(row);
         var number = splitvalues.length;
         for (var i = 0; i < number; i++) {
-            if (!$scope.ct.rows[startindex] ||
-                    $scope.ct.rows[startindex].editable == "0") {
+            if (!$scope.ct.investors[startindex] ||
+                    $scope.ct.investors[startindex].editable == "0") {
                 break;
             } else {
                 splitvalues[i] = calculate.cleannumber(splitvalues[i]);
-                if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.rows[startindex].cells[key][type])) {
+                if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.investors[startindex].cells[key][type])) {
                     var anewTran = captable.newTransaction(key,
-                                        $scope.ct.rows[startindex].name);
+                                        $scope.ct.investors[startindex].name);
                     anewTran.active = false;
                     anewTran.atype = 0;
                     if (type == "u") {

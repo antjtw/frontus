@@ -5,9 +5,11 @@
           ng-click="moveTour();">
         Next
     </span>
-    <!-- NOTE i'm assuming there's only 1 for now -->
+    <!-- NOTE i'm assuming there's only 1 for now
+         and the user can't change it.
+         it's the defining transaction for the security
+    -->
     <editable-transaction-attributes data="sec.transactions[0]">
-<div>
     <span class="blue-link delete-link"
           ng-click="deleteIssueButton(sec);"
           data-icon="&#xe00c;">

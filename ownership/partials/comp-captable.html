@@ -23,7 +23,7 @@
                     </tr>
                 </tbody>
                 <tbody class="scrollable-body">
-                    <tr ng-repeat="row in ct.rows | shareList track by $index">
+                    <tr ng-repeat="row in ct.investors | shareList track by $index">
                         <td>
                             <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </td>
@@ -475,7 +475,7 @@
                                     {{tran.transferto}}<span class="invisible-drop">'</span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li ng-repeat="row in ct.rows | otherinvestors: tran.investor">
+                                    <li ng-repeat="row in ct.investors | otherinvestors: tran.investor">
                                         <span ng-click="trantorow(tran, row.namekey)">{{row.namekey}}</span>
                                     </li>
                                 </ul>
@@ -669,6 +669,7 @@
                         Next
                     </span>
                 </th>
+                <th ng-if="!toggleView();">new security</th>
             </tr>
             <!-- Descriptive row viewable from all modes -->
             <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
@@ -680,10 +681,11 @@
                     <span>{{securityUnitLabel(one.name)}}</span>
                     <span>Total Paid</span>
                 </td>
+                <td ng-if="!toggleView();">new security</td>
             </tr>
-            <!-- Editable rows -->
+            <!-- Editable investors -->
             <tbody ng-if="!toggleView();">
-            <tr ng-repeat="row in ct.rows | orderBy:'percentage()':true"
+            <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true"
                 ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col">
                     <input class="input-right"
@@ -737,12 +739,28 @@
                         select-cell="selectCell"
                         selected-cell="selectedCell">
                 </td>
+                <td ng-if="!toggleView();">new security</td>
+            </tr>
+            <tr>
+                <td class="capsums-col">
+                    new investor
+                </td>
+                <td class="capsums-col">
+                    new investor
+                </td>
+                <td class="capsums-col">
+                    new investor
+                </td>
+                <td ng-repeat="key in ct.securities" class="capsums-col">
+                    new investor
+                </td>
+                <td ng-if="!toggleView();">new security</td>
             </tr>
             </tbody>
             <!-- Un-editable view -->
             <!-- Regular Rows -->
             <tbody ng-if="toggleView()">
-            <tr ng-repeat="row in ct.rows | orderBy:'percentage()':true">
+            <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
@@ -771,8 +789,8 @@
             </tr>
             </tbody>
             <!-- Unissued Rows -->
-            <tr class="unissued-rows"
-                ng-repeat="row in ct.rows | orderBy:'percentage()':true"
+            <tr class="unissued-investors"
+                ng-repeat="row in ct.investors | orderBy:'percentage()':true"
                 ng-show="([row] | unissuedrowviewList).length > 0">
                 <td class="capsums-col">
                     <input class="input-right"
@@ -802,6 +820,7 @@
                          </div>
                     </span>
                 </td>
+                <td ng-if="!toggleView();">new security</td>
             </tr>
             <!-- Footer Total Row -->
             <tr class="total-row">
@@ -812,6 +831,7 @@
                     ng-repeat="one in ct.securities
                 | orderBy:['effective_date', 'insertion_date']:true">
                 </td>
+                <td ng-if="!toggleView();">new security</td>
             </tr>
             <!-- Undiluted footer -->
             <tr class='tablefooter'>
@@ -841,6 +861,7 @@
                         </div>
                     </span>
                 </td>
+                <td ng-if="!toggleView();">new security</td>
             </tr>
         </table>
     </div>
@@ -940,10 +961,10 @@
                             </div>
 
                             <div class="summary-bar">
-                                <div ng-show="totalPaid(ct.rows)" class="belowTitle">
+                                <div ng-show="totalPaid(ct.investors)" class="belowTitle">
                                     <img src="/img/activity/invested.png">
                                     <div>
-                                        <span ng-bind="totalPaid(ct.rows)"></span><span>Total Invested</span>
+                                        <span ng-bind="totalPaid(ct.investors)"></span><span>Total Invested</span>
                                     </div>
                                 </div>
                                 <div ng-show="captable.totalOwnershipUnits()" class="belowTitle">
