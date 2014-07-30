@@ -657,11 +657,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.addAdminModalOpen = function(person) {
             console.log(person); 
-            $scope.selectedToAddArray = [];
+            $scope.selectedToAdds = [];
             angular.forEach(person, function(ind){
-                $scope.selectedToAddArray.push(ind.email)
+                $scope.selectedToAdds.push(ind.email)
             });
-            $scope.selectedToAdd = $scope.selectedToAddArray.join(", ")
+            
             // $scope.selectedToAdd = email;
             $scope.addAdminModal = true;
         };
@@ -741,7 +741,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.add_admin = function() {
-            angular.forEach($scope.selectedToAddArray, function(elem){
+            angular.forEach($scope.selectedToAdds, function(elem){
                 alert(elem);
                  SWBrijj.proc('account.create_admin', elem.toLowerCase()).then(function(x) {
                     void(x);
