@@ -669,7 +669,7 @@
                     <span ng-class="{'tran-highlight':tourstate==4}"><span class="next-button" ng-click="closeTour(); tourNotification();">Done!</span></span>
                       <span ng-switch on="row.editable">
                         <span ng-class="{tranSelected:row[key].state}" class="captablepair-box" ng-switch-default>
-                          <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
+                          <input ng-show="isDebt(key);" class="captablepair first-box"
                                  placeholder="{{grantbyIssue(key)}}"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
@@ -677,7 +677,7 @@
                                  ng-paste="numberPaste($event, row, key, 'u');"
                                  onkeydown="testForEnter();">
                           <input ng-hide="isDebt(key);" class="captablepair default-pointer first-box" disabled>
-                          <input class="captablepair last-box" maxlength="18" placeholder="paid"
+                          <input class="captablepair last-box" placeholder="paid"
                                  ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                  ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'
                                  onpaste="return false"
@@ -1157,16 +1157,16 @@
                                     </p>
 
                                     <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input ng-disabled="toggleView();"
-                                                                                                                 maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
+                                                                                                                 class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                                                                                                  ng-model="tran.units" onkeydown="testForEnter();"></p>
 
                                     <p class="rightTitle"><span>Total Paid</span><input ng-disabled="toggleView();"
-                                                                                        maxlength="18" ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
+                                                                                         ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.amount" onkeydown="testForEnter();"></p>
                                 </div>
 
                                 <div class="capGuide top10">
 
-                                    <p ng-show="tran.forfeited" class="rightTitle"><span>Forfeit</span><input disabled ng-class="{'content':!tran.units}" maxlength="18" class="signless"
+                                    <p ng-show="tran.forfeited" class="rightTitle"><span>Forfeit</span><input disabled ng-class="{'content':!tran.units}" class="signless"
                                                                                                               ui-event="{blur : 'saveTran(tran)'}" ng-model="tran.forfeited" onkeydown="testForEnter();"></p>
 
                                 </div>

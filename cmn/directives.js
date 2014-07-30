@@ -188,7 +188,7 @@ m.directive('messageSide', function(){
                   
                 }
                 else{
-                    var link = '/app/company/profile/view?id=' + person.email 
+                    var link = '/app/company/profile/view?id=' + encodeURIComponent(person.email);
                     $location.url(link);
                 }
                       
