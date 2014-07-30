@@ -306,6 +306,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     function initUI() {
         $rootScope.$broadcast('captable:initui');
     }
+    /*
     function updateCell(tran, row) {
         var cell;
         if (tran.issue in row.cells) {
@@ -325,6 +326,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
                 calculate.sum(cell.exercised, tran.exercised);
         }
     }
+    */
     function attachEvidence(data) {
         angular.forEach(captable.transactions, function(tran) {
             tran.evidence_data = data.filter(function(el) {
@@ -354,6 +356,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     }
     // Uses the grants to update the transactions with forfeited values
     // Eliminates the need for further reference to forfeit grants
+    /*
     function incorporateGrantsIntoTransactions(grants, transactions) {
         angular.forEach(grants, function(grant) {
             angular.forEach(transactions, function(tran) {
@@ -373,6 +376,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             });
         });
     }
+    */
+    /*
     function initRowsFromNames(names) {
         angular.forEach(names, function(name) {
             var row = addRow();
@@ -380,6 +385,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             row.editable = "yes";
         });
     }
+    
     function setTransactionKeys(tran) {
         tran.key = tran.issue;
         tran.unitskey = tran.units;
@@ -434,6 +440,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             });
         }
     }
+    */
     function logError(err) { console.log(err); }
     function logErrorPromise(err) {
         console.log(err);
@@ -457,11 +464,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         return new Security();
     }
     function addSecurity() {
+        /*
         var sec = nullSecurity();
         // Silly future date so that the issue always appears
         // on the leftmost side of the table
         sec.insertion_date = new Date(2100, 1, 1);
         captable.securities.push(sec);
+        */
     }
     function nullRow() {
         return new Row();
@@ -474,6 +483,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         return row;
     }
     function addRow(idx) {
+        /*
         var row = newRow(captable.security_names);
         if (idx) {
             captable.investors.splice(idx, 0, row);
@@ -481,8 +491,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             captable.investors.push(row);
         }
         return row;
+        */
     }
     this.addRow = addRow;
+    /*
     function newTransaction(issuekey, investor) {
         var tran = new Transaction();
         tran.new = "yes";
@@ -498,6 +510,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             })[0];
     }
     this.getIssue = getIssue;
+    */
     function cellsForIssue(iss) {
         var cells = [];
         angular.forEach(captable.investors, function(row) {
@@ -559,6 +572,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         if (tran.tran_id === undefined) { tran.tran_id = ''; }
     }
     this.massageTransactionValues = massageTransactionValues;
+    /*
     function addTranToCell(tran) {
         angular.forEach(captable.investors, function (row) {
             if (row.name == tran.investor) {
@@ -569,6 +583,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             }
         });
     }
+    */
     /*
     function processTransaction(tran) {
         reformatDate(tran);
@@ -594,6 +609,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             }
         });
     }
+    /*
     function incorporateConversionsTransfers(tran) {
         tran.convert = [];
         angular.forEach(captable.conversions, function(con) {
@@ -634,6 +650,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         });
     }
     this.calculateDebtCells = calculateDebtCells;
+    */
     function generateUnissuedRows() {
         angular.forEach(captable.securities, function(iss) {
             if (!calculate.isNumber(iss.totalauth)) return;
@@ -726,6 +743,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         return true;
     }
     */
+    /*
     function attachWatches() {
         for (var i=0; i < captable.trans.length; i++) {
             $rootScope.$watch('trans['+i+']', transaction_watch, true);
@@ -735,6 +753,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         }
     }
     this.attachWatches = attachWatches;
+    */
     function pingIntercomIfCaptableStarted() {
         var earliestedit = new Date.today().addDays(1);
         var duplicate = earliestedit;
@@ -770,6 +789,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
             });
         });
     }
+    /*
     function generic_watch(newval, oldval, obj) {
         if (!newval || !oldval) {return;}
         if (parseFloat(newval.interestrate) > 100 ||
@@ -808,6 +828,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
     function issue_watch(newval, oldval) {
         generic_watch(newval, oldval, captable.securities);
     }
+    */
     /*
     function generateCaptable(names) {
         angular.forEach(captable.securities, processIssue);
@@ -828,6 +849,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         console.log(captable);
     }
     */
+    /*
     var issuetypes = [];
     this.getIssueTypes = function() {return issuetypes;};
     function loadIssueTypes() {
@@ -853,6 +875,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         }).except(logError);
     }
     loadFrequencyTypes();
+    */
     var eligible_evidence = [];
     this.getEligibleEvidence = function() {
         return eligible_evidence;

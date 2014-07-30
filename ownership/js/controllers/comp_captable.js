@@ -29,8 +29,8 @@ var captableController = function(
     $scope.tabs = [{'title': "Information"}, {'title': "Activity"}];
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None', '1X', '2X', '3X'];
-    $scope.issuetypes = captable.getIssueTypes();
-    $scope.freqtypes = captable.getFrequencyTypes();
+    //$scope.issuetypes = captable.getIssueTypes();
+    //$scope.freqtypes = captable.getFrequencyTypes();
     $scope.eligible_evidence = captable.getEligibleEvidence();
     $scope.evidence_object = null;
     $scope.evidenceOrder = 'docname';
@@ -112,8 +112,10 @@ var captableController = function(
             // TODO refactor to take cell directly
             $scope.selectedCell = $scope.cellFor(inv, sec);
             $scope.sideBar = $scope.toggleView() ? 4 : 2;
+            /*
             $scope.allowKeys = calculate.complement(
                     $scope.ct.security_names, [sec]);
+                    */
         }
     };
     $scope.selectSecurity = function(security_name) {
@@ -133,8 +135,10 @@ var captableController = function(
             $scope.sideBar = $scope.toggleView() ? 5 : 1;
             $scope.securityRevert = angular.copy(
                                         $scope.selectedSecurity);
+            /*
             $scope.allowKeys = calculate.complement(
                     $scope.ct.security_names, [security_name]);
+                    */
         }
     };
     $scope.selectInvestor = function(investor_name) {
@@ -356,8 +360,10 @@ var captableController = function(
                                           $scope.issue_watch, true);
                         }
                     }
+                    /*
                     $scope.allowKeys = calculate.complement($scope.ct.security_names,
                                                             [issue.issue]);
+                                                            */
                     $scope.hideTour = true;
                 });
             }
