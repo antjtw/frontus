@@ -50,8 +50,8 @@
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="i in attrs[tran.attrs.security_type][tran.kind]">
-                            <a ng-click="setIt(i)">
+                        <li ng-repeat="i in transaction_types(tran)">
+                            <a ng-click="setIt(tran, 'kind', i)">
                                 {{i}}
                             </a>
                         </li>

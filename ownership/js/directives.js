@@ -146,13 +146,23 @@ own.directive('editableCellDetails', [function() {
         scope: {cell: '=',
                 currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "displayCopy", attributes,
-            function($scope, $rootScope, displayCopy, attributes) {
+        controller: ["$scope", "$rootScope", "attributes",
+            function($scope, $rootScope, attributes) {
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
-                $scope.tips = displayCopy.captabletips;
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
+                };
+                // TODO this has to do more. 
+                // OR, whatever is watching the transaction object
+                // must notice the change and update tran.attrs
+                // appropriately.
+                $scope.setIt = function(tran, k, v) {
+                    tran[k] = v;
+                };
+                $scope.transaction_types = function(tran) {
+                    return Object.keys(
+                        $scope.attrs[tran.attrs.security_type]);
                 };
             }
         ],
@@ -190,7 +200,8 @@ own.directive('editableTransactionAttributes', [function() {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
                 $scope.keys = function() {
-                    return Object.keys($scope.data.attrs)
+                    //return Object.keys($scope.data.attrs)
+                    return Object.keys(attrs[$scope.data.attrs.security_type][$scope.data.kind])
                         .sort(function(x1, x2) {
                             return $filter('sortAttributeTypes')(x1) -
                             $filter('sortAttributeTypes')(x2);
