@@ -15,7 +15,7 @@
                         </div>
                     </div>
             <!--         admin dropdowns -->
-                    <div class="pull-left" ng-show="groupPeople.length > 0&& sidebarPage != 'group'">
+                    <div class="pull-left" ng-show="groupPeople.length > 0 && sidebarPage !== 'group'">
                         <div class="standard-button darkgray">
                             <button class="btn" ng-click="companyIsZombie()|| toggleSide('group'); clearRecipient()">Group</button>
                         </div>
@@ -93,8 +93,8 @@
                     <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: isParam track by $id($index)">
                     <tr class="empty-row"></tr>
 
-                      
-                    <td style="width:300px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
+                    <tr>
+                    <td style="width:400px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
 
                    <!--  check boxes      -->
                         <div class="check-box-side">
@@ -107,8 +107,8 @@
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
                         </ul>
                     </td>
-                    <td style="width: 200px"><span>
-                        <span ng-show="person.role=='issuer'">Admin</span></td>
+                    <td style="width: 65px"><span>
+                        <span ng-show="person.role=='issuer'">Admin</span></span></td>
                     <td><span>{{person.groups}}</span></td>
                     <td style="width:50px;">
                         <ul class="dropdown-list" ng-if="sidebarPage != 'email'">

@@ -335,12 +335,16 @@ app.directive('docTransactionList', function() {
             trans: "="
         },
         templateUrl: "/documents/partials/doc-transaction-list.html",
-        controller: ["$scope", 'calculate', 'switchval', function($scope, calculate, switchval) {
+        controller: ["$scope", 'calculate', 'switchval', '$location', function($scope, calculate, switchval, $location) {
 
             $scope.trans[0].active = true;
 
             $scope.singleTransaction = function(trans) {
                 return (trans.length == 1);
+            };
+
+            $scope.gotoCaptable = function() {
+                $location.url('/app/ownership/company-captable')
             };
 
             $scope.formatAmount = function (amount) {
