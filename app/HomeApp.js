@@ -55,10 +55,6 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'grantController',
             templateUrl: '/ownership/pages/comp-grant.html'
         }).
-        when('/app/ownership/company-status', {
-            controller: 'statusController',
-            templateUrl: '/ownership/pages/comp-status.html'
-        }).
         when('/app/ownership/investor-captable', {
             controller: 'invCaptableController',
             templateUrl: '/ownership/pages/inv-captable.html'
@@ -1024,6 +1020,8 @@ app.filter('fromNowSort', function () {
         return events;
     };
 });
+
+
 
 
 

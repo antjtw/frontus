@@ -327,3 +327,51 @@ app.directive('docTransactionDetails', function() {
         }],
     };
 });
+
+app.directive('docTransactionList', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            trans: "="
+        },
+        templateUrl: "/documents/partials/doc-transaction-list.html",
+        controller: ["$scope", 'calculate', 'switchval', '$location', function($scope, calculate, switchval, $location) {
+
+            $scope.trans[0].active = true;
+
+            $scope.singleTransaction = function(trans) {
+                return (trans.length == 1);
+            };
+
+            $scope.gotoCaptable = function() {
+                $location.url('/app/ownership/company-captable')
+            };
+
+            $scope.formatAmount = function (amount) {
+                return calculate.funcformatAmount(amount);
+            };
+
+            $scope.formatDollarAmount = function(amount) {
+                var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+                return (output);
+            };
+
+            $scope.grantbyIssue = function (tran) {
+                if (tran.type == "Option") {
+                    return "options";
+                }
+                else if (tran.type == "Warrant") {
+                    return "warrants";
+                }
+                else {
+                    return "shares";
+                }
+            };
+
+            $scope.trantype = function (type, activetype) {
+                return switchval.trantype(type, activetype);
+            };
+
+        }]
+    };
+});

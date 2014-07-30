@@ -4,7 +4,7 @@ app.controller('CompContactCtrl',
         'payments', '$route', '$filter', '$location', '$http',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
                  payments, $route, $filter, $location, $http) {
-            if (navState.role == 'investor') {
+            if (navState.role === 'investor') {
                 document.location.href = "/app/home";
                 return;
             }
@@ -462,6 +462,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.sidebarPage = null;
         // $scope.hideRail = false;
 
+        $scope.filterParam = {};
+        
+
+
         angular.element('body').click(function(x) {
             if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
                 x.preventDefault();
@@ -470,39 +474,97 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             hidePopover();
         });
 
-        SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
-            $scope.people = x;
-            SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
-                angular.forEach(admins, function(admin) {
-                    angular.forEach($scope.people, function(person) {
-                        if (person.name) {
-                            person.selector = person.name + "  (" + person.email +")";
+        $scope.isParam = function(person){
+            if($scope.filterParam.param == person.role){
+                return person.role
+            }
+            else if($scope.filterParam.param == undefined){
+                return person
+            }
+            else if(person.groupsArray != undefined && person.groupsArray.indexOf($scope.filterParam.param) > -1){
+                return person.groups;
+            }
+        }
+
+
+        $scope.createPeople = function(){
+            SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
+                $scope.people = x;
+                SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
+                    angular.forEach(admins, function(admin) {
+                        angular.forEach($scope.people, function(person) {
+                            if (person.name) {
+                                person.selector = person.name + "  (" + person.email +")";
+                            }
+                            else {
+                                person.selector = "(" + person.email+")";
+                            }
+
+                            if (person.email == admin.email) {
+                                person.role = "issuer";
+                            }
+                            else if(person.email != admin.email && person.role != 'issuer'){
+                                person.role = "shareholder";
+                            }
+                        });
+                    });
+                    // SWBrijj.tblm()
+                    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+                        angular.forEach($scope.people, function(person) {
+                            if (person.email == me[0].email)
+                                person.hideLock = true;
+                            if (!person.name) {
+                                person.name = person.email;
+                            }
+
+                        });
+                        $scope.setLastLogins();
+                        $scope.setGroups();
+                        $scope.resetFilter();
+                    });
+                    $scope.sort = 'name';
+                });
+                console.log($scope.people);
+                $scope.allPeople = $scope.people;
+            });
+        };
+        $scope.createPeople();
+
+        $scope.resetFilter = function(){
+            $scope.filterParam.param = undefined;
+        }
+        $scope.allGroups = function(){
+            SWBrijj.tblm('account.my_user_groups', ['json_array_elements']).then(function(data){
+                $scope.myGroups = data;
+                console.log($scope.myGroups);
+            });
+        };
+
+        $scope.setGroups = function(){
+            angular.forEach($scope.people, function(person){
+                SWBrijj.tblmm('account.my_user_role', "email", person.email).then(function(data){
+                    $scope.myGroups = data;
+                    angular.forEach($scope.myGroups, function(myGroups){                       
+                        if(myGroups.groups == null){
+                            person.groups = null;
+                        }
+                        else if(myGroups.groups == '[]'){
+                            person.groups = null;
+                        }
+                        else if(JSON.parse(myGroups.groups)==""){
+                            person.groups = null;
                         }
                         else {
-                            person.selector = "(" + person.email+")";
-                        }
-
-                        if (person.email == admin.email) {
-                            person.role = "issuer";
+                            person.groupsArray = JSON.parse(myGroups.groups);
+                            person.groups = JSON.parse(myGroups.groups).sort().join(", ");
                         }
                     });
+                
                 });
-                SWBrijj.tblm('account.profile', ['email']).then(function(me) {
-                    angular.forEach($scope.people, function(person) {
-                        if (person.email == me[0].email)
-                            person.hideLock = true;
-                        if (!person.name) {
-                            person.name = person.email;
-                        }
-
-                    });
-                    $scope.setLastLogins();
-                });
-                $scope.sort = 'name';
             });
-        });
-    
+        };
 
+        
 
 
 
@@ -534,7 +596,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
-            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
+            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + encodeURIComponent(person.email) : '/app/account/profile/') : '');
             if (link) {
                 $location.url(link);
             }
@@ -576,15 +638,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
         
         //want the email directive to bind to this property in the controller
-
         $scope.personIs = function(person){
-            return $scope.messageData.recipients.indexOf(person.email) != -1;
-            // select person in email
+            if($scope.sidebarPage=='email'){
+                return $scope.messageData.recipients.indexOf(person.email) != -1;
+            }
+            else {
+                return $scope.groupPeople.indexOf(person) != -1;
+            };
+            
         };
 
-        $scope.showCheck = function(){
-            $scope.sidebarPage = 'email';
-        }
+
 
         $scope.clearRecipient = function(){
             while($scope.messageData.recipients.length > 0) {
@@ -592,20 +656,35 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             };
         };
       
-
-        $scope.emailRecipient = function(person){
-            if ($scope.messageData.recipients.indexOf(person.email)=== -1){
+        // add person to dropdown on people page
+        $scope.selectPerson = function(person){
+            if($scope.sidebarPage == 'email'){
+                if ($scope.messageData.recipients.indexOf(person.email)=== -1){
                  $scope.messageData.recipients.push(person.email);
+                 
+                 }
+
+                else {
+                    var toDelete = $scope.messageData.recipients.indexOf(person.email)
+                    $scope.messageData.recipients.splice(toDelete, 1);
+                 };   
+                return $scope.messageData.recipients;
             }
             else {
-                var toDelete = $scope.messageData.recipients.indexOf(person.email)
-                $scope.messageData.recipients.splice(toDelete, 1);
-            };   
-            return $scope.messageData.recipients
+                if($scope.groupPeople.indexOf(person)=== -1){
+                    $scope.groupPeople.push(person);
+                }
+                else {
+                    var toDelete = $scope.groupPeople.indexOf(person)
+                    $scope.groupPeople.splice(toDelete, 1);
+                };
+            };
+            
         };
         
         $scope.messageData = {};
         $scope.messageData.recipients = [];
+        $scope.groupPeople = []
 
 
         $scope.narrowopts = {

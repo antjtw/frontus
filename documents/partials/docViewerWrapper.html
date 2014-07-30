@@ -98,7 +98,7 @@
                             <div class="docname" ng-if="doc.docname">
                                 <span>{{doc.docname}}</span>
                             </div>
-                            <div class="inforow" ng-if="doc.tags">
+                            <div class="inforow" ng-if="doc.tags.length > 0">
                                 <span class="activity-icon tags-icon"></span>
                                 <span class="tags">
                                     <span ng-repeat="t in doc.tags">{{t}}</span>
@@ -152,6 +152,9 @@
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
                         </div>
+                    </tab>
+                    <tab heading="Transactions" ng-if="doctrans.length > 0">
+                        <doc-transaction-list trans="doctrans"></doc-transaction-list>
                     </tab>
                 </tabset>
                 <div id="bottom-part" class="confirmPanelContainer" ng-if="actionNeeded()">

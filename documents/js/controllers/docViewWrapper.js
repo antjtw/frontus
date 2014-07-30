@@ -158,6 +158,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     if (counterparty) {
                         SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
                             if (flag) {
+                                SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[0].doc_id).then(function(data) {
+                                    $scope.doctrans = data;
+                                });
                                 $scope.getVersion(data[0]);
                                 return;
                             }
@@ -165,6 +168,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                                 // probably unused at this point
                                 for (var i = 0; i < data.length; i++) {
                                     if (data[i].investor == $scope.urlInves) {
+                                        SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[i].doc_id).then(function(data) {
+                                            $scope.doctrans = data;
+                                        });
                                         $scope.getVersion(data[i]);
                                         return;
                                     }
@@ -172,6 +178,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                             }
                         });
                     } else {
+                        SWBrijj.tblmm("ownership.doc_evidence", "doc_id", tempdocid).then(function(data) {
+                            $scope.doctrans = data;
+                        });
                         $scope.getOriginal();
                     }
                 }
