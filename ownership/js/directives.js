@@ -146,9 +146,10 @@ own.directive('editableCellDetails', [function() {
         scope: {cell: '=',
                 currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "displayCopy",
-            function($scope, $rootScope, displayCopy) {
+        controller: ["$scope", "$rootScope", "displayCopy", attributes,
+            function($scope, $rootScope, displayCopy, attributes) {
                 $scope.settings = $rootScope.settings;
+                $scope.attrs = attributes.getAttrs();
                 $scope.tips = displayCopy.captabletips;
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;

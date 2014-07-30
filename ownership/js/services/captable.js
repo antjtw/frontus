@@ -75,8 +75,9 @@ Cell = function() {
 };
 
 ownership.service('captable',
-function($rootScope, calculate, SWBrijj, $q, attributes) {
+function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
+    console.log(History);
 //    var captable = new CapTable();
     var captable = new NewCapTable();
 
@@ -149,6 +150,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes) {
         }).except(logErrorPromise);
         return promise.promise;
     }
+    // TODO refactor to use attributes service
     function loadAttributes() {
         var promise = $q.defer();
         SWBrijj.tblm('ownership.transaction_attributes',

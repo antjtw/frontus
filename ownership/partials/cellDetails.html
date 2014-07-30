@@ -33,8 +33,11 @@
         </button>
     </div>
     <div class="capTab">
-        <div>
-            {{tran.kind}}
+        <div class="capGuide cap-overflow global">
+            <div class="belowTitle">
+                <span>{{tran.kind}}</span>
+                <span>Transaction Type</span>
+            </div>
         </div>
         <transaction-attributes data="tran"
                                 ng-switch-when="details">

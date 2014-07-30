@@ -41,6 +41,23 @@
 
     <div class="capTab" ng-switch-when="details">
         <div class="capGuide global">
+            <div class="rightTitle double">
+                <span>Transaction Type</span>
+                <ul>
+                    <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{tran.kind}}
+                        <span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in attrs[tran.attrs.security_type][tran.kind]">
+                            <a ng-click="setIt(i)">
+                                {{i}}
+                            </a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
             <div class="rightTitle security-type">
                 <span>Investor</span>
                 <span class="locked-security">{{tran.investor}}</span>
@@ -54,23 +71,6 @@
                     <span data-icon="&#xe60c;" aria-hidden="true"></span>
                     <span>Convert</span>
                 </div>
-            </div>
-            <div class="rightTitle double">
-                <span>Transaction Type</span>
-                <ul>
-                    <li class="dropdown standard">
-                    <a class="dropdown-toggle">
-                        {{data.kind}}
-                        <span class="invisible-drop">'</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="i in attrs[data.attrs.security_type]">
-                            <a ng-click="setIt(i)">
-                                {{i}}
-                            </a>
-                        </li>
-                    </ul>
-                </ul>
             </div>
         </div>
         <editable-transaction-attributes data="tran">

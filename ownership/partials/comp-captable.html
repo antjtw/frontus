@@ -614,6 +614,14 @@
             </li>
         </ul>
     </div>
+    <div class="box-button pull-right"
+         ng-click="undo()">
+         Undo
+    </div>
+    <div class="box-button pull-right"
+         ng-click="redo()">
+         Redo
+    </div>
     <div class="evidenceSearch" ng-if="windowToggle">
         <span>Search</span>
         <input type="text" class="search-box"
@@ -896,53 +904,82 @@
                     </span>
                     <span class="capGuide in-brief"
                           ng-switch-when="3">
-                        <div class="headsection row-fluid tabbed company-info">
-                                <h1><img ng-src="{{ navState.company && '/photo/user?id='+selectedInvestor.email || '' }}">{{selectedInvestor.name}}</h1>
+                        <div class="headsection row-fluid
+                                    tabbed company-info">
+                            <h1>
+                                <img ng-src="{{ navState.company && '/photo/user?id='+selectedInvestor.email || '' }}">
+                                {{selectedInvestor.name}}
+                            </h1>
                         </div>
-                        <div ng-show="userDict[selectedInvestor.email]" class="summary-bar">
-                            <div ng-show="userDict[selectedInvestor.email].lastlogin" class="belowTitle">
+                        <div ng-show="userDict[selectedInvestor.email]"
+                             class="summary-bar">
+                            <div ng-show="userDict[selectedInvestor.email].lastlogin"
+                                 class="belowTitle">
                                 <img src="/img/activity/login.png">
                                 <div>
-                                    <span>{{userDict[selectedInvestor.email].lastlogin | date:settings.shortdate}}</span><span>Last Login</span>
+                                    <span>
+                                        {{userDict[selectedInvestor.email].lastlogin | date:settings.shortdate}}
+                                    </span>
+                                    <span>Last Login</span>
                                 </div>
                             </div>
-                            <div ng-show="userDict[selectedInvestor.email].received" class="belowTitle">
+                            <div ng-show="userDict[selectedInvestor.email].received"
+                                 class="belowTitle">
                                 <img src="/img/activity/received.png">
                                 <div>
-                                    <span>{{userDict[selectedInvestor.email].received | date:settings.shortdate}}</span><span>Delivered</span>
+                                    <span>
+                                        {{userDict[selectedInvestor.email].received | date:settings.shortdate}}
+                                    </span>
+                                    <span>Delivered</span>
                                 </div>
                             </div>
-                            <div ng-show="userDict[selectedInvestor.email].viewed" class="belowTitle">
+                            <div ng-show="userDict[selectedInvestor.email].viewed"
+                                 class="belowTitle">
                                 <img src="/img/activity/view.png">
                                 <div>
-                                    <span>{{userDict[selectedInvestor.email].viewed | date:settings.shortdate}}</span><span>Last Viewed</span>
+                                    <span>
+                                        {{userDict[selectedInvestor.email].viewed | date:settings.shortdate}}
+                                    </span>
+                                    <span>Last Viewed</span>
                                 </div>
                             </div>
                             <div class="belowTitle">
                                 <img src="/img/activity/permissions.png">
                                 <div>
-                                    <span>{{userDict[selectedInvestor.email].level}}</span><span>Permissions</span>
+                                    <span>
+                                        {{userDict[selectedInvestor.email].level}}
+                                    </span>
+                                    <span>Permissions</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="profile-link" ng-show="userDict[selectedInvestor.email]" ng-click="gotoProfile(selectedInvestor.email, selectedInvestor.name);">
-                            <span data-icon="&#xe001;" aria-hidden="true"></span>
+                        <div class="profile-link"
+                             ng-show="userDict[selectedInvestor.email]"
+                             ng-click="gotoProfile(selectedInvestor.email, selectedInvestor.name);">
+                            <span data-icon="&#xe001;"
+                                  aria-hidden="true">
+                            </span>
                             <span>View Full Profile</span>
                         </div>
 
-                        <div ng-show="!companyIsZombie() && !userDict[selectedInvestor.email]" class="share-link">
-                            <div ng-click="companyIsZombie() || modalUp();" class="profile-link">
-                                <span data-icon="&#xe604;" aria-hidden="true"></span>
+                        <div ng-show="!companyIsZombie() && !userDict[selectedInvestor.email]"
+                             class="share-link">
+                            <div ng-click="companyIsZombie() || modalUp();"
+                                 class="profile-link">
+                                <span data-icon="&#xe604;"
+                                      aria-hidden="true">
+                                </span>
                                 <span>Share with Investor</span>
                             </div>
                         </div>
-
-                      </span>
-                      <span class="capGuide" ng-switch-default>
+                    </span>
+                    <span class="capGuide" ng-switch-default>
                         <span ng-hide="toggleView();">
                             <div class="captour railpadding">
-                                <h1 class="right-bar-header">Understand your Ownership</h1>
+                                <h1 class="right-bar-header">
+                                    Understand your Ownership
+                                </h1>
                                 <p> This capitalization table, often referred to as a cap table, will show you exactly what percentage
                                     of your company each shareholder owns.</p>
                                 <p>Enter your company's securities, shareholders and their holdings, and we'll take care of the rest.</p>
@@ -956,27 +993,38 @@
                             </div>
                         </span>
                         <span class="in-brief" ng-show="toggleView();">
-                            <div class="headsection row-fluid tabbed company-info">
+                            <div class="headsection row-fluid
+                                        tabbed company-info">
                                 <h1><img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">{{navState.name}}</h1>
                             </div>
 
                             <div class="summary-bar">
-                                <div ng-show="totalPaid(ct.investors)" class="belowTitle">
+                                <div ng-show="totalPaid(ct.investors)"
+                                     class="belowTitle">
                                     <img src="/img/activity/invested.png">
                                     <div>
-                                        <span ng-bind="totalPaid(ct.investors)"></span><span>Total Invested</span>
+                                        <span ng-bind="totalPaid(ct.investors)">
+                                        </span>
+                                        <span>Total Invested</span>
                                     </div>
                                 </div>
-                                <div ng-show="captable.totalOwnershipUnits()" class="belowTitle">
+                                <div ng-show="captable.totalOwnershipUnits()"
+                                     class="belowTitle">
                                     <img src="/img/activity/sharews.png">
                                     <div>
-                                        <span ng-bind="captable.totalOwnershipUnits()"></span><span>Fully Diluted Units</span>
+                                        <span ng-bind="captable.totalOwnershipUnits()">
+                                        </span>
+                                        <span>
+                                            Fully Diluted Units
+                                        </span>
                                     </div>
                                 </div>
-                                <div ng-show="numShareholders()" class="belowTitle">
+                                <div ng-show="numShareholders()"
+                                     class="belowTitle">
                                     <img src="/img/activity/people.png">
                                     <div>
-                                        <span ng-bind="numShareholders()"></span><span>Shareholders</span>
+                                        <span ng-bind="numShareholders()"></span>
+                                        <span>Shareholders</span>
                                     </div>
                                 </div>
                             </div>
@@ -984,7 +1032,12 @@
                       </span>
                 </div>
                 <div ng-show="chosenTab(tab, 'Activity')">
-                    <div activity-feed height='viewportactivity' user='navState.userid' type="iss" view="activityView"></div>
+                    <div activity-feed
+                         height='viewportactivity'
+                         user='navState.userid'
+                         type="iss"
+                         view="activityView">
+                    </div>
                 </div>
             </tab>
         </tabset>

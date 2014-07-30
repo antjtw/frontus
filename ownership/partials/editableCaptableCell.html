@@ -1,11 +1,13 @@
 <span ng-switch on="editable">
-    <!-- TODO saveCell -->
     <span ng-class="{tranSelected:
                         selectedCell
                         && selectedCell.investor == data.investor
                         && selectedCell.security == data.security}"
           class="captablepair-box"
           ng-switch-default>
+<!-- TODO  which transaction should be modified when the user 
+           updates a cell?
+-->
         <input ng-if="!isDebt(data);"
                class="captablepair first-box"
                maxlength="18"

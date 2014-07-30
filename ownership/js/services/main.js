@@ -1,4 +1,4 @@
-var ownership = angular.module('ownerServices', []);
+var ownership = angular.module('ownerServices', ['decipher.history']);
 
 ownership.service('switchval', function () {
 

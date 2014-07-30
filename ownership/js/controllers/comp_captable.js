@@ -1,6 +1,6 @@
 var captableController = function(
         $scope, $rootScope, $location, $parse, $filter, SWBrijj,
-        calculate, switchval, navState, captable, displayCopy)
+        calculate, switchval, navState, captable, displayCopy, History)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -29,14 +29,29 @@ var captableController = function(
     $scope.tabs = [{'title': "Information"}, {'title': "Activity"}];
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None', '1X', '2X', '3X'];
-    //$scope.issuetypes = captable.getIssueTypes();
-    //$scope.freqtypes = captable.getFrequencyTypes();
     $scope.eligible_evidence = captable.getEligibleEvidence();
     $scope.evidence_object = null;
     $scope.evidenceOrder = 'docname';
     $scope.evidenceNestedOrder = 'name';
     $scope.extraPeople = [];
     function logError(err) { console.log(err); }
+
+    $scope.selectedCell = null;
+    $scope.selectedInvestor = null;
+    $scope.selectedSecurity = null;
+
+    function selectedThing() {
+        if ($scope.selectedCell) return 'selectedCell';
+        if ($scope.selectedInvestor) return 'selectedInvestor';
+        if ($scope.selectedSecurity) return 'selectedSecurity';
+        return null;
+    }
+    $scope.undo = function() {
+        History.undo(selectedThing(), $scope);
+    };
+    $scope.redo = function() {
+        History.redo(selectedThing(), $scope);
+    };
 
     // Sorting variables
     $scope.issueSort = 'date';
@@ -97,25 +112,23 @@ var captableController = function(
             $scope.tourUp();
         }
     }
+    // TODO doesn't work when selecting alternate input element
+    // of the same cell. it deselects, which is no bueno.
+    //
+    // TODO refactor to take cell directly
     $scope.selectCell = function(inv, sec) {
         $scope.currentTab = 'details';
-        $scope.sidebarstart = angular.copy($scope.sidebar);
-        $scope.cellRevert = angular.copy($scope.selectedCell);
         $scope.selectedSecurity = $scope.selectedInvestor = null;
         if ($scope.selectedCell &&
                 $scope.selectedCell.investor == inv &&
                 $scope.selectedCell.security == sec) {
             $scope.selectedCell = null;
+            History.forget($scope, 'selectedCell');
             $scope.sideBar = "home";
-            //deselectAllCells();
         } else {
-            // TODO refactor to take cell directly
             $scope.selectedCell = $scope.cellFor(inv, sec);
+            History.watch('selectedCell', $scope);
             $scope.sideBar = $scope.toggleView() ? 4 : 2;
-            /*
-            $scope.allowKeys = calculate.complement(
-                    $scope.ct.security_names, [sec]);
-                    */
         }
     };
     $scope.selectSecurity = function(security_name) {
@@ -126,19 +139,15 @@ var captableController = function(
         {
             $scope.sideBar = "home";
             $scope.selectedSecurity = null;
+            History.forget($scope, 'selectedSecurity');
         } else {
             // TODO refactor to take security and use it directly
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
                     return el.name == security_name;  
                 })[0];
+            History.watch('selectedSecurity', $scope);
             $scope.sideBar = $scope.toggleView() ? 5 : 1;
-            $scope.securityRevert = angular.copy(
-                                        $scope.selectedSecurity);
-            /*
-            $scope.allowKeys = calculate.complement(
-                    $scope.ct.security_names, [security_name]);
-                    */
         }
     };
     $scope.selectInvestor = function(investor_name) {
@@ -148,12 +157,14 @@ var captableController = function(
                 $scope.selectedInvestor.name == investor_name) {
             $scope.sideBar = "home";
             $scope.selectedInvestor = null;
+            History.forget($scope, 'selectedInvestor');
         } else {
             // TODO refactor to take investor directly
             $scope.selectedInvestor = $scope.ct.investors
                 .filter(function(el) {
                     return el.name == investor_name;
                 })[0];
+            History.watch('selectedInvestor', $scope);
             $scope.sideBar = 3;
         }
     };
@@ -203,6 +214,7 @@ var captableController = function(
      * also be updated in just that field.
      *  TODO refactor
      */
+    /*
     $scope.saveIssue = function (issue, item) {
         if (item == "issuekey") {
             item = "issue";
@@ -360,21 +372,19 @@ var captableController = function(
                                           $scope.issue_watch, true);
                         }
                     }
-                    /*
-                    $scope.allowKeys = calculate.complement($scope.ct.security_names,
-                                                            [issue.issue]);
-                                                            */
                     $scope.hideTour = true;
                 });
             }
         }
     };
+*/
 
     $scope.deleteIssueButton = function (activeIssue) {
         $scope.dmodalUp(activeIssue);
     };
 
     // TODO refactor
+    /*
     $scope.deleteIssue = function (issue) {
         SWBrijj.proc('ownership.delete_issue', issue['key']).then(function (data) {
             $scope.lastsaved = Date.now();
@@ -407,6 +417,7 @@ var captableController = function(
             $scope.sideBar = "x";
         });
     };
+    */
 
     $scope.revertIssue = function (issue) {
         angular.forEach($scope.ct.securities, function (x) {
@@ -416,6 +427,7 @@ var captableController = function(
         });
     };
 
+    /*
     $scope.saveIssuePari = function (pari, item, items) {
         var allpari = "";
         var index;
@@ -440,6 +452,7 @@ var captableController = function(
             $scope.lastsaved = Date.now();
         });
     };
+    */
 
     $scope.addIssuePari = function(items) {
         items.push({"company": items[0].company,
@@ -536,6 +549,7 @@ var captableController = function(
     };
 
     // Function for when the delete transaction button is pressed in the right sidebar
+    /*
     $scope.manualdeleteTran = function (tran) {
         var d1 = tran.date.toUTCString();
         SWBrijj.proc('ownership.delete_transaction', parseInt(tran.tran_id, 10))
@@ -578,7 +592,9 @@ var captableController = function(
             captable.generateUnissuedRows();
         });
     };
+    */
 
+    /*
     $scope.updateRow = function (investor) {
         //Name has been reduced to "" and previously had a value
         if (investor.name === "" && investor.namekey !== undefined) {
@@ -630,6 +646,7 @@ var captableController = function(
             });
         }
     };
+    */
 
     $scope.revertPerson = function (investor) {
         angular.forEach($scope.ct.investors, function (row) {
@@ -640,6 +657,7 @@ var captableController = function(
         });
     };
 
+    /*
     $scope.deletePerson = function (investor) {
         $scope.sideBar = "x";
         SWBrijj.proc('ownership.delete_row', investor)
@@ -689,6 +707,7 @@ var captableController = function(
             });
         });
     };
+    */
 
     $scope.saveTranAssign = function (transaction, field, value) {
         if (value) { transaction[field] = value; }
@@ -900,6 +919,7 @@ var captableController = function(
     };
 
     // Function for saving grant. Used on the captable when paid is updated from the captable on an option
+    /*
     $scope.saveGrant = function (grant) {
         if (grant.action == "" && (isNaN(parseFloat(grant.unit)) || parseFloat(grant.unit) == 0)) {
             if (grant.grant_id != null) {
@@ -935,6 +955,7 @@ var captableController = function(
             }
         });
     };
+    */
 
     $scope.cellFor = function(inv, sec) {
         return $scope.ct.cells
@@ -1207,6 +1228,7 @@ var captableController = function(
         }
     };
 
+    /*
     $scope.performConvert = function (tranConvert) {
         var newtran = tranConvert.newtran;
         SWBrijj.proc('ownership.conversion',
@@ -1283,6 +1305,7 @@ var captableController = function(
                 $scope.$emit("notification:fail", "Conversion Failed");
             });
     };
+    */
 
     // Captable Split Modal
 
@@ -1353,6 +1376,7 @@ var captableController = function(
         }
     };
 
+    /*
     $scope.performSplit = function(issue) {
         var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
         if (!isNaN(ratio)) {
@@ -1414,6 +1438,7 @@ var captableController = function(
             });
         }
     };
+    */
 
     // Captable Transfer Modal
 
@@ -1449,6 +1474,7 @@ var captableController = function(
         dialogClass: 'transferModal modal'
     };
 
+    /*
     $scope.performTransfer = function() {
         angular.forEach($scope.ct.transfer.trans, function(tran) {
             var transferunits = parseFloat(tran.transferunits);
@@ -1524,6 +1550,7 @@ var captableController = function(
             }
         });
     };
+    */
 
 
     // Date grabber
@@ -1742,6 +1769,7 @@ var captableController = function(
         $scope.capEditEmail = false;
     };
 
+    /*
     $scope.alterEmail = function() {
         if ($scope.newEmail != "") {
             SWBrijj.proc('ownership.update_row_share',
@@ -1761,6 +1789,7 @@ var captableController = function(
             });
         }
     };
+    */
 
     $scope.opts = {
         backdropFade: true,

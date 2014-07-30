@@ -228,19 +228,24 @@ ownership.filter('transactionAttributesForDisplay', function() {
 
 ownership.filter('attributeInputTypes', function() {
     return function(tp) {
-        // TODO
-        // literally return the list of accepted types for dropdowns
+        // TODO generate from attributes service (db backed)
         switch(tp) {
             case "security_type":
                 return ["Warrant", "Option", "Safe",
                         "Equity Preferred", "Equity Common", "Debt",
                         "Convertible Debt"];
-            case "transaction_type":
-                return [];
+            case "kind": // this is "transaction_type"
+                return ["purchase", "forfeit", "transfer", "convert",
+                        "grant", "exercise"];
+                // also "split" "issue security" but those operate on
             case "liquidpref":
+                return ['None', '1X', '2X', '3X'];
             case "interestratefreq":
+                return ["weekly", "bi-weekly", "monthly",
+                        "quarterly", "yearly"];
             case "vestfreq":
-                return [];
+                return ["weekly", "bi-weekly", "monthly",
+                        "quarterly", "yearly"];
             case "date":
                 return "date_picker";
             case "common":
