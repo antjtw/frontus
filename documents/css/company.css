@@ -79,43 +79,41 @@
 	margin-bottom: 30px;
 	
 }
-#add-investments {
+.add-investments {
 	position: absolute;
 	left: calc(50% - 116px);
 	top: 0px;
 }
-#share-ownership {
+.share-ownership {
 	position: absolute;
 	right: 25px;
 	top: 0px;
 }
-.span12 > div:last-child > div:last-child {
+.body-box {
 	position: relative;
 }
 .span12 > div:last-child > div:last-child > div > div > div > img {
 	margin-left: 5px;
 } 
-#arrow1 {
+.arrow1 {
 	position: absolute;
 	left: calc(25% + 37px);
 	top: 90px;
 }
-#arrow2 {
+.arrow2 {
 	position: absolute;
 	left: calc(75% - 74px);
 	top: 90px;
 }
-#start-now {
-	margin-left: 80px
-}
-#a_home_own_pre {
-	position: absolute;
+.start-now {
+	position: absolute !important;
 	left: calc(50% - 75px);
 	top: 250px;
 }
 .maincontent {
 	background-color: #CAC9C9
 }
+
 
 .maincontent {
 	background-color: #CAC9C9;
@@ -126,3 +124,7 @@
 h1 {
 font-size: 17px;
 }
+.tabbable .tab-content {
+	border-left: 1px solid #CAC9C9;
+}
+

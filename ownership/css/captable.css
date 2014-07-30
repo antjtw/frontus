@@ -626,7 +626,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .tabbable .tab-content {
     padding-bottom: 0;
-    border-left: 1px solid #CAC9C9;
+  
 }
 .tabBorder .tabbable .tab-content {
     border-right: 1px solid #C6C6C6;
