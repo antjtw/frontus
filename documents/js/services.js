@@ -335,6 +335,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var doc = this;
                 SWBrijj.tblm('document.my_personal_preparations').then(function(data) {
                     data.forEach(function(investor_prep) {
+                        if (investor_prep.annotation_overrides) {
+                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                        }
                         // add id and text fields to make select2 happy
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
                         doc.preparedFor.push(investor_prep);

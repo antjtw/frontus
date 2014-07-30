@@ -423,6 +423,32 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                      // ensure annotations are linked to the service even if we didn't fetch any
                      $scope.annots = Annotations.getDocAnnotations($scope.docId);
                  }
+                 if ($scope.$parent.prepareFor) {
+                     // load the annotation Overrides
+                     // We must already exist in the table, since we got to this step, so loop until we find it.
+                     var endOfWatch = $scope.$watchCollection(function() {
+                         return $scope.doc.getPreparedFor();
+                     }, function(preps) {
+                         preps.forEach(function(prep) {
+                             if (prep.investor == $scope.$parent.prepareFor) {
+                                 if (prep.annotation_overrides) {
+                                     console.log(prep);
+                                     prep.annotation_overrides.forEach(function(override, idx, arr) {
+                                         $scope.doc.annotations.some(function(annot, aidx, aarr) {
+                                             if (annot.id == override.id) {
+                                                 annot.val = override.val;
+                                                 return true;
+                                             } else {
+                                                 return false;
+                                             }
+                                         });
+                                     });
+                                 }
+                                 endOfWatch(); // destroy the $watch
+                             }
+                         });
+                     });
+                 }
              }).except(function(err) {
                  $scope.leave();
              });
