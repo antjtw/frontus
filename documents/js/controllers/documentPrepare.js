@@ -50,5 +50,7 @@ app.controller('DocumentPrepareController',
                 $scope.doc.updatePreparedFor(investor_data.investor, investor_data.display.id);
             }
         };
+
+        $scope.encodeURIComponent = encodeURIComponent;
     }]
 );
