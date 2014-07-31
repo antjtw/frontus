@@ -1605,7 +1605,10 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
-    margin-top: 40px;
+
+}
+.activity-feel2 > div > li:first-child {
+	margin-top: 40px;
 }
 
 .activity-feed2 li.event {
@@ -1625,6 +1628,11 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
+    
+}
+
+.activity-feed2 li.event.roles > div:first-of-type{
+    text-align: left;
 }
 
 .activity-feed2 li.event.roles > div:first-of-type{
@@ -1729,8 +1737,8 @@ ul.spaced-list > li:nth-child(odd) {
     width: -moz-calc(100% - 58px) !important;
     width: -webkit-calc(100% - 58px) !important;
     width: calc(100% - 58px) !important;
-}
 
+}
 .activity-feed2 li.event > div:last-of-type > ul > li {
     line-height: 16px;
 }
@@ -4881,6 +4889,9 @@ textarea.email-text {
 
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
+}
+.event .roles > div > ul > li > div > div {
+	width: 305px;
 }
 .tinycol{
     display: inline-block;

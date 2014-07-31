@@ -325,18 +325,20 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.leave = function() {
-            // TODO: save notes / smartdoc data
-            if ($rootScope.lastPage
-                && ($rootScope.lastPage.indexOf("/register/") === -1)
-                && ($rootScope.lastPage.indexOf("/login/") === -1)
-                && ($rootScope.lastPage.indexOf("-view") === -1)) {
-		if (document.location.href.indexOf("share=true") !== -1) {
+            if ($rootScope.lastPage &&
+                ($rootScope.lastPage.indexOf("/register/") === -1) &&
+                ($rootScope.lastPage.indexOf("/login/") === -1) &&
+                ($rootScope.lastPage.indexOf("-view") === -1)) {
+                if (document.location.href.indexOf("share=true") !== -1) {
                     sessionStorage.setItem("docPrepareState",
-					   angular.toJson({template_id: $scope.templateId,
-							   doc_id: $scope.docId}));
+                                          angular.toJson({template_id: $scope.templateId,
+                                                          doc_id: $scope.docId}));
                     $rootScope.lastPage = $rootScope.lastPage + "?share";
                 }
                 if ($rootScope.lastPage.indexOf("company-status") !== -1) {
+                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
+                }
+                if ($rootScope.lastPage.indexOf("/prepare") !== -1) {
                     $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
                 }
                 $location.url($rootScope.lastPage);
