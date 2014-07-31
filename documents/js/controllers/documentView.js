@@ -432,7 +432,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                          preps.forEach(function(prep) {
                              if (prep.investor == $scope.$parent.prepareFor) {
                                  if (prep.annotation_overrides) {
-                                     console.log(prep);
                                      prep.annotation_overrides.forEach(function(override, idx, arr) {
                                          $scope.doc.annotations.some(function(annot, aidx, aarr) {
                                              if (annot.id == override.id) {
@@ -450,7 +449,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                      });
                  }
              }).except(function(err) {
-                 $scope.leave();
+                 $scope.$parent.leave();
              });
         }
 
@@ -473,30 +472,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.saveNoteData();
             $scope.saveSmartdocData();
         });
-
-        $scope.$on('event:leave', $scope.leave);
-
-        $scope.leave = function() {
-            if ($rootScope.lastPage &&
-                ($rootScope.lastPage.indexOf("/register/") === -1) &&
-                ($rootScope.lastPage.indexOf("/login/") === -1) &&
-                ($rootScope.lastPage.indexOf("-view") === -1)) {
-                if (document.location.href.indexOf("share=true") !== -1) {
-                    sessionStorage.setItem("docPrepareState",
-                            angular.toJson({template_id: $scope.templateId,
-                                            doc_id: $scope.docId}));
-                    $rootScope.lastPage = $rootScope.lastPage + "?share";
-                }
-                if ($rootScope.lastPage.indexOf("company-status") !== -1) {
-                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docKey;
-                }
-                $location.url($rootScope.lastPage);
-            } else if ($scope.invq) {
-                $location.url('/app/documents/investor-list');
-            } else {
-                $location.url('/app/documents/company-list');
-            }
-        };
 
         $scope.$watch('doc.currentPage', function(page) {
             if (page) {
