@@ -168,9 +168,9 @@
     <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
         Are you sure you want to remove 
                 <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$last ? '' : ','}}
-           
-                <span ng-show="$last -1">and</span>
-                </span><span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
+                <span ng-show="$index == selectedToRevokes.length -2">and</span>
+                </span>
+                <span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
  
             <div class="spacer20"></div>
       
@@ -192,8 +192,8 @@
         </div>
         <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
            Are you sure you want to add 
-               <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}{{$last ? '' : ','}}
-                <span ng-show="$last -1">and</span>
+               <span ng-repeat="selectedToAdd in selectedToAdds track by $index">{{selectedToAdd}}{{$last ? '' : ','}}
+                <span ng-show="$index == selectedToAdds.length -2">and</span>
                 </span>
                 </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
             <div class="spacer20"></div>
