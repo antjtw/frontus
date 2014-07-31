@@ -304,7 +304,6 @@ m.directive('peopleFilter', function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.myContacts = data;
                     promise.resolve($scope.myContacts);
-                    console.log($scope.myContacts);
                 });
                 return promise.promise
             };
@@ -342,9 +341,6 @@ m.directive('peopleFilter', function(){
                 // $scope.getUserRoles();
             }, true);
 
-            $scope.$watch('people', function(){
-                $scope.getUserRoles();
-            }, true)
 
 
         }]
