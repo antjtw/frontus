@@ -23,10 +23,10 @@
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">More</a>
                                 <ul class="dropdown-menu">
                                     <li ng-if="addOrRemove=='investor'">
-                                        <a class="button"  ng-click="addAdminModalOpen(groupPeople)" href="#">Make Admin</a>
+                                        <a class="button"  ng-click="companyIsZombie()|| addAdminModalOpen(groupPeople)" href="#">Make Admin</a>
                                     </li>
                                     <li ng-if="addOrRemove =='issuer'">
-                                        <a class="button" ng-click="removeAdminModalOpen(groupPeople)" href="#">Remove Admin</a>
+                                        <a class="button" ng-click="companyIsZombie()|| removeAdminModalOpen(groupPeople)" href="#">Remove Admin</a>
                                     </li>
                                     <li>
                                         <a class="button" ng-click="companyIsZombie() || toggleSide('group'); clearRecipient();" href="#">Group</a>
@@ -168,7 +168,7 @@
                 <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$last ? '' : ','}}
            
                 <span ng-show="$last -1">and</span>
-                </span><span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin', 'other': 'as admins'}"></span>
+                </span><span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
  
             <div class="spacer20"></div>
       
@@ -193,7 +193,7 @@
                <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}{{$last ? '' : ','}}
                 <span ng-show="$last -1">and</span>
                 </span>
-                </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin', 'other': 'as admins'}"></span>
+                </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
             <div class="spacer20"></div>
             <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
                 <span>
