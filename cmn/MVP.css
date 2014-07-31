@@ -1607,15 +1607,14 @@ ul.spaced-list > li:nth-child(odd) {
     overflow: auto;
 
 }
-
-.activity-feed2 > div > li:first-child {
+.activity-feel2 > div > li:first-child {
 	margin-top: 40px;
-}	
+}
 
 .activity-feed2 li.event {
     min-height: 50px;
     border-bottom: 1px solid #C7C7C7;
-    width: 305px;
+    width: 300px;
     margin-left: 20px;
 }
 
@@ -1633,7 +1632,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 li.event.roles > div:first-of-type{
     text-align: left;
-    
+    padding-left: 20px;
 }
 
 
