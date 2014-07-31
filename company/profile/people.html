@@ -170,7 +170,7 @@
                 <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$last ? '' : ','}}
            
                 <span ng-show="$last -1">and</span>
-                </span><span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin', 'other': 'as admins'}"></span>
+                </span><span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
  
             <div class="spacer20"></div>
       
@@ -195,7 +195,7 @@
                <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}{{$last ? '' : ','}}
                 <span ng-show="$last -1">and</span>
                 </span>
-                </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin', 'other': 'as admins'}"></span>
+                </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
             <div class="spacer20"></div>
             <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
                 <span>
