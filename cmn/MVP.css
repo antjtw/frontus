@@ -1632,7 +1632,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 li.event.roles > div:first-of-type{
     text-align: left;
-    padding-left: 20px;
+    
 }
 
 
@@ -1732,9 +1732,7 @@ ul.spaced-list > li:nth-child(odd) {
     width: -moz-calc(100% - 5px) !important;
     width: -webkit-calc(100% - 5px) !important;
     width: calc(100% - 5px) !important;
-}
-.activity-feed2 li.event > div {
-	padding: 0px;
+
 }
 .activity-feed2 li.event > div:last-of-type > ul > li {
     line-height: 16px;
