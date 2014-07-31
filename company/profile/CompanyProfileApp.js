@@ -659,7 +659,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.removeAdminModalClose = function() {
-            alert("close admin modal")
             $scope.removeAdminModal = false;
         };
 
@@ -670,7 +669,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.selectedToAdds.push(ind.email)
             });
             console.log($scope.selectedToAdds)
-            // $scope.selectedToAdd = email;
+
             $scope.addAdminModal = true;
         };
 
@@ -741,13 +740,15 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     void(x);
                     $rootScope.billing.usage.admins_total -= 1;
                     $scope.$emit("notification:success", "Admin Removed");
+                    // console.log()
                     // $route.reload();
                 }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
 
-            })
+            });
+            $scope.createPeople();
             
         };
 
@@ -756,19 +757,18 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                  SWBrijj.proc('account.create_admin', elem.toLowerCase()).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.admins_total += 1;
-                    
-            // $route.reload();
+                    $scope.$emit("notification:success", "Admin Added");
                 }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
             }); 
-            $scope.$emit("notification:success", "Admin Added");
+            $scope.createPeople();
         };
 
-        $scope.$watch('add_admin', function(){
-            $scope.createPeople();
-        })
+        // $scope.$watch('add_admin', function(){
+        //     $scope.createPeople();
+        // })
 
         // email sidebar
         $scope.toggleSide = function(button) {

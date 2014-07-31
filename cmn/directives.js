@@ -339,6 +339,11 @@ m.directive('peopleFilter', function(){
 
             $scope.$watch('people', function(){
                 $scope.getFilterCount();
+                // $scope.getUserRoles();
+            }, true);
+
+            $scope.$watch('people', function(){
+                $scope.getUserRoles();
             }, true)
 
 
