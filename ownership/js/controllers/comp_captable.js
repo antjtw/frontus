@@ -9,7 +9,7 @@ var captableController = function(
     var company = navState.company;
     $scope.currentCompany = company;
     
-    $scope.ct = captable.getNewCapTable();
+    $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
     // Set the view toggles to their defaults
@@ -525,6 +525,7 @@ var captableController = function(
         });
     };
     // Creates a new blank transaction with today's date
+    /*
     $scope.createTrantab = function () {
         var inIssue = $scope.activeTran[0].issue;
         var newTran = captable.newTransaction(inIssue,
@@ -550,6 +551,7 @@ var captableController = function(
             }
         });
     };
+    */
 
     // Function for when the delete transaction button is pressed in the right sidebar
     /*

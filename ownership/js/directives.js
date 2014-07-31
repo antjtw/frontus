@@ -118,7 +118,7 @@ own.directive('editableSecurityDetails', [function() {
         controller: ["$scope", "displayCopy", "captable",
             function($scope, displayCopy, captable) {
                 $scope.tips = displayCopy.captabletips;
-                $scope.ct = captable.getNewCapTable();
+                $scope.ct = captable.getCapTable();
             }
         ],
     };
@@ -146,12 +146,16 @@ own.directive('editableCellDetails', [function() {
         scope: {cell: '=',
                 currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "attributes",
-            function($scope, $rootScope, attributes) {
+        controller: ["$scope", "$rootScope", "attributes", "captable",
+            function($scope, $rootScope, attributes, captable) {
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
+                };
+                $scope.addTransaction = function() {
+                    captable.addTran($scope.cell.investor,
+                                     $scope.cell.security, 'grant');
                 };
                 // TODO this has to do more. 
                 // OR, whatever is watching the transaction object
@@ -194,13 +198,10 @@ own.directive('editableTransactionAttributes', [function() {
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
         controller: ["$scope", "$filter", "captable", "attributes",
-    // TODO
-    //   -  dropdowns
             function($scope, $filter, captable, attributes) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
                 $scope.keys = function() {
-                    //return Object.keys($scope.data.attrs)
                     return Object.keys(attrs[$scope.data.attrs.security_type][$scope.data.kind])
                         .sort(function(x1, x2) {
                             return $filter('sortAttributeTypes')(x1) -
@@ -226,6 +227,9 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
+                };
+                $scope.saveIt = function(key, value) {
+                    console.log(key, value);
                 };
             }
         ],

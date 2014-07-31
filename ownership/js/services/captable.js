@@ -4,20 +4,8 @@ var ownership = angular.module('ownerServices');
  * u, ukey and a, akey refer to units and amount
  * 'key' is actually the backup/previous/undo value
  * TODO implement 'key' values as a stack with generic undo facility
-CapTable = function() {
-    this.vInvestors = [];
-    this.security_names = [];
-    this.securities = [];
-    this.investors = [];
-    this.uniqueinvestors = [];
-    this.trans = [];
-    this.grants = [];
-    this.paripassu = [];
-    this.conversions = [];
-    this.transfers = [];
-};
  */
-NewCapTable = function() {
+CapTable = function() {
     this.investors = [];
     this.securities = [];
     this.transactions = [];
@@ -42,12 +30,6 @@ Transaction = function() {
     this.key = 'undefined';
     this.convert = [];
 };
-/*
-Issue = function() {
-    this.name = "";
-    this.date = new Date(2100, 1, 1);
-};
-*/
 Security = function() {
     this.name = "";
     this.effective_date = null;
@@ -63,12 +45,9 @@ Row = function() {
 };
 // TODO should issue_type be here?
 // I want more data in the cells.
-// Issue
-// Security
-// [] of transactions
 Cell = function() {
-    this.u = this.ukey = null;
-    this.a = this.akey = null;
+    this.u = null;
+    this.a = null;
     this.x = null; // percentage
     this.transactions = [];
     this.security = null;
@@ -77,19 +56,12 @@ Cell = function() {
 ownership.service('captable',
 function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
-    console.log(History);
-//    var captable = new CapTable();
-    var captable = new NewCapTable();
+    var captable = new CapTable();
 
-    /*
     this.getCapTable = function() {
         return captable;
     };
-    */
-    this.getNewCapTable = function() {
-        return captable;
-    };
-    function loadNewCapTable() {
+    function loadCapTable() {
         $q.all([loadLedger(),
                 loadTransactionLog(),
                 loadRowNames(),
@@ -106,7 +78,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             console.log(captable);
         }, logErrorPromise);
     }
-    loadNewCapTable();
+    loadCapTable();
 
     function loadEvidence() {
         var promise = $q.defer();
@@ -496,6 +468,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         */
     }
     this.addRow = addRow;
+    this.addTran = function(inv, sec, tp) {
+        console.log(inv, sec);
+        // TODO create a transaction of a specified type
+    };
     /*
     function newTransaction(issuekey, investor) {
         var tran = new Transaction();

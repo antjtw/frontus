@@ -1,10 +1,4 @@
 <div class="capGuide top10">
-    <!-- TODO refactor..integrate the allowed attrs provided
-              by the database more deeply. 
-
-              when security_type is switched the visible attrs
-              should automatically change
-    -->
     <div ng-repeat="key in keys()"
          class="rightTitle"
          ng-class="{double: inputType(key)!='text_field'}">
