@@ -13,7 +13,12 @@
                 </div>
                 <div ng-repeat="investor in doc.preparedFor" class="docPrepRow">
                     <span><input ui-select2="select2Options" ng-model="investor.display" ng-change="updateInvestor(investor)"></span>
-                    <span><a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>Edit</a></span>
+                    <span>
+                        <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
+                            <span ng-if="investor.is_prepared">Edit</span>
+                            <span ng-if="!investor.is_prepared">Prepare <span data-icon="&#xe016;"></span></span>
+                        </a>
+                    </span>
                 </div>
                 <div class="docPrepRow">
                     <span><input type="text" ui-select2="select2Options" ng-model="newInvestor" ng-change="addInvestor()"></span>
