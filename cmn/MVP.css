@@ -1734,9 +1734,9 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 li.event > div:last-of-type {
     display: inline-block;
     min-height: 50px;
-    width: -moz-calc(100% - 5px) !important;
-    width: -webkit-calc(100% - 5px) !important;
-    width: calc(100% - 5px) !important;
+    width: -moz-calc(100% - 58px) !important;
+    width: -webkit-calc(100% - 58px) !important;
+    width: calc(100% - 58px) !important;
 
 }
 .activity-feed2 li.event > div:last-of-type > ul > li {
