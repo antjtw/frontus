@@ -1628,6 +1628,11 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
+    
+}
+
+.activity-feed2 li.event.roles > div:first-of-type{
+    text-align: left;
 }
 
 .activity-icon {
