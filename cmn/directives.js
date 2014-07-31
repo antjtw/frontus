@@ -342,9 +342,6 @@ m.directive('peopleFilter', function(){
                 // $scope.getUserRoles();
             }, true);
 
-            $scope.$watch('people', function(){
-                $scope.getUserRoles();
-            }, true)
 
 
         }]
