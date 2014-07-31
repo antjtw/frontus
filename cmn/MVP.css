@@ -4890,6 +4890,9 @@ textarea.email-text {
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
 }
+.event .roles > div > ul > li > div > div {
+	width: 305px;
+}
 .tinycol{
     display: inline-block;
     width: 40%;
