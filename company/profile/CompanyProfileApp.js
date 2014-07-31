@@ -463,6 +463,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         // $scope.hideRail = false;
 
         $scope.filterParam = {};
+        $scope.oldRoles = [];
         
 
 
@@ -611,33 +612,32 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.adminModal = true;
         };
 
+
         $scope.sortRolesForAdd = function(people){
-            var roles = []
+            console.log(people);
             angular.forEach(people, function(ind){
                 if(ind.email === $scope.navState.userid){
                    console.log("you must stay where you are")
                 }
-                else if(ind.email !== $scope.navState.userid && roles.indexOf(ind.role)=== -1){
-                    roles.push(ind.role)
-                }
+                else if(ind.email !== $scope.navState.userid && $scope.oldRoles.indexOf(ind.role)=== -1){
+                    $scope.oldRoles.push(ind.role)
+                };
                 
             });
-            return roles
-        }
+            console.log($scope.oldRoles)
+            // return $scope.oldRoles
+        };
 
         $scope.addOrRemoveAdmin = function(people){
-            var selectRole = $scope.sortRolesForAdd(people)
-            console.log(selectRole)
-            if(selectRole.length === 1){
-                // return selectRole[0]
-                $scope.addOrRemove = selectRole[0]
+            $scope.sortRolesForAdd(people);
+            console.log($scope.oldRoles);
+            if($scope.oldRoles.length === 1){
+                $scope.addOrRemove = $scope.oldRoles[0];
             }
             else{
                 $scope.addOrRemove = ""
             }
-
-            
-        }
+        };
 
        
 
@@ -650,30 +650,31 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.removeAdminModalOpen = function(ppl) {
             $scope.selectedToRevokes = [];
             angular.forEach(ppl, function(ind){
-                if(ind.email != $scope.navState.userid){ 
+                if(ind.email !== $scope.navState.userid){ 
                     $scope.selectedToRevokes.push(ind.email);
                 }
                 else if($scope.navState.userid==ind.email){
                     console.log("error!")
-                }
-                else{
-                    console.log("hmmmm")
-                }
+                };
                 
-            })
-            
+            });
             $scope.removeAdminModal = true;
         };
 
         $scope.removeAdminModalClose = function() {
             $scope.removeAdminModal = false;
+            $scope.clearArray($scope.groupPeople);
+            $scope.clearArray($scope.oldRoles);
+            console.log($scope.groupPeople);
         };
 
         $scope.addAdminModalOpen = function(person) {
             console.log(person); 
             $scope.selectedToAdds = [];
             angular.forEach(person, function(ind){
-                $scope.selectedToAdds.push(ind.email)
+                if(ind.email !== $scope.navState.userid){
+                    $scope.selectedToAdds.push(ind.email);
+                };
             });
             console.log($scope.selectedToAdds)
 
@@ -682,6 +683,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.addAdminModalClose = function() {
             $scope.addAdminModal = false;
+            $scope.clearArray($scope.groupPeople);
+            $scope.clearArray($scope.oldRoles);
+            console.log($scope.groupPeople);
+            console.log("grouping people")
+
         };
         
         //want the email directive to bind to this property in the controller
@@ -755,9 +761,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 });
 
             });
+            console.log($scope.oldRoles)
             $scope.createPeople();
+            // $scope.oldRoles = [];
             
         };
+
+        $scope.clearArray = function(array){
+                while(array.length > 0){
+                    array.pop();
+                }
+            }
 
         $scope.add_admin = function() {
             angular.forEach($scope.selectedToAdds, function(elem){
@@ -770,12 +784,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
             }); 
-            $scope.createPeople();
+        $scope.createPeople();
         };
 
-        // $scope.$watch('add_admin', function(){
-        //     $scope.createPeople();
-        // })
+   
 
         // email sidebar
         $scope.toggleSide = function(button) {
