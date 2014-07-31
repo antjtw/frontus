@@ -90,12 +90,6 @@
                     </tbody>
                     <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: isParam track by $id($index)">
                     <tr class="empty-row"></tr>
-
-<<<<<<< HEAD
-                    <tr>
-=======
-                      
->>>>>>> admin_multi
                     <td style="width:400px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
 
                    <!--  check boxes      -->
@@ -110,11 +104,7 @@
                         </ul>
                     </td>
                     <td style="width: 65px"><span>
-<<<<<<< HEAD
-                        <span ng-show="person.role=='issuer'">Admin</span></span></td>
-=======
                         <span ng-show="person.role=='issuer'">Admin</span></td>
->>>>>>> admin_multi
                     <td><span>{{person.groups}}</span></td>
                     <td style="width:50px;">
                         <ul class="dropdown-list" ng-if="sidebarPage != 'email'">
