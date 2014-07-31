@@ -334,7 +334,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             if (!this.preparedFor) {
                 this.preparedFor = [];
                 var doc = this;
-                SWBrijj.tblm('document.my_personal_preparations_view').then(function(data) {
+                SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
                         if (investor_prep.annotation_overrides) {
                             investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
