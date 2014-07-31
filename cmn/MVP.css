@@ -1605,11 +1605,14 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
+    margin-top: 40px;
 }
 
 .activity-feed2 li.event {
     min-height: 50px;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C7C7C7;
+    width: 300px;
+    margin-left: 20px;
 }
 
 .activity-feed2 a {
@@ -4941,4 +4944,3 @@ textarea.email-text {
     position: relative;
     top: 3px;
 } 
-

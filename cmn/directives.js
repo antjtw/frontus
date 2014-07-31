@@ -260,7 +260,7 @@ m.directive('groupPeople', function(){
                         
                     })
                 });
-                $scope.people = [];
+               
             }
 
 

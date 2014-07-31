@@ -1,31 +1,31 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj',
-    function($scope, $routeParams, Documents, SWBrijj) {
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor',
+    function($scope, $routeParams, Documents, SWBrijj, Investor) {
         $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
         $scope.doc.getPreparedFor(); // fetch preparation information (if needed)
 
-        // TODO: move to investor service
-        var investors = [];
-        SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
-            for (var i = 0; i < data.length; i++) {
-                var inv = {id: data[i].email};
-                if (data[i].name) {
-                    inv.text = data[i].name + "  (" + data[i].email +")";
-                } else {
-                    inv.text = data[i].email;
-                }
-                investors.push(inv);
-            }
-        });
-
         $scope.newInvestor = "";
+
+        $scope.investors = Investor.investors;
+        function filterInvestors(investorList, docPreparedFor) {
+            return investorList.filter(function(val, idx, arr) {
+                return ! docPreparedFor.some(function(pval, pidx, parr) {
+                    return val.id == pval.investor;
+                });
+            });
+        }
         $scope.select2Options = {
             allowClear: true,
-            data: investors, // TODO: only show investors not already in doc.preparedFor
+            data: function() {
+                return {
+                    'results': filterInvestors(Investor.investors, $scope.doc.preparedFor)
+                };
+            },
             placeholder: 'Add Investor',
             createSearchChoice: function(text) {
+                // if text was a legit user, would already be in the list, so don't check Investor service
                 return {id: text, text: text};
             }
         };

@@ -50,7 +50,7 @@ docs.service('basics', function () {
 
 });
 
-docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", function(Annotations, SWBrijj, $q, $rootScope) {
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", function(Annotations, SWBrijj, $q, $rootScope, Investor) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
     var transaction_attributes_callback = null;
@@ -335,8 +335,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 var doc = this;
                 SWBrijj.tblm('document.my_personal_preparations').then(function(data) {
                     data.forEach(function(investor_prep) {
+                        if (investor_prep.annotation_overrides) {
+                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                        }
                         // add id and text fields to make select2 happy
-                        investor_prep.display = {id: investor_prep.investor, text: investor_prep.investor};
+                        investor_prep.display = Investor.getDisplay(investor_prep.investor);
                         doc.preparedFor.push(investor_prep);
                     });
                 });
@@ -346,7 +349,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         addPreparedFor: function(investor) {
             var doc = this;
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
-                doc.preparedFor.push({display: {id: investor, text: investor}, investor: investor, doc_id: doc.doc_id});
+                doc.preparedFor.push({display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id});
             }).except(function(error) {
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
@@ -363,7 +366,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             }).except(function(error) {
                 doc.preparedFor.forEach(function(investor_prep) {
                     if (investor_prep.investor == old_investor) {
-                        investor_prep.display = {id: old_investor, text: old_investor};
+                        investor_prep.display = Investor.getDisplay(old_investor);
                     }
                 });
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
@@ -380,12 +383,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             }).except(function(error) {
                 doc.preparedFor.forEach(function(investor_prep) {
                     if (investor_prep.investor == old_investor) {
-                        investor_prep.display = {id: old_investor, text: old_investor};
+                        investor_prep.display = Investor.getDisplay(old_investor);
                     }
                 });
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
         },
+        savePreparation: function(investor) {
+            var notes = [];
+            angular.forEach(this.annotations, function(note) {
+                if (note.whosign == "Issuer" && !note.pristine) {
+                    notes.push({id: note.id, val: note.val});
+                }
+            });
+            SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
+                // do nothing, successful save
+            }).except(function(error) {
+                $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+            });
+        }
     };
 
     /// Document service definition

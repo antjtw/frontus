@@ -32,7 +32,7 @@
 	padding-top: 10px;
 }
 .tabbable > ul > li {
-	border-left: 1px solid;
+	border-right: 1px solid;
 	border-color: #CAC9C9;
 }
 .tab-content > div > div > span {
@@ -118,13 +118,14 @@
 .maincontent {
 	background-color: #CAC9C9;
 }
-.body-box {
+.span12 > .info-box {
  	background-color: white;
 }
 h1 {
 font-size: 17px;
 }
 .tabbable .tab-content {
-	border-left: 1px solid #CAC9C9;
+
+	background-color: #F1F1F1;
 }
 
