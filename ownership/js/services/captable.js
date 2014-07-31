@@ -1,10 +1,5 @@
 var ownership = angular.module('ownerServices');
 
-/*
- * u, ukey and a, akey refer to units and amount
- * 'key' is actually the backup/previous/undo value
- * TODO implement 'key' values as a stack with generic undo facility
- */
 CapTable = function() {
     this.investors = [];
     this.securities = [];
@@ -18,15 +13,12 @@ Transaction = function() {
     this.atype = null;
     this.new = null;
     this.investor = null;
-    this.investorkey = null;
     this.company = null;
     this.date = Date.today();
     this.datekey = Date.today();
     this.issue = null;
     this.units = null;
-    this.unitskey = null;
     this.paid = null;
-    this.paidkey = null;
     this.key = 'undefined';
     this.convert = [];
 };
@@ -46,8 +38,8 @@ Row = function() {
 // TODO should issue_type be here?
 // I want more data in the cells.
 Cell = function() {
-    this.u = null;
-    this.a = null;
+    this.u = null; // units
+    this.a = null; // amount
     this.x = null; // percentage
     this.transactions = [];
     this.security = null;
@@ -57,10 +49,7 @@ ownership.service('captable',
 function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
     var captable = new CapTable();
-
-    this.getCapTable = function() {
-        return captable;
-    };
+    this.getCapTable = function() { return captable; };
     function loadCapTable() {
         $q.all([loadLedger(),
                 loadTransactionLog(),
@@ -224,14 +213,14 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.cellSecurityType = cellSecurityType;
     function setCellUnits(cell) {
         if (cellPrimaryMeasure(cell) == "units") {
-            cell.u = cell.ukey = sum_ledger(cell.ledger_entries);
+            cell.u = sum_ledger(cell.ledger_entries);
         }
     }
     function setCellAmount(cell) {
         if (cellPrimaryMeasure(cell) == "amount") {
-            cell.a = cell.akey = sum_ledger(cell.ledger_entries);
+            cell.a = sum_ledger(cell.ledger_entries);
         } else {
-            cell.a = cell.akey = sum_transactions(cell.transactions);
+            cell.a = sum_transactions(cell.transactions);
         }
     }
     function sum_ledger(entries) {
@@ -270,7 +259,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function rowFromName(name) {
         var row = newRow();
-        row.namekey = row.name = name.name;
+        row.name = name.name;
         row.editable = "yes";
         row.transactions = captable.transactions
             .filter(function(el) {return el.attrs.investor == row.name;});
@@ -308,10 +297,12 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
         });
     }
+    /*
     function setIssueKey(iss) {
         iss.key = iss.issue;
         captable.security_names.push(iss.key);
     }
+    */
     function reformatDate(obj) {
         obj.date = calculate.timezoneOffset(obj.date);
     }
@@ -518,6 +509,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
         return num_granted;
     }
+    /*
     function tranIsInvalid(tran) {
         if (tran === undefined || tran.issue === undefined ||
                 (isNaN(parseFloat(tran.units)) &&
@@ -539,6 +531,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
     }
     this.tranIsInvalid = tranIsInvalid;
+    */
     function massageTransactionValues(tran) {
         tran.units = calculate.cleannumber(tran.units);
         tran.amount = calculate.cleannumber(tran.amount);
@@ -636,7 +629,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             var num_granted = unitsGranted(iss, true);
             var leftovers = total - num_granted;
             var unissued_cell = nullCell();
-            unissued_cell.u = unissued_cell.ukey = leftovers;
+            unissued_cell.u = leftovers;
             var unissued_row = captable.investors.filter(
                 function(el) {
                     return el.name == iss.issue + " (unissued)";
@@ -660,6 +653,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     this.generateUnissuedRows = generateUnissuedRows;
+    /*
     function fillEmptyCells() {
         angular.forEach(captable.investors, function (row) {
             angular.forEach(captable.security_names, function (issuekey) {
@@ -670,6 +664,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     this.fillEmptyCells = fillEmptyCells;
+    */
     function totalOwnershipUnits() {
         return captable.cells.reduce(sumCellUnits, 0);
     }
