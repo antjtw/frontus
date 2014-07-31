@@ -310,7 +310,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             }
             else if (type.required) {
                 return 0 + type.display;
-            } else if (type.required == false) {
+            } else if (type.required === false) {
                 return 1 + type.display;
             } else {
                 return 2 + type.display;
@@ -324,6 +324,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 return this.issuerCanAnnotate();
         },
         investorCanAnnotate: function() {
+            // always false? Can issuer annotate a document with a signature_deadline (has been shared)?
             return (!this.when_signed && this.signature_deadline && this.signature_flow===2);
         },
         issuerCanAnnotate: function() {//does not include if the document is being prepared
@@ -333,7 +334,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             if (!this.preparedFor) {
                 this.preparedFor = [];
                 var doc = this;
-                SWBrijj.tblm('document.my_personal_preparations').then(function(data) {
+                SWBrijj.tblm('document.my_personal_preparations_view').then(function(data) {
                     data.forEach(function(investor_prep) {
                         if (investor_prep.annotation_overrides) {
                             investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
@@ -396,8 +397,15 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                     notes.push({id: note.id, val: note.val});
                 }
             });
+            var doc = this;
             SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
-                // do nothing, successful save
+                // data stored, got back is_prepared, so update preparedFor with that and the overrides
+                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
+                    if (investor_prep.investor == investor) {
+                        investor_prep.annotation_overrides = notes;
+                        investor_prep.is_prepared = result[0].update_preparation;
+                    }
+                });
             }).except(function(error) {
                 $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
             });
