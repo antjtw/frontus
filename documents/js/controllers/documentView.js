@@ -433,9 +433,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              if (prep.investor == $scope.$parent.prepareFor) {
                                  if (prep.annotation_overrides) {
                                      prep.annotation_overrides.forEach(function(override, idx, arr) {
-                                         $scope.doc.annotations.some(function(annot, aidx, aarr) {
+                                         $scope.annots.some(function(annot, aidx, aarr) {
                                              if (annot.id == override.id) {
                                                  annot.val = override.val;
+                                                 annot.pristine = false;
                                                  return true;
                                              } else {
                                                  return false;

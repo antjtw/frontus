@@ -397,8 +397,15 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                     notes.push({id: note.id, val: note.val});
                 }
             });
+            var doc = this;
             SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
-                // do nothing, successful save
+                // data stored, got back is_prepared, so update preparedFor with that and the overrides
+                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
+                    if (investor_prep.investor == investor) {
+                        investor_prep.annotation_overrides = notes;
+                        investor_prep.is_prepared = result[0].update_preparation;
+                    }
+                });
             }).except(function(error) {
                 $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
             });
