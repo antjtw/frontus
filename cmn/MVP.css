@@ -4890,7 +4890,9 @@ textarea.email-text {
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
 }
-
+li.event.roles > div > ul {
+	width: 300px;
+}
 .tinycol{
     display: inline-block;
     width: 40%;
@@ -4900,7 +4902,7 @@ textarea.email-text {
 
 .tinycol.left{
     text-align: right;
-    padding-left: 80px;
+    padding-left: 10px;
 }
 
 .group_button{
