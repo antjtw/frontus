@@ -1637,7 +1637,7 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-feed2 li.event.roles > div:first-of-type{
     text-align: left;
-    padding-left: 20px;
+    
 }
 
 
@@ -4890,8 +4890,8 @@ textarea.email-text {
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
 }
-.event .roles > div > ul > li > div > div {
-	width: 305px;
+.event .roles > div > ul > {
+	width: 300px;
 }
 .tinycol{
     display: inline-block;
