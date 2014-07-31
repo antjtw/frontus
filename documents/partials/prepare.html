@@ -1,6 +1,17 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <div class="container dynamic-page">
     <subnav>
+        <div class="box-button pull-right"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe602;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Save &amp; Exit</span>
+                </li>
+            </ul>
+        </div>
     </subnav>
     <div class="row-fluid">
         <div class="leftTabWindow" ng-style="viewportheight">
@@ -18,7 +29,7 @@
                     <span>
                         <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
                             <span ng-if="investor.is_prepared">Edit</span>
-                            <span ng-if="!investor.is_prepared">Prepare <span data-icon="&#xe016;"></span></span>
+                            <span ng-if="!investor.is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
                         </a>
                     </span>
                 </div>
@@ -35,4 +46,5 @@
             </internal-right-rail> -->
         </div>
     </div>
+    <preparation-bar></preparation-bar>
 </div>
