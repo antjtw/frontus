@@ -15,11 +15,14 @@
                         </div>
                     </div>
             <!--         admin dropdowns -->
-                    <div class="pull-left" ng-show="groupPeople.length > 0">
-                        <!-- <div class="standard-button darkgray">
-                          <button class="btn" ng-click="companyIsZombie()|| toggleSide('group'); clearRecipient()">Group</button>
+
+                    <div class="pull-left" ng-show="groupPeople.length > 0 && sidebarPage !== 'group'">
+                <!--         <div class="standard-button darkgray">
+                            <button class="btn" ng-click="companyIsZombie()|| toggleSide('group'); clearRecipient()">Group</button>
                         </div> -->
+
                         <ul class="dropdown-list drop-selector">
+
                             <li class="dropdown standard"> 
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">More</a>
                                 <ul class="dropdown-menu">
@@ -91,9 +94,9 @@
                     </tbody>
                     <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: isParam track by $id($index)">
                     <tr class="empty-row"></tr>
-                    
+
                       
-                    <td style="width:300px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
+                    <td style="width:400px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
 
                    <!--  check boxes      -->
                         <div class="check-box-side">
@@ -106,7 +109,7 @@
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
                         </ul>
                     </td>
-                    <td style="width: 200px"><span>
+                    <td style="width: 65px"><span>
                         <span ng-show="person.role=='issuer'">Admin</span></td>
                     <td><span>{{person.groups}}</span></td>
                     <td style="width:50px;">
@@ -167,8 +170,10 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="removeAdminModalClose()"></span>
     </div>
     <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
-        Are you sure you want to remove 
-        <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}<span ng-show=" ! $last">, </span></span> as an admin?
+        {{toRemove}}
+        <!--   <span ng-pluralize="revokeLength" when="{'one': 'Are you sure you want to remove {{selectedToRevoke}}? 
+          'other': }">{{selectedToRevoke}}</span> -->
+      
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
@@ -176,6 +181,9 @@
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="revoke_admin(); removeAdminModalClose();">Confirm</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="adminModalString(selectedToRevokes)">test</button>
         </div>
     </div>
 </div>
@@ -188,7 +196,9 @@
         <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
            Are you sure you want to add 
                 <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}
-                <span ng-show=" ! $last">, </span></span>as admin?
+                <span ng-show=" ! $last">, </span>
+                <span ng-show="$last -1">and</span>
+                </span>as admin?
             <div class="spacer20"></div>
             <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
                 <span>
