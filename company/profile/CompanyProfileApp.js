@@ -646,11 +646,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.adminModal = false;
         };
 
-        
+
         $scope.removeAdminModalOpen = function(ppl) {
             $scope.selectedToRevokes = [];
             angular.forEach(ppl, function(ind){
-                if(ind.email !== $scope.navState.userid){ 
+                if(ind.email !== $scope.navState.userid && $scope.selectedToRevokes.indexOf(ind.email)== -1){ 
                     $scope.selectedToRevokes.push(ind.email);
                 }
                 else if($scope.navState.userid==ind.email){
@@ -658,8 +658,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 };
                 
             });
+            console.log($scope.selectedToRevokes);
             $scope.removeAdminModal = true;
+        
         };
+
 
         $scope.removeAdminModalClose = function() {
             $scope.removeAdminModal = false;
@@ -677,7 +680,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 };
             });
             console.log($scope.selectedToAdds)
-
             $scope.addAdminModal = true;
         };
 
