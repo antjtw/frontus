@@ -23,11 +23,11 @@
                             <li class="dropdown standard"> 
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">More</a>
                                 <ul class="dropdown-menu">
-                                    <li>
-                                        <p class="button" ng-if="addOrRemove=='shareholder'" ng-click="addAdminModalOpen(groupPeople)">Make Admin</p>
+                                    <li ng-if="addOrRemove=='investor'">
+                                        <p class="button"  ng-click="addAdminModalOpen(groupPeople)">Make Admin</p>
                                     </li>
-                                    <li>
-                                        <p class="button" ng-if="addOrRemove =='issuer'" ng-click="removeAdminModalOpen(groupPeople)">Remove Admin</p>
+                                    <li ng-if="addOrRemove =='issuer'">
+                                        <p class="button" ng-click="removeAdminModalOpen(groupPeople)">Remove Admin</p>
                                     </li>
                                     <li>
                                         <p class="button" ng-click="companyIsZombie() || toggleSide('group'); clearRecipient();">Group</a>

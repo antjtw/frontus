@@ -504,7 +504,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                                 person.role = "issuer";
                             }
                             else if(person.email != admin.email && person.role != 'issuer'){
-                                person.role = "shareholder";
+                                person.role = "investor";
                             }
                         });
                     });
@@ -613,9 +613,12 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.sortRolesForAdd = function(people){
             var roles = []
-            angular.forEach(people, function(person){
-                if(roles.indexOf(person.role)== -1){
-                    roles.push(person.role);
+            angular.forEach(people, function(ind){
+                if(ind.email === $scope.navState.userid){
+                   console.log("you must stay where you are")
+                }
+                else if(ind.email !== $scope.navState.userid && roles.indexOf(ind.role)=== -1){
+                    roles.push(ind.role)
                 }
                 
             });
@@ -629,6 +632,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 // return selectRole[0]
                 $scope.addOrRemove = selectRole[0]
             }
+            else{
+                $scope.addOrRemove = ""
+            }
+
             
         }
 
