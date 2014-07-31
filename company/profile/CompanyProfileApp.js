@@ -672,14 +672,12 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.addAdminModalOpen = function(person) {
-            console.log(person); 
             $scope.selectedToAdds = [];
             angular.forEach(person, function(ind){
                 if(ind.email !== $scope.navState.userid){
                     $scope.selectedToAdds.push(ind.email);
                 };
             });
-            console.log($scope.selectedToAdds)
             $scope.addAdminModal = true;
         };
 
@@ -687,8 +685,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.addAdminModal = false;
             $scope.clearArray($scope.groupPeople);
             $scope.clearArray($scope.oldRoles);
-            console.log($scope.groupPeople);
-            console.log("grouping people")
 
         };
         
@@ -763,7 +759,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 });
 
             });
-            console.log($scope.oldRoles)
             $scope.createPeople();
             // $scope.oldRoles = [];
             
