@@ -2237,3 +2237,56 @@ div.profile-link > span {
 div.profile-link > span:first-of-type {
     vertical-align: -16%;
 }
+
+/* Document Preparation Screen */
+
+.docPrepTop {
+    margin: 40px 0 60px 50px;
+}
+
+.docPrepTop h2 {
+    text-transform: uppercase;
+    line-height: 20px;
+    margin: 0;
+}
+
+.docPrepRow {
+    width: calc(100% - 80px);
+    margin: 0 auto 0 auto;
+    border-bottom: 1px solid #E3E3E3;
+    height: 40px;
+    line-height: 40px;
+}
+
+.docPrepRow.header {
+    line-height: 20px;
+    height: 20px;
+    color: #33485d;
+}
+
+.docPrepRow > span {
+    display: inline-block;
+    width: 49%;
+    box-sizing: border-box;
+}
+
+.docPrepRow a {
+    color: #3397da;
+}
+
+.docPrepRow.header > span:first-of-type {
+    padding-left: 10px;
+}
+
+.docPrepRow .select2-container {
+    width: 95%;
+}
+
+.docPrepRow .select2-container .select2-choice {
+    border: none;
+    width: 100%;
+}
+
+.docPrepRow .select2-container .select2-choice .select2-arrow {
+    display: none;
+}
