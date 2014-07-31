@@ -659,6 +659,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.removeAdminModalClose = function() {
+            alert("close admin modal")
             $scope.removeAdminModal = false;
         };
 
@@ -734,37 +735,40 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
 
-        // $scope.revoke_admin = function() {
-        //     angular.forEach($scope.selectedToRevokes, function(elem){
-        //         SWBrijj.proc('account.revoke_admin', elem, navState.company).then(function(x) {
-        //             void(x);
-        //             $rootScope.billing.usage.admins_total -= 1;
-        //         }).except(function(x) {
-        //             void(x);
-        //             $scope.$emit("notification:fail", "Something went wrong, please try again later.");
-        //         });
-        //     $scope.$emit("notification:success", "Admin Removed");
-        //     // $route.reload();
-        //     // $scope.selectedToRevokes = [];
+        $scope.revoke_admin = function() {
+            angular.forEach($scope.selectedToRevokes, function(elem){
+                SWBrijj.proc('account.revoke_admin', elem, navState.company).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.admins_total -= 1;
+                    $scope.$emit("notification:success", "Admin Removed");
+                    // $route.reload();
+                }).except(function(x) {
+                    void(x);
+                    $scope.$emit("notification:fail", "Something went wrong, please try again later.");
+                });
 
-        //     })
+            })
             
-        // };
+        };
 
         $scope.add_admin = function() {
             angular.forEach($scope.selectedToAdds, function(elem){
                  SWBrijj.proc('account.create_admin', elem.toLowerCase()).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.admins_total += 1;
-                    $route.reload();
+                    
+            // $route.reload();
                 }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
-            });
+            }); 
             $scope.$emit("notification:success", "Admin Added");
-           
         };
+
+        $scope.$watch('add_admin', function(){
+            $scope.createPeople();
+        })
 
         // email sidebar
         $scope.toggleSide = function(button) {
