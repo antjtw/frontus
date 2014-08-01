@@ -678,12 +678,16 @@
                             Next
                         </span>
                     </span>
-                    <input placeholder="Add Security"
-                           class="capEditHeaders"
+                    <input class="capEditHeaders"
                            ui-event="{focus: 'selectSecurity(sec.name)',
                                        blur: 'saveIssue(sec, \'issue\')'}"
                            ng-model="sec.name"
                            onkeydown="testForEnter();">
+                </th>
+                <th>
+                    <span ng-click="addSecurity()">
+                        Add Security
+                    </span>
                 </th>
             </tr>
             <!-- Uneditable headers -->
@@ -702,7 +706,6 @@
                         Next
                     </span>
                 </th>
-                <th ng-if="!toggleView();">new security</th>
             </tr>
             <!-- Descriptive row viewable from all modes -->
             <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
@@ -714,7 +717,8 @@
                     <span>{{securityUnitLabel(one.name)}}</span>
                     <span>Total Paid</span>
                 </td>
-                <td ng-if="!toggleView();">new security</td>
+                <!-- for new security col -->
+                <td ng-if="!toggleView();"></td>
             </tr>
             <!-- Editable investors -->
             <tbody ng-if="!toggleView();">
@@ -772,22 +776,23 @@
                         select-cell="selectCell"
                         selected-cell="selectedCell">
                 </td>
-                <td ng-if="!toggleView();">new security</td>
+                <!-- for new security col -->
+                <td ng-if="!toggleView();"></td>
             </tr>
             <tr>
                 <td class="capsums-col">
-                    new investor
                 </td>
                 <td class="capsums-col">
-                    new investor
                 </td>
                 <td class="capsums-col">
-                    new investor
+                    <span ng-click="addInvestor()">
+                        Add Investor
+                    </span>
                 </td>
                 <td ng-repeat="key in ct.securities" class="capsums-col">
-                    new investor
                 </td>
-                <td ng-if="!toggleView();">new security</td>
+                <!-- for new security column -->
+                <td ng-if="!toggleView();"></td>
             </tr>
             </tbody>
             <!-- Un-editable view -->
@@ -853,7 +858,8 @@
                          </div>
                     </span>
                 </td>
-                <td ng-if="!toggleView();">new security</td>
+                <!-- for new security col -->
+                <td ng-if="!toggleView();"></td>
             </tr>
             <!-- Footer Total Row -->
             <tr class="total-row">
@@ -864,7 +870,8 @@
                     ng-repeat="one in ct.securities
                 | orderBy:['effective_date', 'insertion_date']:true">
                 </td>
-                <td ng-if="!toggleView();">new security</td>
+                <!-- for new security col -->
+                <td ng-if="!toggleView();"></td>
             </tr>
             <!-- Undiluted footer -->
             <tr class='tablefooter'>
@@ -894,7 +901,8 @@
                         </div>
                     </span>
                 </td>
-                <td ng-if="!toggleView();">new security</td>
+                <!-- for new security col -->
+                <td ng-if="!toggleView();"></td>
             </tr>
         </table>
     </div>

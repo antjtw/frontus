@@ -9,18 +9,17 @@ CapTable = function() {
     this.cells = [];
 };
 Transaction = function() {
-    this.active = null;
-    this.atype = null;
-    this.new = null;
-    this.investor = null;
+    this.attrs = {};
     this.company = null;
-    this.date = Date.today();
-    this.datekey = Date.today();
-    this.issue = null;
-    this.units = null;
-    this.paid = null;
-    this.key = 'undefined';
-    this.convert = [];
+    this.effective_date = null;
+    this.entered_by = null;
+    this.ip = null;
+    this.evidence = null;
+    this.evidence_data = null;
+    this.insertion_date = null;
+    this.transaction = null;
+    this.kind = null;
+    this.verified = false;
 };
 Security = function() {
     this.name = "";
@@ -29,7 +28,7 @@ Security = function() {
     this.transactions = [];
 };
 // if nameeditable == 0 then it's not a real investor row (unissued investors)
-Row = function() {
+Investor = function() {
     this.name = "";
     this.editable = "0";
     this.nameeditable = null;
@@ -46,6 +45,7 @@ Cell = function() {
 ownership.service('captable',
 function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
+    console.log($rootScope);
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
     function loadCapTable() {
@@ -255,9 +255,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 captable.cells.push(cell);
             });
             inv.percentage = function() {
-                return investorOwnershipPercentage(inv.name);
+                return investorSorting(inv.name);
             };
         });
+    }
+    function investorSorting(inv) {
+        if (inv === "") { return -100; } // keep new inv rows at bottom
+        return investorOwnershipPercentage(inv);
     }
     function splice_many(array, elements) {
         var indices = elements
@@ -286,7 +290,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     this.saveTransaction = saveTransaction;
     function rowFromName(name) {
-        var row = newRow();
+        var row = new Investor();
         row.name = name.name;
         row.editable = "yes";
         row.transactions = captable.transactions
@@ -351,30 +355,37 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         captable.securities.push(sec);
         */
     }
-    function nullRow() {
-        return new Row();
-    }
-    function newRow(cols) {
-        var row = nullRow();
-        angular.forEach(cols, function(k) {
-            row.cells[k] = nullCell();
-        });
-        return row;
-    }
-    function addRow(idx) {
-        /*
-        var row = newRow(captable.security_names);
-        if (idx) {
-            captable.investors.splice(idx, 0, row);
-        } else {
-            captable.investors.push(row);
-        }
-        return row;
-        */
-    }
-    this.addRow = addRow;
+    this.addInvestor = function() {
+        var inv = new Investor();
+        inv.editable = "yes";
+        inv.percentage = function() {return investorSorting(inv.name);};
+        captable.investors.splice(0, 0, inv);
+    };
     this.addTran = function(inv, sec, tp) {
-        console.log(inv, sec);
+        var tran = new Transaction();
+        if (tp == "issue_security") {
+            // captable.securities.push()
+            //
+        } else {
+            var security = captable.securities
+                .filter(function(el) { return el.security == sec; })[0];
+            var investor = captable.investors
+                .filter(function(el) { return el.investor == inv; })[0];
+            tran.company = x;
+            tran.investor = inv;
+            tran.security = sec;
+            tran.kind = tp;
+            // instantiate from allowed attrs
+            console.log(Object.keys(captable.attributes[security.security_type][tp]));
+            tran.attrs =
+                Object.keys(captable.attributes
+                                [security.security_type][tp])
+                    .map(function(el) {return {el: null};});
+            debugger;
+            // captable.transactions.push
+            // pass to cell as well
+        }
+        console.log(tran);
         // TODO create a transaction of a specified type
     };
     /*
@@ -488,7 +499,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         var x = captable.cells
             .filter(function(el) { return el.investor == inv; })
             .reduce(sumCellUnits, 0);
-        return x / totalOwnershipUnits() * 100;
+        var res = x / totalOwnershipUnits() * 100;
+        return res;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
     this.securityTotalUnits = function(sec) {

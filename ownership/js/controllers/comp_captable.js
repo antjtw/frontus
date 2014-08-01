@@ -170,6 +170,12 @@ var captableController = function(
             $scope.sideBar = 3;
         }
     };
+    $scope.addSecurity = function() {
+        captable.addTran(null, 'Untitled', 'issue_security');
+    };
+    $scope.addInvestor = function() {
+        captable.addInvestor();
+    };
     $scope.saveIssueAssign = function (issue, field, i) {
         if (i) { issue[field] = i; }
         $scope.saveIssueCheck(issue, field);
