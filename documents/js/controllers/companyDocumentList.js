@@ -199,11 +199,24 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
+                $scope.uploadType = null;
+                $scope.uploadDocid = null;
                 $scope.documentUploadModal = true;
             };
 
             $scope.modals.documentUploadClose = function() {
                 $scope.documentUploadModal = false;
+            };
+            
+            $scope.modals.signedUploadOpen = function(docid) {
+                $scope.files = [];
+                $scope.uploadType = 'signed';
+                $scope.uploadDocid = docid;
+                $scope.signedUploadModal = true;
+            };
+
+            $scope.modals.signedUploadClose = function() {
+                $scope.signedUploadModal = false;
             };
 
             $scope.wideopts = {
@@ -266,7 +279,7 @@ app.controller('CompanyDocumentListController',
                         }
                     }
                     if ($scope.files.length > 0) {
-                        $scope.uploadFile($scope.files);
+                        $scope.uploadFile($scope.files, $scope.uploadType, $scope.uploadDocid);
                     }
                     $scope.modals.documentUploadClose();
                 });
@@ -331,7 +344,7 @@ app.controller('CompanyDocumentListController',
                 });
             };
 
-            $scope.uploadFile = function(files) {
+            $scope.uploadFile = function(files, type, docid) {
                 $scope.$on("upload:progress", function(evt, arg) {
                     $scope.loadProgress = 100 * (arg.loaded / arg.total);
                     $scope.showProgress = true;
@@ -365,8 +378,21 @@ app.controller('CompanyDocumentListController',
                     analytics.track('doc uploader');
                 }
                 Intercom('update', {company : {"documents":$scope.documents.length+1}});
+                console.log(files[0]);
                 for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
-                var upxhr = SWBrijj.uploadFile(fd);
+                var upxhr;
+                if (type == null)
+                {
+                    upxhr = SWBrijj.uploadFile(fd);
+                }
+                else
+                {
+                    console.log(type);
+                    console.log(typeof(type));
+                    console.log(docid);
+                    console.log(typeof(docid));
+                    upxhr = SWBrijj.uploadFile(fd, type, docid);
+                }
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
                     for (var i = 0; i < files.length; i++) {
