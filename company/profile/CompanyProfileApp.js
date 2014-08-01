@@ -518,16 +518,24 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
 
                         });
-                        // $scope.setLastLogins();
+                        $scope.setLastLogins();
                         $scope.setGroups();
+                        // $scope.setGroups();
                         // $scope.resetFilter();
                     });
                     $scope.sort = 'name';
                 });
                 $scope.allPeople = $scope.people;
             });
+            // console.log("who are my people?")
+            // console.log($scope.allPeople);
         };
-        // $scope.createPeople();
+        $scope.createPeople();
+
+        // $scope.test = function(){
+        //     console.log($scope.people)
+        // }
+        // $scope.test();
 
 
 
@@ -542,34 +550,27 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.setGroups = function(){
-            angular.forEach($scope.people, function(person){
-                SWBrijj.tblmm('account.my_user_role', "email", person.email).then(function(data){
-                    $scope.myGroups = data;
-                    angular.forEach($scope.myGroups, function(myGroups){                       
-                        if(myGroups.groups == null){
-                            person.groups = null;
-                        }
-                        else if(myGroups.groups == '[]'){
-                            person.groups = null;
-                        }
-                        else if(JSON.parse(myGroups.groups)==""){
-                            person.groups = null;
-                        }
-                        else {
-                            person.groupsArray = JSON.parse(myGroups.groups);
-                            person.groups = JSON.parse(myGroups.groups).sort().join(", ");
-                        }
+            console.log($scope.people);
+            SWBrijj.tblm('account.my_user_role', ["email", "groups"]).then(function(data){
+                var groups = data;
+                angular.forEach($scope.people, function(person){
+                    angular.forEach(groups, function(group){
+                        if(group.email == person.email){
+                            console.log(group.groups);
+                            person.groups = group.groups;
+                        };
+                      // console.log(ind.email);
+                      // console.log(group.groups);  
                     });
-                
+                    
                 });
             });
-        };
-
-        
+        }
 
 
 
         $scope.setLastLogins = function() {
+            console.log($scope.people)
             SWBrijj.tblm("global.user_tracker").then(function(logins) {
                 angular.forEach($scope.people, function(person) {
                     angular.forEach(logins, function(login) {
@@ -604,10 +605,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.loadPage = function(){
-            $scope.createPeople();
+            // $scope.createPeople();
             $scope.setLastLogins();
             $scope.resetFilter();
-            // $scope.setGroups();
         }
         $scope.loadPage();
 
@@ -622,7 +622,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
 
         $scope.sortRolesForAdd = function(people){
-            console.log(people);
             angular.forEach(people, function(ind){
                 if(ind.email === $scope.navState.userid){
                    console.log("you must stay where you are")
@@ -632,8 +631,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 };
                 
             });
-            console.log($scope.oldRoles)
-            // return $scope.oldRoles
         };
 
         $scope.addOrRemoveAdmin = function(people){
@@ -675,7 +672,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.removeAdminModal = false;
             $scope.clearArray($scope.groupPeople);
             $scope.clearArray($scope.oldRoles);
-            console.log($scope.groupPeople);
         };
 
         $scope.removeAdminModalCancel = function(){
@@ -683,7 +679,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         }
 
         $scope.addAdminModalOpen = function(person) {
-            console.log($scope.groupPeople);
             $scope.selectedToAdds = [];
             angular.forEach(person, function(ind){
                 if(ind.email !== $scope.navState.userid){
