@@ -555,9 +555,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 var groups = data;
                 angular.forEach($scope.people, function(person){
                     angular.forEach(groups, function(group){
-                        if(group.email == person.email){
+                        if(group.email == person.email && group.groups !== null){
                             console.log(group.groups);
-                            person.groups = group.groups;
+                            person.groups = JSON.parse(group.groups).sort().join(", ");
                         };
                       // console.log(ind.email);
                       // console.log(group.groups);  
