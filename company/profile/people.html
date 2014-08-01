@@ -84,7 +84,7 @@
                         <th class="button" ng-click="sortBy('role')"><span class="title">Role</span></th>
                         <th class="button" ng-click="sortBy('groups')"><span class="title">Group</span></th>
                         <th></th>
-                    <!--     <th></th> -->
+
 
                     </tr>
                     </tbody>
@@ -109,19 +109,6 @@
                         <span ng-show="person.role=='issuer'">Admin</span></td>
                     <td><span>{{person.groups}}</span></td>
                     <td style="width:50px;">
-                        <ul class="dropdown-list" ng-if="sidebarPage != 'email'">
-                            <li class="dropdown standard menu-drop">
-                                <a class="dropdown-toggle">
-                                    <span data-icon="&#xe011;" aria-hidden="true"></span>
-                                </a>
-                                <ul ng-hide="toggleView();" class="dropdown-menu">
-                                    <li ng-show="" ng-click="modalUp(person);">Change Role</li>
-                                    <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
-                                    <li ng-show="person.role==='issuer' && person.email!==navState.userid" ng-click="removeAdminModalOpen(person.email)">Remove Admin</li>
-                                    <li ng-show="person.role!=='issuer'" ng-click="addAdminModalOpen(person.email)">Make Admin</li>
-                                </ul>
-                            </li>
-                        </ul>
                     </td>
 
                         
