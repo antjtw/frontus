@@ -1821,6 +1821,10 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
+annotation-list div.annotation-pages:first-child {
+    margin-top: 20px;
+}
+
 annotation-list div.annotation-pages:last-child {
     margin-bottom: 20px;
 }
@@ -1886,8 +1890,9 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
 }
 
 help-tab > div {
-    margin-top: 20px;
-    margin-left: 20px;
+    margin: 0 20px 80px 20px;
+    border-top: 1px solid #C6C6C6;
+    padding-top: 20px;
 }
 
 help-tab > div > p {
@@ -1907,7 +1912,7 @@ help-tab > div > p > span {
 
 .docinfo .inforow {
     padding: 10px 0;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
 }
 
 .docinfo .inforow .info {
@@ -2005,7 +2010,7 @@ doc-transaction-details > div > div > span {
 }
 
 doc-transaction-details > div > div > button {
-    width: 68px;
+    width: 64px;
     height: 30px;
     background-color: #19bb95;
     border: none;
@@ -2099,10 +2104,15 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     border-top: 1px solid #c6c6c6;
 }
 
+.fields-progress > div {
+    color: #1d2c3c;
+    margin-bottom: 10px;
+}
+
 .fields-progress > span {
-    font-size: 14px;
-    margin-bottom: 5px;
-    font-family:'FS Elliot Web Light', sans-serif !important;
+    font-size: 12px;
+    margin-bottom: 0;
+    color: #666666;
 }
 
 .fields-progress .meter {
@@ -2362,4 +2372,10 @@ div.profile-link > span:first-of-type {
 .preparation-bar .bar-button.left-button {
     float: left;
     margin-left: 20px;
+}
+
+.preparation-bar .version-banner {
+    line-height: 60px;
+    font-size: 20px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
 }

@@ -27,7 +27,7 @@
             </div>
         </div>
         <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
-        <div class="box-button pull-right"
+        <div ng-hide="prepareFor" class="box-button pull-right"
              ng-click="leave();"
              data-placement="bottom">
             <ul>
@@ -91,7 +91,7 @@
                             </div>
                             <div class="inforow" ng-if="prepareFor">
                                 <span class="activity-icon people-icon"></span>
-                                <span>Preparing for: {{prepareFor}}</span>
+                                <span class="info"><span>{{prepareFor}}</span><span>Preparing for</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_shared">
                                 <span class="activity-icon doc-share-icon"></span>
@@ -140,10 +140,10 @@
                         <div ng-if="prepareable()">
                             <doc-transaction-details doc="doc"></doc-transaction-details>
                         </div>
+                        <help-tab doc="doc"></help-tab>
                     </tab>
                     <tab active="annottab" heading="Annotations" ng-if="prepareable() || prepareFor || actionNeeded()">
                         <annotation-list doc="doc" active="active"></annotation-list>
-                        <help-tab doc="doc"></help-tab>
                     </tab>
                     <tab heading="Transactions" ng-if="doctrans.length > 0">
                         <doc-transaction-list trans="doctrans"></doc-transaction-list>
@@ -180,7 +180,7 @@
             </internal-right-rail>
         </div>
     </div>
-    <preparation-bar ng-if="prepareable()"></preparation-bar>
+    <preparation-bar ng-if="prepareable() || prepareFor"></preparation-bar>
 </div>
 
 <div modal="imageProcessedModal" options="processedopts" data-keyboard="false" data-backdrop="static">

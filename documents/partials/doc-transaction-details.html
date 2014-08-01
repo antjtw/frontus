@@ -18,6 +18,7 @@
         </div>
     </div>
     <div class="fields-progress">
+        <div>Progress</div>
         <span ng-show="doc.numFieldsComplete() != doc.numFieldsRequired()">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} Complete</span>
         <span ng-show="doc.numFieldsComplete() == doc.numFieldsRequired()">Document is ready to go!</span>
         <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>

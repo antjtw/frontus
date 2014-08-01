@@ -1,4 +1,4 @@
-<div ng-show="doc.doc_id && doc.annotations.length == 0 && !invq && !doc.when_shared">
+<div ng-show="doc.doc_id && doc.annotations.length == 0 && !invq && !doc.when_shared && !doc.issue && prepareable()">
     <p>
         <span>{{invq? "Markers show annotations" : "Prepare your document for sharing"}}</span>
         {{invq? "Fields in red are required by the sender. Fields in yellow are optional. Your signature is legally binding, and will be returned to the sender for their signature." : "Draw fields to mark where information can be entered. Fill out all your own fields prior to sending. The recipient will see everything but your signature, which is hidden until you approve their information."}}
