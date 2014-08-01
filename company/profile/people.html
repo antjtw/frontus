@@ -107,19 +107,6 @@
                         <span ng-show="person.role=='issuer'">Admin</span></td>
                     <td><span>{{person.groups}}</span></td>
                     <td style="width:50px;">
-                        <ul class="dropdown-list" ng-if="sidebarPage != 'email'">
-                            <li class="dropdown standard menu-drop">
-                                <a class="dropdown-toggle">
-                                    <span data-icon="&#xe011;" aria-hidden="true"></span>
-                                </a>
-                                <ul ng-hide="toggleView();" class="dropdown-menu">
-                                    <li ng-show="" ng-click="modalUp(person);">Change Role</li>
-                                    <li ng-show="person.lastlogin" ng-click="gotoPerson(person);">View Profile</li>
-                                    <li ng-show="person.role==='issuer' && person.email!==navState.userid" ng-click="removeAdminModalOpen(person.email)">Remove Admin</li>
-                                    <li ng-show="person.role!=='issuer'" ng-click="addAdminModalOpen(person.email)">Make Admin</li>
-                                </ul>
-                            </li>
-                        </ul>
                     </td>
 
                         
@@ -165,7 +152,7 @@
     </div>
     <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
         Are you sure you want to remove 
-                <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$last ? '' : ','}}
+                <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$index > selectedToRevokes.length -3 ? '' : ','}}
                 <span ng-show="$index == selectedToRevokes.length -2">and</span>
                 </span>
                 <span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
@@ -191,15 +178,18 @@
         </div>
         <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
            Are you sure you want to add 
-               <span ng-repeat="selectedToAdd in selectedToAdds track by $index">{{selectedToAdd}}{{$last ? '' : ','}}
+             <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}{{$index > selectedToAdds.length -3 ? '' : ','}}
                 <span ng-show="$index == selectedToAdds.length -2">and</span>
                 </span>
-                </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
+                <span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
+
             <div class="spacer20"></div>
             <div ng-if="triggerUpgradeAdmins(selectedToAdds.length)" class="upgradeWarning">
-                <span>
+                <span ng-if="selectedToAdds.length == 1">
                     Warning: Making this user an admin will automatically upgrade your payment plan.
                 </span>
+                <span ng-if="selectedToAdds.length > 1">
+                    Warning: Making these users admins will automatically upgrade your payment plan.</span>
             </div>
         </div>
         <div class="modal-footer">
