@@ -449,6 +449,10 @@ app.controller('CompanyDocumentListController',
                         "signature_flow": item.signature_flow
                     };
                     listcopy.push(obj);
+                    if (item.preps) {
+                        // TODO: this only shows emails, need to fix sharing sidebar to show names in this instance
+                        $scope.docShareState.emails = JSON.parse(item.preps);
+                    }
                 }
                 return listcopy;
             };

@@ -2320,9 +2320,8 @@ div.profile-link > span:first-of-type {
     width: calc(100% - 80px);
     bottom: 0;
     height: 60px;
-    background-color: #003045;
+    background-color: rgb(30, 45, 61);
     text-align: center;
-    
 }
 
 .preparation-bar .bar-button {
