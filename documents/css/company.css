@@ -53,11 +53,38 @@
 	margin: 10px;
 	margin-left: 80px;
 }
+.same-row .span6 > div:first-child {
+	margin-top: -10px;
+}
+.same-row .view-button {
+	margin: 5px !important;
+	position: relative;
+	top: 190px;
+	left: calc(50% - 150px);
+}
+.same-row .body-box {
+	height: 250px;
+}
+#view-button1 {
+	left: calc(100% - 100px);
+	top: 195px;
+}
+#view-button2 {
+	position: absolute;
+	left: calc(170% - 145px);
+	top: 116px;
+}
+#view-button3 {
+	left: 20px;
+	top: 10px;
+}
+
 .span6 > div > img {
 	margin-bottom: -15px;
 }
 .span6 > div {
 	margin: 30px;
+	width: 200px;
 }
 .span6 > div > h2 {
 	margin-left: 50px;
@@ -67,18 +94,45 @@
 	font-size: 20px;
 	margin: 3px;
 }
+.span5 > div > img {
+	margin-bottom: -15px;
+}
+.span5 > div {
+	margin: 30px;
+	width: 200px;
+	margin-top: -25px;
+}
+.span5 > div > div > h2 {
+	margin-left: 50px;
+	margin-top: -20px;
+}
+.span5 > div > div > h2 > span {
+	font-size: 20px;
+	margin: 6px;
+}
+.same-row .span5 {
+	margin: 30px !important;
+	margin-left: -50px !important;
+}
 #doc-button {
 	margin-top: 100px;
 }
 #own-button {
 	margin-left: 23px;
 }
-.body-box > div:first-child > div > div{
+.body-box > div:first-child > div > div:last-child {
+	position: absolute;
 	float: left;
 	margin: 50px;
-	margin-bottom: 30px;
-	
 }
+
+.body-box > div:first-child > div > div {
+	top: 30px;
+}
+.body-box > div > div {
+	padding-top: 30px;
+}
+
 .add-investments {
 	position: absolute;
 	left: calc(50% - 116px);
@@ -91,6 +145,13 @@
 }
 .body-box {
 	position: relative;
+}
+.span8 {
+	position: relative;
+}
+.span8 .span12 {
+	position: absolute;
+	right: 0px;
 }
 .span12 > div:last-child > div:last-child > div > div > div > img {
 	margin-left: 5px;
@@ -110,15 +171,33 @@
 	left: calc(50% - 75px);
 	top: 250px;
 }
-.maincontent {
-	background-color: #CAC9C9
+
+.same-row .info-box {
+	width: 45%;
+	float: left;
+}
+.same-row .info-box:first-child {
+	border-right: 15px;
+	margin-left: 0px;
+}
+.same-row .info-box:last-child {
+	border-right: 0px;
+	width: calc(90% + 20px);
+	height: 350px;
+}
+d3vestedbar > svg {
+	height: 270px;
+	margin-left: 10px;
+}
+.span3 {
+	left: calc(50% + 100px);
 }
 
 
 .maincontent {
 	background-color: #CAC9C9;
 }
-.span12 > .info-box {
+.span12 .info-box {
  	background-color: white;
 }
 h1 {
@@ -127,5 +206,27 @@ font-size: 17px;
 .tabbable .tab-content {
 
 	background-color: #F1F1F1;
+}
+
+#tooltip {
+    position: absolute;
+    text-align: center;
+    width: 100px;
+    height: 40px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background-color: #1D2C3C;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+#tooltip.hidden {
+    display: none;
+}
+
+#tooltip p {
+    margin: 0;
+    color: #C6C6C6;
 }
 
