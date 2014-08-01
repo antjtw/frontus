@@ -126,6 +126,15 @@ var captableController = function(
             // TODO should we forget the old cell here?
             // or do we want to maintain the history
             $scope.selectedCell = $scope.cellFor(inv, sec);
+            if (!$scope.selectedCell) {
+                console.log(inv, sec);
+                /*
+                var c = new Cell();
+                c.investor = inv;
+                c.security = sec;
+                $scope.selectedCell = c;
+                */
+            }
             History.watch('selectedCell', $scope);
             $scope.sideBar = $scope.toggleView() ? 4 : 2;
         } else if ($scope.selectedCell && !cellIsSelected(inv, sec)) {

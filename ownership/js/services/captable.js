@@ -5,7 +5,6 @@ CapTable = function() {
     this.securities = [];
     this.transactions = [];
     this.ledger_entries = [];
-
     this.cells = [];
 };
 Transaction = function() {
@@ -27,7 +26,9 @@ Security = function() {
     this.insertion_date = null;
     this.transactions = [];
 };
-// if nameeditable == 0 then it's not a real investor row (unissued investors)
+// if nameeditable == 0 then it's not a real investor row
+// (unissued investors)
+// TODO can this be cut out?
 Investor = function() {
     this.name = "";
     this.editable = "0";
@@ -45,7 +46,6 @@ Cell = function() {
 ownership.service('captable',
 function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
-    console.log($rootScope);
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
     function loadCapTable() {
@@ -57,11 +57,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         .then(function(results) {
             captable.ledger_entries = results[0];
             captable.transactions = results[1].map(parseTransaction);
-            handleTransactions(captable.transactions);
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
+
+            handleTransactions(captable.transactions);
             attachEvidence(results[4]);
             generateCells();
+
             console.log(captable);
         }, logErrorPromise);
     }
@@ -191,6 +193,25 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 }
                 return prev;}, []);
     }
+    function numUnissued(sec) {
+        if (calculate.isNumber(sec.attrs.totalauth)) {
+            return sec.attrs.totalauth - securityTotalUnits(sec);
+        } else {
+            return null;
+        }
+    }
+    this.numUnissued = numUnissued;
+    function secHasUnissued(sec) {
+        return numUnissued(sec);
+    }
+    this.securitiesWithUnissuedUnits = function() {
+        return captable.securities.filter(secHasUnissued);
+    };
+    this.securityUnissuedPercentage = function(sec) {
+        var tot = totalOwnershipUnits();
+        if (tot === 0) return 100;
+        return numUnissued(sec) / tot;
+    };
     function rowFor(inv) {
         return captable.cells
             .filter(function(cell) {
@@ -358,20 +379,24 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.addInvestor = function() {
         var inv = new Investor();
         inv.editable = "yes";
+        inv.company = $rootScope.navState.company;
         inv.percentage = function() {return investorSorting(inv.name);};
         captable.investors.splice(0, 0, inv);
     };
     this.addTran = function(inv, sec, tp) {
         var tran = new Transaction();
+        tran.company = $rootScope.navState.company;
+        debugger;
         if (tp == "issue_security") {
             // captable.securities.push()
             //
         } else {
+            // TODO other transaction types may affect investor list
+            //
             var security = captable.securities
                 .filter(function(el) { return el.security == sec; })[0];
             var investor = captable.investors
                 .filter(function(el) { return el.investor == inv; })[0];
-            tran.company = x;
             tran.investor = inv;
             tran.security = sec;
             tran.kind = tp;
@@ -381,7 +406,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 Object.keys(captable.attributes
                                 [security.security_type][tp])
                     .map(function(el) {return {el: null};});
-            debugger;
             // captable.transactions.push
             // pass to cell as well
         }
@@ -405,6 +429,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     this.getIssue = getIssue;
     */
+    /*
     function cellsForIssue(iss) {
         var cells = [];
         angular.forEach(captable.investors, function(row) {
@@ -434,6 +459,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
         return num_granted;
     }
+    */
     function massageTransactionValues(tran) {
         tran.units = calculate.cleannumber(tran.units);
         tran.amount = calculate.cleannumber(tran.amount);
@@ -460,6 +486,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             }
         });
     }
+    /*
     function generateUnissuedRows() {
         angular.forEach(captable.securities, function(iss) {
             if (!calculate.isNumber(iss.totalauth)) return;
@@ -491,6 +518,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     this.generateUnissuedRows = generateUnissuedRows;
+    */
     function totalOwnershipUnits() {
         return captable.cells.reduce(sumCellUnits, 0);
     }
@@ -503,11 +531,12 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return res;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
-    this.securityTotalUnits = function(sec) {
+    function securityTotalUnits(sec) {
         return captable.cells
             .filter(function(el) { return el.security == sec; })
             .reduce(sumCellUnits, 0);
-    };
+    }
+    this.securityTotalUnits = securityTotalUnits;
     this.securityTotalAmount = function(sec) {
         return captable.cells
             .filter(function(el) { return el.security == sec; })

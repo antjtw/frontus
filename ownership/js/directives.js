@@ -177,6 +177,8 @@ own.directive('editableCellDetails', [function() {
                 $scope.addTransaction = function() {
                     captable.addTran($scope.cell.investor,
                                      $scope.cell.security, 'grant');
+                    // FIXME fails when this is the first transaction
+                    // of the cell
                 };
                 // TODO this has to do more. 
                 // OR, whatever is watching the transaction object

@@ -671,7 +671,7 @@
                 </th>
                 <th class="longrow">Shareholder</th>
                 <th ng-repeat="sec in ct.securities
-                    | orderBy:['effective_date', 'insertion_date']:true">
+                  | orderBy:['effective_date', 'insertion_date']:true">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
                               ng-click="moveTour();">
@@ -679,8 +679,8 @@
                         </span>
                     </span>
                     <input class="capEditHeaders"
-                           ui-event="{focus: 'selectSecurity(sec.name)',
-                                       blur: 'saveIssue(sec, \'issue\')'}"
+                           ui-event="{focus:'selectSecurity(sec.name)',
+                                      blur:'saveIssue(sec,\'issue\')'}"
                            ng-model="sec.name"
                            onkeydown="testForEnter();">
                 </th>
@@ -827,39 +827,38 @@
             </tr>
             </tbody>
             <!-- Unissued Rows -->
-            <tr class="unissued-investors"
-                ng-repeat="row in ct.investors | orderBy:'percentage()':true"
-                ng-show="([row] | unissuedrowviewList).length > 0">
+            <tr class="unissued-invesetors"
+                ng-repeat="sec in
+                    captable.securitiesWithUnissuedUnits()">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{shareSum(row);}}">
+                           value="{{captable.numUnissued(sec)}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.investorOwnershipPercentage(row.name) | number:3}}%">
+                           value="{{captable.securityUnissuedPercentage(sec) || 0.00 | number:3}}%">
                 </td>
                 <td class="viewName">
-                    {{row.name}}
+                    <!-- formatting: italicize, no hover highlight -->
+                    {{sec.name}} (Unissued)
                 </td>
-                <!-- TODO orderBy -->
                 <td class="tableFields"
                     ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                  | orderBy:['effective_date', 'insertion_date']:true">
                     <span class="captablepair-box">
-                        <div ng-class="{'editview': !toggleView()}"
-                             ng-bind="key"
+                        <div ng-class="{editview: !toggleView()}"
                              class="output clickable">
-                         </div>
-                         <div ng-class="{'editview': !toggleView()}"
-                              ng-bind="key"
-                              class="output second clickable">
-                         </div>
-                    </span>
+                            {{captable.numUnissued(key)}}
+                        </div>
+                        <div ng-class="{editview: !toggleView()}"
+                             class="output second clickable">
+                             <!-- don't need anything here.
+                                  no such thing as unissued amounts -->
+                        </div>
+                   </span>
                 </td>
-                <!-- for new security col -->
-                <td ng-if="!toggleView();"></td>
             </tr>
             <!-- Footer Total Row -->
             <tr class="total-row">
