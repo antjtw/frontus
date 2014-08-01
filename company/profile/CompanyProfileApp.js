@@ -509,7 +509,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
                         });
                     });
-                    // SWBrijj.tblm()
                     SWBrijj.tblm('account.profile', ['email']).then(function(me) {
                         angular.forEach($scope.people, function(person) {
                             if (person.email == me[0].email)
@@ -519,17 +518,18 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
 
                         });
-                        $scope.setLastLogins();
+                        // $scope.setLastLogins();
                         $scope.setGroups();
-                        $scope.resetFilter();
+                        // $scope.resetFilter();
                     });
                     $scope.sort = 'name';
                 });
-                console.log($scope.people);
                 $scope.allPeople = $scope.people;
             });
         };
-        $scope.createPeople();
+        // $scope.createPeople();
+
+
 
         $scope.resetFilter = function(){
             $scope.filterParam.param = undefined;
@@ -602,6 +602,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $location.url(link);
             }
         };
+
+        $scope.loadPage = function(){
+            $scope.createPeople();
+            $scope.setLastLogins();
+            $scope.resetFilter();
+            // $scope.setGroups();
+        }
+        $scope.loadPage();
 
         // Admin Modal Functions
 
@@ -681,6 +689,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             console.log($scope.selectedToAdds);
             $scope.addAdminModal = true;
         };
+
 
         $scope.addAdminModalClose = function() {
             $scope.addAdminModal = false;
