@@ -350,20 +350,15 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.signDocument = function() {
-            var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
-            var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
-            return SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
-                void(data);
-                $scope.doc.sign().then(
-                    function(data) {
-                        $scope.$emit("notification:success", "Document signed");
-                        $scope.leave();
-                    },
-                    function(fail) {
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    }
-                );
-            });
+            return $scope.doc.sign().then(
+                function(data) {
+                    $scope.$emit("notification:success", "Document signed");
+                    $scope.leave();
+                },
+                function(fail) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                }
+            );
         };
 
         $scope.signTemplate = function() {
@@ -404,24 +399,19 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.countersignDocument = function() {
-            var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
-            var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
-            return SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
-                void(data);
-                $scope.doc.countersign().then(
-                    function(data) {
-                        if ($scope.doc.issue) {
-                            $scope.$emit("notification:success", "Document approved & cap table entry added");
-                        } else {
-                            $scope.$emit("notification:success", "Document approved");
-                        }
-                        $scope.leave();
-                    },
-                    function(fail) {
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
+            return $scope.doc.countersign().then(
+                function(data) {
+                    if ($scope.doc.issue) {
+                        $scope.$emit("notification:success", "Document approved & cap table entry added");
+                    } else {
+                        $scope.$emit("notification:success", "Document approved");
                     }
-                );
-            });
+                    $scope.leave();
+                },
+                function(fail) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                }
+            );
         };
 
         $scope.finalizeDocument = function() {
