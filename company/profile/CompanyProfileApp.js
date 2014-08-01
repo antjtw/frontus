@@ -678,6 +678,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             console.log($scope.groupPeople);
         };
 
+        $scope.removeAdminModalCancel = function(){
+            $scope.removeAdminModal = false;
+        }
+
         $scope.addAdminModalOpen = function(person) {
             console.log($scope.groupPeople);
             $scope.selectedToAdds = [];
@@ -699,10 +703,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.addAdminModalCancel = function(){
-            console.log("cancel me")
             $scope.addAdminModal = false;
-            console.log($scope.oldRoles);
-            console.log($scope.groupPeople);
            
         }
         

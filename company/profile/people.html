@@ -16,7 +16,7 @@
                     </div>
             <!--         admin dropdowns -->
 
-                    <div class="pull-left" ng-show="groupPeople.length > 0 && sidebarPage !== 'group'">
+                    <div class="pull-left" ng-show="groupPeople.length > 0">
                         <ul class="dropdown-list drop-selector">
 
                             <li class="dropdown standard"> 
@@ -160,7 +160,7 @@
 
 
 <!-- admin toolbar, these are the modals themselves that open -->
-<div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
+<div modal="removeAdminModal" close="removeAdminModalCancel()" options="narrowopts">
     <div class="modalHeader">
         <span>Remove administrator</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="removeAdminModalClose()"></span>
@@ -177,7 +177,7 @@
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="removeAdminModalClose()">Cancel</button>
+            <button class="btn" ng-click="removeAdminModalCancel()">Cancel</button>
         </div>
         <div class="standard-button green">
             <button class="btn" ng-click="revoke_admin(); removeAdminModalClose();">Confirm</button>
