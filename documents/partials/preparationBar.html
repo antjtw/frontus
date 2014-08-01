@@ -12,7 +12,7 @@
             <span>Prepare</span>
         </a>
     </div>
-    <div ng-hide="navState.path.indexOf('/documents/prepare') != -1" class="bar-button right-button">
+    <div ng-show="navState.path.indexOf('/documents/prepare') == -1" class="bar-button right-button">
         <a ng-href="{{'/app/documents/prepare?doc=' + doc.doc_id}}">
             <span ng-show="!prepareFor">Next</span>
             <span ng-show="prepareFor">Done</span>
