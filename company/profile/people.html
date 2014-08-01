@@ -185,6 +185,7 @@
     </div>
 </div>
 
+<!-- add admin modal -->
     <div modal="addAdminModal" close="addAdminModalClose()" options="narrowopts">
         <div class="modalHeader">
             <span>Add administrator</span>
@@ -197,7 +198,7 @@
                 </span>
                 </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
             <div class="spacer20"></div>
-            <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
+            <div ng-if="triggerUpgradeAdmins(selectedToAdds.length)" class="upgradeWarning">
                 <span>
                     Warning: Making this user an admin will automatically upgrade your payment plan.
                 </span>

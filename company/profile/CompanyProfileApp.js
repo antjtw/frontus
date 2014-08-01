@@ -678,6 +678,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.selectedToAdds.push(ind.email);
                 };
             });
+            console.log($scope.selectedToAdds);
             $scope.addAdminModal = true;
         };
 

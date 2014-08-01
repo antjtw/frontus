@@ -739,6 +739,7 @@ navm.controller('NavCtrl',
             }
         };
         $rootScope.triggerUpgradeAdmins = function(numNew) {
+            console.log(numNew);
             if ($rootScope.billing && $rootScope.billing.usage) {
                 var num = $rootScope.billing.usage.admins_total+numNew;
                 var lim = $rootScope.billing.usage.admins_total_limit;
