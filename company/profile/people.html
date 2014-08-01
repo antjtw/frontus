@@ -18,7 +18,6 @@
 
                     <div class="pull-left" ng-show="groupPeople.length > 0">
                         <ul class="dropdown-list drop-selector">
-
                             <li class="dropdown standard"> 
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">More</a>
                                 <ul class="dropdown-menu">
@@ -35,7 +34,7 @@
                             </li>
                         </ul>
                     </div>
-                  <!--   </div> -->
+                  <!--   </div>
 
                  <!--    email button -->
                     <div class="box-button pull-right"
@@ -90,7 +89,8 @@
                     </tbody>
                     <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: isParam track by $id($index)">
                     <tr class="empty-row"></tr>
-                    <td style="width:400px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
+
+                    <td style="width:350px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
 
                    <!--  check boxes      -->
                         <div class="check-box-side">
@@ -103,10 +103,11 @@
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
                         </ul>
                     </td>
-                    <td style="width: 65px"><span>
-                        <span ng-show="person.role=='issuer'">Admin</span></td>
+
+                    <td><span>
+                        <span ng-show="person.role=='issuer'">Admin</span></span></td>
                     <td><span>{{person.groups}}</span></td>
-                    <td style="width:50px;">
+                    <td style="width:10px;">
                     </td>
 
                         
