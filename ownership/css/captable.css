@@ -98,7 +98,8 @@ div.last-saved {
     background-clip: padding-box;
 }
 
-.tableView .unissued-rows td {
+.tableView .unissued-rows td:hover {
+    cursor: default !important;
 }
 
 .tableView.captable td.viewName {
@@ -210,6 +211,7 @@ div.last-saved {
 
 .tableView.captable .unissued-rows {
     font-style: italic;
+    cursor: default;
 }
 
 .captablepair-box {
