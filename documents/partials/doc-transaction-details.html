@@ -8,7 +8,7 @@
 <div ng-show="doc.issue">
     <div class="bottom-padded">
         <span>Fields necessary to add a cap table entry into {{doc.issue}}. <span ng-show="doc.numFieldsComplete() == 0" class='back-button' ng-click="doc.unsetTransaction();">
-            Clear linkage
+            Unlink
         </span>
         </span>
         <div class="required-fields" ng-class="{'field-completed': (doc.hasFilledAnnotation(field.name) || doc.hasOtherPartyAnnotation(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required">
@@ -18,6 +18,7 @@
         </div>
     </div>
     <div class="fields-progress">
+        <div>Progress</div>
         <span ng-show="doc.numFieldsComplete() != doc.numFieldsRequired()">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} Complete</span>
         <span ng-show="doc.numFieldsComplete() == doc.numFieldsRequired()">Document is ready to go!</span>
         <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
