@@ -556,6 +556,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     angular.forEach(groups, function(group){
                         if(group.email == person.email && group.groups !== null){
                             person.groups = JSON.parse(group.groups).sort().join(", ");
+                            person.groupsArray = JSON.parse(group.groups);
+                            console.log(person.groupsArray)
                         };
                     });
                     
@@ -594,7 +596,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
-            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
+            link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + encodeURIComponent(person.email) : '/app/account/profile/') : '');
             if (link) {
                 $location.url(link);
             }

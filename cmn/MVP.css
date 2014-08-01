@@ -4806,6 +4806,7 @@ textarea.email-text {
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
     cursor: pointer;
+    padding-right: 10px;
 }
 
 .messages .activity-feed2 li.event:first-of-type {
@@ -4875,10 +4876,12 @@ textarea.email-text {
     display: inline-block;
     width: 40%;
     padding-left: 20px;
+    margin-left: 10px;
 }
 
 .tinycol.left{
     text-align: right;
+    padding-left: 10px;
 }
 
 .group_button{
@@ -4901,7 +4904,6 @@ textarea.email-text {
     color: #666;
 }
 
-
 .select_role:hover {
     color: #666;
     cursor: pointer;
@@ -4923,13 +4925,13 @@ textarea.email-text {
     cursor: pointer;
 }
 
-.all_groups{
-    color: #8D8D8D;
-    padding-left: 20px;
+.select_role.all_people{
+    color: #1E2D3D;
 }
 
+
 .noGroups span:last-of-type{
-    position:relative;
+    position: relative;
     top: 3px;
 } 
 
