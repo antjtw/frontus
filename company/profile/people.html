@@ -84,7 +84,7 @@
                         <th class="button" ng-click="sortBy('role')"><span class="title">Role</span></th>
                         <th class="button" ng-click="sortBy('groups')"><span class="title">Group</span></th>
                         <th></th>
-
+                    <!--     <th></th> -->
 
                     </tr>
                     </tbody>
@@ -180,15 +180,18 @@
         </div>
         <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
            Are you sure you want to add 
-               <span ng-repeat="selectedToAdd in selectedToAdds track by $index">{{selectedToAdd}}{{$last ? '' : ','}}
+             <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}{{$index > selectedToAdds.length -3 ? '' : ','}}
                 <span ng-show="$index == selectedToAdds.length -2">and</span>
                 </span>
-                </span><span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
+                <span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
+
             <div class="spacer20"></div>
             <div ng-if="triggerUpgradeAdmins(selectedToAdds.length)" class="upgradeWarning">
-                <span>
+                <span ng-if="selectedToAdd.length == 1">
                     Warning: Making this user an admin will automatically upgrade your payment plan.
                 </span>
+                <span ng-if="selectedToAdd.length > 1">
+                    Warning: Making these users admins will automatically upgrade your payment plan.</span>
             </div>
         </div>
         <div class="modal-footer">

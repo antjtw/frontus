@@ -683,6 +683,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             });
             console.log($scope.selectedToAdds);
             $scope.addAdminModal = true;
+          
         };
 
 
