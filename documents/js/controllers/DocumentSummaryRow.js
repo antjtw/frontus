@@ -157,9 +157,9 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.showtooltip = function(doc){
         if(doc.length > 50 && doc.indexOf(' ') >= 0){
-            return doc
+            return doc;
         }
-    }
+    };
 
     // dropdown list functions
     $scope.viewProfile = function(investor) {
@@ -175,6 +175,8 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     $scope.prepareDocument = function(doc) {
         if (doc.template_id) {
             $location.url("/app/documents/company-view?template=" + doc.template_id + "&share=true");
+        } else if (doc.preps) {
+            $location.url("/app/documents/prepare?doc=" + doc.doc_id);
         } else {
             $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true&share=true");
         }
