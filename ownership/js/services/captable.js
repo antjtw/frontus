@@ -35,8 +35,6 @@ Row = function() {
     this.nameeditable = null;
     this.transactions = [];
 };
-// TODO should issue_type be here?
-// I want more data in the cells.
 Cell = function() {
     this.u = null; // units
     this.a = null; // amount
@@ -63,7 +61,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
             attachEvidence(results[4]);
-            generateCells(new Date());
+            generateCells();
             console.log(captable);
         }, logErrorPromise);
     }
@@ -212,17 +210,21 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     this.cellSecurityType = cellSecurityType;
     function setCellUnits(cell) {
+        if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
             cell.u = sum_ledger(cell.ledger_entries);
         }
     }
+    this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
+        if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
         } else {
             cell.a = sum_transactions(cell.transactions);
         }
     }
+    this.setCellAmount = setCellAmount;
     function sum_ledger(entries) {
         return entries.reduce(
                 function(prev, cur, index, arr) {
@@ -257,6 +259,32 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             };
         });
     }
+    function splice_many(array, elements) {
+        var indices = elements
+            .map(function(el) {return array.indexOf(el);})
+            .filter(function(el) {return el!==-1;});
+        return indices.map(function(idx) {return array.splice(idx, 1);});
+    }
+    function saveTransaction(tran) {
+        // TODO this is getting called too often.
+        // use ng-change instead of ui-event?
+        //
+        // or maybe add a save button for now
+        var old_ledger_entries = captable.ledger_entries
+            .filter(function(el) {
+                    return el.transaction == tran.transaction;
+            });
+        SWBrijj.procm('_ownership.save_transaction',
+                      JSON.stringify(tran))
+        .then(function(new_entries) {
+            console.log(splice_many(captable.ledger_entries,
+                                    old_ledger_entries));
+            console.log(new_entries);
+            //captable.ledger_entries.push.apply(captable., new_entries);
+            //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
+        }).except(logError);
+    }
+    this.saveTransaction = saveTransaction;
     function rowFromName(name) {
         var row = newRow();
         row.name = name.name;

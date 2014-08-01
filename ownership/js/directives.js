@@ -69,9 +69,14 @@ own.directive('captableCell', [function() {
         restrict: 'E',
         scope: {data: '='},
         templateUrl: '/ownership/partials/captableCell.html',
-        controller: ["$scope", "$rootScope", "calculate",
-            function($scope, $rootScope, calculate) {
+        controller: ["$scope", "$rootScope", "captable",
+            function($scope, $rootScope, captable) {
                 $scope.settings = $rootScope.settings;
+                $scope.$watchCollection('data.ledger_entries',
+                    function(newEntries, oldEntries) {
+                        captable.setCellUnits($scope.data);
+                        captable.setCellAmount($scope.data);
+                    });
             }
         ],
     };
@@ -90,6 +95,22 @@ own.directive('editableCaptableCell', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
+                $scope.$watchCollection('data.ledger_entries',
+                    function(newEntries, oldEntries) {
+                        captable.setCellUnits($scope.data);
+                        captable.setCellAmount($scope.data);
+                    });
+                $scope.saveIt = function(value) {
+                    console.log(value);
+                };
+                /*
+                $scope.$watch('data.u', function(newUnits, oldUnits) {
+                    // TODO update a transaction
+                });
+                $scope.$watch('data.a', function(newUnits, oldUnits) {
+                    // TODO update a transaction
+                });
+                */
             }
         ],
     };
@@ -129,8 +150,8 @@ own.directive('cellDetails', [function() {
         scope: {cell: '=',
                 currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/cellDetails.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "calculate",
-            function($scope, $rootScope, displayCopy, calculate) {
+        controller: ["$scope", "$rootScope", "displayCopy", "captable",
+            function($scope, $rootScope, displayCopy, captable) {
                 $scope.settings = $rootScope.settings;
                 $scope.tips = displayCopy.captabletips;
                 $scope.switchCapTab = function(tab) {
@@ -228,8 +249,9 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
-                $scope.saveIt = function(key, value) {
-                    console.log(key, value);
+                $scope.saveIt = function(tran) {
+                    console.log(tran);
+                    captable.saveTransaction(tran);
                 };
             }
         ],
