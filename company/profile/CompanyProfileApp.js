@@ -550,17 +550,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.setGroups = function(){
-            console.log($scope.people);
             SWBrijj.tblm('account.my_user_role', ["email", "groups"]).then(function(data){
                 var groups = data;
                 angular.forEach($scope.people, function(person){
                     angular.forEach(groups, function(group){
                         if(group.email == person.email && group.groups !== null){
-                            console.log(group.groups);
                             person.groups = JSON.parse(group.groups).sort().join(", ");
                         };
-                      // console.log(ind.email);
-                      // console.log(group.groups);  
                     });
                     
                 });
