@@ -509,7 +509,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
                         });
                     });
-                    // SWBrijj.tblm()
                     SWBrijj.tblm('account.profile', ['email']).then(function(me) {
                         angular.forEach($scope.people, function(person) {
                             if (person.email == me[0].email)
@@ -519,17 +518,18 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
 
                         });
-                        $scope.setLastLogins();
+                        // $scope.setLastLogins();
                         $scope.setGroups();
-                        $scope.resetFilter();
+                        // $scope.resetFilter();
                     });
                     $scope.sort = 'name';
                 });
-                console.log($scope.people);
                 $scope.allPeople = $scope.people;
             });
         };
-        $scope.createPeople();
+        // $scope.createPeople();
+
+
 
         $scope.resetFilter = function(){
             $scope.filterParam.param = undefined;
@@ -603,6 +603,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
+        $scope.loadPage = function(){
+            $scope.createPeople();
+            $scope.setLastLogins();
+            $scope.resetFilter();
+            // $scope.setGroups();
+        }
+        $scope.loadPage();
+
         // Admin Modal Functions
 
         $scope.adminModalOpen = function() {
@@ -630,7 +638,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.addOrRemoveAdmin = function(people){
             $scope.sortRolesForAdd(people);
-            console.log($scope.oldRoles);
+            console.log($scope.groupPeople)
             if($scope.oldRoles.length === 1){
                 $scope.addOrRemove = $scope.oldRoles[0];
             }
@@ -658,7 +666,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 };
                 
             });
-            console.log($scope.selectedToRevokes);
             $scope.removeAdminModal = true;
         
         };
@@ -672,14 +679,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.addAdminModalOpen = function(person) {
+            console.log($scope.groupPeople);
             $scope.selectedToAdds = [];
             angular.forEach(person, function(ind){
                 if(ind.email !== $scope.navState.userid){
                     $scope.selectedToAdds.push(ind.email);
                 };
             });
+            console.log($scope.selectedToAdds);
             $scope.addAdminModal = true;
         };
+
 
         $scope.addAdminModalClose = function() {
             $scope.addAdminModal = false;
@@ -687,6 +697,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.clearArray($scope.oldRoles);
 
         };
+
+        $scope.addAdminModalCancel = function(){
+            console.log("cancel me")
+            $scope.addAdminModal = false;
+            console.log($scope.oldRoles);
+            console.log($scope.groupPeople);
+           
+        }
         
         //want the email directive to bind to this property in the controller
         $scope.personIs = function(person){
