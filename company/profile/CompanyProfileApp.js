@@ -638,7 +638,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.addOrRemoveAdmin = function(people){
             $scope.sortRolesForAdd(people);
-            console.log($scope.oldRoles);
+            console.log($scope.groupPeople)
             if($scope.oldRoles.length === 1){
                 $scope.addOrRemove = $scope.oldRoles[0];
             }
@@ -666,7 +666,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 };
                 
             });
-            console.log($scope.selectedToRevokes);
             $scope.removeAdminModal = true;
         
         };
@@ -680,6 +679,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.addAdminModalOpen = function(person) {
+            console.log($scope.groupPeople);
             $scope.selectedToAdds = [];
             angular.forEach(person, function(ind){
                 if(ind.email !== $scope.navState.userid){
@@ -697,6 +697,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.clearArray($scope.oldRoles);
 
         };
+
+        $scope.addAdminModalCancel = function(){
+            console.log("cancel me")
+            $scope.addAdminModal = false;
+            console.log($scope.oldRoles);
+            console.log($scope.groupPeople);
+           
+        }
         
         //want the email directive to bind to this property in the controller
         $scope.personIs = function(person){
