@@ -308,8 +308,12 @@ m.directive('peopleFilter', function(){
 
             // add a watch later to update the user roles as well
 
-            $scope.$watch('people', function(){
-                $scope.getFilterCount();
+            $scope.$watch('people', function(newVal, oldVal){
+                if(newVal){
+                    $scope.getFilterCount();
+                    $scope.getUserRoles();
+                }
+                
                 // $scope.getUserRoles();
             }, true);
 
