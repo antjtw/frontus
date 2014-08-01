@@ -297,27 +297,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function initUI() {
         $rootScope.$broadcast('captable:initui');
     }
-    /*
-    function updateCell(tran, row) {
-        var cell;
-        if (tran.issue in row.cells) {
-            cell = row.cells[tran.issue];
-        } else {
-            cell = row.cells[tran.issue] = {};
-            cell.state = false;
-        }
-        cell.ukey = cell.u = calculate.sum(cell.u, tran.units);
-        cell.akey = cell.a = calculate.sum(cell.a, tran.amount);
-        if (calculate.isNumber(tran.forfeited)) {
-            cell.ukey = cell.u =
-                calculate.sum(cell.u, (-tran.forfeited));
-        }
-        if (calculate.isNumber(tran.exercised)) {
-            cell.exercised =
-                calculate.sum(cell.exercised, tran.exercised);
-        }
-    }
-    */
     function attachEvidence(data) {
         angular.forEach(captable.transactions, function(tran) {
             tran.evidence_data = data.filter(function(el) {
@@ -325,12 +304,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
         });
     }
-    /*
-    function setIssueKey(iss) {
-        iss.key = iss.issue;
-        captable.security_names.push(iss.key);
-    }
-    */
     function reformatDate(obj) {
         obj.date = calculate.timezoneOffset(obj.date);
     }
@@ -347,93 +320,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         reformatDate(iss);
         setVestingDates(iss);
     }
-    // Uses the grants to update the transactions with forfeited values
-    // Eliminates the need for further reference to forfeit grants
-    /*
-    function incorporateGrantsIntoTransactions(grants, transactions) {
-        angular.forEach(grants, function(grant) {
-            angular.forEach(transactions, function(tran) {
-                if (grant.tran_id == tran.tran_id) {
-                    grant.investor = tran.investor;
-                    if (grant.action == "forfeited") {
-                        if (tran.forfeited) {
-                            tran.forfeited = tran.forfeited + grant.unit;
-                        } else { tran.forfeited = grant.unit; }
-                    }
-                    if (grant.action == "exercised") {
-                        if (tran.exercised) {
-                            tran.exercised = tran.exercised + grant.unit;
-                        } else { tran.exercised = grant.unit; }
-                    }
-                }
-            });
-        });
-    }
-    */
-    /*
-    function initRowsFromNames(names) {
-        angular.forEach(names, function(name) {
-            var row = addRow();
-            row.namekey = row.name = name.name;
-            row.editable = "yes";
-        });
-    }
-    
-    function setTransactionKeys(tran) {
-        tran.key = tran.issue;
-        tran.unitskey = tran.units;
-        tran.paidkey = tran.amount;
-        tran.datekey = tran.date.toUTCString();
-        tran.investorkey = tran.investor;
-    }
-    function inheritDataFromIssue(obj) {
-        angular.forEach(captable.securities, function(iss) {
-            if (obj.issue == iss.issue) {
-                obj.totalauth = iss.totalauth;
-                obj.premoney = iss.premoney;
-                obj.postmoney = iss.postmoney;
-            }
-        });
-    }
-    function inheritAllDataFromIssue(tran, issue) {
-        if (!issue) {throw "Cannot inherit from null issue.";}
-        tran.company = issue.company;
-        tran.issue = issue.issue;
-        tran.type = issue.type;
-        tran.totalauth = issue.totalauth;
-        tran.premoney = issue.premoney;
-        tran.postmoney = issue.postmoney;
-        tran.ppshare = issue.ppshare;
-        tran.totalauth = issue.totalauth;
-        tran.liquidpref = issue.liquidpref;
-        tran.partpref = issue.partpref;
-        tran.optundersec = issue.optundersec;
-        tran.price = issue.price;
-        tran.terms = issue.terms;
-        tran.vestingbeginsdisplay = issue.vestingbeginsdisplay;
-        tran.vestcliff = issue.vestcliff;
-        tran.vestfreq = issue.vestfreq;
-        tran.debtundersec = issue.debtundersec;
-        tran.interestrate = issue.interestrate;
-        tran.interestratefreq = issue.interestratefreq;
-        tran.valcap = issue.valcap;
-        tran.discount = issue.discount;
-        tran.term = issue.term;
-        tran.dragalong = issue.dragalong;
-        tran.tagalong = issue.tagalong;
-    }
-    function addTranToRows(tran) {
-        if (captable.uniqueinvestors.indexOf(tran.investor) == -1) {
-            captable.uniqueinvestors.push(tran.investor);
-            angular.forEach(captable.investors, function(row) {
-                if (row.namekey == tran.investor) {
-                    row.email = tran.email;
-                    row.emailkey = tran.email;
-                }
-            });
-        }
-    }
-    */
     function logError(err) { console.log(err); }
     function logErrorPromise(err) {
         console.log(err);
@@ -537,29 +423,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
         return num_granted;
     }
-    /*
-    function tranIsInvalid(tran) {
-        if (tran === undefined || tran.issue === undefined ||
-                (isNaN(parseFloat(tran.units)) &&
-                 isNaN(parseFloat(tran.amount)))) {
-            return true;
-        } else if (tran.type == "Option" &&
-                   tran.units < 0) {
-            tran.units = tran.unitskey;
-            $rootScope.$emit("notification:fail",
-                    "Cannot have a negative number of shares");
-            return true;
-        } else if (tran.amount < 0) {
-            tran.amount = tran.paidkey;
-            $rootScope.$emit("notification:fail",
-                    "Cannot have a negative amount for options");
-            return true;
-        } else {
-            return false;
-        }
-    }
-    this.tranIsInvalid = tranIsInvalid;
-    */
     function massageTransactionValues(tran) {
         tran.units = calculate.cleannumber(tran.units);
         tran.amount = calculate.cleannumber(tran.amount);
@@ -571,28 +434,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (tran.tran_id === undefined) { tran.tran_id = ''; }
     }
     this.massageTransactionValues = massageTransactionValues;
-    /*
-    function addTranToCell(tran) {
-        angular.forEach(captable.investors, function (row) {
-            if (row.name == tran.investor) {
-                updateCell(tran, row);
-            } else if (!(tran.issue in row.cells)) {
-                // TODO can both just call updateCell?
-                row.cells[tran.issue] = nullCell();
-            }
-        });
-    }
-    */
-    /*
-    function processTransaction(tran) {
-        reformatDate(tran);
-        setTransactionKeys(tran);
-        setVestingDates(tran);
-        inheritDataFromIssue(tran);
-        addTranToRows(tran); // incorporate transaction's investor
-        addTranToCell(tran);
-    }
-    */
     function attachPariPassu(securities, links) {
         angular.forEach(securities, function(iss) {
             iss.paripassu = [];
@@ -608,48 +449,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             }
         });
     }
-    /*
-    function incorporateConversionsTransfers(tran) {
-        tran.convert = [];
-        angular.forEach(captable.conversions, function(con) {
-            if (con.tranto == tran.tran_id) {
-                con.date = calculate.timezoneOffset(con.date);
-                if (con.method == "Split") {
-                    con.split = new Fraction(con.split);
-                }
-                tran.convert.push(con);
-            }
-        });
-        angular.forEach(captable.transfers, function(transf) {
-            transf.date = calculate.timezoneOffset(transf.date);
-            var final = angular.copy(transf);
-            if (transf.tranto == tran.tran_id) {
-                final.direction = "To";
-            } else if (transf.tranfrom == tran.tran_id) {
-                final.direction = "From";
-            }
-            tran.convert.push(final);
-        });
-    }
-    function calculateDebtCells() {
-        // FIXME why does calculate.debt return null?!?
-        // return immediately.
-        angular.forEach(captable.investors, function (row) {
-            angular.forEach(captable.securities, function (issue) {
-                var cell = row.cells[issue.issue];
-                if (cell !== undefined &&
-                    issue.type == "Debt" &&
-                    (!calculate.isNumber(cell.u) || cell.u === 0) &&
-                    calculate.isNumber(cell.a))
-                {
-                    cell.x = calculate.debt(captable.investors,
-                                            issue, row);
-                }
-            });
-        });
-    }
-    this.calculateDebtCells = calculateDebtCells;
-    */
     function generateUnissuedRows() {
         angular.forEach(captable.securities, function(iss) {
             if (!calculate.isNumber(iss.totalauth)) return;
@@ -681,18 +480,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     this.generateUnissuedRows = generateUnissuedRows;
-    /*
-    function fillEmptyCells() {
-        angular.forEach(captable.investors, function (row) {
-            angular.forEach(captable.security_names, function (issuekey) {
-                if (!(issuekey in row.cells)) {
-                    row.cells[issuekey] = nullCell();
-                }
-            });
-        });
-    }
-    this.fillEmptyCells = fillEmptyCells;
-    */
     function totalOwnershipUnits() {
         return captable.cells.reduce(sumCellUnits, 0);
     }
@@ -724,37 +511,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return prev + (calculate.isNumber(cur.attrs.amount) ?
                           cur.attrs.amount : 0);
     }
-    /*
-    function prepareForDisplay() {
-        // Sort the columns before finally showing them
-        // Issues are sorted by date, investors by ownership within each issue
-        captable.securities.sort(sorting.issuedate);
-        captable.security_names = sorting.security_names(captable.security_names,
-                                               captable.securities);
-        captable.investors.sort(sorting.basicrow());
-        do {
-            addRow();
-        } while (captable.investors.length < 5);
-
-        //Calculate the total vested for each row
-        captable.investors = calculate.detailedvested(captable.investors, captable.trans);
-
-        // Add extra blank issue, which will create a new one when clicked.
-        addSecurity();
-        return true;
-    }
-    */
-    /*
-    function attachWatches() {
-        for (var i=0; i < captable.trans.length; i++) {
-            $rootScope.$watch('trans['+i+']', transaction_watch, true);
-        }
-        for (var j=0; j < captable.securities.length; j++) {
-            $rootScope.$watch('securities['+j+']', issue_watch, true);
-        }
-    }
-    this.attachWatches = attachWatches;
-    */
     function pingIntercomIfCaptableStarted() {
         var earliestedit = new Date.today().addDays(1);
         var duplicate = earliestedit;
@@ -790,66 +546,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
         });
     }
-    /*
-    function generic_watch(newval, oldval, obj) {
-        if (!newval || !oldval) {return;}
-        if (parseFloat(newval.interestrate) > 100 ||
-            parseFloat(newval.interestrate) < 0)
-        {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].interestrate = oldval.interestrate;
-                }
-            }
-        }
-        if (parseFloat(newval.discount) > 100 ||
-            parseFloat(newval.discount) < 0)
-        {
-            for (var y=0; y < obj.length; y++) {
-                if (obj[y] && obj[y].tran_id == newval.tran_id) {
-                    obj[y].discount = oldval.discount;
-                }
-            }
-        }
-        if (parseFloat(newval.vestcliff) > 100 ||
-            parseFloat(newval.vestcliff) < 0)
-        {
-            for (var z=0; z < obj.length; z++) {
-                if (obj[z] && obj[z].tran_id == newval.tran_id) {
-                    obj[z].vestcliff = oldval.vestcliff;
-                }
-            }
-        }
-    }
-
-    function transaction_watch(newval, oldval) {
-        generic_watch(newval, oldval, captable.trans);
-    }
-
-    function issue_watch(newval, oldval) {
-        generic_watch(newval, oldval, captable.securities);
-    }
-    */
-    /*
-    function generateCaptable(names) {
-        angular.forEach(captable.securities, processIssue);
-        incorporateGrantsIntoTransactions(captable.grants, captable.trans);
-        initRowsFromNames(names);
-        angular.forEach(captable.trans, processTransaction);
-        attachPariPassu(captable.securities, captable.paripassu);
-        angular.forEach(captable.trans, incorporateConversionsTransfers);
-        calculateDebtCells();
-        generateUnissuedRows();
-        fillEmptyCells();
-        calculateInvestorPercentages();
-        captable.finishedsorting = prepareForDisplay();
-        attachWatches();
-        pingIntercomIfCaptableStarted();
-        populateListOfInvestorsWithoutAccessToTheCaptable();
-
-        console.log(captable);
-    }
-    */
     /*
     var issuetypes = [];
     this.getIssueTypes = function() {return issuetypes;};
