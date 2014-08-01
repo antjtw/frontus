@@ -638,13 +638,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.addOrRemoveAdmin = function(people){
             $scope.sortRolesForAdd(people);
-            console.log($scope.groupPeople)
             if($scope.oldRoles.length === 1){
                 $scope.addOrRemove = $scope.oldRoles[0];
             }
             else{
                 $scope.addOrRemove = ""
             }
+            $scope.oldRoles = [];
         };
 
        
