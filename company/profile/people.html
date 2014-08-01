@@ -154,7 +154,7 @@
     </div>
     <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
         Are you sure you want to remove 
-                <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$last ? '' : ','}}
+                <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$index > selectedToRevokes.length -3 ? '' : ','}}
                 <span ng-show="$index == selectedToRevokes.length -2">and</span>
                 </span>
                 <span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
@@ -187,10 +187,10 @@
 
             <div class="spacer20"></div>
             <div ng-if="triggerUpgradeAdmins(selectedToAdds.length)" class="upgradeWarning">
-                <span ng-if="selectedToAdd.length == 1">
+                <span ng-if="selectedToAdds.length == 1">
                     Warning: Making this user an admin will automatically upgrade your payment plan.
                 </span>
-                <span ng-if="selectedToAdd.length > 1">
+                <span ng-if="selectedToAdds.length > 1">
                     Warning: Making these users admins will automatically upgrade your payment plan.</span>
             </div>
         </div>
