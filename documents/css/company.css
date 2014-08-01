@@ -125,6 +125,10 @@
 	float: left;
 	margin: 50px;
 }
+.span7 svg{
+	left: calc(100% - 150px);
+	position: absolute;
+}
 
 .body-box > div:first-child > div > div {
 	top: 30px;
