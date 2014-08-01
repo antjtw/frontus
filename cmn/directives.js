@@ -569,7 +569,7 @@ m.directive('addPerson', function(){
                 } else {
                     SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
                         void(x);        
-                        $rootScope.$emit("notification:success", "Investor Added");        
+                        $rootScope.$emit("notification:success", "Person Added");
                         $route.reload();
                     }).except(function(x) {
                         void(x);
