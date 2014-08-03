@@ -11,8 +11,8 @@
       tabTooltip:  "Help",
       tabImageURL: "/img/feedback.png",
       tabColor:    "",
-      tabPosition: "Right",
       requester_email: document.sessionState.userid,
+      hide_tab:    true,
     });
   }
 </script>

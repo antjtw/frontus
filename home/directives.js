@@ -6,7 +6,8 @@ app.directive('d3expdonut', ['d3', function(d3) {
         scope: {
             data: "=",
             label: "@",
-            onClick: "&"
+            onClick: "&",
+            nosort: "@"
         },
         link: function(scope, iElement, iAttrs) {
 
@@ -14,15 +15,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 height = 180,
                 radius = Math.min(width, height) / 2;
 
-            var labelr = radius-25;
-
-            var color = d3.scale.ordinal()
-                .range(["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"]);
-
-            var colors = ["#1ABC96", "#F78D1E", "#3498DB", "#FFBB00"];
+            var colors = ["#1ABC96", "#3498DB", "F78D1E", "#34495E", "#FFBB00", "#2676AB"];
             var corecolor = function(i) {
-                if (i > 3) {
-                   return i % 3 == 0 ? colors[3] : colors[i % 3]
+                if (i > 5) {
+                   return i % 5 == 0 ? colors[5] : colors[i % 5]
                 }
                 else {
                     return colors[i]
@@ -56,7 +52,13 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
             scope.render = function(data){
 
-                if (data && !isNaN(data[0].percent)) {
+                svg.selectAll('path').remove();
+                svg.selectAll('g').remove();
+                svg.selectAll('circle').remove();
+                svg.selectAll('text').remove();
+                svg.selectAll('rect').remove();
+
+                if (data && data[0] && !isNaN(data[0].percent)) {
 
                     data.sort(function(a, b) { return b.percent - a.percent; });
 
@@ -66,7 +68,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("class", "arc");
 
                     g.append("text")
-                        .attr("transform", function(d) {
+                        .attr("transform", function() {
                             return "translate(0,10)";
                         })
                         .attr("dy", ".5em")
@@ -74,28 +76,28 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .attr("class", "mainlabel");
 
                     g.append("text")
-                        .attr("transform", function(d) {
+                        .attr("transform", function() {
                             return "translate(0,-15)";
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
                         .attr("class", "percentlabel");
 
-                    d3.select(".mainlabel")
+                    svg.select(".mainlabel")
                         .text('Ownership');
-                    d3.select(".percentlabel")
+                    svg.select(".percentlabel")
                         .text('100%');
 
                     g.append("path")
                         .attr("d", arc)
-                        .attr("transform", function(d) { return "translate(0,0)"; })
+                        .attr("transform", function() { return "translate(0,0)"; })
                         .style("fill", function(d , i) {
                             return corecolor(i); })
                         .attr("class", "pie-slices")
                         .on("mouseover", function(d, i) {
                             var colour = corecolor(i);
                             var current = this;
-                            d3.selectAll(".pie-slices").transition()
+                            svg.selectAll(".pie-slices").transition()
                                 .duration(250)
                                 .style("fill", function() {
                                     return (this === current) ? colour : "gray";
@@ -104,15 +106,15 @@ app.directive('d3expdonut', ['d3', function(d3) {
                                 return (this === current) ? 1 : 0.5;
                                 });
 
-                            d3.select(".mainlabel")
+                            svg.select(".mainlabel")
                                 .text(d.data.name);
 
-                            d3.select('.percentlabel')
+                            svg.select('.percentlabel')
                                 .text(d.data.percent.toFixed(2) + "%");
                         })
 
                         .on("mouseout", function(d) {
-                            d3.selectAll(".pie-slices").transition()
+                            svg.selectAll(".pie-slices").transition()
                                 .duration(250)
                                 .style("fill", function(d , i) {
                                     return corecolor(i); })
@@ -120,10 +122,10 @@ app.directive('d3expdonut', ['d3', function(d3) {
                                     return 1;
                                 });
 
-                            d3.select(".mainlabel")
+                            svg.select(".mainlabel")
                                 .text('Ownership');
 
-                            d3.select(".percentlabel")
+                            svg.select(".percentlabel")
                                 .text('100%');
                         });
                 }

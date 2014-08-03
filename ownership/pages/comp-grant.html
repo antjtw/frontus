@@ -622,32 +622,32 @@
                           ng-bind="formatAmount(activeTran.units)"></span><span>Shares</span></p>
 
                   <p ng-show="activeTran.optundersec" class="belowTitle"><span
-                          ng-bind="activeTran.optundersec"></span><span tooltip-placement="top"
-                                                                        tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
+                          ng-bind="activeTran.optundersec"></span>
+                          <span tooltip="The security each granted share will convert to upon exercise" tooltip-placement="right" class="forTooltip">Underlying Security</span>
                   </p>
 
                   <p ng-show="activeTran.price" class="belowTitle"><span
-                          ng-bind="formatDollarAmount(activeTran.price)"></span><span tooltip-placement="top"
-                                                                                      tooltip="The price each granted share can be purchased at when vested">Strike Price</span>
+                          ng-bind="formatDollarAmount(activeTran.price)"></span><span tooltip-placement="right"
+                                                                                      tooltip="The price each granted share can be purchased at when vested" class="forTooltip">Strike Price</span>
                   </p>
 
                   <p ng-show="activeTran.terms" class="belowTitle"><span ng-bind="activeTran.terms"></span><span
-                          tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
+                          tooltip-placement="right" class="forTooltip" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
                   </p>
 
                   <p ng-show="activeTran.vestingbegins" class="belowTitle"><span
                           ng-bind="activeTran.vestingbeginsdisplay"></span><span
-                          tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
+                          tooltip-placement="right" class="forTooltip" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
                   </p>
 
                   <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span
-                          tooltip-placement="top"
-                          tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
+                          tooltip-placement="right"
+                          tooltip="The percentage of granted shares that are considered vested on the cliff date" class="forTooltip">Vesting Cliff %</span>
                   </p>
 
                   <p ng-show="activeTran.vestfreq" class="belowTitle"><span ng-bind="activeTran.vestfreq"></span><span
-                          tooltip-placement="top"
-                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
+                          tooltip-placement="right"
+                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends" class="forTooltip">Post Cliff Frequency</span>
                   </p>
               </div>
 

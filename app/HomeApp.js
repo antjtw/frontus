@@ -5,7 +5,7 @@ var app = angular.module('HomeApp',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
         'homeDirectives', 'activityDirective', 'commonDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
-        'bootstrap-tagsinput', 'infinite-scroll']);
+        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -55,10 +55,6 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'grantController',
             templateUrl: '/ownership/pages/comp-grant.html'
         }).
-        when('/app/ownership/company-status', {
-            controller: 'statusController',
-            templateUrl: '/ownership/pages/comp-status.html'
-        }).
         when('/app/ownership/investor-captable', {
             controller: 'invCaptableController',
             templateUrl: '/ownership/pages/inv-captable.html'
@@ -73,8 +69,8 @@ app.config(function($routeProvider, $locationProvider){
             reloadOnSearch: false
         }).
         when('/app/documents/company-view', {
-            templateUrl: '/documents/partials/companyViewer.html',
-            controller: 'CompanyDocumentViewController',
+            templateUrl: '/documents/partials/docViewerWrapper.html',
+            controller: 'DocumentViewWrapperController',
             reloadOnSearch: false
         }).
         when('/app/documents/company-status', {
@@ -86,9 +82,17 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'InvestorDocumentListController'
         }).
         when('/app/documents/investor-view', {
-            templateUrl: '/documents/partials/investorViewer.html',
-            controller: 'InvestorDocumentViewController',
+            templateUrl: '/documents/partials/docViewerWrapper.html',
+            controller: 'DocumentViewWrapperController',
             reloadOnSearch: false
+        }).
+        when('/app/modeling/round', {
+            templateUrl: '/modeling/pages/round.html',
+            controller: 'roundController'
+        }).
+        when('/app/modeling/convertible-notes', {
+            templateUrl: '/modeling/pages/note.html',
+            controller: 'noteController'
         }).
 
         otherwise({redirectTo:'/app/home/investor'});
@@ -101,7 +105,6 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
             $scope.inbox = messages.inbox;
         });
         $rootScope.$on('outboxRefresh', function() {
-            console.log('here');
             $scope.outbox = messages.outbox;
         });
         $scope.mailbox = 'inbox';
@@ -119,7 +122,6 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
 
 
         SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
-            console.log(x);
             $scope.people = x;
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                 angular.forEach(admins, function(admin) {
@@ -240,11 +242,11 @@ app.controller('CompanyCtrl',
                         $scope.docsummary.sig = 0;
                         $scope.docsummary.counter = 0;
                         angular.forEach(sharedocs, function(doc) {
-                            if (doc.signature_status == "countersigned by issuer (awaiting investor confirmation)" ||
-                                doc.signature_status == "signature requested (awaiting investor)") {
+                            if ((doc.signature_status == "countersigned by issuer (awaiting investor confirmation)" ||
+                                doc.signature_status == "signature requested (awaiting investor)") && (doc.when_retracted == null)) {
                                 $scope.docsummary.sig += 1;
                             }
-                            else if (doc.signature_status == "signed by investor (awaiting countersignature)") {
+                            else if ((doc.signature_status == "signed by investor (awaiting countersignature)") && (doc.when_retracted == null)) {
                                 $scope.docsummary.counter += 1;
                             }
                         });
@@ -1014,6 +1016,8 @@ app.filter('fromNowSort', function () {
         return events;
     };
 });
+
+
 
 
 

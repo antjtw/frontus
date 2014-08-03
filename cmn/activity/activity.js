@@ -32,6 +32,7 @@ active.directive('activityFeed', function() {
             $scope.activity = [];
             var quantity = 10; // number of items to load
             function processFeed(feed) {
+                $scope.activitystarted = true;
                 //Generate the groups for the activity feed
                 angular.forEach(feed, function(event) {
                     event.when = moment(event.time).from(event.timenow);

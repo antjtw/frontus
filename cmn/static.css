@@ -272,7 +272,7 @@ address {
     font-family: 'FS Elliot Web Thin', sans-serif !important;
 }
 
-.static .feature-block.dark-feature h2 > a {
+.static .feature-block.feature-permission h3 > a {
     font-family: 'FS Elliot Web Thin', sans-serif !important;
     font-size: 20px;
     line-height: 28px;
@@ -283,6 +283,10 @@ address {
     background-color: #E3E3E3;
     margin-left: 0;
     overflow: auto;
+}
+
+.feature-block.feature-permission.complex-math {
+    padding-bottom: 60px;
 }
 
 .feature-block.feature-permission .screen:nth-child(odd) {
@@ -299,6 +303,10 @@ address {
 .feature-block.feature-permission .screen {
     max-width: 400px;
     text-align: right;
+}
+
+.feature-block.feature-permission.complex-math .screen {
+    margin-top: 100px;
 }
 
 .static .feature-block.feature-permission + .icon-set {
@@ -321,19 +329,6 @@ address {
 .features .header-section ul > li > span {
     margin-top: 5px;
     display: block;
-}
-
-.features h1 {
-    font-size: 42px;
-    line-height: 42px;
-}
-
-
-.features h2 {
-    font-family: 'FS Elliot Web Light', sans-serif !important;
-    font-size: 20px; 
-    line-height: 28px;
-    color: #666666;
 }
 
 .features .grey-stripe {
@@ -581,7 +576,7 @@ address {
 
 .features .debt-calculator {
     max-width: 1024px;
-    margin: 40px auto 0 auto;
+    margin: 60px auto 0 auto;
     position: relative;
 }
 
@@ -877,7 +872,7 @@ address {
 .pricing.static {
     text-align: center;
     background-color: #FFFFFF;
-    padding-top: 100px;
+    padding-top: 0;
 }
 
 .pricing.static h1, .pricing.static p {

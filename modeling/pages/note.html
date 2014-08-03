@@ -1,0 +1,97 @@
+<link type="text/css" rel="stylesheet" href="/modeling/css/visualize.css">
+<div class="company-list maincontent">
+    <div class="grey-background container dynamic-page">
+        <div class="modeling-block">
+            <div class="modeling-inputs">
+                <div class="modeling-header">
+                    <span>Calculate</span>
+                    <ul class="dropdown-list drop-selector dark-drop">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{graphtype}}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="pickGraph('Effective Discount')">Effective Discount</a>
+                                </li>
+                                <li>
+                                    <a ng-click="pickGraph('Resulting Equity')">Resulting Equity</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <span style="margin-left:10px">on</span>
+                    <ul class="dropdown-list drop-selector dark-drop">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{selectedNote | caplength:35}}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="selectNote('Custom Note')">Custom Note</a>
+                                </li>
+                                <li ng-repeat="tran in debttrans">
+                                    <a ng-click="selectNote(tran)">{{tran.investor}}'s {{tran.issue}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modeling-input-row">
+                    <div>
+                        <span>Note Amount</span>
+                        <input type="text" class="money" ng-disabled="fixinputs" ng-model="fields.fromtranamount" ng-change="conversion('fromtranamount')" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="fixinputs" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+                    <div>
+                        <span>Valuation Cap</span>
+                        <input type="text" class="money" ng-disabled="fixinputs" ng-change="conversion('fromtranvalcap')" ng-model="fields.fromtranvalcap" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="fixinputs" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+                    <div>
+                        <span>Discount (%)</span>
+                        <input type="text" ng-disabled="fixinputs" ng-change="conversion('fromtrandiscount')" ng-model="fields.fromtrandiscount" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
+                        <span class="lockedinput" ng-show="fixinputs" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+
+                </div>
+
+                <div class="modeling-input-row">
+                    <div>
+                        <span>New Investment Amount</span>
+                        <input class="money" ng-change="conversion('convertTranamountsold')" ng-model="fields.convertTranamountsold" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                    </div>
+                    <div ng-show="debttab == 'one'">
+                        <span>Percentage of Company Sold</span>
+                        <input class="money" ng-change="conversion('percentsold')" ng-model="fields.convertTranpercentsold" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100, mDec: 2}">
+                    </div>
+                    <div ng-show="debttab == 'two'">
+                        <span>Pre-money Valuation</span>
+                        <input class="money" ng-change="conversion('premoney')" ng-model="fields.premoney" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 0, vMax: 9999999999}">
+                    </div>
+                    <div ng-show="fromtran.interestrate">
+                        <span>Date of Conversion</span>
+                        <input id="convertdate" ng-change="dateconversion(fields)" ui-event="{keydown:'dateconversion(fields, $event)', blur:'dateconversion(fields, \'blur\')'}" type="text"
+                               ng-model="fields.convertdate" data-date-format={{settings.lowercasedate}} bs-datepicker onkeydown="testForEnter();">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modeling-round">
+                <div ng-if="variablewidth && debttab == 'one'" class="calc-outputs">
+                    <d3-discount class="discount-chart" type="discount" width="variablewidth" data="graphdatadiscount"></d3-discount>
+                </div>
+
+                <div ng-if="variablewidth && debttab == 'two'" class="calc-outputs">
+                    <d3-discount class="discount-chart" type="equity" width="variablewidth" data="graphdataequity"></d3-discount>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="disclaimer">
+            <div>Disclaimer:</div>
+            <p>This model is not intended to provide legal or finanical advice, it is only intended to assist in reviewing the underlying data. The accuracy relies on the data that's been entered, and not every deal's terms are captured on this platform. Please consult your legal counsel or accountant before making official decisions.</p>
+        </div>
+    </div>
+</div>

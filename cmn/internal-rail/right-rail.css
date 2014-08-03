@@ -47,6 +47,10 @@ button.right-rail-button.showRightTab {
     background-color: #F1F1F1;
 }
 
+.span4.capright.side-content {
+    background-color: #FFFFFF;
+}
+
 .slidingcss25 {
     transition: all 0.25s;
     -moz-transition:all 0.25s; /* Firefox 4 */;
@@ -265,6 +269,7 @@ button.right-rail-button.showRightTab {
 
 .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
     border-color: #C6C6C6;
+    color: #666666;
 }
 
 .nav-tabs > li:last-child > a, .nav-tabs > li:last-child > a:hover, .nav-tabs > li:last-child > a:focus {
@@ -295,4 +300,32 @@ button.right-rail-button.showRightTab {
 
 .span4.capright, .span4.capright span, .span4.capright input {
     -webkit-transform: translateZ(0);
+}
+
+internal-right-rail tabset {
+    display: block;
+}
+
+internal-right-rail .tab-content {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    width: 100%;
+}
+
+internal-right-rail #bottom-part {
+    border-top: 1px solid #C6C6C6;
+    background-color: #E3E3E3;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+internal-right-rail .bottom-padded {
+    padding: 20px;
+}
+
+internal-right-rail .sides-padded {
+    padding: 0 20px 20px 20px;
+    overflow: auto;
 }

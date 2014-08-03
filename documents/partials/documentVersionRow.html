@@ -1,11 +1,13 @@
 <td class="status-toggle"></td>
-<td class="shareholder-column docname-column" ng-click="viewInvestorCopy(version)">
+<td class="shareholder-column docname-column pointer" ng-click="viewInvestorCopy(version)">
     <ul>
         <li ng-show="type == 'doc'">{{version.name || version.investor}}</li>
+<!--         sets when the doc was last updated -->
         <li ng-show="type == 'investor'">{{version.docname}}</li>
         <li>{{versionStatus(version)}}</li>
     </ul>
 </td>
+<!-- These are the different circles -->
 <td class="status-toggle status-icon">
     <div ng-show="versionIsComplete(version) && !version.when_retracted && !version.when_void_accepted && !isPendingVoid(version)" data-icon="&#xe023;"
          class="circle green" aria-hidden="true"></div>
@@ -15,21 +17,33 @@
     <div ng-show="versionIsComplete(version) && !version.when_retracted  && version.when_void_accepted && !isPendingVoid(version)" class="circle green"
          aria-hidden="true"><span>x</span>
     </div>
-    <div ng-show="isPendingVoid(version) || !versionIsComplete(version)" class="circle yellow" aria-hidden="true"></div>
+    <div ng-show="isPendingVoid(version) || !versionIsComplete(version) && version.sendgrid_event !='dropped' && version.sendgrid_event!='bounce' && version.sendgrid_event !='deferred'" class="circle yellow" aria-hidden="true"></div>
+
+    <div ng-show="version.sendgrid_event=='bounce' && !version.when_retracted" class="circle red" aria-hidden="true"></div>
+
 </td>
-<td class="shareholder-column status-column pointer" ng-click="viewStatus(version)">
+<td class="shareholder-column status-column pointer" ng-click="viewInvestorCopy(version)">
     <ul>
-        <li>{{shortVersionStatus(version)}} <span ng-show="viewState.show_archived && version.archived"> & archived</span></li>
-    </ul>
-</td>
+        <li ng-class="{'red':version.sendgrid_event=='bounce' && !version.when_retracted}">{{shortVersionStatus(version)}} 
+        <span ng-show="viewState.show_archived && version.archived"> & archived</span>
+        </li>
 <td colspan="2">
-    <div class="standard-button small-standard-button doc-share-button">
-        <!--<button ng-show="isPendingSignature(version) || isPendingView(version)" class="btn" ng-click="remind(version.doc_id,version.investor); console.log(doc);">Remind</button>-->
+
+    <div class="standard-button small-standard-button doc-share-button bounced">
         <button ng-show="isPendingCountersignature(version)" class="btn" ng-click="viewInvestorCopy(version)">Sign</button>
         <button ng-show="isPendingIssuerFinalization(version)" class="btn"
                 ng-click="viewInvestorCopy(version)">Approve</button>
+
     </div>
-    <ul class="dropdown-list">
+    <div ng-if="version.sendgrid_event=='bounce' && !version.when_retracted" class="standard-button small-standard-button doc-share-button" style="margin-right: -1px">
+        
+          <input ui-select2="select2Options" ng-model="emailList.email" style="min-width:230px; max-width: 500px; overflow-x:auto; overflow-y:hidden; max-height: 40px"></input>
+
+          <button ng-click="docRecipients(version, emailList.email)" ng-disabled="buttondisabled" class="btn reshare"> Reshare</button>
+   </div>
+
+    </ul>
+    <ul class="dropdown-list" ng-hide="version.sendgrid_event =='dropped' || version.sendgrid_event == 'bounce' || version.sendgrid_event =='deferred' ">
         <li class="dropdown standard menu-drop">
             <a class="dropdown-toggle dark"> <span data-icon="&#xe011;" aria-hidden="true"></span>
 
@@ -41,14 +55,12 @@
                     Switch to View Only
                 </li>
                 <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="modals.remindDocOpen(version)">Send Reminder</li>
-                <li ng-click="viewStatus(version)">View Status</li>
-                <li ng-click="viewInvestorCopy(version)">View Document</li>
                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
+                <li ng-show="version.signature_flow>0"
+                    ng-click="exportVersionToPdf(version, 'investor')">Export to PDF</li>
                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
-                    ng-click="exportVersionToPdf(version, 'investor')">Export Final to PDF</li>
-                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
-                    ng-click="modals.exportToDropbox(version, 'investor');">Export Final to Dropbox</li>
+                    ng-click="modals.exportToDropbox(version, 'investor');">Export to Dropbox</li>
                 <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="modals.voidDocOpen(version)">Void Document</li>
                 <li ng-show="version.investor == elizamail" ng-click="deleteElizaVers(version)">Delete Version</li>
             </ul>

@@ -1,0 +1,210 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<script src="/cmn/spin.js"></script>
+<div class="container dynamic-page">
+    <subnav>
+        <div ng-if="(navState.role == 'issuer') && drawTime() && doc.issue">
+            <div class="toggle-button pull-left"
+                 ng-click="setNextAnnotationType('text');"
+                 data-placement="bottom"
+                 ng-class="{selected: nextAnnotationType == 'text'}">
+                <ul>
+                    <li>
+                        <span data-icon="&#xe60d;" aria-hidden="true"></span>
+                        <span>Marker</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="toggle-button pull-left"
+                 ng-click="setNextAnnotationType('highlight');"
+                 data-placement="bottom"
+                 ng-class="{selected:  nextAnnotationType == 'highlight'}">
+                <ul>
+                    <li>
+                        <span data-icon="&#xe60f;" aria-hidden="true"></span>
+                        <span>Highlight</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
+        <div class="box-button pull-right"
+             ng-click="leave();"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe602;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span><span ng-if="prepareable() || actionNeeded()">Save &amp; </span>Exit</span>
+                </li>
+            </ul>
+        </div>
+        <div ng-show="!prepareable()" class="box-button pull-right"
+             ng-click="downloadPDF();"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe007;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Download</span>
+                </li>
+            </ul>
+        </div>
+    </subnav>
+    <div modal="tourModal" close="tourclose();" options="touropts">
+        <div class="modal-title">
+            <p>
+                {{invq? "How to Sign Documents" : "How to Share Documents"}}
+            </p>
+        </div>
+        <div class="modalText">
+            <div class="row-fluid">
+                <div class="span6">
+                    <img src="{{invq? '/img/gif/investor-modal.gif' : '/img/gif/issuer-modal.gif'}}">
+                </div>
+                <div class="span5 gif-text">
+                    <p>
+                        <span class="subtitle">{{invq? "Markers show annotations" : "Prepare your document for sharing"}}</span>
+                        {{invq? "Fields in red are required by the sender. Fields in yellow are optional. Your signature is legally binding, and will be returned to the sender for their signature." : "Draw fields to mark where information can be entered. Fill out all your own fields prior to sending. The recipient will see everything but your signature, which is hidden until you approve their information."}}
+                    </p>
+                    <p class='blue-link'><span ng-click="tourclose(); invq? signinggot() : sharinggot();">Ok, I got it!</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="leftTabWindow" ng-style="viewportheight">
+            <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" page-query-string="pageQueryString()" doc-id="docId" investor_attributes="investor_attributes"></doc-viewer>
+            <internal-right-rail toggle-side="toggleSide">
+                <tabset>
+                    <tab active="annottab" heading="Annotations" ng-if="prepareable() || actionNeeded()">
+                        <annotation-list doc="doc" active="active"></annotation-list>
+                        <help-tab doc="doc"></help-tab>
+                    </tab>
+                    <tab active="infotab" heading="Information">
+                        <div class="docinfo">
+                            <div class="docname" ng-if="doc.docname">
+                                <span>{{doc.docname}}</span>
+                            </div>
+                            <div class="inforow" ng-if="doc.tags.length > 0">
+                                <span class="activity-icon tags-icon"></span>
+                                <span class="tags">
+                                    <span ng-repeat="t in doc.tags">{{t}}</span>
+                                </span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_shared">
+                                <span class="activity-icon doc-share-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Delivered to {{doc.name}}</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Received</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="doc.last_viewed && navState.role == 'issuer'">
+                                <span class="activity-icon doc-view-icon"></span>
+                                <span class="info"><span>Viewed by {{doc.name}}</span><span>{{doc.last_viewed  | date:settings.fulldate}}</span></span>
+
+                                <div class="investor-views" ng-if="doc.last_viewed && navState.role == 'issuer'">
+                                    <span class="toggle-icon" data-icon="&#xe034;"aria-hidden="true" ng-show="!showViews" ng-click = "showViews = !showViews"></span>
+                                    <span class="toggle-icon" data-icon="&#xe031;"aria-hidden="true" ng-show="showViews" ng-click = "showViews = !showViews"></span>
+                                    <span ng-click = "showViews = !showViews">Detailed Views</span>
+                                    <ul ng-show="showViews">
+                                        <li ng-repeat="view in docviews" ng-if="view.page > 0 && view.page <= doc.pages.length">
+                                            <span>Page {{view.page}}</span>
+                                            <span>{{view.max | date:settings.dateandtime}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_signed">
+                                <span class="activity-icon doc-sign-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Signed by {{doc.name}}</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Signed</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_countersigned">
+                                <span class="activity-icon doc-final-icon"></span>
+                                <span class="info"><span>Approved</span><span>{{doc.when_countersigned  | date:settings.fulldate}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_retracted">
+                                <span class="activity-icon doc-retract-icon"></span>
+                                <span class="info"><span>Retracted</span><span>{{doc.when_retracted  | date:settings.fulldate}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_void_requested">
+                                <span class="activity-icon doc-void-request-icon"></span>
+                                <span class="info"><span>Void requested</span><span>{{doc.when_void_requested  | date:settings.fulldate}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_void_accepted">
+                                <span class="activity-icon doc-void-accept-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Void accepted by {{doc.name}}</span><span>{{doc.when_void_requested  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab heading="Transactions" ng-if="doctrans.length > 0">
+                        <doc-transaction-list trans="doctrans"></doc-transaction-list>
+                    </tab>
+                </tabset>
+                <div id="bottom-part" class="confirmPanelContainer" ng-if="actionNeeded()">
+                    <div class="confirmPanel">
+                        <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()" disabled="unfilledAnnotation()">
+                            By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
+                        </doc-action>
+
+                        <doc-action upgrade-warning="true" approve-action="countersignDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.countersignable(navState.role)" disabled="unfilledAnnotation()">
+                            By clicking "Approve", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent.
+                        </doc-action>
+
+                        <doc-action upgrade-warning="true" approve-action="finalizeDocument()" approve-verb="Approve" rejectable="true" reject-action="rejectSignature(message)" ng-if="!invq && doc.finalizable()">
+                            Approve signature and finalize this document.
+                        </doc-action>
+
+                        <doc-action approve-action="confirmVoid()" approve-verb="Void" rejectable="true" reject-action="rejectVoid(message)" ng-if="invq && doc.voidable()">
+                            Accept the voiding of this document.
+                        </doc-action>
+
+                        <doc-action approve-action="signTemplate()" approve-verb="Sign" ng-if="invq && templateKey">
+                            By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
+                        </doc-action>
+                    </div>
+                    <div ng-if="invq && doc.signable()" class="fields-progress">
+                        <span ng-show="numAnnotationsComplete() != numAnnotations()">{{numAnnotationsComplete()}}/{{numAnnotations()}} Complete</span>
+                        <span ng-show="numAnnotationsComplete() == numAnnotations()">Document is ready to sign!</span>
+                        <meter cur="numAnnotationsComplete()" tot="numAnnotations()"></meter>
+                    </div>
+                </div>
+                <div id="bottom-part" ng-if="prepareable()">
+                    <doc-transaction-details doc="doc"></doc-transaction-details>
+                </div>
+            </internal-right-rail>
+        </div>
+    </div>
+</div>
+
+<div modal="imageProcessedModal" options="processedopts" data-keyboard="false" data-backdrop="static">
+    <div class="row-fluid">
+        <div class="span7">
+            <div class="row-fluid">
+                <div class="rect leftOffset" ng-class="adjustedColor" ng-click="selectProcessing('adjusted')">
+                    <img id="processedModalAdjustedImage">
+                    <div class="modalText centeredText" ng-class="adjustedText">
+                        <span>Enhanced</span>
+                    </div>
+                </div>
+                <div class="rect" ng-class="originalColor" ng-click="selectProcessing('original')">
+                    <img id="processedModalOriginalImage">
+                    <div class="modalText centeredText" ng-class="originalText">
+                        <span>Original</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="modalText">
+                <div class="textBlock">
+                    <span class="subtitle">We fixed it!</span>
+                    <span>We've straightened up your document to make it look better!</span>
+                </div>
+                <div class='blue-link' ng-if="adjustedSelected"><span ng-click="processedClose(false)">Continue with enhancements</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
+                <div class='blue-link' ng-if="!adjustedSelected"><span ng-click="processedClose(true)">Continue with original</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
+            </div>
+        </div>
+    </div>
+</div>

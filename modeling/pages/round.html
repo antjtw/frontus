@@ -1,0 +1,209 @@
+<link type="text/css" rel="stylesheet" href="/modeling/css/visualize.css">
+<div class="company-list maincontent">
+    <div class="grey-background container dynamic-page">
+        <div class="modeling-block">
+            <div class="modeling-inputs">
+                <div class="modeling-header"><span>Round Modeling</span></div>
+                <div class="modeling-input-row">
+                    <div>
+                        <span>Pre-money valuation</span>
+                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+                    <div>
+                        <span>Investment amount</span>
+                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+                    <div>
+                        <span>Post-Money Option Pool %</span>
+                        <input ng-change="calculate()" ng-model="fields.optionpool" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="%" data-p-sign="s" data-ui-options="{ vMin: 0, vMax: 100}">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+                    <div>
+                        <span>Date of Investment</span>
+                        <input ng-disabled="!roundable() || companyIsZombie()" id="convertdate" ng-change="dateconversion(fields)" ui-event="{keydown:'dateconversion(fields, $event)', blur:'dateconversion(fields, \'blur\')'}" type="text"
+                               ng-model="fields.convertdate" data-date-format={{settings.lowercasedate}} bs-datepicker onkeydown="testForEnter();">
+                        <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div ng-show="debtpresent" class="modeling-header"><span>Convert Notes</span></div>
+                <div class="modeling-input-row debt">
+                    <div ng-show="round.type == 'Debt'" ng-repeat="round in initialrounds">
+                        <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
+                            <span data-icon="&#xe023;" aria-hidden="true"></span>
+                        </button>
+                        <span>{{round.name | caplength:28}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="!roundable() && doneround" class="modeling-round no-captable">
+                <div>This model is built on your cap table data. <a href="/app/ownership/company-captable">Start your cap table</a></div>
+            </div>
+
+            <div ng-show="roundable()" class="modeling-round first-round">
+                <div class="round-header">Initial Ownership</div>
+                <div class="round-output">
+                    <d3expdonut nosort="true" data="initialrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Shares</li>
+                                <li>Percentage</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.percent > 0" ng-repeat='round in initialrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.percent)}}%</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatDollarAmount(initialeffectivepremoney)}}</li>
+                            <li>Effective Pre-money</li>
+
+                            <li>{{formatDollarAmount(initialppshare)}}</li>
+                            <li>Price per Share</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="debtrounds[0].percent != initialrounds[0].percent && roundable()" class="modeling-round" ng-class="{'collapsed-round': debtcollapsed}">
+                <div class="round-header pointer" ng-click="debtcollapsed = !debtcollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Note Conversion</div>
+                <div class="round-output">
+                    <d3expdonut nosort="true" data="debtrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Shares</li>
+                                <li>Percentage</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.percent > 0" ng-repeat='round in debtrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.percent)}}%</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="round-summary smart-text">
+                        <span>Impact</span>
+                        Note conversion lowers the effective pre-money valuation by {{formatDollarAmount(totaldebtcost)}}
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="optionrounds[0].percent != debtrounds[0].percent && optionrounds[0].percent != initialrounds[0].percent && roundable()" class="modeling-round" ng-class="{'collapsed-round': optioncollapsed}">
+                <div class="round-header pointer" ng-click="optioncollapsed = !optioncollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Option Pool Creation</div>
+                <div class="round-output">
+                    <d3expdonut nosort="true" data="optionrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Shares</li>
+                                <li>Percentage</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.percent > 0" ng-repeat='round in optionrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.percent)}}%</li>
+                                <li></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="round-summary smart-text">
+                        <span>Impact</span>
+                        Creating a {{formatAmount(optionpool)}}% post-money option pool lowers the effective pre-money valuation by {{formatDollarAmount(optioncost)}}
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="roundable()" class="modeling-round">
+                <div class="round-header">Final Ownership Structure</div>
+                <div class="round-output">
+                    <d3expdonut nosort="true" data="finalrounds"></d3expdonut>
+                    <ul class="visualize-table">
+                        <li>
+                            <ul>
+                                <li>Issue Name</li>
+                                <li>Shares</li>
+                                <li>Percentage</li>
+                                <li>Change</li>
+                            </ul>
+                        </li>
+                        <li ng-show="round.final_percent > 0" ng-repeat='round in finalrounds'>
+                            <ul>
+                                <li>{{round.issue}}</li>
+                                <li>{{formatAmount(round.units)}}</li>
+                                <li>{{formatAmount(round.final_percent)}}%</li>
+                                <li>{{formatAmount(round.final_percent - round.start_percent)}}%</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatDollarAmount(effectivepremoney)}}</li>
+                            <li>Effective Pre-money</li>
+
+                            <li>{{formatDollarAmount(effectiveppshare)}}</li>
+                            <li>Price per Share</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="roundable()" class="modeling-block">
+            <div class="modeling-round summary-round">
+                <div class="round-header">Summary</div>
+                <div class="summary-row">
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatDollarAmount(premoney + investment)}}</li>
+                            <li>Post-money Valuation</li>
+                        </ul>
+                    </div>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatDollarAmount(effectiveppshare)}}</li>
+                            <li>Price per Share</li>
+                        </ul>
+                    </div>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(newseries.percent)}}%</li>
+                            <li>New Series Equity</li>
+                        </ul>
+                    </div>
+                    <div class="round-summary">
+                        <ul>
+                            <li>{{formatAmount(dilution)}}%</li>
+                            <li>Dilution</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="roundable()" class="disclaimer">
+            <div>Disclaimer:</div>
+            <p>This model is not intended to provide legal or financial advice, it is only intended to assist in reviewing the underlying data. The accuracy relies on the data that's been entered, and not every deal's terms are captured on this platform. Please consult your legal counsel or accountant before making official decisions.</p>
+        </div>
+    </div>
+</div>

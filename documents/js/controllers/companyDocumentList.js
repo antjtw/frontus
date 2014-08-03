@@ -1,10 +1,10 @@
 'use strict';
 
 app.controller('CompanyDocumentListController',
-    ['$scope', '$timeout', '$modal', '$window', '$q', '$location',
+    ['$scope', '$timeout', '$modal', '$window', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
         'basics', '$http',
-        function($scope, $timeout, $modal, $window, $q, $location,
+        function($scope, $timeout, $modal, $window, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
                  basics, $http) {
             $scope.docShareState = {
@@ -17,6 +17,7 @@ app.controller('CompanyDocumentListController',
                 query: $routeParams.q || ""
             };
             $scope.modals = {};
+            $scope.scrollParent = angular.element(".leftBlock");
 
             if (navState.role == 'investor') {
                 $location.path('/investor-list'); // goes into a bottomless recursion ?
@@ -205,20 +206,6 @@ app.controller('CompanyDocumentListController',
                 $scope.documentUploadModal = false;
             };
 
-            /*$scope.modals.documentUploadOpen = function() {
-                $scope.files = [];
-                $scope.showProgress = false;
-                $scope.showProcessing = false;
-                $scope.documentUploadModal = true;
-            };
-
-            $scope.modals.documentUploadClose = function() {
-                $scope.showProgress = false;
-                $scope.showProcessing = false;
-                $rootScope.errorMessage = '';
-                $scope.documentUploadModal = false;
-            };*/
-
             $scope.wideopts = {
                 backdropFade: true,
                 dialogFade: true,
@@ -285,6 +272,34 @@ app.controller('CompanyDocumentListController',
                 });
             };
 
+            $scope.checkUploaded = function() {
+                SWBrijj.tblm('document.my_company_library', ['doc_id', 'pages']).then(function(data) {
+                    var repeat = false;
+                    angular.forEach(data, function(doc) {
+                        if (doc.pages == null)
+                        {
+                            repeat = true;
+                        }
+                        else
+                        {
+                            angular.forEach($scope.documents, function(document) {
+                                if ((document.pages == null) &&
+                                    (document.doc_id == doc.doc_id))
+                                {
+                                    document.pages = doc.pages;
+                                }
+                            });
+                        }
+                    });
+                    if (repeat)
+                    {
+                        $timeout($scope.checkUploaded, 2000);
+                    }
+                }).except(function(data) {
+                    console.log(data);
+                });
+            }
+
             $scope.checkReady = function() {
                 // Cap at 10 then say error
                 var incrementer = 0;
@@ -300,6 +315,7 @@ app.controller('CompanyDocumentListController',
                                     if (document.doc_id == doc.upload_id) {
                                         document.doc_id = doc.doc_id;
                                         document.uploading = false;
+                                        document.pages = doc.pages;
                                         $rootScope.billing.usage.documents_total+=1;
                                     }
                                 });
@@ -500,6 +516,7 @@ app.controller('CompanyDocumentListController',
             $scope.retractVersion = function(version, archive) {
                 SWBrijj.procm("document.retract_document", version.doc_id, archive).then(function(data) {
                     void(data);
+                    $scope.retractDocModal = false;
                     $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
                     version.when_retracted = new Date.today();
                     version.last_event_activity = "retracted";
@@ -899,12 +916,18 @@ app.controller('CompanyDocumentListController',
                     } else {
                         myList = loopState.reverseList;
                     }
+                    var stillUploading = false;
                     angular.forEach(data, function(s) {
                         if (typeVars.doTags && s.tags !== null) {
                             s.tags = JSON.parse(s.tags);
                         }
                         s.type = typeVars.type;
                         s.statusRatio = s.status_ratio;
+
+                        if (s.pages == null)
+                        {
+                            stillUploading = true;
+                        }
 
                         // check for existing item in typeVars.list and update instead of duplicating
                         if (!myList.some(function(val, idx, arr) {
@@ -937,6 +960,10 @@ app.controller('CompanyDocumentListController',
                     }
                     if ($scope.viewBy == "document") {
                         $scope.documents = myList;
+                        if (stillUploading)
+                        {
+                            $timeout($scope.checkUploaded, 2000);
+                        }
                     } else if ($scope.viewBy == "name") {
                         $scope.investorDocs = myList;
                     }
@@ -951,7 +978,7 @@ app.controller('CompanyDocumentListController',
                 if (!$scope.loadingDocs) {
                     $scope.loaddocs();
                 } else {
-                    window.setTimeout(loadDocsTrigger(newval, oldval), 50);
+                    window.setTimeout(loadDocsTrigger(newval, oldval), 500);
                 }
             }
             $scope.$watch('viewBy', loadDocsTrigger);

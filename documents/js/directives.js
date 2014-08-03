@@ -125,7 +125,8 @@ app.directive('documentVersionRow', function() {
             version: '=',
             viewState: '=',
             type: '=',
-            modals: '='
+            modals: '=',
+            docShareState: '='
         },
         templateUrl: '/documents/partials/documentVersionRow.html',
         controller: DocumentVersionRowController
@@ -136,16 +137,13 @@ app.directive('annotationList', ["User", function(User) {
     return {
         restrict: "E",
         scope: {
-            docId: "=",
+            doc: "=",
+            active: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents",
-            function($scope, $element, $rootScope, Annotations, Documents) {
-                $scope.annotations = [];
-                $scope.$watch("docId", function(new_doc_id, old_doc_id) {
-                    $scope.annotations = Annotations.getDocAnnotations(new_doc_id);
-                    $scope.doc = Documents.getDoc(new_doc_id);
-
+        controller: ["$scope", "$element", "navState", "Annotations", "Documents", "User",
+            function($scope, $element, navState, Annotations, Documents, User) {
+                $scope.$watch("doc", function(doc) {
                     // we want a new page_visible array for every doc
                     $scope.page_visible = [];
                 });
@@ -155,13 +153,27 @@ app.directive('annotationList', ["User", function(User) {
                     return ret;
                 };
 
-                $scope.attributeLabel = Annotations.attributeLabel;
-
                 $scope.user = User;
+                $scope.navState = navState;
             }
         ],
     };
 }]);
+
+app.directive('helpTab', function() {
+    return {
+        restrict: "E",
+        scope: {
+            doc: "="
+        },
+        templateUrl: "/documents/partials/helpTab.html",
+        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents", "navState",
+            function($scope, $element, $rootScope, Annotations, Documents, navState) {
+                $scope.invq = navState.role == "investor";
+            }
+        ]
+    };
+});
 
 app.directive('annotation', function() {
     return {
@@ -173,6 +185,7 @@ app.directive('annotation', function() {
             doc: "=",
             removeannot: "&",
             sigModalUp: "&",
+            active: "=",
         },
         replace: true,
         templateUrl: "/documents/partials/annotation.html",
@@ -190,22 +203,174 @@ app.directive('pageControls', function() {
         templateUrl: "/documents/partials/page-controls.html",
         controller: ["$scope", "Documents", function($scope, Documents) {
             $scope.doc = Documents.getDoc($scope.docId);
-            $scope.doc.currentPage = $scope.currentPage
+            $scope.doc.currentPage = $scope.currentPage;
             $scope.$watch('docId', function(new_doc_id) {
                 $scope.doc = Documents.getDoc(new_doc_id);
-                $scope.doc.currentPage = $scope.currentPage
+                $scope.doc.currentPage = $scope.currentPage;
             });
             $scope.template_original = false;
-            $scope.$watch('doc.currentPage', function(page) {
+            $scope.$watch('doc.currentPage', function(page, old_page) {
+                var orig = page;
+                var output = page;
+                // ensure it's a valid page set
                 if ((page != void(page)) && $scope.doc.pages) {
+                    // ensure it's within bounds
                     if (page < 1) {
-                        $scope.doc.currentPage = 1;
+                        output = 1;
                     } else if (page > $scope.doc.pages.length) {
-                        $scope.doc.currentPage = $scope.doc.pages.length;
+                        output = $scope.doc.pages.length;
+                    }
+
+                    // change it only if needed
+                    if (orig !== output) {
+                        $scope.doc.currentPage = output;
                     }
                 }
             });
 
         }],
+    };
+});
+
+app.directive('docAction', function() {
+    return {
+        restrict: "E",
+        scope: {
+            approveAction: "&",
+            approveVerb: "@",
+            rejectable: "@",
+            rejectAction: "&",
+            upgradeWarning: "@",
+            disabled: "&",
+        },
+        transclude: true,
+        templateUrl: "/documents/partials/doc-action.html",
+        controller: ["$scope", function($scope) {
+            $scope.processing = false;
+            $scope.rejectVerb = "Reject";
+
+            $scope.approve = function(){
+                $scope.processing = true;
+                $scope.approveAction().finally(function() {
+                    $scope.processing = false;
+                });
+            };
+
+            $scope.reject = function(){
+                $scope.processing = true;
+                $scope.rejectAction({message: $scope.rejectMessage}).finally(function() {
+                    $scope.processing = false;
+                });
+            };
+        }],
+    };
+});
+
+app.directive('integer', function() {
+    // add number formatting to an input
+    // useful when <input type="number"> can't be styled correctly
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attr, ctrl) {
+            // ctrl is ngModel controller
+            ctrl.$parsers.unshift(function(val) {
+                var ret = parseInt(val);
+                if (isNaN(ret)) {
+                    ret = 1;
+                }
+                return ret;
+            });
+        }
+    };
+});
+
+app.directive('docTransactionDetails', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            doc: "=",
+        },
+        templateUrl: "/documents/partials/doc-transaction-details.html",
+        controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
+            var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
+            $scope.selectedIssue = defaultSelectObj;
+            $scope.select2Options = {
+                data: [defaultSelectObj],
+            };
+
+            // Get the company's Issues
+            // TODO: issue / cap table service
+            SWBrijj.tblm('ownership.newtype_company_issue').then(function (data) {
+                $scope.issues = data;
+            });
+
+            $scope.$watch('issues', function(issues) {
+                // set up the select box
+                if (issues) {
+                    $scope.select2Options.data.splice(0);
+                    $scope.select2Options.data.push(defaultSelectObj);
+                    issues.forEach(function(issue) {
+			if (issue.type) {
+                            // TODO: filter to usable issue types
+                            $scope.select2Options.data.push({
+				id: issue.issue,
+				text: 'Add to ' + issue.issue + '',
+				issue: issue
+                            });
+			}
+                    });
+                    $scope.selectedIssue = defaultSelectObj;
+                }
+            });
+        }],
+    };
+});
+
+app.directive('docTransactionList', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            trans: "="
+        },
+        templateUrl: "/documents/partials/doc-transaction-list.html",
+        controller: ["$scope", 'calculate', 'switchval', '$location', function($scope, calculate, switchval, $location) {
+
+            $scope.trans[0].active = true;
+
+            $scope.singleTransaction = function(trans) {
+                return (trans.length == 1);
+            };
+
+            $scope.gotoCaptable = function() {
+                $location.url('/app/ownership/company-captable')
+            };
+
+            $scope.formatAmount = function (amount) {
+                return calculate.funcformatAmount(amount);
+            };
+
+            $scope.formatDollarAmount = function(amount) {
+                var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+                return (output);
+            };
+
+            $scope.grantbyIssue = function (tran) {
+                if (tran.type == "Option") {
+                    return "options";
+                }
+                else if (tran.type == "Warrant") {
+                    return "warrants";
+                }
+                else {
+                    return "shares";
+                }
+            };
+
+            $scope.trantype = function (type, activetype) {
+                return switchval.trantype(type, activetype);
+            };
+
+        }]
     };
 });

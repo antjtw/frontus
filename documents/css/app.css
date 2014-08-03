@@ -67,8 +67,7 @@ h2.large-h2 {
 }
 
 .draggable textarea {
-    font-family: Helvetica, sans-serif;
-    /* letter-spacing: -0.09em; */
+    font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
 .subnav-controls.flush-controls {
@@ -84,7 +83,6 @@ h2.large-h2 {
     padding-top: 9px;
     padding-bottom: 9px;
 
-    /* height: 30px; */
     list-style-type: none;
     line-height: normal;
     text-transform: uppercase;
@@ -100,12 +98,6 @@ h2.large-h2 {
     margin: 0 6px 0 6px;
     float: left;
 }
-
-/*.tableView tr.status-bubbles > div {
-    width: 120px;
-    margin: 0 48px 0 48px;
-}
-  */
 
 .tableView td.status-bar span[data-icon] {
     font-size: 24px;
@@ -167,6 +159,8 @@ table.docLibrary > tbody > tr:first-child > td {
     margin-right: 20px;
 }
 
+
+
 .status-showing td {
     background-color: #f1f1f1;
 }
@@ -183,8 +177,6 @@ table.docLibrary > tbody > tr:first-child > td {
     margin-right: 20px;
 }
 
-
-
 .dModalButtons {
     display: block;
     padding: 0 0 20px 0;
@@ -197,7 +189,6 @@ table.docLibrary > tbody > tr:first-child > td {
     border: 0;
     box-sizing:border-box;
     vertical-align: middle;
-    padding: 0 0 0 0;
 }
 
 .dModalButtons button {
@@ -215,12 +206,6 @@ table.docLibrary > tbody > tr:first-child > td {
     padding: 0;
     margin: 0;
 }
-
-/*
-.modalText.dshare > ul {
-    width: 469px;
-}
-*/
 
 .modalText.dshare > ul > li {
     display: inline-block;
@@ -245,22 +230,6 @@ table.docLibrary > tbody > tr:first-child > td {
     width: 300px;
     height: 24px;
 }
-
-
-/*
-.button:hover {
-    text-decoration: none;
-}
-
-.button.adisabled {
-    background-color:#BDC3C7;
-    cursor:default;
-}
-
-.button.adisabled:hover {
-    background-color:#BDC3C7;
-}
-*/
 
 button.blueButton {
     color:#ffffff;
@@ -325,7 +294,7 @@ button.greyButton {
 .sign-modal label {
     display: inline;
     font-size: 10px;
-    padding: 15px 0px 15px 20px;
+    padding: 15px 0 15px 20px;
     text-transform: none;
 }
 
@@ -440,7 +409,7 @@ button.greyButton {
 .modalText.linkDropboxModalText {
     width: 300px;
     margin-bottom: 5px;
-    padding-top: 0px;
+    padding-top: 0;
     padding-left: 20px;
     padding-right: 20px;
     text-align: left;
@@ -671,6 +640,7 @@ textarea.email-text {
 }
 .sharepeople-input .select2-container {
     width: 100%;
+    height: 100%;
 }
 .shareForm > .controls {
     padding-top: 20px;
@@ -687,13 +657,10 @@ textarea.email-text {
     float: right;
     margin-left: 0;
     width: 350px;
-    border-left: 6px solid white;
     padding-left: 20px;
     padding-right: 40px;
 }
-.company-list .span4.capright.showSharebar {
-    border-left: 6px solid #E3E3E3;
-}
+
 .company-list .right-bar-header {
     letter-spacing: 1px;
 }
@@ -1258,18 +1225,10 @@ input[type='text']:disabled, textarea:disabled {
     width: 280px;
 }
 
-.footerBar {
-    display: none !important;
-}
-
 doc-viewer, internal-right-rail, internal-right-rail > div {
     background-color: #f1f1f1;
     height: 100%;
     overflow: auto;
-}
-
-navbar .navbar + doc-viewer.modal-backdrop {
-    display: none !important;
 }
 
 .docViewer {
@@ -1278,64 +1237,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     max-width: 928px;
     margin: 0 auto;
     background-color: white;
-}
-
-.docViewerHeader.affix {
-    position: fixed;
-    top: 0px;
-    max-width: 928px;
-    width: 928px;
-    margin: 0 auto;
-}
-
-.docViewerHeader {
-    z-index: 10;
-}
-
-.affix + .docPanelContainer {
-    padding-top: 120px;
-}
-
-.docViewerHeader.affix-top {
-}
-
-.docViewerHeader.affix-bottom {
-    bottom: 0;
-}
-
-.docViewerAction {
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 14px;
-    color: #1E2D3D;
-    display: inline-block;
-    vertical-align: middle;
-    height: 60px;
-    line-height: 60px;
-    width: 100%;
-    position: relative; /* for the action buttons inside */
-}
-
-.docViewerControls > div > div.tools {
-    margin-left: 20px;
-    padding-top: 15px;
-    min-width: 210px;
-}
-
-.tools > button {
-    border: none;
-    border-radius: 3px;
-    font-size: 20px;
-    color: #666666;
-    background-color: #E3E3E3;
-    background-position: top;
-    width: 30px;
-    height: 30px;
-    margin-right: 20px;
-}
-
-.tools > button:hover {
-    background-color: #C7C7C7;
 }
 
 .pageTurn {
@@ -1409,73 +1310,10 @@ navbar .navbar + doc-viewer.modal-backdrop {
     background-color: #FFFFFF;
 }
 
-.docActions {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-right: 20px;
-}
-
-.docActions > div > button {
-    display: block;
-}
-
 .last-saved {
     text-transform: uppercase;
     font-size: 10px;
     margin-top: 23px;
-}
-
-.docViewerTitle {
-    background-color: white;
-    height: 60px;
-    display: inline-block;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.docViewerTitle .docName {
-    margin-top: 14px;
-    margin-left: 20px;
-    font-size: 14px;
-    color: #1E2D3D
-}
-
-.docViewerTitle .docStatus {
-    margin-left: 20px;
-    font-size: 10px;
-    text-transform: uppercase;
-}
-
-.docViewerTitle .lastUpdated {
-    margin-top: 0px;
-    margin-left: 20px;
-    text-transform: uppercase;
-    text-align: left;
-    font-size: 10px;
-}
-
-.docViewerTitle .lastUpdated > button {
-    border: none;
-    background-color: white;
-    color: #1E2D3D;
-    padding-left: 20px;
-    font-size: 16px;
-}
-
-.stageControls {
-    position: absolute;
-    left:-webkit-calc(50% - 140px);
-    left:-moz-calc(50% - 140px);
-    left: calc(50% - 140px);
-    margin: 14px auto;
-    width: 280px;
-    color: #666666;
-}
-
-.stageControls > div.disabled > button {
-    cursor: default;
-    text-decoration: none;
-    box-shadow: none;
 }
 
 .docViewerTitle div.standard-button {
@@ -1485,7 +1323,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
 
 .docPanel {
     width: 100%;
-    height: 1165px;
     background-size: contain !important;
     background-repeat: no-repeat;
     background-position: top center;
@@ -1499,121 +1336,52 @@ navbar .navbar + doc-viewer.modal-backdrop {
     margin: 0px auto;
 }
 
-.confirmPanelContainer {
-    left: 0px;
-    right: 0px;
-    margin: 0px auto;
-}
-.confirmPanel {
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-}
-.confirmPanel > div {
-    width: 100%;
-    height: 100%;
-}
-.confirmPanel > .my-loading-spinner-container > div {
-    left: 50%;
-    height: 60px;
-}
-.confirmBody {
-    margin: 0 auto;
-    padding-top: 30px;
-    padding-bottom: 60px;
-    width: 380px;
-    height: 100%;
-    min-height: 40px;
+.confirmPanel span {
+    margin: 3px 0;
 }
 
-.confirmBody.shareDoc {
-    text-align: left;
+.confirmPanel .main {
+    margin-bottom: 14px;
 }
 
-.confirmBody.shareDoc .single-share-input .select2-container {
-    width: 450px;
-}
-
-.confirmBody > .radioOption {
-    height: 40px;
-}
-
-.confirmBody > .radioOption > li:first-child {
-    padding-right: 20px;
-}
-
-.confirmBody > .radioOption > li:last-child {
-    -webkit-transform: translateZ(0);
-    width: 345px; /* ul's width is 380, so drop some for the checkbox */
-}
-
-.confirmBody > .radioOption > li:last-child > span:first-child {
+.confirmPanel span.title {
     font-size: 14px;
     color: #1E2D3D;
 }
 
-.confirmBody > .radioOption > li:last-child > span:last-child {
+.confirmPanel span:.body {
     color: #666666;
 }
 
-.confirmBody > .radioOption textarea.messageText {
+.confirmPanelContainer textarea.messageText {
     margin-left: 0;
     margin-right: 0;
-    margin-top: 6px;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     color: #666666;
+    width: calc(100% - 12px); /* 12px is to account for padding, set by bootstrap */
 }
 
-.confirmBody > .checkboxOption {
-    width: 360px;
-    margin: 0 auto;
-}
-
-.confirmBody > .checkboxOption > li:last-child {
-    padding-left: 30px;
-    float: inherit;
-}
-
-.confirmBody > .checkboxOption > li:last-child > span:first-child {
+.confirmPanel .docViewerAction {
+    text-transform: uppercase;
     font-size: 14px;
     color: #1E2D3D;
+    float: left;
+}
+.confirmPanel .docViewerAction:last-child {
+    float: right;
 }
 
-.confirmBody > .checkboxOption > li:last-child > span:last-child {
-    color: #666666;
+.confirmPanel .modeSwitch {
+    float: left;
+    line-height: 32px; /* should match ".standard-button button" min-height in MVP.css */
 }
-
-.confirmBody .email-text {
-    margin-top: 20px;
+.confirmPanel .modeSwitch:last-child {
+    margin-right: 20px;
+    float: right;
 }
-
-.confirmFooter {
-    height: 12px;
-}
-
-.confirmButton {
-    position: absolute;
-    right: 20px;
-    top: 15px;
-}
-.backButton {
-    position: absolute;
-    left: 20px;
-    top: 15px;
-}
-.backButton > button > span {
-    font-size: 16px;
-    padding-right: 1px;
-}
-.backButton > button > span:before {
-    vertical-align: middle;
-}
-.forwardButton > button > span {
-    font-size: 16px;
-    padding-left: 6px;
-}
-.forwardButton > button > span:before {
-    vertical-align: middle;
+.confirmPanel a {
+    cursor: pointer;
+    color: #3397da;
 }
 
 .hidden {
@@ -1708,7 +1476,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
     resize: both;
     opacity: 0.7;
     border: 1px solid #FFBA00;
-    color: #2980B9;
+    color: #000000;
 
     -webkit-border-top-right-radius: 3px;
     -webkit-border-bottom-right-radius: 3px;
@@ -1718,6 +1486,21 @@ navbar .navbar + doc-viewer.modal-backdrop {
 
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
+}
+
+.draggable div > textarea.highlightContents {
+    opacity: 1;
+    width: 100%;
+    padding: 0;
+    resize: vertical;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 .draggable div > textarea.roundedcorners {
@@ -1829,6 +1612,7 @@ navbar .navbar + doc-viewer.modal-backdrop {
 }
 
 .sticky .dragger > span {
+    cursor: pointer;
     height: 100%;
     position: relative;
     display: inline-block;
@@ -1841,7 +1625,6 @@ navbar .navbar + doc-viewer.modal-backdrop {
     top: 50%;
     margin-top: -9px;
     margin-left: -3px;
-    cursor: pointer;
     height: 16px;
 }
 
@@ -1853,11 +1636,29 @@ navbar .navbar + doc-viewer.modal-backdrop {
     border-radius: 0;
 }
 
+.sticky textarea[readonly] {
+    background-color: #fff;
+    cursor: pointer;
+    /* prevent highlight on creation */
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.sticky fieldset .select2-container .select2-choice {
+    height: 100%
+}
+
+.sticky fieldset .select2-container .select2-choice .select2-arrow b {
+    background-repeat: no-repeat;
+}
+
 .sticky-menu {
     position: absolute;
-    background-color: #1D2C3C;
-    width: 190px;
-    margin: 10px 0 0 -95px;
+    background-color: rgba(29, 44, 60, 0.85);
+    width: 300px;
+    margin: 10px 0 0 -150px;
     left: 50%;
     border-radius: 3px;
     z-index: 5;
@@ -1869,10 +1670,10 @@ navbar .navbar + doc-viewer.modal-backdrop {
     height: 0;
     position: absolute;
     top: -8px;
-    left: 85px;
+    left: 145px;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid #1D2C3C;
+    border-bottom: 8px solid rgba(29, 44, 60, 0.85);
 }
 
 .sticky-menu > ul > li {
@@ -1883,13 +1684,21 @@ navbar .navbar + doc-viewer.modal-backdrop {
     margin-top: 15px;
 }
 
+.sticky .sticky-menu .select2-container {
+    width: 260px;
+}
+
+.sticky .sticky-menu input {
+    width: 248px; /* 150 - 12px padding - 2px border. sizes set in bootstrap */
+}
+
 .sticky-menu > ul > li:last-of-type > ul {
     margin-bottom: 20px;
 }
 
 .sticky-menu > ul > li > ul > li > span, .sticky-menu > ul > li > ul > li.required-text {
-    color: #FFFFFF;
-    font-size: 12px;
+    color: #C6C6C6;
+    font-size: 14px;
     text-transform: capitalize;
 }
 
@@ -1900,20 +1709,35 @@ navbar .navbar + doc-viewer.modal-backdrop {
 }
 
 .sticky-menu .standard-button > button {
-    width: 42px;
-    margin-left: 10px;
+    width: 37px;
+    margin-left: 120px;
     background-color: transparent;
     padding: 0;
     min-height: 20px;
     line-height: 20px;
     box-shadow: none;
     color: #3498DB;
-    text-transform: uppercase;
-    font-size: 10px;
+    font-size: 14px;
 }
 
 .sticky-menu .standard-button > button:hover {
     color: #2980B9;
+}
+
+.sticky-menu .drop-selector .standard .dropdown-toggle {
+    width: 260px;
+}
+
+.sticky-menu .drop-selector .standard .dropdown-menu {
+    width: 264px;
+}
+
+.annotation-dropdown-item > div, .annotation-dropdown .select2-chosen {
+    text-transform: capitalize;
+}
+
+.dropdown-required.select2-result > div.select2-result-label {
+    color: #E74C3C;
 }
 
 
@@ -1998,6 +1822,10 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
+annotation-list div.annotation-pages:last-child {
+    margin-bottom: 20px;
+}
+
 annotation-list > div {
     margin: 0 20px;
 }
@@ -2019,9 +1847,18 @@ annotation-list .annotmark {
     margin-top: 5px;
     margin-left: 25px;
     cursor: pointer;
+    text-transform: capitalize;
 }
 
-annotation-list .annotmark:hover {
+annotation-list .textIcon {
+    data-icon: &#xe60d;
+}
+
+annotation-list .annotmark.mine.complete.highlightIcon {
+    data-icon: &#xe60f;
+}
+
+annotation-list .annotmark:hover, annotation-list .annotmark.active {
     color: #666;
 }
 
@@ -2029,7 +1866,7 @@ annotation-list .annotmark.mine {
     color: #FFBA00;
 }
 
-annotation-list .annotmark.mine:hover {
+annotation-list .annotmark.mine:hover, annotation-list .annotmark.mine.active {
     color: #F78D1E;
 }
 
@@ -2037,7 +1874,7 @@ annotation-list .annotmark.mine.complete {
     color: #1ABC96;
 }
 
-annotation-list .annotmark.mine.complete:hover {
+annotation-list .annotmark.mine.complete:hover, annotation-list .annotmark.mine.complete.active {
     color: #15A085;
 }
 
@@ -2045,6 +1882,359 @@ annotation-list .annotmark.mine.incomplete {
     color: #E74C3C;
 }
 
-annotation-list .annotmark.mine.incomplete:hover {
+annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.mine.incomplete.active {
     color: #C44032;
+}
+
+help-tab > div {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+help-tab > div > p {
+    margin-bottom: 10px;
+    width: 250px;
+    line-height: 20px;
+}
+
+help-tab > div > p > span {
+    color: #1d2c3c;
+    display: block;
+}
+
+.docinfo {
+    margin: 0 20px;
+}
+
+.docinfo .inforow {
+    padding: 10px 0;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.docinfo .inforow .info {
+    vertical-align: top;
+    margin-left: 5px;
+    display: inline-block;
+    width: 255px;
+}
+
+.docinfo .inforow .tags {
+    display: inline-block;
+    width: 270px;
+}
+
+.docinfo .inforow .tags > span {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.docinfo .inforow .info > span {
+    display: block;
+}
+
+.docinfo .inforow .info > span:first-of-type {
+    color: #666666;
+}
+
+.docinfo .inforow .info > span:last-of-type {
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.docinfo .inforow .activity-icon {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+
+.docinfo .docname {
+    line-height: 24px;
+    font-size: 20px;
+    color: #1d2c3c;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #E3E3E3;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.docinfo .investor-views {
+    margin-top: 10px;
+    margin-left: 35px;
+}
+
+.docinfo .investor-views > span {
+    color: #1d2c3c;
+    cursor: pointer;
+}
+
+.docinfo .investor-views > span.toggle-icon {
+    vertical-align: -10%;
+}
+
+.docinfo .investor-views ul {
+    margin-left: 19px;
+}
+
+.docinfo .investor-views ul > li {
+    margin-top: 10px;
+}
+
+.docinfo .investor-views ul > li:first-of-type {
+    margin-top: 5px;
+}
+
+.docinfo .investor-views ul > li > span:first-of-type {
+    display: block;
+    color: #666666;
+}
+
+.docinfo .investor-views ul > li > span:last-of-type {
+    font-size: 12px;
+    line-height: 12px;
+    display: block;
+}
+
+doc-transaction-details .select2-container {
+    width: 220px;
+}
+
+doc-transaction-details > div > div > span {
+    color: #1d2c3c;
+    display: inline-block;
+    width: 280px;
+    margin-bottom: 15px;
+}
+
+doc-transaction-details > div > div > button {
+    width: 68px;
+    height: 30px;
+    background-color: #19bb95;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+
+doc-transaction-details > div > div > span > span.back-button {
+    color: #3498DB;
+    cursor: pointer;
+}
+
+doc-transaction-details > div > div > span > span.back-button:hover {
+    color: #2980B9;
+}
+
+/* Finished Animation */
+
+@-webkit-keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+@-moz-keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+@-o-keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+@keyframes completerequired {
+    0% {
+        color: #E74C3C;
+    }
+    100% {
+        color: #19bc96;
+    }
+}
+
+.required-fields > span {
+    display: inline-block;
+    color: #E74C3C;
+    text-transform: capitalize;
+}
+
+.required-fields.field-completed > span {
+    color: #19bc96;
+    -webkit-animation: completerequired 1s; /* Safari 4+ */
+    -moz-animation:    completerequired 1s; /* Fx 5+ */
+    -o-animation:      completerequired 1s; /* Opera 12+ */
+    animation:         completerequired 1s;
+}
+
+.required-fields > span:first-of-type {
+    width: 15px;
+    margin: 0 5px;
+}
+
+.required-fields > span:first-of-type > span {
+    color: #19bc96;
+    vertical-align: -14%;
+    font-size: 20px;
+    -webkit-animation: completerequired 1s; /* Safari 4+ */
+    -moz-animation:    completerequired 1s; /* Fx 5+ */
+    -o-animation:      completerequired 1s; /* Opera 12+ */
+    animation:         completerequired 1s;
+}
+
+.fields-progress {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-color: #1d2c3c;
+    padding: 20px;
+}
+
+.fields-progress > span {
+    color: #FFFFFF;
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+
+.select2-container.height-force {
+    height: 30px !important;
+}
+
+.redrequired .content-section .select2-container .select2-choice, .redrequired .content-section input {
+    border-color: #E74C3C;
+}
+
+.redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input, .greenrequired .select2-container .select2-choice, .greenrequired input  {
+    border-color: #1ABC96;
+}
+
+/* Transaction Directive */
+
+.transaction-accordion.lessmargin .delete-link.blue-link {
+    margin-left: 5px;
+}
+
+.transaction-accordion .accordion-heading {
+    padding: 0;
+}
+
+.transaction-accordion .accordion-heading .accordion-toggle {
+    padding: 11px 12px;
+}
+
+.transaction-accordion .accordion-heading > a > span:not(:last-of-type),
+.transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
+    vertical-align: 90%;
+    color: #1E2D3D;
+}
+
+.transaction-accordion.lessmargin .capGuide,
+.transaction-accordion.lessmargin .linkedDocuments,
+.transaction-accordion.lessmargin .btn-group {
+    padding-left: 0;
+}
+.transaction-accordion .btn-group,
+.transaction-accordion .linkedDocuments {
+    padding-left: 20px;
+}
+
+.transaction-accordion .accordion-heading > a > span:last-of-type {
+    color: #1E2D3D;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+    display: inline-block;
+}
+
+.transaction-accordion .accordion-heading > a > span:last-of-type > span:first-of-type {
+    font-size: 20px;
+    display: block;
+}
+
+.transaction-accordion .accordion-heading > a > span:last-of-type > span:last-of-type {
+    color: #8D8D8D;
+    font-size: 12px;
+}
+
+.transaction-accordion .accordion-group {
+    border-bottom: none;
+}
+
+.transaction-accordion .accordion-inner {
+    border-top: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.transaction-accordion .capGuide.global {
+    margin-top: 0;
+}
+
+.transaction-accordion .accordion {
+    margin-top: 20px;
+}
+
+p.belowTitle {
+    display: inline-block;
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+.belowTitle > span:first-child {
+    display: block;
+    color: #1E2D3D;
+}
+
+.belowTitle > span:last-of-type {
+    display: block;
+    width: auto;
+    text-transform: capitalize;
+    font-size: 12px;
+    color: #8D8D8D;
+
+}
+
+.capGuide {
+    display: block;
+    padding: 0 0 0 20px;
+}
+
+.belowTitle span.forTooltip {
+    display: inline-block;
+}
+
+.capTab {
+    margin-top: 0;
+}
+
+div.profile-link {
+    margin-bottom: 5px;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    border: none !important;
+    color: #1E2D3D;
+}
+
+div.profile-link:hover {
+    background-color: #E3E3E3;
+}
+
+div.profile-link > span {
+    display: inline-block;
+}
+
+div.profile-link > span:first-of-type {
+    vertical-align: -16%;
 }

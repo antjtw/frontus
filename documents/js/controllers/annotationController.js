@@ -1,7 +1,10 @@
 'use strict';
 
-function annotationController($scope, $element, $rootScope, $document, Annotations, User, $timeout) {
+function annotationController($scope, $rootScope, $element, $document, Annotations, User, $timeout, navState, SWBrijj) {
+    $scope.navState = navState; // TODO: UI is very dependant on navState
+    $scope.transaction_types_mapping = $rootScope.transaction_types_mapping;
     function applyLineBreaks(oTextarea) {
+        // TODO: rewrite as an ngModel validator
         var max = Math.floor(parseInt(oTextarea.style.height)/12);
         if (oTextarea.wrap) {
             oTextarea.setAttribute("wrap", "off");
@@ -82,36 +85,43 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
     }
 
-    var dragicon = $element.find("span.dragger");
-
     /* This is the drag - code -- its been moved to work on the drag widget */
     $scope.mousedown = function($event) {
         $scope.initdrag($event);
+        $event.stopPropagation();
         return false;
     };
 
-    // TODO: shouldn't bind here, but ng-mousedown appears to not stop propagation
-    dragicon.bind('mousedown', $scope.mousedown);
-
     $scope.$watch('annot.val', function(newValue, oldValue) {
         // prevent issuers from filling in the investor values
-        if ($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Investor") {
+        if (!$scope.annot.forRole(navState.role)) {
             $scope.annot.val = "";
         }
     });
 
     $scope.$watch('annot.whattype', function(newval, oldval) {
-        var elem = $element.find('textarea');
-        if (newval == "Signature") {
-            $scope.annot.fontsize = 18;
-            if ($scope.annot.position.size.height < 37) {
-                $scope.annot.position.size.height = 37;
+        if (newval != oldval) { // don't run this on the first $watch call
+            if ($scope.annot.type != 'highlight' && newval != "date") {
+                $scope.annot.val = ""; // clear out value since the type changed
+                setDefaultText();
             }
         }
-        else {
-            $scope.annot.fontsize = 12;
-        }
+        // update type information
+        $scope.annot.updateTypeInfo($scope.doc.annotation_types);
     });
+
+    $scope.unusedType = function(type) {
+        // only want to filter transaction types that are already in used
+        // we use type.required to determine if it's a transaction type or default type
+        if (type.required === undefined) {
+            return true;
+        } else if (type.name == $scope.annot.type_info.name) {
+            // want to show ourselves in the dropdown
+            return true;
+        } else {
+            return !$scope.doc.hasAnnotationType(type.name);
+        }
+    };
 
     var topLocation = function(elementHeight, mouseY) {
         var docPanel = document.querySelector('.docPanel');
@@ -159,8 +169,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         $scope.$apply(function() {
             var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
             var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
-            $scope.annot.position.size.height = dy - 4;
-            $scope.annot.position.size.width = dx - 8;
+            $scope.annot.position.size.height = dy;
+            $scope.annot.position.size.width = dx;
             return false;
         });
     };
@@ -195,6 +205,10 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
             }
             $scope.getme = true;
         });
+        if ($scope.annot.type == 'highlight')
+        {
+            Annotations.ocrHighlighted($scope.doc.doc_id, $scope.annot);
+        }
         return false;
     };
 
@@ -212,7 +226,11 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         var dprt = dpr.top - dp.offsetTop; // top of document itself
         $scope.startX = ev.clientX - dprl + 5; // mouse start positions relative to the box/pad
         var bb = $element[0].querySelector("textarea");
-        $scope.startY = ev.clientY - dprt - (parseInt(bb.style.height)/2); // TODO can we get 6 dynamically?
+        $scope.startY = ev.clientY - dprt; // TODO can we get 6 dynamically?
+        if (bb.style.height)
+        {
+            $scope.startY = $scope.startY - (parseInt(bb.style.height)/2);
+        }
         $scope.initialMouseX = ev.clientX;
         $scope.initialMouseY = ev.clientY;
         $scope.initialScrollX = document.documentElement.scrollLeft;
@@ -232,8 +250,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         var dpr = dp.getBoundingClientRect(); // top/left of docPanel
         var dprl = dpr.left - dp.offsetLeft; // left of document itself
         var dprt = dpr.top - dp.offsetTop; // top of document itself
-        $scope.startX = ev.clientX - dprl - 6; // mouse start positions relative to the box/pad
-        $scope.startY = ev.clientY - dprt - 6; // TODO can we get 6 dynamically?
+        $scope.startX = ev.clientX - dprl; // mouse start positions relative to the box/pad
+        $scope.startY = ev.clientY - dprt;
         $scope.initialMouseX = ev.clientX;
         $scope.initialMouseY = ev.clientY;
         $scope.initialScrollX = document.documentElement.scrollLeft;
@@ -242,8 +260,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         var dy = ev.clientY - $scope.initialMouseY;
         var mousex = $scope.startX + dx;
         var mousey = $scope.startY + dy;
-        $scope.annot.position.coords.y = topLocation($element.height(), mousey);
-        $scope.annot.position.coords.x = leftLocation($element.width(), mousex);
+        $scope.annot.position.coords.y = topLocation(0, mousey); // box has no size (since it's new) so pass 0 instead of $element.height/width
+        $scope.annot.position.coords.x = leftLocation(0, mousex);
         if (document.attachEvent) {
             document.attachEvent('on'+mousewheelevt, $scope.mousemove);
         } else if (document.addEventListener) {
@@ -254,40 +272,31 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         $document.bind('mouseup', $scope.newmouseup);
     };
 
-    $scope.imageMine = function() {
-        var role = $rootScope.navState.role;
-        var whosign = $scope.annot.whosign;
-        return (role == "issuer" && whosign == "Issuer") ||
-               (role == "investor" && whosign == "Investor") ? true : false;
-    };
-    $scope.whosignssticky = function() {
-        var role = $rootScope.navState.role;
-        var whosign = $scope.annot.whosign;
-        return (role == "issuer" && whosign == "Investor") ||
-               (role == "investor" && whosign == "Issuer") ? true : false;
+    $scope.setDatepickerCurrent = function(ev) {
+        // use timeout so we're certain to be set after openBox for this click;
+        $timeout(function() {
+            $scope.active.datepicker = ev.target;
+        });
     };
 
     $scope.openBox = function() {
-        if ($rootScope.navState.role == "issuer" && !$scope.doc.countersignable($rootScope.navState.role)) {
+        $scope.active.annotation = $scope.annot;
+        // kill any open datepicker if needed
+        $($scope.active.datepicker).datepicker("hide");
+        $scope.active.datepicker = null;
+        if (navState.role == "issuer" && !$scope.doc.countersignable(navState.role)) {
             $scope.getme = true;
         }
-        if ($scope.annot.whattype == "ImgSignature" && (($scope.annot.whosign == 'Investor' && $rootScope.navState.role == 'investor') || ($scope.annot.whosign == 'Issuer' && $rootScope.navState.role == 'issuer'))) {
+        if ($scope.annot.whattype == "ImgSignature" &&
+            ($scope.annot.forRole(navState.role) && !$scope.doc.countersignable(navState.role))) {
             $scope.signaturestyle = {height: 180, width: 330 };
-            $scope.signatureURL = '/photo/user?id=signature:';
             $scope.sigModalUp();
         }
     };
 
-    function setPlaceholder() {
-        $scope.whosignlabel = ($scope.annot.whosign == "Investor") ? "Recipient" : $rootScope.navState.name;
-        $scope.whattypelabel = Annotations.attributeLabel($scope.annot.whattype);
-        $scope.val_placeholder = $scope.whosignlabel + " " + $scope.whattypelabel;
-    }
-    setPlaceholder();
-
     function setDefaultText() {
         if ($scope.annot.val.length === 0) {
-            if (($rootScope.navState.role == "issuer" && $scope.annot.whosign == "Issuer") || $rootScope.navState.role == "investor" && $scope.annot.whosign == "Investor") {
+            if ($scope.annot.forRole(navState.role)) {
                 $scope.annot.val = Annotations.investorAttribute([$scope.annot.whattype]);
             } else {
                 $scope.annot.val = "";
@@ -299,14 +308,6 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         $scope.annot.whosign = value;
         $scope.annot.val = "";
         setDefaultText();
-        setPlaceholder();
-    };
-
-    $scope.setAnnot = function($event, sticky, value) {
-        $scope.annot.whattype = value;
-        $scope.annot.val = ""; // clear out value since the type changed
-        setDefaultText();
-        setPlaceholder();
     };
 
     $scope.addLineBreaks = function($event) {
@@ -314,17 +315,37 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     };
 
     $scope.closeBox = function() {
-        if ($rootScope.navState.role == "issuer") {
+        $scope.active.annotation = null;
+        if (navState.role == "issuer") {
             $scope.getme = false;
         }
     };
 
     $scope.investorFixed= function() {
-        return $scope.annot.investorfixed && $rootScope.navState.role == 'investor' ? false : true;
+        return $scope.annot.investorfixed && navState.role == 'investor' ? false : true;
     };
 
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
+    $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
+
+    $scope.enumBoxMode = function() {
+        // whether the annotation box should be a select2 dropdown
+        // note that issuers see it in the blue popup, so it's always false for them
+        return $scope.annot.type_info &&
+               $scope.annot.type_info.typename == 'enum' &&
+               $scope.annot.forRole(navState.role)&&
+               navState.role == 'investor';
+    };
+
+    $scope.dateBoxMode = function() {
+        // whether the main annotation box should be a datepicker
+        // note that issuers see it in the blue popup, so it's always false for them
+        return $scope.annot.type_info &&
+               $scope.annot.type_info.typename == 'date' &&
+               $scope.annot.forRole(navState.role) &&
+               navState.role == 'investor';
+    };
 
     $scope.$watch('annot.position.coords', function(new_coords) {
         if (new_coords) {
@@ -335,8 +356,16 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
 
     $scope.$watch('annot.position.size', function(new_size) {
         if (new_size) {
-            $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
-            $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            if ($scope.annot.type == 'text')
+            {
+                $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
+                $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            }
+            else if ($scope.annot.type == 'highlight')
+            {
+                $scope.annotationHighlightStyle.width = (new_size.width) + "px";
+                $scope.annotationHighlightStyle.height = (new_size.height) + "px";
+            }
         }
     }, true);
 
@@ -356,8 +385,8 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
         if (focus) {
             // using $timeout to avoid nested $digests
             $timeout(function() {
-                // could call openBox(), but want the actual pointer to be focused on the textarea
                 $element.find('textarea').focus();
+                $scope.openBox();
             });
         }
         delete $scope.annot.focus;
@@ -366,4 +395,4 @@ function annotationController($scope, $element, $rootScope, $document, Annotatio
     $scope.user = User;
 }
 
-annotationController.$inject = ["$scope", "$element", "$rootScope", "$document", "Annotations", "User", "$timeout"];
+annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "User", "$timeout", "navState", "SWBrijj"];

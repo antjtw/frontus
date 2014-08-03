@@ -307,6 +307,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
 
         $scope.createNewSignature = function() {
             $scope.scribblemode = true;
+            $scope.files = null;
 
             var canvas = document.getElementById("scribbleboard");
 

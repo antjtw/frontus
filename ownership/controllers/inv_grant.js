@@ -1,5 +1,7 @@
-// Grants page controller
-var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope, navState) {
+
+app.controller('invGrantController',
+    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', 'sorting', '$routeParams', '$rootScope', '$location', 'navState',
+        function($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope, navState) {
 
     if (navState.role == 'issuer') {
         $location.path('/company-grants');
@@ -287,4 +289,4 @@ var invGrantController = function ($scope, $parse, SWBrijj, calculate, switchval
             });
         }
     };
-};
+}]);

@@ -27,13 +27,17 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
                 }
                 version.statusRank = basics.eventRank({activity: version.last_event_activity});
                 version.doc = $scope.doc;
+                // console.log($scope.doc)
                 $scope.versions.push(version);
             });
         });
+
     };
     if ($scope.doc.shown) {
         $scope.loadVersions();
     }
+
+
 
     $scope.versionsVisible = function(doc) {
         var total = doc.version_count;
@@ -55,7 +59,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
     $scope.formatDocStatusRatio = function(doc) {
-        var uploadState = doc.uploading ? "Uploading . . ." : "Uploaded";
+        var uploadState = (doc.pages >= 1) ? "Uploaded": "Uploading . . .";
         if (doc.version_count == 0) return (doc.template_id == null ? uploadState : "Pre-loaded");
 
         var show_archived = $scope.viewState.show_archived;
@@ -70,7 +74,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return "All documents archived";
         } else if (total == doc.complete_count && hide_completed) {
             return "All documents completed";
-        } else if (total == (doc.archive_count + doc.complete_count) && (!show_archived && hide_completed)) {
+        } else if (total == (doc.archive_count + doc.complete_count - doc.archive_complete_count) && (!show_archived && hide_completed)) {
             return "All documents are archived or completed";
         } else {
             return num + " / " + display_total + " completed";
@@ -114,6 +118,8 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         };
     };
 
+
+
     $scope.getShareType = function(doc) {
         if (!doc) {return 0;}
         if (!doc.signature_flow && !doc.template_id) {
@@ -148,6 +154,12 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             }
         }
     };
+
+    $scope.showtooltip = function(doc){
+        if(doc.length > 50 && doc.indexOf(' ') >= 0){
+            return doc
+        }
+    }
 
     // dropdown list functions
     $scope.viewProfile = function(investor) {

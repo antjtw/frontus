@@ -216,6 +216,21 @@ navm.controller('NavCtrl',
                 $location.url(page);
             }
         };
+        $scope.persistentNavGoToPage = function(page) {
+            _kmq.push(['record', 'Persistent Notification', {'Message': $rootScope.paymentmessage}]);
+            $scope.gotoPage(page);
+        };
+
+        $scope.toggleSubmenu = function(tab) {
+            if ($scope.navhover && $scope.submenu == tab) {
+                $scope.navhover = !$scope.navhover;
+            } else if ($scope.navhover && $scope.submenu != tab) {
+                $scope.submenu = tab;
+            } else {
+                $scope.navhover = !$scope.navhover;
+                $scope.submenu = tab;
+            }
+        };
 
 
         $scope.switchCandP = function (company, url) {
@@ -325,6 +340,8 @@ navm.controller('NavCtrl',
             $rootScope.settings = x[0];
             $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
             $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
+            $rootScope.settings.fulldate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y' : 'dd MMMM y';
+            $rootScope.settings.dateandtime = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y, h:mm a' : 'dd MMMM y, h:mm a';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
             $rootScope.settings.domain = window.location.host;
         });
