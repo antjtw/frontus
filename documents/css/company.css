@@ -125,7 +125,7 @@
 	float: left;
 	margin: 50px;
 }
-.company-page > .info-box:last-child > .body-box > div:first-child > div > div {
+.company-page > .info-box > .body-box > div:first-child > div > div {
 	margin: 50px;
 }
 div.pull-right.standard-button.green {
