@@ -120,20 +120,26 @@
 #own-button {
 	margin-left: 23px;
 }
-.body-box > div:first-child > div > div:last-child {
+.same-row .body-box:last-child > div:first-child > div > div:last-child {
 	position: absolute;
 	float: left;
 	margin: 50px;
+}
+.company-page > .info-box:last-child > .body-box > div:first-child > div > div {
+	margin: 50px;
+}
+div.pull-right.standard-button.green {
+	margin-bottom: 20px !important;
 }
 .span7 svg{
 	left: calc(100% - 150px);
 	position: absolute;
 }
 
-.body-box > div:first-child > div > div {
+.same-row .body-box > div:first-child > div > div {
 	top: 30px;
 }
-.body-box > div > div {
+.same-row .body-box > div > div {
 	padding-top: 30px;
 }
 
