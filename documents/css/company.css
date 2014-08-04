@@ -179,11 +179,11 @@
 	width: 45.5%;
 	float: left;
 }
-.same-row .info-box:first-child {
+.same-row div:first-child > .info-box {
 	border-right: 15px;
 	margin-left: 0px;
 }
-.same-row .info-box:last-child {
+.same-row  div:last-child > .info-box {
 	border-right: 0px;
 	width: calc(91% + 20px);
 	height: 350px;
