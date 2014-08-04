@@ -1553,7 +1553,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .draggable.greenrequired div > textarea {
-    border: 1px solid #1ABC96;
+    border: 1px solid rgb(141, 141, 141);
 }
 
 .draggable.otherperson div > textarea {
@@ -1603,7 +1603,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky.greenrequired .dragger {
-    background-color: #1ABC96;
+    background-color: rgb(141, 141, 141);
 }
 
 .sticky.otherperson .dragger {
@@ -1769,7 +1769,7 @@ div.imgsig > div {
 }
 
 div.imgsig > div:first-child {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 div.imgsig > div > img {
@@ -1791,7 +1791,7 @@ div.imgsig > div > img {
 }
 
 .scribblewindow {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 .scribblewindow > canvas {
@@ -1874,11 +1874,11 @@ annotation-list .annotmark.mine:hover, annotation-list .annotmark.mine.active {
 }
 
 annotation-list .annotmark.mine.complete {
-    color: #1ABC96;
+    color: rgb(141, 141, 141);
 }
 
 annotation-list .annotmark.mine.complete:hover, annotation-list .annotmark.mine.complete.active {
-    color: #15A085;
+    color: #666;
 }
 
 annotation-list .annotmark.mine.incomplete {
@@ -1887,6 +1887,12 @@ annotation-list .annotmark.mine.incomplete {
 
 annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.mine.incomplete.active {
     color: #C44032;
+}
+
+annotation-list .annotmark > span {
+    float: right;
+    margin-right: 20px;
+    vertical-align: -10%;
 }
 
 help-tab > div {
@@ -2034,8 +2040,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2043,8 +2052,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2052,8 +2064,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2061,8 +2076,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2073,7 +2091,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields.field-completed > span {
-    color: #19bc96;
+    color: rgb(141, 141, 141);
     -webkit-animation: completerequired 1s; /* Safari 4+ */
     -moz-animation:    completerequired 1s; /* Fx 5+ */
     -o-animation:      completerequired 1s; /* Opera 12+ */
@@ -2086,7 +2104,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields > span:first-of-type > span {
-    color: #19bc96;
+    color: rgb(141, 141, 141);
     vertical-align: -14%;
     font-size: 20px;
     -webkit-animation: completerequired 1s; /* Safari 4+ */
@@ -2119,6 +2137,10 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     background-color: #e3e3e3;
 }
 
+.fields-progress .meter > span {
+    background-color: #666;
+}
+
 
 .select2-container.height-force {
     height: 30px !important;
@@ -2129,7 +2151,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input, .greenrequired .select2-container .select2-choice, .greenrequired input  {
-    border-color: #1ABC96;
+    border-color: rgb(141, 141, 141);
 }
 
 /* Transaction Directive */
