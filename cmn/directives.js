@@ -591,7 +591,9 @@ m.directive('composeMessage', function() {
 
         function($scope, $rootScope, SWBrijj) {
 
-            $scope.myEmails = []
+            $scope.myEmails = [];
+            $scope.myRecipients = [];
+            $scope.recipient = {};
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
@@ -612,6 +614,10 @@ m.directive('composeMessage', function() {
                 'tokenSeparators': [",", " "],
                 'placeholder': 'Enter email addresses & press enter'
             };  
+
+            $scope.checkRecipients = function(){
+                console.log($scope.myRecipients);
+            }
 
             // $scope.resetMessage = function() {
             //     $scope.message = {recipients:[],
