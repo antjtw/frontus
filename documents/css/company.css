@@ -231,3 +231,22 @@ font-size: 17px;
     margin: 0;
     color: #C6C6C6;
 }
+.yticks {
+    stroke: #e3e3e3;
+    stroke-width: 1;
+    opacity: 1;
+}
+
+.axis path {
+    fill: none;
+    stroke: #e3e3e3;
+    shape-rendering: crispEdges;
+}
+
+.x.axis > .tick:nth-child(even) > text {
+    display: none;
+}
+
+.y.axis path, .yticks path {
+    display: none;
+}
