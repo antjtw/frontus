@@ -290,6 +290,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             .filter(function(el) {return el!==-1;});
         return indices.map(function(idx) {return array.splice(idx, 1);});
     }
+    function splice_many_by(array, filter_fn) {
+        return splice_many(array, array.filter(filter_fn));
+    }
     function saveTransaction(tran) {
         // TODO this is getting called too often.
         // use ng-change instead of ui-event?
@@ -311,13 +314,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }).except(logError);
     }
     this.saveTransaction = saveTransaction;
-    function deleteTransactions(trans) {
-        console.log(trans);
-        // TODO remove trans from captable.transactions
-        // captable.investors
-        // captable.securities
-        // and captable.cells
-    }
+    this.deleteTransaction = function(tran) {
+
+    };
     this.deleteSecurity = function(sec) {
         SWBrijj.procm('_ownership.delete_security', sec.name)
         .then(function(x) {
@@ -325,8 +324,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             if (res > 0) {
                 $rootScope.$emit("notification:success",
                     "Security deleted");
-                // TODO splice security from captable.securities
-                // remove transactions and eldger entries from everywhere
+
+                var idx = captable.securities.indexOf(sec);
+                if (idx !== -1) { captable.securities.splice(idx, 1); }
+                splice_many_by(captable.cells,
+                    function(el) {return el.security==sec.name;});
+                splice_many(captable.transactions, sec.transactions);
+                
             } else {
                 $rootScope.$emit("notification:fail",
                     "Oops, something went wrong.");
@@ -344,8 +348,12 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             if (res > 0) {
                 $rootScope.$emit("notification:success",
                     "Investor removed from captable.");
-                // TODO splice investor from captable.securities
-                // remove transactions and eldger entries from everywhere
+
+                var idx = captable.investors.indexOf(inv);
+                if (idx !== -1) { captable.investors.splice(idx, 1); }
+                splice_many_by(captable.cells,
+                    function(el) {return el.investor==inv.name;});
+                splice_many(captable.transactions, inv.transactions);
             } else {
                 $rootScope.$emit("notification:fail",
                     "Oops, something went wrong.");
