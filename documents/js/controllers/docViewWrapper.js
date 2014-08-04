@@ -327,31 +327,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             $scope.nextAnnotationType = type;
         };
 
-        $scope.leave = function() {
-            if ($rootScope.lastPage &&
-                ($rootScope.lastPage.indexOf("/register/") === -1) &&
-                ($rootScope.lastPage.indexOf("/login/") === -1) &&
-                ($rootScope.lastPage.indexOf("-view") === -1)) {
-                if (document.location.href.indexOf("share=true") !== -1) {
-                    sessionStorage.setItem("docPrepareState",
-                                          angular.toJson({template_id: $scope.templateId,
-                                                          doc_id: $scope.docId}));
-                    $rootScope.lastPage = $rootScope.lastPage + "?share";
-                }
-                if ($rootScope.lastPage.indexOf("company-status") !== -1) {
-                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
-                }
-                if ($rootScope.lastPage.indexOf("/prepare") !== -1) {
-                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
-                }
-                $location.url($rootScope.lastPage);
-            } else if ($scope.invq) {
-                $location.url('/documents/investor-list');
-            } else {
-                $location.url('/documents/company-list');
-            }
-        };
-
         $scope.signDocument = function() {
             return $scope.doc.sign().then(
                 function(data) {
