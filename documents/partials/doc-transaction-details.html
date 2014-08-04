@@ -11,16 +11,17 @@
             Unlink
         </span>
         </span>
-        <div class="required-fields" ng-class="{'field-completed': (doc.hasFilledAnnotation(field.name) || doc.hasOtherPartyAnnotation(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required">
-            <span><span data-icon="&#xe052;" ng-show="doc.hasFilledAnnotation(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
+        <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required">
+            <span><span data-icon="&#xe052;" ng-show="doc.hasAnnotationType(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
             <span>{{field.display}}</span>
             <span ng-show="doc.hasOtherPartyAnnotation(field.name)"> (Recipient Completes)</span>
+            <span ng-show="!doc.hasOtherPartyAnnotation(field.name) && doc.hasAnnotationType(field.name) && !doc.hasFilledAnnotation(field.name)"> (Specific to Recipient)</span>
         </div>
     </div>
     <div class="fields-progress">
         <div>Progress</div>
-        <span ng-show="doc.numFieldsComplete() != doc.numFieldsRequired()">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} Complete</span>
-        <span ng-show="doc.numFieldsComplete() == doc.numFieldsRequired()">Document is ready to go!</span>
+        <span ng-show="doc.numFieldsComplete() != doc.numFieldsRequired()">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} added to document</span>
+        <span ng-show="doc.numFieldsComplete() == doc.numFieldsRequired()">Document is ready for recipients!</span>
         <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
     </div>
 </div>

@@ -286,7 +286,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 if (types.required) {
                     angular.forEach(annotations, function(annot) {
                         if (annot.whattype == types.name) {
-                            num += annot.filled(false, $rootScope.navState.role) || !annot.forRole($rootScope.navState.role) ? 1 : 0;
+                            num += 1;
                         }
                     });
                 }
