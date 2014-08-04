@@ -94,6 +94,11 @@ app.config(function($routeProvider, $locationProvider){
             templateUrl: '/modeling/pages/note.html',
             controller: 'noteController'
         }).
+        when('/app/company/messages', {
+            templateUrl: '/messages/inbox.html',
+            controller: 'MsgCtrl'
+            
+        }).
 
         otherwise({redirectTo:'/app/home/investor'});
 });

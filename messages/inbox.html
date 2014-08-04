@@ -35,7 +35,7 @@
 
                     </tr>
                     </tbody>
-                    <tbody>
+                    <tbody ng-repeat="sentMessage in sentMessages">
                     <tr class="empty-row"></tr>
 
                     <td style="width:350px" class="shareholder-column docname-column"> 
@@ -43,12 +43,12 @@
                    <!--  check boxes      -->
             
                         <ul>
-                            <li>Name goes here</li>
+                            <li>{{sentMessage.tox}}</li>
                            
                         </ul>
                     </td>
                     
-                    <td><span>Subject goes here</span></td>
+                    <td><span>{{sentMessage.subject}}</span></td>
                     <td style="width:10px;">
                     </td>
 
