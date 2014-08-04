@@ -203,6 +203,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                             return;
                         }
                         $scope.document = data;
+                        if ($scope.document.signature_flow == "0") {
+                            $scope.toggleSide = true;
+                        }
                         if (data.signature_flow == 1 && !data.when_signed) {
                             document.location.href = "/documents/investor-view?template=" + data.template_id + "&subid=" + data.doc_id;
                         }
