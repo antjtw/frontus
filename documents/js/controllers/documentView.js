@@ -217,7 +217,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         });
 
-        $scope.pageScroll = 0;
         $scope.isAnnotable = true;
 
         $scope.signatureURL = '/photo/user?id=signature:';
@@ -479,7 +478,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 var s = $location.search();
                 s.page = page;
                 $location.search(s).replace();
-                scroll(0,0);
+                $('doc-viewer').scrollTop(0);
                 refreshDocImage();
                 $scope.active.annotation = null; // new page shouldn't have any annotations open
             }
