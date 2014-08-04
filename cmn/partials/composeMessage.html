@@ -3,7 +3,7 @@
         <span>SEND MESSAGE</span>
     </div>
 
-    <div class="sidebarText">
+    <div>
     <!--     <div class="input-list"> -->
         <div ng-if="triggerUpgradeMessages(recipients)"
             class="upgradeWarning">
@@ -12,8 +12,8 @@
         <div>
 
         <div>
-            <span>Recipients</span>
-            <span ng-repeat="recipient in recipients">{{recipient}}</span>
+            <span>RECIPIENTS</span>
+            <span ng-repeat="recipient in recipients">{{recipient}}<span ng-show="!$last">, </span></span>
         </div>
      
         <div>
@@ -24,7 +24,7 @@
             <input type="text" ng-model ="message.subject">
         </div>
 
-        <div class="sidebarText">
+        <div>
             <span>MESSAGE</span>
             <div>
             <textarea class="email-text" rows="6"
@@ -35,7 +35,7 @@
     </div>
 
   
-    <div class="sidebarFooter">
+    <div>
 
         <div class="preview-message" 
             ng-click= "previewModalOpen(message)"

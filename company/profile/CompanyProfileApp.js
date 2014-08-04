@@ -720,6 +720,19 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
       
         // add person to dropdown on people page
+
+        $scope.emailRecipients = function(person){
+            if ($scope.messageData.recipients.indexOf(person.email)=== -1){
+                    $scope.messageData.recipients.push(person.email);             
+             }
+            else {
+                var toDelete = $scope.messageData.recipients.indexOf(person.email)
+                $scope.messageData.recipients.splice(toDelete, 1);
+             };   
+            return $scope.messageData.recipients;
+            console.log($scope.messageData.recipients)
+        }; 
+
         $scope.selectPerson = function(person){
             if($scope.sidebarPage == 'email'){
                 if ($scope.messageData.recipients.indexOf(person.email)=== -1){

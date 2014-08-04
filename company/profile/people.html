@@ -39,7 +39,7 @@
                  <!--    email button -->
                     <div class="box-button pull-right"
                          ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide('email'); clearRecipient();"
+                         ng-click="companyIsZombie() || toggleSide('email')"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
@@ -74,7 +74,7 @@
   <!--   text in the window -->
    <div ng-style="viewportheight" style="width: 100%" ng-if="sidebarPage == 'email'">
 
-        <compose-message  recipients="groupPeople">
+        <compose-message  recipients="messageData.recipients" people="groupPeople">
         </compose-message>
     </div>
 
@@ -101,7 +101,7 @@
 
                    <!--  check boxes      -->
                         <div class="check-box-side">
-                            <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="selectPerson(person)">
+                            <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="selectPerson(person); emailRecipients(person);">
                              <span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </div>
             

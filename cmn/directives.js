@@ -580,7 +580,8 @@ m.directive('addPerson', function(){
 
 m.directive('composeMessage', function() {
     return {
-        scope: {recipients: "="},
+        scope: {recipients: "=",
+                people: "=people"},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -590,12 +591,13 @@ m.directive('composeMessage', function() {
         
 
         function($scope, $rootScope, SWBrijj) {
+             $scope.tox = [];
 
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
                                   subject:""};
-                $scope.recipients = []
+                // $scope.recipients = []
             };
             $scope.resetMessage();
             $scope.composeopts = {
@@ -604,6 +606,15 @@ m.directive('composeMessage', function() {
             };
 
             $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
+
+
+            $scope.createRecipients = function(){
+                angular.forEach($scope.people, function(ind){
+                    if($scope.tox.indexOf(ind.email) ==-1){
+                        $scope.tox.push(ind.email)
+                    };
+                });
+            };
             
             $scope.howMany = function (){
                 if(location.host == 'share.wave'){
@@ -646,6 +657,7 @@ m.directive('composeMessage', function() {
 
             $scope.showRecipients = function(){
                 console.log($scope.recipients);
+                console.log($scope.people);
             }
             $scope.showRecipients();
 
@@ -673,14 +685,9 @@ m.directive('composeMessage', function() {
                 }
             }
 
-          
-
             $scope.previewModalOpen = function(msg) {
                 $scope.previewModal = true;
                 $scope.subject = msg.subject;
-                // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
-                // var re = /<br *\/?>/gi;
-                // $scope.messagetext = message.replace(re, '\n')
                 $scope.messagetext=msg.text
                 $scope.sendername = $rootScope.person.name;
                 $scope.company = $rootScope.navState.name;
