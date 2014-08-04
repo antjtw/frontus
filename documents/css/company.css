@@ -176,7 +176,7 @@
 	top: 250px;
 }
 .same-row .info-box {
-	width: 45%;
+	width: 45.5%;
 	float: left;
 }
 .same-row .info-box:first-child {
@@ -185,7 +185,7 @@
 }
 .same-row .info-box:last-child {
 	border-right: 0px;
-	width: calc(90% + 20px);
+	width: calc(91% + 20px);
 	height: 350px;
 }
 d3vestedbar > svg {

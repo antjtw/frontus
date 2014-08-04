@@ -77,26 +77,28 @@
 								</div>
 							</div>
 						</div>
-						<div class="front info-box">
-							<div class="head-box">
-								<h2>Grant Vesting</h2>
+						<div ng-show="vestedgraphdata.length > 0">
+							<div class="front info-box">
+								<div class="head-box">
+									<h2>Grant Vesting</h2>
 								
-							</div>
-							<div class="body-box">
-								<div>
-									<div class="side-graph row-fluid">
-										<div class="span9">
-											<div id="tooltip" class="hidden">
-												<p><span id="date"></span></p>
-												<p><span id="value"></span> Shares</p>
+								</div>
+								<div class="body-box">
+									<div>
+										<div class="side-graph row-fluid">
+											<div class="span9">
+												<div id="tooltip" class="hidden">
+													<p><span id="date"></span></p>
+													<p><span id="value"></span> Shares</p>
+												</div>
+												<d3vestedbar data='vestedgraphdata'></d3vestedbar>
 											</div>
-											<d3vestedbar data='vestedgraphdata'></d3vestedbar>
-										</div>
-										<div class="span3">
-											<d3myvested class="personal-ownership" data='vesteddonut'></d3myvested>
-											<div class="view-button" id="view-button3">
-												<div class="small-standard-button standard-button gray">
-													<button id='a_home_vesting_inv_front' class="btn" ng-click="gotopage('/app/ownership/investor-grants')">View</button>
+											<div class="span3">
+												<d3myvested class="personal-ownership" data='vesteddonut'></d3myvested>
+												<div class="view-button" id="view-button3">
+													<div class="small-standard-button standard-button gray">
+														<button id='a_home_vesting_inv_front' class="btn" ng-click="gotopage('/app/ownership/investor-grants')">View</button>
+													</div>
 												</div>
 											</div>
 										</div>
