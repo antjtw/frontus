@@ -671,7 +671,8 @@
                 </th>
                 <th class="longrow">Shareholder</th>
                 <th ng-repeat="sec in ct.securities
-                  | orderBy:['effective_date', 'insertion_date']:true">
+                  | orderBy:['effective_date', 'insertion_date']:true"
+                    ng-click="selectSecurity(sec.name)">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
                               ng-click="moveTour();">
@@ -679,8 +680,7 @@
                         </span>
                     </span>
                     <input class="capEditHeaders"
-                           ui-event="{focus:'selectSecurity(sec.name)',
-                                      blur:'saveIssue(sec,\'issue\')'}"
+                           ui-event="{blur:'saveIssue(sec,\'issue\')'}"
                            ng-model="sec.name"
                            onkeydown="testForEnter();">
                 </th>
@@ -1003,6 +1003,14 @@
                                       aria-hidden="true">
                                 </span>
                                 <span>Share with Investor</span>
+                            </div>
+                            <div ng-if="!toggleView();"
+                                 ng-click="captable.removeInvestor(selectedInvestor)"
+                                 class="profile-link">
+                                <span data-icon="&#xe00c;"
+                                      aria-hidden="true">
+                                </span>
+                                <span>Remove Investor</span>
                             </div>
                         </div>
                     </span>

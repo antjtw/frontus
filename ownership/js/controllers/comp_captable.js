@@ -185,6 +185,7 @@ var captableController = function(
     $scope.addInvestor = function() {
         captable.addInvestor();
     };
+    /*
     $scope.saveIssueAssign = function (issue, field, i) {
         if (i) { issue[field] = i; }
         $scope.saveIssueCheck(issue, field);
@@ -229,6 +230,7 @@ var captableController = function(
     $scope.deleteIssueButton = function (activeIssue) {
         $scope.dmodalUp(activeIssue);
     };
+    */
 
     $scope.addIssuePari = function(items) {
         items.push({"company": items[0].company,
@@ -256,10 +258,11 @@ var captableController = function(
     };
 
     $scope.toggleCommon = function(issue) {
-        issue.common = issue.common && issue.type == 'Equity' ? false : true;
-        $scope.saveIssue(issue);
+        //issue.common = issue.common && issue.type == 'Equity' ? false : true;
+        //$scope.saveIssue(issue);
     };
 
+    /*
     $scope.tranChangeU = function (value, issue) {
         captable.generateUnissuedRows();
         if ($scope.activeTran.length < 2) {
@@ -297,6 +300,7 @@ var captableController = function(
             }
         });
     };
+    */
 
     // Preformatting on the date to factor in the local timezone offset
     var keyPressed = false;

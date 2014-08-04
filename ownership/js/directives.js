@@ -131,13 +131,14 @@ own.directive('securityDetails', [function() {
 }]);
 own.directive('editableSecurityDetails', [function() {
     return {
-        restrict: 'EA',
+        restrict: 'E',
         scope: {
             sec: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable",
             function($scope, displayCopy, captable) {
+                $scope.captable = captable;
                 $scope.tips = displayCopy.captabletips;
                 $scope.ct = captable.getCapTable();
             }
@@ -224,7 +225,9 @@ own.directive('editableTransactionAttributes', [function() {
             function($scope, $filter, captable, attributes) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
+                console.log($scope.data);
                 $scope.keys = function() {
+                    if (!$scope.data.attrs.security_type) return null;
                     return Object.keys(attrs[$scope.data.attrs.security_type][$scope.data.kind])
                         .sort(function(x1, x2) {
                             return $filter('sortAttributeTypes')(x1) -

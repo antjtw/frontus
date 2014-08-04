@@ -299,6 +299,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             .filter(function(el) {
                     return el.transaction == tran.transaction;
             });
+        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
@@ -310,6 +311,49 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }).except(logError);
     }
     this.saveTransaction = saveTransaction;
+    function deleteTransactions(trans) {
+        console.log(trans);
+        // TODO remove trans from captable.transactions
+        // captable.investors
+        // captable.securities
+        // and captable.cells
+    }
+    this.deleteSecurity = function(sec) {
+        SWBrijj.procm('_ownership.delete_security', sec.name)
+        .then(function(x) {
+            var res = x[0].delete_security;
+            if (res > 0) {
+                $rootScope.$emit("notification:success",
+                    "Security deleted");
+                // TODO splice security from captable.securities
+                // remove transactions and eldger entries from everywhere
+            } else {
+                $rootScope.$emit("notification:fail",
+                    "Oops, something went wrong.");
+            }
+        }).except(function(err) {
+            console.log(err);
+            $rootScope.$emit("notification:fail",
+                "Oops, something went wrong.");
+        });
+    };
+    this.removeInvestor = function(inv) {
+        SWBrijj.procm('_ownership.remove_investor', inv.name)
+        .then(function(x) {
+            var res = x[0].remove_investor;
+            if (res > 0) {
+                $rootScope.$emit("notification:success",
+                    "Investor removed from captable.");
+                // TODO splice investor from captable.securities
+                // remove transactions and eldger entries from everywhere
+            } else {
+                $rootScope.$emit("notification:fail",
+                    "Oops, something went wrong.");
+            }
+        }).except(function(err) {
+            console.log(err);
+        });
+    };
     function rowFromName(name) {
         var row = new Investor();
         row.name = name.name;
