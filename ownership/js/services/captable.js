@@ -314,8 +314,25 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }).except(logError);
     }
     this.saveTransaction = saveTransaction;
-    this.deleteTransaction = function(tran) {
-
+    this.deleteTransaction = function(tran, cell) {
+        SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
+        .then(function(x) {
+            var res = x[0].delete_transaction;
+            if (res > 0) {
+                $rootScope.$emit("notification:success",
+                    "Transaction deleted");
+                splice_many(captable.transactions, [tran]);
+                splice_many(cell.transactions, [tran]);
+                // TODO removeit from cells
+            } else {
+                $rootScope.$emit("notification:fail",
+                    "Oops, something went wrong.");
+            }
+        }).except(function(err) {
+            console.log(err);
+            $rootScope.$emit("notification:fail",
+                "Oops, something went wrong.");
+        });
     };
     this.deleteSecurity = function(sec) {
         SWBrijj.procm('_ownership.delete_security', sec.name)

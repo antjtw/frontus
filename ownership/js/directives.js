@@ -170,6 +170,7 @@ own.directive('editableCellDetails', [function() {
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable",
             function($scope, $rootScope, attributes, captable) {
+                $scope.captable = captable;
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
                 $scope.switchCapTab = function(tab) {
