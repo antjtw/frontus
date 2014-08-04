@@ -95,6 +95,8 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'noteController'
         }).
 
+      
+
         otherwise({redirectTo:'/app/home/investor'});
 });
 

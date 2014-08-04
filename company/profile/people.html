@@ -72,6 +72,11 @@
         </div>
 
   <!--   text in the window -->
+   <div ng-style="viewportheight" style="width: 100%" ng-if="sidebarPage == 'email'">
+            You!
+           <!--   <compose-message  recipients="messageData.recipients">
+                </compose-message> -->
+        </div>
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">
@@ -130,11 +135,13 @@
             </tabset>
         </internal-right-rail>
         <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
-                <compose-message  recipients="messageData.recipients" ng-switch-when="email">
-                </compose-message>
+                <!-- <compose-message  recipients="messageData.recipients" ng-switch-when="email">
+                </compose-message> -->
                 <add-person ng-switch-when="people"></add-person>
                 <group-people ng-switch-when="group" people="groupPeople"></group-people>
         </div>
+
+
 
     </div>
 
