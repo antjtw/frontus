@@ -588,16 +588,21 @@ m.directive('composeMessage', function() {
         templateUrl: '/cmn/partials/composeMessage.html',
         controller: ['$scope', '$rootScope', 'SWBrijj',
 
-        
+       
 
         function($scope, $rootScope, SWBrijj) {
              $scope.tox = [];
+
+              $scope.clearPeople = function(array){
+                while(array.length > 0){
+                    array.pop();
+                }
+            }
 
             $scope.resetMessage = function() {
                 $scope.message = {recipients:[],
                                   text:"",
                                   subject:""};
-                // $scope.recipients = []
             };
             $scope.resetMessage();
             $scope.composeopts = {
@@ -644,7 +649,7 @@ m.directive('composeMessage', function() {
                     //this works but i don't know why for the root scope
                     $rootScope.$emit('new:message');
                     $scope.resetMessage();
-                    $scope.recipients = [];
+                    $scope.clearPeople($scope.recipients);
                     $scope.clicked = false;
 
                 }).except(function(err) {

@@ -47,7 +47,7 @@
             <div class = "standard-button green">
                 <button class="btn"
                     ng-disabled="!readyToSend(message)  || clicked"
-                    ng-click="sendMessage(message); $parent.toggleSide()">
+                    ng-click="sendMessage(message); $parent.toggleSide(); clearPeople(people);">
                     Send
                 </button>
             </div>
