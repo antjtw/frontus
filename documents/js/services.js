@@ -182,10 +182,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         sign: function() {
             var promise = $q.defer();
-            // before signing the document, I may need to save the existing annotations
-            // In fact, I should send the existing annotations along with the signature request for a two-fer.
-
             var d = this;
+            // send the annotations with the signature, so that it's signed exactly as the user sees it now
             SWBrijj.sign_document(this.doc_id, JSON.stringify(Annotations.getInvestorNotesForUpload(this.doc_id))).then(function(data) {
                 d.when_signed = data;
                 promise.resolve(data);
@@ -196,10 +194,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         countersign: function() {
             var promise = $q.defer();
-            // TODO: Annotations.getIssuerNotesForUpload seems a little when we're inside the document
-            // TODO: shouldn't send notes for countersign, should just use DB version
             var d = this;
-            SWBrijj.document_countersign(this.doc_id, JSON.stringify(Annotations.getIssuerNotesForUpload(this.doc_id))).then(function(data) {
+            SWBrijj.document_countersign(this.doc_id).then(function(data) {
                 d.removeAllNotes();
                 promise.resolve(data);
             }).except(function(x) {
@@ -290,7 +286,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 if (types.required) {
                     angular.forEach(annotations, function(annot) {
                         if (annot.whattype == types.name) {
-                            num += annot.filled(false, $rootScope.navState.role) || !annot.forRole($rootScope.navState.role) ? 1 : 0;
+                            num += 1;
                         }
                     });
                 }
@@ -346,6 +342,23 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 });
             }
             return this.preparedFor;
+        },
+        clearPreparedForCache: function() {
+            // TODO: should consolidate the 2 calls to document.my_personal_preparations_view into a function
+            if (this.preparedFor) {
+                var doc = this;
+                SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
+                    doc.preparedFor = [];
+                    data.forEach(function(investor_prep) {
+                        if (investor_prep.annotation_overrides) {
+                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                        }
+                        // add id and text fields to make select2 happy
+                        investor_prep.display = Investor.getDisplay(investor_prep.investor);
+                        doc.preparedFor.push(investor_prep);
+                    });
+                });
+            }
         },
         addPreparedFor: function(investor) {
             var doc = this;

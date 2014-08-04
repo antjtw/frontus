@@ -101,7 +101,7 @@
         <th colspan="2">Tags</th>
     </tr>
     </tbody>
-    <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder track by $index" class="animate">
+    <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
     </tbody>
 </table>
 <table class="status-table" ng-show="investorDocs && viewBy==='name'" infinite-scroll="loaddocs()" infinite-scroll-distance="0" infinite-scroll-disabled="loadingDocs" infinite-scroll-container="scrollParent">
