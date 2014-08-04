@@ -570,8 +570,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
         $scope.saveNoteData = function(clicked) {
-            var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
-            var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?
@@ -585,6 +583,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 // template ...
                 return;
             }
+            if ($scope.doc.when_signed) {
+                // If there's a signature, no edits can be made
+                return;
+            }
 
             /** @name SWBrijj#saveNoteData
              * @function
@@ -593,6 +595,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {boolean}
              * @param {json}
              */
+            var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
+            var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
                 if (clicked) $scope.$emit("notification:success", "Saved annotations");
