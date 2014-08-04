@@ -109,8 +109,7 @@ app.directive('documentSummaryRow', function() {
         scope: {
             doc: '=',
             viewState: '=',
-            modals: '=',
-            docShareState: '='
+            modals: '='
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController

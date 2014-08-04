@@ -10,7 +10,7 @@
             <span class="toggle-icon" ng-show="versionsVisible(doc) && doc.shown && doc.version_count > 0" data-icon="&#xe01c;" aria-hidden="true"></span>
         </div>
         <div ng-if="!viewState.hideSharebar">
-            <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
+            <button class="check-box-button" ng-class="{selected:forShare()}" ng-click="toggleForShare();">
                 <span data-icon="&#xe023;" aria-hidden="true"></span>
             </button>
         </div>
@@ -60,7 +60,7 @@
         </ul>
     </td>
     <td ng-if="doc.type == 'doc'">
-        <div ng-if="!viewState.hideSharebar && doc.forShare">
+        <div ng-if="!viewState.hideSharebar && forShare()">
             <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
                         {{ formatShareType(getShareType(doc)) }}

@@ -1,6 +1,6 @@
 'use strict';
 
-function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location) {
+function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location, ShareDocs) {
     $scope.versionOrder = 'statusRank';
 
     // load the versions
@@ -37,8 +37,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         $scope.loadVersions();
     }
 
-
-
     $scope.versionsVisible = function(doc) {
         var total = doc.version_count;
         if ($scope.viewState.maxRatio != 1000) {
@@ -60,7 +58,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.formatDocStatusRatio = function(doc) {
         var uploadState = (doc.pages >= 1) ? "Uploaded": "Uploading . . .";
-        if (doc.version_count == 0) return (doc.template_id == null ? uploadState : "Pre-loaded");
+        if (doc.version_count === 0) return (doc.template_id === null ? uploadState : "Pre-loaded");
 
         var show_archived = $scope.viewState.show_archived;
 
@@ -87,16 +85,17 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             || version.when_retracted;
     };
 
-    $scope.toggleForShare = function(doc) {
+    $scope.forShare = function() {
+        return ShareDocs.documents.some(function(d){
+            return d.doc_id == $scope.doc.doc_id;
+        });
+    };
+    $scope.toggleForShare = function() {
         // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
-        if (!doc.forShare) {
-            $scope.docShareState.doclist
-                = $scope.modals.upsertShareItem(doc, $scope.docShareState.doclist);
-            doc.forShare = true;
+        if (!$scope.forShare()) {
+            ShareDocs.upsertShareItem($scope.doc);
         } else {
-            $scope.docShareState.doclist
-                = $scope.modals.removeShareItem(doc, $scope.docShareState.doclist);
-            doc.forShare = false;
+            ShareDocs.removeShareItem($scope.doc);
         }
     };
 
@@ -115,7 +114,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return summary.docname;
         } else if (summary.type == "investor") {
             return summary.name || summary.email;
-        };
+        }
     };
 
 
@@ -173,12 +172,16 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
     $scope.prepareDocument = function(doc) {
+        // store the fact that we went to go prep this document
+        sessionStorage.setItem("docPrepareState",
+                               angular.toJson({template_id: doc.templateId,
+                                               doc_id: doc.doc_id}));
         if (doc.template_id) {
-            $location.url("/app/documents/company-view?template=" + doc.template_id + "&share=true");
+            $location.url("/app/documents/company-view?template=" + doc.template_id);
         } else if (doc.preps) {
             $location.url("/app/documents/prepare?doc=" + doc.doc_id);
         } else {
-            $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true&share=true");
+            $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
         }
     };
 
@@ -196,4 +199,4 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         });
     };
 }
-DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];
+DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location', 'ShareDocs'];

@@ -50,6 +50,72 @@ docs.service('basics', function () {
 
 });
 
+docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, $rootScope) {
+    this.emails = [];
+    this.documents = [];
+    this.message = "";
+
+    this.upsertShareItem = function(item) {
+        var updated = false;
+        angular.forEach(this.documents, function(el) {
+            if (el.doc_id == item.doc_id ||
+                (!el.doc_id && !item.doc_id &&
+                    el.template_id==item.template_id)) {
+                el.signature_flow = item.signature_flow;
+                updated = true;
+            }
+        });
+        if (!updated) {
+            var obj = {
+                "doc_id": item.doc_id,
+                "template_id": item.template_id,
+                "signature_flow": item.signature_flow
+            };
+            this.documents.push(obj);
+            if (item.preps) {
+                // TODO: this overwrites the emails. Is that really what we want?
+                this.emails = JSON.parse(item.preps);
+            }
+        }
+        return this.documents;
+    };
+    this.removeShareItem = function(item) {
+        this.documents = this.documents.filter(function(el) {
+            return !(item.doc_id==el.doc_id &&
+                     item.template_id==el.template_id);
+        });
+    };
+    this.updateShareType = function(doc, tp) {
+        if (doc.template_id && tp > 0) {
+            tp = 1;
+        }
+        doc.signature_flow = tp;
+        this.upsertShareItem(doc);
+    };
+
+    this.docsReadyToShare = function() {
+        if (this.documents.length===0) {
+            return false;
+        }
+        var res = true;
+        angular.forEach(this.documents, function(doc) {
+            // FIXME 'doc' is not the full doc, doesn't have is_prepared.
+            // get the full doc and check that
+            // TODO $q.all(SWBrijj.procm('document.is_prepared_person', [list of doc_ids where signature_flow > 0], [list of emails])) on resolve check everything = true
+            if (doc.signature_flow < 0) {
+                res = false;
+            }
+        });
+        return res;
+    };
+
+    this.shareDocuments = function() {
+
+    };
+}]);
+
+
+// TODO: should really have a document factory
 docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", function(Annotations, SWBrijj, $q, $rootScope, Investor) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
@@ -474,7 +540,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
 }]);
 
 // ANNOTATIONS
-
+// TODO: should really have an annotation factory
 docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootScope) {
     // data structure contents
     // aa -> [annot0...annotn-1]
