@@ -152,14 +152,26 @@ navm.controller('NavCtrl',
         // Within a given angular app, if the path (controller) changes, record the old page.
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
             if (newURL.indexOf(document.location.pathname)==-1) {
-                if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
-                    $rootScope.lastPage = "/app/documents/";
-                } else {
-                    $rootScope.lastPage = document.location.pathname;
-                    $rootScope.lastFullPage = document.location.href;
-                }
+                $rootScope.lastPage = document.location.pathname;
+                $rootScope.lastFullPage = document.location.href;
             }
         });
+        $rootScope.leave = function() {
+            // black list some urls we probably don't want to actually go back to
+            if (!$rootScope.lastPage ||
+                $rootScope.lastPage.indexOf("/register/") !== -1 ||
+                $rootScope.lastPage.indexOf("/login/") !== -1 ||
+                $rootScope.lastPage.indexOf("-view") !== -1 ||
+                $rootScope.lastPage.indexOf("/prepare") !== -1) {
+                if ($scope.invq) {
+                    $location.url('/app/documents/investor-list');
+                } else {
+                    $location.url('/app/documents/company-list');
+                }
+            } else {
+                window.history.back();
+            }
+        };
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
@@ -657,7 +669,7 @@ navm.controller('NavCtrl',
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
                             if (rsp.discount) {
-                                $rootScope.billing.discount = 
+                                $rootScope.billing.discount =
                                     payments.format_discount(rsp.discount);
                             }
                             $rootScope.billing.current_card = rsp.cards.data[0];
