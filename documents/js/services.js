@@ -343,6 +343,23 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             }
             return this.preparedFor;
         },
+        clearPreparedForCache: function() {
+            // TODO: should consolidate the 2 calls to document.my_personal_preparations_view into a function
+            if (this.preparedFor) {
+                var doc = this;
+                SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
+                    doc.preparedFor = [];
+                    data.forEach(function(investor_prep) {
+                        if (investor_prep.annotation_overrides) {
+                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                        }
+                        // add id and text fields to make select2 happy
+                        investor_prep.display = Investor.getDisplay(investor_prep.investor);
+                        doc.preparedFor.push(investor_prep);
+                    });
+                });
+            }
+        },
         addPreparedFor: function(investor) {
             var doc = this;
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {

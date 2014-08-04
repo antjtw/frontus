@@ -599,7 +599,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
             SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
-                if (clicked) $scope.$emit("notification:success", "Saved annotations");
+                if (clicked) {
+                    $scope.$emit("notification:success", "Saved annotations");
+                }
+                $scope.doc.clearPreparedForCache();
             });
         };
 
