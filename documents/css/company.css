@@ -132,9 +132,7 @@
 
 .body-box > div:first-child > div > div {
 	top: 30px;
-}
-.body-box > div > div {
-	padding-top: 30px;
+	margin: 50px;
 }
 
 .add-investments {
