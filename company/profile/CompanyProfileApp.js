@@ -705,9 +705,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
             else {
                 return $scope.groupPeople.indexOf(person) != -1;
+               
             };
             
         };
+
 
 
 
@@ -740,6 +742,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.groupPeople.splice(toDelete, 1);
                 };
             };
+            console.log($scope.groupPeople);
             
         };
         
