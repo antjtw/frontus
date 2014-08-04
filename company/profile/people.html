@@ -39,7 +39,7 @@
                  <!--    email button -->
                     <div class="box-button pull-right"
                          ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || toggleSide('email'); clearRecipient();"
+                         ng-click="companyIsZombie() || gotoPage('/app/company/messages')"
                          data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
