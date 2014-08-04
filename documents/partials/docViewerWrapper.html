@@ -149,7 +149,7 @@
                         <doc-transaction-list trans="doctrans"></doc-transaction-list>
                     </tab>
                 </tabset>
-                <div id="bottom-part" class="confirmPanelContainer" ng-if="prepareFor || actionNeeded()">
+                <div id="bottom-part" class="confirmPanelContainer" ng-if="prepareFor || actionNeeded()" ng-class="{'preparescreen': prepareFor}">
                     <div class="confirmPanel">
                         <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()" disabled="unfilledAnnotation()">
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
