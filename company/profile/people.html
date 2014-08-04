@@ -73,10 +73,12 @@
 
   <!--   text in the window -->
    <div ng-style="viewportheight" style="width: 100%" ng-if="sidebarPage == 'email'">
-            You!
-           <!--   <compose-message  recipients="messageData.recipients">
-                </compose-message> -->
-        </div>
+
+        <compose-message  recipients="messageData.recipients">
+        </compose-message>
+    </div>
+
+
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">

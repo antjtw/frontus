@@ -644,6 +644,11 @@ m.directive('composeMessage', function() {
                 });
             };
 
+            $scope.showRecipients = function(){
+                console.log($scope.recipients);
+            }
+            $scope.showRecipients();
+
 
             
             $scope.readyToSend = function(msg) {
