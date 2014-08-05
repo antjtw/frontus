@@ -946,6 +946,17 @@ input[type='text']:disabled, textarea:disabled {
     margin: 1px 1px 1px 1px;
 }
 
+.evenWiderModal .documentUploadText {
+    text-align: left;
+    width: 450px;
+    padding: 0px 0px 0px 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.evenWiderModal .container {
+    padding: 15px 0px;
+}
+
 .modalText .documentUploadText {
     padding-top: 0px;
     margin: 1px 1px 1px 1px;
@@ -1039,6 +1050,12 @@ input[type='text']:disabled, textarea:disabled {
     left: 50px;
 }
 
+.evenWiderModal div.documentUpload.fakefile{
+    position: absolute;
+    top: 15px;
+    left: 50px;
+}
+
 .twoPieceModal .documentUpload input.file {
     float: left;
     width: 135px;
@@ -1047,6 +1064,19 @@ input[type='text']:disabled, textarea:disabled {
 }
 
 .twoPieceModal div.modalText.documentUploadFileInputs {
+    display: inline-block;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+.evenWiderModal .documentUpload input.file {
+    float: left;
+    width: 135px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.evenWiderModal div.modalText.documentUploadFileInputs {
     display: inline-block;
     padding-left: 50px;
     padding-top: 20px;

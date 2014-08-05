@@ -199,11 +199,24 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
+                $scope.uploadType = null;
+                $scope.uploadDocid = null;
                 $scope.documentUploadModal = true;
             };
 
             $scope.modals.documentUploadClose = function() {
                 $scope.documentUploadModal = false;
+            };
+            
+            $scope.modals.signedUploadOpen = function(docid) {
+                $scope.files = [];
+                $scope.uploadType = 'signed';
+                $scope.uploadDocid = docid;
+                $scope.signedUploadModal = true;
+            };
+
+            $scope.modals.signedUploadClose = function() {
+                $scope.signedUploadModal = false;
             };
 
             $scope.wideopts = {
@@ -266,7 +279,7 @@ app.controller('CompanyDocumentListController',
                         }
                     }
                     if ($scope.files.length > 0) {
-                        $scope.uploadFile($scope.files);
+                        $scope.uploadFile($scope.files, $scope.uploadType, $scope.uploadDocid);
                     }
                     $scope.modals.documentUploadClose();
                 });
@@ -331,7 +344,7 @@ app.controller('CompanyDocumentListController',
                 });
             };
 
-            $scope.uploadFile = function(files) {
+            $scope.uploadFile = function(files, type, docid) {
                 $scope.$on("upload:progress", function(evt, arg) {
                     $scope.loadProgress = 100 * (arg.loaded / arg.total);
                     $scope.showProgress = true;
@@ -365,31 +378,60 @@ app.controller('CompanyDocumentListController',
                     analytics.track('doc uploader');
                 }
                 Intercom('update', {company : {"documents":$scope.documents.length+1}});
-                for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
-                var upxhr = SWBrijj.uploadFile(fd);
+                console.log(files[0]);
+                for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
+                var upxhr;
+                if (type == null)
+                {
+                    upxhr = SWBrijj.uploadFile(fd);
+                }
+                else
+                {
+                    if (fd.length > 1)
+                    {
+                        //throw error. Multiple docs doesn't make sense
+                        console.log("multiple");
+                        return;
+                    }
+                    upxhr = SWBrijj.uploadSigned(fd);
+                }
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
-                    for (var i = 0; i < files.length; i++) {
-                        var newdocument = {
-                            uploaded_by: $rootScope.person.email,
-                            iss_annotations: null,
-                            company: $rootScope.navState.company,
-                            doc_id: x[i],
-                            template_id: null,
-                            annotations: null,
-                            docname: files[i].name,
-                            version_count: 0,
-                            complete_count: 0,
-                            archive_complete_count: 0,
-                            archive_count: 0,
-                            statusRatio: 0,
-                            uploading: true,
-                            type: "doc"
-                        };
-                        $scope.documents.push(newdocument);
+                    console.log(x);
+                    if (type == "signed")
+                    {
+                        SWBrijj.uploadSetType(x[0], type, docid).then(function() {
+                            console.log("succeeded");
+                        }).except(function(x) {
+                            console.log("exception");
+                            console.log(x);
+                        });
+                        $scope.modals.signedUploadClose();
                     }
-                    $timeout($scope.checkReady, 2000);
-                    $scope.modals.documentUploadClose();
+                    else
+                    {
+                        for (var i = 0; i < files.length; i++) {
+                            var newdocument = {
+                                uploaded_by: $rootScope.person.email,
+                                iss_annotations: null,
+                                company: $rootScope.navState.company,
+                                doc_id: x[i],
+                                template_id: null,
+                                annotations: null,
+                                docname: files[i].name,
+                                version_count: 0,
+                                complete_count: 0,
+                                archive_complete_count: 0,
+                                archive_count: 0,
+                                statusRatio: 0,
+                                uploading: true,
+                                type: "doc"
+                            };
+                            $scope.documents.push(newdocument);
+                        }
+                        $timeout($scope.checkReady, 2000);
+                        $scope.modals.documentUploadClose();
+                    }
 
                 }).except(function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");

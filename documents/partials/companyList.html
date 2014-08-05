@@ -150,6 +150,33 @@
 </div>
 </div>
 
+<div modal="signedUploadModal" close="modals.signedUploadClose()" options="verywideopts">
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="modalText documentUploadFileInputs">
+                    <input multiple type="file" class='file'
+                        accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                        onchange="angular.element(this).scope().setFiles(this);"/>
+                    <div class="documentUpload fakefile">
+                        <div class="standard-button green">
+                            <button class="btn">Choose</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="span8">
+            <div class="modalText documentUploadText container">
+                <div class="modalText documentUploadText header">
+                    <span>UPLOAD DOCUMENTS</span>
+                </div>
+                <div class="modalText documentUploadText">
+                    <span>Please select any document, presentation or image (20MB max per file)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div modal="documentUploadModal" close="modals.documentUploadClose()" options="doubleopts">
     <div class="modal-title">
         <div class="row-fluid">
