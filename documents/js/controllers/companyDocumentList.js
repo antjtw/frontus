@@ -379,7 +379,7 @@ app.controller('CompanyDocumentListController',
                 }
                 Intercom('update', {company : {"documents":$scope.documents.length+1}});
                 console.log(files[0]);
-                for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
+                for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
                 var upxhr;
                 if (type == null)
                 {
@@ -387,35 +387,51 @@ app.controller('CompanyDocumentListController',
                 }
                 else
                 {
-                    console.log(type);
-                    console.log(typeof(type));
-                    console.log(docid);
-                    console.log(typeof(docid));
-                    upxhr = SWBrijj.uploadFile(fd, type, docid);
+                    if (fd.length > 1)
+                    {
+                        //throw error. Multiple docs doesn't make sense
+                        console.log("multiple");
+                        return;
+                    }
+                    upxhr = SWBrijj.uploadSigned(fd);
                 }
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
-                    for (var i = 0; i < files.length; i++) {
-                        var newdocument = {
-                            uploaded_by: $rootScope.person.email,
-                            iss_annotations: null,
-                            company: $rootScope.navState.company,
-                            doc_id: x[i],
-                            template_id: null,
-                            annotations: null,
-                            docname: files[i].name,
-                            version_count: 0,
-                            complete_count: 0,
-                            archive_complete_count: 0,
-                            archive_count: 0,
-                            statusRatio: 0,
-                            uploading: true,
-                            type: "doc"
-                        };
-                        $scope.documents.push(newdocument);
+                    console.log(x);
+                    if (type == "signed")
+                    {
+                        SWBrijj.uploadSetType(x[0], type, docid).then(function() {
+                            console.log("succeeded");
+                        }).except(function(x) {
+                            console.log("exception");
+                            console.log(x);
+                        });
+                        $scope.modals.signedUploadClose();
                     }
-                    $timeout($scope.checkReady, 2000);
-                    $scope.modals.documentUploadClose();
+                    else
+                    {
+                        for (var i = 0; i < files.length; i++) {
+                            var newdocument = {
+                                uploaded_by: $rootScope.person.email,
+                                iss_annotations: null,
+                                company: $rootScope.navState.company,
+                                doc_id: x[i],
+                                template_id: null,
+                                annotations: null,
+                                docname: files[i].name,
+                                version_count: 0,
+                                complete_count: 0,
+                                archive_complete_count: 0,
+                                archive_count: 0,
+                                statusRatio: 0,
+                                uploading: true,
+                                type: "doc"
+                            };
+                            $scope.documents.push(newdocument);
+                        }
+                        $timeout($scope.checkReady, 2000);
+                        $scope.modals.documentUploadClose();
+                    }
 
                 }).except(function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
