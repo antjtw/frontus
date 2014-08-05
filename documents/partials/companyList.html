@@ -101,7 +101,7 @@
         <th colspan="2">Tags</th>
     </tr>
     </tbody>
-    <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
+    <tbody document-summary-row doc="doc" view-state="state" modals="modals" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
     </tbody>
 </table>
 <table class="status-table" ng-show="investorDocs && viewBy==='name'" infinite-scroll="loaddocs()" infinite-scroll-distance="0" infinite-scroll-disabled="loadingDocs" infinite-scroll-container="scrollParent">
@@ -112,7 +112,7 @@
         <th></th>
     </tr>
     </tbody>
-    <tbody document-summary-row view-state="state" doc="investor" modals="modals" doc-share-state="docShareState" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder" class="animate">
+    <tbody document-summary-row view-state="state" doc="investor" modals="modals" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder" class="animate">
     </tbody>
 </table>
 </div>
@@ -127,22 +127,21 @@
     <div class="shareForm">
         <span>Recipients</span>
         <div class="sharepeople-input">
-            <input ui-select2="select2Options" ng-model="docShareState.emails">
+            <input ui-select2="sharingSelect2Options" ng-model="sharingemails">
         </div>
         <span>Message</span>
-        <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
+        <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message..."></textarea>
         <div class="controls" my-loading-spinner="processing">
             <div class="standard-button pull-right">
                 <button class="btn"
                         ng-if="!companyIsZombie()"
-                        ng-click="shareDocuments(docShareState.doclist,
-                                   docShareState.emails, messageText)"
+                        ng-click="shareDocuments()"
                         ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
-                                      || !docsReadyToShare(docShareState.doclist)">
+                                      || !ShareDocs.docsReadyToShare()">
                     Share Documents
                 </button>
             </div>
-             <span class="pull-right pointer" ng-click="toggleSide(); saveShareState(true);">
+             <span class="pull-right pointer" ng-click="toggleSide();">
                  Cancel
              </span>
         </div>
