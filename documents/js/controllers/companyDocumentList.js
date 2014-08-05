@@ -932,11 +932,11 @@ app.controller('CompanyDocumentListController',
                         angular.forEach($scope.documents, function(doc) {
                             if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
                                 if (doc.is_prepared) {
-                                    $scope.modals.updateShareType(doc, 2);
+                                    ShareDocs.updateShareType(doc, 2);
                                     $scope.$emit("notification:success",
                                         "Success! Document prepared for signature.");
                                 } else {
-                                    $scope.modals.updateShareType(doc, -1);
+                                    ShareDocs.updateShareType(doc, -1);
                                     $scope.$emit("notification:fail",
                                         "Oops, the document is not ready for signature. Please try again.");
                                 }
