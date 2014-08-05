@@ -104,7 +104,10 @@
 }
 .span5 > div > div > h2 {
 	margin-left: 50px;
-	margin-top: -20px;
+	margin-top: -40px;
+}
+.span5 > div > div:last-child > h2 {
+	margin-top: -12px;
 }
 .span5 > div > div > h2 > span {
 	font-size: 20px;
