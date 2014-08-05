@@ -89,11 +89,13 @@
 .span6 > div > h2 {
 	margin-left: 50px;
 	margin-top: -20px;
+	width: 500px;
 }
 .span6 > div > h2 > span {
 	font-size: 20px;
 	margin: 3px;
 }
+
 .span5 > div > img {
 	margin-bottom: -15px;
 }
@@ -104,7 +106,10 @@
 }
 .span5 > div > div > h2 {
 	margin-left: 50px;
-	margin-top: -20px;
+	margin-top: -40px;
+}
+.span5 > div > div:last-child > h2 {
+	margin-top: -12px;
 }
 .span5 > div > div > h2 > span {
 	font-size: 20px;
@@ -206,7 +211,7 @@ d3vestedbar > svg {
 	margin-left: 10px;
 }
 .span3 {
-	left: calc(50% + 100px);
+	left: calc(50% + 115px);
 }
 
 

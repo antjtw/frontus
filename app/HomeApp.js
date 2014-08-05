@@ -212,6 +212,7 @@ app.controller('CompanyCtrl',
                     $scope.$emit("notification:success", "You have successfully changed your password.");
                 }
             }
+            
 
             $scope.getTokenInfo = function() {
                 SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
