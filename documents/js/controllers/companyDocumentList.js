@@ -935,6 +935,7 @@ app.controller('CompanyDocumentListController',
                 return st1;
             }
             // TODO: store as part of ShareDocs service
+            // If we can eliminate doc.sugnature_flow and only reference the ShareDocs version, that should work
             function initShareState() {
                 loadPrepareState();
                 if (ShareDocs.documents.length > 0) {
@@ -954,33 +955,31 @@ app.controller('CompanyDocumentListController',
             initShareState();
 
             // Sharing stuff that should be move to a directive
-            $scope.sharingemails = [];
             $scope.ShareDocs = ShareDocs;
             $scope.sharingSelect2Options = {
-                'multiple': true,
                 'data': Investor.investors,
-                'tokenSeparators': [",", " "],
-                'placeholder': 'Enter email address & press enter',
+                'placeholder': 'Add Recipients',
                 createSearchChoice: function(text) {
                     // if text was a legit user, would already be in the list, so don't check Investor service
                     return {id: text, text: text};
                 },
             };
-            $scope.$watchCollection('ShareDocs.emails', function(new_emails, old_emails) {
-                $scope.sharingemails = [];
-                new_emails.forEach(function(eml) {
-                    $scope.sharingemails.push(Investor.getDisplay(eml));
-                });
-            });
-            $scope.$watch('sharingemails', function(email) {
+            $scope.addShareEmail = function(email) {
                 // this gets triggered multiple times with multiple types when the data changes
                 if (typeof(email) === "string") {
                     if (email.length > 0) {
-                        ShareDocs.emails = email.split(',');
-                    } else {
-                        ShareDocs.emails = [];
+                        ShareDocs.emails.push(email);
                     }
                 }
-            });
+            }
+            $scope.removeShareEmail = function(email) {
+                var idx = ShareDocs.emails.indexOf(email);
+                if (idx != -1) {
+                    ShareDocs.emails.splice(idx, 1);
+                }
+            };
+            $scope.getInvestorDisplay = function(email) {
+                return Investor.getDisplayText(email);
+            };
         }
     ]);
