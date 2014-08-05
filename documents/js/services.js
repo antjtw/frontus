@@ -124,12 +124,12 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         return true;
     };
 
-    this.checkPrepared = function(doc, investor) {
+    this.checkPrepared = function(doc, investor, ignore_cache) {
         var p = $q.defer();
         if (this.prepCache[doc.doc_id] === undefined) {
             this.prepCache[doc.doc_id] = {};
         }
-        if (this.prepCache[doc.doc_id][investor] !== undefined) {
+        if (!ignore_cache && this.prepCache[doc.doc_id][investor] !== undefined) {
             p.resolve(this.prepCache[doc.doc_id][investor]);
         }
         var shares = this;
@@ -142,14 +142,18 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         });
         return p.promise;
     };
-    this.checkPreparedLists = function(docs, investors) {
+    this.clearPrepCache = function(doc_id) {
+        this.checkPreparedLists([{doc_id: doc_id}], this.emails, true); // clear the cache by fetching the new data
+        return true;
+    };
+    this.checkPreparedLists = function(docs, investors, ignore_cache) {
         // for every document and every investor, check that is_prepared_person returns true;
         var check_defer = $q.defer();
         var promises = [];
         docs.forEach(function(doc) {
             if (doc.signature_flow > 0) { // only signable docs need checking
                 investors.forEach(function(investor) {
-                    promises.push(this.checkPrepared(doc, investor));
+                    promises.push(this.checkPrepared(doc, investor, ignore_cache));
                 }, this);
             }
         }, this);
@@ -189,7 +193,10 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                 ).then(function(data) {
                     $rootScope.$emit("notification:success", "Documents shared");
                     share_defer.resolve(data);
-                    //$route.reload(); // TODO: clear share state and hide sharebar
+                    share.emails = [];
+                    share.documents = [];
+                    share.message = "";
+                    //$route.reload(); // TODO: close share bar?
                 }).except(function(err) {
                     console.error(err);
                     $rootScope.$emit("notification:fail", "Oops, something went wrong.");
