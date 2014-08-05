@@ -138,7 +138,7 @@
 div.pull-right.standard-button.green {
 	margin-bottom: 20px !important;
 }
-.row-fluid .span6 {
+. same-row .row-fluid .span6 {
 	width: 100% !important;
 }
 .span7 svg{
