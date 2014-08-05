@@ -4629,7 +4629,8 @@ div.upgradeWarning > span {
 
 .message_headline{
     display: inline-block;
-    width: 8%;
+    width: 9%;
+    margin-left: 30px;
 }
 
 

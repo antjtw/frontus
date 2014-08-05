@@ -10,7 +10,9 @@
             <div class="message_info">
                 <div class="message_headline">BCC</div>
                 <div class="message_input">
-                    <input ui-select2="select2Options" ng-model="message.recipients" style="width: 100%;"></input>
+                    <select ui-select2 multiple ng-model='message.recipients' data-placeholder="pick an email" style="width: 100%;">
+                        <option ng-repeat="emailList in emailLists" value="{{emailList.email}}">{{emailList.email}}</option>
+                    </select>
                 </div>
             </div>
         <div>
@@ -18,14 +20,14 @@
         <div class="message_info">
             <div class="message_headline"> Subject</div>
             <div class="message_input">
-                <input type="text" ng-model ="message.subject"></input>
+                <input type="text" ng-model ="message.subject" style="width: 100%;" ></input>
             </div>
         </div>
 
         <div class="message_info">
             <div class="message_headline"> Message</div>
             <div class="message_input">
-                <input type="text" ng-model="message.text"></input>
+                <input type="text" ng-model="message.text" style="width: 100%;"></input>
             </div>
         </div>
         

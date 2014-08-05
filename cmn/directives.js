@@ -585,7 +585,7 @@ m.directive('composeMessage', function() {
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 
 
         
 
@@ -597,8 +597,8 @@ m.directive('composeMessage', function() {
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-                    $scope.emailList = data           
-                    angular.forEach($scope.emailList, function(value, key){
+                    $scope.emailLists = data           
+                    angular.forEach($scope.emailLists, function(value, key){
                         $scope.myEmails.push(value['email']);
                     });
                     return $scope.myEmails
@@ -610,7 +610,7 @@ m.directive('composeMessage', function() {
             $scope.select2Options = {
                 'multiple': true,
                 'simple_tags': true,
-                'tags': $scope.myEmails,
+                // 'data': $scope.myEmails,
                 'tokenSeparators': [",", " "],
                 'placeholder': 'Enter email addresses & press enter'
             };  
