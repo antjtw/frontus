@@ -1,32 +1,42 @@
-<div class="composemessage">
-    <div class="sidebarHeader">
-        <span>SEND MESSAGE</span>
-    </div>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <div class="sidebarText">
-    <!--     <div class="input-list"> -->
-        <div ng-if="triggerUpgradeMessages(recipients)"
-            class="upgradeWarning">
-                <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
-            </div> 
+<div class="compose_message">
+   
+    <div>
+        <div ng-if="triggerUpgradeMessages(message.recipients)" class="upgradeWarning">
+            <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
+        </div> 
+
+
         <div>
-     
+            <div class="message_info">
+                <div class="message_headline">BCC</div>
+                <div class="message_input">
+                    <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter the email address of one of your contacts" style="width: 100%;">
+                        <option ng-repeat="emailList in emailLists" value="{{emailList.email}}">{{emailList.email}}</option>
+                    </select>
+                </div>
+            </div>
         <div>
-            <span>SUBJECT</span>
+
+        <div class="message_info">
+            <div class="message_headline"> Subject</div>
+            <div class="message_input">
+                <input type="text" ng-model ="message.subject"></input>
+            </div>
         </div>
 
-        <div class= "email-subject">
-            <input type="text" ng-model ="message.subject">
-        </div>
-
-        <div class="sidebarText">
-            <span>MESSAGE</span>
-            <div>
-            <textarea class="email-text" rows="6"
-                cols="60" ng-model="message.text">
-            </textarea>
-            <div>
-        </div>
+        <div class="message_info">
+            <div class="message_headline"> Message</div>
+            <div class="message_input">
+                <div text-angular ng-model="message.text"  ta-toolbar="[['p'],['bold','italics', 'underline'], ['ul', 'ol'], ['justifyLeft', 'justifyCenter', 'justifyRight'], ['indent', 'outdent']">
+                </div>
+            </div>
+           <!--  <div class="message_input">
+                <input type="text" ng-model="message.text"></input>
+            </div>
+        </div> -->
+        
     </div>
 
   
@@ -38,25 +48,23 @@
             Preview Message 
         </div>
 
+<!--         <div class="footer-headline-left">
+            <div class = "standard-button">
+                <button class="btn" style="background-color: red;"
+                    ng-click="checkRecipients()">
+                    Check and Test
+                </button>
+            </div>
+        </div>
+ -->
         <div class="footer-headline-left">
             <div class = "standard-button green">
                 <button class="btn"
                     ng-disabled="!readyToSend(message)  || clicked"
-                    ng-click="sendMessage(message); $parent.toggleSide()">
+                    ng-click="sendMessage(message)">
                     Send
                 </button>
             </div>
-        </div>
-
-
-  
-
-        <div class="footer-headline-right">
-        <div class= "standard-button white">
-            <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
-            Cancel
-            </button>
-        </div>
         </div>
      
     </div>   
