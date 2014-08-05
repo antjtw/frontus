@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs) {
         $scope.annots = [];
         $scope.signatureprocessing = false;
 
@@ -66,28 +66,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     return attributes.state;
                 }
             }
-        };
-
-        var regExp = /\(([^)]+)\)/;
-        $scope.template_share = function(email, attributes, message, sign, deadline) {
-            $scope.processing = true;
-            var shareto = "";
-
-            angular.forEach(email, function(person) {
-                var matches = regExp.exec(person);
-                if (matches === null) {
-                    matches = ["", person];
-                }
-                shareto += "," +  matches[1];
-            });
-
-            SWBrijj.smartdoc_share_template($scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
-                $scope.$emit("notification:success", "Successfully shared document");
-                $location.path('/company-list').search({});
-            }).except(function(err) {
-                $scope.processing = false;
-                console.log(err);
-            });
         };
 
         $scope.$on('initTemplateView', function(event, templateId, subId) {
@@ -602,6 +580,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     $scope.$emit("notification:success", "Saved annotations");
                 }
                 $scope.doc.clearPreparedForCache();
+                ShareDocs.clearPrepCache($scope.docId);
             });
         };
 
