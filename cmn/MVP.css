@@ -4653,6 +4653,15 @@ div.upgradeWarning > span {
     font-family: "Helvetica";
 }
 
+.ta-editor {
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: "lvetica";
+    font-size: 100%;
+    margin:20px 0;
+}
+
 .message_input .btn[disabled]{
     background-color: white;
     color: black;

@@ -29,13 +29,10 @@
         <div class="message_info">
             <div class="message_headline"> Message</div>
             <div class="message_input">
-                <div text-angular ng-model="message.text"  ta-toolbar="[['p'],['bold','italics', 'underline'], ['ul', 'ol'], ['justifyLeft', 'justifyCenter', 'justifyRight'], ['indent', 'outdent']">
-                </div>
+                <text-angular ng-model="message.text" ta-toolbar="[['p', 'pre'],['bold','italics', 'underline'], ['ul', 'ol'], ['justifyLeft', 'justifyCenter', 'justifyRight'], ['indent', 'outdent']]"  ta-default-wrap="div"></text-angular>
             </div>
-           <!--  <div class="message_input">
-                <input type="text" ng-model="message.text"></input>
-            </div>
-        </div> -->
+        </div>
+
         
     </div>
 
