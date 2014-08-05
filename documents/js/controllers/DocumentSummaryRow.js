@@ -198,5 +198,9 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             document.location.href = url;
         });
     };
+
+    $scope.updateShareType = function(doc, tp) {
+        return ShareDocs.updateShareType(doc, tp);
+    };
 }
 DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location', 'ShareDocs'];

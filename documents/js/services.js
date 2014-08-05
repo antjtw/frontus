@@ -97,20 +97,73 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         if (this.documents.length===0) {
             return false;
         }
-        var res = true;
         angular.forEach(this.documents, function(doc) {
-            // FIXME 'doc' is not the full doc, doesn't have is_prepared.
-            // get the full doc and check that
-            // TODO $q.all(SWBrijj.procm('document.is_prepared_person', [list of doc_ids where signature_flow > 0], [list of emails])) on resolve check everything = true
             if (doc.signature_flow < 0) {
-                res = false;
+                return false;
             }
         });
-        return res;
+        return true;
+    };
+
+    this.checkAllPrepared = function() {
+        // for every document and every investor, check that is_prepared_person returns true;
+        var check_defer = $q.defer();
+        var promises = [];
+        this.documents.forEach(function(doc) {
+            if (doc.signature_flow > 0) { // only signable docs need checking
+                this.emails.forEach(function(investor) {
+                    var p = $q.defer();
+                    SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
+                        p.resolve(data);
+                    }).except(function(err) {
+                        p.reject(err);
+                    });
+                    promises.push(p.promise);
+                });
+            }
+        }, this);
+        $q.all(promises).then(function(results) {
+            check_defer.resolve(results.every(function(res) {
+                return res[0].is_prepared_person; // should already be a boolean
+            }));
+        }, function(err) {
+            console.error(err);
+            check_defer.reject(err);
+        });
+        return check_defer.promise;
     };
 
     this.shareDocuments = function() {
-
+        // TODO: confirm that documents haven't been shared before to the users listed
+        var share_defer = $q.defer();
+        angular.forEach(this.documents, function(doc) {
+            if (doc.signature_flow === undefined || doc.signature_flow === null) {
+                doc.signature_flow = 0;
+            }
+        });
+        var share = this;
+        this.checkAllPrepared().then(function(result) {
+            if (result) {
+                SWBrijj.document_multishare(
+                    share.emails,
+                    JSON.stringify(share.documents),
+                    share.message,
+                    "22 November 2113"
+                ).then(function(data) {
+                    $rootScope.$emit("notification:success", "Documents shared");
+                    share_defer.resolve(data);
+                    //$route.reload(); // TODO: clear share state and hide sharebar
+                }).except(function(err) {
+                    console.error(err);
+                    $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+                    share_defer.reject(err);
+                });
+            } else {
+                $rootScope.$emit("notification:fail", "Please confirm all documents being shared are prepared for all recipients.");
+                share_defer.reject("Not all documents prepared for all people");
+            }
+        });
+        return share_defer.promise;
     };
 }]);
 

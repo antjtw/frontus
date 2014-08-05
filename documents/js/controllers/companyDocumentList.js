@@ -699,37 +699,9 @@ app.controller('CompanyDocumentListController',
 
             $scope.shareDocuments = function() {
                 $scope.processing = true;
-                ShareDocs.shareDocuments();
-                var tosee = "";
-                var regExp = /\(([^)]+)\)/;
-                angular.forEach(ShareDocs.emails, function(person) {
-                    var matches = regExp.exec(person);
-                    if (matches === null) {
-                        matches = ["", person];
-                    }
-                    tosee += "," +  matches[1];
+                ShareDocs.shareDocuments().finally(function(result) {
+                    $scope.processing = false;
                 });
-                tosee = tosee === "" ? "!!!" : tosee;
-                angular.forEach(ShareDocs.documents, function(doc) {
-                    if (doc.signature_flow === undefined || doc.signature_flow === null) {
-                        doc.signature_flow = 0;
-                    }
-                });
-                SWBrijj.document_multishare(
-                        tosee.substring(1).toLowerCase(),
-                        JSON.stringify(docsToShare),
-                        message,
-                        "22 November 2113"
-                    ).then(function(data) {
-                        $scope.$emit("notification:success", "Documents shared");
-                        $location.search({});
-                        $route.reload();
-                        $scope.processing=false;
-                    }).except(function(err) {
-                        $scope.processing=false;
-                        console.log(err);
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                    });
             };
 
             // Infinite Scroll
