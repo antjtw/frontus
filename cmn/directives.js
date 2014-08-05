@@ -580,7 +580,7 @@ m.directive('addPerson', function(){
 
 m.directive('composeMessage', function() {
     return {
-        scope: {recipients: "="},
+        scope: false,
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -618,6 +618,8 @@ m.directive('composeMessage', function() {
             $scope.checkRecipients = function(){
                 console.log($scope.myRecipients);
             }
+
+            $scope.recipients = $scope.myRecipients;
 
             // $scope.resetMessage = function() {
             //     $scope.message = {recipients:[],
