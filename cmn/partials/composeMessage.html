@@ -2,7 +2,7 @@
    
     <div class="sidebarText">
     <!--     <div class="input-list"> -->
-        <div ng-if="triggerUpgradeMessages(recipients)"
+        <div ng-if="triggerUpgradeMessages(message.recipients)"
             class="upgradeWarning">
                 <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
             </div> 
@@ -24,16 +24,26 @@
   
     <div class="sidebarFooter">
 
-<!--         <div class="preview-message" 
+        <div class="preview-message" 
             ng-click= "previewModalOpen(message)"
             ng-hide="!readyToPreview(message)">
             Preview Message 
-        </div> -->
+        </div>
+
+        <div class="footer-headline-left">
+            <div class = "standard-button">
+                <button class="btn" style="background-color: red;"
+                    ng-click="checkRecipients()">
+                    Check and Test
+                </button>
+            </div>
+        </div>
 
         <div class="footer-headline-left">
             <div class = "standard-button green">
                 <button class="btn"
-                    ng-click="checkRecipients()">
+                    ng-disabled="!readyToSend(message)  || clicked"
+                    ng-click="sendMessage(message)">
                     Send
                 </button>
             </div>

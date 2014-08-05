@@ -592,7 +592,6 @@ m.directive('composeMessage', function() {
         function($scope, $rootScope, SWBrijj) {
 
             $scope.myEmails = [];
-            $scope.myRecipients = [];
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
@@ -615,105 +614,102 @@ m.directive('composeMessage', function() {
             };  
 
             $scope.checkRecipients = function(){
-                console.log($scope.myRecipients);
                 console.log($scope.message);
             }
 
-            $scope.recipients = $scope.myRecipients;
 
             $scope.resetMessage = function() {
                 $scope.message = {recipients: [],
                                   text:"",
                                   subject:""};
-                $scope.recipients = []
             };
             $scope.resetMessage();
-            // $scope.composeopts = {
-            //     backdropFade: true,
-            //     dialogFade: true
-            // };
+            $scope.composeopts = {
+                backdropFade: true,
+                dialogFade: true
+            };
 
-            // $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
+            $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
             
-            // $scope.howMany = function (){
-            //     if(location.host == 'share.wave'){
-            //         console.log($scope.recipients + "i'm at sharewave!");
-            //     }
-            // };
+            $scope.howMany = function (){
+                if(location.host == 'share.wave'){
+                    console.log($scope.message.recipients + "i'm at sharewave!");
+                }
+            };
 
 
-            // $scope.sendMessage = function(msg) {
-            //     var category = 'company-message';
-            //     var template = 'company-message.html';
-            //     var newtext = msg.text.replace(/\n/g, "<br/>");
-            //     var recipients = $scope.recipients;
-            //     $scope.clicked = true;
-            //     SWBrijj.procm('mail.send_message',
-            //                   JSON.stringify(recipients),
-            //                   category,
-            //                   template,
-            //                   msg.subject,
-            //                   newtext
-            //     ).then(function(x) {
-            //         void(x);
-            //         $rootScope.billing.usage.direct_messages_monthly += recipients.length;
+            $scope.sendMessage = function(msg) {
+                var category = 'company-message';
+                var template = 'company-message.html';
+                var newtext = msg.text.replace(/\n/g, "<br/>");
+                var recipients = $scope.message.recipients;
+                $scope.clicked = true;
+                SWBrijj.procm('mail.send_message',
+                              JSON.stringify(recipients),
+                              category,
+                              template,
+                              msg.subject,
+                              newtext
+                ).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.direct_messages_monthly += recipients.length;
               
-            //         $rootScope.$emit("notification:success",
-            //             "Message sent!");
-            //         //this works but i don't know why for the root scope
-            //         $rootScope.$emit('new:message');
-            //         $scope.resetMessage();
-            //         $scope.recipients = [];
-            //         $scope.clicked = false;
+                    $rootScope.$emit("notification:success",
+                        "Message sent!");
+                    //this works but i don't know why for the root scope
+                    $rootScope.$emit('new:message');
+                    $scope.resetMessage();
+                    // $scope.recipients = [];
+                    $scope.clicked = false;
 
-            //     }).except(function(err) {
-            //         void(err);
-            //         $rootScope.$emit("notification:fail",
-            //             "Oops, something went wrong.");
-            //         $scope.clicked = false;
-            //     });
-            // };
+                }).except(function(err) {
+                    void(err);
+                    $rootScope.$emit("notification:fail",
+                        "Oops, something went wrong.");
+                    $scope.clicked = false;
+                });
+            };
 
 
             
-            // $scope.readyToSend = function(msg) {
-            //     // console.log($scope.recipients)
-            //     if ($scope.recipients.length===0
-            //         || msg.subject===""
-            //         || msg.text==="") {
-            //         return false;
-            //     }
-            //     else {
-            //         return true;
-            //     }
-            // };
+            $scope.readyToSend = function(msg) {
+                // console.log($scope.recipients)
+                if ($scope.message.recipients.length===0
+                    || msg.subject===""
+                    || msg.text==="") {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            };
 
-            // $scope.readyToPreview = function(msg){
-            //     var text = msg.text
-            //     if(text ===""){
-            //         return false;
-            //     }
-            //     else{
-            //         return true;
-            //     }
-            // }
+            $scope.readyToPreview = function(msg){
+                var text = msg.text
+                if(text ===""){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
 
           
 
-            // $scope.previewModalOpen = function(msg) {
-            //     $scope.previewModal = true;
-            //     $scope.subject = msg.subject;
-            //     // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
-            //     // var re = /<br *\/?>/gi;
-            //     // $scope.messagetext = message.replace(re, '\n')
-            //     $scope.messagetext=msg.text
-            //     $scope.sendername = $rootScope.person.name;
-            //     $scope.company = $rootScope.navState.name;
-            // };
+            $scope.previewModalOpen = function(msg) {
+                $scope.previewModal = true;
+                $scope.subject = msg.subject;
+                // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
+                // var re = /<br *\/?>/gi;
+                // $scope.messagetext = message.replace(re, '\n')
+                $scope.messagetext=msg.text
+                $scope.sendername = $rootScope.person.name;
+                $scope.company = $rootScope.navState.name;
+            };
 
-            // $scope.previewModalClose = function(){
-            //     $scope.previewModal = false
-            // };
+            $scope.previewModalClose = function(){
+                $scope.previewModal = false
+            };
 
         }]
     };
