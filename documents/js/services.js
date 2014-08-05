@@ -463,6 +463,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         defaultList.forEach(function(inv) {
                             doc.addPreparedFor(inv);
                         });
+                        if (defaultList.length > 0) {
+                            $rootScope.$emit("notification:success", "We've automatically added the investors you were sharing to.");
+                        }
                     }
                 });
             }
