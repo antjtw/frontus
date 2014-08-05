@@ -463,6 +463,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         // $scope.hideRail = false;
 
         $scope.filterParam = {};
+        $scope.oldRoles = [];
         
 
 
@@ -504,11 +505,10 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                                 person.role = "issuer";
                             }
                             else if(person.email != admin.email && person.role != 'issuer'){
-                                person.role = "shareholder";
+                                person.role = "investor";
                             }
                         });
                     });
-                    // SWBrijj.tblm()
                     SWBrijj.tblm('account.profile', ['email']).then(function(me) {
                         angular.forEach($scope.people, function(person) {
                             if (person.email == me[0].email)
@@ -520,15 +520,18 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         });
                         $scope.setLastLogins();
                         $scope.setGroups();
-                        $scope.resetFilter();
+                        // $scope.setGroups();
+                        // $scope.resetFilter();
                     });
                     $scope.sort = 'name';
                 });
-                console.log($scope.people);
                 $scope.allPeople = $scope.people;
             });
+
         };
         $scope.createPeople();
+
+
 
         $scope.resetFilter = function(){
             $scope.filterParam.param = undefined;
@@ -541,34 +544,33 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.setGroups = function(){
-            angular.forEach($scope.people, function(person){
-                SWBrijj.tblmm('account.my_user_role', "email", person.email).then(function(data){
-                    $scope.myGroups = data;
-                    angular.forEach($scope.myGroups, function(myGroups){                       
-                        if(myGroups.groups == null){
-                            person.groups = null;
-                        }
-                        else if(myGroups.groups == '[]'){
-                            person.groups = null;
-                        }
-                        else if(JSON.parse(myGroups.groups)==""){
-                            person.groups = null;
-                        }
-                        else {
-                            person.groupsArray = JSON.parse(myGroups.groups);
-                            person.groups = JSON.parse(myGroups.groups).sort().join(", ");
-                        }
+            SWBrijj.tblm('account.my_user_role', ["email", "groups"]).then(function(data){
+                var groups = data;
+                angular.forEach($scope.people, function(person){
+                    angular.forEach(groups, function(group){
+                        if(group.email == person.email && group.groups !== null){
+                            // person.groups = JSON.parse(group.groups).sort().join(", ");
+                            console.log(JSON.parse(group.groups));
+                            var gr = JSON.parse(group.groups);
+                            var grSorted = gr.sort(function(a, b){
+                                if (a.toLowerCase() > b.toLowerCase()) return 1; 
+                                 else if (a.toLowerCase() < b.toLowerCase()) return -1; 
+                                else return 0
+                            });
+                            console.log(grSorted);
+                            person.groups = grSorted.join(", ");
+                            person.groupsArray = JSON.parse(group.groups);
+                        };
                     });
-                
+                    
                 });
             });
-        };
-
-        
+        }
 
 
 
         $scope.setLastLogins = function() {
+            console.log($scope.people)
             SWBrijj.tblm("global.user_tracker").then(function(logins) {
                 angular.forEach($scope.people, function(person) {
                     angular.forEach(logins, function(login) {
@@ -602,6 +604,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
+        $scope.loadPage = function(){
+            // $scope.createPeople();
+            $scope.setLastLogins();
+            $scope.resetFilter();
+        }
+        $scope.loadPage();
+
         // Admin Modal Functions
 
         $scope.adminModalOpen = function() {
@@ -611,6 +620,30 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.adminModal = true;
         };
 
+
+        $scope.sortRolesForAdd = function(people){
+            angular.forEach(people, function(ind){
+                if(ind.email === $scope.navState.userid){
+                   console.log("you must stay where you are")
+                }
+                else if(ind.email !== $scope.navState.userid && $scope.oldRoles.indexOf(ind.role)=== -1){
+                    $scope.oldRoles.push(ind.role)
+                };
+                
+            });
+        };
+
+        $scope.addOrRemoveAdmin = function(people){
+            $scope.sortRolesForAdd(people);
+            if($scope.oldRoles.length === 1){
+                $scope.addOrRemove = $scope.oldRoles[0];
+            }
+            else{
+                $scope.addOrRemove = ""
+            }
+            $scope.oldRoles = [];
+        };
+
        
 
         $scope.adminModalClose = function() {
@@ -618,24 +651,56 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             $scope.adminModal = false;
         };
 
-        
-        $scope.removeAdminModalOpen = function(email) {
-            $scope.selectedToRevoke = email;
+
+        $scope.removeAdminModalOpen = function(ppl) {
+            $scope.selectedToRevokes = [];
+            angular.forEach(ppl, function(ind){
+                if(ind.email !== $scope.navState.userid && $scope.selectedToRevokes.indexOf(ind.email)== -1){ 
+                    $scope.selectedToRevokes.push(ind.email);
+                }
+                else if($scope.navState.userid==ind.email){
+                    console.log("error!")
+                };
+                
+            });
             $scope.removeAdminModal = true;
+        
         };
+
 
         $scope.removeAdminModalClose = function() {
             $scope.removeAdminModal = false;
+            $scope.clearArray($scope.groupPeople);
+            $scope.clearArray($scope.oldRoles);
         };
 
-        $scope.addAdminModalOpen = function(email) {
-            $scope.selectedToAdd = email;
+        $scope.removeAdminModalCancel = function(){
+            $scope.removeAdminModal = false;
+        }
+
+        $scope.addAdminModalOpen = function(person) {
+            $scope.selectedToAdds = [];
+            angular.forEach(person, function(ind){
+                if(ind.email !== $scope.navState.userid){
+                    $scope.selectedToAdds.push(ind.email);
+                };
+            });
             $scope.addAdminModal = true;
+
         };
+
 
         $scope.addAdminModalClose = function() {
             $scope.addAdminModal = false;
+            $scope.clearArray($scope.groupPeople);
+            $scope.clearArray($scope.oldRoles);
+
         };
+
+        $scope.addAdminModalCancel = function(){
+            $scope.addAdminModal = false;
+           
+        }
         
         //want the email directive to bind to this property in the controller
         $scope.personIs = function(person){
@@ -695,29 +760,45 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
 
         $scope.revoke_admin = function() {
-            SWBrijj.proc('account.revoke_admin', $scope.selectedToRevoke, navState.company).then(function(x) {
-                void(x);
-                $rootScope.billing.usage.admins_total -= 1;
-                $scope.$emit("notification:success", "Admin Removed");
-                $route.reload();
-            }).except(function(x) {
+            angular.forEach($scope.selectedToRevokes, function(elem){
+                SWBrijj.proc('account.revoke_admin', elem, navState.company).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.admins_total -= 1;
+                    $scope.$emit("notification:success", "Admin Removed");
+                    // console.log()
+                    // $route.reload();
+                }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
-            $scope.selectedToRevoke = "";
+
+            });
+            $scope.createPeople();
+            // $scope.oldRoles = [];
+            
         };
 
+        $scope.clearArray = function(array){
+                while(array.length > 0){
+                    array.pop();
+                }
+            }
+
         $scope.add_admin = function() {
-            SWBrijj.proc('account.create_admin', $scope.selectedToAdd.toLowerCase()).then(function(x) {
-                void(x);
-                $rootScope.billing.usage.admins_total += 1;
-                $scope.$emit("notification:success", "Admin Added");
-                $route.reload();
-            }).except(function(x) {
+            angular.forEach($scope.selectedToAdds, function(elem){
+                 SWBrijj.proc('account.create_admin', elem.toLowerCase()).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.admins_total += 1;
+                    $scope.$emit("notification:success", "Admin Added");
+                }).except(function(x) {
                     void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
+            }); 
+        $scope.createPeople();
         };
+
+   
 
         // email sidebar
         $scope.toggleSide = function(button) {
