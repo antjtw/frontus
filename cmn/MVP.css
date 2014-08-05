@@ -4610,6 +4610,29 @@ div.upgradeWarning > span {
     cursor: pointer;
 }
 
+
+/*compose message css*/
+
+.compose_message {
+    padding-left: 30px;
+    padding-top: 30px;
+}
+
+.message_info {
+    padding-bottom: 30px;
+}
+
+.message_input {
+    display: inline-block;
+    width: 70%;
+}
+
+.message_headline{
+    display: inline-block;
+    width: 8%;
+}
+
+
 /*Sidebar CSS */
 .sidebarHeader {
     display: block;

@@ -613,11 +613,6 @@ m.directive('composeMessage', function() {
                 'placeholder': 'Enter email addresses & press enter'
             };  
 
-            $scope.checkRecipients = function(){
-                console.log($scope.message);
-            }
-
-
             $scope.resetMessage = function() {
                 $scope.message = {recipients: [],
                                   text:"",
