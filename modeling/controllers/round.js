@@ -1,4 +1,6 @@
-var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
+app.controller('roundController',
+    ['$scope', '$rootScope', '$location', '$parse', 'SWBrijj', 'calculate',
+        function($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
     $scope.optioncollapsed = true;
     $scope.debtcollapsed = true;
     $rootScope.greypage = true;
@@ -246,4 +248,4 @@ var roundController = function ($scope, $rootScope, $location, $parse, SWBrijj, 
         }
     };
 
-};
+}]);

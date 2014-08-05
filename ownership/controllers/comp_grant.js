@@ -1,5 +1,7 @@
 // Grants page controller
-var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting, navState) {
+app.controller('grantController',
+    ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj', 'calculate', 'switchval', 'sorting', 'navState',
+        function($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting, navState) {
     $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
@@ -163,7 +165,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     //Get the active row for the sidebar
     $scope.getActiveTransaction = function (currenttran, mode, view) {
-        if (currenttran == $scope.activeTran && view == "view") {
+        if (currenttran == $scope.activeTran && view == "view" && mode == $scope.stringmode) {
             $scope.activeTran = undefined;
             angular.forEach($scope.issues, function(issue) {
                 angular.forEach(issue.trans, function(tran) {
@@ -185,6 +187,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     if (currenttran.forfeited) {
                         currenttran.fields[2] = true;
                         $scope.mode = 2;
+                        $scope.stringmode = "forfeited"
                     }
                     else {
                         $scope.sideBar = "x";
@@ -195,6 +198,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                     if (currenttran.exercised) {
                         currenttran.fields[3] = true;
                         $scope.mode = 3;
+                        $scope.stringmode = "exercised"
                     }
                     else {
                         $scope.sideBar = "x";
@@ -204,6 +208,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 else if (mode == "vested") {
                     if (currenttran.vested.length > 0) {
                         $scope.mode = 4;
+                        $scope.stringmode = "vested"
                         currenttran.fields[1] = true;
                     }
                     else {
@@ -1114,7 +1119,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     // add tooltip info to fix issue
 
 
-};
+}]);
 
 // Returns only the real transactions (not the empty ones)
 app.filter('noempty', function () {

@@ -226,20 +226,6 @@ app.controller('CompanyDocumentListController',
                 $scope.documentUploadModal = false;
             };
 
-            /*$scope.modals.documentUploadOpen = function() {
-                $scope.files = [];
-                $scope.showProgress = false;
-                $scope.showProcessing = false;
-                $scope.documentUploadModal = true;
-            };
-
-            $scope.modals.documentUploadClose = function() {
-                $scope.showProgress = false;
-                $scope.showProcessing = false;
-                $rootScope.errorMessage = '';
-                $scope.documentUploadModal = false;
-            };*/
-
             $scope.wideopts = {
                 backdropFade: true,
                 dialogFade: true,

@@ -1,86 +1,63 @@
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <div ng-class="{'fixednavoffset':!navState.userid, 'homedrop': homecollapsed}" class="wrap">
 <div class="features static">
-<div class="row-fluid">
-<div class="span12">
-<div class="header-section">
-    <div class="header">
-        <h1>A Smarter Cap Table</h1>
 
-        <ul>
-            <li ng-click="gotopage('')">
-                <img src="/img/overview-grey.png">
-                <span>Overview</span>
-            </li>
-            <li>
-                <img src="/img/cap-green.png">
-                <span>Cap Table</span>
-            </li>
-            <li ng-click="gotopage('doc')">
-                <img src="/img/docs-grey.png">
-                <span>Documents</span>
-            </li>
-        </ul>
-
-    </div>
-</div>
-
-<div class='grey-stripe white-stripe'>
+<div>
     <div>
-        <h2>Editing as you'd expect it, in real-time. As you enter transactions, the totals for your securities and
-            shareholder ownership will update automatically.</h2>
-    </div>
-</div>
-
-<div class="container full-image">
-    <img src="/img/features/captable.png">
-</div>
-
-<div ng-show="finishedsorting" class="container demo-captable">
-<div class="row-fluid leftTabWindow">
-<div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}"
-     class="span8 docLibrary leftBlock">
-    <div class="clear-strip">
-        Start from scratch?
-        <div class="standard-button">
-            <button class="btn" ng-click="clearData();">Clear Data</button>
+        <div class="regular-header">
+            <h2 class="key-header">A real-time cap table, supported by your legal agreements</h2>
+            <h3 class="key-sub-header">Editing as you'd expect it. As you enter transactions, the totals for your securities and shareholder ownership will update in real-time.</h3>
         </div>
-    </div>
-    <div class="row-fluid capcontainer">
-        <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
-            <!-- Editable headers -->
-            <tr ng-if="!toggleView();" class="column-label">
-                <th class="longrow" colspan="2">
-                    Ownership
-                </th>
-                <th class="longrow">Shareholder</th>
-                <th ng-repeat="one in issues track by $index">
-                    <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
-                    <input placeholder="Add Security" class="capEditHeaders"
-                           ui-event="{focus : 'getActiveIssue(one.issue)', blur : 'saveIssue(one, \'issue\')'}"
-                           ng-model="one.issue"
-                           onkeydown="testForEnter();">
-                </th>
-            </tr>
 
-            <!-- Descriptive row viewable from all modes -->
-            <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
-                <td class="input-right">Shares</td>
-                <td class="input-right">%</td>
-                <td></td>
-                <td ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
-                    <span>{{grantbyIssue(one)}}</span>
-                    <span>Total Paid</span>
-                </td>
-            </tr>
-            <!-- Editable rows -->
-            <tr ng-if="!toggleView();" ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled
-                                               value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
-                </td>
-                <td>
-                    <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
+        <div class="container full-image">
+            <img src="/img/features/captable.png">
+        </div>
+
+        <div ng-show="finishedsorting" class="container demo-captable">
+        <div class="row-fluid leftTabWindow">
+        <div ng-class="{leftFullTableBlock:toggleSide(), widthtransition25:oldSafari()}"
+             class="span8 docLibrary leftBlock">
+            <div class="clear-strip">
+                Start from scratch?
+                <div class="standard-button">
+                    <button class="btn" ng-click="clearData();">Clear Data</button>
+                </div>
+            </div>
+            <div class="row-fluid capcontainer">
+                <table ng-class="{viewcaptable:toggleView()}" class="captable tableView bodyText">
+                    <!-- Editable headers -->
+                    <tr ng-if="!toggleView();" class="column-label">
+                        <th class="longrow" colspan="2">
+                            Ownership
+                        </th>
+                        <th class="longrow">Shareholder</th>
+                        <th ng-repeat="one in issues track by $index">
+                            <span ng-class="{'column-highlight':tourstate==2}"><span class="next-button" ng-click="moveTour();">Next</span></span>
+                            <input placeholder="Add Security" class="capEditHeaders"
+                                   ui-event="{focus : 'getActiveIssue(one.issue)', blur : 'saveIssue(one, \'issue\')'}"
+                                   ng-model="one.issue"
+                                   onkeydown="testForEnter();">
+                        </th>
+                    </tr>
+
+                    <!-- Descriptive row viewable from all modes -->
+                    <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
+                        <td class="input-right">Shares</td>
+                        <td class="input-right">%</td>
+                        <td></td>
+                        <td ng-repeat="one in issuekeys | orderBy:issueSort track by $index">
+                            <span>{{grantbyIssue(one)}}</span>
+                            <span>Total Paid</span>
+                        </td>
+                    </tr>
+                    <!-- Editable rows -->
+                    <tr ng-if="!toggleView();" ng-repeat="row in rows track by $index" ng-show="([row] | noUnissue).length > 0">
+                        <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row) || 0}}"></td>
+                        <td class="capsums-col"><input class="input-right" disabled
+                                                       value="{{sharePercentage(row, rows, issuekeys) || 0.000 | number:3}}%">
+                        </td>
+                        <td>
+                            <span ng-class="{'box-highlight':tourstate==1}"><span class="next-button" ng-click="moveTour();">Next</span></span>
                               <span ng-switch on="row.nameeditable">
                                 <span ng-switch-default>
                                   <input class="name-row" placeholder="Add Name" style="width:140px;"
@@ -95,12 +72,12 @@
                                   <input class="name-row" disabled style="width:180px;" ng-model="row.name">
                                 </span>
                               </span>
-                </td>
-                <td ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
+                        </td>
+                        <td ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
                               <span ng-switch on="row.editable">
                                 <span ng-class="{tranSelected:row[key].state}" class="captablepair-box"
                                       ng-switch-default>
-                                  <input ng-show="isDebt(key);" class="captablepair first-box" maxlength="18"
+                                  <input ng-show="isDebt(key);" class="captablepair first-box"
                                          placeholder="{{grantbyIssue(key)}}"
                                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                          ng-change="tranChangeU(row[key]['u'], key)" ng-model='row[key]["u"]'
@@ -108,7 +85,7 @@
                                          ng-paste="numberPaste($event, row, key, 'u');"
                                          onkeydown="testForEnter();">
                                   <input ng-hide="isDebt(key);" class="captablepair default-pointer first-box" disabled>
-                                  <input class="captablepair last-box" maxlength="18" placeholder="paid"
+                                  <input class="captablepair last-box" placeholder="paid"
                                          ui-event="{focus : 'getActiveTransaction(row.name, key)', blur : 'saveTran(activeTran)'}"
                                          ng-change="tranChangeA(row[key]['a'])" ng-model='row[key]["a"]'
                                          onpaste="return false"
@@ -124,16 +101,16 @@
                                          onkeydown="testForEnter();">
                                 </span>
                               </span>
-                </td>
-            </tr>
-            <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-repeat="row in rows track by $index"
-                ng-show="([row] | unissuedrowviewList).length > 0">
-                <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled
-                                               value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
-                <td class="viewName">{{row.name}}</td>
-                <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
+                        </td>
+                    </tr>
+                    <!-- Unissued Rows -->
+                    <tr class="unissued-rows" ng-repeat="row in rows track by $index"
+                        ng-show="([row] | unissuedrowviewList).length > 0">
+                        <td class="capsums-col"><input class="input-right" disabled value="{{shareSum(row);}}"></td>
+                        <td class="capsums-col"><input class="input-right" disabled
+                                                       value="{{sharePercentage(row, rows, issuekeys) | number:3}}%"></td>
+                        <td class="viewName">{{row.name}}</td>
+                        <td class="tableFields" ng-repeat="key in issuekeys | orderBy:issueSort track by $index">
                                     <span class="captablepair-box">
                                         <div ng-class="{'editview': !toggleView()}"
                                              ng-bind="formatAmount(row[key]['u'])" class="output clickable"></div>
@@ -141,21 +118,21 @@
                                              ng-bind="formatAmount(row[key]['a'])"
                                              class="output second clickable"></div>
                                     </span>
-                </td>
-            </tr>
-            <!-- Footer Total Row -->
-            <tr class="total-row">
-                <td class="tableFields">Total</td>
-                <td class="tableFields"></td>
-                <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in issuekeys track by $index"></td>
-            </tr>
-            <!-- Undiluted footer -->
-            <tr class='tablefooter'>
-                <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
-                <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
-                <td class="tableFields"></td>
-                <td class="tableFields" ng-repeat="one in issuekeys track by $index">
+                        </td>
+                    </tr>
+                    <!-- Footer Total Row -->
+                    <tr class="total-row">
+                        <td class="tableFields">Total</td>
+                        <td class="tableFields"></td>
+                        <td class="tableFields"></td>
+                        <td class="tableFields" ng-repeat="one in issuekeys track by $index"></td>
+                    </tr>
+                    <!-- Undiluted footer -->
+                    <tr class='tablefooter'>
+                        <td class="capsums-col"><input class="input-right" disabled value="{{totalShares(rows);}}"></td>
+                        <td class="capsums-col"><input class="input-right" disabled value="100.00%"></td>
+                        <td class="tableFields"></td>
+                        <td class="tableFields" ng-repeat="one in issuekeys track by $index">
                                     <span class="captablepair-box">
                                         <div ng-bind="formatAmount(colTotal(one, rows, 'u'))"
                                              ng-class="{'editview': !toggleView()}" class="output footer"></div>
@@ -163,22 +140,22 @@
                                         <div ng-bind="formatAmount(colTotal(one, rows, 'a'))"
                                              ng-class="{'editview': !toggleView()}" class="output second footer"></div>
                                     </span>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
-<div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}"
-     class="span4 capright button-offset">
-<button ng-hide="true" type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
-    {{sideToggleName}}
-</button>
-<div class="row-fluid">
-<tabset ng-class="{'singletab': tabnumber() == 1}">
-<tab ng-repeat="tab in tabs" active="tab.active" ng-show="tabvisible(tab)" heading="{{tab.title}}">
-<div ng-show="chosenTab(tab, '')" style="overflow-y: auto; height: 735px;" ng-switch on="sideBar">
-<!-- Issues Side Bar when Editable -->
+        <div ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}"
+             class="span4 capright button-offset">
+        <button ng-hide="true" type="button" class="btn" ng-model="sideToggle" ng-change="toggleSide();" btn-checkbox>
+            {{sideToggleName}}
+        </button>
+        <div class="row-fluid">
+        <tabset ng-class="{'singletab': tabnumber() == 1}">
+        <tab ng-repeat="tab in tabs" active="tab.active" ng-show="tabvisible(tab)" heading="{{tab.title}}">
+        <div ng-show="chosenTab(tab, '')" style="overflow-y: auto; height: 735px;" ng-switch on="sideBar">
+        <!-- Issues Side Bar when Editable -->
                             <span ng-switch-when="1">
 
                                 <!-- Global Tab -->
@@ -595,7 +572,7 @@
                                   <span class="blue-link delete-link" ng-click="deleteIssueButton(activeIssue);">Delete security</span>
                               </span>
 
-<!-- Transaction Side Bar when Editable -->
+        <!-- Transaction Side Bar when Editable -->
                               <span ng-switch-when="2">
 
                                 <accordion ng-class="{'lessmargin': (activeTran.length == 1)}"
@@ -632,11 +609,10 @@
 
                                     <p class="rightTitle" ng-hide="tran.type =='Debt' || tran.type == 'Safe'"><span>{{grantbyIssue(tran.issue)}}</span><input
                                             ng-disabled="toggleView();"
-                                            maxlength="18" class="signless" ui-event="{blur : 'saveTran(tran)'}"
+                                            class="signless" ui-event="{blur : 'saveTran(tran)'}"
                                             ng-model="tran.units" onkeydown="testForEnter();"></p>
 
                                     <p class="rightTitle"><span>Total Paid</span><input ng-disabled="toggleView();"
-                                                                                        maxlength="18"
                                                                                         ui-event="{blur : 'saveTran(tran)'}"
                                                                                         ng-model="tran.amount"
                                                                                         onkeydown="testForEnter();"></p>
@@ -646,7 +622,6 @@
 
                                     <p ng-show="tran.forfeited" class="rightTitle"><span>Forfeit</span><input disabled
                                                                                                               ng-class="{'content':!tran.units}"
-                                                                                                              maxlength="18"
                                                                                                               class="signless"
                                                                                                               ui-event="{blur : 'saveTran(tran)'}"
                                                                                                               ng-model="tran.forfeited"
@@ -956,31 +931,32 @@
                                     </div>
                                 </span>
                               </span>
-</div>
-</tab>
-</tabset>
-</div>
-</div>
-<span class="try-me-button">
-    <img src="/img/features/tryit.png">
-</span>
-<button class="right-rail-button" ng-click="sideToggle = !sideToggle">
-    <span ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
-</button>
+        </div>
+        </tab>
+        </tabset>
+        </div>
+        </div>
+        <button class="right-rail-button" ng-click="sideToggle = !sideToggle">
+            <span ng-class="{'arrow-flip': toggleSide()}" data-icon="&#xe033;" aria-hidden="true"></span>
+        </button>
+        </div>
+        <span class="try-me-button">
+            <img src="/img/features/tryit.png">
+        </span>
+    </div>
+
 </div>
 
 </div>
-</div>
-</div>
 
-<div class="feature-block dark-feature">
+<div class="feature-block feature-permission complex-math">
     <div class="text">
-        <h1>Complex math made easy</h1>
+        <h2>Complex math made easy</h2>
 
-        <h2>Have you ever tried to calculate the conversion price of a debt note in a spreadsheet? It's not fun, unless
+        <h3>Have you ever tried to calculate the conversion price of a debt note in a spreadsheet? It's not fun, unless
             you like spending time in the formula bar. We've prepared the math for you, so things like debt conversions
             and share splits are a few clicks instead of a few hours. <a target="_self" href="/features/convertible-notes">Try our Convertible Note Calculator <span data-icon="&#xe016;" aria-hidden="true"></span></a>
-        </h2>
+        </h3>
     </div>
     <div class="screen">
         <img src="/img/features/convert.png"/>
@@ -989,12 +965,12 @@
 
 <div class="feature-block feature-permission">
     <div class="text">
-        <h1>Simple permissioning</h1>
+        <h2>Simple permissioning</h2>
 
-        <h2>Your large investors want to see your full cap table, and others just want to track their personal holdings.
-            Easily define what each person can see, along with their latest <br class="hidden-phone"> cap table
+        <h3>Your large investors want to see your full cap table, and others just want to track their personal holdings.
+            Easily define what each person can see, along with their latest cap table
             activity.
-        </h2>
+        </h3>
     </div>
     <div class="screen pull-left">
         <img src="/img/features/status2.png"/>
@@ -1003,104 +979,80 @@
 
 <div class="feature-block feature-permission">
     <div class="text">
-        <h1>Supported by evidence</h1>
+        <h2>Supported by evidence</h2>
 
-        <h2>Most cap tables are just spreadsheets of numbers, but that leaves costly work for your lawyer and accountant to validate the data. Connect supporting documents to your transactions for a more organized cap table.
-        </h2>
+        <h3>Most cap tables are just spreadsheets of numbers, but that leaves costly work for your lawyer and accountant to validate the data. Connect supporting documents to your transactions for a more organized cap table.
+        </h3>
     </div>
     <div class="screen">
         <img src="/img/features/evidence.png"/>
     </div>
 </div>
 
-<div class="icon-set">
-    <div class="container">
-        <div class="row-fluid">
-            <div class="span12">
-                <div class="trio-icons row-fluid">
-                    <div class="span4 text-center">
-                        <img src="/img/features/option-pool.png">
+<div class="section-icon-trio">
+    <ul>
+        <li>
+            <span class="large-icon options-icon"></span>
+            <span>See the impact of your option pool</span>
+            <span class="double-text">Review the fully diluted percentage of your pool, vesting progress for grantees, and the number of options you’ve granted over time.</span>
+        </li>
 
-                        <h2>See the impact of your option pool</h2>
+        <li>
+            <span class="large-icon confusing-icon"></span>
+            <span>Term sheets can be confusing</span>
+            <span class="double-text">It helps to know what some of the terms mean, so we include helpful tips throughout to make sense of things.</span>
+        </li>
 
-                        <p>Review the fully diluted percentage of your pool, vesting progress for grantees, and the
-                            number of options you've granted over time.
-                        </p>
-                    </div>
-                    <div class="span4 text-center">
-                        <img src="/img/features/term-sheets.png">
-
-                        <h2>Term sheets can be confusing
-                        </h2>
-
-                        <p>It helps to know what some of the terms mean, so we include helpful tips throughout to help
-                            make sense of things.
-                        </p>
-                    </div>
-                    <div class="span4 text-center">
-                        <img src="/img/features/versioning.png">
-
-                        <h2>Avoid versioning nightmares</h2>
-
-                        <p>The days of creating versions for different shareholders are gone. Enter your data once and
-                            share everything, some things, or nothing at all.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row-fluid second-icons">
-            <div class="span12">
-                <div class="trio-icons row-fluid">
-                    <div class="span4 text-center">
-                        <img src="/img/features/download.png">
-
-                        <h2>Take your data with you</h2>
-
-                        <p>Love spreadsheets too much to leave them completely? No problem. You can export all of the
-                            data from your cap table in a flexible CSV file.
-                        </p>
-                    </div>
-                    <div class="span4 text-center">
-                        <img src="/img/features/invite.png">
-
-                        <h2>Invite your lawyer & accountant</h2>
-
-                        <p>Your cap table data isn't just for you and your shareholders. Share read-only views for
-                            things like auditing, fundraising, and tax reporting.
-                        </p>
-                    </div>
-                    <div class="span4 text-center">
-                        <img src="/img/features/multi-security.png">
-
-                        <h2>Multiple security types</h2>
-
-                        <p>We keep your data conveniently structured by its security type. Keep track of your equity,
-                            debt, options, warrants and SAFEs.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <li>
+            <span class="large-icon versioning-icon"></span>
+            <span>Avoid versioning nightmares</span>
+            <span class="double-text">The days of creating versions for different shareholders are gone. Enter your data once and share everything, some things, or nothing at all.</span>
+        </li>
+    </ul>
 </div>
 
-<div id="register" class="hidden-phone">
-    <div class="row-fluid">
-        <div class="span10 offset1 text-center">
-            <h1>Ready to build your cap table?</h1>
+<div class="section-icon-trio second">
+    <ul>
+        <li>
+            <span class="large-icon download-icon"></span>
+            <span>Take your data with you</span>
+            <span class="double-text">Love spreadsheets too much to leave them completely? No problem. You can export all of the data from your cap table in a flexible CSV file.</span>
+        </li>
 
+        <li>
+            <span class="large-icon send-icon"></span>
+            <span>Invite your lawyer & accountant</span>
+            <span class="double-text">Your cap table data isn’t just for you and your shareholders. Share read-only views for things like auditing, fundraising, and tax reporting.</span>
+        </li>
+
+        <li>
+            <span class="large-icon security-icon"></span>
+            <span>Multiple security types</span>
+            <span class="double-text">We keep your data conveniently structured by its security type. Keep track of your equity, debt, options, warrants and SAFEs.</span>
+        </li>
+    </ul>
+</div>
+
+<div class="learn-more-section">
+    <div>
+        <div>
+            <h2>Want to see more?</h2>
+            <div class="CompanyRegister-form large-standard-button blue standard-button">
+                <button class="btn" onclick="window.location.href='/features/convertible-notes/'">Try Modeling</button>
+            </div>
+        </div>
+        <div>
+            <h2>Ready to get started?</h2>
             <div class="CompanyRegister-form large-standard-button standard-button">
-                <button class="btn" onclick="window.location.href='/pricing'">Get Started</button>
+                <button class="btn" onclick="window.location.href='/pricing'">View Pricing Plans</button>
             </div>
         </div>
     </div>
-    <div class="spacer30"></div>
 </div>
 
 </div>
 </div>
+
 <div class="push"></div>
 
 <div modal="tranDelete" close="deleteclose();" options="opts">

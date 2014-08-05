@@ -1,6 +1,7 @@
 'use strict';
 
-function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $location) {
+DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location', '$route'];
+function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $location, $route) {
     $scope.versionStatus = function(version) {
         if (version.last_event_activity) {
             return (version.last_event_activity==='received' ? 'sent to ' : (version.last_event_activity === 'retracted' ? (version.last_event_activity + " from ") : (version.last_event_activity + " by "))) +
@@ -12,23 +13,95 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
+    $scope.myEmails = []
+    // this returns everyone you have ever emailed. yay
+    $scope.getPeople = function(){
+        SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+            $scope.emailList = data           
+            angular.forEach($scope.emailList, function(value, key){
+                $scope.myEmails.push(value['email']);
+            });
+            return $scope.myEmails
+        });
+        // $scope.myEmails = array
+    };
+    $scope.getPeople()
+
+    $scope.buttondisabled = false;
+
+    $scope.docRecipients = function(version, email){
+        // $scope.buttondisabled = true
+        $scope.buttondisabled = true
+        SWBrijj.tblmm('document.my_counterpart_document_library_view', 'original', version.original).then(function(data){
+                $scope.myLibrary = data
+                var alreadySent = []
+              
+                angular.forEach($scope.myLibrary, function(name){
+                   alreadySent.push(name.investor)
+                });
+                if(alreadySent.indexOf(email[0]) > -1){
+                     $scope.$emit('notification:fail', 'You have already shared this');
+                     $route.reload();
+                    // $scope.buttondisabled = false;  
+                }
+                else{
+                    $scope.reShare(version, email);
+                }
+        });
+    };
+
+    $scope.reShare = function(version, email){
+        SWBrijj.document_resend_to(email[0], version.doc_id).then(function(data){
+            // console.log(data)
+            $route.reload();
+            $scope.$emit('notification:success', 'Document reshared');
+        }).except(function(data){
+            console.log("failed")
+            $rootScope.$emit('notification:fail', 'Something went wrong');
+            // $scope.buttondisabled = false
+        })
+      
+    };
+
+
+
+    $scope.select2Options = {
+        'multiple': true,
+        'simple_tags': true,
+        maximumSelectionSize: 1,
+        'tags': $scope.myEmails,
+        'tokenSeparators': [",", " "],
+        'placeholder': 'Enter an email address & press enter'
+    };
+
+
     $scope.shortVersionStatus = function(version) {
         if (!version) return "";
         if ($scope.isVoided(version)) {
             return "Voided"
+        }
+        else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred'){
+            version.sendgrid_event ='bounce'
+            return 'Bounced Share'
+        }
+        else if(version.sendgrid_event =='processed'){
+            return 'doc processed'
         }
         else if ($scope.isPendingVoid(version)) {
             return "Void requested by you"
         }
         else if (wasJustRejected(version) && lastEventByInvestor(version)) {
             return "Rejected by recipient";
-        } else if (wasJustRejected(version) &&
+        } 
+        else if (wasJustRejected(version) &&
                    !lastEventByInvestor(version)) {
             return "Rejected by you";
-        } else if ($scope.isPendingSignature(version)){
-            return "Sent for Signature";
+        } 
+        else if ($scope.isPendingSignature(version)){
+                return "Sent for Signature";
+            
         } else if ($scope.isPendingCountersignature(version)){
-            return "Review and Sign";
+                return "Review and Sign";                    
         } else if ($scope.isPendingInvestorFinalization(version)) {
             return "Signed and Sent for Approval";
         } else if ($scope.isPendingIssuerFinalization(version)) {
@@ -44,6 +117,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else {
             return "Sent";
         }
+  
     };
 
     function lastEventByInvestor(doc) {
@@ -56,6 +130,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.isPendingView = function(version) {
         return version.signature_flow===0 && !version.last_viewed;
+        console.log('test')
     };
     $scope.isPendingSignature = function(version) {
         return version.signature_flow>0 && !version.when_signed && !version.when_retracted;
@@ -107,13 +182,13 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         $location.url("/app/documents/company-status?doc=" + version.original);
     };
 
-    $scope.remind = function(doc_id, user_email) {
+    // $scope.remind = function(doc_id, user_email) {
         /*
           SWBrijj.procm("document.remind", version.doc_id, version.investor).then(function(data) {
           $scope.emit('event:remind');
           });
         */
-    };
+    // };
 
     $scope.switchSignatureFlow = function(version, sigflow) {
         SWBrijj.procm("document.update_signature_flow", version.doc_id, sigflow).then(function(x) {
@@ -157,10 +232,15 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $scope.$emit("notification:fail", "Document unarchive failed.");
         });
     };
+    
+    $scope.versionIsFinalized = function(version) {
+            return basics.isCompleteSigned(version)
+                || basics.isCompleteVoided(version);
+        };
 
     $scope.exportVersionToPdf = function(version) {
         $scope.$emit("notification:success", "Export in progress.");
-        SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true).then(function(url) {
+        SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true, !$scope.versionIsFinalized(version)).then(function(url) {
             document.location.href = url;
         }).except(function(x) {
             console.log(x);
@@ -169,4 +249,4 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
 }
-DocumentVersionRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];
+

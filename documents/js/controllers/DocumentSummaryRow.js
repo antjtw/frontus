@@ -27,13 +27,17 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
                 }
                 version.statusRank = basics.eventRank({activity: version.last_event_activity});
                 version.doc = $scope.doc;
+                // console.log($scope.doc)
                 $scope.versions.push(version);
             });
         });
+
     };
     if ($scope.doc.shown) {
         $scope.loadVersions();
     }
+
+
 
     $scope.versionsVisible = function(doc) {
         var total = doc.version_count;

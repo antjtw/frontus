@@ -24,9 +24,10 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.dp = {width: 0, height: 0};
         $scope.updateDocPanelSize = function(img_width, img_height) {
             var dp = $('.docPanel');
+            var width = 928;
             if (dp) {
-                dp.height((dp.width()/img_width)*$scope.img_eight);
-                $scope.dp.width = dp.width();
+                dp.height((width/img_width)*img_height);
+                $scope.dp.width = width;
                 $scope.dp.height = dp.height();
             }
         };
@@ -221,19 +222,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.signatureURL = '/photo/user?id=signature:';
 
-        $scope.annotable = function() {
-            return ($scope.invq && $scope.investorCanAnnotate()) || (!$scope.invq && $scope.issuerCanAnnotate());
-        };
-
-        $scope.investorCanAnnotate = function() {
-            return (!$scope.lib.when_signed && $scope.lib.signature_deadline && $scope.lib.signature_flow===2);
-        };
-
-        $scope.issuerCanAnnotate = function() {
-            return (!$scope.lib.when_countersigned && $scope.lib.when_signed && $scope.lib.signature_flow===2) ||
-                   ($scope.lib && $scope.prepare);
-        };
-
         $scope.loadPages = function () {
             /** @name SWBrijj#tblmm * @function
              * @param {string}
@@ -254,34 +242,29 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        $scope.uploadSuccess = function() {
-            $scope.signatureURL = '/photo/user?id=signature:';
+        function uploadSuccess() {
+            var rand = Math.random();
+            $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + rand;
             $scope.signatureprocessing = false;
             $scope.progressVisible = false;
             User.signaturePresent = true;
             var elements = document.getElementsByClassName('draggable imagesignature mysignature');
             angular.forEach(elements, function(element) {
                 element = element.querySelector("textarea");
-                if (element.style.backgroundImage == 'url(/photo/user?id=signature:)') {
-                    element.style.backgroundImage = 'url(/photo/user?id=signature:1)';
-                }
-                else {
-                    element.style.backgroundImage = 'url(/photo/user?id=signature:)';
-                }
+                element.style.backgroundImage = 'url(/photo/user?id=signature:&dontcache' + rand + ')';
             });
             $scope.$emit("notification:success", "Signature uploaded");
             $scope.scribblemode = false;
-            $scope.$apply();
-        };
+        }
 
-        $scope.uploadFail = function() {
+        function uploadFail() {
             void(0);
             $scope.progressVisible = false;
             $scope.signatureprocessing = false;
             $scope.signatureURL = '/photo/user?id=signature:';
             $scope.$emit("notification:fail", "Oops, something went wrong.");
             // console.log(x);
-        };
+        }
 
         $scope.uploadSignatureNow = function() {
             if ($scope.files || $scope.scribblemode) {
@@ -294,7 +277,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     fd = canvas.toDataURL();
                     $scope.signatureModal = false;
                     SWBrijj.uploadSignatureString(fd).then(function(x) {
-                        $scope.uploadSuccess();
+                        uploadSuccess();
                     }).except(function(x) {
                             $scope.uploadFail();
                         });
@@ -306,7 +289,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     }
                     $scope.signatureModal = false;
                     SWBrijj.uploadSignatureImage(fd).then(function(x) {
-                        $scope.uploadSuccess();
+                        uploadSuccess();
                     }).except(function(x) {
                         $scope.uploadFail();
                     });
@@ -405,7 +388,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  // TODO: migrate all uses of $scope.lib to $scope.doc
                  $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
                  $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
-                 $scope.isAnnotable = $scope.annotable(); // requires $scope.lib
+                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || ($scope.lib && $scope.prepare); // requires $scope.lib
 
                  // TODO: move all of this to the Documents and Annotations services
                  if ($scope.lib.annotations) {
@@ -417,7 +400,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                          var temp_annots = JSON.parse($scope.lib.iss_annotations);
                          temp_annots.forEach(function(annot) {
                              // TODO: we're creating an Annotation object and destroying it for no good reason
-                             var tmp = new Annotation().parseFromJson(annot);
+                             var tmp = Annotations.createBlankAnnotation().parseFromJson(annot, $scope.doc.annotation_types);
                              if (tmp.isCountersign()) {
                                  annots.push(annot);
                              }
@@ -430,7 +413,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              }
                          }
                      }
-                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots);
+                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots, $scope.doc.annotation_types);
                      var sticky;
                      for (var i = 0; i < annots.length; i++) {
                          var annot = annots[i];
@@ -553,12 +536,17 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                var a = new Annotation();
+                var a = Annotations.createBlankAnnotation();
                 a.page = $scope.doc.currentPage;
                 a.position.docPanel = $scope.dp;
                 a.position.size.width = 0;
                 a.position.size.height = 0;
                 a.initDrag = event;
+                a.type = $scope.nextAnnotationType;
+                if (a.type == 'highlight')
+                {
+                    a.whosign = 'Issuer';
+                }
                 if ($rootScope.navState.role == "issuer") {
                     a.investorfixed = true;
                 } else {
@@ -669,11 +657,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         $scope.$on("$destroy", function( event ) {
             $window.onkeydown = null;
         });
-
-        $scope.drawTime = function() {
-            // TODO: check issuerCanAnnotate or investorCanAnnotate depending on role
-            return $scope.isAnnotable && $scope.lib && ((!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $rootScope.navState.role == "investor"));
-        };
 
         $scope.user = User;
 
