@@ -997,35 +997,6 @@ app.controller('CompanyDocumentListController',
             $scope.$watch('state.maxRatio', stateChangeTrigger);
             $scope.$watch('state.show_archived', stateChangeTrigger);
 
-            // Smart docs
-            SWBrijj.tblm('smartdoc.document_view').then(function(data) {
-                angular.forEach(data, function(template) {
-                    var doc = {
-                        "docname": template.template_name,
-                        "uploaded_by": null,
-                        "company": null,
-                        "doc_id": null,
-                        "template_id": template.template_id,
-                        "last_updated": null,
-                        "annotations": null,
-                        "versions": null,
-                        "is_prepared": template.is_prepared,
-                        "version_count": 0,
-                        "complete_count": 0,
-                        "archive_count": 0,
-                        "archive_complete_count": 0,
-                        "type": "doc",
-                        "last_event_time": null,
-                    };
-                    // add to each list of documents
-                    loadState.document.docname.forwardList.push(doc);
-                    loadState.document.docname.reverseList.push(doc);
-                    loadState.document.statusRatio.forwardList.push(doc);
-                    loadState.document.statusRatio.reverseList.push(doc);
-                });
-            }).except(function(x) {
-            });
-
             // fully load all the documents in the weird case where we're in the middle of sharing / preparing a document
             function fullyLoadDocuments(callback) {
                 if (loadState.document.fullyLoaded) {
