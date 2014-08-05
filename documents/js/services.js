@@ -55,6 +55,8 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
     this.documents = [];
     this.message = "";
 
+    this.prepCache = {}; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
+
     this.upsertShareItem = function(item) {
         var updated = false;
         angular.forEach(this.documents, function(el) {
@@ -69,17 +71,33 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
             var obj = {
                 "doc_id": item.doc_id,
                 "template_id": item.template_id,
-                "signature_flow": item.signature_flow
+                "signature_flow": item.signature_flow,
+                "docname": item.docname
             };
             this.documents.push(obj);
             if (item.preps) {
-                // TODO: this overwrites the emails. Is that really what we want?
-                // combine the list, don't overwrite
-                this.emails = item.preps;
+                item.preps.forEach(function(prep_email) {
+                    this.addEmail(prep_email);
+                }, this);
             }
+        }
+        if (item.signature_flow > 0) {
+            this.checkPreparedLists([item], this.emails);
         }
         return this.documents;
     };
+    this.addEmail = function(email) {
+        if (email.length > 0 && this.emails.indexOf(email) == -1) {
+            this.emails.push(email);
+            this.checkEmail(email);
+        }
+    }
+    this.removeEmail = function(email) {
+        var idx = ShareDocs.emails.indexOf(email);
+        if (idx != -1) {
+            ShareDocs.emails.splice(idx, 1);
+        }
+    }
     this.removeShareItem = function(item) {
         this.documents = this.documents.filter(function(el) {
             return !(item.doc_id==el.doc_id &&
@@ -106,32 +124,50 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         return true;
     };
 
-    this.checkAllPrepared = function() {
+    this.checkPrepared = function(doc, investor) {
+        var p = $q.defer();
+        if (this.prepCache[doc.doc_id] === undefined) {
+            this.prepCache[doc.doc_id] = {};
+        }
+        if (this.prepCache[doc.doc_id][investor] !== undefined) {
+            p.resolve(this.prepCache[doc.doc_id][investor]);
+        }
+        var shares = this;
+        SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
+            var res = data[0].is_prepared_person;
+            shares.prepCache[doc.doc_id][investor] = res;
+            p.resolve(res);
+        }).except(function(err) {
+            p.reject(err);
+        });
+        return p.promise;
+    };
+    this.checkPreparedLists = function(docs, investors) {
         // for every document and every investor, check that is_prepared_person returns true;
         var check_defer = $q.defer();
         var promises = [];
-        this.documents.forEach(function(doc) {
+        docs.forEach(function(doc) {
             if (doc.signature_flow > 0) { // only signable docs need checking
-                this.emails.forEach(function(investor) {
-                    var p = $q.defer();
-                    SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
-                        p.resolve(data);
-                    }).except(function(err) {
-                        p.reject(err);
-                    });
-                    promises.push(p.promise);
-                });
+                investors.forEach(function(investor) {
+                    promises.push(this.checkPrepared(doc, investor));
+                }, this);
             }
         }, this);
         $q.all(promises).then(function(results) {
             check_defer.resolve(results.every(function(res) {
-                return res[0].is_prepared_person; // should already be a boolean
+                return res; // should already be a boolean
             }));
         }, function(err) {
             console.error(err);
             check_defer.reject(err);
         });
         return check_defer.promise;
+    }
+    this.checkEmail = function(investor) {
+        return this.checkPreparedLists(this.documents, [investor]);
+    };
+    this.checkAllPrepared = function() {
+        return this.checkPreparedLists(this.documents, this.emails);
     };
 
     this.shareDocuments = function() {

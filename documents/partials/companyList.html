@@ -127,7 +127,18 @@
     <div class="shareForm">
         <span>Recipients</span>
         <ul>
-            <li ng-repeat="investor in ShareDocs.emails">{{getInvestorDisplay(investor)}} <a ng-click="removeShareEmail(investor)">remove</a></li>
+            <li ng-repeat="investor in ShareDocs.emails">
+                {{getInvestorDisplay(investor)}} <a ng-click="removeShareEmail(investor)">remove</a>
+                <ul>
+                    <li ng-repeat="doc in ShareDocs.documents">
+                        {{doc.docname}}:
+                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === undefined">Loading</span>
+                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === true">Prepared</span>
+                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === false">Needs Work</span>
+                        <span ng-if="!(doc.signature_flow > 0)">View Only</span>
+                    </li>
+                </ul>
+            </li>
         </ul>
         <div class="sharepeople-input">
             <input ui-select2="sharingSelect2Options" ng-model="sharingemail" ng-change="addShareEmail(sharingemail); sharingemail = ''">

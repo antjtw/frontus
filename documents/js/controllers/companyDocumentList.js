@@ -970,16 +970,11 @@ app.controller('CompanyDocumentListController',
             $scope.addShareEmail = function(email) {
                 // this gets triggered multiple times with multiple types when the data changes
                 if (typeof(email) === "string") {
-                    if (email.length > 0) {
-                        ShareDocs.emails.push(email);
-                    }
+                    ShareDocs.addEmail(email);
                 }
             }
             $scope.removeShareEmail = function(email) {
-                var idx = ShareDocs.emails.indexOf(email);
-                if (idx != -1) {
-                    ShareDocs.emails.splice(idx, 1);
-                }
+                ShareDocs.removeEmail(email);
             };
             $scope.getInvestorDisplay = function(email) {
                 return Investor.getDisplayText(email);
