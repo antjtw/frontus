@@ -607,14 +607,6 @@ m.directive('composeMessage', function() {
             };
             $scope.getPeople()
 
-            $scope.select2Options = {
-                'multiple': true,
-                'simple_tags': true,
-                // 'data': $scope.myEmails,
-                'tokenSeparators': [",", " "],
-                'placeholder': 'Enter email addresses & press enter'
-            };  
-
             $scope.resetMessage = function() {
                 $scope.message = {recipients: [],
                                   text:"",
