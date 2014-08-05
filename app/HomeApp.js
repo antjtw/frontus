@@ -5,7 +5,7 @@ var app = angular.module('HomeApp',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
         'homeDirectives', 'activityDirective', 'commonDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
-        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular']);
+        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular', 'ngSanitize']);
 
 /** @name $routeParams#msg
  *  @type {string}
