@@ -126,8 +126,22 @@
     <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
     <div class="shareForm">
         <span>Recipients</span>
+        <ul>
+            <li ng-repeat="investor in ShareDocs.emails">
+                {{getInvestorDisplay(investor)}} <a ng-click="removeShareEmail(investor)">remove</a>
+                <ul>
+                    <li ng-repeat="doc in ShareDocs.documents">
+                        {{doc.docname}}:
+                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === undefined">Loading</span>
+                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === true">Prepared</span>
+                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === false">Needs Work</span>
+                        <span ng-if="!(doc.signature_flow > 0)">View Only</span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
         <div class="sharepeople-input">
-            <input ui-select2="sharingSelect2Options" ng-model="sharingemails">
+            <input ui-select2="sharingSelect2Options" ng-model="sharingemail" ng-change="addShareEmail(sharingemail); sharingemail = ''">
         </div>
         <span>Message</span>
         <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message..."></textarea>

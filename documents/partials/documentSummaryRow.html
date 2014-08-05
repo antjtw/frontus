@@ -68,7 +68,7 @@
 
                     <ul class="dropdown-menu">
                         <li ng-show="!doc.template_id"> <a class="button" ng-click="updateShareType(doc,0);">View Only</a></li>
-                        <li> <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a></li>
+                        <li ng-show="doc.is_prepared || doc.preps"> <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a></li>
                         <li ng-show="!doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a></li>
                         <li ng-show="doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Re-prepare</a></li>
                     </ul>
