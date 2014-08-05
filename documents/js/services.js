@@ -93,9 +93,9 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         }
     }
     this.removeEmail = function(email) {
-        var idx = ShareDocs.emails.indexOf(email);
+        var idx = this.emails.indexOf(email);
         if (idx != -1) {
-            ShareDocs.emails.splice(idx, 1);
+            this.emails.splice(idx, 1);
         }
     }
     this.removeShareItem = function(item) {
