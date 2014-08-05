@@ -1,10 +1,10 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor',
-    function($scope, $routeParams, Documents, SWBrijj, Investor) {
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs) {
         $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
-        $scope.doc.getPreparedFor(); // fetch preparation information (if needed)
+        $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
 
         $scope.newInvestor = "";
 
