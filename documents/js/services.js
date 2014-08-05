@@ -445,7 +445,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         issuerCanAnnotate: function() {//does not include if the document is being prepared
             return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
         },
-        getPreparedFor: function() {
+        getPreparedFor: function(defaultList) {
+            // defaultList is a list to use if there's no preps yet.
             if (!this.preparedFor) {
                 this.preparedFor = [];
                 var doc = this;
@@ -458,6 +459,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
                         doc.preparedFor.push(investor_prep);
                     });
+                    if (doc.preparedFor.length == 0 && defaultList) {
+                        defaultList.forEach(function(inv) {
+                            doc.addPreparedFor(inv);
+                        });
+                    }
                 });
             }
             return this.preparedFor;
