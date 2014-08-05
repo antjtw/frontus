@@ -580,22 +580,37 @@ m.directive('addPerson', function(){
 
 m.directive('composeMessage', function() {
     return {
-        scope: {recipients: "="},
+        scope: false,
         // replace: true,
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 
 
         
 
         function($scope, $rootScope, SWBrijj) {
 
+            $scope.myEmails = [];
+
+            
+            // this returns everyone you have ever emailed. yay
+            $scope.getPeople = function(){
+                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+                    $scope.emailLists = data           
+                    angular.forEach($scope.emailLists, function(value, key){
+                        $scope.myEmails.push(value['email']);
+                    });
+                    return $scope.myEmails
+                });
+                // $scope.myEmails = array
+            };
+            $scope.getPeople()
+
             $scope.resetMessage = function() {
-                $scope.message = {recipients:[],
+                $scope.message = {recipients: [],
                                   text:"",
                                   subject:""};
-                $scope.recipients = []
             };
             $scope.resetMessage();
             $scope.composeopts = {
@@ -607,7 +622,7 @@ m.directive('composeMessage', function() {
             
             $scope.howMany = function (){
                 if(location.host == 'share.wave'){
-                    console.log($scope.recipients + "i'm at sharewave!");
+                    console.log($scope.message.recipients + "i'm at sharewave!");
                 }
             };
 
@@ -616,7 +631,7 @@ m.directive('composeMessage', function() {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
-                var recipients = $scope.recipients;
+                var recipients = $scope.message.recipients;
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
@@ -633,7 +648,7 @@ m.directive('composeMessage', function() {
                     //this works but i don't know why for the root scope
                     $rootScope.$emit('new:message');
                     $scope.resetMessage();
-                    $scope.recipients = [];
+                    // $scope.recipients = [];
                     $scope.clicked = false;
 
                 }).except(function(err) {
@@ -648,7 +663,7 @@ m.directive('composeMessage', function() {
             
             $scope.readyToSend = function(msg) {
                 // console.log($scope.recipients)
-                if ($scope.recipients.length===0
+                if ($scope.message.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
