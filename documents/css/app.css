@@ -636,7 +636,10 @@ textarea.email-text {
     height: 60px;
 }
 .shareForm > .sharepeople-input {
-    padding-bottom: 40px;
+    padding-bottom: 10px;
+}
+.shareForm > textarea {
+    margin-top: 20px;
 }
 .sharepeople-input .select2-container {
     width: 100%;

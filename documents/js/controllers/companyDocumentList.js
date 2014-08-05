@@ -948,7 +948,11 @@ app.controller('CompanyDocumentListController',
                 ShareDocs.removeEmail(email);
             };
             $scope.getInvestorDisplay = function(email) {
-                return Investor.getDisplayText(email);
+                if (Investor.names[email]) {
+                    return Investor.names[email];
+                } else {
+                    return email;
+                }
             };
         }
     ]);
