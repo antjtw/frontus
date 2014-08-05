@@ -29,11 +29,6 @@
         </ul>
     </td>
 
-    <td ng-show="viewState.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}" class="status-toggle status-icon">
-
-        <div ng-if="docIsComplete(doc)" data-icon="&#xe023;" class="circle green" aria-hidden="true"></div>
-        <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
-    </td>
     <td ng-show="viewState.hideSharebar" class="shareholder-column status-column issuer pointer"
         ng-click="!(!doc.uploaded_by || doc.pages > 0) || viewStatus(doc)">
         <ul>
@@ -104,4 +99,4 @@
     </td>
 </tr>
 <!-- TODO animate show/hide by sliding down/up -->
-<tr document-version-row version="version" view-state="viewState" modals="modals" ng-if="viewState.hideSharebar && doc.shown && (!viewState.show_archived || (version.archived && viewState.show_archived)) && (viewState.maxRatio == 1000 || !versionIsComplete(version))" type="doc.type" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>
+<tr document-version-row version="version" view-state="viewState" modals="modals" ng-if="viewState.hideSharebar && doc.shown && (viewState.show_all || (version.archived && viewState.show_archived) || (viewState.show_completed && versionIsComplete(version)))" type="doc.type" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>

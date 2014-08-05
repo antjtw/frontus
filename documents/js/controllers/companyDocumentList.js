@@ -123,7 +123,6 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.toggleMaxRatio = function() {
-                console.log($scope.state.maxRatio);
                 $scope.state.maxRatio = ($scope.state.maxRatio===1000) ? 2 : 1000;
             };
 
@@ -134,13 +133,24 @@ app.controller('CompanyDocumentListController',
             $scope.recipients = [];
             $scope.signaturedate = Date.today();
             $scope.signeeded = "No";
-
+            $scope.state.show_all = true;
             $scope.toggleState = function(field) {
                 if (field == "archive") {
+                    if ($scope.state.show_archived) {
+                        $scope.state.show_all = true;
+                    }
                     $scope.state.show_archived = !$scope.state.show_archived;
+                    $scope.state.show_completed = false;
+                    $scope.state.show_all = false;
                 } else if (field == "complete") {
+                    if ($scope.state.show_completed) {
+                        $scope.state.show_all = true;
+                    }
                     $scope.state.show_completed = !$scope.state.show_completed;
+                    $scope.state.show_archived = false;
+                    $scope.state.show_all = false;
                 }
+                console.log($scope.state.show_all);
             };
 
             // only allow docOrder to be set
@@ -164,13 +174,10 @@ app.controller('CompanyDocumentListController',
             $scope.toggleFilter = function(obj) {
                 /** @name obj#docname
                  * @type { string} */
-                 if (!$scope.state.hideSharebar && obj.forShare) {
+                if (!$scope.state.hideSharebar && obj.forShare) {
                     return true
-                } else if ($scope.state.maxRatio!==1000 && obj.version_count == obj.complete_count && obj.complete_count > 0) {
+                } else if ($scope.state.show_completed && obj.complete_count == 0) {
                     // if hide_completed and all versions are completed then return false
-                    return false
-                } else if (!$scope.state.show_archived && obj.version_count == obj.archive_count && obj.archive_count > 0) {
-                    // if !show_archived and all versions are archived then return false
                     return false
                 } else if ($scope.state.show_archived && obj.archive_count == 0) {
                     return false

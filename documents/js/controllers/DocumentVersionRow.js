@@ -13,7 +13,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
-    $scope.myEmails = []
+    $scope.myEmails = [];
     // this returns everyone you have ever emailed. yay
     $scope.getPeople = function(){
         SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
@@ -25,7 +25,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         });
         // $scope.myEmails = array
     };
-    $scope.getPeople()
+    $scope.getPeople();
 
     $scope.buttondisabled = false;
 
@@ -130,7 +130,6 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.isPendingView = function(version) {
         return version.signature_flow===0 && !version.last_viewed;
-        console.log('test')
     };
     $scope.isPendingSignature = function(version) {
         return version.signature_flow>0 && !version.when_signed && !version.when_retracted;

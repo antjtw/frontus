@@ -64,20 +64,29 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
 
         var show_archived = $scope.viewState.show_archived;
 
-        var hide_completed = ($scope.viewState.maxRatio !== 1000);
+        var show_completed = ($scope.viewState.show_completed);
 
-        var num = (hide_completed ? 0 : (!show_archived ? doc.complete_count - doc.archive_complete_count : doc.complete_count));
+        var num = 0;
+        if (show_archived) {
+            num = doc.archive_count
+        } else if (show_completed) {
+            num = doc.complete_count
+        } else {
+            num  = doc.complete_count - doc.archive_complete_count
+        }
         var total = doc.version_count;
-        var display_total = doc.version_count - (hide_completed ? doc.complete_count : 0) - (!show_archived ? doc.archive_count : 0) + ((hide_completed && !show_archived) ? doc.archive_complete_count : 0);
+        var display_total = doc.version_count - doc.archive_count;
 
         if (show_archived) {
-            return doc.archive_count + " archived documents"
+            return num + " archived documents"
+        } else if (show_completed) {
+            return num + " completed documents"
         }
         if (total == doc.archive_count && !show_archived) {
             return "All documents archived";
-        } else if (total == doc.complete_count && hide_completed) {
+        } else if (total == doc.complete_count) {
             return "All documents completed";
-        } else if (total == (doc.archive_count + doc.complete_count - doc.archive_complete_count) && (!show_archived && hide_completed)) {
+        } else if (total == (doc.archive_count + doc.complete_count - doc.archive_complete_count) && (!show_archived && !show_completed)) {
             return "All documents are archived or completed";
         } else {
             return num + " / " + display_total + " completed";

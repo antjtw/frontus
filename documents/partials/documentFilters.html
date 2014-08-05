@@ -1,2 +1,23 @@
 <div>
+    <ul>
+        <li>
+            <ul>
+                <li>
+                    <div ng-click="toggleState('pending')">
+                        Pending {{pending_doc_count}}
+                    </div>
+                </li>
+                <li>
+                    <div ng-click="toggleState('complete')">
+                        Complete {{complete_doc_count}}
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <div ng-click="toggleState('archive')">
+                Archive {{archive_doc_count}}
+            </div>
+        </li>
+    </ul>
 </div>

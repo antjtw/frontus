@@ -1941,7 +1941,7 @@ li.no-activity {
 }
 
 .status-table > tbody > tr > td:last-child.toggle-column {
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .status-table > tbody > tr > td > span > span.status-icon {
@@ -1959,8 +1959,8 @@ li.no-activity {
 .status-table > tbody > tr > td.status-toggle {
     font-size: 14px;
     border-right: 1px solid transparent;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
     text-align:center;
     min-width: 40px;
 }

@@ -267,7 +267,7 @@ m.directive('peopleFilter', function(){
                 else if($scope.filterParam.param == assignMe){
                     $scope.filterParam.param = undefined;
                 }
-            }
+            };
 
            
           
