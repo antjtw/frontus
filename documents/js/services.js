@@ -74,7 +74,8 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
             this.documents.push(obj);
             if (item.preps) {
                 // TODO: this overwrites the emails. Is that really what we want?
-                this.emails = JSON.parse(item.preps);
+                // combine the list, don't overwrite
+                this.emails = item.preps;
             }
         }
         return this.documents;
