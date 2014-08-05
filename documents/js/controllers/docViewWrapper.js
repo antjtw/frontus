@@ -486,7 +486,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.exportVersionPdf = function() {
             $scope.$emit("notification:success", "Export in progress.");
             var truthiness = navState.role == "investor" ? false : true;
-            SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, truthiness, !$scope.versionIsComplete($scope.doc)).then(function(url) {
+            SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, truthiness, !$scope.versionIsFinalized($scope.doc)).then(function(url) {
                 document.location.href = url;
             }).except(function(x) {
                     console.log(x);
@@ -500,6 +500,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             } else {
                 $scope.downloadOriginalPdf();
             }
+        };
+        
+        $scope.versionIsFinalized = function(version) {
+            return basics.isCompleteSigned(version)
+                || basics.isCompleteVoided(version);
         };
 
         $scope.versionIsComplete = function(version) {
