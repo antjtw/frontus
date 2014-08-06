@@ -202,7 +202,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         this.checkAllPrepared().then(function(result) {
             if (result) {
                 SWBrijj.document_multishare(
-                    share.emails,
+                    share.emails.join(","),
                     JSON.stringify(share.documents),
                     share.message,
                     "22 November 2113"
