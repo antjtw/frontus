@@ -189,6 +189,15 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
             }
         }, this);
     };
+    this.emailNotPreparedCache = function(email) {
+        return this.documents.some(function(doc) {
+            if (doc.signature_flow > 0) {
+                return !this.prepCache[doc.doc_id][email];
+            } else {
+                return false;
+            }
+        }, this);
+    };
 
     this.shareDocuments = function() {
         // TODO: confirm that documents haven't been shared before to the users listed
