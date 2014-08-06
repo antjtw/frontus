@@ -4660,7 +4660,10 @@ div.upgradeWarning > span {
 
 .message_input .btn-group > .btn{
     border-right: 1px solid #E3E3E3;
+    border-radius: 0px;
 }
+
+
 
 .message_input .btn-toolbar{
     margin-top: 0px;
