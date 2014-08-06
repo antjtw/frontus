@@ -515,10 +515,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
         },
         getPreparedFor: function(defaultList) {
+            var doc = this;
+            function mergeDefaultList(defaultList){
+                if (defaultList) {
+                    var origLength = doc.preparedFor.length;
+                    defaultList.forEach(function(inv) {
+                        if (!doc.preparedFor.some(function(prep) {
+                            return prep.investor == inv;
+                        })) {
+                            doc.addPreparedFor(inv);
+                        }
+                    });
+                    if (doc.preparedFor.length != origLength) {
+                        $rootScope.$emit("notification:success", "We've automatically added the investors you were sharing to.");
+                    }
+                }
+            }
             // defaultList is a list to use if there's no preps yet.
             if (!this.preparedFor) {
                 this.preparedFor = [];
-                var doc = this;
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
                         if (investor_prep.annotation_overrides) {
@@ -528,21 +543,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
                         doc.preparedFor.push(investor_prep);
                     });
-                    // merge in the default list of investors (from the share screen, probably)
-                    if (defaultList) {
-                        var origLength = doc.preparedFor.length;
-                        defaultList.forEach(function(inv) {
-                            if (!doc.preparedFor.some(function(prep) {
-                                return prep.investor == inv;
-                            })) {
-                                doc.addPreparedFor(inv);
-                            }
-                        });
-                        if (doc.preparedFor.length != origLength) {
-                            $rootScope.$emit("notification:success", "We've automatically added the investors you were sharing to.");
-                        }
-                    }
+                    mergeDefaultList(defaultList);
                 });
+            } else {
+                mergeDefaultList(defaultList);
             }
             return this.preparedFor;
         },
