@@ -821,9 +821,7 @@ app.controller('CompanyDocumentListController',
                                     $scope.$emit("notification:success",
                                         "Success! Document prepared for signature.");
                                 } else {
-                                    ShareDocs.updateShareType(doc, -1);
-                                    $scope.$emit("notification:fail",
-                                        "Oops, the document is not ready for signature. Please try again.");
+                                    ShareDocs.updateShareType(doc, 2);
                                 }
                             }
                         });
