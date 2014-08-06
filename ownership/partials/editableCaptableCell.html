@@ -27,6 +27,7 @@
                placeholder="paid"
                ui-event="{focus: 'selectCell(data.investor, data.security)',
                            blur: 'saveIt(data.a)'}"
+               data-currency
                ng-model='data.a'
                onpaste="return false"
                ng-paste="numberPaste($event, row, data.security, 'a');"

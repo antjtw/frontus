@@ -685,9 +685,10 @@
                            onkeydown="testForEnter();">
                 </th>
                 <th>
-                    <span ng-click="addSecurity()">
-                        Add Security
-                    </span>
+                    <input placeholder="Add Security"
+                           class="capEditHeaders"
+                           ui-event="{blur: 'addSecurity(new_sec)'}"
+                           ng-model="new_sec">
                 </th>
             </tr>
             <!-- Uneditable headers -->
@@ -785,6 +786,7 @@
                 <td class="capsums-col">
                 </td>
                 <td class="capsums-col">
+                    <!-- FIXME make input-->
                     <span ng-click="addInvestor()">
                         Add Investor
                     </span>

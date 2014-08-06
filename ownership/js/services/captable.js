@@ -46,6 +46,7 @@ Cell = function() {
 ownership.service('captable',
 function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
+    var attrs = attributes.getAttrs();
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
     function loadCapTable() {
@@ -145,6 +146,15 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
         return tran;
     }
+    /* parseIssueSecurity
+     *
+     * Securities retain a summary of their transactions 
+     * as attributes on the security object iself.
+     *
+     * Therefore, any transactions affecting this summary must be
+     * parsed to incorporate such relevant data in the summary.
+     *
+     */
     function parseIssueSecurity(tran) {
         var security = nullSecurity();
         security.name = tran.attrs.security;
@@ -293,6 +303,23 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function splice_many_by(array, filter_fn) {
         return splice_many(array, array.filter(filter_fn));
     }
+    /* saveTransaction
+     *
+     * Takes a new (no id) transaction or an instance of an
+     * existing transaction which we assume to have been modified.
+     *
+     * Send transaction to the database (_ownership.save_transaction).
+     *
+     * Database fn will...
+     * -  upsert transaction into _ownership.draft_transactions
+     * -  remove existing ledger entries, if any exist
+     * -  parse transaction into ledger entries, and insert them
+     * -  return new ledger entries to front-end
+     *
+     * This fn then updates the captable object with
+     * the new ledger entries.
+     *
+     */
     function saveTransaction(tran) {
         // TODO this is getting called too often.
         // use ng-change instead of ui-event?
@@ -323,7 +350,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                     "Transaction deleted");
                 splice_many(captable.transactions, [tran]);
                 splice_many(cell.transactions, [tran]);
-                // TODO removeit from cells
             } else {
                 $rootScope.$emit("notification:fail",
                     "Oops, something went wrong.");
@@ -436,15 +462,40 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function nullSecurity() {
         return new Security();
     }
-    function addSecurity() {
-        /*
-        var sec = nullSecurity();
+    /* initAttrs
+     *
+     * Grab valid attribute keys from the attributes service
+     * for the given security type and transaction kind.
+     *
+     * Add said keys to obj.attrs
+     */
+    function initAttrs(obj, sec_type, kind) {
+        var attr_obj = attrs[sec_type][kind];
+        if (attr_obj) {
+            angular.forEach(Object.keys(attr_obj),
+                    function(el) { obj.attrs[el] = null; });
+        }
+    }
+
+    function newTransaction(sec_type, kind) {
+        var tran = new Transaction();
+        tran.kind = kind;
+        initAttrs(tran, sec_type, kind);
+        return tran;
+    }
+    this.addSecurity = function(name) {
+        // NOTE assume Option for now, user can change,
+        // attrs will update automatically
+        var tran = newTransaction("Option", "issue security");
+        tran.kind = "issue_security";
         // Silly future date so that the issue always appears
         // on the leftmost side of the table
-        sec.insertion_date = new Date(2100, 1, 1);
-        captable.securities.push(sec);
-        */
-    }
+        tran.insertion_date = new Date(2100, 1, 1);
+        // FIXME should we be using AddTran
+        // which takes care of the ledger entries?
+        captable.transactions.push(tran);
+        parseTransaction(tran);
+    };
     this.addInvestor = function() {
         var inv = new Investor();
         inv.editable = "yes";
@@ -452,83 +503,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         inv.percentage = function() {return investorSorting(inv.name);};
         captable.investors.splice(0, 0, inv);
     };
-    this.addTran = function(inv, sec, tp) {
-        var tran = new Transaction();
-        tran.company = $rootScope.navState.company;
-        debugger;
-        if (tp == "issue_security") {
-            // captable.securities.push()
-            //
-        } else {
-            // TODO other transaction types may affect investor list
-            //
-            var security = captable.securities
-                .filter(function(el) { return el.security == sec; })[0];
-            var investor = captable.investors
-                .filter(function(el) { return el.investor == inv; })[0];
-            tran.investor = inv;
-            tran.security = sec;
-            tran.kind = tp;
-            // instantiate from allowed attrs
-            console.log(Object.keys(captable.attributes[security.security_type][tp]));
-            tran.attrs =
-                Object.keys(captable.attributes
-                                [security.security_type][tp])
-                    .map(function(el) {return {el: null};});
-            // captable.transactions.push
-            // pass to cell as well
-        }
-        console.log(tran);
-        // TODO create a transaction of a specified type
-    };
-    /*
-    function newTransaction(issuekey, investor) {
-        var tran = new Transaction();
-        tran.new = "yes";
-        tran.investor = tran.investorkey = investor;
-        inheritAllDataFromIssue(tran, getIssue(issuekey));
-        return tran;
-    }
-    this.newTransaction = newTransaction;
-    function getIssue(issuekey) {
-        return captable.securities
-            .filter(function(el) {
-                return el.issue==issuekey;
-            })[0];
-    }
-    this.getIssue = getIssue;
-    */
-    /*
-    function cellsForIssue(iss) {
-        var cells = [];
-        angular.forEach(captable.investors, function(row) {
-            if (iss.issue in row.cells && row.nameeditable !== 0) {
-                cells.push(row.cells[iss.issue]);
-            }
-        });
-        return cells;
-    }
-    function derivativeIssues(underlying_issue) {
-        return captable.securities
-            .filter(function(iss) {
-                return iss.optundersec == underlying_issue.issuename;
-            });
-    }
-    function unitsGranted(iss, dilute) {
-        var num_granted = cellsForIssue(iss).reduce(
-            function(prev, cur, index, arr) {
-                return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
-            }, 0);
-        if (dilute) {
-            num_granted += derivativeIssues(iss).reduce(
-                function(prev, cur, index, arr) {
-                    return prev +
-                calculate.isNumber(cur.totalauth) ? cur.totalauth : 0;
-                }, 0);
-        }
-        return num_granted;
-    }
-    */
     function massageTransactionValues(tran) {
         tran.units = calculate.cleannumber(tran.units);
         tran.amount = calculate.cleannumber(tran.amount);
@@ -555,39 +529,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             }
         });
     }
-    /*
-    function generateUnissuedRows() {
-        angular.forEach(captable.securities, function(iss) {
-            if (!calculate.isNumber(iss.totalauth)) return;
-            var total = iss.totalauth;
-            var num_granted = unitsGranted(iss, true);
-            var leftovers = total - num_granted;
-            var unissued_cell = nullCell();
-            unissued_cell.u = leftovers;
-            var unissued_row = captable.investors.filter(
-                function(el) {
-                    return el.name == iss.issue + " (unissued)";
-                })[0];
-            if (unissued_row) {
-                if (leftovers !== 0) {
-                    unissued_row.cells[iss.issue] = unissued_cell;
-                } else {
-                    captable.investors.splice(
-                        captable.investors.indexOf(unissued_row), 1);
-                }
-            } else {
-                if (leftovers !== 0) {
-                    unissued_row = addRow(-1);
-                    unissued_row.name = iss.issue + " (unissued)";
-                    unissued_row.editable = 0;
-                    unissued_row.nameeditable = 0;
-                    unissued_row.cells[iss.issue] = unissued_cell;
-                }
-            }
-        });
-    }
-    this.generateUnissuedRows = generateUnissuedRows;
-    */
     function totalOwnershipUnits() {
         return captable.cells.reduce(sumCellUnits, 0);
     }

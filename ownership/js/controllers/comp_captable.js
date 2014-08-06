@@ -14,7 +14,7 @@ var captableController = function(
 
     // Set the view toggles to their defaults
     $scope.radioModel = "Edit";
-    $scope.maintoggle = true;
+    $scope.editMode = true;
     $scope.windowToggle = false;
     $scope.dilutionSwitch = true;
     $scope.captablestate = 0;
@@ -108,7 +108,7 @@ var captableController = function(
     $rootScope.$on('captable:initui', initUI);
     function initUI() {
         if (!$rootScope.companyIsZombie()) {
-            $scope.maintoggle = false;
+            $scope.editMode = false;
             $scope.radioModel = "View";
             $scope.tourshow = true;
             $scope.sideToggle = true;
@@ -152,7 +152,6 @@ var captableController = function(
             $scope.selectedSecurity = null;
             History.forget($scope, 'selectedSecurity');
         } else {
-            // TODO refactor to take security and use it directly
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
                     return el.name == security_name;  
@@ -170,7 +169,6 @@ var captableController = function(
             $scope.selectedInvestor = null;
             History.forget($scope, 'selectedInvestor');
         } else {
-            // TODO refactor to take investor directly
             $scope.selectedInvestor = $scope.ct.investors
                 .filter(function(el) {
                     return el.name == investor_name;
@@ -179,58 +177,14 @@ var captableController = function(
             $scope.sideBar = 3;
         }
     };
-    $scope.addSecurity = function() {
-        captable.addTran(null, 'Untitled', 'issue_security');
+    $scope.addSecurity = function(new_sec) {
+        $scope.new_sec = null;
+        captable.addSecurity(new_sec);
     };
-    $scope.addInvestor = function() {
-        captable.addInvestor();
+    $scope.addInvestor = function(new_inv) {
+        captable.addInvestor(new_inv);
+        $scope.new_inv = null;
     };
-    /*
-    $scope.saveIssueAssign = function (issue, field, i) {
-        if (i) { issue[field] = i; }
-        $scope.saveIssueCheck(issue, field);
-    };
-
-    $scope.saveIssueCheckDate = function (issue, field, evt) {
-        //Fix the dates to take into account timezone differences
-        if (evt) { // User is typing
-            if (evt != 'blur')
-                keyPressed = true;
-            var dateString = angular.element(field + '#' + issue.$$hashKey).val();
-            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
-            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                var date = Date.parse(dateString);
-                if (date) {
-                    issue[field] = calculate.timezoneOffset(date);
-                    $scope.saveIssueCheck(issue, field);
-                    keyPressed = false;
-                }
-            }
-        } else { // User is using calendar
-            if (issue[field] instanceof Date) {
-                issue[field] = calculate.timezoneOffset(issue[field]);
-                $scope.saveIssueCheck(issue, field);
-                keyPressed = false;
-            }
-        }
-    };
-
-    $scope.saveIssueCheck = function (issue, field) {
-        var x = false;
-        var testcopy = angular.copy(issue);
-        if ($scope.issueModal === true) {
-            return;
-        } else if (!angular.equals(testcopy, $scope.issueRevert)) {
-            $scope.saveIssue(issue, field);
-        } else {
-            return;
-        }
-    };
-
-    $scope.deleteIssueButton = function (activeIssue) {
-        $scope.dmodalUp(activeIssue);
-    };
-    */
 
     $scope.addIssuePari = function(items) {
         items.push({"company": items[0].company,
@@ -256,51 +210,6 @@ var captableController = function(
     $scope.showPari = function(list) {
         return list.length > 0;
     };
-
-    $scope.toggleCommon = function(issue) {
-        //issue.common = issue.common && issue.type == 'Equity' ? false : true;
-        //$scope.saveIssue(issue);
-    };
-
-    /*
-    $scope.tranChangeU = function (value, issue) {
-        captable.generateUnissuedRows();
-        if ($scope.activeTran.length < 2) {
-            $scope.activeTran[0].units = value;
-        }
-    };
-    $scope.tranChangeA = function (value) {
-        if ($scope.activeTran.length < 2) {
-            $scope.activeTran[0].amount = value;
-        }
-    };
-    $scope.nameChangeLR = function (investor) {
-        $scope.activeInvestorName = investor.name;
-        if ((investor.name).length > 0) {
-            angular.forEach($scope.ct.investors, function (row) {
-                if (row.name == investor.name) {
-                    row.editable = "yes";
-                }
-            });
-        } else {
-            angular.forEach($scope.ct.investors, function (row) {
-                if (row.name == investor.name) {
-                    row.editable = "0";
-                }
-            });
-        }
-    };
-    $scope.nameChangeRL = function (investor) {
-        $scope.activeInvestorName = investor.name;
-    };
-    $scope.deletePersonButton = function (name) {
-        angular.forEach($scope.ct.investors, function (row) {
-            if (row.name == name) {
-                $scope.rmodalUp(row);
-            }
-        });
-    };
-    */
 
     // Preformatting on the date to factor in the local timezone offset
     var keyPressed = false;
@@ -354,18 +263,33 @@ var captableController = function(
         return cell && (cell.u || cell.a);
     };
 
+    function reselectCurrentSelection() {
+        switch (selectedThing()) {
+            case "selectedCell":
+                $scope.selectCell($scope.selectedCell.investor,
+                                  $scope.selectedCell.security);
+                break;
+            case "selectedInvestor":
+                $scope.selectInvestor($scope.selectedInvestor.name);
+                break;
+            case "selectedSecurity":
+                $scope.selectSecurity($scope.selectedSecurity.name);
+                break;
+        }
+    }
     $scope.editViewToggle = function() {
-        $scope.maintoggle = !$scope.maintoggle;
-        $scope.radioModel = $scope.maintoggle ? "Edit" : "View";
+        $scope.editMode = !$scope.editMode;
+        $scope.radioModel = $scope.editMode ? "Edit" : "View";
+        reselectCurrentSelection();
     };
 
     $scope.tabvisible = function(tab) {
         if (tab.title == "Activity") {
-            if (tab.active == true && !($scope.toggleView() && $scope.fieldActive())) {
+            if (tab.active === true && !($scope.toggleView() && $scope.fieldActive())) {
                 tab.active = false;
                 $scope.tabs[0].active = true;
             }
-            return $scope.toggleView() && $scope.fieldActive()
+            return $scope.toggleView() && $scope.fieldActive();
         } else {
             return true;
         }
@@ -375,21 +299,20 @@ var captableController = function(
         var total = 0;
         angular.forEach($scope.tabs, function(tab) {
             if ($scope.tabvisible(tab)) {
-                total += 1
+                total += 1;
             }
         });
         return total;
     };
     // TODO refactor and rename
     $scope.toggleView = function () {
-        if ($scope.maintoggle) {
+        if ($scope.editMode) {
             $scope.captablestate = 1;
             if ($scope.sideBar == 2 || $scope.sideBar == 1) {
                 $scope.sideBar = "hello";
             }
             return true;
-        }
-        else {
+        } else {
             $scope.dilutionSwitch = true;
             $scope.captablestate = 0;
             if ($scope.sideBar == 4 || $scope.sideBar == 5) {

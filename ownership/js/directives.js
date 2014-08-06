@@ -1,5 +1,25 @@
 var own = angular.module('ownerDirectives', []);
 
+own.directive('currency', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attr, ctrl) {
+            ctrl.$formatters.push(function(modelValue) {
+                // TODO commas are not being added
+                // TODO add currency symbol?
+                if (!modelValue) return "";
+                return modelValue.toString()
+                    .replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
+            });
+            ctrl.$parsers.push(function(viewValue) {
+                var re = new RegExp(",", "g");
+                var res = parseFloat(viewValue.replace(re, ''));
+                return isNaN(res) ? undefined : res;
+            });
+        }
+    };
+});
 own.directive('d3Donut', ['d3', function(d3) {
     return {
         restrict: 'EA',

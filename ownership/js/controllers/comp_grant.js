@@ -30,7 +30,7 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
     $scope.possibleActions = ['exercised', 'forfeited'];
 
     // False is edit mode, true is view mode
-    $scope.maintoggle = true;
+    $scope.editMode = true;
     $scope.optionView = "Security";
 
     $scope.newSchedule = false;
@@ -145,12 +145,12 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
                 if ($scope.issues.length == 1) {
                     $rootScope.$on('billingLoaded', function(x) {
                         if (!$rootScope.companyIsZombie()) {
-                            $scope.maintoggle = false;
+                            $scope.editMode = false;
                         }
                     });
                     if ($rootScope.selectedPlan) {
                         if (!$rootScope.companyIsZombie()) {
-                            $scope.maintoggle = false;
+                            $scope.editMode = false;
                         }
                     }
                 }
@@ -969,14 +969,14 @@ var grantController = function ($scope, $rootScope, $parse, $location, SWBrijj, 
 
     //
     $scope.editViewToggle = function() {
-        $scope.maintoggle = !$scope.maintoggle;
-        if (!$scope.maintoggle) {
+        $scope.editMode = !$scope.editMode;
+        if (!$scope.editMode) {
             $scope.optionView = "Security";
         }
     };
 
     $scope.togglename = function() {
-        return $scope.maintoggle ? "Edit" : "View";
+        return $scope.editMode ? "Edit" : "View";
     };
 
     $scope.setView = function(field) {
