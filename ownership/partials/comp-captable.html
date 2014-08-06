@@ -572,7 +572,7 @@
          ng-click="companyIsZombie() || modalUp();"
          id='a_own_tour_share_subnav'
          data-placement="bottom" bs-tooltip="zombiemessage">
-        <span ng-hide="toggleView() || tourstate == 0"
+        <span ng-hide="editMode || tourstate == 0"
               class="tour-icon tour-share"
               data-placement="bottom"
               bs-tooltip="tourmessages.share">
@@ -592,7 +592,7 @@
          ng-class="{'disabledme': companyIsZombie()}"
          ng-click="companyIsZombie() || editViewToggle();"
          data-placement="bottom" bs-tooltip="zombiemessage">
-        <span ng-hide="toggleView() || tourstate == 0"
+        <span ng-hide="editMode || tourstate == 0"
               class="tour-icon tour-view"
               data-placement="bottom"
               bs-tooltip="tourmessages.view">
@@ -600,17 +600,22 @@
         </span>
         <ul>
             <li>
-                <span ng-show="!toggleView()"
+                <span ng-show="editMode"
                       data-icon="&#xe001;"
                       aria-hidden="true">
                 </span>
-                <span ng-show="toggleView()"
+                <span ng-hide="editMode"
                       data-icon="&#xe00e;"
                       aria-hidden="true">
                 </span>
             </li>
             <li>
-                <span>{{radioModel}}</span>
+                <span ng-show="editMode">
+                    View
+                </span>
+                <span ng-hide="editMode">
+                    Edit
+                </span>
             </li>
         </ul>
     </div>
@@ -662,10 +667,10 @@
      class="span8 docLibrary leftBlock">
 
     <div class="row-fluid capcontainer">
-        <table ng-class="{viewcaptable: toggleView()}"
+        <table ng-class="{viewcaptable: !editMode}"
                class="captable tableView bodyText">
             <!-- Editable headers -->
-            <tr ng-if="!toggleView();" class="column-label">
+            <tr ng-if="editMode;" class="column-label">
                 <th class="longrow" colspan="2">
                     Ownership
                 </th>
@@ -692,7 +697,7 @@
                 </th>
             </tr>
             <!-- Uneditable headers -->
-            <tr ng-if="toggleView();" class="column-label">
+            <tr ng-if="!editMode" class="column-label">
                 <th class="longrow" colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected:
@@ -709,7 +714,7 @@
                 </th>
             </tr>
             <!-- Descriptive row viewable from all modes -->
-            <tr class="descriptionRow" ng-class="{'viewmode':toggleView()}">
+            <tr class="descriptionRow" ng-class="{'viewmode':!editMode}">
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
@@ -719,10 +724,10 @@
                     <span>Total Paid</span>
                 </td>
                 <!-- for new security col -->
-                <td ng-if="!toggleView();"></td>
+                <td ng-if="editMode"></td>
             </tr>
             <!-- Editable investors -->
-            <tbody ng-if="!toggleView();">
+            <tbody ng-if="editMode;">
             <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true"
                 ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col">
@@ -778,7 +783,7 @@
                         selected-cell="selectedCell">
                 </td>
                 <!-- for new security col -->
-                <td ng-if="!toggleView();"></td>
+                <td ng-if="editMode;"></td>
             </tr>
             <tr>
                 <td class="capsums-col">
@@ -794,12 +799,12 @@
                 <td ng-repeat="key in ct.securities" class="capsums-col">
                 </td>
                 <!-- for new security column -->
-                <td ng-if="!toggleView();"></td>
+                <td ng-if="editMode;"></td>
             </tr>
             </tbody>
             <!-- Un-editable view -->
             <!-- Regular Rows -->
-            <tbody ng-if="toggleView()">
+            <tbody ng-if="!editMode">
             <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true">
                 <td class="capsums-col">
                     <input class="input-right"
@@ -850,11 +855,11 @@
                     ng-repeat="key in ct.securities
                   | orderBy:['effective_date', 'insertion_date']:true">
                     <span class="captablepair-box">
-                        <div ng-class="{editview: !toggleView()}"
+                        <div ng-class="{editview: editMode}"
                              class="output clickable">
                             {{captable.numUnissued(key)}}
                         </div>
-                        <div ng-class="{editview: !toggleView()}"
+                        <div ng-class="{editview: editMode}"
                              class="output second clickable">
                              <!-- don't need anything here.
                                   no such thing as unissued amounts -->
@@ -872,7 +877,7 @@
                 | orderBy:['effective_date', 'insertion_date']:true">
                 </td>
                 <!-- for new security col -->
-                <td ng-if="!toggleView();"></td>
+                <td ng-if="editMode;"></td>
             </tr>
             <!-- Undiluted footer -->
             <tr class='tablefooter'>
@@ -892,18 +897,18 @@
                     ng-repeat="one in ct.securities
                 | orderBy:['effective_date', 'insertion_date']:true">
                     <span class="captablepair-box">
-                        <div ng-class="{'editview': !toggleView()}"
+                        <div ng-class="{'editview': editMode}"
                              class="output footer">
                             {{captable.securityTotalUnits(one.security) | formatAmount:settings:'units'}}
                         </div>
-                        <div ng-class="{'editview': !toggleView()}"
+                        <div ng-class="{'editview': editMode}"
                              class="output second footer">
                             {{captable.securityTotalAmount(one.security) | formatAmount:settings:'amount'}}
                         </div>
                     </span>
                 </td>
                 <!-- for new security col -->
-                <td ng-if="!toggleView();"></td>
+                <td ng-if="editMode;"></td>
             </tr>
         </table>
     </div>
@@ -1006,7 +1011,7 @@
                                 </span>
                                 <span>Share with Investor</span>
                             </div>
-                            <div ng-if="!toggleView();"
+                            <div ng-if="editMode"
                                  ng-click="captable.removeInvestor(selectedInvestor)"
                                  class="profile-link">
                                 <span data-icon="&#xe00c;"
@@ -1017,7 +1022,7 @@
                         </div>
                     </span>
                     <span class="capGuide" ng-switch-default>
-                        <span ng-hide="toggleView();">
+                        <span ng-if="editMode;">
                             <div class="captour railpadding">
                                 <h1 class="right-bar-header">
                                     Understand your Ownership
@@ -1034,7 +1039,7 @@
                                 </ul>
                             </div>
                         </span>
-                        <span class="in-brief" ng-show="toggleView();">
+                        <span class="in-brief" ng-show="!editMode;">
                             <div class="headsection row-fluid
                                         tabbed company-info">
                                 <h1><img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">{{navState.name}}</h1>
@@ -1157,7 +1162,7 @@
     </table>
 </div>
 
-<div ng-hide="toggleView() || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
+<div ng-hide="!editMode || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
     <div class="standard-button small-standard-button" ng-click="moveTour();">
         <h2>Need Help?</h2>
         <button id='a_own_tour_start_bar' class="btn">Tour</button>

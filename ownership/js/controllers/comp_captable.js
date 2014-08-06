@@ -13,11 +13,8 @@ var captableController = function(
     $scope.captable = captable;
 
     // Set the view toggles to their defaults
-    $scope.radioModel = "Edit";
-    $scope.editMode = true;
+    $scope.editMode = false;
     $scope.windowToggle = false;
-    $scope.dilutionSwitch = true;
-    $scope.captablestate = 0;
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
     $scope.tourshow = false;
@@ -109,7 +106,6 @@ var captableController = function(
     function initUI() {
         if (!$rootScope.companyIsZombie()) {
             $scope.editMode = false;
-            $scope.radioModel = "View";
             $scope.tourshow = true;
             $scope.sideToggle = true;
             $scope.tourUp();
@@ -136,19 +132,19 @@ var captableController = function(
                 */
             }
             History.watch('selectedCell', $scope);
-            $scope.sideBar = $scope.toggleView() ? 4 : 2;
+            displayCellDetails();
         } else if ($scope.selectedCell && !cellIsSelected(inv, sec)) {
             $scope.selectedCell = null;
             History.forget($scope, 'selectedCell');
-            $scope.sideBar = "home";
+            displayIntroSidebar();
         }
     };
     $scope.selectSecurity = function(security_name) {
         $scope.selectedCell = $scope.selectedInvestor = null;
-        if ($scope.toggleView() && $scope.selectedSecurity &&
+        if ($scope.editMode && $scope.selectedSecurity &&
             $scope.selectedSecurity.name == security_name)
         {
-            $scope.sideBar = "home";
+            displayIntroSidebar();
             $scope.selectedSecurity = null;
             History.forget($scope, 'selectedSecurity');
         } else {
@@ -157,15 +153,15 @@ var captableController = function(
                     return el.name == security_name;  
                 })[0];
             History.watch('selectedSecurity', $scope);
-            $scope.sideBar = $scope.toggleView() ? 5 : 1;
+            displaySecurityDetails();
         }
     };
     $scope.selectInvestor = function(investor_name) {
         $scope.selectedCell = $scope.selectedSecurity = null;
         //deselectAllCells();
-        if ($scope.toggleView() && $scope.selectedInvestor &&
+        if ($scope.editMode && $scope.selectedInvestor &&
                 $scope.selectedInvestor.name == investor_name) {
-            $scope.sideBar = "home";
+            displayIntroSidebar();
             $scope.selectedInvestor = null;
             History.forget($scope, 'selectedInvestor');
         } else {
@@ -174,7 +170,7 @@ var captableController = function(
                     return el.name == investor_name;
                 })[0];
             History.watch('selectedInvestor', $scope);
-            $scope.sideBar = 3;
+            displayInvestorDetails();
         }
     };
     $scope.addSecurity = function(new_sec) {
@@ -278,18 +274,19 @@ var captableController = function(
         }
     }
     $scope.editViewToggle = function() {
+        toggleDetailsView();
         $scope.editMode = !$scope.editMode;
-        $scope.radioModel = $scope.editMode ? "Edit" : "View";
         reselectCurrentSelection();
     };
 
     $scope.tabvisible = function(tab) {
         if (tab.title == "Activity") {
-            if (tab.active === true && !($scope.toggleView() && $scope.fieldActive())) {
+            if (tab.active === true &&
+                    !(!$scope.editMode && $scope.fieldActive())) {
                 tab.active = false;
                 $scope.tabs[0].active = true;
             }
-            return $scope.toggleView() && $scope.fieldActive();
+            return !$scope.editMode;
         } else {
             return true;
         }
@@ -305,51 +302,89 @@ var captableController = function(
         return total;
     };
     // TODO refactor and rename
+    function editableDetailsVisible() {
+        return $scope.sideBar == 2 || $scope.sideBar == 1;
+    }
+    function viewOnlyDetailsVisible() {
+        return $scope.sideBar == 4 || $scope.sideBar == 5;
+    }
+    function hideEditableDetails() {
+        if (editableDetailsVisible()) {
+            $scope.sideBar = "hello";
+        }
+    }
+    function hideViewOnlyDetails() {
+        if (viewOnlyDetailsVisible()) {
+            $scope.sideBar = "hello";
+        }
+    }
+    function displayCellDetails() {
+        $scope.sideBar = $scope.editMode ? 2 : 4;
+    }
+    function displaySecurityDetails() {
+        $scope.sideBar = $scope.editMode ? 1 : 5;
+    }
+    function displayIntroSidebar() {
+        $scope.sideBar = "home";
+    }
+    function displayInvestorDetails() {
+        $scope.sideBar = 3;
+    }
+    function toggleDetailsView() {
+        switch ($scope.sideBar) {
+            case 1:
+                $scope.sideBar = 5;
+                break;
+            case 2:
+                $scope.sideBar = 4;
+                break;
+            case 4:
+                $scope.sideBar = 2;
+                break;
+            case 5:
+                $scope.sideBar = 1;
+                break;
+            default:
+                $scope.sideBar = "home";
+                break;
+        }
+        console.log($scope.sideBar);
+    }
     $scope.toggleView = function () {
         if ($scope.editMode) {
-            $scope.captablestate = 1;
-            if ($scope.sideBar == 2 || $scope.sideBar == 1) {
-                $scope.sideBar = "hello";
-            }
-            return true;
+            hideEditableDetails();
+            $scope.editMode = false;
+            return $scope.editMode;
         } else {
-            $scope.dilutionSwitch = true;
-            $scope.captablestate = 0;
-            if ($scope.sideBar == 4 || $scope.sideBar == 5) {
-                $scope.sideBar = "hello";
-            }
-            return false;
+            hideViewOnlyDetails();
+            $scope.editMode = true;
+            return $scope.editMode;
         }
     };
 
     $scope.fieldActive = function () {
-        return isNaN(parseInt($scope.sideBar));
-    };
-
-    // Toggles editable to view
-    $scope.toggleDilution = function () {
-        return $scope.dilutionSwitch;
+        return isNaN(parseInt($scope.sideBar, 10));
     };
 
     $scope.switchCapTab = function(tab) {
         $scope.currentTab = tab;
     };
     $scope.toggleShown = function(obj) {
-        if (obj.shown == undefined) {
+        if (obj.shown === undefined) {
             obj.shown = true;
         } else {
             obj.shown = !obj.shown;
         }
     };
     $scope.viewEvidence = function(ev) {
-        if (ev.doc_id != null) {
-            if (!$scope.toggleView()) {
+        if (ev.doc_id !== null) {
+            if ($scope.editMode) {
                 $scope.viewme = ['investor', ev.doc_id];
             } else {
-                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1')
+                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
             }
-        } else if (ev.original != null) {
-            if (!$scope.toggleView()) {
+        } else if (ev.original !== null) {
+            if ($scope.editMode) {
                 $scope.viewme = ['issuer', ev.original];
             } else {
                 $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
@@ -1147,10 +1182,12 @@ var captableController = function(
     // Functions derived from services for use in the table
 
     //switches the sidebar based on the type of the issue
+    /*
     $scope.dilution = function () {
         $scope.sideBar = 9;
         $scope.dilutedRows = calculate.dilution($scope.ct.investors, $scope.ct.securities);
     };
+    */
 
     //switches the sidebar based on the type of the issue
     $scope.trantype = function (type, activetype) {
