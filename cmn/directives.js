@@ -607,6 +607,7 @@ m.directive('composeMessage', function() {
             };
             $scope.getPeople()
 
+
             $scope.resetMessage = function() {
                 $scope.message = {recipients: [],
                                   text:"",
@@ -620,10 +621,15 @@ m.directive('composeMessage', function() {
 
             $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
             
-            $scope.howMany = function (){
+            $scope.howMany = function(){
                 if(location.host == 'share.wave'){
                     console.log($scope.message.recipients + "i'm at sharewave!");
                 }
+            };
+
+            $scope.keypressCallback = function($event) {
+                alert('Voila!');
+                $event.preventDefault();
             };
 
 
