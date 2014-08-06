@@ -630,6 +630,7 @@ textarea.email-text {
 }
 .shareForm {
     padding-top: 40px;
+    padding-bottom: 20px;
 }
 .shareForm .my-loading-spinner-container > div {
     left: 50%;
@@ -693,6 +694,10 @@ textarea.email-text {
     width: 250px;
 }
 
+.shareForm ul.doc-list > li > a:hover {
+    color: #666;
+}
+
 .shareForm ul.recipients .incomplete {
     color: #e74c3c;
 }
@@ -705,6 +710,7 @@ textarea.email-text {
 }
 .shareForm > .controls {
     padding-top: 20px;
+    overflow: auto;
 }
 .shareForm > .controls span {
     line-height: 32px;
