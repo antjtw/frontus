@@ -1,22 +1,34 @@
 <div>
     <ul>
         <li>
+            <div ng-click="toggleState('all')">
+                All Shares ({{librarystate.total_docs}})
+            </div>
+        </li>
+        <li>
             <ul>
                 <li>
                     <div ng-click="toggleState('pending')">
-                        Pending {{pending_doc_count}}
+                        Pending {{librarystate.pending_doc_count}}
                     </div>
                 </li>
                 <li>
                     <div ng-click="toggleState('complete')">
-                        Complete {{complete_doc_count}}
+                        Complete ({{librarystate.total_completed}})
                     </div>
                 </li>
             </ul>
         </li>
         <li>
+            <div>
+                <select ui-select2="select2Picker" ng-model="state.recipientfilter">
+                    <option ng-repeat="investor in vInvestors" value="{{investor}}">{{investor}}</option>
+                </select>
+            </div>
+        </li>
+        <li>
             <div ng-click="toggleState('archive')">
-                Archive {{archive_doc_count}}
+                Archive ({{librarystate.total_archived}})
             </div>
         </li>
     </ul>

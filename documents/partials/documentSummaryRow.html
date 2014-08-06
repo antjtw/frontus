@@ -99,4 +99,4 @@
     </td>
 </tr>
 <!-- TODO animate show/hide by sliding down/up -->
-<tr document-version-row version="version" view-state="viewState" modals="modals" ng-if="viewState.hideSharebar && doc.shown && (viewState.show_all || (version.archived && viewState.show_archived) || (viewState.show_completed && versionIsComplete(version)))" type="doc.type" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>
+<tr document-version-row version="version" view-state="viewState" modals="modals" ng-if="viewState.hideSharebar && doc.shown && (viewState.show_all || (version.archived && viewState.show_archived) || (viewState.show_completed && versionIsComplete(version)) || (viewState.show_pending && !versionIsComplete(version)))" type="doc.type" class="sub-row" ng-repeat="version in versions | orderBy:versionOrder"></tr>

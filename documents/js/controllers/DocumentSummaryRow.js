@@ -63,12 +63,14 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         if (doc.version_count == 0) return (doc.template_id == null ? uploadState : "Pre-loaded");
 
         var show_archived = $scope.viewState.show_archived;
-
+        var show_pending = ($scope.viewState.show_pending);
         var show_completed = ($scope.viewState.show_completed);
 
         var num = 0;
         if (show_archived) {
             num = doc.archive_count
+        } else if (show_pending) {
+            num = doc.version_count - doc.complete_count;
         } else if (show_completed) {
             num = doc.complete_count
         } else {
@@ -79,6 +81,8 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
 
         if (show_archived) {
             return num + " archived documents"
+        } else if (show_pending) {
+            return num + " pending documents"
         } else if (show_completed) {
             return num + " completed documents"
         }

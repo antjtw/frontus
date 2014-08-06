@@ -133,6 +133,8 @@ app.controller('CompanyDocumentListController',
             $scope.recipients = [];
             $scope.signaturedate = Date.today();
             $scope.signeeded = "No";
+
+
             $scope.state.show_all = true;
             $scope.toggleState = function(field) {
                 if (field == "archive") {
@@ -140,6 +142,15 @@ app.controller('CompanyDocumentListController',
                         $scope.state.show_all = true;
                     }
                     $scope.state.show_archived = !$scope.state.show_archived;
+                    $scope.state.show_pending = false;
+                    $scope.state.show_completed = false;
+                    $scope.state.show_all = false;
+                } else if (field == "pending") {
+                    if ($scope.state.show_pending) {
+                        $scope.state.show_all = true;
+                    }
+                    $scope.state.show_pending = !$scope.state.show_pending;
+                    $scope.state.show_archived = false;
                     $scope.state.show_completed = false;
                     $scope.state.show_all = false;
                 } else if (field == "complete") {
@@ -147,10 +158,10 @@ app.controller('CompanyDocumentListController',
                         $scope.state.show_all = true;
                     }
                     $scope.state.show_completed = !$scope.state.show_completed;
+                    $scope.state.show_pending = false;
                     $scope.state.show_archived = false;
                     $scope.state.show_all = false;
                 }
-                console.log($scope.state.show_all);
             };
 
             // only allow docOrder to be set
@@ -814,6 +825,10 @@ app.controller('CompanyDocumentListController',
                 'placeholder': 'Enter email address & press enter'
             };
 
+            $scope.select2Picker = {
+                'placeholder': 'Filter by recipient'
+            };
+
             $scope.shareDocuments = function(docsToShare, emails, message) {
                 $scope.processing = true;
                 if (message == "Add an optional message...") {
@@ -1047,6 +1062,10 @@ app.controller('CompanyDocumentListController',
                     loadState.document.statusRatio.reverseList.push(doc);
                 });
             }).except(function(x) {
+            });
+
+            SWBrijj.tblm('document.my_company_library_recipient_totals').then(function(data) {
+                $scope.librarystate = data[0];
             });
 
             // fully load all the documents in the weird case where we're in the middle of sharing / preparing a document
