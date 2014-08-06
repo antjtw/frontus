@@ -4697,6 +4697,12 @@ div.upgradeWarning > span {
 
 }
 
+.msgButtons{
+    display: inline-block;
+    margin-left: 6.5%;
+    margin-top: 40px;
+}
+
 
 /*Sidebar CSS */
 .sidebarHeader {
