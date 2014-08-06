@@ -327,9 +327,24 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.setNextAnnotationType = function (type) {
             $scope.nextAnnotationType = type;
         };
+        
+        var checkUploadTimeout;
 
         $scope.leave = function() {
             // TODO: save notes / smartdoc data
+            if (checkUploadTimeout)
+            {
+                $timeout.cancel(checkUploadTimeout);
+            }
+            if (navState.role == "issuer") {
+                $scope.pageQueryString = function() {
+                    return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
+                };
+            } else if (navState.role == 'investor') {
+                $scope.pageQueryString = function() {
+                    return "id=" + $scope.docId + "&investor=" + $scope.invq;
+                };
+            }
             if ($rootScope.lastPage
                 && ($rootScope.lastPage.indexOf("/register/") === -1)
                 && ($rootScope.lastPage.indexOf("/login/") === -1)
@@ -540,6 +555,105 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.completeDoc = function() {
             return $scope.versionIsComplete($scope.doc) || !$scope.doc.investor
         };
+        
+        
+        var mimetypes = ["application/pdf", // .pdf
+            // microsoft office
+            "application/msword", // .doc
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+            "application/vnd.ms-powerpoint", // .ppt
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
+            // open office
+            "application/vnd.oasis.opendocument.text", // .odt
+            "application/vnd.oasis.opendocument.presentation", // .odp
+            "application/vnd.oasis.opendocument.image", // .odi
+            "image/png", // .png
+            "image/tiff", // .tiff
+            "image/jpeg", // .jpg
+            "text/plain", // .txt
+            "application/rtf" // .rtf
+        ];
+        $scope.setSignedFiles = function(element) {
+            // called from outside of angular, so $apply it
+            $scope.$apply(function() {
+                $scope.files = [];
+                $scope.fileError = "";
+                for (var i = 0; i < element.files.length; i++) {
+                    if (element.files[i].size > 20000000) {
+                        $scope.fileError = "Please choose a smaller file";
+                    } else if (mimetypes.indexOf(element.files[i].type) == -1) {
+                        $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
+                    } else {
+                        $scope.files.push(element.files[i]);
+                    }
+                }
+                if ($scope.files.length > 0) {
+                    $scope.uploadSigned($scope.files);
+                }
+            });
+        };
+        
+        $scope.checkSignedUploaded = function () {
+            SWBrijj.tblm('document.my_counterparty_library', ['when_signature_provided', 'signed_uploaded', 'signed_upload_attempted'], 'doc_id', $scope.doc.doc_id).then(function(doc) {
+                if (doc.signed_upload_attempted)
+                {
+                    if (doc.when_signature_provided)
+                    {
+                        if (navState.role == "issuer") {
+                            $scope.pageQueryString = function() {
+                                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty + "&newlysigned=true";
+                            };
+                        } else if (navState.role == 'investor') {
+                            $scope.pageQueryString = function() {
+                                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&newlysigned=true";
+                            };
+                        }
+                        $scope.doc.when_signed = doc.when_signature_provided;
+                        $scope.doc.when_signature_provided = doc.when_signature_provided;
+                        $scope.initDocView();
+                        return;
+                    }
+                    else if (!doc.signed_uploaded)
+                    {
+                        $scope.$emit("notification:fail", "Signed copy rejected. Did it have the same number of pages as the original?");
+                        return;
+                    }
+                }
+                checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
+            }).except(function(data) {
+                console.log(data);
+            });
+        }
+        
+        $scope.uploadSigned = function(files) {
+                var fd = new FormData();
+                if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
+                    _kmq.push(['record', 'doc uploader']);
+                    analytics.track('doc uploader');
+                }
+                for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
+                if (fd.length > 1)
+                {
+                    //throw error. Multiple docs doesn't make sense
+                    $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
+                    return;
+                }
+                var upxhr = SWBrijj.uploadSigned(fd);
+                upxhr.then(function(x) {
+                    $scope.uploadprogress = x;
+                    
+                    SWBrijj.uploadSetType(x[0], "signed", $scope.doc.doc_id).then(function() {
+                        checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
+                        $scope.$emit("notification:success", "Uploading signed version . . .");
+                        $scope.files = [];
+                    }).except(function(x) {
+                        console.log(x);
+                    });
+                }).except(function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                    $scope.files = [];
+                });
+            };
 
         $scope.getData();
     }
