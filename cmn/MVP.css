@@ -4637,30 +4637,37 @@ div.upgradeWarning > span {
     padding-top: 30px;
 }
 
-/*.ta-root.focussed .ta-scroll-window.form-control.ng-hide{
-    border: 3px solid blue;
-}*/
 .message_info {
   padding: 30px 0px;
 }
-
+/*styling the editor*/
 .message_info .ta-scroll-window{
     border: 1px solid #E3E3E3;
+    border-radius: 5px;
 }
 
 .message_input .ta-scroll-window > .ta-bind {
     padding: 0px;
-    font-family: "Helvetica";
-    white-space: pre-wrap;
 }
 
 .ta-editor {
     min-height: 300px;
     height: auto;
     overflow: auto;
-    font-family: "lvetica";
     font-size: 100%;
     margin:20px 0;
+}
+
+.message_input .ta-root.focussed .ta-scroll-window.form-control{
+    border-color: none;
+    -webkit-box-shadow: none;
+    border: 1px solid #E3E3E3;
+    padding: 10px;
+}
+
+/*style the inside of the text box*/
+.message_input .ta-scroll-window.form-control *{
+    font-family: Helvetica;
 }
 
 .message_input .btn[disabled]{
@@ -4669,7 +4676,7 @@ div.upgradeWarning > span {
 }
 .message_input {
     display: inline-block;
-    width: 80%;
+    width: 76%;
 }
 
 .message_headline{
@@ -4678,10 +4685,14 @@ div.upgradeWarning > span {
     margin-left: 30px;
 }
 
-.message_input input{
-    padding: 4px 0px;
+.msgsubject{
+    padding-top: 4px;
+    padding-left: 0px;
+    padding-right: 0px;
     width: 100%;
-    height: 26px;
+    height: 31px;
+    border-radius: 3px;
+
 }
 
 

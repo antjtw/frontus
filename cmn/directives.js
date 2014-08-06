@@ -607,11 +607,6 @@ m.directive('composeMessage', function() {
             };
             $scope.getPeople()
 
-            $scope.keyPress = function($event){
-                console.log($event);
-                
-            }
-
 
             $scope.resetMessage = function() {
                 $scope.message = {recipients: [],
