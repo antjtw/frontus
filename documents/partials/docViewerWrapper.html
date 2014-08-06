@@ -116,8 +116,14 @@
                             </div>
                             <div class="inforow" ng-if="doc.when_signed">
                                 <span class="activity-icon doc-sign-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'"><span>Signed by {{doc.name}}</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
-                                <span class="info" ng-if="navState.role == 'investor'"><span>Signed</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'issuer'">
+                                    <span ng-if="!doc.when_signature_provided">Signed by {{doc.name}}</span>
+                                    <span ng-if="doc.when_signature_provided">Signed offline by {{doc.name}} and uploaded</span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'">
+                                    <span ng-if="!doc.when_signature_provided">Signed</span>
+                                    <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
                                 <span class="activity-icon doc-final-icon"></span>
