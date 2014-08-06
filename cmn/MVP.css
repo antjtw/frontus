@@ -4651,10 +4651,15 @@ div.upgradeWarning > span {
     font-family: Helvetica;
 }
 
+
 .message_input .btn[disabled]{
     background-color: white;
     color: black;
-    /*border: 1px solid #E3E3E3;*/
+    border-right: 1px solid #E3E3E3;
+}
+
+.message_input .btn-group > .btn{
+    border-right: 1px solid #E3E3E3;
 }
 
 .message_input .btn-toolbar{
