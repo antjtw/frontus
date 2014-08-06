@@ -30,9 +30,6 @@ var captableController = function(
     $scope.tabs = [{'title': "Information"}, {'title': "Activity"}];
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None', '1X', '2X', '3X'];
-    $scope.eligible_evidence = captable.getEligibleEvidence();
-    $scope.evidenceOrder = 'docname';
-    $scope.evidenceNestedOrder = 'name';
     $scope.extraPeople = [];
     function logError(err) { console.log(err); }
 
@@ -378,21 +375,6 @@ var captableController = function(
             obj.shown = !obj.shown;
         }
     };
-    $scope.viewEvidence = function(ev) {
-        if (ev.doc_id !== null) {
-            if ($scope.editMode) {
-                $scope.viewme = ['investor', ev.doc_id];
-            } else {
-                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
-            }
-        } else if (ev.original !== null) {
-            if ($scope.editMode) {
-                $scope.viewme = ['issuer', ev.original];
-            } else {
-                $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
-            }
-        }
-    };
     $scope.editEvidence = function(obj) {
         if (obj) {
             captable.evidence_object = obj;
@@ -402,80 +384,6 @@ var captableController = function(
             $scope.windowToggle = false;
         }
         return $scope.windowToggle;
-    };
-    $scope.evidenceEquals = function(ev1, ev2) {
-        return (ev1.doc_id && ev2.doc_id && ev1.doc_id==ev2.doc_id && ev1.investor==ev2.investor)
-            || (ev1.original && ev2.original && !ev1.doc_id && !ev2.doc_id && ev1.original==ev2.original);
-    };
-    $scope.isEvidence = function(ev) {
-        if (captable.evidence_object && captable.evidence_object.evidence_data) {
-            return captable.evidence_object.evidence_data.filter(function(x) {return $scope.evidenceEquals(ev, x);}).length>0;
-        } else {
-            return false;
-        }
-    };
-    $scope.removeEvidence = function(ev, obj) {
-        if (!obj) {
-            captable.evidence_object.evidence_data = captable.evidence_object.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
-            $scope.updateEvidenceInDB(captable.evidence_object, 'removed');
-        } else {
-            obj.evidence_data = obj.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
-            $scope.updateEvidenceInDB(obj, 'removed');
-        }
-    };
-    $scope.addEvidence = function(ev) {
-        if (captable.evidence_object &&
-                captable.evidence_object.evidence_data) {
-            // assumes ev is not already in evidence_data
-            captable.evidence_object.evidence_data.push(ev);
-        }
-    };
-    $scope.toggleForEvidence = function(ev) {
-        if (!ev || !captable.evidence_object) {return;}
-        if (!captable.evidence_object.evidence_data) {
-            captable.evidence_object.evidence_data = [];
-        } else {
-            var action = "";
-            if ($scope.isEvidence(ev)) {
-                $scope.removeEvidence(ev);
-                action = "removed";
-            } else {
-                $scope.addEvidence(ev);
-                action = "added";
-            }
-            $scope.updateEvidenceInDB(captable.evidence_object, action);
-        }
-    };
-    $scope.updateEvidenceInDB = function(obj, action) {
-        if (obj.tran_id && obj.evidence_data) {
-            SWBrijj.procm('ownership.upsert_transaction_evidence',
-                          parseInt(obj.tran_id, 10),
-                          JSON.stringify(obj.evidence_data)
-            ).then(function(r) {
-                void(r);
-            }).except(function(e) {
-                $scope.$emit("notification:fail",
-                    "Something went wrong. Please try again.");
-                console.log(e);
-            });
-        }
-    };
-    $scope.evidenceFilter = function(obj) {
-        var res = [];
-        if ($scope.state.evidenceQuery && obj) {
-            var items = $scope.state.evidenceQuery.split(" ");
-            angular.forEach(items, function(item) {
-                res.push(new RegExp(item, 'i'))
-            });
-        }
-        var truthiness = res.length;
-        var result = 0;
-        angular.forEach(res, function(re) {
-            if (re.test(obj.docname) || re.test(obj.tags)) {
-                result += 1;
-            }
-        });
-        return !$scope.state.evidenceQuery || truthiness == result;
     };
     // Captable Conversion Modal
     $scope.convertSharesUp = function(trans) {

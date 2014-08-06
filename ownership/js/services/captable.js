@@ -678,32 +678,79 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         var type = cellSecurityType(cell);
         return type == "Debt" || type == "Safe";
     };
-    this.updateEvidenceInDB = function(obj, action) {
-        if (obj.tran_id && obj.evidence_data) {
-            SWBrijj.procm('ownership.upsert_transaction_evidence',
-                          parseInt(obj.tran_id, 10),
+    function updateEvidenceInDB(obj, action) {
+        debugger;
+        if (obj.transaction && obj.evidence_data) {
+            SWBrijj.procm('_ownership.upsert_transaction_evidence',
+                          parseInt(obj.transaction, 10),
                           JSON.stringify(obj.evidence_data)
             ).then(function(r) {
                 void(r);
             }).except(function(e) {
-                $scope.$emit("notification:fail",
+                $rootScope.$emit("notification:fail",
                     "Something went wrong. Please try again.");
                 console.log(e);
             });
         }
-    };
-    this.evidenceEquals = function(ev1, ev2) {
+    }
+    this.updateEvidenceInDB = updateEvidenceInDB;
+    function evidenceEquals(ev1, ev2) {
         return (ev1.doc_id && ev2.doc_id &&
                 ev1.doc_id==ev2.doc_id &&
                 ev1.investor==ev2.investor)
             || (ev1.original && ev2.original &&
                 !ev1.doc_id && !ev2.doc_id &&
                 ev1.original==ev2.original);
-    };
-    this.addEvidence = function(ev) {
+    }
+    this.evidenceEquals = evidenceEquals;
+    function addEvidence(ev) {
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data.push(ev);
         }
+    }
+    this.addEvidence = addEvidence;
+    function removeEvidence(ev, obj) {
+        if (!obj) {
+            captable.evidence_object.evidence_data =
+                captable.evidence_object.evidence_data
+                    .filter(function(x) {
+                        return !evidenceEquals(ev, x);});
+            updateEvidenceInDB(captable.evidence_object, 'removed');
+        } else {
+            obj.evidence_data = obj.evidence_data
+                .filter(function(x) {
+                    return !evidenceEquals(ev, x);
+                });
+            updateEvidenceInDB(obj, 'removed');
+        }
+    }
+    this.removeEvidence = removeEvidence;
+    this.toggleForEvidence = function(ev) {
+        if (!ev || !captable.evidence_object) {return;}
+        if (!captable.evidence_object.evidence_data) {
+            captable.evidence_object.evidence_data = [];
+        } else {
+            var action = "";
+            if (isEvidence(ev)) {
+                removeEvidence(ev);
+                action = "removed";
+            } else {
+                addEvidence(ev);
+                action = "added";
+            }
+            updateEvidenceInDB(captable.evidence_object, action);
+        }
     };
+    function isEvidence(ev) {
+        if (captable.evidence_object &&
+                captable.evidence_object.evidence_data) {
+            return captable.evidence_object.evidence_data
+                .filter(function(x) {
+                    return evidenceEquals(ev, x);
+                }).length>0;
+        } else {
+            return false;
+        }
+    }
 });

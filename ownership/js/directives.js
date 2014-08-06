@@ -171,12 +171,21 @@ own.directive('cellDetails', [function() {
         scope: {cell: '=',
                 currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/cellDetails.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "captable",
-            function($scope, $rootScope, displayCopy, captable) {
+        controller: ["$scope", "$rootScope", "$location",
+                     "displayCopy", "captable",
+            function($scope, $rootScope, $location,
+                     displayCopy, captable) {
                 $scope.settings = $rootScope.settings;
                 $scope.tips = displayCopy.captabletips;
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
+                };
+                $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                    } else if (ev.original !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
+                    }
                 };
             }
         ],
@@ -186,13 +195,13 @@ own.directive('editableCellDetails', [function() {
     return {
         restrict: 'EA',
         scope: {cell: '=',
-                currentTab: '=currenttab',
-                viewme: '='},
+                currentTab: '=currenttab'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable",
             function($scope, $rootScope, attributes, captable) {
                 console.log($scope);
                 $scope.captable = captable;
+                var ct = captable.getCapTable();
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
                 captable.evidence_object = null;
@@ -225,63 +234,9 @@ own.directive('editableCellDetails', [function() {
                     }
                 };
                 $scope.editEvidence = function(obj) {
-                    captable.evidence_object = obj;
+                    ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
-                };
-                $scope.removeEvidence = function(ev, obj) {
-                    if (!obj) {
-                        captable.evidence_object.evidence_data =
-                            captable.evidence_object.evidence_data
-                                .filter(function(x) {
-                                    return !captable.evidenceEquals(ev, x);
-                                });
-                        captable.updateEvidenceInDB(
-                                captable.evidence_object, 'removed');
-                    } else {
-                        obj.evidence_data = obj.evidence_data
-                            .filter(function(x) {
-                                return !captable.evidenceEquals(ev, x);
-                            });
-                        captable.updateEvidenceInDB(obj, 'removed');
-                    }
-                };
-                /*
-                $scope.addEvidence = function(ev) {
-                    if (captable.evidence_object &&
-                            captable.evidence_object.evidence_data) {
-                        // assumes ev is not already in evidence_data
-                        captable.evidence_object.evidence_data.push(ev);
-                    }
-                };
-                
-                $scope.toggleForEvidence = function(ev) {
-                    if (!ev || !captable.evidence_object) {return;}
-                    if (!captable.evidence_object.evidence_data) {
-                        captable.evidence_object.evidence_data = [];
-                    } else {
-                        var action = "";
-                        if ($scope.isEvidence(ev)) {
-                            $scope.removeEvidence(ev);
-                            action = "removed";
-                        } else {
-                            $scope.addEvidence(ev);
-                            action = "added";
-                        }
-                        captable.updateEvidenceInDB(
-                                captable.evidence_object, action);
-                    }
-                };
-                */
-                $scope.isEvidence = function(ev) {
-                    if (!captable.evidence_object ||
-                            !captable.evidence_object.evidence_data) {
-                        return false;
-                    }
-                    return captable.evidence_object.evidence_data
-                        .filter(function(x) {
-                            return $scope.evidenceEquals(ev, x);
-                        }).length > 0;
                 };
             }
         ],
@@ -352,3 +307,55 @@ own.directive('editableTransactionAttributes', [function() {
         ],
     };
 }]);
+own.directive('evidenceTable', [function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {state: '='},
+        templateUrl: '/ownership/partials/evidenceTable.html',
+        controller: ["$scope", "captable",
+            function($scope, captable) {
+                $scope.captable = captable;
+                $scope.eligible_evidence = 
+                    captable.getEligibleEvidence();
+
+                $scope.evidenceOrder = 'docname';
+                $scope.evidenceNestedOrder = 'name';
+                $scope.evidenceFilter = function(obj) {
+                    var res = [];
+                    if ($scope.state.evidenceQuery && obj) {
+                        var items = $scope.state.evidenceQuery
+                                        .split(" ");
+                        angular.forEach(items, function(item) {
+                            res.push(new RegExp(item, 'i'));
+                        });
+                    }
+                    var truthiness = res.length;
+                    var result = 0;
+                    angular.forEach(res, function(re) {
+                        if (re.test(obj.docname) || re.test(obj.tags)) {
+                            result += 1;
+                        }
+                    });
+                    return !$scope.state.evidenceQuery ||
+                        truthiness == result;
+                };
+                $scope.toggleShown = function(obj) {
+                    if (obj.shown === undefined) {
+                        obj.shown = true;
+                    } else {
+                        obj.shown = !obj.shown;
+                    }
+                };
+                $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $scope.viewme = ['investor', ev.doc_id];
+                    } else if (ev.original !== null) {
+                        $scope.viewme = ['issuer', ev.original];
+                    }
+                };
+            }
+        ],
+    };
+}]);
+
