@@ -515,10 +515,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
         },
         getPreparedFor: function(defaultList) {
+            var doc = this;
+            function mergeDefaultList(defaultList){
+                if (defaultList) {
+                    var origLength = doc.preparedFor.length;
+                    defaultList.forEach(function(inv) {
+                        if (!doc.preparedFor.some(function(prep) {
+                            return prep.investor == inv;
+                        })) {
+                            doc.addPreparedFor(inv);
+                        }
+                    });
+                    if (doc.preparedFor.length != origLength) {
+                        $rootScope.$emit("notification:success", "We've automatically added the investors you were sharing to.");
+                    }
+                }
+            }
             // defaultList is a list to use if there's no preps yet.
             if (!this.preparedFor) {
                 this.preparedFor = [];
-                var doc = this;
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
                         if (investor_prep.annotation_overrides) {
@@ -528,15 +543,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
                         doc.preparedFor.push(investor_prep);
                     });
-                    if (doc.preparedFor.length == 0 && defaultList) {
-                        defaultList.forEach(function(inv) {
-                            doc.addPreparedFor(inv);
-                        });
-                        if (defaultList.length > 0) {
-                            $rootScope.$emit("notification:success", "We've automatically added the investors you were sharing to.");
-                        }
-                    }
+                    mergeDefaultList(defaultList);
                 });
+            } else {
+                mergeDefaultList(defaultList);
             }
             return this.preparedFor;
         },
@@ -560,7 +570,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         addPreparedFor: function(investor) {
             var doc = this;
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
-                doc.preparedFor.push({display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id});
+                SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
+                    doc.preparedFor.push({display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: data[0].is_prepared_person});
+                }).except(function(error) {
+                    $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+                });
             }).except(function(error) {
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
