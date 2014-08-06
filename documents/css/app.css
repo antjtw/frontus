@@ -653,6 +653,10 @@ textarea.email-text {
     color: rgb(30, 45, 61);
 }
 
+.shareForm ul.recipients > li .incomplete-name {
+    color: #e74c3c;
+}
+
 .shareForm ul.recipients > li .investor-name {
     cursor: pointer;
 }
