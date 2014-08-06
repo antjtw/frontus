@@ -13,5 +13,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         }
         $scope.createInbox();
 
+        
+
+
     }
 ]);

@@ -4651,6 +4651,7 @@ div.upgradeWarning > span {
 .message_input .ta-scroll-window > .ta-bind {
     padding: 0px;
     font-family: "Helvetica";
+    white-space: pre-wrap;
 }
 
 .ta-editor {
