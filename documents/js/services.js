@@ -121,6 +121,9 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                 return false;
             }
         });
+        if (!this.allPreparedCache()) {
+            return false;
+        }
         return true;
     };
 
@@ -171,7 +174,20 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         return this.checkPreparedLists(this.documents, [investor]);
     };
     this.checkAllPrepared = function() {
-        return this.checkPreparedLists(this.documents, this.emails);
+        // does a force reload of all is_prepared data
+        return this.checkPreparedLists(this.documents, this.emails, true);
+    };
+    this.allPreparedCache = function() {
+        return this.documents.every(function(doc) {
+            if (doc.signature_flow > 0) {
+                return this.emails.every(function(inv) {
+                    return this.prepCache[doc.doc_id][inv];
+                }, this);
+            } else {
+                // if document isn't for share, we're good regardless
+                return true;
+            }
+        }, this);
     };
 
     this.shareDocuments = function() {
