@@ -331,7 +331,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.sign().then(
                 function(data) {
                     $scope.$emit("notification:success", "Document signed");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -384,7 +384,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     } else {
                         $scope.$emit("notification:success", "Document approved");
                     }
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -396,7 +396,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.finalize().then(
                 function(data) {
                     $scope.$emit("notification:success", "Document approved");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -407,7 +407,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.rejectSignature(msg).then(
                 function(data) {
                     $scope.$emit("notification:success", "Document signature rejected.");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -419,7 +419,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.void().then(
                 function(data) {
                     $scope.$emit("notification:success", "Void request accepted and document voided");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -431,7 +431,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.rejectVoid(msg).then(
                 function(data) {
                     $scope.$emit("notification:success", "Void request rejected");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
