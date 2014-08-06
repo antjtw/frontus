@@ -4651,6 +4651,11 @@ div.upgradeWarning > span {
     width: 80%;
 }
 
+.message_input .ta-root.focussed .ta-scroll-window.form-control{
+    border-color: none;
+    -webkit-box-shadow: none;
+
+}
 .message_headline{
     display: inline-block;
     width: 9%;
