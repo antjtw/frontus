@@ -528,11 +528,17 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
                         doc.preparedFor.push(investor_prep);
                     });
-                    if (doc.preparedFor.length == 0 && defaultList) {
+                    // merge in the default list of investors (from the share screen, probably)
+                    if (defaultList) {
+                        var origLength = doc.preparedFor.length;
                         defaultList.forEach(function(inv) {
-                            doc.addPreparedFor(inv);
+                            if (!doc.preparedFor.some(function(prep) {
+                                return prep.investor == inv;
+                            })) {
+                                doc.addPreparedFor(inv);
+                            }
                         });
-                        if (defaultList.length > 0) {
+                        if (doc.preparedFor.length != origLength) {
                             $rootScope.$emit("notification:success", "We've automatically added the investors you were sharing to.");
                         }
                     }
