@@ -1330,6 +1330,7 @@ ul.grant-list-view li:first-of-type {
 .info-box {
    border: 20px solid #CAC9C9;
    margin-bottom: 0px;
+   border-bottom: 0px;
 }
 
 .body-box {
