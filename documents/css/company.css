@@ -71,14 +71,16 @@
 }
 #view-button2 {
 	position: absolute;
-	left: calc(170% - 145px);
+	left: calc(99% - 145px);
 	top: 116px;
 }
 #view-button3 {
 	left: 20px;
 	top: 10px;
 }
-
+.row-fluid .span7 {
+	width: 100% !important;
+}
 .span6 > div > img {
 	margin-bottom: -15px;
 }
@@ -89,11 +91,13 @@
 .span6 > div > h2 {
 	margin-left: 50px;
 	margin-top: -20px;
+	
 }
 .span6 > div > h2 > span {
 	font-size: 20px;
 	margin: 3px;
 }
+
 .span5 > div > img {
 	margin-bottom: -15px;
 }
@@ -104,7 +108,10 @@
 }
 .span5 > div > div > h2 {
 	margin-left: 50px;
-	margin-top: -20px;
+	margin-top: -40px;
+}
+.span5 > div > div:last-child > h2 {
+	margin-top: -12px;
 }
 .span5 > div > div > h2 > span {
 	font-size: 20px;
@@ -131,8 +138,11 @@
 div.pull-right.standard-button.green {
 	margin-bottom: 20px !important;
 }
+. same-row .row-fluid .span6 {
+	width: 100% !important;
+}
 .span7 svg{
-	left: calc(100% - 150px);
+	left: calc(60% - 150px);
 	position: absolute;
 }
 .span6 svg {
@@ -206,7 +216,7 @@ d3vestedbar > svg {
 	margin-left: 10px;
 }
 .span3 {
-	left: calc(50% + 100px);
+	left: calc(50% + 115px);
 }
 
 

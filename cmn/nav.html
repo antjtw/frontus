@@ -148,6 +148,10 @@
         </li>
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/people'); navhover=false" ng-class="{activepage: (navState.path.indexOf('/company/profile/people') != -1 || navState.path.indexOf('/company/profile/view') != -1 || navState.path.indexOf('/account/profile') != -1) && !navhover}"><span class="nav-icon people-icon"></span>People
         </li>
+
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/messages'); navhover=false"><span class="nav-icon"></span>Messages</li>
+
+
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/'); navhover=false" ng-class="{activepage: navState.path.indexOf('/company/profile/') != -1 && navState.path.indexOf('people') == -1 && navState.path.indexOf('view') == -1 && !navhover}"><span class="nav-icon settings-icon"></span>Settings
         </li>
 

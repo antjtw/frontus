@@ -878,6 +878,9 @@ app.controller('CompanyDocumentListController',
                         if (typeVars.doTags && s.tags !== null) {
                             s.tags = JSON.parse(s.tags);
                         }
+                        if (s.preps !== null) {
+                            s.preps = JSON.parse(s.preps);
+                        }
                         s.type = typeVars.type;
                         s.statusRatio = s.status_ratio;
 
@@ -969,11 +972,11 @@ app.controller('CompanyDocumentListController',
                         angular.forEach($scope.documents, function(doc) {
                             if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
                                 if (doc.is_prepared) {
-                                    $scope.modals.updateShareType(doc, 2);
+                                    ShareDocs.updateShareType(doc, 2);
                                     $scope.$emit("notification:success",
                                         "Success! Document prepared for signature.");
                                 } else {
-                                    $scope.modals.updateShareType(doc, -1);
+                                    ShareDocs.updateShareType(doc, -1);
                                     $scope.$emit("notification:fail",
                                         "Oops, the document is not ready for signature. Please try again.");
                                 }
@@ -985,6 +988,7 @@ app.controller('CompanyDocumentListController',
                 return st1;
             }
             // TODO: store as part of ShareDocs service
+            // If we can eliminate doc.sugnature_flow and only reference the ShareDocs version, that should work
             function initShareState() {
                 loadPrepareState();
                 if (ShareDocs.documents.length > 0) {
@@ -1004,33 +1008,30 @@ app.controller('CompanyDocumentListController',
             initShareState();
 
             // Sharing stuff that should be move to a directive
-            $scope.sharingemails = [];
             $scope.ShareDocs = ShareDocs;
             $scope.sharingSelect2Options = {
-                'multiple': true,
                 'data': Investor.investors,
-                'tokenSeparators': [",", " "],
-                'placeholder': 'Enter email address & press enter',
+                'placeholder': 'Add Recipients',
                 createSearchChoice: function(text) {
                     // if text was a legit user, would already be in the list, so don't check Investor service
                     return {id: text, text: text};
                 },
             };
-            $scope.$watchCollection('ShareDocs.emails', function(new_emails, old_emails) {
-                $scope.sharingemails = [];
-                new_emails.forEach(function(eml) {
-                    $scope.sharingemails.push(Investor.getDisplay(eml));
-                });
-            });
-            $scope.$watch('sharingemails', function(email) {
+            $scope.addShareEmail = function(email) {
                 // this gets triggered multiple times with multiple types when the data changes
                 if (typeof(email) === "string") {
-                    if (email.length > 0) {
-                        ShareDocs.emails = email.split(',');
-                    } else {
-                        ShareDocs.emails = [];
-                    }
+                    ShareDocs.addEmail(email);
                 }
-            });
+            }
+            $scope.removeShareEmail = function(email) {
+                ShareDocs.removeEmail(email);
+            };
+            $scope.getInvestorDisplay = function(email) {
+                if (Investor.names[email]) {
+                    return Investor.names[email];
+                } else {
+                    return email;
+                }
+            };
         }
     ]);

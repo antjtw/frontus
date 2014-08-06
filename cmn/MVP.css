@@ -4629,6 +4629,61 @@ div.upgradeWarning > span {
     cursor: pointer;
 }
 
+
+/*compose message css*/
+
+.compose_message {
+    padding-left: 30px;
+    padding-top: 30px;
+}
+
+/*.ta-root.focussed .ta-scroll-window.form-control.ng-hide{
+    border: 3px solid blue;
+}*/
+.message_info {
+  padding: 30px 0px;
+}
+
+.message_info .ta-scroll-window{
+    border: 1px solid #E3E3E3;
+}
+
+.message_input .ta-scroll-window > .ta-bind {
+    padding: 0px;
+    font-family: "Helvetica";
+}
+
+.ta-editor {
+    min-height: 300px;
+    height: auto;
+    overflow: auto;
+    font-family: "lvetica";
+    font-size: 100%;
+    margin:20px 0;
+}
+
+.message_input .btn[disabled]{
+    background-color: white;
+    color: black;
+}
+.message_input {
+    display: inline-block;
+    width: 80%;
+}
+
+.message_headline{
+    display: inline-block;
+    width: 9%;
+    margin-left: 30px;
+}
+
+.message_input input{
+    padding: 4px 0px;
+    width: 100%;
+    height: 26px;
+}
+
+
 /*Sidebar CSS */
 .sidebarHeader {
     display: block;
