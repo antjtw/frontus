@@ -328,9 +328,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
         
         var checkUploadTimeout;
-
-        $scope.leave = function() {
-            // TODO: save notes / smartdoc data
+        
+        $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+            void(oldUrl);
+            // don't save note data if I'm being redirected to log in
             if (checkUploadTimeout)
             {
                 $timeout.cancel(checkUploadTimeout);
@@ -344,6 +345,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     return "id=" + $scope.docId + "&investor=" + $scope.invq;
                 };
             }
+        });
+
+        $scope.leave = function() {
+            // TODO: save notes / smartdoc data
             if ($rootScope.lastPage
                 && ($rootScope.lastPage.indexOf("/register/") === -1)
                 && ($rootScope.lastPage.indexOf("/login/") === -1)
