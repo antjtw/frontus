@@ -376,7 +376,10 @@ app.controller('CompanyDocumentListController',
                     _kmq.push(['record', 'doc uploader']);
                     analytics.track('doc uploader');
                 }
-                Intercom('update', {company : {"documents":$scope.documents.length+1}});
+                if (type == null)
+                {
+                    Intercom('update', {company : {"documents":$scope.documents.length+1}});
+                }
                 for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
                 var upxhr;
                 if (type == "signed")

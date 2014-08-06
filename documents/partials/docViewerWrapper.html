@@ -125,6 +125,22 @@
                                     <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
                                     <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
+                            <div class="inforow" ng-if="!doc.when_signed && navState.role == 'issuer'">
+                                <span class="activity-icon doc-upload-red-icon"></span>
+                                <span class="info">
+                                    <span>{{doc.name}} has not signed this document. Do you wish to upload a signed copy?</span><span></span>
+                                    <div class="fileInputContainer">
+                                        <input multiple type="file" class='file'
+                                            accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                            onchange="angular.element(this).scope().setSignedFiles(this);"/>
+                                        <div class="fakefile">
+                                            <div class="small-standard-button darkgray">
+                                                <button class="btn">Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
                                 <span class="activity-icon doc-final-icon"></span>
                                 <span class="info"><span>Approved</span><span>{{doc.when_countersigned  | date:settings.fulldate}}</span></span>
