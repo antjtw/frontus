@@ -566,7 +566,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         addPreparedFor: function(investor) {
             var doc = this;
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
-                doc.preparedFor.push({display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id});
+                SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
+                    doc.preparedFor.push({display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: data[0].is_prepared_person});
+                }).except(function(error) {
+                    $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+                });
             }).except(function(error) {
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
