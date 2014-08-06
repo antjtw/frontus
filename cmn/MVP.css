@@ -4619,7 +4619,7 @@ div.upgradeWarning > span {
 }
 
 .message_info {
-  padding: 30px 0px;
+  margin-bottom: 40px;
 }
 /*styling the editor*/
 .message_info .ta-scroll-window{
@@ -4658,12 +4658,14 @@ div.upgradeWarning > span {
 .message_input {
     display: inline-block;
     width: 76%;
+    position: relative;
 }
 
 .message_headline{
     display: inline-block;
     width: 9%;
     vertical-align: top;
+    margin-top: 10px;
 }
 
 .msgsubject{
@@ -4671,7 +4673,6 @@ div.upgradeWarning > span {
     padding-left: 0px;
     padding-right: 0px;
     width: calc(100% - 6px);
-    height: 31px;
     border-radius: 3px;
 
 }
