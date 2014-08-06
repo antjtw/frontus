@@ -656,7 +656,7 @@
                     <input placeholder="Add Security"
                            class="capEditHeaders"
                            ui-event="{blur: 'addSecurity(new_sec)'}"
-                           ng-model="new_sec">
+                           ng-model="$parent.new_sec">
                 </th>
             </tr>
             <!-- Uneditable headers -->
@@ -754,10 +754,11 @@
                 <td class="capsums-col">
                 </td>
                 <td class="capsums-col">
-                    <!-- FIXME make input-->
-                    <span ng-click="addInvestor()">
-                        Add Investor
-                    </span>
+                    <input placeholder="Add Investor"
+                           class="name-row"
+                           style="width: 140px;"
+                           ui-event="{blur: 'addInvestor(new_inv)'}"
+                           ng-model="$parent.new_inv">
                 </td>
                 <td ng-repeat="key in ct.securities" class="capsums-col">
                 </td>

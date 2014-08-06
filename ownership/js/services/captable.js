@@ -498,12 +498,18 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         captable.transactions.push(tran);
         parseTransaction(tran);
     };
-    this.addInvestor = function() {
+    this.addInvestor = function(name) {
         var inv = new Investor();
         inv.editable = "yes";
+        inv.name = name;
         inv.company = $rootScope.navState.company;
         inv.percentage = function() {return investorSorting(inv.name);};
-        captable.investors.splice(0, 0, inv);
+        SWBrijj.procm('_ownership.add_investor', inv.name)
+        .then(function(x) {
+            captable.investors.splice(0, 0, inv);
+        }).except(function(err) {
+            console.log(err);
+        });
     };
     /*
     function massageTransactionValues(tran) {

@@ -174,12 +174,14 @@ var captableController = function(
         }
     };
     $scope.addSecurity = function(new_sec) {
-        $scope.new_sec = null;
         captable.addSecurity(new_sec);
+        $scope.selectSecurity(new_sec);
+        $scope.new_sec = "";
     };
     $scope.addInvestor = function(new_inv) {
-        captable.addInvestor(new_inv);
-        $scope.new_inv = null;
+        if (new_inv) captable.addInvestor(new_inv);
+        $scope.selectInvestor(new_inv);
+        $scope.new_inv = "";
     };
 
     $scope.addIssuePari = function(items) {
@@ -211,6 +213,7 @@ var captableController = function(
     var keyPressed = false;
     // Needed because selecting a date in the calendar is considered a blur,
     // so only save on blur if user has typed a key
+    /*
     $scope.saveTranDate = function (transaction, field, evt) {
         if (evt) { // User is typing
             if (evt != 'blur')
@@ -234,6 +237,7 @@ var captableController = function(
             }
         }
     };
+    */
 
     $scope.cellFor = function(inv, sec) {
         return $scope.ct.cells
@@ -301,7 +305,6 @@ var captableController = function(
         });
         return total;
     };
-    // TODO refactor and rename
     function editableDetailsVisible() {
         return $scope.sideBar == 2 || $scope.sideBar == 1;
     }
