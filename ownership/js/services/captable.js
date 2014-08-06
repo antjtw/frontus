@@ -31,6 +31,8 @@ Security = function() {
 // TODO can this be cut out?
 Investor = function() {
     this.name = "";
+    this.email = "";
+    this.access_level = "";
     this.editable = "0";
     this.nameeditable = null;
     this.transactions = [];
@@ -80,7 +82,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function loadRowNames() {
         var promise = $q.defer();
-        SWBrijj.tblm('ownership.company_row_names')
+        SWBrijj.tblm('_ownership.my_company_row_names')
         .then(function(names) {
             promise.resolve(names);
         }).except(logErrorPromise);
@@ -408,10 +410,11 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function rowFromName(name) {
         var row = new Investor();
         row.name = name.name;
+        row.email = name.email;
+        row.access_level = name.level;
         row.editable = "yes";
         row.transactions = captable.transactions
             .filter(function(el) {return el.attrs.investor == row.name;});
-        // TODO row.email = ______
         return row;
     }
     function initUI() {
