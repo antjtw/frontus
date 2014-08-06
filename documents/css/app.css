@@ -641,19 +641,58 @@ textarea.email-text {
 .shareForm ul.recipients ul span[data-icon] {
     float: right;
 }
+.shareForm span[data-icon] {
+    color: #C7C7C7;
+}
 .shareForm ul.recipients span[data-icon].remove-icon {
-    float: right;
     cursor: pointer;
+    margin-left: 5px;
 }
 .shareForm ul.recipients > li {
     margin-bottom: 6px;
+    color: rgb(30, 45, 61);
 }
+
+.shareForm ul.recipients > li .incomplete-name {
+    color: #e74c3c;
+}
+
+.shareForm ul.recipients > li .investor-name {
+    cursor: pointer;
+}
+
+.shareForm ul.recipients > li .investor-name > span.lower-icon {
+    color: rgb(30, 45, 61);
+}
+
+.shareForm ul.recipients > li .investor-name .investor-name-display {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 230px;
+}
+
+.shareForm ul.recipients > li .investor-name > span.lower-icon, .shareForm ul.recipients > li .investor-name > a > span {
+    vertical-align: 20%;
+}
+
 .shareForm ul.recipients ul {
     margin-left: 22px;
 }
-.shareForm ul.recipients ul > li {
+.shareForm ul.recipients > ul > li {
     margin-bottom: 3px;
 }
+
+.shareForm ul.doc-list > li > a {
+    cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 250px;
+}
+
 .shareForm ul.recipients .incomplete {
     color: #e74c3c;
 }
@@ -2384,6 +2423,7 @@ div.profile-link > span:first-of-type {
     border: 1px solid #3397da;
     color: #FFFFFF;
     padding: 5px 10px;
+    cursor: pointer;
 }
 
 .preparation-bar .bar-button.bar-center-buttons {
