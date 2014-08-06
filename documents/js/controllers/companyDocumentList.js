@@ -703,82 +703,6 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            // Multisharing modal functions
-            /* TODO: replace in ShareDocs service
-            var docsharestateCOPY = angular.copy($scope.docShareState);
-            $scope.checkmany = function(people, docs, compare) {
-                var old_failed = true;
-                var offender = "";
-                if (compare) {
-                    old_failed = $scope.checkmany(docsharestateCOPY.emails, docsharestateCOPY.doclist, false);
-                }
-                var anybad = false;
-                var investors = [];
-                var docids = [];
-                angular.forEach(docs, function(doc) {
-                    docids.push(doc.doc_id);
-                });
-                angular.forEach($scope.documents, function(doc) {
-                    if (docids.indexOf(doc.doc_id)!==-1) {
-                        angular.forEach(doc.versions, function(version) {
-                            if (!doc.when_retracted) {
-                                investors.push(version.investor);
-                            }
-                        });
-                    }
-                });
-                var regExp = /\(([^)]+)\)/;
-                angular.forEach(people, function(person) {
-                    if (person.length != 1) {
-                        var email;
-                        var matches = regExp.exec(person);
-                        if (matches === null) {
-                            matches = ["", person];
-                        }
-                        email = matches[1];
-                        if (!re.test(email)) {
-                            anybad = true;
-                        }
-                        if (investors.indexOf(person)!==-1) {
-                            anybad = true;
-                        }
-                    }
-                });
-                if (people && people.length === 0) {
-                    anybad = true;
-                }
-                if (compare) {
-                    docsharestateCOPY = angular.copy($scope.docShareState);
-                    if (anybad && !old_failed && people.length > 0 && docs) {
-                        $scope.$emit("notification:fail", "Oops, recipients have already received these documents.");
-                    }
-                }
-                return anybad;
-            };
-            $scope.docsReadyToShare = function(docs) {
-                if (!docs || docs.length===0) {
-                    return false;
-                }
-                var count = 0;
-                angular.forEach($scope.documents, function(doc) {
-                    if (doc.forShare) {
-                        count += 1;
-                    }
-                });
-                if (count !== docs.length) {
-                    return false;
-                }
-                var res = true;
-                angular.forEach(docs, function(doc) {
-                    // FIXME 'doc' is not the full doc, doesn't have is_prepared.
-                    // get the full doc and check that
-                    if (doc.signature_flow < 0) {
-                        res = false;
-                    }
-                });
-                return res;
-            };*/
-
             $scope.shareDocuments = function() {
                 $scope.processing = true;
                 ShareDocs.shareDocuments().finally(function(result) {
@@ -1012,9 +936,20 @@ app.controller('CompanyDocumentListController',
 
             // Sharing stuff that should be move to a directive
             $scope.ShareDocs = ShareDocs;
+            function filterInvestors(investorList, emails) {
+                return investorList.filter(function(val, idx, arr) {
+                    return ! emails.some(function(emval, eidx, earr) {
+                        return val.id == emval;
+                    });
+                });
+            }
             $scope.sharingSelect2Options = {
-                'data': Investor.investors,
-                'placeholder': 'Add Recipients',
+                data: function() {
+                    return {
+                        'results': filterInvestors(Investor.investors, ShareDocs.emails)
+                    };
+                },
+                placeholder: 'Add Recipients',
                 createSearchChoice: function(text) {
                     // if text was a legit user, would already be in the list, so don't check Investor service
                     return {id: text, text: text};
@@ -1036,5 +971,8 @@ app.controller('CompanyDocumentListController',
                     return email;
                 }
             };
+            $scope.expandShareList = {};
+
+            $scope.encodeURIComponent = encodeURIComponent;
         }
     ]);

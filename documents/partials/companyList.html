@@ -128,16 +128,22 @@
         <div class="sharepeople-input">
             <input ui-select2="sharingSelect2Options" ng-model="sharingemail" ng-change="addShareEmail(sharingemail); sharingemail = ''">
         </div>
-        <ul>
+        <ul class="recipients">
             <li ng-repeat="investor in ShareDocs.emails">
-                {{getInvestorDisplay(investor)}} <a ng-click="removeShareEmail(investor)">remove</a>
-                <ul>
+                <span ng-click="expandShareList[investor] = !expandShareList[investor]">
+                    <span data-icon="&#xe031;" ng-show="expandShareList[investor]"></span>
+                    <span data-icon="&#xe034;" ng-hide="expandShareList[investor]"></span>
+                    {{getInvestorDisplay(investor)}}
+                    <a ng-click="removeShareEmail(investor)"><span data-icon="&#xe00f;" class="remove-icon"></span></a>
+                </span>
+                <ul ng-show="expandShareList[investor]">
                     <li ng-repeat="doc in ShareDocs.documents">
-                        {{doc.docname}}:
-                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === undefined">Loading</span>
-                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === true">Prepared</span>
-                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === false">Needs Work</span>
-                        <span ng-if="!(doc.signature_flow > 0)">View Only</span>
+                        <a ng-if="doc.signature_flow > 0" href="/app/documents/company-view?doc={{doc.doc_id}}&investorid={{encodeURIComponent(investor)}}"
+                           ng-class="{'incomplete': ShareDocs.prepCache[doc.doc_id][investor] === false}">
+                            {{doc.docname}}
+                            <span ng-if="ShareDocs.prepCache[doc.doc_id][investor] === true" data-icon="&#xe052;"></span>
+                        </a>
+                        <a ng-if="!(doc.signature_flow > 0)">{{doc.docname }} <span data-icon="&#xe001;"></span></a>
                     </li>
                 </ul>
             </li>

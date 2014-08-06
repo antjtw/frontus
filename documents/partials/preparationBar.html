@@ -13,9 +13,11 @@
         </a>
     </div>
     <div ng-show="navState.path.indexOf('/documents/prepare') == -1" class="bar-button right-button">
-        <a ng-href="{{'/app/documents/prepare?doc=' + doc.doc_id}}">
-            <span ng-show="!prepareFor">Next</span>
-            <span ng-show="prepareFor">Done</span>
+        <a ng-show="!prepareFor" ng-href="{{'/app/documents/prepare?doc=' + doc.doc_id}}">
+            <span>Next</span>
+        </a>
+        <a ng-show="prepareFor" ng-click="leave(['-view'])">
+            <span>Done</span>
         </a>
     </div>
     <div class="version-banner" ng-show="prepareFor">

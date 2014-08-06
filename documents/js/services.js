@@ -121,6 +121,9 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                 return false;
             }
         });
+        if (!this.allPreparedCache()) {
+            return false;
+        }
         return true;
     };
 
@@ -171,7 +174,20 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         return this.checkPreparedLists(this.documents, [investor]);
     };
     this.checkAllPrepared = function() {
-        return this.checkPreparedLists(this.documents, this.emails);
+        // does a force reload of all is_prepared data
+        return this.checkPreparedLists(this.documents, this.emails, true);
+    };
+    this.allPreparedCache = function() {
+        return this.documents.every(function(doc) {
+            if (doc.signature_flow > 0) {
+                return this.emails.every(function(inv) {
+                    return this.prepCache[doc.doc_id][inv];
+                }, this);
+            } else {
+                // if document isn't for share, we're good regardless
+                return true;
+            }
+        }, this);
     };
 
     this.shareDocuments = function() {
@@ -213,7 +229,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
 
 
 // TODO: should really have a document factory
-docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", function(Annotations, SWBrijj, $q, $rootScope, Investor) {
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
     var transaction_attributes_callback = null;
@@ -585,12 +601,24 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             var doc = this;
             SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
                 // data stored, got back is_prepared, so update preparedFor with that and the overrides
+                var found = false;
                 doc.preparedFor.forEach(function(investor_prep, idx, arr) {
                     if (investor_prep.investor == investor) {
                         investor_prep.annotation_overrides = notes;
                         investor_prep.is_prepared = result[0].update_preparation;
+                        found = true;
                     }
                 });
+                ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
+                if (!found) {
+                    // must have accidentally inserted instead of updating ...
+                    doc.preparedFor.push(
+                        {display: Investor.getDisplay(investor),
+                         investor: investor,
+                         doc_id: doc.doc_id,
+                         annotation_overrides: notes,
+                         is_prepared: result[0].update_preparation});
+                }
             }).except(function(error) {
                 $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
             });

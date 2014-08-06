@@ -638,6 +638,25 @@ textarea.email-text {
 .shareForm > .sharepeople-input {
     padding-bottom: 10px;
 }
+.shareForm ul.recipients ul span[data-icon] {
+    float: right;
+}
+.shareForm ul.recipients span[data-icon].remove-icon {
+    float: right;
+    cursor: pointer;
+}
+.shareForm ul.recipients > li {
+    margin-bottom: 6px;
+}
+.shareForm ul.recipients ul {
+    margin-left: 22px;
+}
+.shareForm ul.recipients ul > li {
+    margin-bottom: 3px;
+}
+.shareForm ul.recipients .incomplete {
+    color: #e74c3c;
+}
 .shareForm > textarea {
     margin-top: 20px;
 }
