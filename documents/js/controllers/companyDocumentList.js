@@ -930,9 +930,20 @@ app.controller('CompanyDocumentListController',
 
             // Sharing stuff that should be move to a directive
             $scope.ShareDocs = ShareDocs;
+            function filterInvestors(investorList, emails) {
+                return investorList.filter(function(val, idx, arr) {
+                    return ! emails.some(function(emval, eidx, earr) {
+                        return val.id == emval;
+                    });
+                });
+            }
             $scope.sharingSelect2Options = {
-                'data': Investor.investors,
-                'placeholder': 'Add Recipients',
+                data: function() {
+                    return {
+                        'results': filterInvestors(Investor.investors, ShareDocs.emails)
+                    };
+                },
+                placeholder: 'Add Recipients',
                 createSearchChoice: function(text) {
                     // if text was a legit user, would already be in the list, so don't check Investor service
                     return {id: text, text: text};
