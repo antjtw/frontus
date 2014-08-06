@@ -4631,15 +4631,14 @@ div.upgradeWarning > span {
 
 .message_input .ta-scroll-window > .ta-bind {
     padding: 0px;
-    font-family: "Helvetica";
+    font-family: "Times";
     white-space: pre-wrap;
 }
 
 .ta-editor {
     min-height: 300px;
     height: auto;
-    overflow: auto;
-    font-family: "lvetica";
+    overflow: auto;   
     font-size: 100%;
     margin:20px 0;
 }
