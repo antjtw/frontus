@@ -15,6 +15,10 @@ var captableController = function(
     // Set the view toggles to their defaults
     $scope.editMode = false;
     $scope.windowToggle = false;
+    $scope.$on('windowToggle', function(evt, val) {
+        void(evt);
+        $scope.windowToggle = val;
+    });
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
     $scope.tourshow = false;
@@ -27,7 +31,6 @@ var captableController = function(
     $scope.tf = ["yes", "no"];
     $scope.liquidpref = ['None', '1X', '2X', '3X'];
     $scope.eligible_evidence = captable.getEligibleEvidence();
-    $scope.evidence_object = null;
     $scope.evidenceOrder = 'docname';
     $scope.evidenceNestedOrder = 'name';
     $scope.extraPeople = [];
@@ -348,7 +351,6 @@ var captableController = function(
                 $scope.sideBar = "home";
                 break;
         }
-        console.log($scope.sideBar);
     }
     $scope.toggleView = function () {
         if ($scope.editMode) {
@@ -393,10 +395,10 @@ var captableController = function(
     };
     $scope.editEvidence = function(obj) {
         if (obj) {
-            $scope.evidence_object = obj;
+            captable.evidence_object = obj;
             $scope.windowToggle = true;
         } else {
-            $scope.evidence_object = null;
+            captable.evidence_object = null;
             $scope.windowToggle = false;
         }
         return $scope.windowToggle;
@@ -406,32 +408,32 @@ var captableController = function(
             || (ev1.original && ev2.original && !ev1.doc_id && !ev2.doc_id && ev1.original==ev2.original);
     };
     $scope.isEvidence = function(ev) {
-        if ($scope.evidence_object && $scope.evidence_object.evidence_data) {
-            return $scope.evidence_object.evidence_data.filter(function(x) {return $scope.evidenceEquals(ev, x);}).length>0;
+        if (captable.evidence_object && captable.evidence_object.evidence_data) {
+            return captable.evidence_object.evidence_data.filter(function(x) {return $scope.evidenceEquals(ev, x);}).length>0;
         } else {
             return false;
         }
     };
     $scope.removeEvidence = function(ev, obj) {
         if (!obj) {
-            $scope.evidence_object.evidence_data = $scope.evidence_object.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
-            $scope.updateEvidenceInDB($scope.evidence_object, 'removed');
+            captable.evidence_object.evidence_data = captable.evidence_object.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
+            $scope.updateEvidenceInDB(captable.evidence_object, 'removed');
         } else {
             obj.evidence_data = obj.evidence_data.filter(function(x) {return !$scope.evidenceEquals(ev, x);});
             $scope.updateEvidenceInDB(obj, 'removed');
         }
     };
     $scope.addEvidence = function(ev) {
-        if ($scope.evidence_object &&
-                $scope.evidence_object.evidence_data) {
+        if (captable.evidence_object &&
+                captable.evidence_object.evidence_data) {
             // assumes ev is not already in evidence_data
-            $scope.evidence_object.evidence_data.push(ev);
+            captable.evidence_object.evidence_data.push(ev);
         }
     };
     $scope.toggleForEvidence = function(ev) {
-        if (!ev || !$scope.evidence_object) {return;}
-        if (!$scope.evidence_object.evidence_data) {
-            $scope.evidence_object.evidence_data = [];
+        if (!ev || !captable.evidence_object) {return;}
+        if (!captable.evidence_object.evidence_data) {
+            captable.evidence_object.evidence_data = [];
         } else {
             var action = "";
             if ($scope.isEvidence(ev)) {
@@ -441,7 +443,7 @@ var captableController = function(
                 $scope.addEvidence(ev);
                 action = "added";
             }
-            $scope.updateEvidenceInDB($scope.evidence_object, action);
+            $scope.updateEvidenceInDB(captable.evidence_object, action);
         }
     };
     $scope.updateEvidenceInDB = function(obj, action) {

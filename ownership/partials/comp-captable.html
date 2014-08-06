@@ -87,43 +87,6 @@
         </div>
     </div>
 </div>
-<div modal="evidenceModal" close="closeEvidenceModal()" options="opts">
-    <div class="modalHeader">
-        <span>Select Evidence</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="closeEvidenceModal()"></span>
-    </div>
-    <div class="modalText">
-        <p>Explananation here</p>
-        <div ng-repeat="item in activeIssue.evidence">
-            <ul class="dropdown-list drop-selector">
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
-                        {{item.docname + item.investor | maxLength}}
-                        <span class="invisible-drop">'</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="e in availableEvidence(eligible_evidence, activeIssue.evidence) track by $index">
-                            <a ng-click="saveEvidence(e, activeIssue)">
-                                {{e.docname | maxLength}}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <button class="icon-button" ng-click="addEvidence(activeIssue.evidence)">
-            <span data-icon="&#xe053;" aria-hidden="true"></span>
-        </button>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="closeEvidenceModal()">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="closeEvidenceModal(); updateEvidence();">Confirm</button>
-        </div>
-    </div>
-</div>
 <div modal="capMulti" close="mclose(); mReset();" options="opts">
     <div class="modalHeader">
         <span>Is this a new transaction?</span>
@@ -931,8 +894,10 @@
                             sec="selectedSecurity">
                     </span>
                     <span ng-switch-when="2">
-                        <editable-cell-details cell="selectedCell"
-                                               currenttab="currentTab">
+                        <editable-cell-details
+                                   cell="selectedCell"
+                                   currenttab="currentTab"
+                                   viewme='viewme'>
                     </span>
                     <span ng-switch-when="5">
                         <security-details sec="selectedSecurity">

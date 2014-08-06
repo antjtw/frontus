@@ -422,6 +422,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             tran.evidence_data = data.filter(function(el) {
                 return el.evidence==tran.evidence;
             });
+            if (tran.evidence_data.length > 0) {
+                console.log(tran);
+            }
         });
     }
     function reformatDate(obj) {
@@ -485,7 +488,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     this.addSecurity = function(name) {
         // NOTE assume Option for now, user can change,
-        // attrs will update automatically
         var tran = newTransaction("Option", "issue security");
         tran.kind = "issue_security";
         // Silly future date so that the issue always appears
@@ -503,6 +505,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         inv.percentage = function() {return investorSorting(inv.name);};
         captable.investors.splice(0, 0, inv);
     };
+    /*
     function massageTransactionValues(tran) {
         tran.units = calculate.cleannumber(tran.units);
         tran.amount = calculate.cleannumber(tran.amount);
@@ -514,6 +517,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (tran.tran_id === undefined) { tran.tran_id = ''; }
     }
     this.massageTransactionValues = massageTransactionValues;
+    */
     function attachPariPassu(securities, links) {
         angular.forEach(securities, function(iss) {
             iss.paripassu = [];
@@ -673,5 +677,33 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (!cell) return;
         var type = cellSecurityType(cell);
         return type == "Debt" || type == "Safe";
+    };
+    this.updateEvidenceInDB = function(obj, action) {
+        if (obj.tran_id && obj.evidence_data) {
+            SWBrijj.procm('ownership.upsert_transaction_evidence',
+                          parseInt(obj.tran_id, 10),
+                          JSON.stringify(obj.evidence_data)
+            ).then(function(r) {
+                void(r);
+            }).except(function(e) {
+                $scope.$emit("notification:fail",
+                    "Something went wrong. Please try again.");
+                console.log(e);
+            });
+        }
+    };
+    this.evidenceEquals = function(ev1, ev2) {
+        return (ev1.doc_id && ev2.doc_id &&
+                ev1.doc_id==ev2.doc_id &&
+                ev1.investor==ev2.investor)
+            || (ev1.original && ev2.original &&
+                !ev1.doc_id && !ev2.doc_id &&
+                ev1.original==ev2.original);
+    };
+    this.addEvidence = function(ev) {
+        if (captable.evidence_object &&
+                captable.evidence_object.evidence_data) {
+            captable.evidence_object.evidence_data.push(ev);
+        }
     };
 });
