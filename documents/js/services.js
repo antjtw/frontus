@@ -229,7 +229,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
 
 
 // TODO: should really have a document factory
-docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", function(Annotations, SWBrijj, $q, $rootScope, Investor) {
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
     var transaction_attributes_callback = null;
@@ -609,6 +609,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         found = true;
                     }
                 });
+                ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
                 if (!found) {
                     // must have accidentally inserted instead of updating ...
                     doc.preparedFor.push(
