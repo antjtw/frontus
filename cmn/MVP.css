@@ -4618,9 +4618,11 @@ div.upgradeWarning > span {
     padding-top: 30px;
 }
 
-.message_info {
-  margin-bottom: 40px;
+.message_elem{
+    margin-bottom: 40px;
 }
+
+
 /*styling the editor*/
 .message_info .ta-scroll-window{
     border: 1px solid #E3E3E3;
@@ -4643,12 +4645,13 @@ div.upgradeWarning > span {
     border-color: none;
     -webkit-box-shadow: none;
     border: 1px solid #E3E3E3;
-    padding: 10px;
+    padding: 0px;
 }
 
 /*style the inside of the text box*/
 .message_input .ta-scroll-window.form-control *{
     font-family: Helvetica;
+    padding: 5px;
 }
 
 
@@ -4662,7 +4665,6 @@ div.upgradeWarning > span {
     border-right: 1px solid #E3E3E3;
     border-radius: 0px;
 }
-
 
 
 .message_input .btn-toolbar{
@@ -4745,9 +4747,9 @@ textarea.email-text {
     display: block;
     font-family: 'FS Elliot Web Regular', sans-serif;
     color: #2980B9;
-    padding-bottom: 10px;
     cursor: pointer;
     position: absolute;
+    margin-left: 6.5%;
 }
 
 .sidebarText span{
