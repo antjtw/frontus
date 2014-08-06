@@ -288,7 +288,7 @@ app.controller('CompanyDocumentListController',
             $scope.checkSignedUploaded = function() {
                 SWBrijj.tblm('document.my_counterparty_library', ['doc_id', 'when_signature_provided', 'signed_uploaded', 'signed_upload_attempted']).then(function(data) {
                     angular.forEach(data, function(doc) {
-                        if (doc.signed_upload_attempted)
+                        if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
                         {
                             var ind = $scope.modals.uploadedSignedDocs.indexOf(doc.doc_id);
                             if (ind > -1)

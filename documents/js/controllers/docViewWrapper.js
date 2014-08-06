@@ -595,7 +595,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         
         $scope.checkSignedUploaded = function () {
             SWBrijj.tblm('document.my_counterparty_library', ['when_signature_provided', 'signed_uploaded', 'signed_upload_attempted'], 'doc_id', $scope.doc.doc_id).then(function(doc) {
-                if (doc.signed_upload_attempted)
+                if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
                 {
                     if (doc.when_signature_provided)
                     {
