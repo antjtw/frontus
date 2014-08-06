@@ -130,13 +130,13 @@
         </div>
         <ul class="recipients">
             <li ng-repeat="investor in ShareDocs.emails">
-                <span ng-click="expandShareList[investor] = !expandShareList[investor]">
-                    <span data-icon="&#xe031;" ng-show="expandShareList[investor]"></span>
-                    <span data-icon="&#xe034;" ng-hide="expandShareList[investor]"></span>
-                    {{getInvestorDisplay(investor)}}
+                <span ng-class="{'incomplete-name': ShareDocs.emailNotPreparedCache(investor)}" class="investor-name" ng-click="expandShareList[investor] = !expandShareList[investor]">
+                    <span class="lower-icon" data-icon="&#xe031;" ng-show="expandShareList[investor]"></span>
+                    <span class="lower-icon" data-icon="&#xe034;" ng-hide="expandShareList[investor]"></span>
+                    <span class="investor-name-display">{{getInvestorDisplay(investor)}}</span>
                     <a ng-click="removeShareEmail(investor)"><span data-icon="&#xe00f;" class="remove-icon"></span></a>
                 </span>
-                <ul ng-show="expandShareList[investor]">
+                <ul class="doc-list" ng-show="expandShareList[investor]">
                     <li ng-repeat="doc in ShareDocs.documents">
                         <a ng-if="doc.signature_flow > 0" href="/app/documents/company-view?doc={{doc.doc_id}}&investorid={{encodeURIComponent(investor)}}"
                            ng-class="{'incomplete': ShareDocs.prepCache[doc.doc_id][investor] === false}">
