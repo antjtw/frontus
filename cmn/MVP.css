@@ -1605,11 +1605,17 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
+
 }
+.activity-feed2 > div > li:first-child {
+	margin-top: 40px;
+}	
 
 .activity-feed2 li.event {
     min-height: 50px;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C7C7C7;
+    width: 305px;
+    margin-left: 20px;
 }
 
 .activity-feed2 a {
@@ -1622,6 +1628,11 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
+    
+}
+
+.activity-feed2 li.event.roles > div:first-of-type{
+    text-align: left;
 }
 
 .activity-feed2 li.event.roles > div:first-of-type{

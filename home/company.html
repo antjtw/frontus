@@ -1,230 +1,231 @@
-<link type="text/css" rel="stylesheet" href="/home/home.css">
-<div class="dashboard-center">
-<div class="container">
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link type="text/css" rel="stylesheet" href="/documents/css/company.css">
+<div class="maincontent openflow">
+<div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
-<div class="maincontent">
-<div class="row-fluid home-top-row">
-    <div ng-show="docsummary" class="span8 flip-tile" ng-class="{'reverse':flipped1}">
-        <div class="flipper">
-            <div class="front info-box">
-                <div class="head-box" ng-click="flipTile(1);">
-                    <h2>Document Management</h2>
-                    <span data-icon="&#xe033;" aria-hidden="true"></span>
-                </div>
-                <div class="body-box">
-                    <div ng-show="docsummary.num == 0">
-                        <div class="onboarding-row row-fluid">
-                            <div>
-                                <img src='/img/onboardingicons/dayzero/doc-upload.png'>
-                                <h2>Upload and Share</h2>
-                            </div>
-                            <span data-icon="&#xe004;" aria-hidden="true"></span>
-                            <div>
-                                <img src='/img/onboardingicons/dayzero/doc-sign.png'>
-                                <h2>Request Signature</h2>
-                            </div>
-                            <span data-icon="&#xe004;" aria-hidden="true"></span>
-                            <div>
-                                <img src='/img/onboardingicons/dayzero/doc-audit.png'>
-                                <h2>Review Audit Trail</h2>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <span>Want more information? <span class="blue-link" ng-click="flipTile(1);">Learn more</span></span>
-                            <div class="pull-right standard-button green">
-                                <button id='a_home_doc_pre' class="btn" ng-click="gotopage('/app/documents/company-list')">Start Now</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div ng-show="docsummary && docsummary.num != 0">
-                        <div class="detail-row row-fluid">
-                            <div class="span6">
-                                <div>
-                                    <img src='/img/onboardingicons/dayone/doc-upload.png'>
-                                    <h2><span>{{docsummary.num}}</span> Documents</h2>
-                                </div>
-                                <div>
-                                    <img src='/img/onboardingicons/dayone/doc-sign.png'>
-                                    <h2><span>{{docsummary.sig}}</span> Signatures Pending</h2>
-                                </div>
-                                <div>
-                                    <img src='/img/onboardingicons/dayone/doc-audit.png'>
-                                    <h2><span>{{docsummary.counter}}</span> Awaiting Review</h2>
-                                </div>
-                            </div>
-                            <div class="span6 no-graph">
-                                <div class="standard-button green">
-                                    <button id='a_home_doc_post' class="btn" ng-click="gotopage('/app/documents/company-list')">View Documents</button>
-                                </div>
-                                <span class="blue-link" ng-click="flipTile(1);">Learn More about Documents</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="back info-box">
-                <div class="head-box" ng-click="flipTile(1);">
-                    <span data-icon="&#xe032;" aria-hidden="true"></span>
-                    <h2>Document Management</h2>
-                </div>
-                <div class="body-box">
-                    <ul class="q-and-a">
-                        <li>Are e-signatures on Sharewave legally binding?</li>
-                        <li>Yes, though currently in the United States only. We append an audit trail with IP Address and activity to each document, which is court admissible.</li>
+    <section class="statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+            
+        </div>
 
-                        <li>What document types can I upload?</li>
-                        <li>Right now we only take PDF documents, though we'll soon accept a wider range.</li>
-
-                        <li>How do I know if someone has viewed a document?</li>
-                        <li>When viewing the document, select "Status" from the navigation to view an audit trial by recipient.</li>
-                    </ul>
-                </div>
+  <!--   text in the window -->
+    <div class="row-fluid leftTabWindow">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+            <div class="span12 company-page">
+                <div class="front info-box">
+					<div class="head-box">
+						<h2>Document Management</h2>
+					</div>
+					<div class="body-box">
+						<div ng-show="docsummary.num == 0">
+							<div class="onboarding-row row-fluid">
+								<div>
+									<img src='/img/onboardingicons/dayzero/doc-upload.png'>
+                                	<h2>Upload and Share</h2>
+								</div>
+								<span data-icon="&#xe004;" class="arrow1" aria-hidden="true"></span>
+								<div class="add-investments">
+									<img src='/img/onboardingicons/dayzero/doc-sign.png'>
+                                	<h2>Request Signature</h2>
+								</div>
+								<span data-icon="&#xe004;" class="arrow2" aria-hidden="true"></span>
+								<div class="share-ownership">
+									<img src='/img/onboardingicons/dayzero/doc-audit.png'>
+                                	<h2>Review Audit Trail</h2>
+								</div>
+							</div>
+							<div class="row-fluid">
+								
+								<div class="pull-right standard-button green">
+									<button id='a_home_doc_pre'  class="btn start-now" ng-click="gotopage('/app/documents/company-list')">Start Now</button>
+								</div>
+							</div>
+						</div>
+						<div ng-show="docsummary && docsummary.num != 0">
+							<div class="detail-row row-fluid">
+								<div class="span6">
+									<div>
+										<img src='/img/onboardingicons/dayone/doc-upload.png'>
+										<h2><span>{{docsummary.num}}</span> Documents</h2>
+									</div>
+									<div>
+										<img src='/img/onboardingicons/dayone/doc-sign.png'>
+										<h2><span>{{docsummary.sig}}</span> Signatures Pending</h2>
+									</div>
+									<div>
+										<img src='/img/onboardingicons/dayone/doc-audit.png'>
+										<h2><span>{{docsummary.counter}}</span> Awaiting Review</h2>
+									</div>
+								</div>
+								<div class="span6 no-graph">
+									<div class="standard-button green" id="doc-button">
+										<button id='a_home_doc_post' class="btn" ng-click="gotopage('/app/documents/company-list')">View Documents</button>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="front info-box">
+					<div class="head-box">
+						<h2>Understand Your Ownership</h2>
+					</div>
+					<div class="body-box">
+						<div ng-show="ownersummary.peoplenum == 0">
+							<div class="onboarding-row row-fluid">
+								<div>
+									<img src='/img/onboardingicons/dayzero/ownership-investors.png'>
+									<h2>Add Shareholders</h2>
+								</div>
+								<span data-icon="&#xe004;" class="arrow1" aria-hidden="true"></span>
+								<div class="add-investments">
+									<img src='/img/onboardingicons/dayzero/ownership-invest.png'>
+									<h2>Add Investments</h2>
+								</div>
+								<span data-icon="&#xe004;" class="arrow2" aria-hidden="true"></span>
+								<div class="share-ownership">
+									<img src='/img/onboardingicons/dayzero/ownership-share.png'>
+									<h2>Share Ownership</h2>
+								</div>
+							</div>
+							<div class="row-fluid">
+								
+								<div class="pull-right standard-button green">
+									<button id='a_home_own_pre' class="btn start-now" ng-click="gotopage('/app/ownership/company-captable')">Start Now</button>
+								</div>
+							</div>
+						</div>
+						<div ng-show="ownersummary && ownersummary.peoplenum != 0">
+							<div class="detail-row row-fluid">
+								<div class="span6">
+									<div>
+										<img src='/img/onboardingicons/dayone/ownership-invest.png'>
+										<h2><span>{{ownersummary.invested || 0}}</span> Invested</h2>
+									</div>
+									<div>
+										<img src='/img/onboardingicons/dayone/ownership-investors.png'>
+										<h2><span>{{ownersummary.peoplenum || 0}}</span> Investors</h2>
+									</div>
+									<div>
+										<img src='/img/onboardingicons/dayone/ownership-share.png'>
+										<h2><span>{{ownersummary.shares || 0}}</span> Invited</h2>
+									</div>
+								</div>
+								<div class="span6">
+									<d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
+									<div class="standard-button green" id="own-button">
+										<button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View Ownership</button>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
             </div>
         </div>
+
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
+            <tabset class="singletab" style="display:block;" ng-style="viewportheight">
+                <tab heading = "Information">
+                	<div class="headsection row-fluid tabbed company-info">
+                        <h1><img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">{{navState.name}}</h1>
+						<div class="address-area">
+							<div>
+								<span>{{company.address}}</span>
+							</div>
+							<div>
+								<span>{{company.city}}<span ng-show="company.city && (company.state || company.zipcode)">, </span>{{company.state}}<span> </span>{{company.zipcode}}
+							</div>
+						</div>
+                    </div>
+
+					<div class="summary-bar">
+						<div class="belowTitle" id="first-item">
+							<img src="/img/activity/invested.png" ng-show="totalPaid(rows)">
+							<div ng-show="totalPaid(rows)">
+								<span ng-bind="totalPaid(rows)"></span><span>Total Invested</span>
+							</div>
+						</div>
+						<div class="belowTitle" ng-show="totalShares(rows)">
+							<img src="/img/activity/sharews.png">
+							<div>
+								<span ng-bind="totalShares(rows)"></span><span>Fully Diluted Units</span>
+							</div>
+						</div>
+						<div class="belowTitle" ng-show="numShareholders()">
+							<img src="/img/activity/people.png">
+							<div>
+								<span ng-bind="numShareholders()"></span><span>Shareholders</span>
+							</div>
+						</div>
+					</div>
+					<div>
+						<span data-icon="&#xe001;"><a href="/app/company/profile">View Full Profile</a></span>
+					</div>
+                </tab>
+                <tab heading = "Activity">
+                	<div height="viewportactivity" activity-feed user='navState.userid' type="iss" view="activityView"></div>
+                </tab>
+            </tabset>
+        </internal-right-rail>
+    
+
     </div>
-    <div class="span4 issuer-profile">
-        <div class="row-fluid">
-            <div class="span3">
-                <img ng-src="{{photoURL}}">
-            </div>
-            <div class="span7">
-                <h2 class="company-name-box">{{company.name}}</h2>
-                <span>{{company.city}}<span ng-show="company.city && company.state">, </span>{{company.state}}</span>
-            </div>
-            <div class="span2">
-                <ul class="dropdown-list">
-                    <li class="dropdown standard menu-drop">
-                        <a class="dropdown-toggle dark">
-                            <span data-icon="&#xe011;" aria-hidden="true"></span>
-                        </a>
-                        <ul ng-hide="toggleView();" class="dropdown-menu">
-                            <!--
-                            <li ng-show="!backupInfo || backupError() || backupInfo.access_token_exists===0" ng-click="authorizeOauth('dropbox');">Authenticate Dropbox</li>
-                            <li ng-hide="!backupInfo || backupError() || backupInfo.access_token_exists===0" ng-click="deauthorizeOauth('dropbox');">Revoke Dropbox Access</li>
-                            -->
-                            <li ng-click="gotopage('/app/company/profile/');">View Profile</li>
-                            <li ng-click="profileModalOpen();">Edit Profile</li>
-                            <li ng-click="settingModalOpen();">Edit Settings</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+
+
+    </section>
+
+</div>
+
+<!-- admin toolbar -->
+<div modal="removeAdminModal" close="removeAdminModalClose()" options="narrowopts">
+    <div class="modalHeader">
+        <span>Remove administrator</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="removeAdminModalClose()"></span>
+    </div>
+    <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
+        <span>Are you sure you want to remove {{selectedToRevoke}} as an admin?</span>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="removeAdminModalClose()">Cancel</button>
         </div>
-        <div class="row-fluid">
-            <ul>
-                <li>
-                    {{company.longcurrency}}
-                </li>
-                <li>
-                    Currency
-                </li>
-                <li>
-                    {{company.dateformat}}
-                </li>
-                <li>
-                    Date format
-                </li>
-                <!--
-                <li>
-                    <div ng-hide="backupError()">{{backupStatus()}}</div>
-                    <div class="error" ng-show="backupError()">Backup failed. Please re-authenticate Dropbox.</div>
-                </li>
-                <li>
-                    Last Dropbox Backup
-                </li>
-                -->
-            </ul>
+        <div class="standard-button green">
+            <button class="btn" ng-click="revoke_admin(); removeAdminModalClose();">Confirm</button>
         </div>
     </div>
 </div>
-<div class="row-fluid home-bottom-row">
-    <div ng-show="ownersummary" class="span8 flip-tile" ng-class="{'reverse':flipped2}">
-        <div class="flipper">
-            <div class="front info-box">
-                <div class="head-box" ng-click="flipTile(2);">
-                    <h2>Understand Your Ownership</h2>
-                    <span data-icon="&#xe033;" aria-hidden="true"></span>
-                </div>
-                <div class="body-box">
-                    <div ng-show="ownersummary.peoplenum == 0">
-                        <div class="onboarding-row row-fluid">
-                            <div>
-                                <img src='/img/onboardingicons/dayzero/ownership-investors.png'>
-                                <h2>Add Shareholders</h2>
-                            </div>
-                            <span data-icon="&#xe004;" aria-hidden="true"></span>
-                            <div>
-                                <img src='/img/onboardingicons/dayzero/ownership-invest.png'>
-                                <h2>Add Investments</h2>
-                            </div>
-                            <span data-icon="&#xe004;" aria-hidden="true"></span>
-                            <div>
-                                <img src='/img/onboardingicons/dayzero/ownership-share.png'>
-                                <h2>Share Ownership</h2>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <span>New to Equity? <span class="blue-link" ng-click="flipTile(2);">Learn more</span></span>
-                            <div class="pull-right standard-button green">
-                                <button id='a_home_own_pre' class="btn" ng-click="gotopage('/app/ownership/company-captable')">Start Now</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div ng-show="ownersummary && ownersummary.peoplenum != 0">
-                        <div class="detail-row row-fluid">
-                            <div class="span6">
-                                <div>
-                                    <img src='/img/onboardingicons/dayone/ownership-invest.png'>
-                                    <h2><span>{{ownersummary.invested || 0}}</span> Invested</h2>
-                                </div>
-                                <div>
-                                    <img src='/img/onboardingicons/dayone/ownership-investors.png'>
-                                    <h2><span>{{ownersummary.peoplenum || 0}}</span> Investors</h2>
-                                </div>
-                                <div>
-                                    <img src='/img/onboardingicons/dayone/ownership-share.png'>
-                                    <h2><span>{{ownersummary.shares || 0}}</span> Invited</h2>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
-                                <div class="standard-button green">
-                                    <button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View Ownership</button>
-                                </div>
-                                <span class="blue-link" ng-click="flipTile(2);">Learn More about Ownership</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div modal="addAdminModal" close="addAdminModalClose()" options="narrowopts">
+        <div class="modalHeader">
+            <span>Add administrator</span>
+            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addAdminModalClose()"></span>
+        </div>
+        <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
+            <span>Are you sure you want to add {{selectedToAdd}} as an admin?</span>
+            <div class="spacer20"></div>
+            <div ng-if="triggerUpgradeAdmins(1)" class="upgradeWarning">
+                <span>
+                    Warning: Making this user an admin will automatically upgrade your payment plan.
+                </span>
             </div>
-            <div class="back info-box">
-                <div class="head-box" ng-click="flipTile(2);">
-                    <span data-icon="&#xe032;" aria-hidden="true"></span>
-                    <h2>Understand Your Ownership</h2>
-                </div>
-                <div class="body-box">
-                    <ul class="q-and-a">
-                        <li>What percent of the company do my shareholders own?</li>
-                        <li>Just enter names, amounts, and terms. Leave the math to us.</li>
-
-                        <li>How much of my option pool have I given to my employees?</li>
-                        <li>You enter the total shares authorized, and we tell you what's left unissued.</li>
-
-                        <li>Can I show my employees the vesting progress on their stock options?</li>
-                        <li>Yes, simply enter their vesting schedule and share a personal view of the cap table with them.</li>
-
-                        <li>If I share my cap table, what can the recipient see?</li>
-                        <li>Shareholders will only see their personal holdings by default, though you can grant them an unlimited view of the cap table via their profile.</li>
-                    </ul>
-                </div>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn" ng-click="addAdminModalClose()">Cancel</button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn" ng-click="add_admin(); addAdminModalClose();">Confirm</button>
             </div>
         </div>
     </div>
-    <div class="span4">
-        <div activity-feed user='navState.userid' type="iss" view="activityView"></div>
-    </div>
-</div>
+<!-- toggle siderail -->
 
+</div>
+</div>
 <!-- Modals below -->
 
 <div modal="profileModal" close="profileModalClose()" options="profileopts">
@@ -321,7 +322,6 @@
             <button class="btn" ng-click="settingModalClose(); saveSettings(editcompany);">Confirm</button>
         </div>
     </div>
-</div>
 </div>
 </div>
 </div>
