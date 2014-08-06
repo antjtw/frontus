@@ -70,29 +70,7 @@ app.directive('restrictContentEditable', function() {
     };
 });
 
-// app.directive('contenteditable', function() {
-//     return {
-//         require: 'ngModel',
-//         link: function(scope, elm, attrs, ctrl) {
-//             // view -> model
-//             var ff = function() {
-//                 scope.$apply(function() {
-//                     ctrl.$setViewValue(elm.text());
-//                 });
-//                 scope.$emit('updated:name');
-//             };
 
-//             elm.on('blur', ff);
-//             // model -> view
-//             ctrl.$render = function() {
-//                 elm.text(ctrl.$viewValue);
-//             };
-
-//             // load init value from DOM
-//             ctrl.$setViewValue(elm.text());
-//         }
-//     };
-// });
 
 app.directive('documentSummaryRow', function() {
     // must be used in a tbody for valid html
