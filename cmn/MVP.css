@@ -4663,14 +4663,14 @@ div.upgradeWarning > span {
 .message_headline{
     display: inline-block;
     width: 9%;
-    margin-left: 30px;
+    vertical-align: top;
 }
 
 .msgsubject{
     padding-top: 4px;
     padding-left: 0px;
     padding-right: 0px;
-    width: 100%;
+    width: calc(100% - 6px);
     height: 31px;
     border-radius: 3px;
 
