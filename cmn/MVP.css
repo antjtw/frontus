@@ -1635,6 +1635,14 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: left;
 }
 
+.activity-feed2 li.event.roles > div:first-of-type{
+    text-align: left;
+    padding-left: 20px;
+}
+
+
+    
+
 .activity-icon {
     width: 30px;
     height: 30px;
@@ -2338,6 +2346,7 @@ a.oldschool-link  {
     -ms-animation: leftTabSlideIn 0.25s linear;
     -o-animation: leftTabSlideIn 0.25s linear;
     animation: leftTabSlideIn 0.25s linear;
+    position: relative;
 }
 .leftTabWindow.showRightTab {
     margin-left: calc(-100% + 350px);
@@ -2602,6 +2611,48 @@ a.oldschool-link  {
     cursor: pointer;
     background-color: inherit;
 }
+
+.toggle-button {
+    height: 30px;
+    width: 87px;
+    cursor: pointer;
+    border: 1px solid #8D8D8D;
+}
+
+.toggle-button.selected {
+    background-color: #8D8D8D;
+}
+
+.toggle-button > ul > li {
+    line-height: 30px;
+}
+
+.toggle-button > ul > li > span:first-child {
+    vertical-align: -3%;
+}
+
+.toggle-button:first-of-type {
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.toggle-button:last-of-type {
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
 /* New Standard Button as of 10/03/13 */
 .standard-button > button {
     border-radius: 3px;
@@ -3206,7 +3257,7 @@ button.icon-button:hover {
     line-height: 24px;
     min-height: 24px;
     display: block;
-    padding: 3px 20px 3px 10px;
+    padding: 3px 20px 3px 5px;
     clear: both;
     font-weight: normal;
     color: #333333;
@@ -4012,6 +4063,53 @@ button.icon-button:hover {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
+.select2-container {
+    height: 30px;
+}
+
+.select2-container .select2-choice .select2-arrow {
+    background-color: #FFFFFF;
+    background-image: none;
+    border-left: transparent;
+}
+
+.select2-container .select2-choice {
+    background-color: #FFFFFF;
+    background-image: none;
+    height: 30px;
+    line-height: 30px;
+    color: #666666;
+    padding-left: 10px;
+}
+
+.select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #aaa;
+}
+
+.select2-results .select2-result-label {
+    color: #666666;
+}
+
+.select2-container-active .select2-choice {
+    border: 1px solid #aaa;
+    box-shadow: none;
+}
+
+.select2-container .select2-choice .select2-arrow b {
+    background: url('/img/down-arrow-20x30.png');
+}
+
+.select2-container .select2-choice .select2-arrow {
+    right: 5px;
+}
+
+.select2-dropdown-open .select2-choice {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
 
 /* Dropdown */
 .menu_dropdown {
@@ -4686,6 +4784,7 @@ textarea.email-text {
 
 .secondbar {
     right: -350px;
+/*    position: relative;*/
 }
 
 /*//Message sidebar*/
@@ -4717,6 +4816,8 @@ textarea.email-text {
 
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
+    cursor: pointer;
+    padding-right: 10px;
 }
 
 .messages .activity-feed2 li.event:first-of-type {
@@ -4771,11 +4872,77 @@ textarea.email-text {
     padding-bottom: 1em; 
 }
 
-
-
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
     cursor: pointer; 
 }
 
+
+/*Filter sidebar*/
+
+.messages .activity-feed2 li.event.roles{
+    margin-right: 0px;
+}
+.tinycol{
+    display: inline-block;
+    width: 40%;
+    padding-left: 20px;
+    margin-left: 10px;
+}
+
+.tinycol.left{
+    text-align: right;
+    padding-left: 10px;
+}
+
+.group_button{
+    line-height: 30px;
+}
+
+.instructions{
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.check-box-button.group > span.check_group{
+    margin-right: 20px;
+
+}
+.select_role{
+    cursor: pointer;
+}
+.select_role.picked{
+    color: #666;
+}
+
+.select_role:hover {
+    color: #666;
+    cursor: pointer;
+}
+
+.noGroups{
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px dashed #C7C7C7; 
+    width: 200px;
+    margin-left: 20px;
+}
+
+.noGroups span{
+    color: #3498DB;
+    cursor: pointer;
+}
+
+.select_role.all_people{
+    color: #1E2D3D;
+}
+
+
+.noGroups span:last-of-type{
+    position: relative;
+    top: 3px;
+} 
 

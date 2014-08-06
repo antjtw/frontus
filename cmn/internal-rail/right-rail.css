@@ -314,9 +314,18 @@ internal-right-rail .tab-content {
 }
 
 internal-right-rail #bottom-part {
+    border-top: 1px solid #C6C6C6;
     background-color: #E3E3E3;
     position: absolute;
     bottom: 0;
+    width: 100%;
+}
+
+internal-right-rail .bottom-padded {
     padding: 20px;
-    width: calc(100% - 40px);
+}
+
+internal-right-rail .sides-padded {
+    padding: 0 20px 20px 20px;
+    overflow: auto;
 }

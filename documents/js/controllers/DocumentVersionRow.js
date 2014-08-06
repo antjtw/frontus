@@ -232,10 +232,15 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $scope.$emit("notification:fail", "Document unarchive failed.");
         });
     };
+    
+    $scope.versionIsFinalized = function(version) {
+            return basics.isCompleteSigned(version)
+                || basics.isCompleteVoided(version);
+        };
 
     $scope.exportVersionToPdf = function(version) {
         $scope.$emit("notification:success", "Export in progress.");
-        SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true).then(function(url) {
+        SWBrijj.genInvestorPdf('sharewave-'+version.doc_id+'-'+version.investor+'.pdf', 'application/pdf', version.doc_id, true, !$scope.versionIsFinalized(version)).then(function(url) {
             document.location.href = url;
         }).except(function(x) {
             console.log(x);

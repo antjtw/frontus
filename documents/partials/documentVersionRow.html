@@ -55,14 +55,12 @@
                     Switch to View Only
                 </li>
                 <li ng-show="!versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_signed" ng-click="modals.remindDocOpen(version)">Send Reminder</li>
-                <li ng-click="viewStatus(version)">View Status</li>
-                <li ng-click="viewInvestorCopy(version)">View Document</li>
                 <li ng-show="versionIsComplete(version) && !version.archived" ng-click="archiveDoc(version)">Archive</li>
                 <li ng-show="versionIsComplete(version) && version.archived" ng-click="unarchiveDoc(version)">Unarchive</li>
+                <li ng-show="version.signature_flow>0"
+                    ng-click="exportVersionToPdf(version, 'investor')">Export to PDF</li>
                 <li ng-show="versionIsComplete(version) && version.signature_flow>0"
-                    ng-click="exportVersionToPdf(version, 'investor')">Export Final to PDF</li>
-                <li ng-show="versionIsComplete(version) && version.signature_flow>0"
-                    ng-click="modals.exportToDropbox(version, 'investor');">Export Final to Dropbox</li>
+                    ng-click="modals.exportToDropbox(version, 'investor');">Export to Dropbox</li>
                 <li ng-show="versionIsComplete(version) && version.signature_flow > 0 && !version.when_retracted && !version.when_void_requested" ng-click="modals.voidDocOpen(version)">Void Document</li>
             </ul>
         </li>

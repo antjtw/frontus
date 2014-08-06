@@ -1733,6 +1733,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .transferModal .share-modal-main .sharepeople-input .select2-container {
     width: 677px;
+    height: 100%;
 }
 
 .tourModal {

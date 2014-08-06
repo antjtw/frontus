@@ -141,8 +141,8 @@ app.directive('annotationList', ["User", function(User) {
             active: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "$rootScope", "Annotations", "Documents", "User",
-            function($scope, $element, $rootScope, Annotations, Documents, User) {
+        controller: ["$scope", "$element", "navState", "Annotations", "Documents", "User",
+            function($scope, $element, navState, Annotations, Documents, User) {
                 $scope.$watch("doc", function(doc) {
                     // we want a new page_visible array for every doc
                     $scope.page_visible = [];
@@ -153,9 +153,8 @@ app.directive('annotationList', ["User", function(User) {
                     return ret;
                 };
 
-                $scope.attributeLabel = Annotations.attributeLabel;
-
                 $scope.user = User;
+                $scope.navState = navState;
             }
         ],
     };
@@ -252,14 +251,14 @@ app.directive('docAction', function() {
 
             $scope.approve = function(){
                 $scope.processing = true;
-                $scope.approveAction().catch(function(data) {
+                $scope.approveAction().finally(function() {
                     $scope.processing = false;
                 });
             };
 
             $scope.reject = function(){
                 $scope.processing = true;
-                $scope.rejectAction({message: $scope.rejectMessage}).catch(function(data) {
+                $scope.rejectAction({message: $scope.rejectMessage}).finally(function() {
                     $scope.processing = false;
                 });
             };
@@ -269,7 +268,7 @@ app.directive('docAction', function() {
 
 app.directive('integer', function() {
     // add number formatting to an input
-    // useful with <input type="number" can't be styled correctly
+    // useful when <input type="number"> can't be styled correctly
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -283,5 +282,95 @@ app.directive('integer', function() {
                 return ret;
             });
         }
+    };
+});
+
+app.directive('docTransactionDetails', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            doc: "=",
+        },
+        templateUrl: "/documents/partials/doc-transaction-details.html",
+        controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
+            var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
+            $scope.selectedIssue = defaultSelectObj;
+            $scope.select2Options = {
+                data: [defaultSelectObj],
+            };
+
+            // Get the company's Issues
+            // TODO: issue / cap table service
+            SWBrijj.tblm('ownership.newtype_company_issue').then(function (data) {
+                $scope.issues = data;
+            });
+
+            $scope.$watch('issues', function(issues) {
+                // set up the select box
+                if (issues) {
+                    $scope.select2Options.data.splice(0);
+                    $scope.select2Options.data.push(defaultSelectObj);
+                    issues.forEach(function(issue) {
+			if (issue.type) {
+                            // TODO: filter to usable issue types
+                            $scope.select2Options.data.push({
+				id: issue.issue,
+				text: 'Add to ' + issue.issue + '',
+				issue: issue
+                            });
+			}
+                    });
+                    $scope.selectedIssue = defaultSelectObj;
+                }
+            });
+        }],
+    };
+});
+
+app.directive('docTransactionList', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            trans: "="
+        },
+        templateUrl: "/documents/partials/doc-transaction-list.html",
+        controller: ["$scope", 'calculate', 'switchval', '$location', function($scope, calculate, switchval, $location) {
+
+            $scope.trans[0].active = true;
+
+            $scope.singleTransaction = function(trans) {
+                return (trans.length == 1);
+            };
+
+            $scope.gotoCaptable = function() {
+                $location.url('/app/ownership/company-captable')
+            };
+
+            $scope.formatAmount = function (amount) {
+                return calculate.funcformatAmount(amount);
+            };
+
+            $scope.formatDollarAmount = function(amount) {
+                var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+                return (output);
+            };
+
+            $scope.grantbyIssue = function (tran) {
+                if (tran.type == "Option") {
+                    return "options";
+                }
+                else if (tran.type == "Warrant") {
+                    return "warrants";
+                }
+                else {
+                    return "shares";
+                }
+            };
+
+            $scope.trantype = function (type, activetype) {
+                return switchval.trantype(type, activetype);
+            };
+
+        }]
     };
 });
