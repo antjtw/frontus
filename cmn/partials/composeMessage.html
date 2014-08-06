@@ -26,9 +26,9 @@
         </div>
 
         <div class="message_info">
-            <div class="message_headline" style="margin-top: 15px"> Message</div>
+            <div class="message_headline"> Message</div>
             <div class="message_input">
-                <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3'], ['p'], ['bold', 'italics', 'underline'], ['ul', 'ol'], ['justifyLeft', 'justifyCenter', 'justifyRight'], ['indent', 'outdent'], ['insertImage', 'insertLink']]"></div>
+                <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertImage', 'insertLink']]"></div>
             </div>
         </div>
 
@@ -44,15 +44,15 @@
             Preview Message 
         </div>
 
-<!--         <div class="footer-headline-left">
+        <div class="footer-headline-left">
             <div class = "standard-button">
                 <button class="btn" style="background-color: red;"
-                    ng-click="checkRecipients()">
-                    Check and Test
+                    ng-click="resetMessage()">
+                    Cancel
                 </button>
             </div>
         </div>
- -->
+
         <div class="footer-headline-left">
             <div class = "standard-button green">
                 <button class="btn"
@@ -62,6 +62,8 @@
                 </button>
             </div>
         </div>
+
+
      
     </div>   
 </div>
@@ -143,7 +145,7 @@
                                                                 {{company}} is using Sharewave to organize and share company information with you.
                                                             </div>                                           
                                                             <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:40px; margin-bottom:20px; border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
-                                                            <div  style="white-space: pre;">{{messagetext}}</div>
+                                                            <div  style="white-space: pre;" ng-bind-html="messagetext"></div>
                                                             <div>&nbsp;</div>
                                                             <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
                                                             <div>&nbsp;</div>

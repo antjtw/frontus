@@ -4624,7 +4624,8 @@ div.upgradeWarning > span {
 /*styling the editor*/
 .message_info .ta-scroll-window{
     border: 1px solid #E3E3E3;
-    border-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .message_input .ta-scroll-window > .ta-bind {
@@ -4636,7 +4637,6 @@ div.upgradeWarning > span {
     height: auto;
     overflow: auto;
     font-size: 100%;
-    margin:20px 0;
 }
 
 .message_input .ta-root.focussed .ta-scroll-window.form-control{
@@ -4654,6 +4654,16 @@ div.upgradeWarning > span {
 .message_input .btn[disabled]{
     background-color: white;
     color: black;
+    /*border: 1px solid #E3E3E3;*/
+}
+
+.message_input .btn-toolbar{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-top: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+    border-left: 1px solid #E3E3E3;
+    /*border: 1px solid #E3E3E3;*/
 }
 .message_input {
     display: inline-block;
@@ -4663,9 +4673,9 @@ div.upgradeWarning > span {
 
 .message_headline{
     display: inline-block;
-    width: 9%;
+    width: 6.5%;
     vertical-align: top;
-    margin-top: 10px;
+    margin-top: 9px;
 }
 
 .msgsubject{

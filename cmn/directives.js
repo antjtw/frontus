@@ -619,6 +619,8 @@ m.directive('composeMessage', function() {
                 dialogFade: true
             };
 
+            
+
             $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
             
             $scope.howMany = function(){
@@ -627,10 +629,6 @@ m.directive('composeMessage', function() {
                 }
             };
 
-            $scope.keypressCallback = function($event) {
-                alert('Voila!');
-                $event.preventDefault();
-            };
 
 
             $scope.sendMessage = function(msg) {
@@ -654,9 +652,7 @@ m.directive('composeMessage', function() {
                     //this works but i don't know why for the root scope
                     $rootScope.$emit('new:message');
                     $scope.resetMessage();
-                    // $scope.recipients = [];
                     $scope.clicked = false;
-
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",
@@ -694,9 +690,6 @@ m.directive('composeMessage', function() {
             $scope.previewModalOpen = function(msg) {
                 $scope.previewModal = true;
                 $scope.subject = msg.subject;
-                // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
-                // var re = /<br *\/?>/gi;
-                // $scope.messagetext = message.replace(re, '\n')
                 $scope.messagetext=msg.text
                 $scope.sendername = $rootScope.person.name;
                 $scope.company = $rootScope.navState.name;
