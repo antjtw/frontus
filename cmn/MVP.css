@@ -4627,6 +4627,7 @@ div.upgradeWarning > span {
 
 .message_info .ta-scroll-window{
     border: 1px solid #E3E3E3;
+    border-radius: 5px;
 }
 
 .message_input .ta-scroll-window > .ta-bind {
@@ -4634,12 +4635,13 @@ div.upgradeWarning > span {
     font-family: "Helvetica";
 }
 
-.ta-editor {
-    min-height: 300px;
-    height: auto;
-    overflow: auto;   
-    font-size: 100%;
-    margin:20px 0;
+/*styling the editor*/
+
+
+.message_input .ta-root.focussed .ta-scroll-window.form-control{
+    border-color: none;
+    -webkit-box-shadow: none;
+    border: 1px solid #E3E3E3;
 }
 
 .message_input .btn[disabled]{
@@ -4651,11 +4653,8 @@ div.upgradeWarning > span {
     width: 80%;
 }
 
-.message_input .ta-root.focussed .ta-scroll-window.form-control{
-    border-color: none;
-    -webkit-box-shadow: none;
 
-}
+
 .message_headline{
     display: inline-block;
     width: 9%;
