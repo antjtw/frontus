@@ -402,7 +402,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  }
                  if ($scope.$parent.prepareFor) {
                      // load the annotation Overrides
-                     // We must already exist in the table, since we got to this step, so loop until we find it.
+                     // It may already exist in the table, since we got to this step, so loop until we find it.
                      var endOfWatch = $scope.$watchCollection(function() {
                          return $scope.doc.getPreparedFor();
                      }, function(preps) {

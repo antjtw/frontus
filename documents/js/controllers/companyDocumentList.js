@@ -965,5 +965,7 @@ app.controller('CompanyDocumentListController',
                     return email;
                 }
             };
+
+            $scope.encodeURIComponent = encodeURIComponent;
         }
     ]);

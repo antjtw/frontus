@@ -133,11 +133,13 @@
                 {{getInvestorDisplay(investor)}} <a ng-click="removeShareEmail(investor)">remove</a>
                 <ul>
                     <li ng-repeat="doc in ShareDocs.documents">
-                        {{doc.docname}}:
-                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === undefined">Loading</span>
-                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === true">Prepared</span>
-                        <span ng-if="doc.signature_flow > 0 && ShareDocs.prepCache[doc.doc_id][investor] === false">Needs Work</span>
-                        <span ng-if="!(doc.signature_flow > 0)">View Only</span>
+                        <a ng-if="doc.signature_flow > 0" href="/app/documents/company-view?doc={{doc.doc_id}}&investorid={{encodeURIComponent(investor)}}">
+                            {{doc.docname}}:
+                            <span ng-if="ShareDocs.prepCache[doc.doc_id][investor] === undefined">Loading</span>
+                            <span ng-if="ShareDocs.prepCache[doc.doc_id][investor] === true">Prepared</span>
+                            <span ng-if="ShareDocs.prepCache[doc.doc_id][investor] === false">Needs Work</span>
+                        </a>
+                        <span ng-if="!(doc.signature_flow > 0)">{{doc.docname }} View Only</span>
                     </li>
                 </ul>
             </li>
