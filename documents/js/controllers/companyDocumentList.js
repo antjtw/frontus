@@ -284,6 +284,38 @@ app.controller('CompanyDocumentListController',
                     $scope.modals.documentUploadClose();
                 });
             };
+            
+            $scope.checkSignedUploaded = function() {
+                SWBrijj.tblm('document.my_counterparty_library', ['doc_id', 'when_signature_provided', 'signed_uploaded', 'signed_upload_attempted']).then(function(data) {
+                    angular.forEach(data, function(doc) {
+                        if (doc.signed_upload_attempted)
+                        {
+                            var ind = $scope.modals.uploadedSignedDocs.indexOf(doc.doc_id);
+                            if (ind > -1)
+                            {
+                                if (doc.when_signature_provided)
+                                {
+                                    $scope.modals.uploadedSignedDocs.splice(ind, 1);
+                                    //update row TODO: find a way to refresh row without refreshing page
+                                    $route.reload();
+                                }
+                                else if (!doc.signed_uploaded)
+                                {
+                                    $scope.modals.uploadedSignedDocs.splice(ind, 1);
+                                    //notify failure
+                                    $scope.$emit("notification:fail", "Signed copy rejected. Did it have the same number of pages as the original?");
+                                }
+                            }
+                        }
+                    });
+                    if ($scope.modals.uploadedSignedDocs.length > 0)
+                    {
+                        $timeout($scope.checkSignedUploaded, 2000);
+                    }
+                }).except(function(data) {
+                    console.log(data);
+                });
+            }
 
             $scope.checkUploaded = function() {
                 SWBrijj.tblm('document.my_company_library', ['doc_id', 'pages']).then(function(data) {
@@ -355,7 +387,14 @@ app.controller('CompanyDocumentListController',
                     $rootScope.showProgress = false;
                     $rootScope.showProcessing = true;
                     $scope.modals.documentUploadClose();
-                    $scope.$emit("notification:success", "Success! We're preparing your file.");
+                    if (type == "signed")
+                    {
+                        $scope.$emit("notification:success", "Uploading signed version . . .");
+                    }
+                    else
+                    {
+                        $scope.$emit("notification:success", "Success! We're preparing your file.");
+                    }
                 });
                 $scope.$on(
                     "upload:error", function(evt, arg) {
@@ -378,32 +417,30 @@ app.controller('CompanyDocumentListController',
                     analytics.track('doc uploader');
                 }
                 Intercom('update', {company : {"documents":$scope.documents.length+1}});
-                console.log(files[0]);
                 for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
                 var upxhr;
-                if (type == null)
-                {
-                    upxhr = SWBrijj.uploadFile(fd);
-                }
-                else
+                if (type == "signed")
                 {
                     if (fd.length > 1)
                     {
                         //throw error. Multiple docs doesn't make sense
-                        console.log("multiple");
+                        $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
                         return;
                     }
                     upxhr = SWBrijj.uploadSigned(fd);
                 }
+                else
+                {
+                    upxhr = SWBrijj.uploadFile(fd);
+                }
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
-                    console.log(x);
                     if (type == "signed")
                     {
                         SWBrijj.uploadSetType(x[0], type, docid).then(function() {
-                            console.log("succeeded");
+                            $scope.modals.uploadedSignedDocs.push(docid);
+                            $timeout($scope.checkSignedUploaded, 2000);
                         }).except(function(x) {
-                            console.log("exception");
                             console.log(x);
                         });
                         $scope.modals.signedUploadClose();
