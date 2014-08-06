@@ -337,15 +337,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             {
                 $timeout.cancel(checkUploadTimeout);
             }
-            if (navState.role == "issuer") {
-                $scope.pageQueryString = function() {
-                    return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
-                };
-            } else if (navState.role == 'investor') {
-                $scope.pageQueryString = function() {
-                    return "id=" + $scope.docId + "&investor=" + $scope.invq;
-                };
-            }
         });
 
         $scope.leave = function() {
@@ -604,18 +595,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 {
                     if (doc.when_signature_provided)
                     {
-                        if (navState.role == "issuer") {
-                            $scope.pageQueryString = function() {
-                                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty + "&newlysigned=true";
-                            };
-                        } else if (navState.role == 'investor') {
-                            $scope.pageQueryString = function() {
-                                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&newlysigned=true";
-                            };
-                        }
                         $scope.doc.when_signed = doc.when_signature_provided;
                         $scope.doc.when_signature_provided = doc.when_signature_provided;
-                        $scope.initDocView();
+                        $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString() + "&newlysigned=true", $scope.pages);
                         return;
                     }
                     else if (!doc.signed_uploaded)
