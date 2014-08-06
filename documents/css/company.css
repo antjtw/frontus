@@ -71,14 +71,14 @@
 }
 #view-button2 {
 	position: absolute;
-	left: calc(99% - 145px);
+	left: calc(158% - 145px);
 	top: 116px;
 }
 #view-button3 {
 	left: 20px;
 	top: 10px;
 }
-.row-fluid .span7 {
+{
 	width: 100% !important;
 }
 .span6 > div > img {
@@ -138,11 +138,19 @@
 div.pull-right.standard-button.green {
 	margin-bottom: 20px !important;
 }
-. same-row .row-fluid .span6 {
+
+.same-row .row-fluid .span6 {
 	width: 100% !important;
 }
+.same-row .row-fluid .span7 {
+	width: 63% !important;
+}
+
+.row-fluid .span6 {
+	width: 46% !important;
+}
 .span7 svg{
-	left: calc(60% - 150px);
+	left: calc(81% - 124px);
 	position: absolute;
 }
 .span6 svg {

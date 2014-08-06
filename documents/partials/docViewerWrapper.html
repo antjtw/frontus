@@ -116,8 +116,30 @@
                             </div>
                             <div class="inforow" ng-if="doc.when_signed">
                                 <span class="activity-icon doc-sign-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'"><span>Signed by {{doc.name}}</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
-                                <span class="info" ng-if="navState.role == 'investor'"><span>Signed</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'issuer'">
+                                    <span ng-if="!doc.when_signature_provided">Signed by {{doc.name}}</span>
+                                    <span ng-if="doc.when_signature_provided">Signed offline by {{doc.name}} and uploaded</span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'">
+                                    <span ng-if="!doc.when_signature_provided">Signed</span>
+                                    <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="!doc.when_signed && navState.role == 'issuer'">
+                                <span class="activity-icon doc-upload-red-icon"></span>
+                                <span class="info">
+                                    <span>{{doc.name}} has not signed this document. Do you wish to upload a signed copy?</span><span></span>
+                                    <div class="fileInputContainer">
+                                        <input multiple type="file" class='file'
+                                            accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                            onchange="angular.element(this).scope().setSignedFiles(this);"/>
+                                        <div class="fakefile">
+                                            <div class="small-standard-button darkgray">
+                                                <button class="btn">Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
                             </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
                                 <span class="activity-icon doc-final-icon"></span>
