@@ -105,7 +105,8 @@ app.directive('contenteditable', function() {
 app.directive('documentFilters', function() {
     return {
         restrict: "A",
-        templateUrl: "/documents/partials/documentFilters.html"
+        templateUrl: "/documents/partials/documentFilters.html",
+        scope: false
     };
 });
 

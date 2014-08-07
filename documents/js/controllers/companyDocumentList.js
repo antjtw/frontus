@@ -182,6 +182,14 @@ app.controller('CompanyDocumentListController',
                 $scope.state.query = investor ;
             };
 
+            $scope.$watch('state.recipientfilter', function(current, previous) {
+                if (current) {
+                    $scope.filterInvestor(current);
+                } else {
+                    $scope.viewBy = 'document';
+                }
+            });
+
             $scope.toggleFilter = function(obj) {
                 /** @name obj#docname
                  * @type { string} */
@@ -826,7 +834,8 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.select2Picker = {
-                'placeholder': 'Filter by recipient'
+                'placeholder': 'Filter by recipient',
+                'allowClear': true
             };
 
             $scope.shareDocuments = function(docsToShare, emails, message) {

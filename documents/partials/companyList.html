@@ -6,22 +6,6 @@
     <div class="row-fluid">
         <div class="subnav-controls doclist-controls">
             <div>
-                <div class="pull-left" ng-hide="!state.hideSharebar" ng-animate="{show:'fadeShow', hide:'fadeHide'}"> <span>View By</span>
-                    <ul class="dropdown-list drop-selector">
-                        <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            {{ viewBy | viewByPrinter }}
-                        </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a ng-click="setViewBy('document')" class="button">Document</a>
-                                </li>
-                                <li>
-                                    <a ng-click="setViewBy('name')" class="button">Recipient</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
                 <div class="pull-left"> <span>Search</span>
                     <input type="text" class="search-box" ng-model="state.query">
                 </div>
