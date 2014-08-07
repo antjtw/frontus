@@ -4749,7 +4749,7 @@ the compose message page styling*/
 
 .msgButtons{
     display: inline-block;
-    margin-left: 6.5%;
+    margin-left: 75px;
     margin-top: 50px;
  /*   position: absolute;*/
 }
@@ -4804,7 +4804,7 @@ textarea.email-text {
     color: #2980B9;
     cursor: pointer;
     position: absolute;
-    margin-left: 6.5%;
+    margin-left:75px;
     padding-top: 20px;
 }
 
