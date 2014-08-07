@@ -12,6 +12,8 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             return "";
         }
     };
+    
+    $scope.modals.uploadedSignedDocs = [];
 
     $scope.myEmails = []
     // this returns everyone you have ever emailed. yay
@@ -77,7 +79,10 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.shortVersionStatus = function(version) {
         if (!version) return "";
-        if ($scope.isVoided(version)) {
+        if ($scope.modals.uploadedSignedDocs.indexOf(version.doc_id) > -1) {
+            return "Uploading . . ."
+        }
+        else if ($scope.isVoided(version)) {
             return "Voided"
         }
         else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred'){

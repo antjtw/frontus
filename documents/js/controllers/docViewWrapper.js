@@ -326,6 +326,17 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.setNextAnnotationType = function (type) {
             $scope.nextAnnotationType = type;
         };
+        
+        var checkUploadTimeout;
+        
+        $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+            void(oldUrl);
+            // don't save note data if I'm being redirected to log in
+            if (checkUploadTimeout)
+            {
+                $timeout.cancel(checkUploadTimeout);
+            }
+        });
 
         $scope.signDocument = function() {
             return $scope.doc.sign().then(
@@ -516,6 +527,100 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.goToPreparation = function() {
             $location.url('/app/documents/prepare?doc=' + $scope.doc.doc_id);
         };
+        
+        
+        var mimetypes = ["application/pdf", // .pdf
+            // microsoft office
+            "application/msword", // .doc
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+            "application/vnd.ms-powerpoint", // .ppt
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
+            // open office
+            "application/vnd.oasis.opendocument.text", // .odt
+            "application/vnd.oasis.opendocument.presentation", // .odp
+            "application/vnd.oasis.opendocument.image", // .odi
+            "image/png", // .png
+            "image/tiff", // .tiff
+            "image/jpeg", // .jpg
+            "text/plain", // .txt
+            "application/rtf" // .rtf
+        ];
+        $scope.setSignedFiles = function(element) {
+            // called from outside of angular, so $apply it
+            $scope.$apply(function() {
+                $scope.files = [];
+                $scope.fileError = "";
+                for (var i = 0; i < element.files.length; i++) {
+                    if (element.files[i].size > 20000000) {
+                        $scope.fileError = "Please choose a smaller file";
+                    } else if (mimetypes.indexOf(element.files[i].type) == -1) {
+                        $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
+                    } else {
+                        $scope.files.push(element.files[i]);
+                    }
+                }
+                if ($scope.files.length > 0) {
+                    $scope.uploadSigned($scope.files);
+                }
+            });
+        };
+        
+        $scope.checkSignedUploaded = function () {
+            SWBrijj.tblm('document.my_counterparty_library', ['when_signature_provided', 'signed_uploaded', 'signed_upload_attempted'], 'doc_id', $scope.doc.doc_id).then(function(doc) {
+                if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
+                {
+                    if (doc.when_signature_provided)
+                    {
+                        $scope.doc.when_signed = doc.when_signature_provided;
+                        $scope.doc.when_signature_provided = doc.when_signature_provided;
+                        $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString() + "&newlysigned=true", $scope.pages);
+                        $scope.uploading = false;
+                        return;
+                    }
+                    else if (!doc.signed_uploaded)
+                    {
+                        $scope.$emit("notification:fail", "Signed copy rejected. Did it have the same number of pages as the original?");
+                        $scope.uploading = false;
+                        return;
+                    }
+                }
+                checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
+            }).except(function(data) {
+                console.log(data);
+            });
+        }
+        
+        $scope.uploadSigned = function(files) {
+                var fd = new FormData();
+                if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
+                    _kmq.push(['record', 'doc uploader']);
+                    analytics.track('doc uploader');
+                }
+                for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
+                if (fd.length > 1)
+                {
+                    //throw error. Multiple docs doesn't make sense
+                    $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
+                    return;
+                }
+                var upxhr = SWBrijj.uploadSigned(fd);
+                $scope.uploading = true;
+                upxhr.then(function(x) {
+                    $scope.uploadprogress = x;
+                    
+                    SWBrijj.uploadSetType(x[0], "signed", $scope.doc.doc_id).then(function() {
+                        checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
+                        $scope.$emit("notification:success", "Uploading signed version . . .");
+                        $scope.files = [];
+                    }).except(function(x) {
+                        console.log(x);
+                    });
+                }).except(function(x) {
+                    $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                    $scope.files = [];
+                    $scope.uploading = false;
+                });
+            };
 
         $scope.getData();
     }

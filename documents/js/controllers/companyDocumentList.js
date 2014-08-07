@@ -159,11 +159,24 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
+                $scope.uploadType = null;
+                $scope.uploadDocid = null;
                 $scope.documentUploadModal = true;
             };
 
             $scope.modals.documentUploadClose = function() {
                 $scope.documentUploadModal = false;
+            };
+            
+            $scope.modals.signedUploadOpen = function(docid) {
+                $scope.files = [];
+                $scope.uploadType = 'signed';
+                $scope.uploadDocid = docid;
+                $scope.signedUploadModal = true;
+            };
+
+            $scope.modals.signedUploadClose = function() {
+                $scope.signedUploadModal = false;
             };
 
             $scope.wideopts = {
@@ -226,11 +239,43 @@ app.controller('CompanyDocumentListController',
                         }
                     }
                     if ($scope.files.length > 0) {
-                        $scope.uploadFile($scope.files);
+                        $scope.uploadFile($scope.files, $scope.uploadType, $scope.uploadDocid);
                     }
                     $scope.modals.documentUploadClose();
                 });
             };
+            
+            $scope.checkSignedUploaded = function() {
+                SWBrijj.tblm('document.my_counterparty_library', ['doc_id', 'when_signature_provided', 'signed_uploaded', 'signed_upload_attempted']).then(function(data) {
+                    angular.forEach(data, function(doc) {
+                        if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
+                        {
+                            var ind = $scope.modals.uploadedSignedDocs.indexOf(doc.doc_id);
+                            if (ind > -1)
+                            {
+                                if (doc.when_signature_provided)
+                                {
+                                    $scope.modals.uploadedSignedDocs.splice(ind, 1);
+                                    //update row TODO: find a way to refresh row without refreshing page
+                                    $route.reload();
+                                }
+                                else if (!doc.signed_uploaded)
+                                {
+                                    $scope.modals.uploadedSignedDocs.splice(ind, 1);
+                                    //notify failure
+                                    $scope.$emit("notification:fail", "Signed copy rejected. Did it have the same number of pages as the original?");
+                                }
+                            }
+                        }
+                    });
+                    if ($scope.modals.uploadedSignedDocs.length > 0)
+                    {
+                        $timeout($scope.checkSignedUploaded, 2000);
+                    }
+                }).except(function(data) {
+                    console.log(data);
+                });
+            }
 
             $scope.checkUploaded = function() {
                 SWBrijj.tblm('document.my_company_library', ['doc_id', 'pages']).then(function(data) {
@@ -291,7 +336,7 @@ app.controller('CompanyDocumentListController',
                 });
             };
 
-            $scope.uploadFile = function(files) {
+            $scope.uploadFile = function(files, type, docid) {
                 $scope.$on("upload:progress", function(evt, arg) {
                     $scope.loadProgress = 100 * (arg.loaded / arg.total);
                     $scope.showProgress = true;
@@ -302,7 +347,14 @@ app.controller('CompanyDocumentListController',
                     $rootScope.showProgress = false;
                     $rootScope.showProcessing = true;
                     $scope.modals.documentUploadClose();
-                    $scope.$emit("notification:success", "Success! We're preparing your file.");
+                    if (type == "signed")
+                    {
+                        $scope.$emit("notification:success", "Uploading signed version . . .");
+                    }
+                    else
+                    {
+                        $scope.$emit("notification:success", "Success! We're preparing your file.");
+                    }
                 });
                 $scope.$on(
                     "upload:error", function(evt, arg) {
@@ -324,32 +376,62 @@ app.controller('CompanyDocumentListController',
                     _kmq.push(['record', 'doc uploader']);
                     analytics.track('doc uploader');
                 }
-                Intercom('update', {company : {"documents":$scope.documents.length+1}});
-                for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
-                var upxhr = SWBrijj.uploadFile(fd);
+                if (type == null)
+                {
+                    Intercom('update', {company : {"documents":$scope.documents.length+1}});
+                }
+                for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
+                var upxhr;
+                if (type == "signed")
+                {
+                    if (fd.length > 1)
+                    {
+                        //throw error. Multiple docs doesn't make sense
+                        $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
+                        return;
+                    }
+                    upxhr = SWBrijj.uploadSigned(fd);
+                }
+                else
+                {
+                    upxhr = SWBrijj.uploadFile(fd);
+                }
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
-                    for (var i = 0; i < files.length; i++) {
-                        var newdocument = {
-                            uploaded_by: $rootScope.person.email,
-                            iss_annotations: null,
-                            company: $rootScope.navState.company,
-                            doc_id: x[i],
-                            template_id: null,
-                            annotations: null,
-                            docname: files[i].name,
-                            version_count: 0,
-                            complete_count: 0,
-                            archive_complete_count: 0,
-                            archive_count: 0,
-                            statusRatio: 0,
-                            uploading: true,
-                            type: "doc"
-                        };
-                        $scope.documents.push(newdocument);
+                    if (type == "signed")
+                    {
+                        SWBrijj.uploadSetType(x[0], type, docid).then(function() {
+                            $scope.modals.uploadedSignedDocs.push(docid);
+                            $timeout($scope.checkSignedUploaded, 2000);
+                        }).except(function(x) {
+                            console.log(x);
+                        });
+                        $scope.modals.signedUploadClose();
                     }
-                    $timeout($scope.checkReady, 2000);
-                    $scope.modals.documentUploadClose();
+                    else
+                    {
+                        for (var i = 0; i < files.length; i++) {
+                            var newdocument = {
+                                uploaded_by: $rootScope.person.email,
+                                iss_annotations: null,
+                                company: $rootScope.navState.company,
+                                doc_id: x[i],
+                                template_id: null,
+                                annotations: null,
+                                docname: files[i].name,
+                                version_count: 0,
+                                complete_count: 0,
+                                archive_complete_count: 0,
+                                archive_count: 0,
+                                statusRatio: 0,
+                                uploading: true,
+                                type: "doc"
+                            };
+                            $scope.documents.push(newdocument);
+                        }
+                        $timeout($scope.checkReady, 2000);
+                        $scope.modals.documentUploadClose();
+                    }
 
                 }).except(function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
