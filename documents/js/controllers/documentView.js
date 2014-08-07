@@ -2,6 +2,7 @@
 
 app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs',
     function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs) {
+        $scope.cachebuster = Math.random();
         $scope.annots = [];
         $scope.signatureprocessing = false;
 
@@ -213,7 +214,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.pageImageUrl = function() {
             if ($scope.pageQueryString && $scope.doc && $scope.doc.currentPage) {
-                return "/photo/docpg?" + $scope.pageQueryString + "&page=" + $scope.doc.currentPage;
+                return "/photo/docpg?" + $scope.pageQueryString + "&page=" + $scope.doc.currentPage + "&dontcache=" + $scope.cachebuster;
             } else {
                 return '';
             }

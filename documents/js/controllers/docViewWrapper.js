@@ -292,7 +292,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             else
             {
                 SWBrijj.procm("document.approve_processing", $scope.docId).then(function(data)
-                {;}).except(function(data)
+                {}).except(function(data)
                 {
                     console.log(data);
                 });
