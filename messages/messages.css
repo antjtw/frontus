@@ -1,3 +1,10 @@
+.compose_message {
+    padding-top: 30px;
+    width: 1100px;
+    position: absolute;
+    left: 20%;
+}
+
 .preview-message {
     text-align: left;
     display: block;
@@ -19,10 +26,7 @@
     left: 40%;
 }
 
-.compose_message {
-    padding-left: 40px;
-    padding-top: 30px;
-}
+
 
 .message_elem{
     margin-bottom: 20px;
