@@ -67,6 +67,7 @@ var captableController = function(
     // ownership.clean_company_access
     // => then
     // => $q.all([get_company_activity, user_tracker])
+    /*
     SWBrijj.tblm("ownership.clean_company_access").then(function(data) {
         Intercom('update', {company : {'captable_shares':data.length}});
         $scope.userstatuses = data;
@@ -102,6 +103,7 @@ var captableController = function(
         }).except(logError);
         $scope.userDict = userDict;
     });
+    */
     $rootScope.$on('captable:initui', initUI);
     function initUI() {
         if (!$rootScope.companyIsZombie()) {

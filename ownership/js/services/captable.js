@@ -62,6 +62,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             captable.transactions = results[1].map(parseTransaction);
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
+            generateSecuritySummaries();
 
             handleTransactions(captable.transactions);
             attachEvidence(results[4]);
@@ -108,7 +109,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function loadTransactionLog() {
         var promise = $q.defer();
-        SWBrijj.tblm('_ownership.my_company_transactions')
+        SWBrijj.tblm('_ownership.my_company_draft_transactions')
         .then(function(trans) {
             promise.resolve(trans);
         }).except(logErrorPromise);
@@ -168,6 +169,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         captable.securities.push(security);
     }
     function parseRetireSecurity(tran) {
+        var sec = securityFor(tran);
+        sec.transactions.push(tran);
     }
     function parsePurchase(tran) {
     }
@@ -176,8 +179,12 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function parseTransfer(tran) {
     }
     function parseConvert(tran) {
+        var sec = securityFor(tran);
+        sec.transactions.push(tran);
     }
     function parseSplit(tran) {
+        var sec = securityFor(tran);
+        sec.transactions.push(tran);
     }
     function parseGrant(tran) {
     }
@@ -213,6 +220,11 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
     }
     this.numUnissued = numUnissued;
+    function securityFor(obj) {
+        return captable.securities.filter(function(el) {
+            return el.name == obj.attrs.security;
+        })[0];
+    }
     function secHasUnissued(sec) {
         return numUnissued(sec);
     }
@@ -266,6 +278,14 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function sum_transactions(trans) {
         return trans.reduce(sumTransactionAmount, 0);
+    }
+    function generateSecuritySummaries() {
+        angular.forEach(captable.securities, function(sec) {
+            // totalauth should equal sum credits - sum debits
+            // from ledger entries
+            //
+            // other attrs should remain the same?
+        });
     }
     function generateCells() {
         angular.forEach(captable.investors, function(inv) {
@@ -426,7 +446,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 return el.evidence==tran.evidence;
             });
             if (tran.evidence_data.length > 0) {
-                console.log(tran);
+                console.log("evidence!", tran);
             }
         });
     }

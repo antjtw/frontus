@@ -32,15 +32,14 @@
             </span>
         </button>
     </div>
-    <div class="capTab">
+    <div class="capTab" ng-switch-when="details">
         <div class="capGuide cap-overflow global">
             <div class="belowTitle">
                 <span>{{tran.kind}}</span>
                 <span>Transaction Type</span>
             </div>
         </div>
-        <transaction-attributes data="tran"
-                                ng-switch-when="details">
+        <transaction-attributes data="tran">
     </div>
     <div class="capTab" ng-switch-when="documents">
         <div ng-if="tran.evidence_data.length==0"

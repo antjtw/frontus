@@ -145,6 +145,10 @@ own.directive('securityDetails', [function() {
         controller: ["$scope", "displayCopy",
             function($scope, displayCopy) {
                 $scope.tips = displayCopy.captabletips;
+                $scope.currentTab = 'details';
+                $scope.switchCapTab = function(tab) {
+                    $scope.currentTab = tab;
+                };
             }
         ],
     };
@@ -160,7 +164,11 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable) {
                 $scope.captable = captable;
                 $scope.tips = displayCopy.captabletips;
-                $scope.ct = captable.getCapTable();
+                $scope.currentTab = 'details';
+                $scope.switchCapTab = function(tab) {
+                    $scope.currentTab = tab;
+                };
+               // $scope.ct = captable.getCapTable();
             }
         ],
     };
@@ -177,6 +185,7 @@ own.directive('cellDetails', [function() {
                      displayCopy, captable) {
                 $scope.settings = $rootScope.settings;
                 $scope.tips = displayCopy.captabletips;
+                $scope.currentTab = 'details';
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
