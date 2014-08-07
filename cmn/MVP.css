@@ -4723,7 +4723,6 @@ the compose message page styling*/
     display: inline-block;
     margin-left: 6.5%;
     margin-top: 50px;
-    padding-left: 5px;
  /*   position: absolute;*/
 }
 
@@ -4766,6 +4765,7 @@ textarea.email-text {
     width: 130px;
     background-color: white;
     color: #2980B9;
+    font-size: 14px;
 }
 
 
