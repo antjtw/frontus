@@ -1718,6 +1718,9 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-icon.doc-void-accept-icon {
     background-position: -60px -120px;
 }
+.activity-icon.doc-upload-red-icon {
+    background-position: -180px -90px;
+}
 
 
 .activity-feed2 li.event > div:last-of-type {
