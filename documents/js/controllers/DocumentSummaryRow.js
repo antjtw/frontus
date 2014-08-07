@@ -132,7 +132,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         if (!tp || tp === 0) {
             return 'View Only';
         } else if (tp < 0) {
-            return 'Prepare for Signature';
+            return 'Prepare';
         } else if (tp > 0) {
             return 'Request Signature';
         }
