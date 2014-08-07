@@ -4640,13 +4640,16 @@ div.upgradeWarning > span {
     padding-top: 30px;
 }
 
-.message_info {
-  padding: 30px 0px;
+.message_elem{
+    margin-bottom: 40px;
 }
+
+
 /*styling the editor*/
 .message_info .ta-scroll-window{
     border: 1px solid #E3E3E3;
-    border-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .message_input .ta-scroll-window > .ta-bind {
@@ -4658,44 +4661,68 @@ div.upgradeWarning > span {
     height: auto;
     overflow: auto;
     font-size: 100%;
-    margin:20px 0;
 }
 
 .message_input .ta-root.focussed .ta-scroll-window.form-control{
     border-color: none;
     -webkit-box-shadow: none;
     border: 1px solid #E3E3E3;
-    padding: 10px;
+    padding: 0px;
 }
 
 /*style the inside of the text box*/
 .message_input .ta-scroll-window.form-control *{
     font-family: Helvetica;
+    padding: 5px;
 }
+
 
 .message_input .btn[disabled]{
     background-color: white;
     color: black;
+    border-right: 1px solid #E3E3E3;
+}
+
+.message_input .btn-group > .btn{
+    border-right: 1px solid #E3E3E3;
+    border-radius: 0px;
+}
+
+
+.message_input .btn-toolbar{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-top: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+    border-left: 1px solid #E3E3E3;
+    /*border: 1px solid #E3E3E3;*/
 }
 .message_input {
     display: inline-block;
     width: 76%;
+    position: relative;
 }
 
 .message_headline{
     display: inline-block;
-    width: 9%;
-    margin-left: 30px;
+    width: 6.5%;
+    vertical-align: top;
+    margin-top: 9px;
 }
 
 .msgsubject{
     padding-top: 4px;
     padding-left: 0px;
     padding-right: 0px;
-    width: 100%;
-    height: 31px;
+    width: calc(100% - 6px);
     border-radius: 3px;
 
+}
+
+.msgButtons{
+    display: inline-block;
+    margin-left: 6.5%;
+    margin-top: 40px;
 }
 
 
@@ -4748,9 +4775,9 @@ textarea.email-text {
     display: block;
     font-family: 'FS Elliot Web Regular', sans-serif;
     color: #2980B9;
-    padding-bottom: 10px;
     cursor: pointer;
     position: absolute;
+    margin-left: 6.5%;
 }
 
 .sidebarText span{

@@ -109,6 +109,7 @@
 .span5 > div > div > h2 {
 	margin-left: 50px;
 	margin-top: -40px;
+	width: 100%
 }
 .span5 > div > div:last-child > h2 {
 	margin-top: -12px;
@@ -135,6 +136,9 @@
 .company-page > .info-box > .body-box > div:first-child > div > div {
 	margin: 50px;
 }
+.info-box:last-of-type {
+	border-bottom: 20px solid #CAC9C9;
+}
 div.pull-right.standard-button.green {
 	margin-bottom: 20px !important;
 }
@@ -148,6 +152,9 @@ div.pull-right.standard-button.green {
 
 .row-fluid .span6 {
 	width: 46% !important;
+}
+.row-fluid .span6 h2{
+	width: 100% !important;
 }
 .span7 svg{
 	left: calc(81% - 124px);
@@ -172,6 +179,22 @@ div.pull-right.standard-button.green {
 	left: calc(50% - 116px);
 	top: 0px;
 }
+#a_home_doc_pre {
+	background-color: rgb(51,151,218);
+	color: white;
+	padding-right: 5px;
+	padding-left: 25px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	position: absolute;
+	bottom: 22px;
+}
+#a_home_doc_pre span{
+	position: relative;
+	top: 2px;
+	margin-left: 14px;
+	padding-right: 3px;
+}
 .share-ownership {
 	position: absolute;
 	right: 25px;
@@ -179,6 +202,32 @@ div.pull-right.standard-button.green {
 }
 .body-box {
 	position: relative;
+}
+.new-box h2 {
+	margin: 0px !important;
+}
+.new-box {
+	padding-left: 45px;
+	padding-right: 45px;
+}
+.new-box:first-of-type {
+	height: 210px;
+}
+.new-box:nth-of-type(2) {
+	height: 500px;
+}
+.new-box:first-of-type > div {
+	margin: 20px !important;
+}
+.new-box:first-of-type > div:first-child {
+	width: 44%;
+	float: left;
+}
+.new-box:first-of-type > div:last-child {
+	width: 32%;
+	float: left;
+	position: absolute;
+	left: calc(64% - 81px);
 }
 .span8 {
 	position: relative;

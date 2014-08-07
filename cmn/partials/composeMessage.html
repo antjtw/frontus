@@ -8,7 +8,7 @@
 
 
         <div>
-            <div class="message_info">
+            <div class="message_elem">
                 <div class="message_headline">BCC</div>
                 <div class="message_input">
                     <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter the email address of one of your contacts" style="width: 100%;">
@@ -18,7 +18,7 @@
             </div>
         <div>
 
-        <div class="message_info">
+        <div class="message_elem">
             <div class="message_headline"> Subject</div>
             <div class="message_input">
                 <input type="text" ng-model ="message.subject" class="msgsubject" style="padding-right: 0px"></input>
@@ -28,7 +28,7 @@
         <div class="message_info">
             <div class="message_headline"> Message</div>
             <div class="message_input">
-                <div text-angular ng-model="message.text"></div>
+                <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertImage', 'insertLink']]"></div>
             </div>
         </div>
 
@@ -36,7 +36,7 @@
     </div>
 
   
-    <div class="sidebarFooter">
+   
 
         <div class="preview-message" 
             ng-click= "previewModalOpen(message)"
@@ -44,16 +44,7 @@
             Preview Message 
         </div>
 
-<!--         <div class="footer-headline-left">
-            <div class = "standard-button">
-                <button class="btn" style="background-color: red;"
-                    ng-click="checkRecipients()">
-                    Check and Test
-                </button>
-            </div>
-        </div>
- -->
-        <div class="footer-headline-left">
+        <div class="msgButtons">
             <div class = "standard-button green">
                 <button class="btn"
                     ng-disabled="!readyToSend(message)  || clicked"
@@ -61,9 +52,21 @@
                     Send
                 </button>
             </div>
+            
         </div>
+
+        <div class="msgButtons">
+            <div class = "standard-button">
+                <button class="btn" style="background-color: white; color: #2980B9;"
+                    ng-click="resetMessage()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+
+
      
-    </div>   
+     
 </div>
 
 <div modal="previewModal" close="previewModalClose()" options="{dialogClass: 'modal preview-modal'}">
@@ -143,7 +146,7 @@
                                                                 {{company}} is using Sharewave to organize and share company information with you.
                                                             </div>                                           
                                                             <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:40px; margin-bottom:20px; border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
-                                                            <div  style="white-space: pre;">{{messagetext}}</div>
+                                                            <div  style="white-space: pre;" ng-bind-html="messagetext"></div>
                                                             <div>&nbsp;</div>
                                                             <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
                                                             <div>&nbsp;</div>
