@@ -625,6 +625,7 @@ app.controller('CompanyDocumentListController',
                 $scope.processing = true;
                 ShareDocs.shareDocuments().finally(function(result) {
                     $scope.processing = false;
+                    $route.reload();
                 });
             };
 
