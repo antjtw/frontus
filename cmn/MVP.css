@@ -4694,7 +4694,7 @@ the compose message page styling*/
 
 .message_headline{
     display: inline-block;
-    width: 6.5%;
+    width: 7.5%;
     vertical-align: top;
     margin-top: 9px;
 }
@@ -4710,7 +4710,7 @@ the compose message page styling*/
 
 .msgButtons{
     display: inline-block;
-    margin-left: 6.5%;
+    margin-left: 7.5%;
     margin-top: 40px;
 }
 
