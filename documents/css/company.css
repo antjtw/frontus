@@ -136,7 +136,7 @@
 .company-page > .info-box > .body-box > div:first-child > div > div {
 	margin: 50px;
 }
-.info-box:last-of-type {
+.info-box:nth-of-type(2) {
 	border-bottom: 20px solid #CAC9C9;
 }
 div.pull-right.standard-button.green {
@@ -234,22 +234,22 @@ div.pull-right.standard-button.green {
 	height: 167px;
 	border: 3px solid white;
 	width: 280px;
-	z-index: 3;
+	
 }
 iframe {
 	position: absolute;
 	width: 280px;
 	left: -14px;
 	top: 3px;
-
+}
 .new-box:first-of-type > div:last-child > img:first-of-type {
-	z-index: 1;
+	z-index: 2;
 	cursor: pointer;
 }
 
 .new-box:first-of-type > div:last-child > img:first-of-type:hover {
 	border: 3px solid rgb(26,188,150);
-	cursor: pointer;
+	
 	
 }
 .new-box:first-of-type > div:last-child > img:first-of-type {
