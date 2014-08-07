@@ -54,16 +54,17 @@
     color: rgb(141, 141, 141) !important;
 }
 .message_input .ta-scroll-window.form-control h1{
+    font-size: 2em;
     color: rgb(141, 141, 141);
 }
 
 .message_input .ta-scroll-window.form-control h2{
-    font-size: 24px;
+    font-size: 1.5em;
     color: rgb(141, 141, 141);
 }
 
 .message_input .ta-scroll-window.form-control h3 {
-    font-size: 36px;
+    font-size: 1.17em;
     color: rgb(141, 141, 141);
     font-weight: normal;
 }
@@ -160,3 +161,11 @@ the compose message page styling*/
 
 .msgButtons.left{
   margin-left: 40px;
+}
+
+
+
+
+
+
+
