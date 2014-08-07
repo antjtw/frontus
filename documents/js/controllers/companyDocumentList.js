@@ -817,12 +817,16 @@ app.controller('CompanyDocumentListController',
                     fullyLoadDocuments(function() {
                         angular.forEach($scope.documents, function(doc) {
                             if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
+                                ShareDocs.updateShareType(doc, 2);
+                                doc.preps.forEach(function(prep) {
+                                    // add the prepared users to the big list
+                                    if (ShareDocs.emails.indexOf(prep) == -1) {
+                                        ShareDocs.addEmail(prep);
+                                    }
+                                });
                                 if (doc.is_prepared) {
-                                    ShareDocs.updateShareType(doc, 2);
                                     $scope.$emit("notification:success",
                                         "Success! Document prepared for signature.");
-                                } else {
-                                    ShareDocs.updateShareType(doc, 2);
                                 }
                             }
                         });
