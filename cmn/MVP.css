@@ -4074,9 +4074,9 @@ button.icon-button:hover {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
-.select2-container {
+/*.select2-container {
     height: 30px;
-}
+}*/
 
 .select2-container .select2-choice .select2-arrow {
     background-color: #FFFFFF;
@@ -4641,11 +4641,16 @@ div.upgradeWarning > span {
 }
 
 .message_elem{
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    max-width: 1000px;
 }
 
 
 /*styling the editor*/
+.message_info{
+    max-width: 1000px;
+}
+
 .message_info .ta-scroll-window{
     border: 1px solid #E3E3E3;
     border-bottom-left-radius: 5px;
@@ -4662,9 +4667,15 @@ div.upgradeWarning > span {
 
 /*style the inside of the text box*/
 .message_input .ta-scroll-window.form-control *{
-    font-family: Helvetica;
-    padding: 5px;
+    font-family: "Helvetica Neue", Helvetica;
     max-height: 302px;
+}
+
+.message_input .ta-scroll-window.form-control blockquote p{
+    font-size: 100%;
+    font-family: "Helvetica Neue", Helvetica;
+    font-weight: normal;
+
 }
 
 .message_input .ta-scroll-window.form-control ul {
@@ -4694,7 +4705,7 @@ div.upgradeWarning > span {
 
 /*preview message class*/
 .msgText * {
-    font-family: Helvetica;
+    font-family: "Helvetica Neue", Helvetica;
 }
 
 .message_input .btn-toolbar{
@@ -4726,17 +4737,17 @@ the compose message page styling*/
     padding-left: 0px;
     padding-right: 0px;
     width: calc(100% - 6px);
-    border-radius: 3px;
+    border-radius: 5px;
 
 }
 
 .msgButtons{
     display: inline-block;
-    margin-left: 7.5%;
-    margin-top: 40px;
+    margin-left: 6.5%;
+    margin-top: 50px;
+    padding-left: 5px;
+ /*   position: absolute;*/
 }
-
-
 
 /*Sidebar CSS */
 .sidebarHeader {
@@ -4755,8 +4766,6 @@ textarea.email-text {
 }
 
 .sidebarText {
-   /* padding: 10px 0 0 0;*/
-  /*  margin: 5px 0 20px 0;*/
     display: block;
     text-align: left;
 }
@@ -4790,6 +4799,7 @@ textarea.email-text {
     cursor: pointer;
     position: absolute;
     margin-left: 6.5%;
+    padding-top: 20px;
 }
 
 .sidebarText span{
@@ -4836,14 +4846,12 @@ textarea.email-text {
 }
 /*preview modal for email*/
 .modal.preview-modal {
-/*    text-align: center;*/
-/*    overflow-y: scroll;
-    overflow-x: scroll;*/
     min-height: 400px;
     max-height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
-    min-width: 600px;
+    min-width: 700px;
+    max-width: 800px;
     left: 40%;
 }
 
