@@ -69,7 +69,7 @@
                     <ul class="dropdown-menu">
                         <li ng-show="!doc.template_id"> <a class="button" ng-click="updateShareType(doc,0);">View Only</a></li>
                         <li ng-show="doc.is_prepared || doc.preps"> <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a></li>
-                        <li ng-show="!doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a></li>
+                        <li ng-show="!doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Prepare</a></li>
                         <li ng-show="doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Re-prepare</a></li>
                     </ul>
                 </li>
@@ -87,8 +87,8 @@
                         <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.updateTitleOpen(doc)">Rename</li>
                         <li ng-show="doc.doc_id" ng-click="modals.updateTagsOpen(doc)">Edit Tags</li>
                         <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.deleteDocOpen(doc)">Delete</li>
-                        <li ng-show="!doc.is_prepared && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
-                        <li ng-show="doc.is_prepared && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
+                        <li ng-show="!doc.is_prepared && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare</li>
+                        <li ng-show="doc.is_prepared && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare</li>
                     </ul>
                 </li>
             </ul>
