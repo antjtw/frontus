@@ -157,3 +157,6 @@ the compose message page styling*/
     margin-top: 50px;
  /*   position: absolute;*/
 }
+
+.msgButtons.left{
+  margin-left: 40px;
