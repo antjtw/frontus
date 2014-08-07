@@ -579,11 +579,13 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                         $scope.doc.when_signed = doc.when_signature_provided;
                         $scope.doc.when_signature_provided = doc.when_signature_provided;
                         $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString() + "&newlysigned=true", $scope.pages);
+                        $scope.uploading = false;
                         return;
                     }
                     else if (!doc.signed_uploaded)
                     {
                         $scope.$emit("notification:fail", "Signed copy rejected. Did it have the same number of pages as the original?");
+                        $scope.uploading = false;
                         return;
                     }
                 }
@@ -607,6 +609,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     return;
                 }
                 var upxhr = SWBrijj.uploadSigned(fd);
+                $scope.uploading = true;
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
                     
@@ -620,6 +623,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 }).except(function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                     $scope.files = [];
+                    $scope.uploading = false;
                 });
             };
 
