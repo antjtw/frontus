@@ -4619,11 +4619,16 @@ div.upgradeWarning > span {
 }
 
 .message_elem{
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    max-width: 1000px;
 }
 
 
 /*styling the editor*/
+.message_info{
+    max-width: 1000px;
+}
+
 .message_info .ta-scroll-window{
     border: 1px solid #E3E3E3;
     border-bottom-left-radius: 5px;
@@ -4710,17 +4715,17 @@ the compose message page styling*/
     padding-left: 0px;
     padding-right: 0px;
     width: calc(100% - 6px);
-    border-radius: 3px;
+    border-radius: 5px;
 
 }
 
 .msgButtons{
     display: inline-block;
-    margin-left: 7.5%;
-    margin-top: 40px;
+    margin-left: 6.5%;
+    margin-top: 50px;
+    padding-left: 5px;
+ /*   position: absolute;*/
 }
-
-
 
 /*Sidebar CSS */
 .sidebarHeader {
@@ -4739,8 +4744,6 @@ textarea.email-text {
 }
 
 .sidebarText {
-   /* padding: 10px 0 0 0;*/
-  /*  margin: 5px 0 20px 0;*/
     display: block;
     text-align: left;
 }
@@ -4774,6 +4777,7 @@ textarea.email-text {
     cursor: pointer;
     position: absolute;
     margin-left: 6.5%;
+    padding-top: 20px;
 }
 
 .sidebarText span{
