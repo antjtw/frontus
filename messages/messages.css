@@ -83,6 +83,9 @@
     font-weight: bold;
 }
 
+.message_input .ta-scroll-window.form-control a {
+  color: blue !important;
+}
 .message_input .ta-scroll-window.form-control h3 {
     font-size: 1.17em;
     color: rgb(141, 141, 141);
@@ -152,6 +155,9 @@
     font-weight: bold;
 }
 
+.msgText a {
+  color: blue !important;
+}
 
 .message_input .btn-toolbar{
     margin-top: 0px;
