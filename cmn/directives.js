@@ -213,7 +213,6 @@ m.directive('groupPeople', function(){
                                          newGroupsArray.splice(toDelete, 1);
                                     };
                                 });
-                                console.log(newGroupsArray);
                             }
                             if($scope.groupName.length > 0){
                                 var checkNew = []
@@ -240,7 +239,6 @@ m.directive('groupPeople', function(){
             $scope.showUserRoles = function(){
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
                     $scope.myUserRoles = data;
-                    console.log($scope.myUserRoles);
                 });
             };
 
@@ -664,7 +662,6 @@ m.directive('composeMessage', function() {
 
             
             $scope.readyToSend = function(msg) {
-                // console.log($scope.recipients)
                 if ($scope.message.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
