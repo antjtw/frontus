@@ -4672,7 +4672,6 @@ div.upgradeWarning > span {
 /*preview message class*/
 .msgText * {
     font-family: Helvetica;
-    max-width: 300px;
 }
 
 .message_input .btn-toolbar{
@@ -4818,7 +4817,7 @@ textarea.email-text {
     max-height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
-    min-width: 600px;
+    min-width: 700px;
     max-width: 800px;
     left: 40%;
 }
