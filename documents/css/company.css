@@ -136,7 +136,7 @@
 .company-page > .info-box > .body-box > div:first-child > div > div {
 	margin: 50px;
 }
-.info-box:last-of-type {
+.info-box:nth-of-type(2) {
 	border-bottom: 20px solid #CAC9C9;
 }
 div.pull-right.standard-button.green {
