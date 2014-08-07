@@ -16,6 +16,58 @@
             <div class="span12 company-page">
                 <div class="front info-box">
 					<div class="head-box">
+						<h2>Understand Your Ownership</h2>
+					</div>
+					<div class="body-box">
+						<div ng-show="ownersummary.peoplenum == 0">
+							<div class="new-box">
+								<div>
+									<h2>Setting up your capitalization table 
+									is super simple. Just add your shareholders
+									and investments and we'll do the math for 
+									you. Share the result with anyone!
+									</h2>
+									<div>
+										<button id='a_home_doc_pre'  class="btn" ng-click="gotopage('/app/ownership/company-captable')">Get Started <span data-icon="&#xe016;"></span>
+										</button>
+									</div>
+								</div>
+						
+								<div>
+									<img src="/img/vid-pic.png" ng-click="fullScreen()">
+									<iframe width="100" height="165" src="//www.youtube.com/embed/kl0If2UmOdQ" id="vid" frameborder="0" allowfullscreen></iframe>
+								</div>
+							</div>	
+						</div>
+						<div ng-show="ownersummary && ownersummary.peoplenum != 0">
+							<div class="detail-row row-fluid">
+								<div class="span6">
+									<div>
+										<img src='/img/onboardingicons/dayone/ownership-invest.png'>
+										<h2><span>{{ownersummary.invested || 0}}</span> Invested</h2>
+									</div>
+									<div>
+										<img src='/img/onboardingicons/dayone/ownership-investors.png'>
+										<h2><span>{{ownersummary.peoplenum || 0}}</span> Investors</h2>
+									</div>
+									<div>
+										<img src='/img/onboardingicons/dayone/ownership-share.png'>
+										<h2><span>{{ownersummary.shares || 0}}</span> Invited</h2>
+									</div>
+								</div>
+								<div class="span6">
+									<d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
+									<div class="standard-button green" id="own-button">
+										<button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View Ownership</button>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="front info-box">
+					<div class="head-box">
 						<h2>Document Management</h2>
 					</div>
 					<div class="body-box">
@@ -62,57 +114,6 @@
 								<div class="span6 no-graph">
 									<div class="standard-button green" id="doc-button">
 										<button id='a_home_doc_post' class="btn" ng-click="gotopage('/app/documents/company-list')">View Documents</button>
-									</div>
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="front info-box">
-					<div class="head-box">
-						<h2>Understand Your Ownership</h2>
-					</div>
-					<div class="body-box">
-						<div ng-show="ownersummary.peoplenum == 0">
-							<div class="new-box">
-								<div>
-									<h2>Setting up your capitalization table 
-									is super simple. Just add your shareholders
-									and investments and we'll do the math for 
-									you. Share the result with anyone!
-									</h2>
-									<div>
-										<button id='a_home_doc_pre'  class="btn" ng-click="gotopage('/app/ownership/company-captable')">Get Started <span data-icon="&#xe016;"></span>
-										</button>
-									</div>
-								</div>
-						
-								<div>
-									<iframe width="260" height="165" src="//www.youtube.com/embed/C3ytru1YISg" frameborder="0" allowfullscreen></iframe>
-								</div>
-							</div>	
-						</div>
-						<div ng-show="ownersummary && ownersummary.peoplenum != 0">
-							<div class="detail-row row-fluid">
-								<div class="span6">
-									<div>
-										<img src='/img/onboardingicons/dayone/ownership-invest.png'>
-										<h2><span>{{ownersummary.invested || 0}}</span> Invested</h2>
-									</div>
-									<div>
-										<img src='/img/onboardingicons/dayone/ownership-investors.png'>
-										<h2><span>{{ownersummary.peoplenum || 0}}</span> Investors</h2>
-									</div>
-									<div>
-										<img src='/img/onboardingicons/dayone/ownership-share.png'>
-										<h2><span>{{ownersummary.shares || 0}}</span> Invited</h2>
-									</div>
-								</div>
-								<div class="span6">
-									<d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
-									<div class="standard-button green" id="own-button">
-										<button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View Ownership</button>
 									</div>
 									
 								</div>

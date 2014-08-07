@@ -4636,7 +4636,7 @@ div.upgradeWarning > span {
 /*compose message css*/
 
 .compose_message {
-    padding-left: 30px;
+    padding-left: 40px;
     padding-top: 30px;
 }
 
@@ -4652,16 +4652,6 @@ div.upgradeWarning > span {
     border-bottom-right-radius: 5px;
 }
 
-.message_input .ta-scroll-window > .ta-bind {
-    padding: 0px;
-}
-
-.ta-editor {
-    min-height: 300px;
-    height: auto;
-    overflow: auto;
-    font-size: 100%;
-}
 
 .message_input .ta-root.focussed .ta-scroll-window.form-control{
     border-color: none;
@@ -4674,8 +4664,22 @@ div.upgradeWarning > span {
 .message_input .ta-scroll-window.form-control *{
     font-family: Helvetica;
     padding: 5px;
+    max-height: 302px;
 }
 
+.message_input .ta-scroll-window.form-control ul {
+    display: block;
+    list-style-type: decimal;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+}
+
+.message_input .ta-scroll-window.form-control ul li{
+    list-style: square outside none;
+}
 
 .message_input .btn[disabled]{
     background-color: white;
@@ -4688,6 +4692,10 @@ div.upgradeWarning > span {
     border-radius: 0px;
 }
 
+/*preview message class*/
+.msgText * {
+    font-family: Helvetica;
+}
 
 .message_input .btn-toolbar{
     margin-top: 0px;
@@ -4695,8 +4703,11 @@ div.upgradeWarning > span {
     border-top: 1px solid #E3E3E3;
     border-right: 1px solid #E3E3E3;
     border-left: 1px solid #E3E3E3;
-    /*border: 1px solid #E3E3E3;*/
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
+/*
+the compose message page styling*/
 .message_input {
     display: inline-block;
     width: 76%;
@@ -4705,7 +4716,7 @@ div.upgradeWarning > span {
 
 .message_headline{
     display: inline-block;
-    width: 6.5%;
+    width: 7.5%;
     vertical-align: top;
     margin-top: 9px;
 }
@@ -4721,9 +4732,10 @@ div.upgradeWarning > span {
 
 .msgButtons{
     display: inline-block;
-    margin-left: 6.5%;
+    margin-left: 7.5%;
     margin-top: 40px;
 }
+
 
 
 /*Sidebar CSS */
