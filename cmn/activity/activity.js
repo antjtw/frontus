@@ -73,6 +73,7 @@ active.filter('icon', function() {
             else if (activity == "reminder") return "reminder";
             else if (activity == "edited") return "doc-edit";
             else if (activity == "signed") return "doc-sign";
+            else if (activity == "signed outside of Sharewave, uploaded") return "doc-upload-red";
             else if (activity == "uploaded") return "doc-upload";
             else if (activity == "transcoded") return "doc-upload";
             else if (activity == "rejected") return "doc-rejected";
@@ -132,6 +133,7 @@ active.filter('description', function() {
                 else if (activity == "reminder") return "Reminded "+person + " about " + doclink;
                 else if (activity == "edited") return doclink + " edited by "+person;
                 else if (activity == "signed") return doclinkperson + " signed by "+person;
+                else if (activity == "signed outside of Sharewave, uploaded") return "Signed copy of " + doclinkperson + " uploaded by "+person;
                 else if (activity == "uploaded") return doclink + " uploaded by "+person;
                 else if (activity == "transcoded") return doclink + " uploaded by "+person;
                 else if (activity == "received") return doclinkperson + " sent to "+person;
