@@ -186,8 +186,7 @@ div.pull-right.standard-button.green {
 	padding-left: 25px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	position: absolute;
-	bottom: 22px;
+	margin-top: 20px;
 }
 #a_home_doc_pre span{
 	position: relative;
@@ -207,8 +206,8 @@ div.pull-right.standard-button.green {
 	margin: 0px !important;
 }
 .new-box {
-	padding-left: 45px;
-	padding-right: 45px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
 .new-box:first-of-type {
 	height: 210px;
@@ -222,12 +221,33 @@ div.pull-right.standard-button.green {
 .new-box:first-of-type > div:first-child {
 	width: 44%;
 	float: left;
+	max-width: 400px;
 }
 .new-box:first-of-type > div:last-child {
-	width: 32%;
+	width: 38%;
 	float: left;
 	position: absolute;
 	left: calc(64% - 81px);
+}
+.new-box:first-of-type > div:last-child > img {
+	position: absolute;
+	left: -17px;
+	height: 167px;
+}
+.new-box:first-of-type > div:last-child > img:first-of-type {
+	z-index:2
+}
+.new-box:first-of-type > div:last-child > img:nth-of-type(2) {
+	z-index:1
+}
+.new-box:first-of-type > div:last-child > img:first-of-type:hover {
+	opacity: 0;
+}
+.new-box:first-of-type > div:last-child > img:first-of-type {
+	z-index:2
+}
+.new-box:first-of-type > div:last-child > img:nth-of-type(2) {
+	z-index:1
 }
 .span8 {
 	position: relative;
