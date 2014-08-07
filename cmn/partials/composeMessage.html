@@ -11,7 +11,7 @@
             <div class="message_elem">
                 <div class="message_headline">To</div>
                 <div class="message_input">
-                    <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter the email address of one of your contacts" style="width: 100%;">
+                    <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter the email address your contacts" style="width: 100%;">
                         <option ng-repeat="emailList in emailLists" value="{{emailList.email}}">{{emailList.email}}</option>
                     </select>
                 </div>

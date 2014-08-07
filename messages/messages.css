@@ -59,11 +59,7 @@
     font-family: "Helvetica Neue", Helvetica !important;
     color: rgb(141, 141, 141) !important;
 }
-.message_input .ta-scroll-window.form-control h1{
-    font-size: 2em;
-    color: rgb(141, 141, 141);
-    line-height: 1.231;
-}
+
 
 .ta-editor{
   max-height: 500px;
@@ -72,17 +68,26 @@
 .message_input .btn.active, .btn:active{
   box-shadow: none;
 }
+
+.message_input .ta-scroll-window.form-control h1{
+    font-size: 2em;
+    color: rgb(141, 141, 141);
+    line-height: 1.231;
+    font-weight: bold;
+}
+
 .message_input .ta-scroll-window.form-control h2{
     font-size: 1.5em;
     color: rgb(141, 141, 141);
     line-height: 1.231;
+    font-weight: bold;
 }
 
 .message_input .ta-scroll-window.form-control h3 {
     font-size: 1.17em;
     color: rgb(141, 141, 141);
-    font-weight: normal;
     line-height: 1.231;
+    font-weight: bold;
 }
 
 .message_input .ta-scroll-window.form-control blockquote p{
