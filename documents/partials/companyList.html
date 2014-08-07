@@ -140,10 +140,13 @@
                     <li ng-repeat="doc in ShareDocs.documents">
                         <a ng-if="doc.signature_flow > 0" href="/app/documents/company-view?doc={{doc.doc_id}}&investorid={{encodeURIComponent(investor)}}"
                            ng-class="{'incomplete': ShareDocs.prepCache[doc.doc_id][investor] === false}">
-                            {{doc.docname}}
+                            <span>{{doc.docname}}</span>
                             <span ng-if="ShareDocs.prepCache[doc.doc_id][investor] === true" data-icon="&#xe052;"></span>
                         </a>
-                        <a ng-if="!(doc.signature_flow > 0)">{{doc.docname }} <span data-icon="&#xe001;"></span></a>
+                        <a ng-if="!(doc.signature_flow > 0)">
+                            <span>{{doc.docname }}</span>
+                            <span data-icon="&#xe001;"></span>
+                        </a>
                     </li>
                 </ul>
             </li>

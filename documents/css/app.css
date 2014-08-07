@@ -639,9 +639,6 @@ textarea.email-text {
 .shareForm > .sharepeople-input {
     padding-bottom: 10px;
 }
-.shareForm ul.recipients ul span[data-icon] {
-    float: right;
-}
 .shareForm span[data-icon] {
     color: #C7C7C7;
 }
@@ -688,10 +685,15 @@ textarea.email-text {
 .shareForm ul.doc-list > li > a {
     cursor: pointer;
     display: inline-block;
+}
+
+.shareForm ul.doc-list > li > a > span:first-of-type {
+    cursor: pointer;
+    display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 250px;
+    width: 231px;
 }
 
 .shareForm ul.doc-list > li > a:hover {
