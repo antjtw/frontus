@@ -3,6 +3,7 @@
     width: 1100px;
     position: absolute;
     left: 20%;
+    min-height: 600px;
 }
 
 .preview-message {
@@ -68,7 +69,9 @@
   max-height: 500px;
 }
 
-
+.message_input .btn.active, .btn:active{
+  box-shadow: none;
+}
 .message_input .ta-scroll-window.form-control h2{
     font-size: 1.5em;
     color: rgb(141, 141, 141);
