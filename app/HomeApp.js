@@ -205,7 +205,7 @@ app.controller('CompanyCtrl',
             }
             
 			$scope.fullScreen = function() {
-				var elem = document.getElementById("vid");
+				/*var elem = document.getElementById("vid");
 				if (elem.requestFullscreen) {
 				  elem.requestFullscreen();
 				} else if (elem.msRequestFullscreen) {
@@ -214,7 +214,9 @@ app.controller('CompanyCtrl',
 				  elem.mozRequestFullScreen();
 				} else if (elem.webkitRequestFullscreen) {
 				  elem.webkitRequestFullscreen();
-				}
+				}*/
+				
+				document.getElementById("vid-pic").style.visibility="hidden";
 			};
             $scope.getTokenInfo = function() {
                 SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
