@@ -4646,6 +4646,9 @@ div.upgradeWarning > span {
 
 .message_input .ta-scroll-window.form-control blockquote p{
     font-size: 100%;
+    font-family: "Helvetica Neue", Helvetica;
+    font-weight: normal;
+
 }
 
 .message_input .ta-scroll-window.form-control ul {
