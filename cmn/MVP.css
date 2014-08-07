@@ -4052,9 +4052,9 @@ button.icon-button:hover {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
-.select2-container {
+/*.select2-container {
     height: 30px;
-}
+}*/
 
 .select2-container .select2-choice .select2-arrow {
     background-color: #FFFFFF;
@@ -4642,6 +4642,10 @@ div.upgradeWarning > span {
 .message_input .ta-scroll-window.form-control *{
     font-family: "Helvetica Neue", Helvetica;
     max-height: 302px;
+}
+
+.message_input .ta-scroll-window.form-control blockquote p{
+    font-size: 100%;
 }
 
 .message_input .ta-scroll-window.form-control ul {
