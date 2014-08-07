@@ -293,7 +293,7 @@ app.directive('docTransactionDetails', function() {
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
         controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
-            var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
+            var defaultSelectObj = {id: 0, text: "Prepare"};
             $scope.selectedIssue = defaultSelectObj;
             $scope.select2Options = {
                 data: [defaultSelectObj],
