@@ -4635,118 +4635,10 @@ div.upgradeWarning > span {
 
 /*compose message css*/
 
-.compose_message {
-    padding-left: 40px;
-    padding-top: 30px;
-}
-
-.message_elem{
-    margin-bottom: 20px;
-    max-width: 1000px;
-}
 
 
 /*styling the editor*/
-.message_info{
-    max-width: 1000px;
-}
 
-.message_info .ta-scroll-window{
-    border: 1px solid #E3E3E3;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-
-.message_input .ta-root.focussed .ta-scroll-window.form-control{
-    border-color: none;
-    -webkit-box-shadow: none;
-    border: 1px solid #E3E3E3;
-    padding: 0px;
-}
-
-/*style the inside of the text box*/
-.message_input .ta-scroll-window.form-control *{
-    font-family: "Helvetica Neue", Helvetica;
-    max-height: 302px;
-}
-
-.message_input .ta-scroll-window.form-control blockquote p{
-    font-size: 100%;
-    font-family: "Helvetica Neue", Helvetica;
-    font-weight: normal;
-
-}
-
-.message_input .ta-scroll-window.form-control ul {
-    display: block;
-    list-style-type: decimal;
-    -webkit-margin-before: 1em;
-    -webkit-margin-after: 1em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    -webkit-padding-start: 40px;
-}
-
-.message_input .ta-scroll-window.form-control ul li{
-    list-style: square outside none;
-}
-
-.message_input .btn[disabled]{
-    background-color: white;
-    color: black;
-    border-right: 1px solid #E3E3E3;
-}
-
-.message_input .btn-group > .btn{
-    border-right: 1px solid #E3E3E3;
-    border-radius: 0px;
-}
-
-/*preview message class*/
-.msgText * {
-    font-family: "Helvetica Neue", Helvetica;
-}
-
-.message_input .btn-toolbar{
-    margin-top: 0px;
-    margin-bottom: 0px;
-    border-top: 1px solid #E3E3E3;
-    border-right: 1px solid #E3E3E3;
-    border-left: 1px solid #E3E3E3;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-/*
-the compose message page styling*/
-.message_input {
-    display: inline-block;
-    width: 76%;
-    position: relative;
-}
-
-.message_headline{
-    display: inline-block;
-    width: 7.5%;
-    vertical-align: top;
-    margin-top: 9px;
-}
-
-.msgsubject{
-    padding-top: 4px;
-    padding-left: 0px;
-    padding-right: 0px;
-    width: calc(100% - 6px);
-    border-radius: 5px;
-
-}
-
-.msgButtons{
-    display: inline-block;
-    margin-left: 6.5%;
-    margin-top: 50px;
- /*   position: absolute;*/
-}
 
 /*Sidebar CSS */
 .sidebarHeader {
@@ -4791,16 +4683,6 @@ textarea.email-text {
 }
 
 
-.preview-message {
-    text-align: left;
-    display: block;
-    font-family: 'FS Elliot Web Regular', sans-serif;
-    color: #2980B9;
-    cursor: pointer;
-    position: absolute;
-    margin-left: 6.5%;
-    padding-top: 20px;
-}
 
 .sidebarText span{
     font-size: 12px;
@@ -4845,15 +4727,7 @@ textarea.email-text {
     padding-left: 30px;
 }
 /*preview modal for email*/
-.modal.preview-modal {
-    min-height: 400px;
-    max-height: 600px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-width: 700px;
-    max-width: 800px;
-    left: 40%;
-}
+
 
 
 .capTab {
@@ -4912,7 +4786,7 @@ textarea.email-text {
 /*    position: relative;*/
 }
 
-/*//Message sidebar*/
+/*//Message status sidebar*/
 .message-side ul.activity-feed2 {
     width: 345px;
 }

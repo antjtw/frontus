@@ -27,7 +27,7 @@
 
         <div class="message_info">
             <div class="message_headline"> Message</div>
-            <div class="message_input" style="margin-left: 5px">
+            <div class="message_input" style="width: calc(76% + 5px);">
                 <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
             </div>
         </div>
@@ -45,24 +45,24 @@
     Preview Message 
 </div>
 
-    <div class="msgButtons">
-        <div class = "standard-button green">
-            <button class="btn" style="font-size: 14px"
-                ng-disabled="!readyToSend(message)  || clicked"
-                ng-click="sendMessage(message)">
-                Send
-            </button>
-        </div>
+<div class="msgButtons">
+    <div class = "standard-button green">
+        <button class="btn" style="font-size: 14px"
+            ng-disabled="!readyToSend(message)  || clicked"
+            ng-click="sendMessage(message)">
+            Send
+        </button>
     </div>
+</div>
 
-    <div class="msgButtons left">
-        <div class = "standard-button white">
-            <button class="btn"
-                ng-click="resetMessage()">
-                Cancel
-            </button>
-        </div>
+<div class="msgButtons left">
+    <div class = "standard-button white">
+        <button class="btn"
+            ng-click="resetMessage()">
+            Cancel
+        </button>
     </div>
+</div>
 
 
 
