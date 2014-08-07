@@ -4664,12 +4664,21 @@ div.upgradeWarning > span {
 .message_input .ta-scroll-window.form-control *{
     font-family: Helvetica;
     padding: 5px;
+    max-height: 302px;
 }
 
 .message_input .ta-scroll-window.form-control ul {
-    color: green;
-    list-style: circle outside;
     display: block;
+    list-style-type: decimal;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+}
+
+.message_input .ta-scroll-window.form-control ul li{
+    list-style: square outside none;
 }
 
 .message_input .btn[disabled]{
@@ -4683,6 +4692,10 @@ div.upgradeWarning > span {
     border-radius: 0px;
 }
 
+/*preview message class*/
+.msgText * {
+    font-family: Helvetica;
+}
 
 .message_input .btn-toolbar{
     margin-top: 0px;
@@ -4703,7 +4716,7 @@ the compose message page styling*/
 
 .message_headline{
     display: inline-block;
-    width: 6.5%;
+    width: 7.5%;
     vertical-align: top;
     margin-top: 9px;
 }
@@ -4719,9 +4732,10 @@ the compose message page styling*/
 
 .msgButtons{
     display: inline-block;
-    margin-left: 6.5%;
+    margin-left: 7.5%;
     margin-top: 40px;
 }
+
 
 
 /*Sidebar CSS */
