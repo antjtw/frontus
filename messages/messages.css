@@ -117,16 +117,29 @@
 }
 
 .msgText h1 {
-    font-weight: normal !important;
+    font-size: 2em;
+    font-weight: bold;
+    -webkit-margin-before: 0.67em;
+  -webkit-margin-after: 0.67em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  font-weight: bold;
+
 }
 
 .msgText h2 {
-    font-weight: normal !important;
+    font-size: 1.5em;
+    font-weight: bold;
+
 }
 
 .msgText h3 {
-    font-weight: normal !important;
+    font-size: 1.17em;
+    color: rgb(141, 141, 141);
+    line-height: 1.231;
+    font-weight: bold;
 }
+
 
 .message_input .btn-toolbar{
     margin-top: 0px;
