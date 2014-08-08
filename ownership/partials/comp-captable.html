@@ -669,7 +669,7 @@
                     ng-repeat="sec in ct.securities
                     | orderBy:['effective_date', 'insertion_date']:true"
                     ng-click="selectSecurity(sec.name)">
-                    <span>{{sec.name}}</span>
+                    <span>{{::sec.name}}</span>
                     <span class="next-button"
                           ng-click="moveTour();">
                         Next
@@ -741,7 +741,6 @@
                     </span>
                     <editable-captable-cell
                         data="cellFor(row.name, key.name)"
-                        editable="row.editable"
                         select-cell="selectCell"
                         selected-cell="selectedCell">
                 </td>
@@ -773,18 +772,18 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{rowSum(row.name)}}">
+                           value="{{::rowSum(row.name)}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
+                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
                     class="viewName tableFields"
                     ng-click="selectInvestor(row.name);">
-                    {{row.name}}
+                    {{::row.name}}
                 </td>
                 <td ng-click="selectCell(row.name, key.name)"
                     class="tableFields"
@@ -804,16 +803,16 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec)}}">
+                           value="{{::captable.numUnissued(sec)}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec) || 0.00 | number:3}}%">
+                           value="{{::captable.securityUnissuedPercentage(sec) || 0.00 | number:3}}%">
                 </td>
                 <td class="viewName">
                     <!-- formatting: italicize, no hover highlight -->
-                    {{sec.name}} (Unissued)
+                    {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
                     ng-repeat="key in ct.securities
@@ -821,7 +820,7 @@
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
-                            {{captable.numUnissued(key)}}
+                            {{::captable.numUnissued(key)}}
                         </div>
                         <div ng-class="{editview: editMode}"
                              class="output second clickable">
@@ -886,7 +885,7 @@
         <tab ng-repeat="tab in tabs"
              active="tab.active"
              ng-if="tabvisible(tab)"
-             heading="{{tab.title}}">
+             heading="{{::tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')"
                      ng-style="viewportactivity"
                      ng-switch on="sideBar">
