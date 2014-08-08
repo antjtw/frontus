@@ -247,6 +247,7 @@ the compose message page styling*/
     -webkit-margin-after: 1em ;
     -webkit-margin-start: 40px;
     -webkit-margin-end: 40px;
+    border: none;
 } 
 
 .msgText blockquote p {
