@@ -123,14 +123,23 @@ own.directive('editableCaptableCell', [function() {
                 $scope.saveIt = function(value) {
                     //console.log(value);
                 };
-                /*
-                $scope.$watch('data.u', function(newUnits, oldUnits) {
-                    // TODO update a transaction
-                });
-                $scope.$watch('data.a', function(newUnits, oldUnits) {
-                    // TODO update a transaction
-                });
-                */
+                function updateAttr(key, val) {
+                    if ($scope.data.transactions.length == 1) {
+                        $scope.data.transactions[0].attrs[key] = val;
+                        // TODO then save transaction, if failed,
+                        // revert cell
+                    } else {
+                        // pop the user over to the proper cell
+                        // in the proper transaction?
+                        alert('so many transactions what do i do?!?');
+                    }
+                }
+                $scope.updateUnits = function() {
+                    updateAttr('units', $scope.data.u);
+                };
+                $scope.updateAmount = function() {
+                    updateAttr('amount', $scope.data.a);
+                };
             }
         ],
     };
@@ -149,6 +158,13 @@ own.directive('securityDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+                $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                    } else if (ev.original !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
+                    }
+                };
             }
         ],
     };
@@ -164,11 +180,27 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable) {
                 $scope.captable = captable;
                 $scope.tips = displayCopy.captabletips;
+                $scope.displayAttr = captable.displayAttr;
                 $scope.currentTab = 'details';
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
-               // $scope.ct = captable.getCapTable();
+                $scope.ct = captable.getCapTable();
+                $scope.addTransaction = function() {
+                    captable.addTran(null, $scope.sec.name, 'split');
+                };
+                $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $scope.viewme = ['investor', ev.doc_id];
+                    } else if (ev.original !== null) {
+                        $scope.viewme = ['issuer', ev.original];
+                    }
+                };
+                $scope.editEvidence = function(obj) {
+                    $scope.ct.evidence_object = obj;
+                    $scope.windowToggle = (obj ? true : false);
+                    $scope.$emit('windowToggle', $scope.windowToggle);
+                };
             }
         ],
     };

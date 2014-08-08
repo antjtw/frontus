@@ -170,7 +170,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function parseRetireSecurity(tran) {
         var sec = securityFor(tran);
-        sec.transactions.push(tran);
+        if (sec && sec.transactions) sec.transactions.push(tran);
     }
     function parsePurchase(tran) {
     }
@@ -180,11 +180,11 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function parseConvert(tran) {
         var sec = securityFor(tran);
-        sec.transactions.push(tran);
+        if (sec && sec.transactions) sec.transactions.push(tran);
     }
     function parseSplit(tran) {
         var sec = securityFor(tran);
-        sec.transactions.push(tran);
+        if (sec && sec.transactions) sec.transactions.push(tran);
     }
     function parseGrant(tran) {
     }
@@ -281,6 +281,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function generateSecuritySummaries() {
         angular.forEach(captable.securities, function(sec) {
+            if (sec.transactions.length > 1) {
+                // recalc various attributes
+            }
             // totalauth should equal sum credits - sum debits
             // from ledger entries
             //
@@ -533,6 +536,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }).except(function(err) {
             console.log(err);
         });
+    };
+    this.addTransaction = function(inv, sec, kind) {
+        console.log(inv, sec, kind);
     };
     /*
     function massageTransactionValues(tran) {

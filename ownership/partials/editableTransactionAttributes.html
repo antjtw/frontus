@@ -8,13 +8,11 @@
         <!--ng-change="saveIt(data)"-->
         <input ng-if="useTextField(key)"
                id="date{{data.attrs.$$hashKey}}"
-               ui-event="{keydown: 'saveIt(data)',
-                          blur: 'saveIt(data)'}"
+               ui-event="{blur: 'saveIt(data)'}"
                type="text"
                ng-model="data.attrs[key]">
         <input ng-if="useDatePicker(key)"
-               ui-event="{keydown: 'saveIt(data)',
-                          blur: 'saveIt(data)'}"
+               ui-event="{blur: 'saveIt(data)'}"
                type="text"
                bs-datepicker>
         <ul ng-if="useDropdown(key)">

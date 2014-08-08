@@ -16,6 +16,7 @@
                ui-event="{focus: 'selectCell(data.investor, data.security)',
                            blur: 'saveIt(data.u)'}"
                ng-model='data.u'
+               ng-change='updateUnits()'
                onpaste="return false"
                ng-paste="numberPaste($event, row, data.security, 'u');"
                onkeydown="testForEnter();">
@@ -29,6 +30,7 @@
                            blur: 'saveIt(data.a)'}"
                data-currency
                ng-model='data.a'
+               ng-change='updateAmount()'
                onpaste="return false"
                ng-paste="numberPaste($event, row, data.security, 'a');"
                onkeydown="testForEnter();">

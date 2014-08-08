@@ -283,3 +283,11 @@ ownership.filter('sortAttributeTypes', function() {
         return res === -1 ? orderedAttributes.length+1 : res;
     };
 });
+ownership.filter('describeTran', function() {
+    return function(tran) {
+        /* TODO replace 'Transaction' accordion headers with something
+         * that actually describes the transaction
+         *
+         */
+    };
+});
