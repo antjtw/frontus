@@ -7,6 +7,8 @@ app.controller('DocumentPrepareController',
         $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
 
         $scope.newInvestor = "";
+        $scope.state = {};
+        $scope.state.bulkPrep = false;
 
         $scope.investors = Investor.investors;
         function filterInvestors(investorList, docPreparedFor) {
@@ -50,6 +52,8 @@ app.controller('DocumentPrepareController',
                 $scope.doc.updatePreparedFor(investor_data.investor, investor_data.display.id);
             }
         };
+
+        $scope.annots = Annotations.getDocAnnotations($scope.doc);
 
         $scope.encodeURIComponent = encodeURIComponent;
     }]

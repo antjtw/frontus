@@ -2438,8 +2438,37 @@ div.profile-link > span:first-of-type {
 
 .docPrepRow > span {
     display: inline-block;
-    width: 49%;
     box-sizing: border-box;
+}
+
+/* 2 columns */
+.docPrepRow > span:first-child:nth-last-child(2),
+.docPrepRow > span:first-child:nth-last-child(2) ~ span {
+    width: calc((100% - 4px) / 2);
+}
+
+/* 3 columns */
+.docPrepRow > span:first-child:nth-last-child(3),
+.docPrepRow > span:first-child:nth-last-child(3) ~ span {
+    width: calc((100% - 4px) / 3);
+}
+
+/* 4 columns */
+.docPrepRow > span:first-child:nth-last-child(4),
+.docPrepRow > span:first-child:nth-last-child(4) ~ span {
+    width: calc((100% - 4px) / 4);
+}
+
+/* 5 columns */
+.docPrepRow > span:first-child:nth-last-child(5),
+.docPrepRow > span:first-child:nth-last-child(5) ~ span {
+    width: calc((100% - 4px) / 5);
+}
+
+/* 6 columns */
+.docPrepRow > span:first-child:nth-last-child(6),
+.docPrepRow > span:first-child:nth-last-child(6) ~ span {
+    width: calc((100% - 4px) / 6);
 }
 
 .docPrepRow a {
