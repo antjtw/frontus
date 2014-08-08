@@ -14,7 +14,7 @@
     color: #2980B9;
     cursor: pointer;
     position: absolute;
-    margin-left: 80px;
+    margin-left: 90px;
     padding-top: 20px;
 }
 
@@ -44,14 +44,13 @@
     border: 1px solid #E3E3E3;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    height: 320px;
+
 
 }
 
 
 
 .message_input .ta-root.focussed .ta-scroll-window.form-control{
-    border-color: none;
     -webkit-box-shadow: none;
     border: 1px solid #E3E3E3;
     padding: 0px;
@@ -199,8 +198,9 @@ the compose message page styling*/
 
 .msgButtons{
     display: inline-block;
-    margin-left: 80px;
+    margin-left: 90px;
     margin-top: 50px;
+    margin-bottom: 40px;
 }
 
 .msgButtons.left{
