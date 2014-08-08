@@ -491,8 +491,4 @@ app.controller('invCaptableController',
     });
 
 
-<<<<<<< HEAD:ownership/js/controllers/inv_captable.js
-};
-=======
 }]);
->>>>>>> origin/master:ownership/controllers/inv_captable.js

@@ -1,6 +1,9 @@
-var captableController = function(
-        $scope, $rootScope, $location, $parse, $filter, SWBrijj,
-        calculate, switchval, navState, captable, displayCopy, History)
+app.controller('captableController',
+        ["$scope", "$rootScope", "$location", "$parse", "$filter",
+         "SWBrijj", "calculate", "switchval", "navState", "captable",
+         "displayCopy", "History",
+function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
+         calculate, switchval, navState, captable, displayCopy, History)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -1287,7 +1290,7 @@ var captableController = function(
         */
     };
 
-};
+}]);
 
 // IE fix to remove enter to submit form
 function testForEnter()

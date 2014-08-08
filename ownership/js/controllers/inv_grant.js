@@ -288,8 +288,4 @@ app.controller('invGrantController',
             });
         }
     };
-<<<<<<< HEAD:ownership/js/controllers/inv_grant.js
-};
-=======
 }]);
->>>>>>> origin/master:ownership/controllers/inv_grant.js

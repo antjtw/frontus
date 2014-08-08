@@ -63,13 +63,6 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'grantController',
             templateUrl: '/ownership/partials/comp-grant.html'
         }).
-<<<<<<< HEAD
-        when('/app/ownership/company-status', {
-            controller: 'statusController',
-            templateUrl: '/ownership/partials/comp-status.html'
-        }).
-=======
->>>>>>> origin/master
         when('/app/ownership/investor-captable', {
             controller: 'invCaptableController',
             templateUrl: '/ownership/partials/inv-captable.html'
