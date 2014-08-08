@@ -631,13 +631,16 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .tabbable .tab-content {
     padding-bottom: 0;
+  
 }
 .tabBorder .tabbable .tab-content {
     border-right: 1px solid #C6C6C6;
+    
 }
 .tabbable .info-box {
     margin-bottom: 0;
     border-top: none;
+    border: 0px
 }
 
 .nav-tabs > li > a {
@@ -1330,8 +1333,9 @@ ul.grant-list-view li:first-of-type {
 }
 
 .info-box {
-   border: 1px solid #E2E2E2;
-   margin-bottom: 20px;
+   border: 20px solid #CAC9C9;
+   margin-bottom: 0px;
+   border-bottom: 0px;
 }
 
 .body-box {
@@ -1352,7 +1356,7 @@ ul.grant-list-view li:first-of-type {
 
 .info-box > .body-box {
     padding: 0 0 0 0;
-    margin: 0 0 0 20px;
+    margin: 0 0 0 0px;
 }
 
 a.oldschool-link  {
@@ -1735,6 +1739,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 
 .transferModal .share-modal-main .sharepeople-input .select2-container {
     width: 677px;
+    height: 100%;
 }
 
 .tourModal {

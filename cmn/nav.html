@@ -144,7 +144,7 @@
         </li>
         <li ng-show="navState.reasons.rol" ng-click="toggleSubmenu('modeling')" ng-class="{activepage: (navhover && submenu == 'modeling') || (navState.path.indexOf('/modeling/round') != -1)  || (navState.path.indexOf('/modeling/convertible-notes') != -1)}"><span class="nav-icon modeling-icon"></span>Modeling
         </li>
-        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/documents/company-list'); navhover=false" ng-class="{activepage: navState.path.indexOf('/documents/company-list') != -1 && !navhover}"><span class="nav-icon documents-icon"></span>Documents
+        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/documents/company-list'); navhover=false" ng-class="{activepage: navState.path.indexOf('/documents/') != -1 && !navhover}"><span class="nav-icon documents-icon"></span>Documents
         </li>
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/people'); navhover=false" ng-class="{activepage: (navState.path.indexOf('/company/profile/people') != -1 || navState.path.indexOf('/company/profile/view') != -1 || navState.path.indexOf('/account/profile') != -1) && !navhover}"><span class="nav-icon people-icon"></span>People
         </li>

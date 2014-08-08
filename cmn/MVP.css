@@ -1605,11 +1605,17 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
+
 }
+.activity-feed2 > div > li:first-child {
+	margin-top: 40px;
+}	
 
 .activity-feed2 li.event {
     min-height: 50px;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C7C7C7;
+    width: 305px;
+    margin-left: 20px;
 }
 
 .activity-feed2 a {
@@ -1622,7 +1628,20 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
+    
 }
+
+.activity-feed2 li.event.roles > div:first-of-type{
+    text-align: left;
+}
+
+.activity-feed2 li.event.roles > div:first-of-type{
+    text-align: left;
+    padding-left: 20px;
+}
+
+
+    
 
 .activity-icon {
     width: 30px;
@@ -1675,6 +1694,14 @@ ul.spaced-list > li:nth-child(odd) {
     background-position: 0 -30px;
 }
 
+.activity-icon.zoom-icon {
+    background-position: -60px -30px;
+}
+
+.activity-icon.people-icon {
+    background-position: -150px -30px;
+}
+
 .activity-icon.page-icon {
     background-position: -210px -30px;
 }
@@ -1701,6 +1728,9 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-icon.doc-void-accept-icon {
     background-position: -60px -120px;
+}
+.activity-icon.doc-upload-red-icon {
+    background-position: -180px -90px;
 }
 
 
@@ -2056,7 +2086,7 @@ li.no-activity {
 }
 
 .link{
-   cursor: pointer; 
+   cursor: pointer;
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
@@ -2327,6 +2357,7 @@ a.oldschool-link  {
     -ms-animation: leftTabSlideIn 0.25s linear;
     -o-animation: leftTabSlideIn 0.25s linear;
     animation: leftTabSlideIn 0.25s linear;
+    position: relative;
 }
 .leftTabWindow.showRightTab {
     margin-left: calc(-100% + 350px);
@@ -3978,11 +4009,11 @@ button.icon-button:hover {
 }
 
 .select2-results .select2-highlighted {
-    background: #1ABC96;
+    background: #E3E3E3;
 }
 
 .select2-results .select2-highlighted .select2-result-label {
-    color: #fff;
+    color: #666666;
 }
 
 .select2-drop {
@@ -4764,6 +4795,7 @@ textarea.email-text {
 
 .secondbar {
     right: -350px;
+/*    position: relative;*/
 }
 
 /*//Message sidebar*/
@@ -4795,6 +4827,8 @@ textarea.email-text {
 
 .messages .activity-feed2 span.msgarrow{
     vertical-align: -9%;
+    cursor: pointer;
+    padding-right: 10px;
 }
 
 .messages .activity-feed2 li.event:first-of-type {
@@ -4810,7 +4844,7 @@ textarea.email-text {
     padding-top: 12px;
 }
 
-.span4.capright.sidecontent{ 
+.span4.capright.sidecontent{
     padding-right: 0;
 }
 
@@ -4826,7 +4860,7 @@ textarea.email-text {
 
 .span4.capright.side{
     padding-right: 0px;
-} 
+}
 
 .scrollable-docs {
     max-height: 500px;
@@ -4846,14 +4880,78 @@ textarea.email-text {
 .recipients.details{
     font-size: 12px;
     padding-left: 1.5em;
-    padding-bottom: 1em; 
+    padding-bottom: 1em;
 }
-
-
 
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
-    cursor: pointer; 
+    cursor: pointer;
+}
+
+/*Filter sidebar*/
+
+.messages .activity-feed2 li.event.roles{
+    margin-right: 0px;
+}
+.tinycol{
+    display: inline-block;
+    width: 40%;
+    padding-left: 20px;
+    margin-left: 10px;
+}
+
+.tinycol.left{
+    text-align: right;
+    padding-left: 10px;
+}
+
+.group_button{
+    line-height: 30px;
+}
+
+.instructions{
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.check-box-button.group > span.check_group{
+    margin-right: 20px;
+
+}
+.select_role{
+    cursor: pointer;
+}
+.select_role.picked{
+    color: #666;
+}
+
+.select_role:hover {
+    color: #666;
+    cursor: pointer;
+}
+
+.noGroups{
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px dashed #C7C7C7; 
+    width: 200px;
+    margin-left: 20px;
+}
+
+.noGroups span{
+    color: #3498DB;
+    cursor: pointer;
+}
+
+.select_role.all_people{
+    color: #1E2D3D;
 }
 
 
+.noGroups span:last-of-type{
+    position: relative;
+    top: 3px;
+} 

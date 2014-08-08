@@ -1,3 +1,5 @@
+'use strict';
+
 var service = angular.module('commonServices', ['brijj']);
 
 service.filter('caplength', function () {
@@ -191,10 +193,41 @@ service.factory('myPayments', function($q, payments) {
 
 service.service('User', ['SWBrijj', function(SWBrijj) {
     this.signaturePresent = false;
-    u = this; // save "this" context for procm callback
+    var u = this; // save "this" context for procm callback
     SWBrijj.procm('account.have_signature').then(function(sig) {
         u.signaturePresent = sig[0].have_signature;
     });
+}]);
+
+service.service('Investor', ['SWBrijj', function(SWBrijj) {
+    this.investors = [];
+    this.names = {};
+    this.displays = {};
+    var inv_service = this;
+    SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].name) {
+                inv_service.names[data[i].email] = data[i].name;
+                inv_service.getDisplay(data[i].email).text = inv_service.getDisplayText(data[i].email); // overwrite old value if exists
+            }
+            inv_service.investors.push(inv_service.getDisplay(data[i].email));
+        }
+    });
+
+    this.getDisplayText = function(identifier) {
+        if (this.names[identifier]) {
+            return this.names[identifier] + " (" + identifier + ")";
+        } else {
+            return identifier;
+        }
+    };
+
+    this.getDisplay = function(identifier) {
+        if (!this.displays[identifier]) {
+            this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier)};
+        }
+        return this.displays[identifier];
+    };
 }]);
 
 // service.service('Messages', ['SWBrijj', function(SWBrijj) {

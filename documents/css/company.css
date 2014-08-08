@@ -1,0 +1,360 @@
+.summary-bar {
+	padding-left: 30px;
+	margin-top: 80px;
+	
+}
+.summary-bar > div > div:last-child {
+	padding-left: 35px;
+	padding-bottom: 2px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+	border-bottom: 2px solid;
+	border-color: #CAC9C9;
+	width: 250px;
+	font-size: 12px;
+}
+.summary-bar > div > div > span:first-child {
+	position: absolute;
+	bottom: 16px;
+	color: black;
+	font-size: 15px;
+	left: 35px;
+	top: 14px;
+}
+.belowTitle {
+	position: relative;
+}
+
+#first-item{
+	border-top: 2px solid;
+	border-color: #CAC9C9;
+	width: 285px;
+	padding-top: 10px;
+}
+.tabbable > ul > li {
+	border-right: 1px solid;
+	border-color: #CAC9C9;
+}
+.tab-content > div > div > span {
+	margin-left: 35px;
+	position: relative;
+	top: 10px;
+	color: black;
+		
+}
+.tab-content > div > div > span > a {
+	color: black;
+	margin-left: 5px;
+	position: relative;
+	top: -2px;
+}
+
+.address-area {
+	margin: 10px;
+	margin-left: 80px;
+}
+.same-row .span6 > div:first-child {
+	margin-top: -10px;
+}
+.same-row .view-button {
+	margin: 5px !important;
+	position: relative;
+	top: 190px;
+	left: calc(50% - 150px);
+}
+.same-row .body-box {
+	height: 250px;
+}
+#view-button1 {
+	left: calc(100% - 100px);
+	top: 195px;
+}
+#view-button2 {
+	position: absolute;
+	left: calc(158% - 145px);
+	top: 116px;
+}
+#view-button3 {
+	left: 20px;
+	top: 10px;
+}
+{
+	width: 100% !important;
+}
+.span6 > div > img {
+	margin-bottom: -15px;
+}
+.span6 > div {
+	margin: 30px;
+	width: 200px;
+}
+.span6 > div > h2 {
+	margin-left: 50px;
+	margin-top: -20px;
+	
+}
+.span6 > div > h2 > span {
+	font-size: 20px;
+	margin: 3px;
+}
+
+.span5 > div > img {
+	margin-bottom: -15px;
+}
+.span5 > div {
+	margin: 30px;
+	width: 200px;
+	margin-top: -25px;
+}
+.span5 > div > div > h2 {
+	margin-left: 50px;
+	margin-top: -40px;
+	width: 100%
+}
+.span5 > div > div:last-child > h2 {
+	margin-top: -12px;
+}
+.span5 > div > div > h2 > span {
+	font-size: 20px;
+	margin: 6px;
+}
+.same-row .span5 {
+	margin: 30px !important;
+	margin-left: -50px !important;
+}
+#doc-button {
+	margin-top: 100px;
+}
+#own-button {
+	margin-left: 23px;
+}
+.same-row .body-box:last-child > div:first-child > div > div:last-child {
+	position: absolute;
+	float: left;
+	margin: 50px;
+}
+.company-page > .info-box > .body-box > div:first-child > div > div {
+	margin: 50px;
+}
+.info-box:nth-of-type(2) {
+	border-bottom: 20px solid #CAC9C9;
+}
+div.pull-right.standard-button.green {
+	margin-bottom: 20px !important;
+}
+.same-row .row-fluid .span6 {
+	width: 100% !important;
+}
+.same-row .row-fluid .span7 {
+	width: 63% !important;
+}
+
+.row-fluid .span6 {
+	width: 46% !important;
+}
+.row-fluid .span6 h2{
+	width: 100% !important;
+}
+.span7 svg{
+	left: calc(81% - 124px);
+	position: absolute;
+}
+.span6 svg {
+	margin-top: 20px;
+	margin-bottom: -20px;
+}
+
+.same-row .body-box > div:first-child > div > div {
+	top: 30px;
+}
+.same-row .body-box > div > div {
+	padding-top: 30px;
+}
+
+.add-investments {
+	position: absolute;
+	left: calc(50% - 116px);
+	top: 0px;
+}
+#a_home_doc_pre {
+	background-color: rgb(51,151,218);
+	color: white;
+	padding-right: 5px;
+	padding-left: 25px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 20px;
+	font-family: 'FS Elliot Web Light', sans-serif;
+}
+#a_home_doc_pre span{
+	position: relative;
+	top: 2px;
+	margin-left: 14px;
+	padding-right: 3px;
+	
+}
+.share-ownership {
+	position: absolute;
+	right: 25px;
+	top: 0px;
+}
+.body-box {
+	position: relative;
+}
+.new-box h2 {
+	margin: 0px !important;
+}
+.new-box {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.new-box:first-of-type {
+	height: 210px;
+}
+.new-box:nth-of-type(2) {
+	height: 500px;
+}
+.new-box:first-of-type > div {
+	margin: 20px !important;
+}
+.new-box:first-of-type > div:first-child {
+	width: 44%;
+	float: left;
+	max-width: 400px;
+}
+.new-box:first-of-type > div:last-child {
+	width: 44%;
+	float: left;
+	position: absolute;
+	left: calc(64% - 81px);
+}
+.new-box:first-of-type > div:last-child > img {
+	position: absolute;
+	left: -17px;
+	height: 167px;
+	border: 3px solid white;
+	width: 280px;
+	
+}
+iframe {
+	position: absolute;
+	width: 280px;
+	left: -14px;
+	top: 3px;
+}
+.new-box:first-of-type > div:last-child > img:first-of-type {
+	z-index: 2;
+	cursor: pointer;
+}
+
+.new-box:first-of-type > div:last-child > img:first-of-type:hover {
+	border: 3px solid rgb(26,188,150);
+	
+	
+}
+.new-box:first-of-type > div:last-child > img:first-of-type {
+	z-index:2
+}
+.new-box:first-of-type > div:last-child > img:nth-of-type(2) {
+	z-index:1
+}
+.span8 {
+	position: relative;
+}
+.span8 .span12 {
+	position: absolute;
+	right: 0px;
+}
+.span12 > div:last-child > div:last-child > div > div > div > img {
+	margin-left: 5px;
+} 
+.arrow1 {
+	position: absolute;
+	left: calc(25% + 37px);
+	top: 90px;
+}
+.arrow2 {
+	position: absolute;
+	left: calc(75% - 74px);
+	top: 90px;
+}
+.start-now {
+	position: absolute !important;
+	left: calc(50% - 75px);
+	top: 250px;
+}
+.same-row .info-box {
+	width: calc(50% - 30px);
+	float: left;
+}
+.same-row div:first-child > .info-box {
+	border-right: 15px;
+	margin-left: 0px;
+}
+.same-row  div:last-child > .info-box {
+	border-right: 0px;
+	width: calc(100% - 40px);
+	height: 350px;
+}
+d3vestedbar > svg {
+	height: 270px;
+	margin-left: 10px;
+}
+.span3 {
+	left: calc(50% + 100px);
+}
+
+.maincontent {
+	background-color: #CAC9C9;
+}
+.span12 .info-box {
+ 	background-color: white;
+}
+h1 {
+font-size: 17px;
+}
+.tabbable .tab-content {
+
+	background-color: #F1F1F1;
+}
+#tooltip {
+    position: absolute;
+    text-align: center;
+    width: 100px;
+    height: 40px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background-color: #1D2C3C;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    margin-top: 30px;
+}
+
+#tooltip.hidden {
+    display: none;
+}
+
+#tooltip p {
+    margin: 0;
+    color: #C6C6C6;
+}
+.yticks {
+    stroke: #e3e3e3;
+    stroke-width: 1;
+    opacity: 1;
+}
+
+.axis path {
+    fill: none;
+    stroke: #e3e3e3;
+    shape-rendering: crispEdges;
+}
+
+.x.axis > .tick:nth-child(even) > text {
+    display: none;
+}
+
+.y.axis path, .yticks path {
+    display: none;
+}
