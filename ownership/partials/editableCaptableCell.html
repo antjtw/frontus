@@ -9,7 +9,6 @@
 -->
         <input ng-if="!isDebt(data);"
                class="captablepair first-box"
-               maxlength="18"
                placeholder="{{captable.cellSecurityType(key)
                               | securityUnitLabel}}"
                ui-event="{focus: 'selectCell(data.investor, data.security)',
@@ -23,7 +22,6 @@
                class="captablepair default-pointer first-box"
                disabled>
         <input class="captablepair last-box"
-               maxlength="18"
                placeholder="paid"
                ui-event="{focus: 'selectCell(data.investor, data.security)',
                            blur: 'saveIt(data.a)'}"

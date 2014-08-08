@@ -44,20 +44,24 @@
             <div class="capGuide global">
                 <div class="rightTitle double">
                     <span>Transaction Type</span>
+                    <span class="locked-security">{{tran.kind}}</span>
+                    <!--
                     <ul>
                         <li class="dropdown standard">
-                        <a class="dropdown-toggle">
-                            {{tran.kind}}
-                            <span class="invisible-drop">'</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li ng-repeat="i in transaction_types(tran)">
-                                <a ng-click="setIt(tran, 'kind', i)">
-                                    {{i}}
-                                </a>
-                            </li>
-                        </ul>
+                            <a class="dropdown-toggle">
+                                {{tran.kind}}
+                                <span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="i in transaction_types(tran)">
+                                    <a ng-click="setIt(tran, 'kind', i)">
+                                        {{i}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
+                    -->
                 </div>
                 <div class="rightTitle security-type">
                     <span>Investor</span>

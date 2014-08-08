@@ -311,14 +311,17 @@ own.directive('editableTransactionAttributes', [function() {
             function($scope, $filter, captable, attributes) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
-                $scope.keys = function() {
-                    if (!$scope.data.attrs.security_type) return null;
-                    return Object.keys(attrs[$scope.data.attrs.security_type][$scope.data.kind])
-                        .sort(function(x1, x2) {
-                            return $filter('sortAttributeTypes')(x1) -
-                            $filter('sortAttributeTypes')(x2);
-                    });
-                };
+                function filterSortKeys(attrs) {
+                    if (!attrs.security) return null;
+                    var filtered = $filter('attrsForDisplay')(attrs);
+                    var sorted = Object.keys(filtered)
+                            .sort(function(x1, x2) {
+                                return $filter('sortAttributeTypes')(x1)
+                                     - $filter('sortAttributeTypes')(x2);
+                            });
+                    return sorted;
+                }
+                $scope.keys = filterSortKeys($scope.data.attrs);
                 function key_display_info(key) {
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};

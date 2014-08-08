@@ -569,6 +569,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     function totalOwnershipUnits() {
+        // FIXME ledger entries, not cells
         return captable.cells.reduce(sumCellUnits, 0);
     }
     this.totalOwnershipUnits = totalOwnershipUnits;

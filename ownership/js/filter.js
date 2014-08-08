@@ -213,9 +213,10 @@ ownership.filter('formatAmount', function() {
     };
 });
 
-ownership.filter('transactionAttributesForDisplay', function() {
+ownership.filter('attrsForDisplay', function() {
     return function(attr) {
-        var hide_attrs = ["physical", "security", "security_type"];
+        var hide_attrs = ["kind", "physical",
+                          "security", "security_type"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1) {
