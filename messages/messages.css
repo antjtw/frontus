@@ -48,9 +48,7 @@
 
 }
 
-.message_input{
-    width: 100%;
-}
+
 
 .message_input .ta-root.focussed .ta-scroll-window.form-control{
     border-color: none;
@@ -135,8 +133,22 @@
 }
 
 .message_input .ta-scroll-window.form-control ul li{
-    list-style: square outside none;
+    list-style: disc outside none;
 }
+.message_input .ta-scroll-window.form-control ul ul li{
+    list-style-type: circle;
+  
+}
+
+.message_input .ta-scroll-window.form-control ul ul ul li{
+    list-style-type: square;
+}
+
+.message_input .ta-scroll-window.form-control ul ul {
+    -webkit-margin-before: 0px !important;
+    -webkit-margin-after: 0px !important;  
+}
+
 
 .message_input .btn[disabled]{
     background-color: white;
@@ -252,7 +264,25 @@ the compose message page styling*/
 }
 
 .msgText ul li{
-    list-style: square outside none;
+    list-style: disc outside none;
+}
+
+.msgText ul ul li{
+    list-style-type: circle;
+}
+
+.msgText ul ul ul li{
+    list-style-type: square;
+}
+
+.msgText ul ul ul {
+    -webkit-margin-before: 0px !important;
+    -webkit-margin-after: 0px !important;   
+}
+
+.msgText ul ul {
+    -webkit-margin-before: 0px !important;
+    -webkit-margin-after: 0px !important;  
 }
 
 
