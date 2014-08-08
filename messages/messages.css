@@ -48,6 +48,9 @@
 
 }
 
+.message_input{
+    width: 100%;
+}
 
 .message_input .ta-root.focussed .ta-scroll-window.form-control{
     border-color: none;
@@ -84,6 +87,7 @@
     line-height: 1.231;
     font-weight: bold;
 }
+
 
 .message_input .ta-scroll-window.form-control a {
   color: blue !important;
@@ -146,6 +150,51 @@
 }
 
 /*preview message class*/
+
+
+.message_input .btn-toolbar{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-top: 1px solid #E3E3E3;
+    border-right: 1px solid #E3E3E3;
+    border-left: 1px solid #E3E3E3;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+/*
+the compose message page styling*/
+.message_input {
+    display: inline-block;
+    width: 76%;
+    position: relative;
+}
+
+.message_headline{
+    display: inline-block;
+    width: 7.5%;
+    vertical-align: top;
+    margin-top: 9px;
+}
+
+.msgsubject{
+    padding-top: 4px;
+    padding-left: 0px;
+    padding-right: 0px;
+    border-radius: 5px;
+
+}
+
+.msgButtons{
+    display: inline-block;
+    margin-left: 80px;
+    margin-top: 50px;
+}
+
+.msgButtons.left{
+  margin-left: 40px;
+}
+
+/*preview modal text*/
 .msgText * {
     font-family: "Helvetica Neue", Helvetica !important;
     color: rgb(141, 141, 141) !important;
@@ -192,51 +241,19 @@
     font-weight: normal;
 }
 
-.message_input .btn-toolbar{
-    margin-top: 0px;
-    margin-bottom: 0px;
-    border-top: 1px solid #E3E3E3;
-    border-right: 1px solid #E3E3E3;
-    border-left: 1px solid #E3E3E3;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-/*
-the compose message page styling*/
-.message_input {
-    display: inline-block;
-    width: 76%;
-    position: relative;
+.msgText ul {
+    display: block;
+    list-style-type: decimal;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
 }
 
-.message_headline{
-    display: inline-block;
-    width: 7.5%;
-    vertical-align: top;
-    margin-top: 9px;
+.msgText ul li{
+    list-style: square outside none;
 }
-
-.msgsubject{
-    padding-top: 4px;
-    padding-left: 0px;
-    padding-right: 0px;
-    width: calc(100% - 6px);
-    border-radius: 5px;
-
-}
-
-.msgButtons{
-    display: inline-block;
-    margin-left: 80px;
-    margin-top: 50px;
- /*   position: absolute;*/
-}
-
-.msgButtons.left{
-  margin-left: 40px;
-}
-
-
 
 
 
