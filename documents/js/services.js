@@ -632,6 +632,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         found = true;
                     }
                 });
+                if (!ShareDocs.prepCache[doc.doc_id]) {
+                    ShareDocs.prepCache[doc.doc_id] = {};
+                }
                 ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
                 if (!found) {
                     // must have accidentally inserted instead of updating ...
@@ -890,6 +893,8 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
 
     var doc_annotations = {};
 
+    // TODO: take doc_id, and some sort of status thing (original / version. Countersign mode or not) and fetch everything from the appropriate library
+    // Filter based on current mode (countersign), and create a separate hash with appropriate overrides
     this.getDocAnnotations = function(doc_id) {
         if (doc_id === void(0)) {
             return [];

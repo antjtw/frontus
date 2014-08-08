@@ -370,33 +370,16 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
                  // TODO: move all of this to the Documents and Annotations services
                  // TODO: should load all annotations all of the time, and vary how they're displayed
-                 if ($scope.lib.annotations) {
+                 var annots = [];
+                 if (data.annotations) {
                      // restoreNotes
-                     var annots = [];
-                     // TODO: should probably load all annotations into $scope.annots, and only display as relevant (probably already works)
-                     if ($scope.doc.countersignable($rootScope.navState.role) && $scope.lib.iss_annotations) {
-                         // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
-                         var temp_annots = JSON.parse($scope.lib.iss_annotations);
-                         temp_annots.forEach(function(annot) {
-                             // TODO: we're creating an Annotation object and destroying it for no good reason
-                             var tmp = Annotations.createBlankAnnotation().parseFromJson(annot, $scope.doc.annotation_types);
-                             if (tmp.isCountersign()) {
-                                 annots.push(annot);
-                             }
-                         });
-                     } else {
-                         if ($scope.drawTime() || $scope.$parent.prepareFor) { // if it's not drawTime or counterSigntime, then there should be no annotations anywhere
-                             annots = JSON.parse($scope.lib.annotations);
-                             if (data.iss_annotations) {
-                                 annots = annots.concat(JSON.parse(data.iss_annotations));
-                             }
-                         }
-                     }
+                     annots = annots.concat(JSON.parse(data.annotations));
+                 }
+                 if (data.iss_annotations) {
+                     annots = annots.concat(JSON.parse(data.iss_annotations));
+                 }
+                 if (annots.length !== 0) {
                      $scope.annots = Annotations.setDocAnnotations($scope.docId, annots, $scope.doc.annotation_types);
-                     var sticky;
-                     for (var i = 0; i < annots.length; i++) {
-                         var annot = annots[i];
-                     }
                  } else {
                      // ensure annotations are linked to the service even if we didn't fetch any
                      $scope.annots = Annotations.getDocAnnotations($scope.docId);
