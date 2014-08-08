@@ -665,7 +665,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         if (!docs[doc_id]) {
             docs[doc_id] = new Document();
             docs[doc_id].doc_id = doc_id;
-            docs[doc_id].annotations = Annotations.getDocAnnotations(doc_id);
+            docs[doc_id].annotations = Annotations.getDocAnnotations(docs[doc_id]);
         }
         return docs[doc_id];
     };
@@ -677,7 +677,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         var realPages = oldDoc.pages;
         angular.extend(oldDoc, doc);
         oldDoc.pages = realPages;
-        oldDoc.annotations = Annotations.getDocAnnotations(doc_id); // refresh annotations (in case doc overwrote);
+        oldDoc.annotations = Annotations.getDocAnnotations(oldDoc); // refresh annotations (in case doc overwrote);
         if (oldDoc.issue_type) {
             updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types);
             oldDoc.annotations.forEach(function(annot) {
@@ -701,7 +701,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
 
 // ANNOTATIONS
 // TODO: should really have an annotation factory
-docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootScope) {
+docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', function(SWBrijj, $rootScope, navState) {
     // data structure contents
     // aa -> [annot0...annotn-1]
     // [i] annoti -> [position, type, value, style]
@@ -895,29 +895,37 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
 
     // TODO: take doc_id, and some sort of status thing (original / version. Countersign mode or not) and fetch everything from the appropriate library
     // Filter based on current mode (countersign), and create a separate hash with appropriate overrides
-    this.getDocAnnotations = function(doc_id) {
-        if (doc_id === void(0)) {
-            return [];
+    this.getDocAnnotations = function(doc) {
+        // need doc since annotations can only exist within a document context
+        if (!doc_annotations[doc.doc_id]) {
+            doc_annotations[doc.doc_id] = [];
+            var library;
+            if (navState.role == 'investor') {
+                library = "document.my_investor_library";
+            } else {
+                if (doc.original) { // if original has a value, we're looking at a version
+                    library = "document.my_counterparty_library";
+                } else {
+                    library = "document.my_company_library";
+                }
+            }
+            SWBrijj.tblm(library, "doc_id", doc.doc_id).then(function(data) {
+                var annots = [];
+                if (data.annotations) {
+                    annots = annots.concat(JSON.parse(data.annotations));
+                }
+                if (data.iss_annotations) {
+                    annots = annots.concat(JSON.parse(data.iss_annotations));
+                }
+                annots.forEach(function(annot) {
+                    var new_annot = (new Annotation()).parseFromJson(annot, doc.annotation_types);
+                    doc_annotations[doc.doc_id].push(new_annot);
+                });
+            });
         }
-        if (!doc_annotations[doc_id]) {
-            doc_annotations[doc_id] = [];
-        }
-        return doc_annotations[doc_id];
-    };
+        return doc_annotations[doc.doc_id];
+    }
 
-    this.setDocAnnotations = function(doc_id, annotations, annotation_types) {
-        if (!doc_annotations[doc_id]) {
-            doc_annotations[doc_id] = [];
-        } else {
-            // clear out any existing annotations
-            doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
-        }
-        annotations.forEach(function(annot) {
-            var new_annot = (new Annotation()).parseFromJson(annot, annotation_types);
-            doc_annotations[doc_id].push(new_annot);
-        });
-        return doc_annotations[doc_id];
-    };
 
     this.getIssuerNotesForUpload = function(doc_id) {
         var doc_notes = doc_annotations[doc_id];

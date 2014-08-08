@@ -366,27 +366,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  // TODO: migrate all uses of $scope.lib to $scope.doc
                  $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
                  $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
-                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || ($scope.lib && $scope.prepare); // requires $scope.lib
+                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
 
-                 // TODO: move all of this to the Documents and Annotations services
-                 // TODO: should load all annotations all of the time, and vary how they're displayed
-                 var annots = [];
-                 if (data.annotations) {
-                     // restoreNotes
-                     annots = annots.concat(JSON.parse(data.annotations));
-                 }
-                 if (data.iss_annotations) {
-                     annots = annots.concat(JSON.parse(data.iss_annotations));
-                 }
-                 if (annots.length !== 0) {
-                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots, $scope.doc.annotation_types);
-                 } else {
-                     // ensure annotations are linked to the service even if we didn't fetch any
-                     $scope.annots = Annotations.getDocAnnotations($scope.docId);
-                 }
+                 $scope.annots = Annotations.getDocAnnotations($scope.doc);
                  if ($scope.$parent.prepareFor) {
                      // load the annotation Overrides
                      // It may already exist in the table, since we got to this step, so loop until we find it.
+                     // TODO: don't override $scope.doc.annotations, as the canonical version of the doc annots shouldn't change
                      var endOfWatch = $scope.$watchCollection(function() {
                          return $scope.doc.getPreparedFor();
                      }, function(preps) {

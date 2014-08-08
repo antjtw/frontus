@@ -167,7 +167,7 @@ app.controller('CompanyDocumentListController',
             $scope.modals.documentUploadClose = function() {
                 $scope.documentUploadModal = false;
             };
-            
+
             $scope.modals.signedUploadOpen = function(docid) {
                 $scope.files = [];
                 $scope.uploadType = 'signed';
@@ -244,7 +244,7 @@ app.controller('CompanyDocumentListController',
                     $scope.modals.documentUploadClose();
                 });
             };
-            
+
             $scope.checkSignedUploaded = function() {
                 SWBrijj.tblm('document.my_counterparty_library', ['doc_id', 'when_signature_provided', 'signed_uploaded', 'signed_upload_attempted']).then(function(data) {
                     angular.forEach(data, function(doc) {
