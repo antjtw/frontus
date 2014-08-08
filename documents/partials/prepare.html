@@ -1,0 +1,51 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<div class="container dynamic-page">
+    <subnav>
+        <div class="box-button pull-right"
+             ng-click="$root.leave();"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe602;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Save &amp; Exit</span>
+                </li>
+            </ul>
+        </div>
+    </subnav>
+    <div class="row-fluid">
+        <div class="leftTabWindow" ng-style="viewportheight">
+            <div class="span8 leftBlock" ng-class="{leftFullTableBlock: true, widthtransition25:oldSafari()}">
+                <div class="docPrepTop">
+                    <h2>Shareholder Terms</h2>
+                    <span>Enter your shareholder's emails below. Prepare their copy with specific terms.</span>
+                </div>
+                <div class="docPrepRow header">
+                    <span>Recipient</span>
+                    <span>Copy Status</span>
+                </div>
+                <div ng-repeat="investor in doc.preparedFor" class="docPrepRow">
+                    <span><input ui-select2="select2Options" ng-model="investor.display" ng-change="updateInvestor(investor)"></span>
+                    <span>
+                        <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
+                            <span ng-if="investor.is_prepared">Edit</span>
+                            <span ng-if="!investor.is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
+                        </a>
+                    </span>
+                </div>
+                <div class="docPrepRow">
+                    <span><input type="text" ui-select2="select2Options" ng-model="newInvestor" ng-change="addInvestor()"></span>
+                    <span></span>
+                </div>
+            </div>
+            <!-- <internal-right-rail toggle-side="toggleSide">
+                <tabset>
+                    <tab heading="Tab">
+                    </tab>
+                </tabset>
+            </internal-right-rail> -->
+        </div>
+    </div>
+    <preparation-bar></preparation-bar>
+</div>

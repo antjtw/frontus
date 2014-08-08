@@ -630,13 +630,81 @@ textarea.email-text {
 }
 .shareForm {
     padding-top: 40px;
+    padding-bottom: 20px;
 }
 .shareForm .my-loading-spinner-container > div {
     left: 50%;
     height: 60px;
 }
 .shareForm > .sharepeople-input {
-    padding-bottom: 40px;
+    padding-bottom: 10px;
+}
+.shareForm span[data-icon] {
+    color: #C7C7C7;
+}
+.shareForm ul.recipients span[data-icon].remove-icon {
+    cursor: pointer;
+    margin-left: 5px;
+}
+.shareForm ul.recipients > li {
+    margin-bottom: 6px;
+    color: rgb(30, 45, 61);
+}
+
+.shareForm ul.recipients > li .incomplete-name {
+    color: #e74c3c;
+}
+
+.shareForm ul.recipients > li .investor-name {
+    cursor: pointer;
+}
+
+.shareForm ul.recipients > li .investor-name > span.lower-icon {
+    color: rgb(30, 45, 61);
+}
+
+.shareForm ul.recipients > li .investor-name .investor-name-display {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 230px;
+}
+
+.shareForm ul.recipients > li .investor-name > span.lower-icon, .shareForm ul.recipients > li .investor-name > a > span {
+    vertical-align: 20%;
+}
+
+.shareForm ul.recipients ul {
+    margin-left: 22px;
+}
+.shareForm ul.recipients > ul > li {
+    margin-bottom: 3px;
+}
+
+.shareForm ul.doc-list > li > a {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.shareForm ul.doc-list > li > a > span:first-of-type {
+    cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 231px;
+}
+
+.shareForm ul.doc-list > li > a:hover {
+    color: #666;
+}
+
+.shareForm ul.recipients .incomplete {
+    color: #e74c3c;
+}
+.shareForm > textarea {
+    margin-top: 20px;
 }
 .sharepeople-input .select2-container {
     width: 100%;
@@ -644,6 +712,7 @@ textarea.email-text {
 }
 .shareForm > .controls {
     padding-top: 20px;
+    overflow: auto;
 }
 .shareForm > .controls span {
     line-height: 32px;
@@ -946,6 +1015,17 @@ input[type='text']:disabled, textarea:disabled {
     margin: 1px 1px 1px 1px;
 }
 
+.evenWiderModal .documentUploadText {
+    text-align: left;
+    width: 450px;
+    padding: 0px 0px 0px 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.evenWiderModal .container {
+    padding: 15px 0px;
+}
+
 .modalText .documentUploadText {
     padding-top: 0px;
     margin: 1px 1px 1px 1px;
@@ -1039,6 +1119,22 @@ input[type='text']:disabled, textarea:disabled {
     left: 50px;
 }
 
+.evenWiderModal div.documentUpload.fakefile{
+    position: absolute;
+    top: 15px;
+    left: 50px;
+}
+
+input.file {
+    position: relative;
+    text-align: right;
+    opacity: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
 .twoPieceModal .documentUpload input.file {
     float: left;
     width: 135px;
@@ -1047,6 +1143,19 @@ input[type='text']:disabled, textarea:disabled {
 }
 
 .twoPieceModal div.modalText.documentUploadFileInputs {
+    display: inline-block;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+.evenWiderModal .documentUpload input.file {
+    float: left;
+    width: 135px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.evenWiderModal div.modalText.documentUploadFileInputs {
     display: inline-block;
     padding-left: 50px;
     padding-top: 20px;
@@ -1554,7 +1663,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .draggable.greenrequired div > textarea {
-    border: 1px solid #1ABC96;
+    border: 1px solid rgb(141, 141, 141);
 }
 
 .draggable.otherperson div > textarea {
@@ -1604,7 +1713,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky.greenrequired .dragger {
-    background-color: #1ABC96;
+    background-color: rgb(141, 141, 141);
 }
 
 .sticky.otherperson .dragger {
@@ -1770,7 +1879,7 @@ div.imgsig > div {
 }
 
 div.imgsig > div:first-child {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 div.imgsig > div > img {
@@ -1792,7 +1901,7 @@ div.imgsig > div > img {
 }
 
 .scribblewindow {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 .scribblewindow > canvas {
@@ -1820,6 +1929,10 @@ div.imgsig > div > img {
 
 .standard-button.green.red-needed > button {
     background-color: #E74C3C;
+}
+
+annotation-list div.annotation-pages:first-child {
+    margin-top: 20px;
 }
 
 annotation-list div.annotation-pages:last-child {
@@ -1871,11 +1984,11 @@ annotation-list .annotmark.mine:hover, annotation-list .annotmark.mine.active {
 }
 
 annotation-list .annotmark.mine.complete {
-    color: #1ABC96;
+    color: rgb(141, 141, 141);
 }
 
 annotation-list .annotmark.mine.complete:hover, annotation-list .annotmark.mine.complete.active {
-    color: #15A085;
+    color: #666;
 }
 
 annotation-list .annotmark.mine.incomplete {
@@ -1886,9 +1999,16 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     color: #C44032;
 }
 
+annotation-list .annotmark > span {
+    float: right;
+    margin-right: 20px;
+    vertical-align: -10%;
+}
+
 help-tab > div {
-    margin-top: 20px;
-    margin-left: 20px;
+    margin: 0 20px 80px 20px;
+    border-top: 1px solid #C6C6C6;
+    padding-top: 20px;
 }
 
 help-tab > div > p {
@@ -1908,7 +2028,7 @@ help-tab > div > p > span {
 
 .docinfo .inforow {
     padding: 10px 0;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
 }
 
 .docinfo .inforow .info {
@@ -1947,13 +2067,35 @@ help-tab > div > p > span {
     vertical-align: top;
 }
 
+.docinfo .inforow .info input.file {
+    height: 32px;
+}
+
+.docinfo .inforow .info .fileInputContainer {
+    padding-top: 10px;
+    height: 30px;
+    width: 76px;
+}
+
+.docinfo .inforow .info .fileInputContainer .fakefile {
+    position: relative;
+    top: -32px;
+    left: 0px;
+}
+
+.standard-button .verydarkgray > button {
+    background-color: #C7C7C7;
+    width: 70px;
+    font-size: 14px;
+}
+
 .docinfo .docname {
     line-height: 24px;
     font-size: 20px;
     color: #1d2c3c;
     margin-top: 30px;
     padding-bottom: 30px;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
@@ -2006,7 +2148,7 @@ doc-transaction-details > div > div > span {
 }
 
 doc-transaction-details > div > div > button {
-    width: 68px;
+    width: 64px;
     height: 30px;
     background-color: #19bb95;
     border: none;
@@ -2030,8 +2172,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2039,8 +2184,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2048,8 +2196,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2057,8 +2208,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2069,7 +2223,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields.field-completed > span {
-    color: #19bc96;
+    color: rgb(141, 141, 141);
     -webkit-animation: completerequired 1s; /* Safari 4+ */
     -moz-animation:    completerequired 1s; /* Fx 5+ */
     -o-animation:      completerequired 1s; /* Opera 12+ */
@@ -2082,7 +2236,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields > span:first-of-type > span {
-    color: #19bc96;
+    color: rgb(141, 141, 141);
     vertical-align: -14%;
     font-size: 20px;
     -webkit-animation: completerequired 1s; /* Safari 4+ */
@@ -2095,15 +2249,28 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: #1d2c3c;
-    padding: 20px;
+    padding: 20px 0;
+    margin: 0 20px;
+    border-top: 1px solid #c6c6c6;
+}
+
+.fields-progress > div {
+    color: #1d2c3c;
+    margin-bottom: 10px;
 }
 
 .fields-progress > span {
-    color: #FFFFFF;
-    font-size: 14px;
-    margin-bottom: 5px;
-    font-family:'FS Elliot Web Light', sans-serif !important;
+    font-size: 12px;
+    margin-bottom: 0;
+    color: #666666;
+}
+
+.fields-progress .meter {
+    background-color: #e3e3e3;
+}
+
+.fields-progress .meter > span {
+    background-color: #666;
 }
 
 
@@ -2116,7 +2283,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input, .greenrequired .select2-container .select2-choice, .greenrequired input  {
-    border-color: #1ABC96;
+    border-color: rgb(141, 141, 141);
 }
 
 /* Transaction Directive */
@@ -2237,4 +2404,132 @@ div.profile-link > span {
 
 div.profile-link > span:first-of-type {
     vertical-align: -16%;
+}
+
+/* Document Preparation Screen */
+
+.docPrepTop {
+    margin: 40px 0 60px 50px;
+}
+
+.docPrepTop h2 {
+    text-transform: uppercase;
+    line-height: 20px;
+    margin: 0;
+}
+
+.docPrepRow {
+    width: calc(100% - 80px);
+    margin: 0 auto 0 auto;
+    border-bottom: 1px solid #E3E3E3;
+    height: 40px;
+    line-height: 40px;
+}
+
+.docPrepRow:last-of-type {
+    margin-bottom: 80px;
+}
+
+.docPrepRow.header {
+    line-height: 20px;
+    height: 20px;
+    color: #33485d;
+}
+
+.docPrepRow > span {
+    display: inline-block;
+    width: 49%;
+    box-sizing: border-box;
+}
+
+.docPrepRow a {
+    color: #3397da;
+}
+
+.docPrepRow .lower-icon {
+    vertical-align: -10%;
+}
+
+.docPrepRow.header > span:first-of-type {
+    padding-left: 10px;
+}
+
+.docPrepRow .select2-container {
+    width: 95%;
+}
+
+.docPrepRow .select2-container .select2-choice {
+    border: none;
+    width: 100%;
+}
+
+.docPrepRow .select2-container .select2-choice .select2-arrow {
+    display: none;
+}
+
+/* Preparation Bar */
+
+.preparation-bar {
+    position: fixed;
+    width: calc(100% - 80px);
+    bottom: 0;
+    height: 60px;
+    background-color: rgb(30, 45, 61);
+    text-align: center;
+}
+
+.preparation-bar .bar-button {
+    display: inline-block;
+    line-height: 60px;
+}
+
+.preparation-bar .bar-button > a {
+    font-family:'FS Elliot Web Light', sans-serif !important;
+    box-sizing: border-box;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 3px;
+    background-color: #1d2c3c;
+    border: 1px solid #3397da;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.preparation-bar .bar-button.bar-center-buttons {
+    border: 1px solid #3397da;
+    line-height: 30px;
+    margin-top: 15px;
+    border-radius: 3px;
+    background-color: #1d2c3c;
+}
+
+.preparation-bar .bar-button.bar-center-buttons > a {
+    width: 130px;
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 15px;
+    border: none;
+    border-radius: 0;
+}
+
+.preparation-bar .bar-button.bar-center-buttons > a.active-bar-button {
+    background-color: #3397da;
+}
+
+.preparation-bar .bar-button.right-button {
+    float: right;
+    margin-right: 20px;
+}
+
+.preparation-bar .bar-button.left-button {
+    float: left;
+    margin-left: 20px;
+}
+
+.preparation-bar .version-banner {
+    line-height: 60px;
+    font-size: 20px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
 }

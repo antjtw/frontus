@@ -50,7 +50,195 @@ docs.service('basics', function () {
 
 });
 
-docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", function(Annotations, SWBrijj, $q, $rootScope) {
+docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, $rootScope) {
+    this.emails = [];
+    this.documents = [];
+    this.message = "";
+
+    this.prepCache = {}; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
+
+    this.upsertShareItem = function(item) {
+        var updated = false;
+        angular.forEach(this.documents, function(el) {
+            if (el.doc_id == item.doc_id ||
+                (!el.doc_id && !item.doc_id &&
+                    el.template_id==item.template_id)) {
+                el.signature_flow = item.signature_flow;
+                updated = true;
+            }
+        });
+        if (!updated) {
+            var obj = {
+                "doc_id": item.doc_id,
+                "template_id": item.template_id,
+                "signature_flow": item.signature_flow,
+                "docname": item.docname
+            };
+            this.documents.push(obj);
+            if (item.preps) {
+                item.preps.forEach(function(prep_email) {
+                    this.addEmail(prep_email);
+                }, this);
+            }
+        }
+        if (item.signature_flow > 0) {
+            this.checkPreparedLists([item], this.emails);
+        }
+        return this.documents;
+    };
+    this.addEmail = function(email) {
+        if (email.length > 0 && this.emails.indexOf(email) == -1) {
+            this.emails.push(email);
+            this.checkEmail(email);
+        }
+    }
+    this.removeEmail = function(email) {
+        var idx = this.emails.indexOf(email);
+        if (idx != -1) {
+            this.emails.splice(idx, 1);
+        }
+    }
+    this.removeShareItem = function(item) {
+        this.documents = this.documents.filter(function(el) {
+            return !(item.doc_id==el.doc_id &&
+                     item.template_id==el.template_id);
+        });
+    };
+    this.updateShareType = function(doc, tp) {
+        if (doc.template_id && tp > 0) {
+            tp = 1;
+        }
+        doc.signature_flow = tp;
+        this.upsertShareItem(doc);
+    };
+
+    this.docsReadyToShare = function() {
+        if (this.documents.length===0) {
+            return false;
+        }
+        angular.forEach(this.documents, function(doc) {
+            if (doc.signature_flow < 0) {
+                return false;
+            }
+        });
+        if (!this.allPreparedCache()) {
+            return false;
+        }
+        return true;
+    };
+
+    this.checkPrepared = function(doc, investor, ignore_cache) {
+        var p = $q.defer();
+        if (this.prepCache[doc.doc_id] === undefined) {
+            this.prepCache[doc.doc_id] = {};
+        }
+        if (!ignore_cache && this.prepCache[doc.doc_id][investor] !== undefined) {
+            p.resolve(this.prepCache[doc.doc_id][investor]);
+        }
+        var shares = this;
+        SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
+            var res = data[0].is_prepared_person;
+            shares.prepCache[doc.doc_id][investor] = res;
+            p.resolve(res);
+        }).except(function(err) {
+            p.reject(err);
+        });
+        return p.promise;
+    };
+    this.clearPrepCache = function(doc_id) {
+        this.checkPreparedLists([{doc_id: doc_id}], this.emails, true); // clear the cache by fetching the new data
+        return true;
+    };
+    this.checkPreparedLists = function(docs, investors, ignore_cache) {
+        // for every document and every investor, check that is_prepared_person returns true;
+        var check_defer = $q.defer();
+        var promises = [];
+        docs.forEach(function(doc) {
+            if (doc.signature_flow > 0) { // only signable docs need checking
+                investors.forEach(function(investor) {
+                    promises.push(this.checkPrepared(doc, investor, ignore_cache));
+                }, this);
+            }
+        }, this);
+        $q.all(promises).then(function(results) {
+            check_defer.resolve(results.every(function(res) {
+                return res; // should already be a boolean
+            }));
+        }, function(err) {
+            console.error(err);
+            check_defer.reject(err);
+        });
+        return check_defer.promise;
+    }
+    this.checkEmail = function(investor) {
+        return this.checkPreparedLists(this.documents, [investor]);
+    };
+    this.checkAllPrepared = function() {
+        // does a force reload of all is_prepared data
+        return this.checkPreparedLists(this.documents, this.emails, true);
+    };
+    this.allPreparedCache = function() {
+        return this.documents.every(function(doc) {
+            if (doc.signature_flow > 0) {
+                return this.emails.every(function(inv) {
+                    return this.prepCache[doc.doc_id][inv];
+                }, this);
+            } else {
+                // if document isn't for share, we're good regardless
+                return true;
+            }
+        }, this);
+    };
+    this.emailNotPreparedCache = function(email) {
+        return this.documents.some(function(doc) {
+            if (doc.signature_flow > 0) {
+                return !this.prepCache[doc.doc_id][email];
+            } else {
+                return false;
+            }
+        }, this);
+    };
+
+    this.shareDocuments = function() {
+        // TODO: confirm that documents haven't been shared before to the users listed
+        var share_defer = $q.defer();
+        angular.forEach(this.documents, function(doc) {
+            if (doc.signature_flow === undefined || doc.signature_flow === null) {
+                doc.signature_flow = 0;
+            }
+        });
+        var share = this;
+        this.checkAllPrepared().then(function(result) {
+            if (result) {
+                SWBrijj.document_multishare(
+                    share.emails.join(","),
+                    JSON.stringify(share.documents),
+                    share.message,
+                    "22 November 2113"
+                ).then(function(data) {
+                    $rootScope.$emit("notification:success", "Documents shared");
+                    share_defer.resolve(data);
+                    share.emails = [];
+                    share.documents = [];
+                    share.message = "";
+                    //$route.reload(); // TODO: close share bar?
+                }).except(function(err) {
+                    console.error(err);
+                    $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+                    share_defer.reject(err);
+                });
+            } else {
+                $rootScope.$emit("notification:fail", "Please confirm all documents being shared are prepared for all recipients.");
+                share_defer.reject("Not all documents prepared for all people");
+            }
+        });
+        return share_defer.promise;
+    };
+}]);
+
+
+// TODO: should really have a document factory
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
     var transaction_attributes_callback = null;
@@ -182,10 +370,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         },
         sign: function() {
             var promise = $q.defer();
-            // before signing the document, I may need to save the existing annotations
-            // In fact, I should send the existing annotations along with the signature request for a two-fer.
-
             var d = this;
+            // send the annotations with the signature, so that it's signed exactly as the user sees it now
             SWBrijj.sign_document(this.doc_id, JSON.stringify(Annotations.getInvestorNotesForUpload(this.doc_id))).then(function(data) {
                 d.when_signed = data;
                 promise.resolve(data);
@@ -196,10 +382,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         },
         countersign: function() {
             var promise = $q.defer();
-            // TODO: Annotations.getIssuerNotesForUpload seems a little when we're inside the document
-            // TODO: shouldn't send notes for countersign, should just use DB version
             var d = this;
-            SWBrijj.document_countersign(this.doc_id, JSON.stringify(Annotations.getIssuerNotesForUpload(this.doc_id))).then(function(data) {
+            SWBrijj.document_countersign(this.doc_id).then(function(data) {
                 d.removeAllNotes();
                 promise.resolve(data);
             }).except(function(x) {
@@ -249,7 +433,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
             updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
             this.annotations.forEach(function(annot) {
                 annot.updateTypeInfo(this.annotation_types);
-            });
+            }, this);
         },
         unsetTransaction: function() {
             this.issue = null;
@@ -290,7 +474,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 if (types.required) {
                     angular.forEach(annotations, function(annot) {
                         if (annot.whattype == types.name) {
-                            num += annot.filled(false, $rootScope.navState.role) || !annot.forRole($rootScope.navState.role) ? 1 : 0;
+                            num += 1;
                         }
                     });
                 }
@@ -299,21 +483,21 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
         },
         dropdownDisplay: function(type) {
             if (type.required) {
-                return type.display + " (Required)"
+                return type.display + " (Required)";
             } else {
-                return type.display
+                return type.display;
             }
         },
         annotationOrder: function(type) {
             if (type.display == "Text") {
-                return 0
+                return 0;
             }
             else if (type.required) {
-                return 0 + type.display
-            } else if (type.required == false) {
-                return 1 + type.display
+                return 0 + type.display;
+            } else if (type.required === false) {
+                return 1 + type.display;
             } else {
-                return 2 + type.display
+                return 2 + type.display;
             }
         },
         annotable: function(role) {
@@ -324,20 +508,154 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
                 return this.issuerCanAnnotate();
         },
         investorCanAnnotate: function() {
+            // always false? Can issuer annotate a document with a signature_deadline (has been shared)?
             return (!this.when_signed && this.signature_deadline && this.signature_flow===2);
         },
         issuerCanAnnotate: function() {//does not include if the document is being prepared
             return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
         },
+        getPreparedFor: function(defaultList) {
+            var doc = this;
+            function mergeDefaultList(defaultList){
+                if (defaultList) {
+                    var origLength = doc.preparedFor.length;
+                    defaultList.forEach(function(inv) {
+                        if (!doc.preparedFor.some(function(prep) {
+                            return prep.investor == inv;
+                        })) {
+                            doc.addPreparedFor(inv);
+                        }
+                    });
+                    if (doc.preparedFor.length != origLength) {
+                        $rootScope.$emit("notification:success", "We've automatically added the investors you were sharing to.");
+                    }
+                }
+            }
+            // defaultList is a list to use if there's no preps yet.
+            if (!this.preparedFor) {
+                this.preparedFor = [];
+                SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
+                    data.forEach(function(investor_prep) {
+                        if (investor_prep.annotation_overrides) {
+                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                        }
+                        // add id and text fields to make select2 happy
+                        investor_prep.display = Investor.getDisplay(investor_prep.investor);
+                        doc.preparedFor.push(investor_prep);
+                    });
+                    mergeDefaultList(defaultList);
+                });
+            } else {
+                mergeDefaultList(defaultList);
+            }
+            return this.preparedFor;
+        },
+        clearPreparedForCache: function() {
+            // TODO: should consolidate the 2 calls to document.my_personal_preparations_view into a function
+            if (this.preparedFor) {
+                var doc = this;
+                SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
+                    doc.preparedFor = [];
+                    data.forEach(function(investor_prep) {
+                        if (investor_prep.annotation_overrides) {
+                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                        }
+                        // add id and text fields to make select2 happy
+                        investor_prep.display = Investor.getDisplay(investor_prep.investor);
+                        doc.preparedFor.push(investor_prep);
+                    });
+                });
+            }
+        },
+        addPreparedFor: function(investor) {
+            var doc = this;
+            SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
+                SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
+                    doc.preparedFor.push({display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: data[0].is_prepared_person});
+                }).except(function(error) {
+                    $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+                });
+            }).except(function(error) {
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
+        updatePreparedFor: function(old_investor, new_investor) {
+            var doc = this;
+            SWBrijj.update('document.my_personal_preparations', {investor: new_investor}, {doc_id: this.doc_id, investor: old_investor}).then(function(result){
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.investor = new_investor;
+                        // TODO: ensure investor_prep.display.text is right (might need investor name)
+                    }
+                });
+            }).except(function(error) {
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.display = Investor.getDisplay(old_investor);
+                    }
+                });
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
+        deletePreparedFor: function(old_investor) {
+            var doc = this;
+            SWBrijj.delete_one('document.my_personal_preparations', {doc_id: this.doc_id, investor: old_investor}).then(function(result) {
+                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
+                    if (investor_prep.investor == old_investor) {
+                        arr.splice(idx, 1);
+                    }
+                });
+            }).except(function(error) {
+                doc.preparedFor.forEach(function(investor_prep) {
+                    if (investor_prep.investor == old_investor) {
+                        investor_prep.display = Investor.getDisplay(old_investor);
+                    }
+                });
+                $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+            });
+        },
+        savePreparation: function(investor) {
+            var notes = [];
+            angular.forEach(this.annotations, function(note) {
+                if (note.whosign == "Issuer" && !note.pristine) {
+                    notes.push({id: note.id, val: note.val});
+                }
+            });
+            var doc = this;
+            SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
+                // data stored, got back is_prepared, so update preparedFor with that and the overrides
+                var found = false;
+                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
+                    if (investor_prep.investor == investor) {
+                        investor_prep.annotation_overrides = notes;
+                        investor_prep.is_prepared = result[0].update_preparation;
+                        found = true;
+                    }
+                });
+                ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
+                if (!found) {
+                    // must have accidentally inserted instead of updating ...
+                    doc.preparedFor.push(
+                        {display: Investor.getDisplay(investor),
+                         investor: investor,
+                         doc_id: doc.doc_id,
+                         annotation_overrides: notes,
+                         is_prepared: result[0].update_preparation});
+                }
+            }).except(function(error) {
+                $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+            });
+        }
     };
 
     /// Document service definition
-    // TODO: probably need to distinguish between originals and investor versions
+    // TODO: need to distinguish between originals and investor versions
     var docs = {};
 
     this.getDoc = function(doc_id) {
         if (doc_id === void(0)) {
             // we're probably uninitialized
+            // TODO: fetch the actual document
             var d = new Document();
             return d;
         }
@@ -379,7 +697,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", functio
 }]);
 
 // ANNOTATIONS
-
+// TODO: should really have an annotation factory
 docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootScope) {
     // data structure contents
     // aa -> [annot0...annotn-1]
@@ -411,7 +729,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
     //
     // [i][3] style -> font size -- anything else?
     //
-    // [i][4] other -> investorfixed, whosign, whattype, and required
+    // [i][4] other -> investorfixed, whosign, whattype, required, and id
 
     var Annotation = function() {
         this.position = {
@@ -434,10 +752,12 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         this.whosign = "Investor";
         this.whattype = "Text";
         this.required = true;
+        this.id = generateAnnotationId();
         this.type_info = {
             name: "text",
             display: "Text"
         };
+        this.pristine = false;
 
         var annot = this;
         $rootScope.$watch(function() {
@@ -488,6 +808,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             this.whosign = json[4].whosign;
             this.whattype = json[4].whattype;
             this.required = json[4].required;
+            this.id = json[4].id;
+            if (!this.id) {
+                this.id = generateAnnotationId();
+            }
+            this.pristine = true; // used to tell if value has changed since server load. mostly useful when preparing for an individual
             this.updateTypeInfo(annotation_types);
             return this;
         },
@@ -501,7 +826,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             position.push(this.position.docPanel.height); // document page height
             json.push(position);
             json.push(this.type);
-            if (this.val != null) {
+            if (this.val !== null) {
                 json.push([this.val]);
             } else {
                 json.push([""]);
@@ -511,7 +836,8 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 investorfixed: this.investorfixed,
                 whosign: this.whosign,
                 whattype: this.whattype,
-                required: this.required
+                required: this.required,
+                id: this.id
             });
             return json;
         },
@@ -557,6 +883,11 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
         return new Annotation();
     };
 
+    function generateAnnotationId() {
+        // needs to return an id that's unique to this document
+        return Date.now().toString() + "id" + Math.floor(Math.random()*100000);
+    }
+
     var doc_annotations = {};
 
     this.getDocAnnotations = function(doc_id) {
@@ -574,7 +905,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
             doc_annotations[doc_id] = [];
         } else {
             // clear out any existing annotations
-            // TODO: should check for dupes and update instead
             doc_annotations[doc_id].splice(0, Number.MAX_VALUE);
         }
         annotations.forEach(function(annot) {
@@ -643,7 +973,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', function(SWBrijj, $rootSco
                 if (annot.val === '')
                 {
                     annot.val = data;
-                    //$document.getElementById('highlightContents').value = data;
                 }
             }).except(function (x) {console.log(x);});
     };

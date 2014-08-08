@@ -109,8 +109,7 @@ app.directive('documentSummaryRow', function() {
         scope: {
             doc: '=',
             viewState: '=',
-            modals: '=',
-            docShareState: '='
+            modals: '='
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController
@@ -185,6 +184,7 @@ app.directive('annotation', function() {
             doc: "=",
             removeannot: "&",
             sigModalUp: "&",
+            prepareFor: "=",
             active: "=",
         },
         replace: true,
@@ -293,7 +293,7 @@ app.directive('docTransactionDetails', function() {
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
         controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
-            var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
+            var defaultSelectObj = {id: 0, text: "Prepare"};
             $scope.selectedIssue = defaultSelectObj;
             $scope.select2Options = {
                 data: [defaultSelectObj],
@@ -372,5 +372,13 @@ app.directive('docTransactionList', function() {
             };
 
         }]
+    };
+});
+
+app.directive('preparationBar', function() {
+    return {
+        restrict: "E",
+        scope: false,
+        templateUrl: '/documents/partials/preparationBar.html'
     };
 });
