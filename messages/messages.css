@@ -232,8 +232,8 @@ the compose message page styling*/
 
 .msgText h3 {
     font-size: 1.17em;
-    color: rgb(141, 141, 141);
-    line-height: 1.231;
+/*    color: rgb(141, 141, 141);*/
+/*    line-height: 1.231;*/
     font-weight: bold;
 }
 
