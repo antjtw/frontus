@@ -249,6 +249,10 @@ the compose message page styling*/
     -webkit-margin-end: 40px;
 } 
 
+.msgText blockquote {
+    border: none;
+}
+
 .msgText blockquote p {
     font-size: 14px;
     font-weight: normal;
