@@ -285,9 +285,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 if (defaultList) {
                     var origLength = doc.preparedFor.length;
                     defaultList.forEach(function(inv) {
-                        if (!doc.preparedFor.some(function(prep) {
-                            return prep.investor == inv;
-                        })) {
+                        if (!doc.preparedFor.keys().indexOf(inv) === -1) {
                             doc.addPreparedFor(inv);
                         }
                     });
@@ -298,15 +296,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             }
             // defaultList is a list to use if there's no preps yet.
             if (!this.preparedFor) {
-                this.preparedFor = [];
+                this.preparedFor = {};
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
+                        investor_prep.override_hash = {};
                         if (investor_prep.annotation_overrides) {
-                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                            var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                            annotation_overrides.forEach(function(override) {
+                                investor_prep.override_hash[override.id] = override;
+                            });
                         }
                         // add id and text fields to make select2 happy
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
-                        doc.preparedFor.push(investor_prep);
+                        doc.preparedFor[investor_prep.investor] = investor_prep;
                     });
                     mergeDefaultList(defaultList);
                 });
@@ -322,8 +324,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     doc.preparedFor = [];
                     data.forEach(function(investor_prep) {
+                        investor_prep.override_hash = {};
                         if (investor_prep.annotation_overrides) {
-                            investor_prep.annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                            var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
+                            annotation_overrides.forEach(function(override) {
+                                investor_prep.override_hash[override.id] = override;
+                            });
                         }
                         // add id and text fields to make select2 happy
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
@@ -336,7 +342,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             var doc = this;
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
                 SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
-                    doc.preparedFor.push({display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: data[0].is_prepared_person});
+                    doc.preparedFor[investor] = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: data[0].is_prepared_person, override_hash: {}};
                 }).except(function(error) {
                     $rootScope.$emit("notification:fail", "Oops, something went wrong.");
                 });
@@ -380,6 +386,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         savePreparation: function(investor) {
+            // TODO: use override_hash instead of annotation_overrides
             var notes = [];
             angular.forEach(this.annotations, function(note) {
                 if (note.whosign == "Issuer" && !note.pristine) {
@@ -392,7 +399,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var found = false;
                 doc.preparedFor.forEach(function(investor_prep, idx, arr) {
                     if (investor_prep.investor == investor) {
-                        investor_prep.annotation_overrides = notes;
+                        //investor_prep.annotation_overrides = notes; // should already be updated, should be pulling from in above check to send data
                         investor_prep.is_prepared = result[0].update_preparation;
                         found = true;
                     }
@@ -403,6 +410,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
                 if (!found) {
                     // must have accidentally inserted instead of updating ...
+                    // TODO: if override_hash must already exist, how did we get here?
                     doc.preparedFor.push(
                         {display: Investor.getDisplay(investor),
                          investor: investor,

@@ -2441,6 +2441,10 @@ div.profile-link > span:first-of-type {
     box-sizing: border-box;
 }
 
+.docPrepRow > span:first-child ~ span input {
+    width: 95%;
+}
+
 /* 2 columns */
 .docPrepRow > span:first-child:nth-last-child(2),
 .docPrepRow > span:first-child:nth-last-child(2) ~ span {
