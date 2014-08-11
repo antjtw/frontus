@@ -162,6 +162,10 @@ h3 {
     background-position: -270px -90px;
 }
 
+.large-icon.captable-icon {
+    background-position: 0 -360px;
+}
+
 .photo-icon {
     width: 150px;
     height: 150px;

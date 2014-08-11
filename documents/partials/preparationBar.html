@@ -1,0 +1,26 @@
+<div class="preparation-bar">
+    <div ng-show="false && navState.path.indexOf('/documents/company-view') == -1" class="bar-button left-button">
+        <a ng-href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true&share=true"}}'>
+            <span>Back</span>
+        </a>
+    </div>
+    <div ng-show="!prepareFor" class="bar-button bar-center-buttons">
+        <a ng-class="{'active-bar-button': navState.path.indexOf('/documents/company-view') != -1}" ng-href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true&share=true"}}'>
+            <span>Mark Up</span>
+        </a>
+        <a ng-class="{'active-bar-button': navState.path.indexOf('/documents/prepare') != -1}" ng-href="{{'/app/documents/prepare?doc=' + doc.doc_id}}">
+            <span>Prepare</span>
+        </a>
+    </div>
+    <div ng-show="navState.path.indexOf('/documents/prepare') == -1" class="bar-button right-button">
+        <a ng-show="!prepareFor" ng-href="{{'/app/documents/prepare?doc=' + doc.doc_id}}">
+            <span>Next</span>
+        </a>
+        <a ng-show="prepareFor" ng-click="leave(['-view'])">
+            <span>Done</span>
+        </a>
+    </div>
+    <div class="version-banner" ng-show="prepareFor">
+        {{prepareFor}} version
+    </div>
+</div>

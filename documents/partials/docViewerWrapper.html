@@ -27,19 +27,19 @@
             </div>
         </div>
         <page-controls doc-id="docId" current-page="currentPage" ng-if="docId"></page-controls>
-        <div class="box-button pull-right"
-             ng-click="leave();"
+        <div ng-hide="prepareFor" class="box-button pull-right"
+             ng-click="$root.leave();"
              data-placement="bottom">
             <ul>
                 <li>
                     <span data-icon="&#xe602;" aria-hidden="true"></span>
                 </li>
                 <li>
-                    <span><span ng-if="prepareable() || actionNeeded()">Save &amp; </span>Exit</span>
+                    <span><span ng-if="prepareable() || prepareFor || actionNeeded()">Save &amp; </span>Exit</span>
                 </li>
             </ul>
         </div>
-        <div ng-show="!prepareable()" class="box-button pull-right"
+        <div ng-show="!prepareFor && !prepareable()" class="box-button pull-right"
              ng-click="downloadPDF();"
              data-placement="bottom">
             <ul>
@@ -78,20 +78,20 @@
             <doc-viewer class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" page-query-string="pageQueryString()" doc-id="docId" investor_attributes="investor_attributes"></doc-viewer>
             <internal-right-rail toggle-side="toggleSide">
                 <tabset>
-                    <tab active="annottab" heading="Annotations" ng-if="prepareable() || actionNeeded()">
-                        <annotation-list doc="doc" active="active"></annotation-list>
-                        <help-tab doc="doc"></help-tab>
-                    </tab>
                     <tab active="infotab" heading="Information">
                         <div class="docinfo">
                             <div class="docname" ng-if="doc.docname">
                                 <span>{{doc.docname}}</span>
                             </div>
-                            <div class="inforow" ng-if="doc.tags">
+                            <div class="inforow" ng-if="doc.tags.length > 0">
                                 <span class="activity-icon tags-icon"></span>
                                 <span class="tags">
                                     <span ng-repeat="t in doc.tags">{{t}}</span>
                                 </span>
+                            </div>
+                            <div class="inforow" ng-if="prepareFor">
+                                <span class="activity-icon people-icon"></span>
+                                <span class="info"><span>{{prepareFor}}</span><span>Preparing for</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_shared">
                                 <span class="activity-icon doc-share-icon"></span>
@@ -116,8 +116,33 @@
                             </div>
                             <div class="inforow" ng-if="doc.when_signed">
                                 <span class="activity-icon doc-sign-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'"><span>Signed by {{doc.name}}</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
-                                <span class="info" ng-if="navState.role == 'investor'"><span>Signed</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'issuer'">
+                                    <span ng-if="!doc.when_signature_provided">Signed by {{doc.name}}</span>
+                                    <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'">
+                                    <span ng-if="!doc.when_signature_provided">Signed</span>
+                                    <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="doc.when_shared && !doc.when_signed && navState.role == 'issuer' && doc.signature_flow > 0 && !doc.issue">
+                                <span class="activity-icon doc-upload-red-icon"></span>
+                                <span class="info" ng-if="!uploading">
+                                    <span>{{doc.name}} has not signed this document. Do you wish to upload a signed copy?</span><span></span>
+                                    <div class="fileInputContainer">
+                                        <input multiple type="file" class='file'
+                                            accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                            onchange="angular.element(this).scope().setSignedFiles(this);"/>
+                                        <div class="fakefile">
+                                            <div class="small-standard-button darkgray">
+                                                <button class="btn">Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span class="info" ng-if="uploading">
+                                    <span>Uploading signed copy now . . . </span><span></span>
+                                </span>
                             </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
                                 <span class="activity-icon doc-final-icon"></span>
@@ -137,9 +162,19 @@
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
                             </div>
                         </div>
+                        <div ng-if="prepareable()">
+                            <doc-transaction-details doc="doc"></doc-transaction-details>
+                        </div>
+                        <help-tab doc="doc"></help-tab>
+                    </tab>
+                    <tab active="annottab" heading="Annotations" ng-if="prepareable() || prepareFor || actionNeeded()">
+                        <annotation-list doc="doc" active="active"></annotation-list>
+                    </tab>
+                    <tab heading="Transactions" ng-if="doctrans.length > 0">
+                        <doc-transaction-list trans="doctrans"></doc-transaction-list>
                     </tab>
                 </tabset>
-                <div id="bottom-part" class="confirmPanelContainer" ng-if="actionNeeded()">
+                <div id="bottom-part" class="confirmPanelContainer" ng-if="prepareFor || actionNeeded()" ng-class="{'preparescreen': prepareFor}">
                     <div class="confirmPanel">
                         <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()" disabled="unfilledAnnotation()">
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
@@ -161,18 +196,16 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
                     </div>
-                    <div ng-if="invq && doc.signable()" class="fields-progress">
+                    <div ng-if="(invq && doc.signable()) || prepareFor" class="fields-progress">
                         <span ng-show="numAnnotationsComplete() != numAnnotations()">{{numAnnotationsComplete()}}/{{numAnnotations()}} Complete</span>
-                        <span ng-show="numAnnotationsComplete() == numAnnotations()">Document is ready to sign!</span>
+                        <span ng-show="numAnnotationsComplete() == numAnnotations()">Document is ready!</span>
                         <meter cur="numAnnotationsComplete()" tot="numAnnotations()"></meter>
                     </div>
-                </div>
-                <div id="bottom-part" ng-if="prepareable()">
-                    <doc-transaction-details doc="doc"></doc-transaction-details>
                 </div>
             </internal-right-rail>
         </div>
     </div>
+    <preparation-bar ng-if="prepareable() || prepareFor"></preparation-bar>
 </div>
 
 <div modal="imageProcessedModal" options="processedopts" data-keyboard="false" data-backdrop="static">

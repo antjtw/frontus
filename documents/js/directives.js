@@ -109,8 +109,7 @@ app.directive('documentSummaryRow', function() {
         scope: {
             doc: '=',
             viewState: '=',
-            modals: '=',
-            docShareState: '='
+            modals: '='
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController
@@ -185,6 +184,7 @@ app.directive('annotation', function() {
             doc: "=",
             removeannot: "&",
             sigModalUp: "&",
+            prepareFor: "=",
             active: "=",
         },
         replace: true,
@@ -293,7 +293,7 @@ app.directive('docTransactionDetails', function() {
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
         controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
-            var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
+            var defaultSelectObj = {id: 0, text: "Prepare"};
             $scope.selectedIssue = defaultSelectObj;
             $scope.select2Options = {
                 data: [defaultSelectObj],
@@ -324,5 +324,61 @@ app.directive('docTransactionDetails', function() {
                 }
             });
         }],
+    };
+});
+
+app.directive('docTransactionList', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            trans: "="
+        },
+        templateUrl: "/documents/partials/doc-transaction-list.html",
+        controller: ["$scope", 'calculate', 'switchval', '$location', function($scope, calculate, switchval, $location) {
+
+            $scope.trans[0].active = true;
+
+            $scope.singleTransaction = function(trans) {
+                return (trans.length == 1);
+            };
+
+            $scope.gotoCaptable = function() {
+                $location.url('/app/ownership/company-captable')
+            };
+
+            $scope.formatAmount = function (amount) {
+                return calculate.funcformatAmount(amount);
+            };
+
+            $scope.formatDollarAmount = function(amount) {
+                var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
+                return (output);
+            };
+
+            $scope.grantbyIssue = function (tran) {
+                if (tran.type == "Option") {
+                    return "options";
+                }
+                else if (tran.type == "Warrant") {
+                    return "warrants";
+                }
+                else {
+                    return "shares";
+                }
+            };
+
+            $scope.trantype = function (type, activetype) {
+                return switchval.trantype(type, activetype);
+            };
+
+        }]
+    };
+});
+
+app.directive('preparationBar', function() {
+    return {
+        restrict: "E",
+        scope: false,
+        templateUrl: '/documents/partials/preparationBar.html'
     };
 });

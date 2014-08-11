@@ -14,7 +14,6 @@
         <span ng-bind="sec.attrs.security_type"></span>
         <span>Security Type</span>
     </p>
-    <div><span>History / Actions / Events</span></div>
     <accordion ng-class="{'lessmargin': sec.transactions.length == 1}"
                class="transaction-accordion" close-others="true">
     <accordion-group ng-repeat="tran in sec.transactions

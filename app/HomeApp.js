@@ -63,10 +63,6 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'grantController',
             templateUrl: '/ownership/partials/comp-grant.html'
         }).
-        when('/app/ownership/company-status', {
-            controller: 'statusController',
-            templateUrl: '/ownership/partials/comp-status.html'
-        }).
         when('/app/ownership/investor-captable', {
             controller: 'invCaptableController',
             templateUrl: '/ownership/partials/inv-captable.html'
@@ -84,6 +80,10 @@ app.config(function($routeProvider, $locationProvider){
             templateUrl: '/documents/partials/docViewerWrapper.html',
             controller: 'DocumentViewWrapperController',
             reloadOnSearch: false
+        }).
+        when('/app/documents/prepare', {
+            templateUrl: '/documents/partials/prepare.html',
+            controller: 'DocumentPrepareController'
         }).
         when('/app/documents/company-status', {
             templateUrl: '/documents/partials/companyStatus.html',
@@ -215,7 +215,21 @@ app.controller('CompanyCtrl',
                     $scope.$emit("notification:success", "You have successfully changed your password.");
                 }
             }
-
+            
+			$scope.fullScreen = function() {
+				/*var elem = document.getElementById("vid");
+				if (elem.requestFullscreen) {
+				  elem.requestFullscreen();
+				} else if (elem.msRequestFullscreen) {
+				  elem.msRequestFullscreen();
+				} else if (elem.mozRequestFullScreen) {
+				  elem.mozRequestFullScreen();
+				} else if (elem.webkitRequestFullscreen) {
+				  elem.webkitRequestFullscreen();
+				}*/
+				
+				document.getElementById("vid-pic").style.visibility="hidden";
+			};
             $scope.getTokenInfo = function() {
                 SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
                     $scope.backupInfo = data[0];
@@ -1031,6 +1045,8 @@ app.filter('fromNowSort', function () {
 
 
 
+
+
 function memoize( fn ) {
     return function () {
         var args = Array.prototype.slice.call(arguments),
@@ -1052,4 +1068,3 @@ function memoize( fn ) {
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
-

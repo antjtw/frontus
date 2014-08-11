@@ -87,10 +87,12 @@ own.directive('d3Donut', ['d3', function(d3) {
 own.directive('captableCell', [function() {
     return {
         restrict: 'E',
-        scope: {data: '='},
+        scope: {inv: '=',
+                sec: '='},
         templateUrl: '/ownership/partials/captableCell.html',
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
+                $scope.data = captable.cellFor($scope.inv, $scope.sec);
                 $scope.settings = $rootScope.settings;
                 $scope.$watchCollection('data.ledger_entries',
                     function(newEntries, oldEntries) {
@@ -105,13 +107,15 @@ own.directive('editableCaptableCell', [function() {
     return {
         restrict: 'E',
         replace: true,
-        scope: {data: '=',
-                editable: '=',
+        scope: {sec: '=',
+                inv: '=',
                 selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
         controller: ["$scope", "$rootScope", "calculate", "captable",
             function($scope, $rootScope, calculate, captable) {
+                $scope.data = captable.cellFor($scope.inv,
+                                               $scope.sec);
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
@@ -123,14 +127,23 @@ own.directive('editableCaptableCell', [function() {
                 $scope.saveIt = function(value) {
                     //console.log(value);
                 };
-                /*
-                $scope.$watch('data.u', function(newUnits, oldUnits) {
-                    // TODO update a transaction
-                });
-                $scope.$watch('data.a', function(newUnits, oldUnits) {
-                    // TODO update a transaction
-                });
-                */
+                function updateAttr(key, val) {
+                    if ($scope.data.transactions.length == 1) {
+                        $scope.data.transactions[0].attrs[key] = val;
+                        // TODO then save transaction, if failed,
+                        // revert cell
+                    } else {
+                        // pop the user over to the proper cell
+                        // in the proper transaction?
+                        alert('so many transactions what do i do?!?');
+                    }
+                }
+                $scope.updateUnits = function() {
+                    updateAttr('units', $scope.data.u);
+                };
+                $scope.updateAmount = function() {
+                    updateAttr('amount', $scope.data.a);
+                };
             }
         ],
     };
@@ -149,6 +162,13 @@ own.directive('securityDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+                $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                    } else if (ev.original !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
+                    }
+                };
             }
         ],
     };
@@ -164,11 +184,27 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable) {
                 $scope.captable = captable;
                 $scope.tips = displayCopy.captabletips;
+                $scope.displayAttr = captable.displayAttr;
                 $scope.currentTab = 'details';
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
-               // $scope.ct = captable.getCapTable();
+                $scope.ct = captable.getCapTable();
+                $scope.addTransaction = function() {
+                    captable.addTran(null, $scope.sec.name, 'split');
+                };
+                $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $scope.viewme = ['investor', ev.doc_id];
+                    } else if (ev.original !== null) {
+                        $scope.viewme = ['issuer', ev.original];
+                    }
+                };
+                $scope.editEvidence = function(obj) {
+                    $scope.ct.evidence_object = obj;
+                    $scope.windowToggle = (obj ? true : false);
+                    $scope.$emit('windowToggle', $scope.windowToggle);
+                };
             }
         ],
     };
@@ -208,7 +244,6 @@ own.directive('editableCellDetails', [function() {
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable",
             function($scope, $rootScope, attributes, captable) {
-                console.log($scope);
                 $scope.captable = captable;
                 var ct = captable.getCapTable();
                 $scope.settings = $rootScope.settings;
@@ -281,14 +316,17 @@ own.directive('editableTransactionAttributes', [function() {
             function($scope, $filter, captable, attributes) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
-                $scope.keys = function() {
-                    if (!$scope.data.attrs.security_type) return null;
-                    return Object.keys(attrs[$scope.data.attrs.security_type][$scope.data.kind])
-                        .sort(function(x1, x2) {
-                            return $filter('sortAttributeTypes')(x1) -
-                            $filter('sortAttributeTypes')(x2);
-                    });
-                };
+                function filterSortKeys(attrs) {
+                    if (!attrs.security) return null;
+                    var filtered = $filter('attrsForDisplay')(attrs);
+                    var sorted = Object.keys(filtered)
+                            .sort(function(x1, x2) {
+                                return $filter('sortAttributeTypes')(x1)
+                                     - $filter('sortAttributeTypes')(x2);
+                            });
+                    return sorted;
+                }
+                $scope.keys = filterSortKeys($scope.data.attrs);
                 function key_display_info(key) {
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};

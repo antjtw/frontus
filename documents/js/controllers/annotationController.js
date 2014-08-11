@@ -96,6 +96,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         // prevent issuers from filling in the investor values
         if (!$scope.annot.forRole(navState.role)) {
             $scope.annot.val = "";
+        } else if ($scope.annot.pristine && newValue != oldValue) {
+            $scope.annot.pristine = false;
         }
     });
 
@@ -335,7 +337,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'enum' &&
                $scope.annot.forRole(navState.role)&&
-               navState.role == 'investor';
+               (navState.role == 'investor' ||
+                $scope.prepareFor);
     };
 
     $scope.dateBoxMode = function() {
@@ -344,7 +347,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'date' &&
                $scope.annot.forRole(navState.role) &&
-               navState.role == 'investor';
+               (navState.role == 'investor' ||
+                $scope.prepareFor);
     };
 
     $scope.$watch('annot.position.coords', function(new_coords) {

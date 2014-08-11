@@ -1,6 +1,9 @@
-var captableController = function(
-        $scope, $rootScope, $location, $parse, $filter, SWBrijj,
-        calculate, switchval, navState, captable, displayCopy, History)
+app.controller('captableController',
+        ["$scope", "$rootScope", "$location", "$parse", "$filter",
+         "SWBrijj", "calculate", "switchval", "navState", "captable",
+         "displayCopy", "History",
+function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
+         calculate, switchval, navState, captable, displayCopy, History)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -121,19 +124,8 @@ var captableController = function(
         $scope.currentTab = 'details';
         $scope.selectedSecurity = $scope.selectedInvestor = null;
         if (!$scope.selectedCell || !cellIsSelected(inv, sec)) {
-            // TODO should we forget the old cell here?
-            // or do we want to maintain the history
-            $scope.selectedCell = $scope.cellFor(inv, sec);
-            console.log($scope.selectedCell);
-            if (!$scope.selectedCell) {
-                console.log(inv, sec);
-                /*
-                var c = new Cell();
-                c.investor = inv;
-                c.security = sec;
-                $scope.selectedCell = c;
-                */
-            }
+            History.forget($scope, 'selectedCell');
+            $scope.selectedCell = captable.cellFor(inv, sec, true);
             History.watch('selectedCell', $scope);
             displayCellDetails();
         } else if ($scope.selectedCell && !cellIsSelected(inv, sec)) {
@@ -151,6 +143,7 @@ var captableController = function(
             $scope.selectedSecurity = null;
             History.forget($scope, 'selectedSecurity');
         } else {
+            History.forget($scope, 'selectedSecurity');
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
                     return el.name == security_name;  
@@ -168,6 +161,7 @@ var captableController = function(
             $scope.selectedInvestor = null;
             History.forget($scope, 'selectedInvestor');
         } else {
+            History.forget($scope, 'selectedInvestor');
             $scope.selectedInvestor = $scope.ct.investors
                 .filter(function(el) {
                     return el.name == investor_name;
@@ -241,15 +235,6 @@ var captableController = function(
         }
     };
     */
-
-    $scope.cellFor = function(inv, sec) {
-        return $scope.ct.cells
-            .filter(function(cell) {
-                return cell.investor == inv &&
-                       cell.security == sec &&
-                       (cell.a || cell.u);
-            })[0];
-    };
     $scope.rowFor = function(inv) {
         return $scope.ct.cells
             .filter(function(cell) {
@@ -1288,7 +1273,7 @@ var captableController = function(
         */
     };
 
-};
+}]);
 
 // IE fix to remove enter to submit form
 function testForEnter()

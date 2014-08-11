@@ -213,9 +213,10 @@ ownership.filter('formatAmount', function() {
     };
 });
 
-ownership.filter('transactionAttributesForDisplay', function() {
+ownership.filter('attrsForDisplay', function() {
     return function(attr) {
-        var hide_attrs = ["physical", "security", "security_type"];
+        var hide_attrs = ["kind", "physical",
+                          "security", "security_type"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1) {
@@ -281,5 +282,13 @@ ownership.filter('sortAttributeTypes', function() {
     return function(tp) {
         var res = orderedAttributes.indexOf(tp);
         return res === -1 ? orderedAttributes.length+1 : res;
+    };
+});
+ownership.filter('describeTran', function() {
+    return function(tran) {
+        /* TODO replace 'Transaction' accordion headers with something
+         * that actually describes the transaction
+         *
+         */
     };
 });

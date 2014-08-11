@@ -214,16 +214,24 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
 
         $scope.clearData = function() {
             angular.forEach($scope.rows, function(row) {
-                $scope.deletePerson(row.namekey);
+                if (row && row.namekey) {
+                    $scope.deletePerson(row.namekey);
+                }
             });
             angular.forEach($scope.rows, function(row) {
-                $scope.deletePerson(row.namekey);
+                if (row && row.namekey) {
+                    $scope.deletePerson(row.namekey);
+                }
             });
             angular.forEach($scope.issues, function(issue) {
-                $scope.deleteIssue(issue);
+                if (issue) {
+                    $scope.deleteIssue(issue);
+                }
             });
             angular.forEach($scope.issues, function(issue) {
-                $scope.deleteIssue(issue);
+                if (issue) {
+                    $scope.deleteIssue(issue);
+                }
             });
         };
 
@@ -1345,7 +1353,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         $scope.deleteIssue = function (issue) {
             $scope.lastsaved = Date.now();
             angular.forEach($scope.issues, function (oneissue) {
-                if (oneissue['key'] == issue['key']) {
+                if (oneissue && oneissue['key'] == issue['key']) {
                     var index = $scope.issues.indexOf(oneissue);
                     $scope.issues.splice(index, 1);
                     var indexed = $scope.security_names.indexOf(oneissue.key);
@@ -1353,20 +1361,20 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                 }
             });
             angular.forEach($scope.rows, function (row) {
-                if (issue.key in row) {
+                if (row && issue.key in row) {
                     delete row[issue.key];
                 }
-                if (row["name"] == issue.key + " (unissued)") {
+                if (row && row["name"] == issue.key + " (unissued)") {
                     var index = $scope.rows.indexOf(row);
                     $scope.rows.splice(index, 1);
                 }
             });
             angular.forEach($scope.trans, function(tran) {
-                if (tran.issue == issue.key) {
+                if (tran && issue && tran.issue == issue.key) {
                     var index = $scope.trans.indexOf(tran);
                     $scope.trans.splice(index, 1);
                 }
-            })
+            });
             if ($scope.issues.length == 0 || ($scope.issues[$scope.issues.length-1].name != "")) {
                 $scope.issues.push({"name": "", "date": new Date(2100, 1, 1)});
             }
@@ -1404,7 +1412,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             $scope.sideBar = "x";
             $scope.lastsaved = Date.now();
             angular.forEach($scope.trans, function (tran) {
-                if (tran.investor == investor) {
+                if (tran && tran.investor == investor) {
                     var index = $scope.trans.indexOf(tran);
                     $scope.trans.splice(index, 1);
                     angular.forEach($scope.rows, function (row) {
@@ -1437,7 +1445,7 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             });
 
             angular.forEach($scope.rows, function (row) {
-                if (row.namekey == investor) {
+                if (row && row.namekey == investor) {
                     var index = $scope.rows.indexOf(row);
                     $scope.rows.splice(index, 1);
                     if ($scope.rows.length <= 5) {
