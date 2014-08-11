@@ -663,8 +663,7 @@
             <tr ng-if="!editMode" class="column-label">
                 <th class="longrow" colspan="2">Ownership</th>
                 <th class="longrow">Shareholder</th>
-                <th ng-class="{tranViewSelected:
-                                   sec==selectedSecurity.name}"
+                <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
                     ng-repeat="sec in ct.securities
                     | orderBy:['effective_date', 'insertion_date']:true"
