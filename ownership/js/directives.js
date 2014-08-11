@@ -273,7 +273,8 @@ own.directive('editableTransactionAttributes', [function() {
     return {
         restrict: 'E',
         replace: true,
-        scope: {data: '='},
+        scope: {data: '=',
+                selected: '=selected'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
         controller: ["$scope", "$filter", "captable", "attributes",
@@ -308,9 +309,9 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
-                $scope.saveIt = function(tran) {
+                $scope.saveIt = function(tran, cell) {
                     console.log(tran);
-                    captable.saveTransaction(tran);
+                    captable.saveTransaction(tran, cell);
                 };
             }
         ],

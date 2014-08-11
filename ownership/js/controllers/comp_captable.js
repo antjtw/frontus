@@ -124,6 +124,7 @@ var captableController = function(
             // TODO should we forget the old cell here?
             // or do we want to maintain the history
             $scope.selectedCell = $scope.cellFor(inv, sec);
+            console.log($scope.selectedCell);
             if (!$scope.selectedCell) {
                 console.log(inv, sec);
                 /*

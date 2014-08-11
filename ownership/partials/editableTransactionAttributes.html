@@ -8,7 +8,7 @@
         <!--ng-change="saveIt(data)"-->
         <input ng-if="useTextField(key)"
                id="date{{data.attrs.$$hashKey}}"
-               ui-event="{keydown: 'saveIt(data)',
+               ui-event="{keydown: 'saveIt(data, selected)',
                           blur: 'saveIt(data)'}"
                type="text"
                ng-model="data.attrs[key]">
