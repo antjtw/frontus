@@ -358,8 +358,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {...}
              */
              SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                 if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
+                 if ($scope.doc && $scope.annots) {
                      // don't load annotations twice
+                     console.error("loading document twice");
                      return;
                  }
                  $scope.lib = data;
@@ -445,7 +446,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.newnewBox = function(event) {
-            if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
+            if ($scope.isAnnotable && (!$scope.doc.when_shared && $rootScope.navState.role == "issuer") || (!$scope.doc.when_signed && $scope.doc.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
                 var a = Annotations.createBlankAnnotation();
                 a.page = $scope.doc.currentPage;
                 a.position.docPanel = $scope.dp;
@@ -544,7 +545,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              */
             var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
             var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
-            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
+            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.doc.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
                 if (clicked) {
                     $scope.$emit("notification:success", "Saved annotations");
