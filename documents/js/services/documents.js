@@ -396,38 +396,23 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         savePreparation: function(investor) {
-            // TODO: use overrides instead of annotation_overrides
             var notes = [];
             angular.forEach(this.annotations, function(note) {
-                if (note.whosign == "Issuer" && !note.pristine) {
-                    notes.push({id: note.id, val: note.val});
+                if (note.whosign == "Issuer" && this.preparedFor && this.preparedFor[investor] && this.preparedFor[investor].overrides[note.id]) {
+                    // don't save the override if it's empty or equal to the base value
+                    if (this.preparedFor[investor].overrides[note.id].val != "" && this.preparedFor[investor].overrides[note.id].val != note.val) {
+                        notes.push({id: note.id, val: this.preparedFor[investor].overrides[note.id].val});
+                    }
                 }
-            });
+            }, this);
             var doc = this;
             SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
                 // data stored, got back is_prepared, so update preparedFor with that and the overrides
-                var found = false;
-                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
-                    if (investor_prep.investor == investor) {
-                        //investor_prep.annotation_overrides = notes; // should already be updated, should be pulling from in above check to send data
-                        investor_prep.is_prepared = result[0].update_preparation;
-                        found = true;
-                    }
-                });
+                doc.preparedFor[investor].is_prepared = result[0].update_preparation;
                 if (!ShareDocs.prepCache[doc.doc_id]) {
                     ShareDocs.prepCache[doc.doc_id] = {};
                 }
                 ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
-                if (!found) {
-                    // must have accidentally inserted instead of updating ...
-                    // TODO: if overrides must already exist, how did we get here?
-                    doc.preparedFor.push(
-                        {display: Investor.getDisplay(investor),
-                         investor: investor,
-                         doc_id: doc.doc_id,
-                         annotation_overrides: notes,
-                         is_prepared: result[0].update_preparation});
-                }
             }).except(function(error) {
                 $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
             });
