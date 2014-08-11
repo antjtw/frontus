@@ -316,6 +316,26 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             // other attrs should remain the same?
         });
     }
+    function updateCell(cell) {
+        cell.ledger_entries = cell.transactions = null;
+        cell.a = cell.u = null;
+        console.log("updateCell");
+        console.log(cell);
+        
+        cell.transactions = captable.transactions.filter(
+            function(tran) {
+                return tran.attrs.investor == cell.investor &&
+                       tran.attrs.security == cell.security;
+            });
+        cell.ledger_entries = captable.ledger_entries.filter(
+            function(ent) {
+                return ent.investor == cell.investor &&
+                       ent.security == cell.security;
+            });
+        setCellUnits(cell);
+        setCellAmount(cell);
+    }
+    this.updateCell = updateCell;
     function generateCells() {
         angular.forEach(captable.investors, function(inv) {
             angular.forEach(captable.securities, function(sec) {
@@ -371,7 +391,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
      * the new ledger entries.
      *
      */
-    function saveTransaction(tran) {
+    function saveTransaction(tran, toUpdate) {
         // TODO this is getting called too often.
         // use ng-change instead of ui-event?
         //
@@ -380,13 +400,24 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             .filter(function(el) {
                     return el.transaction == tran.transaction;
             });
-        console.log(JSON.stringify(tran));
+        var old_transactions = captable.transactions
+            .filter(function(el) {
+                    return el.transaction == tran.transaction;
+            });
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            console.log(splice_many(captable.ledger_entries,
-                                    old_ledger_entries));
-            console.log(new_entries);
+            splice_many(captable.ledger_entries, old_ledger_entries);
+            splice_many(captable.transactions, old_transactions);
+            for (new_entry in new_entries)
+            {
+                captable.ledger_entries.push(new_entries[new_entry]);
+            }
+            captable.transactions.push(tran);
+            if (toUpdate)
+            {
+                updateCell(toUpdate);
+            }
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(logError);
@@ -651,7 +682,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function sumTransactionAmount(prev, cur, idx, arr) {
         return prev + (calculate.isNumber(cur.attrs.amount) ?
-                          cur.attrs.amount : 0);
+                          Number(cur.attrs.amount) : 0);
     }
     function pingIntercomIfCaptableStarted() {
         var earliestedit = new Date.today().addDays(1);
