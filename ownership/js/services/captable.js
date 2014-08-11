@@ -524,11 +524,20 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
     }
 
-    function newTransaction(sec_type, kind) {
+    function newTransaction(sec, kind, inv) {
         var tran = new Transaction();
         tran.kind = kind;
         tran.company = $rootScope.navState.company;
-        initAttrs(tran, sec_type, kind);
+        tran.insertion_date = Date.now();
+        var sec_obj = captable.securities
+            .filter(function(el) {
+                return el.name==sec && el.attrs.security_type;
+            })[0];
+        initAttrs(tran, sec_obj.attrs.security_type, kind);
+        tran.attrs.security = sec;
+        tran.attrs.security_type = sec_obj.attrs.security_type;
+        tran.attrs.investor = inv;
+        // TODO should we be grabbing the next transaction id?
         return tran;
     }
     this.addSecurity = function(name) {
@@ -568,8 +577,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (!sec_obj.attrs || !sec_obj.attrs.security_type) {
             return null;
         } else {
-            var tran = newTransaction(sec_obj.attrs.security_type,
-                                      'grant');
+            var tran = newTransaction(sec, 'grant', inv);
             c.transactions.push(tran);
             captable.cells.push(c);
             return c;

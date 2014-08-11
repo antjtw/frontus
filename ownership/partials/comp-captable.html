@@ -731,9 +731,8 @@
                 <td ng-repeat="key in ct.securities
                 | orderBy:['effective_date', 'insertion_date']:true"
                     ng-class="{tranSelected: selectedCell
-                        && data.investor && data.security
-                        && selectedCell.investor == data.investor
-                        && selectedCell.security == data.security}">
+                        && selectedCell.investor == row.name
+                        && selectedCell.security == key.name}">
                     <span ng-class="{'tran-highlight':tourstate==4}">
                         <span class="next-button"
                               ng-click="closeTour(); tourNotification();">
