@@ -87,10 +87,12 @@ own.directive('d3Donut', ['d3', function(d3) {
 own.directive('captableCell', [function() {
     return {
         restrict: 'E',
-        scope: {data: '='},
+        scope: {inv: '=',
+                sec: '='},
         templateUrl: '/ownership/partials/captableCell.html',
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
+                $scope.data = captable.cellFor($scope.inv, $scope.sec);
                 $scope.settings = $rootScope.settings;
                 $scope.$watchCollection('data.ledger_entries',
                     function(newEntries, oldEntries) {
@@ -105,12 +107,15 @@ own.directive('editableCaptableCell', [function() {
     return {
         restrict: 'E',
         replace: true,
-        scope: {data: '=',
+        scope: {sec: '=',
+                inv: '=',
                 selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
         controller: ["$scope", "$rootScope", "calculate", "captable",
             function($scope, $rootScope, calculate, captable) {
+                $scope.data = captable.cellFor($scope.inv,
+                                               $scope.sec);
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
@@ -239,7 +244,6 @@ own.directive('editableCellDetails', [function() {
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable",
             function($scope, $rootScope, attributes, captable) {
-                console.log($scope);
                 $scope.captable = captable;
                 var ct = captable.getCapTable();
                 $scope.settings = $rootScope.settings;

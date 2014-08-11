@@ -709,29 +709,31 @@
                             Next
                         </span>
                     </span>
-                    <span ng-switch on="row.nameeditable">
-                        <span ng-switch-default>
-                            <input class="name-row"
-                                   placeholder="Add Name"
-                                   style="width:140px;"
-                                   ng-model="row.name"
-                                   ng-change="nameChangeLR(row)"
-                                   ui-event="{focus: 'selectInvestor(row.name)',
-                                               blur: 'updateRow(row)'}"
-                                   onpaste="return false"
-                                   ng-paste="namePaste($event, row);"
-                                   onkeydown="testForEnter();">
-                        </span>
-                        <span ng-switch-when="0">
-                            <input class="name-row"
-                                   disabled
-                                   style="width:180px;"
-                                   ng-model="row.name">
-                        </span>
+                    <span ng-if="!row.email">
+                        <input class="name-row"
+                               placeholder="Add Name"
+                               style="width:140px;"
+                               ng-model="row.name"
+                               ng-change="nameChangeLR(row)"
+                               ui-event="{focus: 'selectInvestor(row.name)',
+                                           blur: 'updateRow(row)'}"
+                               onpaste="return false"
+                               ng-paste="namePaste($event, row);"
+                               onkeydown="testForEnter();">
+                    </span>
+                    <span ng-if="row.email">
+                        <input class="name-row"
+                               disabled
+                               style="width:180px;"
+                               ng-model="row.name">
                     </span>
                 </td>
                 <td ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']:true"
+                    ng-class="{tranSelected: selectedCell
+                        && data.investor && data.security
+                        && selectedCell.investor == data.investor
+                        && selectedCell.security == data.security}">
                     <span ng-class="{'tran-highlight':tourstate==4}">
                         <span class="next-button"
                               ng-click="closeTour(); tourNotification();">
@@ -739,7 +741,8 @@
                         </span>
                     </span>
                     <editable-captable-cell
-                        data="cellFor(row.name, key.name)"
+                        sec='key.name'
+                        inv='row.name'
                         select-cell="selectCell"
                         selected-cell="selectedCell">
                 </td>
@@ -787,11 +790,11 @@
                 <td ng-click="selectCell(row.name, key.name)"
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
-                               hoverable: cellFor(row.name, key.name).a
-                                          || cellFor(row.name, key.name).u}"
+                               hoverable: captable.cellFor(row.name, key.name).a
+                                          || captable.cellFor(row.name, key.name).u}"
                     ng-repeat="key in ct.securities
                 | orderBy:['effective_date', 'insertion_date']:true">
-                    <captable-cell data="cellFor(row.name, key.name)">
+                    <captable-cell inv='row.name' sec='key.name'>
                 </td>
             </tr>
             </tbody>

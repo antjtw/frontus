@@ -26,15 +26,11 @@ Security = function() {
     this.insertion_date = null;
     this.transactions = [];
 };
-// if nameeditable == 0 then it's not a real investor row
-// (unissued investors)
-// TODO can this be cut out?
 Investor = function() {
     this.name = "";
     this.email = "";
     this.access_level = "";
-    this.editable = "0";
-    this.nameeditable = null;
+    this.editable = true;
     this.transactions = [];
 };
 Cell = function() {
@@ -225,6 +221,29 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             return el.name == obj.attrs.security;
         })[0];
     }
+    this.cellFor = function(inv, sec, create) {
+        var cells = captable.cells
+            .filter(function(cell) {
+                return cell.investor == inv &&
+                       cell.security == sec &&
+                       (cell.a || cell.u);
+            });
+        if (cells.length === 0) {
+            if (create) {
+                var c = createCell(inv, sec);
+                console.log(c);
+                return c;
+            } else {
+                return null;
+            }
+        } else if (cells.length == 1) {
+            return cells[0];
+        } else if (cells.length > 1) {
+            // FIXME error, do cleanup?
+        } else {
+            return null;
+        }
+    };
     function secHasUnissued(sec) {
         return numUnissued(sec);
     }
@@ -435,7 +454,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         row.name = name.name;
         row.email = name.email;
         row.access_level = name.level;
-        row.editable = "yes";
         row.transactions = captable.transactions
             .filter(function(el) {return el.attrs.investor == row.name;});
         return row;
@@ -509,6 +527,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function newTransaction(sec_type, kind) {
         var tran = new Transaction();
         tran.kind = kind;
+        tran.company = $rootScope.navState.company;
         initAttrs(tran, sec_type, kind);
         return tran;
     }
@@ -526,7 +545,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     };
     this.addInvestor = function(name) {
         var inv = new Investor();
-        inv.editable = "yes";
+        inv.editable = true;
         inv.name = name;
         inv.company = $rootScope.navState.company;
         inv.percentage = function() {return investorSorting(inv.name);};
@@ -540,6 +559,23 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.addTransaction = function(inv, sec, kind) {
         console.log(inv, sec, kind);
     };
+    function createCell(inv, sec) {
+        var c = new Cell();
+        c.investor = inv;
+        c.security = sec;
+        var sec_obj = captable.securities
+            .filter(function(el) { return el.name==sec; })[0];
+        if (!sec_obj.attrs || !sec_obj.attrs.security_type) {
+            return null;
+        } else {
+            var tran = newTransaction(sec_obj.attrs.security_type,
+                                      'grant');
+            c.transactions.push(tran);
+            captable.cells.push(c);
+            return c;
+        }
+    }
+    this.createCell = createCell;
     /*
     function massageTransactionValues(tran) {
         tran.units = calculate.cleannumber(tran.units);

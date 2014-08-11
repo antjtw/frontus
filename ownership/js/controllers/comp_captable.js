@@ -124,18 +124,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.currentTab = 'details';
         $scope.selectedSecurity = $scope.selectedInvestor = null;
         if (!$scope.selectedCell || !cellIsSelected(inv, sec)) {
-            // TODO should we forget the old cell here?
-            // or do we want to maintain the history
-            $scope.selectedCell = $scope.cellFor(inv, sec);
-            if (!$scope.selectedCell) {
-                console.log(inv, sec);
-                /*
-                var c = new Cell();
-                c.investor = inv;
-                c.security = sec;
-                $scope.selectedCell = c;
-                */
-            }
+            History.forget($scope, 'selectedCell');
+            $scope.selectedCell = captable.cellFor(inv, sec, true);
             History.watch('selectedCell', $scope);
             displayCellDetails();
         } else if ($scope.selectedCell && !cellIsSelected(inv, sec)) {
@@ -153,6 +143,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.selectedSecurity = null;
             History.forget($scope, 'selectedSecurity');
         } else {
+            History.forget($scope, 'selectedSecurity');
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
                     return el.name == security_name;  
@@ -170,6 +161,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.selectedInvestor = null;
             History.forget($scope, 'selectedInvestor');
         } else {
+            History.forget($scope, 'selectedInvestor');
             $scope.selectedInvestor = $scope.ct.investors
                 .filter(function(el) {
                     return el.name == investor_name;
@@ -243,15 +235,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
     */
-
-    $scope.cellFor = function(inv, sec) {
-        return $scope.ct.cells
-            .filter(function(cell) {
-                return cell.investor == inv &&
-                       cell.security == sec &&
-                       (cell.a || cell.u);
-            })[0];
-    };
     $scope.rowFor = function(inv) {
         return $scope.ct.cells
             .filter(function(cell) {

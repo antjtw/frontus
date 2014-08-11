@@ -1,35 +1,26 @@
-<span>
-    <span ng-class="{tranSelected:
-                        selectedCell
-                        && selectedCell.investor == data.investor
-                        && selectedCell.security == data.security}"
-                        class="captablepair-box">
-<!-- TODO  which transaction should be modified when the user 
-           updates a cell?
--->
-        <input ng-if="!isDebt(data);"
-               class="captablepair first-box"
-               placeholder="{{captable.cellSecurityType(key)
-                              | securityUnitLabel}}"
-               ui-event="{focus: 'selectCell(data.investor, data.security)',
-                           blur: 'saveIt(data.u)'}"
-               ng-model='data.u'
-               ng-change='updateUnits()'
-               onpaste="return false"
-               ng-paste="numberPaste($event, row, data.security, 'u');"
-               onkeydown="testForEnter();">
-        <input ng-if="isDebt(data);"
-               class="captablepair default-pointer first-box"
-               disabled>
-        <input class="captablepair last-box"
-               placeholder="paid"
-               ui-event="{focus: 'selectCell(data.investor, data.security)',
-                           blur: 'saveIt(data.a)'}"
-               data-currency
-               ng-model='data.a'
-               ng-change='updateAmount()'
-               onpaste="return false"
-               ng-paste="numberPaste($event, row, data.security, 'a');"
-               onkeydown="testForEnter();">
-    </span>
+<span class="captablepair-box">
+    <input ng-if="!isDebt(data);"
+           class="captablepair first-box"
+           placeholder="{{captable.cellSecurityType(key)
+                          | securityUnitLabel}}"
+           ui-event="{focus: 'selectCell(inv, sec)',
+                       blur: 'saveIt(data.u)'}"
+           ng-model='data.u'
+           ng-change='updateUnits()'
+           onpaste="return false"
+           ng-paste="numberPaste($event, row, data.security, 'u');"
+           onkeydown="testForEnter();">
+    <input ng-if="isDebt(data);"
+           class="captablepair default-pointer first-box"
+           disabled>
+    <input class="captablepair last-box"
+           placeholder="paid"
+           ui-event="{focus: 'selectCell(inv, sec)',
+                       blur: 'saveIt(data.a)'}"
+           data-currency
+           ng-model='data.a'
+           ng-change='updateAmount()'
+           onpaste="return false"
+           ng-paste="numberPaste($event, row, data.security, 'a');"
+           onkeydown="testForEnter();">
 </span>
