@@ -13,7 +13,7 @@ app.controller('DocumentPrepareController',
         $scope.investors = Investor.investors;
         function filterInvestors(investorList, docPreparedFor) {
             return investorList.filter(function(val, idx, arr) {
-                return (docPreparedFor.keys().indexOf(pval.investor) === -1)
+                return (Object.keys(docPreparedFor).indexOf(val.id) === -1)
             });
         }
         $scope.select2Options = {

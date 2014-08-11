@@ -358,7 +358,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {...}
              */
              SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                 if ($scope.doc && $scope.annots) {
+                 if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
                      // don't load annotations twice
                      console.error("loading document twice");
                      return;
@@ -366,37 +366,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  $scope.lib = data;
                  // TODO: migrate all uses of $scope.lib to $scope.doc
                  $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
+                 $scope.doc.getPreparedFor(); // don't need the results here, just for it to exist for the annotations
                  $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
                  $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
 
                  $scope.annots = Annotations.getDocAnnotations($scope.doc);
-                 if ($scope.$parent.prepareFor) {
-                     // load the annotation Overrides
-                     // It may already exist in the table, since we got to this step, so loop until we find it.
-                     // TODO: don't override $scope.doc.annotations, as the canonical version of the doc annots shouldn't change
-                     var endOfWatch = $scope.$watchCollection(function() {
-                         return $scope.doc.getPreparedFor();
-                     }, function(preps) {
-                         preps.forEach(function(prep) {
-                             if (prep.investor == $scope.$parent.prepareFor) {
-                                 if (prep.annotation_overrides) {
-                                     prep.annotation_overrides.forEach(function(override, idx, arr) {
-                                         $scope.annots.some(function(annot, aidx, aarr) {
-                                             if (annot.id == override.id) {
-                                                 annot.val = override.val;
-                                                 annot.pristine = false;
-                                                 return true;
-                                             } else {
-                                                 return false;
-                                             }
-                                         });
-                                     });
-                                 }
-                                 endOfWatch(); // destroy the $watch
-                             }
-                         });
-                     });
-                 }
              }).except(function(err) {
                  $scope.$parent.leave();
              });

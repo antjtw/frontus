@@ -397,6 +397,70 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     });
 
     $scope.user = User;
+
+    // create variables we can bind to for placeholder and value
+    // depending on whether we're using the annotation proper, or an override value
+    $scope.$watch('annot.type_info.display', function(display) {
+        if ((!$scope.prepareFor) || ($scope.annot.val.length === 0)) {
+            $scope.current_placeholder = display;
+        }
+    });
+    if ($scope.prepareFor) {
+        $scope.$watch('annot.val', function(val) {
+            if (val.length > 0) {
+                $scope.current_placeholder = val;
+            } else {
+                $scope.current_placeholder = $scope.annot.type_info.display;
+            }
+        });
+        $scope.$watch(function() {
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor] &&
+                $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id]) {
+                return $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id].val;
+            } else {
+                return "";
+            }
+        }, function(override) {
+            $scope.current_val = override;
+        });
+        $scope.$watch('current_val', function(val, old_val) {
+            if (val == old_val) {
+                // don't run the first time
+                return;
+            }
+            // check for overrides value existance, then assign to it if it's not equal
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor] &&
+                $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id]) {
+                if (val != $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id].val) {
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id].val = val;
+                }
+            } else {
+                var hash;
+                if (!$scope.doc.preparedFor) {
+                    $scope.doc.getPreparedFor();
+                }
+                if (!$scope.doc.preparedFor[$scope.prepareFor]) {
+                    hash = $scope.doc.addPreparedFor($scope.prepareFor);
+                    hash.overrides[$scope.annot.id] = {id: $scope.annot.id, val: val};
+                } else {
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = {id: $scope.annot.id, val: val};
+                }
+            }
+        });
+    } else {
+        $scope.$watch('annot.val', function(val) {
+            if ($scope.current_value != val) {
+                $scope.current_value = val;
+            }
+        });
+        $scope.$watch('current_val', function(val) {
+            if ($scope.annot.val != val) {
+                $scope.annot.val = val;
+            }
+        });
+    }
 }
 
 annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "User", "$timeout", "navState", "SWBrijj"];

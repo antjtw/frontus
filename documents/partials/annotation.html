@@ -10,19 +10,19 @@
             <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode()) && (boxHover || active.annotation == annot)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
-                          placeholder="{{annot.type_info.display}}"
+                          placeholder="{{current_placeholder}}"
                           ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum'"
-                          ng-keyup="addLineBreaks($event)" ng-model="annot.val" style="resize:none"
+                          ng-keyup="addLineBreaks($event)" ng-model="current_val" style="resize:none"
                           class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <select class="height-force" ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
+                <select class="height-force" ui-select2="select2Options" ng-model="current_val" ng-style="annotationSizeStyle" placeholder="{{current_placeholder}}">
                     <option></option>
                     <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>
             </div>
             <div ng-if="dateBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)">
+                <input type="text" ng-model="current_val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)" placeholder="{{current_placeholder}}">
             </div>
         </fieldset>
         <fieldset ng-if="annot.type == 'highlight'" >
@@ -72,14 +72,14 @@
                         </li>
                         <li ng-if="annot.type == 'highlight' && annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'">
                             <div class="textarea-container">
-                                <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="annot.val"/>
+                                <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="current_val"/>
                             </div>
                         </li>
                         <li ng-if="annot.type_info.typename == 'date'">
-                            <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
+                            <input type="text" ng-model="current_val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
                         </li>
                         <li ng-if="annot.type_info.typename == 'enum'">
-                            <select ui-select2="select2Options" ng-model="annot.val">
+                            <select ui-select2="select2Options" ng-model="current_val">
                                 <option></option>
                                 <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>

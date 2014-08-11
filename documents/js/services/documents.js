@@ -285,7 +285,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 if (defaultList) {
                     var origLength = doc.preparedFor.length;
                     defaultList.forEach(function(inv) {
-                        if (!doc.preparedFor.keys().indexOf(inv) === -1) {
+                        if (!Object.keys(doc.preparedFor).indexOf(inv) === -1) {
                             doc.addPreparedFor(inv);
                         }
                     });
@@ -299,11 +299,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 this.preparedFor = {};
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
-                        investor_prep.override_hash = {};
+                        investor_prep.overrides = {};
                         if (investor_prep.annotation_overrides) {
                             var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
                             annotation_overrides.forEach(function(override) {
-                                investor_prep.override_hash[override.id] = override;
+                                investor_prep.overrides[override.id] = override;
                             });
                         }
                         // add id and text fields to make select2 happy
@@ -324,11 +324,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     doc.preparedFor = [];
                     data.forEach(function(investor_prep) {
-                        investor_prep.override_hash = {};
+                        investor_prep.overrides = {};
                         if (investor_prep.annotation_overrides) {
                             var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
                             annotation_overrides.forEach(function(override) {
-                                investor_prep.override_hash[override.id] = override;
+                                investor_prep.overrides[override.id] = override;
                             });
                         }
                         // add id and text fields to make select2 happy
@@ -340,15 +340,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         addPreparedFor: function(investor) {
             var doc = this;
+            var hash = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: false, overrides: {}};
+            if (investor == "") {
+                return;
+            }
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
                 SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
-                    doc.preparedFor[investor] = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: data[0].is_prepared_person, override_hash: {}};
+                    hash.is_prepared = data[0].is_prepared_person;
+                    if (!doc.preparedFor[investor]) {
+                        doc.preparedFor[investor] = hash;
+                    } // if it's already set, just fail silently as something more canonical hopefully overwrote
                 }).except(function(error) {
+                    delete doc.preparedFor[investor];
                     $rootScope.$emit("notification:fail", "Oops, something went wrong.");
                 });
             }).except(function(error) {
+                delete doc.preparedFor[investor];
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
+            return hash;
         },
         updatePreparedFor: function(old_investor, new_investor) {
             var doc = this;
@@ -386,7 +396,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         savePreparation: function(investor) {
-            // TODO: use override_hash instead of annotation_overrides
+            // TODO: use overrides instead of annotation_overrides
             var notes = [];
             angular.forEach(this.annotations, function(note) {
                 if (note.whosign == "Issuer" && !note.pristine) {
@@ -410,7 +420,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
                 if (!found) {
                     // must have accidentally inserted instead of updating ...
-                    // TODO: if override_hash must already exist, how did we get here?
+                    // TODO: if overrides must already exist, how did we get here?
                     doc.preparedFor.push(
                         {display: Investor.getDisplay(investor),
                          investor: investor,

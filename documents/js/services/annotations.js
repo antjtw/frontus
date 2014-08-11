@@ -117,7 +117,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', function(SWBri
             if (!this.id) {
                 this.id = generateAnnotationId();
             }
-            this.pristine = true; // used to tell if value has changed since server load. mostly useful when preparing for an individual
             this.updateTypeInfo(annotation_types);
             return this;
         },
