@@ -21,24 +21,31 @@
             {{tran.date | date:settings.shortdate}} Transaction
         </span>
     </accordion-heading>
-
-    <div class="standard-button btn-group darkgray">
+    <div class="small-standard-button
+                standard-button
+                btn-group darkgray">
         <button class="btn"
                 ng-click="switchCapTab('details');"
-                ng-class="{on:currentTab=='details'}">
-            <span data-icon="&#xe01e;" aria-hidden="true">
+                ng-class="{on: currentTab=='details'}">
+            <span>
                 Details
             </span>
         </button>
         <button class="btn"
                 ng-click="switchCapTab('documents');"
-                ng-class="{on:currentTab=='documents'}">
-            <span data-icon="&#xe60e;" aria-hidden="true">
+                ng-class="{on: currentTab=='documents'}">
+            <span>
                 Evidence
             </span>
         </button>
+        <button class="btn"
+                ng-click="switchCapTab('actions');"
+                ng-class="{on: currentTab=='actions'}">
+            <span>
+                Actions
+            </span>
+        </button>
     </div>
-
     <div class="capTab" ng-switch-when="details">
         <div class="capGuide global">
             <div class="rightTitle double">
@@ -123,6 +130,9 @@
                 Finished!
             </button>
         </div>
+    </div>
+    <div class="capTab" ng-switch-when="actions">
+        Hello
     </div>
     </accordion-group>
 </accordion>
