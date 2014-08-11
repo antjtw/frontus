@@ -37,7 +37,7 @@
                 <div class="docPrepRow header">
                     <span>Recipient</span>
                     <span ng-if="!state.bulkPrep">Copy Status</span>
-                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots">{{annot.type_info.display}}</span>
+                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">{{annot.type_info.display}}</span>
                 </div>
                 <div ng-repeat="investor in doc.preparedFor" class="docPrepRow">
                     <span><input ui-select2="select2Options" ng-model="investor.display" ng-change="updateInvestor(investor)"></span>
@@ -47,7 +47,7 @@
                             <span ng-if="!investor.is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
                         </a>
                     </span>
-                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots">{{annot.type_info.display}}</span>
+                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">{{annot.type_info.display}}</span>
                 </div>
                 <div class="docPrepRow">
                     <span><input type="text" ui-select2="select2Options" ng-model="newInvestor" ng-change="addInvestor()"></span>

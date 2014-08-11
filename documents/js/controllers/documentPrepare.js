@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations',
-    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations) {
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState) {
         $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
         $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
 
@@ -50,6 +50,14 @@ app.controller('DocumentPrepareController',
             } else if (investor_data.investor != investor_data.display.id) {
                 // there's been a bona fide change in user
                 $scope.doc.updatePreparedFor(investor_data.investor, investor_data.display.id);
+            }
+        };
+
+        $scope.bulkPrepable = function(annotation) {
+            if (!annotation.forRole(navState.role) || annotation.whattype == "ImgSignature") {
+                return false;
+            } else {
+                return true;
             }
         };
 
