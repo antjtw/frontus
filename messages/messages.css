@@ -97,6 +97,10 @@
     font-weight: bold;
 }
 
+.message_input .ta-scroll-window.form-control span{
+    line-height: 0px;
+}
+
 .message_input .ta-scroll-window.form-control blockquote  {
     display: block;
     -webkit-margin-before: 1em;
