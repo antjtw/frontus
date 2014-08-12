@@ -632,7 +632,13 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                var newtext = msg.text.replace(/\n/g, "<br/>");
+                console.log(msg.text);
+                console.log(typeof msg.text);
+                var newString = msg.text.replace("hi", "arielll")
+                console.log(newString)
+                var newtext = msg.text.replace("(/&nbsp;/)","heyyyyyy");
+                console.log(newtext)
+                console.log("see new text?")
                 var recipients = $scope.message.recipients;
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',

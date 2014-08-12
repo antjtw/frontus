@@ -4880,20 +4880,22 @@ textarea.email-text {
 
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
+    margin-left: 0px;
+    padding-bottom: 12px;
 }
 li.event.roles > div > ul {
 	width: 300px;
 }
 .tinycol{
-    display: inline-block;
-    width: 40%;
-    padding-left: 20px;
-    margin-left: 10px;
+    padding-left: 30px;
+    float: left;
+    width: 60%;
 }
 
 .tinycol.left{
     text-align: right;
     padding-left: 10px;
+    width: 20%;
 }
 
 .group_button{
