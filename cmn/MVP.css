@@ -4882,15 +4882,18 @@ textarea.email-text {
     margin-right: 0px;
 }
 .tinycol{
-    display: inline-block;
-    width: 40%;
-    padding-left: 20px;
-    margin-left: 10px;
+/*    display: inline-block;*/
+/*    width: 40%;*/
+    padding-left: 30px;
+    float: left;
+    width: 60%;
+/*    margin-left: 10px;*/
 }
 
 .tinycol.left{
     text-align: right;
     padding-left: 10px;
+    width: 20%;
 }
 
 .group_button{

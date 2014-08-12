@@ -1,7 +1,6 @@
 <div class="row-fluid">
 <div class="message-side">
-
- <div class="messages tabbable">            
+<div class="messages tabbable">            
     <ul class="activity-feed2">
         <li class="event roles" style="margin: 0px">
             <div>
@@ -44,37 +43,37 @@
                 </ul>
             </div>
         </li>
-        <li class="event roles" stye="margin: 0px">
+      <!--   <li class="event roles" stye="margin: 0px">
             <div>
-                    <ul>
-                        <li>
+                <ul>
+                    <li>
+                        
+                        <div>
+                            <span data-icon="&#xe034;"aria-hidden="true" ng-show="showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
+                            <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
+                            <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
+
+                            <div ng-if="!showGroups && myGroups.length == 0" ng-click="$parent.$parent.toggleSide('group')">
+                                <div class="noGroups status-toggle">Want to save time when sharing and messaging?<br/>
+                                    <span>Start Grouping</span>
+                                    <span data-icon="&#xe016;" aria-hidden="true"></span>
+                                </div>
+                            </div>
                             
-                            <div>
-                                <span data-icon="&#xe034;"aria-hidden="true" ng-show="showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
-                                <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
-                                <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
 
-                                <div ng-if="!showGroups && myGroups.length == 0" ng-click="$parent.$parent.toggleSide('group')">
-                                    <div class="noGroups status-toggle">Want to save time when sharing and messaging?<br/>
-                                        <span>Start Grouping</span>
-                                        <span data-icon="&#xe016;" aria-hidden="true"></span>
-                                    </div>
-                                </div>
-                                
-
-                                <div ng-if="!showGroups && myGroups.length > 0" ng-repeat = "myGroup in myGroups" class="select_role" ng-click="assignFilter(myGroup.ind_group)">
-                                    <div class="select_role tinycol"  ng-class="{'picked': filterParam.param==myGroup.ind_group}">{{myGroup.ind_group}}</div>
-                                    <div class="select_role tinycol left" ng-class="{'picked': filterParam.param==myGroup.ind_group}"> ({{myGroup.count}})</div>
-                                </div>
-                
-                            </div>          
-                        </li>                
-                    </ul>
+                            <div ng-if="!showGroups && myGroups.length > 0" ng-repeat = "myGroup in myGroups" class="select_role" ng-click="assignFilter(myGroup.ind_group)">
+                                <div class="select_role tinycol"  ng-class="{'picked': filterParam.param==myGroup.ind_group}">{{myGroup.ind_group}}</div>
+                                <div class="select_role tinycol left" ng-class="{'picked': filterParam.param==myGroup.ind_group}"> ({{myGroup.count}})</div>
+                            </div>
+            
+                        </div>          
+                    </li>                
+                </ul>
             </div>
-        </li>
+        </li> -->
            
-        </ul>
-    </div>
+    </ul>
+</div>
 </div>
 </div>
 
