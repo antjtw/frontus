@@ -139,7 +139,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
     $scope.titleClick = function() {
-        if ($scope.doc.uploading) {
+        if (!(!$scope.doc.uploaded_by || $scope.doc.pages > 0)) {
             return;
         }
         if ($scope.doc.type != 'doc') {
@@ -163,12 +163,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     // dropdown list functions
     $scope.viewProfile = function(investor) {
         document.location.href = "/app/company/profile/view?id=" + investor.email;
-    };
-
-    $scope.viewStatus = function(doc) {
-        if (doc.doc_id) {
-            $location.url("/app/documents/company-status?doc=" + doc.doc_id);
-        }
     };
 
     $scope.prepareDocument = function(doc) {
