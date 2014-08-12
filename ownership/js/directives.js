@@ -448,7 +448,6 @@ own.directive('editableTransactionAttributes', [function() {
                     return isArray(inputType(key));
                 };
                 $scope.saveIt = function(tran, cell) {
-                    console.log(tran);
                     captable.saveTransaction(tran, cell);
                 };
             }
