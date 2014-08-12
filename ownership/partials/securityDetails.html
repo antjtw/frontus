@@ -48,13 +48,6 @@
                     Evidence
                 </span>
             </button>
-            <button class="btn"
-                    ng-click="switchCapTab('actions');"
-                    ng-class="{on: currentTab=='actions'}">
-                <span>
-                    Actions
-                </span>
-            </button>
         </div>
         <div class="capTab" ng-switch-when="details">
             <div class="capGuide cap-overflow global">
@@ -87,23 +80,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
-        <div class="capTab" ng-switch-when="actions">
-            <ul>
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
-                        {{chosen_action}}
-                    </a>
-                    <span class="invisible-drop">'</span>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="a in actions">
-                            <a ng-click="chooseAction(a)">
-                                {{a}}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
         </div>
         </accordion-group>
     </accordion>
