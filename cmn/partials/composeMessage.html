@@ -1,70 +1,81 @@
-<div class="composemessage">
-    <div class="sidebarHeader">
-        <span>SEND MESSAGE</span>
-    </div>
 
-    <div class="sidebarText">
-    <!--     <div class="input-list"> -->
-        <div ng-if="triggerUpgradeMessages(recipients)"
-            class="upgradeWarning">
-                <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
-            </div> 
+<div class="compose_message">
+   
+    <div>
+        <div ng-if="triggerUpgradeMessages(message.recipients)" class="upgradeWarning">
+            <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
+        </div> 
+
+
         <div>
-     
+            <div class="message_elem">
+                <div class="message_headline">To</div>
+                <div class="message_input">
+                    <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter the email address your contacts" style="width: 100%;">
+                        <option ng-repeat="emailList in emailLists" value="{{emailList.email}}">{{emailList.email}}</option>
+                    </select>
+                </div>
+            </div>
         <div>
-            <span>SUBJECT</span>
-        </div>
 
-        <div class= "email-subject">
-            <input type="text" ng-model ="message.subject">
-        </div>
-
-        <div class="sidebarText">
-            <span>MESSAGE</span>
-            <div>
-            <textarea class="email-text" rows="6"
-                cols="60" ng-model="message.text">
-            </textarea>
-            <div>
-        </div>
-    </div>
-
-  
-    <div class="sidebarFooter">
-
-        <div class="preview-message" 
-            ng-click= "previewModalOpen(message)"
-            ng-hide="!readyToPreview(message)">
-            Preview Message 
-        </div>
-
-        <div class="footer-headline-left">
-            <div class = "standard-button green">
-                <button class="btn"
-                    ng-disabled="!readyToSend(message)  || clicked"
-                    ng-click="sendMessage(message); $parent.toggleSide()">
-                    Send
-                </button>
+        <div class="message_elem">
+            <div class="message_headline"> Subject</div>
+            <div class="message_input">
+                <input type="text" ng-model ="message.subject" class="msgsubject" style="padding-right: 0px; width: calc(100% - 5px);"></input>
             </div>
         </div>
 
+        <div class="message_info">
+            <div class="message_headline" style="margin-top: 4px;"> Message</div>
+            <div class="message_input" style="width: calc(76% + 5px);">
+                <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
+            </div>
+        </div>
+
+        
+    </div>
+
 
   
+   
 
-        <div class="footer-headline-right">
-        <div class= "standard-button white">
-            <button class="btn" ng-click="$parent.toggleSide(); resetMessage()">
-            Cancel
-            </button>
-        </div>
-        </div>
-     
-    </div>   
+<div class="preview-message" 
+    ng-click= "previewModalOpen(message)"
+    ng-hide="!readyToPreview(message)">
+    Preview Message 
 </div>
+
+<div class="msgButtons">
+    <div class = "standard-button green">
+        <button class="btn" style="font-size: 14px"
+            ng-disabled="!readyToSend(message)  || clicked"
+            ng-click="sendMessage(message)">
+            Send
+        </button>
+    </div>
+</div>
+
+<div class="msgButtons left">
+    <div class = "standard-button white">
+        <button class="btn"
+            ng-click="resetMessage()">
+            Cancel
+        </button>
+    </div>
+</div>
+</div>
+
+
+
+
+     
+     
+
 
 <div modal="previewModal" close="previewModalClose()" options="{dialogClass: 'modal preview-modal'}">
     <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0; padding: 0;background-color: #F1F1F1;;height: 100% !important;width: 100% !important;">
         <tr>
+            <span class="close" data-icon="&#xe00f;" ng-click="previewModalClose()"></span>
             <td align="center" valign="top" id="bodyCell" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;border-top: 0;height: 100% !important;width: 100% !important;">
                 <!-- BEGIN TEMPLATE // -->
                 <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border: 0;">
@@ -138,8 +149,8 @@
                                                             <div>
                                                                 {{company}} is using Sharewave to organize and share company information with you.
                                                             </div>                                           
-                                                            <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:40px; margin-bottom:20px; border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
-                                                            <div  style="white-space: pre;">{{messagetext}}</div>
+                                                            <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:40px; margin-bottom:20px; border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div >
+                                                            <div ng-bind-html="messagetext" class="msgText"></div>
                                                             <div>&nbsp;</div>
                                                             <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
                                                             <div>&nbsp;</div>
@@ -200,6 +211,8 @@
                         </tr>
                     </table>
 
+                </div>
+            </tr>
 </div>
 
 

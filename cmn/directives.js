@@ -36,7 +36,10 @@ m.directive('groupPeople', function(){
                     angular.forEach($scope.myUserGroups, function(info){
                         var a = info.json_array_elements;
                         var b = JSON.parse(a);
-                        $scope.groupData.push(new indGroup(b));
+                        if(b !== ""){
+                            $scope.groupData.push(new indGroup(b));
+                        }
+                        
                     });
                 });
             };
@@ -45,7 +48,6 @@ m.directive('groupPeople', function(){
             $scope.fromFront = function(person){
                 var allGroups = [];
                 angular.forEach(person, function(info){
-                    console.log(person)
                     if(info.groups != undefined){
                         var a = info.groups.split(", ");
                         for(var i = 0; i < a.length; i++){
@@ -188,8 +190,9 @@ m.directive('groupPeople', function(){
                             else{
                                 angular.forEach(myInfo, function(thing){
                                     bigGroup.push([thing.email, thing.role])
-                                    if(thing.groups == null || thing.groups == undefined){
+                                    if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == []){
                                         newGroupsArray = []
+                                        console.log("I don't have groups")
                                     }
                                     else{
                                         newGroupsArray = JSON.parse(thing.groups);
@@ -213,7 +216,6 @@ m.directive('groupPeople', function(){
                                          newGroupsArray.splice(toDelete, 1);
                                     };
                                 });
-                                console.log(newGroupsArray);
                             }
                             if($scope.groupName.length > 0){
                                 var checkNew = []
@@ -228,6 +230,13 @@ m.directive('groupPeople', function(){
                                 }
                                 
                             }
+                            console.log(newGroupsArray)
+                            // remove empty entries, and cannot add an empty group
+                        if(newGroupsArray.indexOf("") > -1){
+                           console.log(newGroupsArray.indexOf(""));
+                           var toDelete= newGroupsArray.indexOf("")
+                           newGroupsArray.splice(toDelete, 1)
+                        }
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
                     })
@@ -240,7 +249,6 @@ m.directive('groupPeople', function(){
             $scope.showUserRoles = function(){
                 SWBrijj.tblm('account.my_user_role', ['email', 'role', 'groups']).then(function(data){
                     $scope.myUserRoles = data;
-                    console.log($scope.myUserRoles);
                 });
             };
 
@@ -580,22 +588,38 @@ m.directive('addPerson', function(){
 
 m.directive('composeMessage', function() {
     return {
-        scope: {recipients: "="},
+        scope: false,
         // replace: true,
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 
 
         
 
         function($scope, $rootScope, SWBrijj) {
 
+            $scope.myEmails = [];
+
+            
+            // this returns everyone you have ever emailed. yay
+            $scope.getPeople = function(){
+                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+                    $scope.emailLists = data           
+                    angular.forEach($scope.emailLists, function(value, key){
+                        $scope.myEmails.push(value['email']);
+                    });
+                    return $scope.myEmails
+                });
+                // $scope.myEmails = array
+            };
+            $scope.getPeople()
+
+
             $scope.resetMessage = function() {
-                $scope.message = {recipients:[],
+                $scope.message = {recipients: [],
                                   text:"",
                                   subject:""};
-                $scope.recipients = []
             };
             $scope.resetMessage();
             $scope.composeopts = {
@@ -603,20 +627,29 @@ m.directive('composeMessage', function() {
                 dialogFade: true
             };
 
+            
+
             $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
             
-            $scope.howMany = function (){
+            $scope.howMany = function(){
                 if(location.host == 'share.wave'){
-                    console.log($scope.recipients + "i'm at sharewave!");
+                    console.log($scope.message.recipients + "i'm at sharewave!");
                 }
             };
+
 
 
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                var newtext = msg.text.replace(/\n/g, "<br/>");
-                var recipients = $scope.recipients;
+                console.log(msg.text);
+                console.log(typeof msg.text);
+                var newString = msg.text.replace("hi", "arielll")
+                console.log(newString)
+                var newtext = msg.text.replace("(/&nbsp;/)","heyyyyyy");
+                console.log(newtext)
+                console.log("see new text?")
+                var recipients = $scope.message.recipients;
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
@@ -633,9 +666,7 @@ m.directive('composeMessage', function() {
                     //this works but i don't know why for the root scope
                     $rootScope.$emit('new:message');
                     $scope.resetMessage();
-                    $scope.recipients = [];
                     $scope.clicked = false;
-
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",
@@ -647,8 +678,7 @@ m.directive('composeMessage', function() {
 
             
             $scope.readyToSend = function(msg) {
-                // console.log($scope.recipients)
-                if ($scope.recipients.length===0
+                if ($scope.message.recipients.length===0
                     || msg.subject===""
                     || msg.text==="") {
                     return false;
@@ -673,9 +703,6 @@ m.directive('composeMessage', function() {
             $scope.previewModalOpen = function(msg) {
                 $scope.previewModal = true;
                 $scope.subject = msg.subject;
-                // var message = msg.text.replace(new RegExp( "\n", "g" ),"<br>");
-                // var re = /<br *\/?>/gi;
-                // $scope.messagetext = message.replace(re, '\n')
                 $scope.messagetext=msg.text
                 $scope.sendername = $rootScope.person.name;
                 $scope.company = $rootScope.navState.name;
