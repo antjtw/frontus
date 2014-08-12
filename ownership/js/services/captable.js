@@ -402,43 +402,41 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         //
         // or maybe add a save button for now
         console.log("saveTransaction");
-        console.log(tran);
+        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            /*var old_ledger_entries = captable.ledger_entries
-                .filter(function(el) {
-                        return el.transaction == tran.transaction;
-                });*/
             console.log("save_transaction");
-            splice_many_by(captable.ledger_entries, function(el) {
+            for (new_entry in new_entries)
+            {
+                console.log(new_entry);
+                console.log(new_entries[new_entry]);
+                console.log(new_entries[new_entry].credit);
+            }
+            /*splice_many_by(captable.ledger_entries, function(el) {
                         return el.transaction == tran.transaction;
                 });
-            /*var old_transactions = captable.transactions
-                .filter(function(el) {
-                        return el.transaction == tran.transaction;
-                });*/
             splice_many_by(captable.transactions, function(el) {
                         return el.transaction == tran.transaction;
                 });
             if (new_entries.length < 1)
+            {
+                console.log("no new ledger entries");
                 return;
+            }
             var transaction = new_entries[0].transaction;
             tran.transaction = transaction;
             for (new_entry in new_entries)
             {
                 captable.ledger_entries.push(new_entries[new_entry]);
+                console.log(new_entries[new_entry].credit);
             }
             captable.transactions.push(tran);
-            console.log(captable.ledger_entries
-                .filter(function(el) {
-                        return el.transaction == tran.transaction;
-                }).length);
             if (toUpdate)
             {
                 updateCell(toUpdate);
             }
-            console.log(toUpdate, captable.cells);
+            console.log(toUpdate, captable.cells);*/
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(logError);
