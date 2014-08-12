@@ -103,13 +103,14 @@
 
 .message_input .ta-scroll-window.form-control blockquote  {
     display: block;
-    -webkit-margin-before: 1em;
+/*    -webkit-margin-before: 1em;
     -webkit-margin-after: 1em;
     -webkit-margin-start: 40px;
-    -webkit-margin-end: 40px;
+    -webkit-margin-end: 1em;*/
+    margin-left: 40px;
 }
 
-.message_input .ta-scroll-window.form-control blockquote p{
+.message_input .ta-scroll-window.form-control blockquote *{
     -webkit-margin-before: 1em;
     -webkit-margin-after: 1em;
 }
