@@ -398,12 +398,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // use ng-change instead of ui-event?
         //
         // or maybe add a save button for now
-        console.log("saveTransaction");
-        console.log(tran);
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            console.log("save_transaction");
             splice_many_by(captable.ledger_entries, function(el) {
                         return el.transaction == tran.transaction;
                 });
@@ -411,7 +408,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                         return el.transaction == tran.transaction;
                 });
             if (new_entries.length < 1)
+            {
+                console.log("no new ledger entries");
                 return;
+            }
             var transaction = new_entries[0].transaction;
             tran.transaction = transaction;
             for (new_entry in new_entries)
@@ -423,6 +423,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             {
                 updateCell(toUpdate);
             }
+            //captable.ledger_entries.push.apply(captable., new_entries);
+            //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(logError);
     }
     this.saveTransaction = saveTransaction;
@@ -609,6 +611,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     };
     this.addTransaction = function(inv, sec, kind) {
+        var tran = newTransaction(sec, kind, inv);
+        captable.transactions.push(tran);
+        updateCell(this.cellFor(inv, sec, true));
         console.log(inv, sec, kind);
     };
     function createCell(inv, sec) {
