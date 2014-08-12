@@ -50,7 +50,7 @@
                         </a>
                     </span>
                     <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
-                        <input placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id].val>
+                        <input placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
                     </span>
                 </div>
                 <div class="docPrepRow">

@@ -442,15 +442,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
 
-        /*
-        function newBoxX(annot) {
-            bb.addEventListener('mousemove', function(e) {
-                if (e.which !== 0) {
-                    boundBoxByPage(bb); // TODO?
-                }
-            });
-        }*/
-
         $scope.prepareable = function(doc) {
             return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original) || ($scope.template_original);
         };

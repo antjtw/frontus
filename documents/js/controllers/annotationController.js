@@ -80,7 +80,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             strNewValue = strNewValue.split("\n", max).join("\n");
         }
         oTextarea.value = strNewValue;
-        $scope.annot.val = strNewValue;
+        $scope.current.val = strNewValue;
         oTextarea.setAttribute("wrap", "hard");
         return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
     }
@@ -92,12 +92,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return false;
     };
 
-    $scope.$watch('annot.val', function(newValue, oldValue) {
+    $scope.$watch('current.val', function(newValue, oldValue) {
         // prevent issuers from filling in the investor values
         if (!$scope.annot.forRole(navState.role)) {
-            $scope.annot.val = "";
-        } else if ($scope.annot.pristine && newValue != oldValue) {
-            $scope.annot.pristine = false;
+            $scope.current.val = "";
         }
     });
 
@@ -416,9 +414,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         });
         $scope.$watch(function() {
             if ($scope.doc.preparedFor &&
-                $scope.doc.preparedFor[$scope.prepareFor] &&
-                $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id]) {
-                return $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id].val;
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                return $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id];
             } else {
                 return "";
             }
@@ -432,10 +429,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
             // check for overrides value existance, then assign to it if it's not equal
             if ($scope.doc.preparedFor &&
-                $scope.doc.preparedFor[$scope.prepareFor] &&
-                $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id]) {
-                if (val != $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id].val) {
-                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id].val = val;
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                if (val != $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id]) {
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = val;
                 }
             } else {
                 if (!$scope.doc.preparedFor) {
@@ -443,9 +439,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                 }
                 if (!$scope.doc.preparedFor[$scope.prepareFor]) {
                     var hash = $scope.doc.addPreparedFor($scope.prepareFor);
-                    hash.overrides[$scope.annot.id] = {id: $scope.annot.id, val: val};
+                    hash.overrides[$scope.annot.id] = val;
                 } else {
-                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = {id: $scope.annot.id, val: val};
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = val;
                 }
             }
         });
