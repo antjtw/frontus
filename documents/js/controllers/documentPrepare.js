@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState',
-    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState) {
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState', '$window',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState, $window) {
         $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
         $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
 
@@ -62,5 +62,21 @@ app.controller('DocumentPrepareController',
         $scope.annots = Annotations.getDocAnnotations($scope.doc);
 
         $scope.encodeURIComponent = encodeURIComponent;
+
+        /* Save the overrides when navigating away */
+        function saveOverrides() {
+            for (var investor in $scope.doc.preparedFor) {
+                $scope.doc.savePreparation(investor);
+            }
+        }
+        $window.addEventListener('beforeunload', function(event) {
+            saveOverrides();
+        });
+        $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+            // don't save note data if I'm being redirected to log in
+            if (newUrl.match(/login([?]|$)/)) return;
+
+            saveOverrides();
+        });
     }]
 );
