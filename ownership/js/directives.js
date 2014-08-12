@@ -114,8 +114,11 @@ own.directive('editableCaptableCell', [function() {
         controller: ["$scope", "$rootScope",
                      "calculate", "captable", "History",
             function($scope, $rootScope, calculate, captable, history) {
-                $scope.data = captable.cellFor($scope.inv,
-                                               $scope.sec);
+                $scope.refresh = function() {
+                    $scope.data = captable.cellFor($scope.inv,
+                                                   $scope.sec);
+                };
+                $scope.refresh();
                 $scope.destination_transaction = null;
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;

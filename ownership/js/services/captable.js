@@ -317,6 +317,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     function updateCell(cell) {
+        console.log("I am here?", cell);
         cell.ledger_entries = cell.transactions = null;
         cell.a = cell.u = null;
         
@@ -339,22 +340,25 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function generateCells() {
         angular.forEach(captable.investors, function(inv) {
             angular.forEach(captable.securities, function(sec) {
-                var cell = nullCell();
-                cell.transactions = captable.transactions.filter(
+                var transactions = captable.transactions.filter(
                     function(tran) {
                         return tran.attrs.investor == inv.name &&
                                tran.attrs.security == sec.name;
                     });
-                cell.ledger_entries = captable.ledger_entries.filter(
-                    function(ent) {
-                        return ent.investor == inv.name &&
-                               ent.security == sec.name;
-                    });
-                cell.security = sec.name;
-                cell.investor = inv.name;
-                setCellUnits(cell);
-                setCellAmount(cell);
-                captable.cells.push(cell);
+                if (transactions.length > 0) {
+                    var cell = nullCell();
+                    cell.transactions = transactions;
+                    cell.ledger_entries = captable.ledger_entries.filter(
+                        function(ent) {
+                            return ent.investor == inv.name &&
+                                   ent.security == sec.name;
+                        });
+                    cell.security = sec.name;
+                    cell.investor = inv.name;
+                    setCellUnits(cell);
+                    setCellAmount(cell);
+                    captable.cells.push(cell);
+                }
             });
             inv.percentage = function() {
                 return investorSorting(inv.name);
@@ -434,6 +438,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             {
                 updateCell(toUpdate);
             }
+            console.log(toUpdate, captable.cells);
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(logError);
