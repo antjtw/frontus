@@ -126,7 +126,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if (!$scope.selectedCell || !cellIsSelected(inv, sec)) {
             History.forget($scope, 'selectedCell');
             $scope.selectedCell = captable.cellFor(inv, sec, true);
-            console.log($scope.selectedCell);
             History.watch('selectedCell', $scope);
             displayCellDetails();
         } else if ($scope.selectedCell && !cellIsSelected(inv, sec)) {

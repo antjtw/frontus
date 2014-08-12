@@ -238,7 +238,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (cells.length === 0) {
             if (create) {
                 var c = createCell(inv, sec);
-                console.log(c);
                 return c;
             } else {
                 return null;
@@ -317,7 +316,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     function updateCell(cell) {
-        console.log("I am here?", cell);
         cell.ledger_entries = cell.transactions = null;
         cell.a = cell.u = null;
         
@@ -333,7 +331,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
         setCellUnits(cell);
         setCellAmount(cell);
-        console.log("updateCell");
         console.log(cell);
     }
     this.updateCell = updateCell;
@@ -435,8 +432,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             if (toUpdate)
             {
                 updateCell(toUpdate);
-            }
-            console.log(toUpdate, captable.cells);*/
+            }*/
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(logError);

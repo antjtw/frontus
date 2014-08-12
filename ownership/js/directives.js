@@ -87,17 +87,12 @@ own.directive('captableCell', [function() {
     return {
         restrict: 'E',
         scope: {inv: '=',
-                sec: '='},
+                sec: '=',
+                data: '='},
         templateUrl: '/ownership/partials/captableCell.html',
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
-                $scope.data = captable.cellFor($scope.inv, $scope.sec);
                 $scope.settings = $rootScope.settings;
-                $scope.$watchCollection('data.ledger_entries',
-                    function(newEntries, oldEntries) {
-                        captable.setCellUnits($scope.data);
-                        captable.setCellAmount($scope.data);
-                    });
             }
         ],
     };
@@ -108,28 +103,18 @@ own.directive('editableCaptableCell', [function() {
         replace: true,
         scope: {sec: '=',
                 inv: '=',
+                data: '=',
                 selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
         controller: ["$scope", "$rootScope",
                      "calculate", "captable", "History",
             function($scope, $rootScope, calculate, captable, history) {
-                $scope.refresh = function() {
-                    $scope.data = captable.cellFor($scope.inv,
-                                                   $scope.sec);
-                };
-                $scope.refresh();
                 $scope.destination_transaction = null;
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
-                $scope.$watchCollection('data.ledger_entries',
-                    function(newEntries, oldEntries) {
-                        captable.setCellUnits($scope.data);
-                        captable.setCellAmount($scope.data);
-                    });
                 $scope.saveIt = function(value) {
-                    //console.log(value);
                 };
                 function updateAttr(key, val) {
                     if ($scope.data.transactions.length == 1) {

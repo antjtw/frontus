@@ -700,6 +700,7 @@
                     <editable-captable-cell
                         sec='key.name'
                         inv='row.name'
+                        data="captable.cellFor(row.name, key.name)"
                         select-cell="selectCell"
                         selected-cell="selectedCell">
                 </td>
@@ -751,7 +752,8 @@
                                           || captable.cellFor(row.name, key.name).u}"
                     ng-repeat="key in ct.securities
                 | orderBy:['effective_date', 'insertion_date']:true">
-                    <captable-cell inv='row.name' sec='key.name'>
+                    <captable-cell inv='row.name' sec='key.name'
+                        data='captable.cellFor(row.name, key.name)'>
                 </td>
             </tr>
             </tbody>
