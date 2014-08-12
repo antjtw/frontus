@@ -360,73 +360,17 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                  if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
                      // don't load annotations twice
+                     console.error("loading document twice");
                      return;
                  }
                  $scope.lib = data;
                  // TODO: migrate all uses of $scope.lib to $scope.doc
                  $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
+                 $scope.doc.getPreparedFor(); // don't need the results here, just for it to exist for the annotations
                  $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
-                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || ($scope.lib && $scope.prepare); // requires $scope.lib
+                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
 
-                 // TODO: move all of this to the Documents and Annotations services
-                 // TODO: should load all annotations all of the time, and vary how they're displayed
-                 if ($scope.lib.annotations) {
-                     // restoreNotes
-                     var annots = [];
-                     // TODO: should probably load all annotations into $scope.annots, and only display as relevant (probably already works)
-                     if ($scope.doc.countersignable($rootScope.navState.role) && $scope.lib.iss_annotations) {
-                         // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
-                         var temp_annots = JSON.parse($scope.lib.iss_annotations);
-                         temp_annots.forEach(function(annot) {
-                             // TODO: we're creating an Annotation object and destroying it for no good reason
-                             var tmp = Annotations.createBlankAnnotation().parseFromJson(annot, $scope.doc.annotation_types);
-                             if (tmp.isCountersign()) {
-                                 annots.push(annot);
-                             }
-                         });
-                     } else {
-                         if ($scope.drawTime() || $scope.$parent.prepareFor) { // if it's not drawTime or counterSigntime, then there should be no annotations anywhere
-                             annots = JSON.parse($scope.lib.annotations);
-                             if (data.iss_annotations) {
-                                 annots = annots.concat(JSON.parse(data.iss_annotations));
-                             }
-                         }
-                     }
-                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots, $scope.doc.annotation_types);
-                     var sticky;
-                     for (var i = 0; i < annots.length; i++) {
-                         var annot = annots[i];
-                     }
-                 } else {
-                     // ensure annotations are linked to the service even if we didn't fetch any
-                     $scope.annots = Annotations.getDocAnnotations($scope.docId);
-                 }
-                 if ($scope.$parent.prepareFor) {
-                     // load the annotation Overrides
-                     // It may already exist in the table, since we got to this step, so loop until we find it.
-                     var endOfWatch = $scope.$watchCollection(function() {
-                         return $scope.doc.getPreparedFor();
-                     }, function(preps) {
-                         preps.forEach(function(prep) {
-                             if (prep.investor == $scope.$parent.prepareFor) {
-                                 if (prep.annotation_overrides) {
-                                     prep.annotation_overrides.forEach(function(override, idx, arr) {
-                                         $scope.annots.some(function(annot, aidx, aarr) {
-                                             if (annot.id == override.id) {
-                                                 annot.val = override.val;
-                                                 annot.pristine = false;
-                                                 return true;
-                                             } else {
-                                                 return false;
-                                             }
-                                         });
-                                     });
-                                 }
-                                 endOfWatch(); // destroy the $watch
-                             }
-                         });
-                     });
-                 }
+                 $scope.annots = Annotations.getDocAnnotations($scope.doc);
              }).except(function(err) {
                  $scope.$parent.leave();
              });
@@ -476,7 +420,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.newnewBox = function(event) {
-            if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
+            if ($scope.isAnnotable && (!$scope.doc.when_shared && $rootScope.navState.role == "issuer") || (!$scope.doc.when_signed && $scope.doc.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
                 var a = Annotations.createBlankAnnotation();
                 a.page = $scope.doc.currentPage;
                 a.position.docPanel = $scope.dp;
@@ -497,15 +441,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.active.annotation = a;
             }
         };
-
-        /*
-        function newBoxX(annot) {
-            bb.addEventListener('mousemove', function(e) {
-                if (e.which !== 0) {
-                    boundBoxByPage(bb); // TODO?
-                }
-            });
-        }*/
 
         $scope.prepareable = function(doc) {
             return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original) || ($scope.template_original);
@@ -575,7 +510,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              */
             var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
             var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
-            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
+            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.doc.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
                 if (clicked) {
                     $scope.$emit("notification:success", "Saved annotations");

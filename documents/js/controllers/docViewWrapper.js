@@ -127,16 +127,12 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                      console.log(x);
                  });
                 $scope.docId = doc.doc_id;
-                $scope.library = "document.my_counterparty_library";
-                $scope.pages = "document.my_counterparty_codex";
                 $scope.initDocView();
             };
 
             $scope.getOriginal = function() {
                 counterparty = false;
                 $scope.docId = $scope.docKey;
-                $scope.library = "document.my_company_library";
-                $scope.pages = "document.my_company_codex";
                 var z = $location.search();
                 delete z.investor;
                 $location.search(z);
@@ -326,9 +322,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.setNextAnnotationType = function (type) {
             $scope.nextAnnotationType = type;
         };
-        
+
         var checkUploadTimeout;
-        
+
         $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             void(oldUrl);
             // don't save note data if I'm being redirected to log in
@@ -512,7 +508,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 $scope.downloadOriginalPdf();
             }
         };
-        
+
         $scope.versionIsFinalized = function(version) {
             return basics.isCompleteSigned(version)
                 || basics.isCompleteVoided(version);
@@ -532,8 +528,8 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.goToPreparation = function() {
             $location.url('/app/documents/prepare?doc=' + $scope.doc.doc_id);
         };
-        
-        
+
+
         var mimetypes = ["application/pdf", // .pdf
             // microsoft office
             "application/msword", // .doc
@@ -569,7 +565,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 }
             });
         };
-        
+
         $scope.checkSignedUploaded = function () {
             SWBrijj.tblm('document.my_counterparty_library', ['when_signature_provided', 'signed_uploaded', 'signed_upload_attempted'], 'doc_id', $scope.doc.doc_id).then(function(doc) {
                 if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
@@ -594,7 +590,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 console.log(data);
             });
         }
-        
+
         $scope.uploadSigned = function(files) {
                 var fd = new FormData();
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
@@ -612,7 +608,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 $scope.uploading = true;
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
-                    
+
                     SWBrijj.uploadSetType(x[0], "signed", $scope.doc.doc_id).then(function() {
                         checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
                         $scope.$emit("notification:success", "Uploading signed version . . .");

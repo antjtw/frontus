@@ -2438,8 +2438,60 @@ div.profile-link > span:first-of-type {
 
 .docPrepRow > span {
     display: inline-block;
-    width: 49%;
     box-sizing: border-box;
+}
+
+.docPrepRow > span:first-child ~ span input {
+    width: 95%;
+}
+
+/* 2 columns */
+.docPrepRow > span:first-child:nth-last-child(2),
+.docPrepRow > span:first-child:nth-last-child(2) ~ span {
+    width: calc((100% - 4px) / 2);
+}
+/* 3 columns */
+.docPrepRow > span:first-child:nth-last-child(3),
+.docPrepRow > span:first-child:nth-last-child(3) ~ span {
+    width: calc((100% - 4px) / 3);
+}
+/* 4 columns */
+.docPrepRow > span:first-child:nth-last-child(4),
+.docPrepRow > span:first-child:nth-last-child(4) ~ span {
+    width: calc((100% - 4px) / 4);
+}
+
+/* minimums for more than 4 columns */
+.docPrepRow > span:first-child {
+    min-width: 261px; /* select2 wants to be this wide? */
+}
+.docPrepRow > span:first-child ~ span{
+    min-width: 100px;
+}
+
+/* 5 columns */
+.docPrepRow > span:first-child:nth-last-child(5) ~ span {
+    width: calc((100% - 265px) / 4);
+}
+/* 6 columns */
+.docPrepRow > span:first-child:nth-last-child(6) ~ span {
+    width: calc((100% - 265px) / 5);
+}
+/* 7 columns */
+.docPrepRow > span:first-child:nth-last-child(7) ~ span {
+    width: calc((100% - 265px) / 6);
+}
+/* 8 columns */
+.docPrepRow > span:first-child:nth-last-child(8) ~ span {
+    width: calc((100% - 265px) / 7);
+}
+/* 9 columns */
+.docPrepRow > span:first-child:nth-last-child(9) ~ span {
+    width: calc((100% - 265px) / 8);
+}
+/* 10 columns */
+.docPrepRow > span:first-child:nth-last-child(10) ~ span {
+    width: calc((100% - 265px) / 9);
 }
 
 .docPrepRow a {

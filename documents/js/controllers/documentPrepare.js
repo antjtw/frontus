@@ -1,19 +1,19 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs',
-    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs) {
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState) {
         $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
         $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
 
         $scope.newInvestor = "";
+        $scope.state = {};
+        $scope.state.bulkPrep = false;
 
         $scope.investors = Investor.investors;
         function filterInvestors(investorList, docPreparedFor) {
             return investorList.filter(function(val, idx, arr) {
-                return ! docPreparedFor.some(function(pval, pidx, parr) {
-                    return val.id == pval.investor;
-                });
+                return (Object.keys(docPreparedFor).indexOf(val.id) === -1)
             });
         }
         $scope.select2Options = {
@@ -50,6 +50,16 @@ app.controller('DocumentPrepareController',
                 $scope.doc.updatePreparedFor(investor_data.investor, investor_data.display.id);
             }
         };
+
+        $scope.bulkPrepable = function(annotation) {
+            if (!annotation.forRole(navState.role) || annotation.whattype == "ImgSignature") {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        $scope.annots = Annotations.getDocAnnotations($scope.doc);
 
         $scope.encodeURIComponent = encodeURIComponent;
     }]

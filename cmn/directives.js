@@ -48,7 +48,6 @@ m.directive('groupPeople', function(){
             $scope.fromFront = function(person){
                 var allGroups = [];
                 angular.forEach(person, function(info){
-                    console.log(person)
                     if(info.groups != undefined){
                         var a = info.groups.split(", ");
                         for(var i = 0; i < a.length; i++){
@@ -191,14 +190,12 @@ m.directive('groupPeople', function(){
                             else{
                                 angular.forEach(myInfo, function(thing){
                                     bigGroup.push([thing.email, thing.role])
-                                    if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == "[]"){
+                                    if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == []){
                                         newGroupsArray = []
                                         console.log("I don't have groups")
                                     }
                                     else{
                                         newGroupsArray = JSON.parse(thing.groups);
-                                        console.log("I have groups!")
-                                        console.log(thing.groups)
                                     }
                                     
                                 })
@@ -227,7 +224,6 @@ m.directive('groupPeople', function(){
                                     });
                                 if(newGroupsArray.indexOf($scope.groupName) == -1 && checkNew.indexOf($scope.groupName)== -1){
                                     newGroupsArray.push($scope.groupName);
-                                    console.log(checkNew)
                                 }
                                 else{
                                     console.log("already in group");
@@ -235,11 +231,11 @@ m.directive('groupPeople', function(){
                                 
                             }
                             console.log(newGroupsArray)
+                            // remove empty entries, and cannot add an empty group
                         if(newGroupsArray.indexOf("") > -1){
                            console.log(newGroupsArray.indexOf(""));
                            var toDelete= newGroupsArray.indexOf("")
                            newGroupsArray.splice(toDelete, 1)
-                           console.log(newGroupsArray);
                         }
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
