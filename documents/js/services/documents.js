@@ -285,7 +285,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 if (defaultList) {
                     var origLength = doc.preparedFor.length;
                     defaultList.forEach(function(inv) {
-                        if (!Object.keys(doc.preparedFor).indexOf(inv) === -1) {
+                        if (!doc.preparedFor[inv]) {
                             doc.addPreparedFor(inv);
                         }
                     });
@@ -322,7 +322,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             if (this.preparedFor) {
                 var doc = this;
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
-                    doc.preparedFor = [];
+                    doc.preparedFor = {};
                     data.forEach(function(investor_prep) {
                         investor_prep.overrides = {};
                         if (investor_prep.annotation_overrides) {
@@ -333,7 +333,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         }
                         // add id and text fields to make select2 happy
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
-                        doc.preparedFor.push(investor_prep);
+                        doc.preparedFor[investor_prep.investor] = investor_prep;
                     });
                 });
             }
@@ -363,35 +363,21 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         updatePreparedFor: function(old_investor, new_investor) {
             var doc = this;
             SWBrijj.update('document.my_personal_preparations', {investor: new_investor}, {doc_id: this.doc_id, investor: old_investor}).then(function(result){
-                doc.preparedFor.forEach(function(investor_prep) {
-                    if (investor_prep.investor == old_investor) {
-                        investor_prep.investor = new_investor;
-                        // TODO: ensure investor_prep.display.text is right (might need investor name)
-                    }
-                });
+                doc.preparedFor[new_investor] = doc.preparedFor[old_investor];
+                delete doc.preparedFor[old_investor]
+                doc.preparedFor[new_investor].investor = new_investor;
+                doc.preparedFor[new_investor].display = Investor.getDisplay(new_investor);
             }).except(function(error) {
-                doc.preparedFor.forEach(function(investor_prep) {
-                    if (investor_prep.investor == old_investor) {
-                        investor_prep.display = Investor.getDisplay(old_investor);
-                    }
-                });
+                doc.preparedFor[old_investor].display = Investor.getDisplay(old_investor);
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
         },
         deletePreparedFor: function(old_investor) {
             var doc = this;
             SWBrijj.delete_one('document.my_personal_preparations', {doc_id: this.doc_id, investor: old_investor}).then(function(result) {
-                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
-                    if (investor_prep.investor == old_investor) {
-                        arr.splice(idx, 1);
-                    }
-                });
+                delete doc.preparedFor[old_investor];
             }).except(function(error) {
-                doc.preparedFor.forEach(function(investor_prep) {
-                    if (investor_prep.investor == old_investor) {
-                        investor_prep.display = Investor.getDisplay(old_investor);
-                    }
-                });
+                doc.preparedFor[old_investor].display = Investor.getDisplay(old_investor);
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
         },
