@@ -36,7 +36,10 @@ m.directive('groupPeople', function(){
                     angular.forEach($scope.myUserGroups, function(info){
                         var a = info.json_array_elements;
                         var b = JSON.parse(a);
-                        $scope.groupData.push(new indGroup(b));
+                        if(b !== ""){
+                            $scope.groupData.push(new indGroup(b));
+                        }
+                        
                     });
                 });
             };
@@ -188,11 +191,14 @@ m.directive('groupPeople', function(){
                             else{
                                 angular.forEach(myInfo, function(thing){
                                     bigGroup.push([thing.email, thing.role])
-                                    if(thing.groups == null || thing.groups == undefined){
+                                    if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == "[]"){
                                         newGroupsArray = []
+                                        console.log("I don't have groups")
                                     }
                                     else{
                                         newGroupsArray = JSON.parse(thing.groups);
+                                        console.log("I have groups!")
+                                        console.log(thing.groups)
                                     }
                                     
                                 })
@@ -221,12 +227,20 @@ m.directive('groupPeople', function(){
                                     });
                                 if(newGroupsArray.indexOf($scope.groupName) == -1 && checkNew.indexOf($scope.groupName)== -1){
                                     newGroupsArray.push($scope.groupName);
+                                    console.log(checkNew)
                                 }
                                 else{
                                     console.log("already in group");
                                 }
                                 
                             }
+                            console.log(newGroupsArray)
+                        if(newGroupsArray.indexOf("") > -1){
+                           console.log(newGroupsArray.indexOf(""));
+                           var toDelete= newGroupsArray.indexOf("")
+                           newGroupsArray.splice(toDelete, 1)
+                           console.log(newGroupsArray);
+                        }
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
                         
                     })
