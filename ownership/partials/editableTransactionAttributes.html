@@ -7,7 +7,7 @@
         </span>
         <input ng-if="useTextField(key)"
                id="date{{data.attrs.$$hashKey}}"
-               ui-event="{keydown: 'saveIt(data, selected)',
+               ui-event="{keyup: 'saveIt(data, selected)',
                           blur: 'saveIt(data, selected)'}"
                type="text"
                ng-model="data.attrs[key]">

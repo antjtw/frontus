@@ -398,19 +398,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // use ng-change instead of ui-event?
         //
         // or maybe add a save button for now
-        console.log("saveTransaction");
-        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            console.log("save_transaction");
-            for (new_entry in new_entries)
-            {
-                console.log(new_entry);
-                console.log(new_entries[new_entry]);
-                console.log(new_entries[new_entry].credit);
-            }
-            /*splice_many_by(captable.ledger_entries, function(el) {
+            splice_many_by(captable.ledger_entries, function(el) {
                         return el.transaction == tran.transaction;
                 });
             splice_many_by(captable.transactions, function(el) {
@@ -426,13 +417,12 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             for (new_entry in new_entries)
             {
                 captable.ledger_entries.push(new_entries[new_entry]);
-                console.log(new_entries[new_entry].credit);
             }
             captable.transactions.push(tran);
             if (toUpdate)
             {
                 updateCell(toUpdate);
-            }*/
+            }
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(logError);
