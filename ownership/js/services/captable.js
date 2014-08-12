@@ -369,6 +369,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         var indices = elements
             .map(function(el) {return array.indexOf(el);})
             .filter(function(el) {return el!==-1;});
+        indices.sort(function(a, b){return b-a;});//descending order so splice won't affect later indices
         return indices.map(function(idx) {return array.splice(idx, 1);});
     }
     function splice_many_by(array, filter_fn) {
@@ -401,18 +402,21 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            var old_ledger_entries = captable.ledger_entries
+            /*var old_ledger_entries = captable.ledger_entries
                 .filter(function(el) {
                         return el.transaction == tran.transaction;
-                });
-            splice_many(captable.ledger_entries, old_ledger_entries);
-            var old_transactions = captable.transactions
-                .filter(function(el) {
-                        return el.transaction == tran.transaction;
-                });
-            splice_many(captable.transactions, old_transactions);
+                });*/
             console.log("save_transaction");
-            console.log(new_entries);
+            splice_many_by(captable.ledger_entries, function(el) {
+                        return el.transaction == tran.transaction;
+                });
+            /*var old_transactions = captable.transactions
+                .filter(function(el) {
+                        return el.transaction == tran.transaction;
+                });*/
+            splice_many_by(captable.transactions, function(el) {
+                        return el.transaction == tran.transaction;
+                });
             if (new_entries.length < 1)
                 return;
             var transaction = new_entries[0].transaction;
@@ -422,6 +426,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 captable.ledger_entries.push(new_entries[new_entry]);
             }
             captable.transactions.push(tran);
+            console.log(captable.ledger_entries
+                .filter(function(el) {
+                        return el.transaction == tran.transaction;
+                }).length);
             if (toUpdate)
             {
                 updateCell(toUpdate);
