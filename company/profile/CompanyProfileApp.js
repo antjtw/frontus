@@ -520,7 +520,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         });
                         $scope.setLastLogins();
                         $scope.setGroups();
-                        // $scope.setGroups();
                         // $scope.resetFilter();
                     });
                     $scope.sort = 'name';
@@ -556,6 +555,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                                 else return 0
                             });
                             person.groups = grSorted.join(", ");
+                            console.log(person.groups)
                             person.groupsArray = JSON.parse(group.groups);
                         };
                     });
