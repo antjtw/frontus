@@ -57,9 +57,10 @@
 }
 
 /*style the inside of the text box*/
-.message_input .ta-scroll-window.form-control *{
+.message_input .ta-scroll-window.form-control * {
     font-family: "Helvetica Neue", Helvetica !important;
     color: rgb(141, 141, 141) !important;
+    padding-left: 5px;
 }
 
 
@@ -96,9 +97,17 @@
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control blockquote  * {
-     display: block;
-     margin: 0 0 0 40px;   
+.message_input .ta-scroll-window.form-control blockquote  {
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 40px;
+    -webkit-margin-end: 40px;
+}
+
+.message_input .ta-scroll-window.form-control blockquote p{
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
 }
 
 
@@ -129,8 +138,14 @@
     -webkit-padding-start: 40px;
 }
 
+
+
 .message_input .ta-scroll-window.form-control ol {
-    margin-left: 40px;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
 }
 
 .message_input .ta-scroll-window.form-control ul li{
@@ -266,7 +281,6 @@ the compose message page styling*/
 
 .msgText ul {
     display: block;
-    padding-left: 40px;
     list-style-type: decimal;
     -webkit-margin-before: 1em;
     -webkit-margin-after: 1em;
