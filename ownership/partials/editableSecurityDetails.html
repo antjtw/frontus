@@ -137,7 +137,21 @@
             </div>
         </div>
         <div class="capTab" ng-switch-when="actions">
-            Hello
+            <ul>
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{chosen_action}}
+                        <span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="a in actions">
+                            <a ng-click="chooseAction(a)">
+                                {{a}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
         </accordion-group>
     </accordion>

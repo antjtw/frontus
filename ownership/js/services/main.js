@@ -220,7 +220,7 @@ ownership.value('displayCopy', {
             "The maximum pre-money valuation at which the safe "
             + "converts to equity",
         interestrate:
-            "The rate that interest accrus on this debt",
+            "The rate that interest accrues on this debt",
         discount:
             "The percentage discount applied upon conversion",
         term:

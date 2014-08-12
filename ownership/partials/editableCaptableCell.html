@@ -5,8 +5,8 @@
                           | securityUnitLabel}}"
            ui-event="{focus: 'selectCell(inv, sec)',
                        blur: 'saveIt(data.u)'}"
-           ng-model='data.u'
-           ng-change='updateUnits()'
+           ng-model='units'
+           ng-model-options="{getterSetter: true}"
            onpaste="return false"
            ng-paste="numberPaste($event, row, data.security, 'u');"
            onkeydown="testForEnter();">
@@ -18,8 +18,8 @@
            ui-event="{focus: 'selectCell(inv, sec)',
                        blur: 'saveIt(data.a)'}"
            data-currency
-           ng-model='data.a'
-           ng-change='updateAmount()'
+           ng-model='amount'
+           ng-model-options="{getterSetter: true}"
            onpaste="return false"
            ng-paste="numberPaste($event, row, data.security, 'a');"
            onkeydown="testForEnter();">

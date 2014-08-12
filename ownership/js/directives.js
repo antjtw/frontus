@@ -6,11 +6,10 @@ own.directive('currency', function() {
         require: 'ngModel',
         link: function(scope, element, attr, ctrl) {
             ctrl.$formatters.push(function(modelValue) {
-                // TODO commas are not being added
-                // TODO add currency symbol?
                 if (!modelValue) return "";
-                return modelValue.toString()
+                var r = modelValue.toString()
                     .replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
+                return r;
             });
             ctrl.$parsers.push(function(viewValue) {
                 var re = new RegExp(",", "g");
@@ -141,11 +140,21 @@ own.directive('editableCaptableCell', [function() {
                         $scope.openTranPicker(key, val);
                     }
                 }
-                $scope.updateUnits = function() {
-                    updateAttr('units', $scope.data.u);
+                $scope.units = function(newval) {
+                    if (angular.isDefined(newval)) {
+                        $scope.data.u = newval;
+                        updateAttr('units', newval);
+                    } else {
+                        return ($scope.data ? $scope.data.u : null);
+                    }
                 };
-                $scope.updateAmount = function() {
-                    updateAttr('amount', $scope.data.a);
+                $scope.amount = function(newval) {
+                    if (angular.isDefined(newval)) {
+                        $scope.data.a = newval;
+                        updateAttr('amount', newval);
+                    } else {
+                        return ($scope.data ? $scope.data.a : null);
+                    }
                 };
                 $scope.opts = {
                     backdropFade: true,
@@ -276,6 +285,7 @@ own.directive('editableSecurityDetails', [function() {
                 $scope.tips = displayCopy.captabletips;
                 $scope.displayAttr = captable.displayAttr;
                 $scope.currentTab = 'details';
+                $scope.actions = ["split", "grant", "exercise"];
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
@@ -496,4 +506,3 @@ own.directive('evidenceTable', [function() {
         ],
     };
 }]);
-
