@@ -129,6 +129,10 @@
     -webkit-padding-start: 40px;
 }
 
+.message_input .ta-scroll-window.form-control ol {
+    margin-left: 40px;
+}
+
 .message_input .ta-scroll-window.form-control ul li{
     list-style: disc outside none;
 }
@@ -256,8 +260,13 @@ the compose message page styling*/
     font-weight: normal;
 }
 
+.msgText ol {
+    margin-left: 40px;
+}
+
 .msgText ul {
     display: block;
+    padding-left: 40px;
     list-style-type: decimal;
     -webkit-margin-before: 1em;
     -webkit-margin-after: 1em;
