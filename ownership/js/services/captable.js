@@ -332,6 +332,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
         setCellUnits(cell);
         setCellAmount(cell);
+        console.log("updateCell");
+        console.log(cell);
     }
     this.updateCell = updateCell;
     function generateCells() {
@@ -394,21 +396,27 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // use ng-change instead of ui-event?
         //
         // or maybe add a save button for now
-        var old_ledger_entries = captable.ledger_entries
-            .filter(function(el) {
-                    return el.transaction == tran.transaction;
-            });
-        var old_transactions = captable.transactions
-            .filter(function(el) {
-                    return el.transaction == tran.transaction;
-            });
+        console.log("saveTransaction");
+        console.log(tran);
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
+            var old_ledger_entries = captable.ledger_entries
+                .filter(function(el) {
+                        return el.transaction == tran.transaction;
+                });
             splice_many(captable.ledger_entries, old_ledger_entries);
+            var old_transactions = captable.transactions
+                .filter(function(el) {
+                        return el.transaction == tran.transaction;
+                });
             splice_many(captable.transactions, old_transactions);
             console.log("save_transaction");
             console.log(new_entries);
+            if (new_entries.length < 1)
+                return;
+            var transaction = new_entries[0].transaction;
+            tran.transaction = transaction;
             for (new_entry in new_entries)
             {
                 captable.ledger_entries.push(new_entries[new_entry]);
@@ -556,6 +564,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
      */
     function initAttrs(obj, sec_type, kind) {
         var attr_obj = attrs[sec_type][kind];
+        console.log("attrs");
+        console.log(attr_obj);
         if (attr_obj) {
             angular.forEach(Object.keys(attr_obj),
                     function(el) { obj.attrs[el] = null; });
@@ -566,7 +576,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         var tran = new Transaction();
         tran.kind = kind;
         tran.company = $rootScope.navState.company;
-        tran.insertion_date = Date.now();
+        tran.insertion_date = new Date(Date.now());
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==sec && el.attrs.security_type;

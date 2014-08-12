@@ -62,7 +62,7 @@ function(SWBrijj, $q, $filter, displayCopy) {
     }
     function loadAttributes() {
         var promise = $q.defer();
-        SWBrijj.tblm('ownership.transaction_attributes')
+        SWBrijj.tblm('_ownership.transaction_attributes')
         .then(function(attrs) {
             promise.resolve(attrs);
         });
