@@ -219,7 +219,10 @@ ownership.filter('attrsForDisplay', function() {
                           "security", "security_type"];
         var res = {};
         angular.forEach(attr, function(val, key) {
-            if (hide_attrs.indexOf(key) === -1) {
+            if (hide_attrs.indexOf(key) === -1 &&
+                val &&
+                toString(val).length>0)
+            {
                 res[key] = val;
             }
         });
