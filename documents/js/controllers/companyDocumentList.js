@@ -806,13 +806,13 @@ app.controller('CompanyDocumentListController',
                         if (typeVars.doTags && s.tags !== null) {
                             s.tags = JSON.parse(s.tags);
                         }
-                        if (s.preps !== null) {
+                        if (typeVars.doTags && s.preps !== null) {
                             s.preps = JSON.parse(s.preps);
                         }
                         s.type = typeVars.type;
                         s.statusRatio = s.status_ratio;
 
-                        if (s.pages == null)
+                        if (typeVars.doTags && s.pages == null)
                         {
                             stillUploading = true;
                         }
