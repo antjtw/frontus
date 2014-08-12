@@ -312,8 +312,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function updateCell(cell) {
         cell.ledger_entries = cell.transactions = null;
         cell.a = cell.u = null;
-        console.log("updateCell");
-        console.log(cell);
         
         cell.transactions = captable.transactions.filter(
             function(tran) {
@@ -402,6 +400,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         .then(function(new_entries) {
             splice_many(captable.ledger_entries, old_ledger_entries);
             splice_many(captable.transactions, old_transactions);
+            console.log("save_transaction");
+            console.log(new_entries);
             for (new_entry in new_entries)
             {
                 captable.ledger_entries.push(new_entries[new_entry]);
