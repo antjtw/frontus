@@ -257,9 +257,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return captable.securities.filter(secHasUnissued);
     };
     this.securityUnissuedPercentage = function(sec) {
-        var tot = totalOwnershipUnits();
-        if (tot === 0) return 100;
-        return numUnissued(sec) / tot;
+        return 100 * (numUnissued(sec) / sec.attrs.totalauth);
     };
     function rowFor(inv) {
         return captable.cells
@@ -674,8 +672,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
     function securityTotalUnits(sec) {
+        if (!sec) return 0;
         return captable.cells
-            .filter(function(el) { return el.security == sec; })
+            .filter(function(el) { return el.security == sec.name; })
             .reduce(sumCellUnits, 0);
     }
     this.securityTotalUnits = securityTotalUnits;
