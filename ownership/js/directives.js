@@ -279,7 +279,7 @@ own.directive('editableSecurityDetails', [function() {
                 };
                 $scope.ct = captable.getCapTable();
                 $scope.addTransaction = function() {
-                    captable.addTran(null, $scope.sec.name, 'split');
+                    captable.addTransaction(null, $scope.sec.name, 'split');
                 };
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
@@ -342,7 +342,7 @@ own.directive('editableCellDetails', [function() {
                     $scope.currentTab = tab;
                 };
                 $scope.addTransaction = function() {
-                    captable.addTran($scope.cell.investor,
+                    captable.addTransaction($scope.cell.investor,
                                      $scope.cell.security, 'grant');
                     // FIXME fails when this is the first transaction
                     // of the cell

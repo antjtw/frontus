@@ -611,6 +611,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     };
     this.addTransaction = function(inv, sec, kind) {
+        var tran = newTransaction(sec, kind, inv);
+        captable.transactions.push(tran);
+        updateCell(this.cellFor(inv, sec, true));
         console.log(inv, sec, kind);
     };
     function createCell(inv, sec) {
