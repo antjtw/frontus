@@ -5,7 +5,7 @@ var app = angular.module('HomeApp',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
         'homeDirectives', 'activityDirective', 'commonDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
-        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq']);
+        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -97,6 +97,11 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/modeling/convertible-notes', {
             templateUrl: '/modeling/pages/note.html',
             controller: 'noteController'
+        }).
+        when('/app/company/messages', {
+            templateUrl: '/messages/newMessage.html',
+            controller: 'MsgCtrl'
+            
         }).
 
         otherwise({redirectTo:'/app/home/investor'});
