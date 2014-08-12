@@ -381,17 +381,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         deletePreparedFor: function(old_investor) {
             var doc = this;
             SWBrijj.delete_one('document.my_personal_preparations', {doc_id: this.doc_id, investor: old_investor}).then(function(result) {
-                doc.preparedFor.forEach(function(investor_prep, idx, arr) {
-                    if (investor_prep.investor == old_investor) {
-                        arr.splice(idx, 1);
-                    }
-                });
+                delete doc.preparedFor[old_investor];
             }).except(function(error) {
-                doc.preparedFor.forEach(function(investor_prep) {
-                    if (investor_prep.investor == old_investor) {
-                        investor_prep.display = Investor.getDisplay(old_investor);
-                    }
-                });
+                doc.preparedFor[old_investor].display = Investor.getDisplay(old_investor);
                 $rootScope.$emit("notification:fail", "Oops, something went wrong.");
             });
         },
