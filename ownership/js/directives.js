@@ -112,10 +112,12 @@ own.directive('editableCaptableCell', [function() {
                 selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
-        controller: ["$scope", "$rootScope", "calculate", "captable",
-            function($scope, $rootScope, calculate, captable) {
+        controller: ["$scope", "$rootScope",
+                     "calculate", "captable", "History",
+            function($scope, $rootScope, calculate, captable, history) {
                 $scope.data = captable.cellFor($scope.inv,
                                                $scope.sec);
+                $scope.destination_transaction = null;
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
@@ -132,10 +134,11 @@ own.directive('editableCaptableCell', [function() {
                         $scope.data.transactions[0].attrs[key] = val;
                         // TODO then save transaction, if failed,
                         // revert cell
+                    } else if ($scope.destination_transaction) {
+                        // FIXME no straight update
+                        // $scope.destination_transaction.attrs[key] = val;
                     } else {
-                        // pop the user over to the proper cell
-                        // in the proper transaction?
-                        alert('so many transactions what do i do?!?');
+                        $scope.openTranPicker(key, val);
                     }
                 }
                 $scope.updateUnits = function() {
@@ -144,6 +147,93 @@ own.directive('editableCaptableCell', [function() {
                 $scope.updateAmount = function() {
                     updateAttr('amount', $scope.data.a);
                 };
+                $scope.opts = {
+                    backdropFade: true,
+                    dialogFade: true
+                };
+                $scope.openTranPicker = function(key, val) {
+                    $scope.picker = {
+                        "key": key,
+                        "val": val,
+                        "history": captable.selectedCellHistory()
+                    };
+                    var k = key[0]; // units -> units; amount -> a
+                    var hist_len = $scope.picker.history.length;
+                    console.log($scope.picker.history.length);
+                    $scope.picker.diff =
+                        $scope.picker.history[hist_len-1][k] -
+                        $scope.picker.history[hist_len-2][k];
+                    $scope.tranPicker = true;
+                };
+                $scope.closeTranPicker = function(update) {
+                    if (update) {
+                        if (!$scope.destination_transaction) {
+                            $scope.destination_transaction = captable.newTran();
+                        }
+                        updateAttr($scope.picker.key, $scope.picker.val);
+                    } else {
+                        // reset
+                    }
+                    $scope.picker = {};
+                    $scope.tranPicker = false;
+                };
+                $scope.pickTran = function(id) {
+                    $scope.destination_transaction = id;
+                };
+
+    //Adding to a row with more than one transaction modal
+    /*
+    $scope.mComplete = function (transactions, picked, number, type) {
+        var inIssue = transactions[0].issue;
+        if (!picked) {
+            var newTran = captable.newTransaction(inIssue,
+                                                  $scope.activeTran[0].investor);
+            newTran.active = true;
+            newTran.atype = 0;
+            if (type == "u") { newTran.units = newTran.unitskey = number; }
+            else { newTran.paid = newtran.paidkey = number; }
+            angular.forEach($scope.ct.securities, function (issue) {
+                if (issue.issue == inIssue) {
+                    newTran = captable.inheritAllDataFromIssue(newTran, issue);
+                }
+            });
+            if (number < 0 && newTran.type == "Option") {
+                $scope.$emit("notification:fail",
+                        "Cannot have a negative amount for options");
+                return;
+            }
+            $scope.ct.trans.push(newTran);
+            $scope.activeTran.push(newTran);
+            for (var i = 0; i < $scope.activeTran.length; i++) {
+                if (i + 1 == $scope.activeTran.length) {
+                    $scope.activeTran[i].active = true;
+                } else {
+                    $scope.activeTran[i].active = false;
+                }
+            }
+        }
+        else {
+            if (type == "u") {
+                picked.units = picked.units + number;
+            }
+            else {
+                picked.amount = picked.amount + number;
+            }
+            var newTran = picked;
+        }
+        $scope.saveTran(newTran);
+    };
+
+    $scope.mReset = function () {
+        angular.forEach($scope.ct.investors, function (row) {
+            if (row.name == $scope.activeTran[0].investor) {
+                row.cells[$scope.activeTran[0].issue].u = row.cells[$scope.activeTran[0].issue].ukey;
+                row.cells[$scope.activeTran[0].issue].a = row.cells[$scope.activeTran[0].issue].akey;
+            }
+        });
+    };
+    */
+
             }
         ],
     };

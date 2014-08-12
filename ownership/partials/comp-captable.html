@@ -87,48 +87,6 @@
         </div>
     </div>
 </div>
-<div modal="capMulti" close="mclose(); mReset();" options="opts">
-    <div class="modalHeader">
-        <span>Is this a new transaction?</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="mclose(); mReset();"></span>
-    </div>
-    <div class="modalText">
-        <form>
-            <p>Is this a new transaction, or do you want to modify the existing transaction?</p>
-            <br>
-            <div>
-                <ul class="dropdown-list drop-selector">
-                    <li class="dropdown standard">
-                        <a class="dropdown-toggle">
-                            <span ng-show="newtransaction">
-                                {{newtransaction}}
-                            </span>
-                            <span ng-hide="newtransction">
-                                {{pickTran.date | date:settings.formatdate}}
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a ng-click="pickOddOption('New Transaction')">New Transaction</a>
-                            </li>
-                            <li ng-repeat="i in dateoptions(changedTransactions);">
-                                <a ng-click="pickmOption(i)">{{i.date | date:settings.formatdate}}</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="mclose(); mReset();">Undo</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="mclose(); mComplete(changedTransactions, pickTran, changedNum, changedType);">Complete</button>
-        </div>
-    </div>
-</div>
 
 <div modal="issueModal" close="iclose();" options="opts">
     <div class="modalHeader">

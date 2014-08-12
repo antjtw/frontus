@@ -215,6 +215,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             return null;
         }
     }
+    function selectedCellHistory() {
+        var watches = Object.keys(History.history);
+        var obj = History.history[watches[0]];
+        var hist = obj.selectedCell;
+        return hist;
+    }
+    this.selectedCellHistory = selectedCellHistory;
     this.numUnissued = numUnissued;
     function securityFor(obj) {
         return captable.securities.filter(function(el) {

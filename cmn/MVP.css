@@ -3376,9 +3376,6 @@ button.icon-button:hover {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
 }
-.btn-group > .btn + .btn {
-    margin-left: 0px;
-}
 .edittoggle > .btn.active {
     color: #FFFFFF;
     background-color: #1ABC96;
