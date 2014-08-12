@@ -175,70 +175,69 @@ m.directive('groupPeople', function(){
 
       
             $scope.createGroups = function(person){
-                // if($scope.selectedGroup.length > 0 || $scope.unChecked.length > 0 || $scope.selectedGroup.length > 0){
-                    angular.forEach(person, function(info){
-                        var bigGroup = [];
-                        var newGroupsArray = []; 
-                        var myOldGroups = "" 
-                        var deleteInx = []; 
-                        SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
-                            var myInfo = data;
-                            if(myInfo.length == 0){
-                                bigGroup.push([info.email, 'investor'])
-                                newGroupsArray = [];
-                            }
-                            else{
-                                angular.forEach(myInfo, function(thing){
-                                    bigGroup.push([thing.email, thing.role])
-                                    if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == []){
-                                        newGroupsArray = []
-                                        console.log("I don't have groups")
-                                    }
-                                    else{
-                                        newGroupsArray = JSON.parse(thing.groups);
-                                    }
-                                    
-                                })
-                            };                        
-                            if($scope.selectedGroup.length > 0){
-                                angular.forEach($scope.selectedGroup, function(selected){
-                                    if(newGroupsArray.indexOf(selected)==-1){
-                                        newGroupsArray.push(selected);
-                                    }
-                                    
-                                })
-                            }
-                            if($scope.unChecked.length > 0){
-                                angular.forEach($scope.unChecked, function(unChecked){
-                                    if(newGroupsArray.indexOf(unChecked) > -1){
-                                         var toDelete = newGroupsArray.indexOf(unChecked);
-                                         deleteInx.push(toDelete);
-                                         newGroupsArray.splice(toDelete, 1);
-                                    };
-                                });
-                            }
-                            if($scope.groupName.length > 0){
-                                var checkNew = []
-                                angular.forEach($scope.groupData, function(data){
-                                        checkNew.push(data.group);
-                                    });
-                                if(newGroupsArray.indexOf($scope.groupName) == -1 && checkNew.indexOf($scope.groupName)== -1){
-                                    newGroupsArray.push($scope.groupName);
+                angular.forEach(person, function(info){
+                    var bigGroup = [];
+                    var newGroupsArray = []; 
+                    var myOldGroups = "" 
+                    var deleteInx = []; 
+                    SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
+                        var myInfo = data;
+                        if(myInfo.length == 0){
+                            bigGroup.push([info.email, 'investor'])
+                            newGroupsArray = [];
+                        }
+                        else{
+                            angular.forEach(myInfo, function(thing){
+                                bigGroup.push([thing.email, thing.role])
+                                if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == []){
+                                    newGroupsArray = []
+                                    console.log("I don't have groups")
                                 }
                                 else{
-                                    console.log("already in group");
+                                    newGroupsArray = JSON.parse(thing.groups);
                                 }
                                 
-                            }
-                            console.log(newGroupsArray)
-                            // remove empty entries, and cannot add an empty group
-                        if(newGroupsArray.indexOf("") > -1){
-                           console.log(newGroupsArray.indexOf(""));
-                           var toDelete= newGroupsArray.indexOf("")
-                           newGroupsArray.splice(toDelete, 1)
+                            })
+                        };                        
+                        if($scope.selectedGroup.length > 0){
+                            angular.forEach($scope.selectedGroup, function(selected){
+                                if(newGroupsArray.indexOf(selected)==-1){
+                                    newGroupsArray.push(selected);
+                                }
+                                
+                            })
                         }
-                        $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
-                        
+                        if($scope.unChecked.length > 0){
+                            angular.forEach($scope.unChecked, function(unChecked){
+                                if(newGroupsArray.indexOf(unChecked) > -1){
+                                     var toDelete = newGroupsArray.indexOf(unChecked);
+                                     deleteInx.push(toDelete);
+                                     newGroupsArray.splice(toDelete, 1);
+                                };
+                            });
+                        }
+                        if($scope.groupName.length > 0){
+                            var checkNew = []
+                            angular.forEach($scope.groupData, function(data){
+                                    checkNew.push(data.group);
+                                });
+                            if(newGroupsArray.indexOf($scope.groupName) == -1 && checkNew.indexOf($scope.groupName)== -1){
+                                newGroupsArray.push($scope.groupName);
+                            }
+                            else{
+                                console.log("already in group");
+                            }
+                            
+                        }
+                        console.log(newGroupsArray)
+                        // remove empty entries, and cannot add an empty group
+                    if(newGroupsArray.indexOf("") > -1){
+                       console.log(newGroupsArray.indexOf(""));
+                       var toDelete= newGroupsArray.indexOf("")
+                       newGroupsArray.splice(toDelete, 1)
+                    }
+                    $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
+                    
                     })
                 });
                
@@ -487,6 +486,9 @@ m.directive('messageSide', function(){
                                         myThings.event = myThings[lastEvent];
                                         if(myThings.event == 'open'){
                                             myThings.event = 'opened'
+                                        }
+                                        else if(myThings.event == 'dropped'){
+                                            myThings.event = 'failed'
                                         }
                                         if($scope.peopleDict[myThings.email]==null){
                                             myThings.personName = myThings.email;

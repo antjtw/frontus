@@ -1092,6 +1092,8 @@ app.filter('fromNowSort', function() {
     };
 });
 
+
+
 /**
  *
  * @param $scope

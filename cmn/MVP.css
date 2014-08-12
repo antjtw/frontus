@@ -4804,7 +4804,7 @@ textarea.email-text {
 }
 
 .messages .activity-feed2 span.recipients {
-    color: #8D8D8D;
+    color: #666;
     padding-left: 19px;
 
 }
@@ -4875,6 +4875,8 @@ textarea.email-text {
     color: #3498DB;
     cursor: pointer;
 }
+
+
 
 /*Filter sidebar*/
 
