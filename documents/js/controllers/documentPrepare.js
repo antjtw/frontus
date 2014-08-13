@@ -1,10 +1,11 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState', '$window', '$location',
-    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState, $window, $location) {
-        $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'navState', '$window', '$location', '$rootScope',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, navState, $window, $location, $rootScope) {
+        $scope.doc = Documents.getOriginal(parseInt($routeParams.doc, 10));
         $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
+        $scope.annots = $scope.doc.annotations;
 
         $scope.newInvestor = "";
 
@@ -67,14 +68,22 @@ app.controller('DocumentPrepareController',
         };
 
         $scope.bulkPrepable = function(annotation) {
-            if (!annotation.forRole(navState.role) || annotation.whattype == "ImgSignature") {
+            if (!annotation.forRole(navState.role) || annotation.whattype == "ImgSignature" || annotation.type == "highlight") {
                 return false;
             } else {
                 return true;
             }
         };
 
-        $scope.annots = Annotations.getDocAnnotations($scope.doc);
+        $scope.requiredField = function(annot) {
+            return annot.required && !annot.filled(navState.role);
+        };
+
+        $scope.overrideFilled = function(annot, override) {
+            return annot.wouldBeValid(navState.role, override) ||
+                   (((override === undefined) || (override == "")) &&
+                    annot.filled(navState.role));
+        };
 
         $scope.encodeURIComponent = encodeURIComponent;
 
