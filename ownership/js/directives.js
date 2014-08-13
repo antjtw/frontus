@@ -131,16 +131,24 @@ own.directive('editableCaptableCell', [function() {
                 }
                 $scope.units = function(newval) {
                     if (angular.isDefined(newval)) {
-                        $scope.data.u = newval;
-                        updateAttr('units', newval);
+                        if (!$scope.data) {
+                            alert("ahhh");
+                        } else {
+                            $scope.data.u = newval;
+                            updateAttr('units', newval);
+                        }
                     } else {
                         return ($scope.data ? $scope.data.u : null);
                     }
                 };
                 $scope.amount = function(newval) {
                     if (angular.isDefined(newval)) {
-                        $scope.data.a = newval;
-                        updateAttr('amount', newval);
+                        if (!$scope.data) {
+                            alert("ahh");
+                        } else {
+                            $scope.data.a = newval;
+                            updateAttr('amount', newval);
+                        }
                     } else {
                         return ($scope.data ? $scope.data.a : null);
                     }

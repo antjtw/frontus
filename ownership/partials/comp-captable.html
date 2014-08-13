@@ -639,7 +639,7 @@
                 <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                     <span>{{securityUnitLabel(one.name)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -682,12 +682,13 @@
                     <span ng-if="row.email">
                         <input class="name-row"
                                disabled
-                               style="width:180px;"
+                               style="width:140px;"
+                               ng-click="selectInvestor(row.name)"
                                ng-model="row.name">
                     </span>
                 </td>
                 <td ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true"
+                | orderBy:['effective_date', 'insertion_date']"
                     ng-class="{tranSelected: selectedCell
                         && selectedCell.investor == row.name
                         && selectedCell.security == key.name}">
@@ -751,7 +752,7 @@
                                hoverable: captable.cellFor(row.name, key.name).a
                                           || captable.cellFor(row.name, key.name).u}"
                     ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                     <captable-cell inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'>
                 </td>
@@ -776,7 +777,7 @@
                 </td>
                 <td class="tableFields"
                     ng-repeat="key in ct.securities
-                  | orderBy:['effective_date', 'insertion_date']:true">
+                  | orderBy:['effective_date', 'insertion_date']">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
@@ -799,7 +800,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"
                     ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -820,7 +821,7 @@
                 </td>
                 <td class="tableFields"
                     ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
@@ -877,9 +878,9 @@
                                 {{selectedInvestor.name}}
                             </h1>
                         </div>
-                        <div ng-show="userDict[selectedInvestor.email]"
+                        <div ng-if="selectedInvestor.email"
                              class="summary-bar">
-                            <div ng-show="userDict[selectedInvestor.email].lastlogin"
+                            <div ng-if="userDict[selectedInvestor.email].lastlogin"
                                  class="belowTitle">
                                 <img src="/img/activity/login.png">
                                 <div>
@@ -889,7 +890,7 @@
                                     <span>Last Login</span>
                                 </div>
                             </div>
-                            <div ng-show="userDict[selectedInvestor.email].received"
+                            <div ng-if="userDict[selectedInvestor.email].received"
                                  class="belowTitle">
                                 <img src="/img/activity/received.png">
                                 <div>
@@ -899,7 +900,7 @@
                                     <span>Delivered</span>
                                 </div>
                             </div>
-                            <div ng-show="userDict[selectedInvestor.email].viewed"
+                            <div ng-if="userDict[selectedInvestor.email].viewed"
                                  class="belowTitle">
                                 <img src="/img/activity/view.png">
                                 <div>
@@ -913,7 +914,7 @@
                                 <img src="/img/activity/permissions.png">
                                 <div>
                                     <span>
-                                        {{userDict[selectedInvestor.email].level}}
+                                        {{selectedInvestor.level}}
                                     </span>
                                     <span>Permissions</span>
                                 </div>
@@ -921,7 +922,7 @@
                         </div>
 
                         <div class="profile-link"
-                             ng-show="userDict[selectedInvestor.email]"
+                             ng-if="selectedInvestor.email"
                              ng-click="gotoProfile(selectedInvestor.email, selectedInvestor.name);">
                             <span data-icon="&#xe001;"
                                   aria-hidden="true">
@@ -929,7 +930,7 @@
                             <span>View Full Profile</span>
                         </div>
 
-                        <div ng-show="!companyIsZombie() && !userDict[selectedInvestor.email]"
+                        <div ng-if="!companyIsZombie() && !selectedInvestor.email"
                              class="share-link">
                             <div ng-click="companyIsZombie() || modalUp();"
                                  class="profile-link">

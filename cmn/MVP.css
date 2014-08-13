@@ -4071,9 +4071,9 @@ button.icon-button:hover {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
-.select2-container {
+/*.select2-container {
     height: 30px;
-}
+}*/
 
 .select2-container .select2-choice .select2-arrow {
     background-color: #FFFFFF;
@@ -4629,6 +4629,14 @@ div.upgradeWarning > span {
     cursor: pointer;
 }
 
+
+/*compose message css*/
+
+
+
+/*styling the editor*/
+
+
 /*Sidebar CSS */
 .sidebarHeader {
     display: block;
@@ -4646,8 +4654,6 @@ textarea.email-text {
 }
 
 .sidebarText {
-   /* padding: 10px 0 0 0;*/
-  /*  margin: 5px 0 20px 0;*/
     display: block;
     text-align: left;
 }
@@ -4670,18 +4676,10 @@ textarea.email-text {
     width: 130px;
     background-color: white;
     color: #2980B9;
+    font-size: 14px;
 }
 
 
-.preview-message {
-    text-align: left;
-    display: block;
-    font-family: 'FS Elliot Web Regular', sans-serif;
-    color: #2980B9;
-    padding-bottom: 10px;
-    cursor: pointer;
-    position: absolute;
-}
 
 .sidebarText span{
     font-size: 12px;
@@ -4726,17 +4724,7 @@ textarea.email-text {
     padding-left: 30px;
 }
 /*preview modal for email*/
-.modal.preview-modal {
-/*    text-align: center;*/
-/*    overflow-y: scroll;
-    overflow-x: scroll;*/
-    min-height: 400px;
-    max-height: 600px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-width: 600px;
-    left: 40%;
-}
+
 
 
 .capTab {
@@ -4795,7 +4783,7 @@ textarea.email-text {
 /*    position: relative;*/
 }
 
-/*//Message sidebar*/
+/*//Message status sidebar*/
 .message-side ul.activity-feed2 {
     width: 345px;
 }
@@ -4889,17 +4877,19 @@ textarea.email-text {
 
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
+/*    margin-left: 0px;*/
+    padding-bottom: 12px;
 }
 .tinycol{
-    display: inline-block;
-    width: 40%;
-    padding-left: 20px;
-    margin-left: 10px;
+    padding-left: 30px;
+    float: left;
+    width: 60%;
 }
 
 .tinycol.left{
     text-align: right;
     padding-left: 10px;
+    width: 20%;
 }
 
 .group_button{
@@ -4952,3 +4942,4 @@ textarea.email-text {
     position: relative;
     top: 3px;
 } 
+

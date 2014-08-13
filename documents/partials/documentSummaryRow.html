@@ -35,7 +35,7 @@
         <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
     </td>
     <td ng-show="viewState.hideSharebar" class="shareholder-column status-column issuer pointer"
-        ng-click="!(!doc.uploaded_by || doc.pages > 0) || viewStatus(doc)">
+        ng-click="titleClick()">
         <ul>
             <li>{{formatDocStatusRatio(doc)}}</li>
         </ul>
