@@ -289,7 +289,11 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
         } else {
-            cell.a = sum_transactions(cell.transactions);
+            var trans = cell.transactions
+                .filter(function(el) {
+                    return el.attrs.investor == cell.investor ||
+                           el.attrs.investor_to == cell.investor;});
+            cell.a = sum_transactions(trans);
         }
     }
     this.setCellAmount = setCellAmount;
@@ -337,7 +341,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             angular.forEach(captable.securities, function(sec) {
                 var transactions = captable.transactions.filter(
                     function(tran) {
-                        return tran.attrs.investor == inv.name &&
+                        return (tran.attrs.investor == inv.name ||
+                                tran.attrs.investor_to == inv.name ||
+                                tran.attrs.investor_from == inv.name) &&
                                tran.attrs.security == sec.name;
                     });
                 if (transactions.length > 0) {
