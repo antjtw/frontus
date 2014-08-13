@@ -48,7 +48,7 @@
 <div class="msgButtons">
     <div class = "standard-button green">
         <button class="btn" style="font-size: 14px"
-            ng-disabled="!readyToSend(message)  || clicked"
+            ng-disabled="companyIsZombie()||!readyToSend(message)  || clicked"
             ng-click="sendMessage(message)">
             Send
         </button>
