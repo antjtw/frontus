@@ -4946,3 +4946,8 @@ textarea.email-text {
     top: 3px;
 } 
 
+.standard-button > button.disabledButton{
+    background-color: #8CDDCA;
+    cursor: auto;
+}
+

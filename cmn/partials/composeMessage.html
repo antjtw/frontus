@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
 <div class="compose_message">
    
     <div>
@@ -46,13 +46,14 @@
 </div>
 
 <div class="msgButtons">
-    <div class = "standard-button green">
+    <div class = "standard-button green" tooltip="{{zombiemessage()}}">
         <button class="btn" style="font-size: 14px"
-            ng-disabled="!readyToSend(message)  || clicked"
-            ng-click="sendMessage(message)">
+            ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
+            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
             Send
         </button>
     </div>
+
 </div>
 
 <div class="msgButtons left">
