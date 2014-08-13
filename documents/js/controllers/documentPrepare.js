@@ -1,14 +1,29 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState', '$window',
-    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState, $window) {
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState', '$window', '$location',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState, $window, $location) {
         $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
         $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
 
         $scope.newInvestor = "";
+
         $scope.state = {};
-        $scope.state.bulkPrep = false;
+        if ($routeParams.bulk) {
+            $scope.state.bulkPrep = true;
+        } else {
+            $scope.state.bulkPrep = false;
+        }
+        $scope.$watch('state.bulkPrep', function(bulkPrep, old_bulkPrep) {
+            if (bulkPrep != old_bulkPrep) { // only on change, not initial
+                if (bulkPrep) {
+                    $location.search('bulk', true).replace();
+                } else {
+                    saveOverrides();
+                    $location.search('bulk', null).replace();
+                }
+            }
+        });
 
         $scope.investors = Investor.investors;
         function filterInvestors(investorList, docPreparedFor) {
@@ -65,17 +80,24 @@ app.controller('DocumentPrepareController',
 
         /* Save the overrides when navigating away */
         function saveOverrides() {
-            for (var investor in $scope.doc.preparedFor) {
-                $scope.doc.savePreparation(investor);
+            if ($routeParams.bulk) { // don't save if we aren't in bulkPrep mode
+                for (var investor in $scope.doc.preparedFor) {
+                    $scope.doc.savePreparation(investor);
+                }
             }
         }
         $window.addEventListener('beforeunload', function(event) {
             saveOverrides();
         });
         $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-            // don't save note data if I'm being redirected to log in
-            if (newUrl.match(/login([?]|$)/)) return;
-
+            if (newUrl.match(/login([?]|$)/)) {
+                // don't save note data if I'm being redirected to log in
+                return;
+            }
+            if (newUrl.substring(0, newUrl.indexOf('?')) == oldUrl.substring(0, oldUrl.indexOf('?'))) {
+                // don't save if it's just a change in search
+                return;
+            }
             saveOverrides();
         });
     }]

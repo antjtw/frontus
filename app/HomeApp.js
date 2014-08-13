@@ -75,7 +75,8 @@ app.config(function($routeProvider, $locationProvider){
         }).
         when('/app/documents/prepare', {
             templateUrl: '/documents/partials/prepare.html',
-            controller: 'DocumentPrepareController'
+            controller: 'DocumentPrepareController',
+            reloadOnSearch: false
         }).
         when('/app/documents/company-status', {
             templateUrl: '/documents/partials/companyStatus.html',
@@ -101,7 +102,7 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/company/messages', {
             templateUrl: '/messages/newMessage.html',
             controller: 'MsgCtrl'
-            
+
         }).
 
         otherwise({redirectTo:'/app/home/investor'});
@@ -212,7 +213,7 @@ app.controller('CompanyCtrl',
                     $scope.$emit("notification:success", "You have successfully changed your password.");
                 }
             }
-            
+
 			$scope.fullScreen = function() {
 				/*var elem = document.getElementById("vid");
 				if (elem.requestFullscreen) {
@@ -224,7 +225,7 @@ app.controller('CompanyCtrl',
 				} else if (elem.webkitRequestFullscreen) {
 				  elem.webkitRequestFullscreen();
 				}*/
-				
+
 				document.getElementById("vid-pic").style.visibility="hidden";
 			};
             $scope.getTokenInfo = function() {
