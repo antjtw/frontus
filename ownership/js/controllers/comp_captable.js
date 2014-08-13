@@ -943,11 +943,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.gotoProfile = function(email, name) {
-        var link;
-        link = (name ? ((navState.userid != email) ? '/app/company/profile/view?id=' + email : '/app/account/profile/') : '');
-        if (link) {
-            $location.url(link);
-        }
+        if (!email) return;
+        var link = (navState.userid == email) ?
+                    '/app/account/profile' :
+                    '/app/company/profile/view?id='+email;
+        $location.url(link);
     };
 
     $scope.securityUnitLabel = function(security_name) {
