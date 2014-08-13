@@ -51,7 +51,16 @@
                     </span>
                     <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
                           ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[investor.investor].overrides[annot.id])}">
-                        <input placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                        <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
+                               placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                        <input ng-if="annot.type_info.typename == 'date'"
+                               type="text" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
+                               placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                        <select ng-if="annot.type_info.typename == 'enum'" ui-select2
+                                placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                            <option></option>
+                            <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
+                        </select>
                     </span>
                 </div>
                 <div class="docPrepRow">
