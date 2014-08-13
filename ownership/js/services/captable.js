@@ -397,7 +397,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
      * the new ledger entries.
      *
      */
-    function saveTransaction(tran, toUpdate) {
+    function saveTransaction(tran, toUpdate, errorFunc) {
         // TODO this is getting called too often.
         // use ng-change instead of ui-event?
         //
@@ -431,7 +431,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             }
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
-        }).except(logError);
+        }).except(function(e) {
+            console.log(e);
+            if (errorFunc)
+            {
+                errorFunc();
+            }
+        });
     }
     this.saveTransaction = saveTransaction;
     this.deleteTransaction = function(tran, cell) {

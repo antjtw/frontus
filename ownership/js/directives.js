@@ -330,7 +330,8 @@ own.directive('editableCellDetails', [function() {
     return {
         restrict: 'EA',
         scope: {cell: '=',
-                currentTab: '=currenttab'},
+                currentTab: '=currenttab',
+                undo: '=undo'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable",
             function($scope, $rootScope, attributes, captable) {
@@ -400,7 +401,8 @@ own.directive('editableTransactionAttributes', [function() {
         restrict: 'E',
         replace: true,
         scope: {data: '=',
-                selected: '=selected'},
+                selected: '=selected',
+                undo: '=undo'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
         controller: ["$scope", "$filter", "captable", "attributes",
@@ -441,8 +443,8 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
-                $scope.saveIt = function(tran, cell) {
-                    captable.saveTransaction(tran, cell);
+                $scope.saveIt = function(tran, cell, errorFunc) {
+                    captable.saveTransaction(tran, cell, errorFunc);
                 };
             }
         ],

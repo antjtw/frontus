@@ -212,7 +212,7 @@
             <span>Date</span>
             <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
                    ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
-                   onkeydown="testForEnter();">
+                   onkeydown="testForEnter(event);">
         </div>
         <div ng-show="convertTran.toissue.issue" class="pull-right">
             <span>Method</span>
@@ -232,7 +232,7 @@
         </div>
         <div ng-show="convertTran.method == 'Price Per Share'" class="pull-right">
             <span class="double">Conversion PPS</span>
-            <input type="text" ng-model="convertTran.ppshare" onkeydown="testForEnter();">
+            <input type="text" ng-model="convertTran.ppshare" onkeydown="testForEnter(event);">
         </div>
     </div>
     <div ng-show="convertTran.step == '2'" class="modalText">
@@ -308,13 +308,13 @@
                 <span>Date</span>
                 <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
                        ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
-                       onkeydown="testForEnter();">
+                       onkeydown="testForEnter(event);">
             </div>
             <div class="ratio-input">
                 <span>Ratio</span>
-                <input type="text" ng-model="splitIssue.ratioa" onkeydown="testForEnter();">
+                <input type="text" ng-model="splitIssue.ratioa" onkeydown="testForEnter(event);">
                 <span>:</span>
-                <input type="text" ng-model="splitIssue.ratiob" onkeydown="testForEnter();">
+                <input type="text" ng-model="splitIssue.ratiob" onkeydown="testForEnter(event);">
             </div>
         </div>
         <div class="convert-summary three">
@@ -374,7 +374,7 @@
             <span>Date</span>
             <input id="transferdate" ng-change="dateTransfer()" ui-event="{keydown:'dateTransfer($event)', blur:'dateTransfer(\'blur\')'}" type="text"
                    ng-model="transfer.date" data-date-format={{settings.lowercasedate}} bs-datepicker
-                   onkeydown="testForEnter();">
+                   onkeydown="testForEnter(event);">
         </div>
 
         <div class="docLibrary full-width">
@@ -388,7 +388,7 @@
                 <tr ng-repeat="tran in transfer.trans">
                     <td>{{tran.date | date:settings.shortdate}}</td>
                     <td>{{formatAmount(tran.units)}}</td>
-                    <td><input class="transfer-shares-input" type="text" ng-model="tran.transferunits" onkeydown="testForEnter();"></td>
+                    <td><input class="transfer-shares-input" type="text" ng-model="tran.transferunits" onkeydown="testForEnter(event);"></td>
                     <td>
                         <ul class="dropdown-list drop-selector">
                             <li class="dropdown standard">
@@ -608,7 +608,7 @@
                     <input class="capEditHeaders"
                            ui-event="{blur:'saveIssue(sec,\'issue\')'}"
                            ng-model="sec.name"
-                           onkeydown="testForEnter();">
+                           onkeydown="testForEnter(event);">
                 </th>
                 <th>
                     <input placeholder="Add Security"
@@ -677,7 +677,7 @@
                                            blur: 'updateRow(row)'}"
                                onpaste="return false"
                                ng-paste="namePaste($event, row);"
-                               onkeydown="testForEnter();">
+                               onkeydown="testForEnter(event);">
                     </span>
                     <span ng-if="row.email">
                         <input class="name-row"
@@ -858,7 +858,8 @@
                     <span ng-switch-when="2">
                         <editable-cell-details
                                    cell="selectedCell"
-                                   currenttab="currentTab">
+                                   currenttab="currentTab"
+                                   undo="undo">
                     </span>
                     <span ng-switch-when="5">
                         <security-details sec="selectedSecurity">

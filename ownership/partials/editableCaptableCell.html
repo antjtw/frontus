@@ -9,7 +9,7 @@
            ng-model-options="{getterSetter: true}"
            onpaste="return false"
            ng-paste="numberPaste($event, row, data.security, 'u');"
-           onkeydown="testForEnter();">
+           onkeydown="testForEnter(event);">
     <input ng-if="isDebt(data);"
            class="captablepair default-pointer first-box"
            disabled>
@@ -22,7 +22,7 @@
            ng-model-options="{getterSetter: true}"
            onpaste="return false"
            ng-paste="numberPaste($event, row, data.security, 'a');"
-           onkeydown="testForEnter();">
+           onkeydown="testForEnter(event);">
     <div modal="tranPicker"
          close="closeTranPicker"
          options="opts">

@@ -1192,7 +1192,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 }]);
 
 // IE fix to remove enter to submit form
-function testForEnter()
+function testForEnter(event)
 {
     if (event.keyCode == 13)
     {

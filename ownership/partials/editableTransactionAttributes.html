@@ -7,12 +7,12 @@
         </span>
         <input ng-if="useTextField(key)"
                id="date{{data.attrs.$$hashKey}}"
-               ui-event="{keyup: 'saveIt(data, selected)',
-                          blur: 'saveIt(data, selected)'}"
+               ui-event="{keyup: 'saveIt(data, selected, undo)',
+                          blur: 'saveIt(data, selected, undo)'}"
                type="text"
                ng-model="data.attrs[key]">
         <input ng-if="useDatePicker(key)"
-               ui-event="{blur: 'saveIt(data)'}"
+               ui-event="{blur: 'saveIt(data, selected, undo)'}"
                type="text"
                bs-datepicker>
         <ul ng-if="useDropdown(key)">
