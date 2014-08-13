@@ -597,7 +597,7 @@
                 </th>
                 <th class="longrow">Shareholder</th>
                 <th ng-repeat="sec in ct.securities
-                  | orderBy:['effective_date', 'insertion_date']:true"
+                  | orderBy:['effective_date', 'insertion_date']"
                     ng-click="selectSecurity(sec.name)">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
@@ -624,7 +624,7 @@
                 <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
                     ng-repeat="sec in ct.securities
-                    | orderBy:['effective_date', 'insertion_date']:true"
+                    | orderBy:['effective_date', 'insertion_date']"
                     ng-click="selectSecurity(sec.name)">
                     <span>{{::sec.name}}</span>
                     <span class="next-button"
