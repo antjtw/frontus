@@ -16,7 +16,7 @@
                           class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <select class="height-force" ui-select2="select2Options" ng-model="current.val" ng-style="annotationSizeStyle" placeholder="{{current.placeholder}}">
+                <select class="height-force" ui-select2 ng-model="current.val" ng-style="annotationSizeStyle" placeholder="{{current.placeholder}}">
                     <option></option>
                     <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>
@@ -60,9 +60,7 @@
                         <li>
                             <span>Annotation Type</span>
                         </li>
-                        <select class="annotation-dropdown" ui-select2="select2Options" ng-model="annot.whattype">
-                            <option ng-class="{'dropdown-required': type.required, 'dropdown-suggested': type.required == false}" class="annotation-dropdown-item"  ng-repeat="type in doc.annotation_types | filter: unusedType | orderBy:doc.annotationOrder" value="{{type.name}}">{{doc.dropdownDisplay(type)}}</option>
-                        </select>
+                        <input class="annotation-dropdown" ui-select2="select2TypeOptions" ng-model="annot.whattypesetter" ng-model-options="{getterSetter: true}" placeholder="{{annot.whattype}}">
                     </ul>
                 </li>
                 <li class="content-section" ng-if="(annot.type_info.typename == 'date' || annot.type_info.typename == 'enum' || annot.type == 'highlight') && annot.forRole(navState.role)">
@@ -79,7 +77,7 @@
                             <input type="text" ng-model="current.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
                         </li>
                         <li ng-if="annot.type_info.typename == 'enum'">
-                            <select ui-select2="select2Options" ng-model="current.val">
+                            <select ui-select2 ng-model="current.val" placeholder="{{current.placeholder}}">
                                 <option></option>
                                 <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>

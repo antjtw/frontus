@@ -473,17 +473,15 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.toggleSide = function () {
-                var s = $location.search();
                 if (!$scope.state.hideSharebar) {
-                    s={};
                     $scope.state.hideSharebar = true;
                     $scope.restoreViewState();
+                    $location.search('share', null).replace();
                 } else {
-                    s.share=true;
                     $scope.saveAndClearViewState();
                     $scope.state.hideSharebar = false;
+                    $location.search('share', true).replace();
                 }
-                $location.search(s);
             };
             $scope.saveAndClearViewState = function() {
                 $scope.viewState = {
@@ -707,6 +705,7 @@ app.controller('CompanyDocumentListController',
                 $scope.processing = true;
                 ShareDocs.shareDocuments().finally(function(result) {
                     $scope.processing = false;
+                    $location.search('share', null);
                     $route.reload();
                 });
             };
@@ -920,7 +919,7 @@ app.controller('CompanyDocumentListController',
                 return st1;
             }
             // TODO: store as part of ShareDocs service
-            // If we can eliminate doc.sugnature_flow and only reference the ShareDocs version, that should work
+            // If we can eliminate doc.signature_flow and only reference the ShareDocs version, that should work
             function initShareState() {
                 loadPrepareState();
                 if (ShareDocs.documents.length > 0) {
