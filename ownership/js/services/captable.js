@@ -361,6 +361,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                     captable.cells.push(cell);
                 }
             });
+            // NOTE: this is a fn as a property b/c it makes sorting easy
             inv.percentage = function() {
                 return investorSorting(inv.name);
             };

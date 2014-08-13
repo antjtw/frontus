@@ -639,7 +639,7 @@
                 <td class="input-right">%</td>
                 <td></td>
                 <td ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                     <span>{{securityUnitLabel(one.name)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -687,7 +687,7 @@
                     </span>
                 </td>
                 <td ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true"
+                | orderBy:['effective_date', 'insertion_date']"
                     ng-class="{tranSelected: selectedCell
                         && selectedCell.investor == row.name
                         && selectedCell.security == key.name}">
@@ -751,7 +751,7 @@
                                hoverable: captable.cellFor(row.name, key.name).a
                                           || captable.cellFor(row.name, key.name).u}"
                     ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                     <captable-cell inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'>
                 </td>
@@ -776,7 +776,7 @@
                 </td>
                 <td class="tableFields"
                     ng-repeat="key in ct.securities
-                  | orderBy:['effective_date', 'insertion_date']:true">
+                  | orderBy:['effective_date', 'insertion_date']">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
@@ -799,7 +799,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"
                     ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -820,7 +820,7 @@
                 </td>
                 <td class="tableFields"
                     ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']:true">
+                | orderBy:['effective_date', 'insertion_date']">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
