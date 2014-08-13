@@ -110,6 +110,75 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.annot.updateTypeInfo($scope.doc.annotation_types);
     });
 
+    $scope.annot.whattypesetter = function(val) {
+        // using a setter to prevent select2 from reformatting the whattype to it's prefered format...
+        if (typeof(val) == "string") {
+            $scope.annot.whattype = val;
+        }
+        return $scope.annot.whattype;
+    }
+    function annotationOrderComp(typeA, typeB) {
+        // type "Text" always takes priority
+        if (typeA.id == "Text") {
+            return -1;
+        }
+        if (typeB.id == "Text") {
+            return 1;
+        }
+        // required == true should be higher than required == false, should be higher than required == undefined
+        // this keeps transaction types at the top
+        // otherwise, sort by alpha on type.text
+        if (typeA.required === true) {
+            if (typeB.required === true) {
+                return typeA.text.localeCompare(typeB.text);
+            } else {
+                return -1;
+            }
+        }
+        if (typeA.required === false) {
+            if (typeB.required === true) {
+                return 1;
+            } else if (typeB.required === false) {
+                return typeA.text.localeCompare(typeB.text);
+            } else {
+                return -1;
+            }
+        }
+        if (typeA.required === undefined) {
+            if (typeB.required !== undefined) {
+                return 1;
+            } else {
+                return typeA.text.localeCompare(typeB.text);
+            }
+        }
+    }
+    $scope.select2TypeOptions = {
+        data: function() {
+            var res = [];
+            $scope.doc.annotation_types.forEach(function(type) {
+                if ($scope.unusedType(type)) {
+                    res.push({id: type.name, text: type.display, required: type.required});
+                }
+            });
+            return {results: res};
+        },
+        sortResults: function(data, container, query) {
+            return data.sort(annotationOrderComp);
+        },
+        formatResultCssClass: function(type) {
+            var classes = "annotation-dropdown-item";
+            if (type.required === true) {
+                classes += " dropdown-required";
+            } else if (type.required === false) {
+                classes += " dropdown-suggested";
+            }
+            return classes;
+        },
+        createSearchChoice: function(text) {
+            return {id: text, text: text};
+        },
+    }
+
     $scope.unusedType = function(type) {
         // only want to filter transaction types that are already in used
         // we use type.required to determine if it's a transaction type or default type
@@ -398,6 +467,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     // create variables we can bind to for placeholder and value
     // depending on whether we're using the annotation proper, or an override value
+    // TODO: look at using a getter/setter on custom.val to cut down on the number of watches
     $scope.current = {};
     $scope.$watch('annot.type_info.display', function(display) {
         if ((!$scope.prepareFor) || ($scope.annot.val.length === 0)) {
