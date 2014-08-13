@@ -49,7 +49,8 @@
                             <span ng-if="!investor.is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
                         </a>
                     </span>
-                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
+                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
+                          ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[investor.investor].overrides[annot.id])}">
                         <input placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
                     </span>
                 </div>

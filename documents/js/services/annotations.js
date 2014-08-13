@@ -3,7 +3,7 @@
 var docs = angular.module('docServices');
 
 // TODO: should really have an annotation factory
-docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', function(SWBrijj, $rootScope, navState) {
+docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', function(SWBrijj, $rootScope, navState, User) {
     // data structure contents
     // aa -> [annot0...annotn-1]
     // [i] annoti -> [position, type, value, style]
@@ -145,21 +145,26 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', function(SWBri
             });
             return json;
         },
-        filled: function(signaturepresent, role) {
+        wouldBeValid: function(role, value) {
+            // can be used to check override values
+            // TODO: validate format of XX/XX/XXXX if type == "date"
+            var type = this.type_info.typename;
+            if (["int8", "int4", "float8"].indexOf(type) != -1) {
+                var num = Number(value);
+                return (!isNaN(num) && value.length > 0);
+            } else if (type == "enum") {
+                return this.type_info.labels.indexOf(value) != -1;
+            } else {
+                return ((value && value.length > 0) ||
+                        (this.whattype == "ImgSignature" && User.signaturePresent));
+            }
+        },
+        filled: function(unused, role) {
             // signature present comes from the account
             if (!this.forRole(role)) {
                 return false;
             }
-            var type = this.type_info.typename;
-            if (["int8", "int4", "float8"].indexOf(type) != -1) {
-                var num = Number(this.val);
-                return (!isNaN(num) && this.val.length > 0);
-            } else if (type == "enum") {
-                return this.type_info.labels.indexOf(this.val) != -1;
-            } else {
-                return ((this.val && this.val.length > 0) ||
-                        (this.whattype == "ImgSignature" && signaturepresent));
-            }
+            return this.wouldBeValid(role, this.val);
         },
         isCountersign: function() {
             return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature");

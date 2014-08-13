@@ -2521,6 +2521,10 @@ div.profile-link > span:first-of-type {
     display: none;
 }
 
+.docPrepRow .required > input {
+    border-color: #E74C3C;
+}
+
 /* Preparation Bar */
 
 .preparation-bar {

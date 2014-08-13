@@ -74,6 +74,16 @@ app.controller('DocumentPrepareController',
             }
         };
 
+        $scope.requiredField = function(annot) {
+            return annot.required && !annot.filled(true, navState.role);
+        }
+
+        $scope.overrideFilled = function(annot, override) {
+            return annot.wouldBeValid(navState.role, override) ||
+                   (((override === undefined) || (override == "")) &&
+                    annot.filled(true, navState.role));
+        }
+
         $scope.annots = Annotations.getDocAnnotations($scope.doc);
 
         $scope.encodeURIComponent = encodeURIComponent;
