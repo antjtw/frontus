@@ -4880,7 +4880,7 @@ textarea.email-text {
 
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
-    margin-left: 0px;
+/*    margin-left: 0px;*/
     padding-bottom: 12px;
 }
 .tinycol{
