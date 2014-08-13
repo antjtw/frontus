@@ -1,4 +1,4 @@
-var m = angular.module('commonDirectives', ['ui.select2', 'brijj', 'ui.filters']);
+var m = angular.module('commonDirectives', ['ui.select2', 'brijj', 'ui.filters', 'ui.bootstrap']);
 
 m.directive('groupPeople', function(){
     return {

@@ -46,9 +46,9 @@
 </div>
 
 <div class="msgButtons">
-    <div class = "standard-button green">
+    <div class = "standard-button green" style="display: inline-block" tooltip="test" tooltip-trigger="companyIsZombie()">
         <button class="btn" style="font-size: 14px"
-            ng-disabled="companyIsZombie()||!readyToSend(message)  || clicked"
+            ng-disabled="companyIsZombie()|| !readyToSend(message)  || clicked"
             ng-click="sendMessage(message)">
             Send
         </button>
@@ -57,7 +57,7 @@
 
 <div class="msgButtons left">
     <div class = "standard-button white">
-        <button class="btn"
+        <button class="btn" tooltip="Tooltip on right"
             ng-click="resetMessage()">
             Cancel
         </button>
