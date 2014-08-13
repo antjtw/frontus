@@ -593,15 +593,22 @@ m.directive('composeMessage', function() {
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState',
 
         
 
-        function($scope, $rootScope, SWBrijj) {
+        function($scope, $rootScope, SWBrijj, navState) {
 
             $scope.myEmails = [];
 
-            
+            $scope.zombiemessage = function(){
+                if(navState.role == "issuer" && ($rootScope.billing.currentPlan == "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
+                    return "Please update your payment information to use this feature."
+                }
+                else{
+                    return null
+                }
+            }
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){

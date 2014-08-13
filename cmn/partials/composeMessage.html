@@ -46,7 +46,7 @@
 </div>
 
 <div class="msgButtons">
-    <div class = "standard-button green" tooltip="{{zombiemessage}}">
+    <div class = "standard-button green" tooltip="{{zombiemessage()}}">
         <button class="btn" style="font-size: 14px"
             ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
             ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
