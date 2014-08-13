@@ -1,10 +1,11 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'Annotations', 'navState', '$window', '$location', '$rootScope',
-    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, Annotations, navState, $window, $location, $rootScope) {
-        $scope.doc = Documents.getDoc(parseInt($routeParams.doc, 10));
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'navState', '$window', '$location', '$rootScope',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, navState, $window, $location, $rootScope) {
+        $scope.doc = Documents.getOriginal(parseInt($routeParams.doc, 10));
         $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
+        $scope.annots = $scope.doc.annotations;
 
         $scope.newInvestor = "";
 
@@ -83,8 +84,6 @@ app.controller('DocumentPrepareController',
                    (((override === undefined) || (override == "")) &&
                     annot.filled(navState.role));
         };
-
-        $scope.annots = Annotations.getDocAnnotations($scope.doc);
 
         $scope.encodeURIComponent = encodeURIComponent;
 

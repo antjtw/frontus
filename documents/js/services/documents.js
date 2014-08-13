@@ -54,7 +54,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
-    function updateAnnotationTypes(issue_type, transaction_type, type_list) {
+    function updateAnnotationTypes(issue_type, transaction_type, type_list, annotation_list) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
             if (issue_type) {
@@ -73,6 +73,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             var args = [type_list.length, 0].concat(tmp_array);
             Array.prototype.splice.apply(type_list, args);
             // TODO: remove duplicate types, favoring the transaction type
+
+            annotation_list.forEach(function(annot) {
+                annot.updateTypeInfo(type_list);
+            });
         }
         if (transaction_attributes) {
             reallyDo();
@@ -195,20 +199,14 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             // documents can only create grants and purchases right now
             this.transaction_type = viable_actions.purchase ? "purchase" : "grant";
             SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
-            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
-            this.annotations.forEach(function(annot) {
-                annot.updateTypeInfo(this.annotation_types);
-            }, this);
+            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types, this.annotations);
         },
         unsetTransaction: function() {
             this.issue = null;
             this.issue_type = null;
             this.transaction_type = null;
             SWBrijj.update("document.my_company_library", {issue: this.issue, "transaction_type": this.transaction_type}, {doc_id: this.doc_id}); // TODO: handle response / error
-            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types);
-            this.annotations.forEach(function(annot) {
-                annot.updateTypeInfo(this.annotation_types);
-            });
+            updateAnnotationTypes(this.issue_type, this.transaction_type, this.annotation_types, this.annotations);
         },
         hasOtherPartyAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
@@ -414,16 +412,13 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         oldDoc.pages = realPages;
         oldDoc.annotations = Annotations.getDocAnnotations(oldDoc); // refresh annotations (in case doc overwrote);
         if (oldDoc.issue_type) {
-            updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types);
-            oldDoc.annotations.forEach(function(annot) {
-                annot.updateTypeInfo(oldDoc.annotation_types);
-            });
+            updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types, oldDoc.annotations);
         }
         if (oldDoc.tags) {
             try {
                 oldDoc.tags = JSON.parse(oldDoc.tags);
             } catch (e) {
-                console.log("error while parsing JSON");
+                console.warn("error while parsing JSON");
                 console.log(oldDoc.tags);
                 oldDoc.tags = [];
             }
@@ -431,5 +426,15 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             oldDoc.tags = [];
         }
         return oldDoc;
+    };
+
+    this.getOriginal = function(doc_id) {
+        if (!docs[doc_id]) {
+            var docServ = this;
+            SWBrijj.tblm("document.my_company_library", "doc_id", doc_id).then(function(data) {
+                docServ.setDoc(doc_id, data);
+            });
+        }
+        return this.getDoc(doc_id);
     };
 }]);
