@@ -4951,5 +4951,6 @@ li.event.roles > div > ul {
 
 .standard-button > button.disabledButton{
     background-color: #8CDDCA;
+    cursor: auto;
 }
 
