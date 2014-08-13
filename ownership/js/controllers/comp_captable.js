@@ -125,7 +125,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.selectedSecurity = $scope.selectedInvestor = null;
         if (!$scope.selectedCell || !cellIsSelected(inv, sec)) {
             History.forget($scope, 'selectedCell');
-            $scope.selectedCell = captable.cellFor(inv, sec, true);
+            $scope.selectedCell =
+                captable.cellFor(inv, sec, $scope.editMode);
             History.watch('selectedCell', $scope);
             displayCellDetails();
         } else if ($scope.selectedCell && !cellIsSelected(inv, sec)) {
