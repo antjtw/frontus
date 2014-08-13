@@ -1,6 +1,6 @@
 'use strict';
 
-function annotationController($scope, $rootScope, $element, $document, Annotations, User, $timeout, navState, SWBrijj) {
+function annotationController($scope, $rootScope, $element, $document, Annotations, $timeout, navState, SWBrijj) {
     $scope.navState = navState; // TODO: UI is very dependant on navState
     $scope.transaction_types_mapping = $rootScope.transaction_types_mapping;
     function applyLineBreaks(oTextarea) {
@@ -463,8 +463,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         delete $scope.annot.focus;
     });
 
-    $scope.user = User;
-
     // create variables we can bind to for placeholder and value
     // depending on whether we're using the annotation proper, or an override value
     // TODO: look at using a getter/setter on custom.val to cut down on the number of watches
@@ -529,4 +527,4 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     }
 }
 
-annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "User", "$timeout", "navState", "SWBrijj"];
+annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "$timeout", "navState", "SWBrijj"];

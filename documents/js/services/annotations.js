@@ -159,7 +159,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
                         (this.whattype == "ImgSignature" && User.signaturePresent));
             }
         },
-        filled: function(unused, role) {
+        filled: function(role) {
             // signature present comes from the account
             if (!this.forRole(role)) {
                 return false;

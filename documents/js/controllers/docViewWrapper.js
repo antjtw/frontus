@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', 'User', '$q', 'basics',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q, basics) {
+        'navState', 'Annotations', 'Documents', '$q', 'basics',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -460,7 +460,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.unfilledAnnotation = function() {
             return $scope.doc.annotations.some(function(annot) {
-                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
+                return (annot.required && annot.forRole(navState.role) && !annot.filled(navState.role));
             });
         };
 
@@ -475,7 +475,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.numAnnotationsComplete = function() {
             var num = 0;
             angular.forEach($scope.doc.annotations, function(annot) {
-                num += annot.required && annot.forRole(navState.role) && annot.filled(User.signaturePresent, navState.role) ? 1 : 0;
+                num += annot.required && annot.forRole(navState.role) && annot.filled(navState.role) ? 1 : 0;
             });
             return num;
         };

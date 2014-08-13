@@ -217,7 +217,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         hasFilledAnnotation: function(annotType) {
             return this.annotations.some(function(annot) {
-                return (annot.whattype == annotType) && (annot.filled(false, $rootScope.navState.role));
+                return (annot.whattype == annotType) && (annot.filled($rootScope.navState.role));
             });
         },
         hasAnnotationType: function(annotType) {
