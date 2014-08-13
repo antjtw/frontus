@@ -71,7 +71,7 @@
             </div>
             <div class="rightTitle security-type">
                 <span>Investor</span>
-                <span class="locked-security">{{tran.investor}}</span>
+                <span class="locked-security">{{tran.attrs.investor}}</span>
                 <div ng-click="transferSharesUp(activeTran);"
                      ng-show="tran.attrs.security_type == 'Equity'">
                     <span data-icon="&#xe60a;" aria-hidden="true"></span>

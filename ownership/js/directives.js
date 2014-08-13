@@ -280,7 +280,8 @@ own.directive('editableSecurityDetails', [function() {
                 };
                 $scope.ct = captable.getCapTable();
                 $scope.addTransaction = function() {
-                    captable.addTransaction(null, $scope.sec.name, 'split');
+                    var tran = captable.addTransaction(null, $scope.sec.name, 'split');
+                    tran.active = true;
                 };
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
@@ -343,8 +344,9 @@ own.directive('editableCellDetails', [function() {
                     $scope.currentTab = tab;
                 };
                 $scope.addTransaction = function() {
-                    captable.addTransaction($scope.cell.investor,
+                    var tran = captable.addTransaction($scope.cell.investor,
                                      $scope.cell.security, 'grant');
+                    tran.active = true;
                     // FIXME fails when this is the first transaction
                     // of the cell
                 };
@@ -407,7 +409,7 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.attrs = attrs;
                 function filterSortKeys(attrs) {
                     if (!attrs.security) return null;
-                    var filtered = $filter('attrsForDisplay')(attrs);
+                    var filtered = $filter('attrsForEdit')(attrs);
                     var sorted = Object.keys(filtered)
                             .sort(function(x1, x2) {
                                 return $filter('sortAttributeTypes')(x1)
@@ -416,6 +418,9 @@ own.directive('editableTransactionAttributes', [function() {
                     return sorted;
                 }
                 $scope.keys = filterSortKeys($scope.data.attrs);
+                console.log("keys");
+                console.log($scope.keys);
+                console.log($scope.data.attrs);
                 function key_display_info(key) {
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};

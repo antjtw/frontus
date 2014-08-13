@@ -230,6 +230,21 @@ ownership.filter('attrsForDisplay', function() {
     };
 });
 
+ownership.filter('attrsForEdit', function() {
+    return function(attr) {
+        var hide_attrs = ["kind", "physical", "investor",
+                          "security", "security_type"];
+        var res = {};
+        angular.forEach(attr, function(val, key) {
+            if (hide_attrs.indexOf(key) === -1)
+            {
+                res[key] = val;
+            }
+        });
+        return res;
+    };
+});
+
 ownership.filter('attributeInputTypes', function() {
     return function(tp) {
         // TODO generate from attributes service (db backed)

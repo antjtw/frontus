@@ -396,6 +396,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // use ng-change instead of ui-event?
         //
         // or maybe add a save button for now
+        console.log("saveTransaction");
+        console.log(tran);
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
@@ -613,6 +615,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         captable.transactions.push(tran);
         updateCell(this.cellFor(inv, sec, true));
         console.log(inv, sec, kind);
+        return tran;
     };
     function createCell(inv, sec) {
         var c = new Cell();
