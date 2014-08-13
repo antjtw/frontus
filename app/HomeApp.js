@@ -307,10 +307,11 @@ app.controller('CompanyCtrl',
                     $scope.ownersummary.invested = 0;
                     $scope.trans = trans;
                     angular.forEach(trans, function(tran) {
+                        tran.attrs = JSON.parse(tran.attrs);
                         if ($scope.ownersummary.people.indexOf(tran.attrs.investor) == -1) {
                             $scope.ownersummary.people.push(tran.attrs.investor);
                         }
-                        $scope.ownersummary.invested = tran.attrs.amount ? $scope.ownersummary.invested + tran.attrs.amount : $scope.ownersummary.invested;
+                        $scope.ownersummary.invested = calculate.isNumber(tran.attrs.amount) ? $scope.ownersummary.invested + Number(tran.attrs.amount) : $scope.ownersummary.invested;
                     });
                     $scope.ownersummary.investedraw = angular.copy($scope.ownersummary.invested);
                     $scope.ownersummary.invested = $scope.formatAbrAmount($scope.ownersummary.invested);
@@ -361,16 +362,16 @@ app.controller('CompanyCtrl',
                         angular.forEach($scope.rows, function (row) {
                             if (row.name == tran.attrs.investor) {
                                 if (tran.attrs.security in row) {
-                                    row[tran.attrs.security]["u"] = calculate.sum(row[tran.attrs.security]["u"], tran.attrs.units);
-                                    row[tran.attrs.security]["a"] = calculate.sum(row[tran.attrs.security]["a"], tran.attrs.amount);
+                                    row[tran.attrs.security]["u"] = calculate.sum(row[tran.attrs.security]["u"], calculate.isNumber(tran.attrs.units)? Number(tran.attrs.units) : 0);
+                                    row[tran.attrs.security]["a"] = calculate.sum(row[tran.attrs.security]["a"], calculate.isNumber(tran.attrs.amount)? Number(tran.attrs.amount) : 0);
                                     /*if (!isNaN(parseFloat(tran.forfeited))) {TODO: don't know what forfeited should do
                                         row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                     }*/
                                 }
                                 else {
                                     row[tran.attrs.security] = {};
-                                    row[tran.attrs.security]["u"] = tran.attrs.units;
-                                    row[tran.attrs.security]["a"] = tran.attrs.amount;
+                                    row[tran.attrs.security]["u"] = calculate.isNumber(tran.attrs.units)? Number(tran.attrs.units) : 0;
+                                    row[tran.attrs.security]["a"] = calculate.isNumber(tran.attrs.amount)? Number(tran.attrs.amount) : 0;
                                     /*if (!isNaN(parseFloat(tran.forfeited))) {TODO: don't know what forfeited should do
                                         row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                         row[tran.issue]["ukey"] = row[tran.issue]["u"];
@@ -392,7 +393,7 @@ app.controller('CompanyCtrl',
                     $scope.issuepercent = {};
                     angular.forEach($scope.issues, function (issue) {
                         $scope.issuepercent[issue.attrs.security] = {'units':0,'debt':0};
-                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));//TODO: is this calculate correct?
+                        //$scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));//TODO: is this calculate correct?
                     });
                     var totalunits = 0;
                     var totaldebt = 0;
