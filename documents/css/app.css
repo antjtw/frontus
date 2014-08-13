@@ -1848,7 +1848,9 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 .dropdown-required.select2-result > div.select2-result-label {
     color: #E74C3C;
 }
-
+.dropdown-required.select2-result > div.select2-result-label:after {
+    content: " (Required)";
+}
 
 div.textarea-container {
     line-height: 0;
