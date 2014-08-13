@@ -1,39 +1,40 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <link type="text/css" rel="stylesheet" href="/messages/messages.css">
+
+
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
- <!--  this is the gray tex twindow -->
-    <div class="row-fluid">
-        <div class="subnav-controls">
-            <div>
-                              
-              <!--   </div>
-
-             <!--    email button -->
-    <!--             <div class="box-button pull-right"
-                     ng-class="{'disabledme': companyIsZombie()}"
-                     ng-click="companyIsZombie() || gotoPage('/app/company/messages')"
-                     data-placement="bottom" bs-tooltip="zombiemessage">
-                    <ul>
-                        <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
-
-                        </li>
-                        <li> <span>Compose</span>
-
-                        </li>
-                    </ul>
-                </div> -->
-
+    <section class="statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
                 
+                <div class="DivHelper"></div>
             </div>
-            <div class="DivHelper"></div>
         </div>
+
+  <!--   text in the window -->
+    <div class="row-fluid leftTabWindow">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+            <compose-message></compose-message>
+        </div>
+
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
+            <tabset style="display:block;" ng-style="viewportheight">
+                <tab heading = "Message Activity">
+                    <div style="clear: both;">
+                        <message-side></message-side>
+                    </div>
+                </tab>
+                
+            </tabset>
+        </internal-right-rail>
+
     </div>
-  <!--   text in the window/directive-->
-  <compose-message></compose-message>
-    
+
+
+    </section>
 
 </div>
 
