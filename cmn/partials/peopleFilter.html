@@ -45,7 +45,7 @@
             <div>
                 <ul>
                     <li>
-                        <div >
+                        <div class="clearfix">
                             <span data-icon="&#xe034;"aria-hidden="true" ng-show="showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                             <span data-icon="&#xe031;"aria-hidden="true" ng-show="!showGroups" class="msgarrow" ng-click = "showGroups = !showGroups"></span>
                             <span style="cursor:pointer" ng-click = "showGroups = !showGroups">Groups</span>
@@ -58,7 +58,7 @@
                             </div>
                             
 
-                            <div ng-if="!showGroups && myGroups.length > 0" ng-repeat = "myGroup in myGroups" class="select_role clearfix" ng-click="assignFilter(myGroup.ind_group)">
+                            <div ng-if="!showGroups && myGroups.length > 0" ng-repeat = "myGroup in myGroups" class="select_role " ng-click="assignFilter(myGroup.ind_group)">
                                 <div class="select_role tinycol"  ng-class="{'picked': filterParam.param==myGroup.ind_group}" ng-if="myGroup.indGroup != ''">{{myGroup.ind_group}}</div>
                                 <div class="select_role tinycol left" ng-class="{'picked': filterParam.param==myGroup.ind_group}" ng-if="myGroup.indGroup != ''"> ({{myGroup.count}})</div>
                             </div>

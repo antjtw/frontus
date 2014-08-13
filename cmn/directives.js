@@ -611,7 +611,6 @@ m.directive('composeMessage', function() {
                     });
                     return $scope.myEmails
                 });
-                // $scope.myEmails = array
             };
             $scope.getPeople()
 
