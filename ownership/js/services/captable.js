@@ -695,7 +695,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.securityTotalUnits = securityTotalUnits;
     this.securityTotalAmount = function(sec) {
         return captable.cells
-            .filter(function(el) { return el.security == sec; })
+            .filter(function(el) { return el.security == sec.name; })
             .reduce(sumCellAmount, 0);
     };
     function sumCellUnits(prev, cur, idx, arr) {
