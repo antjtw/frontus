@@ -1,0 +1,20 @@
+<div modal="capDelete" close="dclose(); revertIssue(missue);" options="opts">
+    <div class="modalHeader">
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="dclose(); revertIssue(missue);"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>Do you want to delete this issue, including all associated transactions?</p>
+            <br>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="dclose(); revertIssue(missue);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="dclose(); deleteIssue(missue);">Yes</button>
+        </div>
+    </div>
+</div>

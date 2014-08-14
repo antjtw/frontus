@@ -1340,13 +1340,16 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         //Captable Delete Issue Modal
 
         $scope.dmodalUp = function (issue) {
-            $scope.capDelete = true;
+            $scope.capDelete = $modal.open({
+                templateUrl: "/features/modals/deleteIssue.html",
+                scope: $scope,
+            });
             $scope.missue = issue;
         };
 
         $scope.dclose = function () {
             $scope.closeMsg = 'I was closed at: ' + new Date();
-            $scope.capDelete = false;
+            $scope.capDelete.dismiss();
         };
 
         $scope.deleteIssueButton = function (activeIssue) {
@@ -1393,13 +1396,16 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         };
 
         $scope.rmodalUp = function (investor) {
-            $scope.rowDelete = true;
+            $scope.rowDelete = $modal.open({
+                templateUrl: "/features/modals/deleteShareholder.html",
+                scope: $scope,
+            });
             $scope.minvestor = investor.namekey;
         };
 
         $scope.rclose = function () {
             $scope.closeMsg = 'I was closed at: ' + new Date();
-            $scope.rowDelete = false;
+            $scope.rowDelete.dismiss();
         };
 
         $scope.revertPerson = function (investor) {
