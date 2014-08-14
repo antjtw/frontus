@@ -555,7 +555,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                                 else return 0
                             });
                             person.groups = grSorted.join(", ");
-                            console.log(person.groups)
                             person.groupsArray = JSON.parse(group.groups);
                         };
                     });
@@ -567,7 +566,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
 
         $scope.setLastLogins = function() {
-            console.log($scope.people)
             SWBrijj.tblm("global.user_tracker").then(function(logins) {
                 angular.forEach($scope.people, function(person) {
                     angular.forEach(logins, function(login) {
