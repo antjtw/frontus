@@ -702,7 +702,7 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                var newtext = msg.text.replace((/\n/g, "<br/>");
+                var newtext = msg.text.replace(/\n/g, "<br/>");
                 console.log($scope.createRecipients())
                 var recipients = $scope.createRecipients();
                 $scope.clicked = true;
