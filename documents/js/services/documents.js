@@ -365,7 +365,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             angular.forEach(this.annotations, function(note) {
                 if (note.whosign == "Issuer" && this.preparedFor && this.preparedFor[investor]) {
                     // don't save the override if it's empty or equal to the base value
-                    if (this.preparedFor[investor].overrides[note.id] != "" && this.preparedFor[investor].overrides[note.id] != note.val) {
+                    if (this.preparedFor[investor].overrides[note.id] &&
+                        this.preparedFor[investor].overrides[note.id] != "" &&
+                        this.preparedFor[investor].overrides[note.id] != note.val) {
                         notes.push({id: note.id, val: this.preparedFor[investor].overrides[note.id]});
                     }
                 }
