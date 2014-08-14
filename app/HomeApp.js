@@ -1,7 +1,7 @@
 
 var app = angular.module('HomeApp',
     ['ngAnimate', 'ngRoute', 'ngResource', 'ui.bootstrap',
-        '$strap.directives', 'ui.event', 'nav', 'brijj', 'ownerFilters',
+        'ui.event', 'nav', 'brijj', 'ownerFilters',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
         'homeDirectives', 'activityDirective', 'commonDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',

@@ -35,7 +35,7 @@ window.analytics.page()
 <script src="/lib/angular/angular-ui.js"></script>
 <script src="/lib/angular/ui-utils.js"></script>
 <script src="/lib/angular/angular-resource.js"></script>
-<script src="/lib/angular/ui-bootstrap-tpls-0.4.0.js"></script>
+<script src="/lib/angular/ui-bootstrap-tpls-0.11.0.js"></script>
 <script src="/lib/angular/ui-utils/event.js"></script>
 <script src="/lib/angular/ng-infinite-scroll.js"></script>
 <script src="/lib/angular-scroll.min.js"></script>
