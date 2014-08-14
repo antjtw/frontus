@@ -599,8 +599,6 @@ m.directive('composeMessage', function() {
 
         function($scope, $rootScope, SWBrijj, navState) {
 
-            $scope.myEmails = [];
-
             $scope.zombiemessage = function(){
                 if(navState.role == "issuer" && ($rootScope.billing.currentPlan == "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
                     return "Please update your payment information to use this feature."
@@ -612,12 +610,21 @@ m.directive('composeMessage', function() {
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-                    $scope.emailLists = data           
-                    angular.forEach($scope.emailLists, function(value, key){
-                        $scope.myEmails.push(value['email']);
-                    });
-                    return $scope.myEmails
+                    $scope.emailLists = data
+                    SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(x){
+                        console.log(x);
+                        var myGroups = x;
+                        console.log(myGroups);
+                        console.log($scope.emailLists);
+                        angular.forEach(myGroups, function(gr){
+                            angular.forEach($scope.emailLists, function(email){
+                                email.email = gr.ind_group
+                            })
+                        })
+                    })           
                 });
+                
+
             };
             $scope.getPeople()
 
