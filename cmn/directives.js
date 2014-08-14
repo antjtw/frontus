@@ -599,8 +599,6 @@ m.directive('composeMessage', function() {
 
         function($scope, $rootScope, SWBrijj, navState) {
 
-            $scope.myEmails = [];
-
             $scope.zombiemessage = function(){
                 if(navState.role == "issuer" && ($rootScope.billing.currentPlan == "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
                     return "Please update your payment information to use this feature."
@@ -612,15 +610,52 @@ m.directive('composeMessage', function() {
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-                    $scope.emailLists = data           
-                    angular.forEach($scope.emailLists, function(value, key){
-                        $scope.myEmails.push(value['email']);
-                    });
-                    return $scope.myEmails
+                    $scope.emailLists = data;          
                 });
-                // $scope.myEmails = array
+                
+
             };
             $scope.getPeople()
+
+           $scope.myContacts = []
+            $scope.groupsAndPeople = function(){
+                function Contact(namex, details){
+                    this.namex = namex;
+                    this.details = []
+                }
+
+                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+                    $scope.myEmails = data;
+                    angular.forEach($scope.myEmails, function(email){
+                        $scope.myContacts.push(new Contact(email.email));
+                        angular.forEach($scope.myContact, function(ct){
+                            ct.details.push(ct.namex)
+                        })
+                        console.log($scope.myContacts)
+                    })
+                })
+                SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
+                    var myGroups = data;
+                    console.log(myGroups);
+                    angular.forEach(myGroups, function(gr){
+                        var b = JSON.parse(gr.ind_group)
+                        $scope.myContacts.push(new Contact(b))
+                        console.log($scope.myContacts)
+                    })
+                    
+                })
+                SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
+                    var emailGroups = data;
+                    angular.forEach(emailGroups, function(group){
+                        angular.forEach($scope.myContacts, function(contact){
+                            if(JSON.parse(group.json_array_elements)== contact.namex){
+                                contact.details.push(group.email);
+                            }
+                        })
+                    })
+                })
+            }
+            $scope.groupsAndPeople();
 
 
             $scope.resetMessage = function() {
@@ -628,6 +663,7 @@ m.directive('composeMessage', function() {
                                   text:"",
                                   subject:""};
             };
+
             $scope.resetMessage();
             $scope.composeopts = {
                 backdropFade: true,
@@ -644,19 +680,31 @@ m.directive('composeMessage', function() {
                 }
             };
 
+            $scope.createRecipients = function(){
+                var recipients = []
+                angular.forEach($scope.message.recipients, function(recip){
+                    angular.forEach($scope.myContacts, function(contact){
+                        if(recip == contact.namex){
+                            for(i = 0; i < contact.details.length; i++){
+                                if(recipients.indexOf(contact.details[i])== -1){
+                                    recipients.push(contact.details[i]);
+                                }
+                                
+                            }
+                        }
+                    })
+                })
+                return recipients
+            }
+
 
 
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                console.log(msg.text);
-                console.log(typeof msg.text);
-                var newString = msg.text.replace("hi", "arielll")
-                console.log(newString)
-                var newtext = msg.text.replace("(/&nbsp;/)","heyyyyyy");
-                console.log(newtext)
-                console.log("see new text?")
-                var recipients = $scope.message.recipients;
+                var newtext = msg.text.replace((/\n/g, "<br/>");
+                console.log($scope.createRecipients())
+                var recipients = $scope.createRecipients();
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
