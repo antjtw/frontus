@@ -641,6 +641,19 @@ m.directive('composeMessage', function() {
                     })
                     
                 })
+                SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
+                    var emailGroups = data;
+                    console.log(emailGroups);
+                    angular.forEach(emailGroups, function(group){
+                        angular.forEach($scope.myContacts, function(contact){
+                            if(JSON.parse(group.json_array_elements)== contact.namex){
+                                console.log(group.email)
+                                contact.details.push(group.email);
+                                console.log($scope.myContacts);
+                            }
+                        })
+                    })
+                })
             }
             $scope.groupsAndPeople();
 
