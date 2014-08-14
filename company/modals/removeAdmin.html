@@ -1,0 +1,24 @@
+<div modal="removeAdminModal" close="removeAdminModalCancel()" options="narrowopts">
+    <div class="modalHeader">
+        <span>Remove administrator</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="removeAdminModalClose()"></span>
+    </div>
+    <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
+        Are you sure you want to remove
+                <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$index > selectedToRevokes.length -3 ? '' : ','}}
+                <span ng-show="$index == selectedToRevokes.length -2">and</span>
+                </span>
+                <span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
+
+            <div class="spacer20"></div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="removeAdminModalCancel()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="revoke_admin(); removeAdminModalClose();">Confirm</button>
+        </div>
+    </div>
+</div>

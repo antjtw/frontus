@@ -11,14 +11,14 @@
                         <div class="pull-left" >
                             <span>Search</span>
                             <input type="text" class="search-box" ng-model="filterText">
-                            
+
                         </div>
                     </div>
             <!--         admin dropdowns -->
 
                     <div class="pull-left" ng-show="groupPeople.length > 0">
                         <ul class="dropdown-list drop-selector">
-                            <li class="dropdown standard"> 
+                            <li class="dropdown standard">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">More</a>
                                 <ul class="dropdown-menu">
                                     <li ng-if="addOrRemove=='investor'">
@@ -65,7 +65,7 @@
                     </div>
 
 
-                    
+
                 </div>
                 <div class="DivHelper"></div>
             </div>
@@ -78,7 +78,7 @@
                 <table class="status-table people-table">
                     <tbody>
                     <tr>
-                    
+
                         <th class="button" ng-click="sortBy('name')"><span class="title">Name</span></th>
                         <th class="button" ng-click="sortBy('role')"><span class="title">Role</span></th>
                         <th class="button" ng-click="sortBy('groups')"><span class="title">Group</span></th>
@@ -90,14 +90,14 @@
                     <tbody ng-repeat="person in allPeople | orderBy: sort | filter: filterText | filter: isParam track by $id($index)">
                     <tr class="empty-row"></tr>
 
-                    <td style="width:350px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'"> 
+                    <td style="width:350px" class="shareholder-column docname-column" ng-click="sidebarPage=='email'">
 
                    <!--  check boxes      -->
                         <div class="check-box-side">
                             <button class="check-box-button" ng-class="{'selected': personIs(person)}" ng-click ="selectPerson(person)">
                              <span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </div>
-            
+
                         <ul ng-class="{'link': person.lastlogin}" ng-click="gotoPerson(person)">
                             <li>{{person.name}}</li>
                             <li>{{formatLastLogin(person.lastlogin)}}</li>
@@ -109,7 +109,7 @@
                     <td style="width:10px;">
                     </td>
 
-                        
+
                     </tr>
                     </tbody>
                 </table>
@@ -126,7 +126,7 @@
                         <message-side></message-side>
                     </div>
                 </tab>
-                
+
             </tabset>
         </internal-right-rail>
         <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
@@ -140,66 +140,6 @@
     </section>
 
 </div>
-
-
-<!-- admin toolbar, these are the modals themselves that open -->
-<div modal="removeAdminModal" close="removeAdminModalCancel()" options="narrowopts">
-    <div class="modalHeader">
-        <span>Remove administrator</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="removeAdminModalClose()"></span>
-    </div>
-    <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
-        Are you sure you want to remove 
-                <span ng-repeat="selectedToRevoke in selectedToRevokes">{{selectedToRevoke}}{{$index > selectedToRevokes.length -3 ? '' : ','}}
-                <span ng-show="$index == selectedToRevokes.length -2">and</span>
-                </span>
-                <span ng-pluralize count="selectedToRevokes.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
- 
-            <div class="spacer20"></div>
-      
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="removeAdminModalCancel()">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="revoke_admin(); removeAdminModalClose();">Confirm</button>
-        </div>
-    </div>
-</div>
-
-<!-- add admin modal -->
-    <div modal="addAdminModal" close="addAdminModalCancel()" options="narrowopts">
-        <div class="modalHeader">
-            <span>Add administrator</span>
-            <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addAdminModalClose()"></span>
-        </div>
-        <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
-           Are you sure you want to add 
-             <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}{{$index > selectedToAdds.length -3 ? '' : ','}}
-                <span ng-show="$index == selectedToAdds.length -2">and</span>
-                </span>
-                <span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
-
-            <div class="spacer20"></div>
-            <div ng-if="triggerUpgradeAdmins(selectedToAdds.length)" class="upgradeWarning">
-                <span ng-if="selectedToAdds.length == 1">
-                    Warning: Making this user an admin will automatically upgrade your payment plan.
-                </span>
-                <span ng-if="selectedToAdds.length > 1">
-                    Warning: Making these users admins will automatically upgrade your payment plan.</span>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <div class="pull-left standard-button gray">
-                <button class="btn" ng-click="addAdminModalCancel()">Cancel</button>
-            </div>
-            <div class="standard-button green">
-                <button class="btn" ng-click="add_admin(); addAdminModalClose()">Confirm</button>
-            </div>
-        </div>
-    </div>
-<!-- toggle siderail -->
 
 </div>
 </div>

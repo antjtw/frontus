@@ -1,0 +1,30 @@
+<div modal="addAdminModal" close="addAdminModalCancel()" options="narrowopts">
+    <div class="modalHeader">
+        <span>Add administrator</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addAdminModalClose()"></span>
+    </div>
+    <div class="modalCopy" style="text-align:center; padding-left: 20px; padding-right: 20px;">
+       Are you sure you want to add
+         <span ng-repeat="selectedToAdd in selectedToAdds">{{selectedToAdd}}{{$index > selectedToAdds.length -3 ? '' : ','}}
+            <span ng-show="$index == selectedToAdds.length -2">and</span>
+            </span>
+            <span ng-pluralize count="selectedToAdds.length" when="{'1': 'as an admin?', 'other': 'as admins?'}"></span>
+
+        <div class="spacer20"></div>
+        <div ng-if="triggerUpgradeAdmins(selectedToAdds.length)" class="upgradeWarning">
+            <span ng-if="selectedToAdds.length == 1">
+                Warning: Making this user an admin will automatically upgrade your payment plan.
+            </span>
+            <span ng-if="selectedToAdds.length > 1">
+                Warning: Making these users admins will automatically upgrade your payment plan.</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="addAdminModalCancel()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="add_admin(); addAdminModalClose()">Confirm</button>
+        </div>
+    </div>
+</div>
