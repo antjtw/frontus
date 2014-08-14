@@ -404,27 +404,32 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         //
         // or maybe add a save button for now
         console.log("saveTransaction");
-        console.log(tran);
+        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            splice_many_by(captable.ledger_entries, function(el) {
-                        return el.transaction == tran.transaction;
-                });
+            if (new_entries.length < 1)
+            {
+                console.log("Error: no ledger entries");
+                return;
+            }
+            var transaction = new_entries.splice(0, 1).transaction;
+            tran.transaction = transaction;
+            spliced = [];
+            for (new_entry in new_entries)
+            {
+                if (spliced.indexOf(new_entries[new_entry].transaction) == -1)
+                {
+                    spliced.push(new_entries[new_entry].transaction);
+                    splice_many_by(captable.ledger_entries, function(el) {
+                            return el.transaction == new_entries[new_entry].transaction;
+                    });
+                }
+                captable.ledger_entries.push(new_entries[new_entry]);
+            }
             splice_many_by(captable.transactions, function(el) {
                         return el.transaction == tran.transaction;
                 });
-            if (new_entries.length < 1)
-            {
-                console.log("no new ledger entries");
-                return;
-            }
-            var transaction = new_entries[0].transaction;
-            tran.transaction = transaction;
-            for (new_entry in new_entries)
-            {
-                captable.ledger_entries.push(new_entries[new_entry]);
-            }
             captable.transactions.push(tran);
             if (toUpdate)
             {
