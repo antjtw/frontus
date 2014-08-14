@@ -610,23 +610,39 @@ m.directive('composeMessage', function() {
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-                    $scope.emailLists = data
-                    SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(x){
-                        console.log(x);
-                        var myGroups = x;
-                        console.log(myGroups);
-                        console.log($scope.emailLists);
-                        angular.forEach(myGroups, function(gr){
-                            angular.forEach($scope.emailLists, function(email){
-                                email.email = gr.ind_group
-                            })
-                        })
-                    })           
+                    $scope.emailLists = data;          
                 });
                 
 
             };
             $scope.getPeople()
+
+           $scope.myContacts = []
+            $scope.groupsAndPeople = function(){
+                function Contact(namex, details){
+                    this.namex = namex;
+                    this.details = []
+                }
+
+                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+                    $scope.myEmails = data;
+                    angular.forEach($scope.myEmails, function(email){
+                        $scope.myContacts.push(new Contact(email.email));
+                        console.log($scope.myContacts)
+                    })
+                })
+                SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
+                    var myGroups = data;
+                    console.log(myGroups);
+                    angular.forEach(myGroups, function(gr){
+                        var b = JSON.parse(gr.ind_group)
+                        $scope.myContacts.push(new Contact(b))
+                        console.log($scope.myContacts)
+                    })
+                    
+                })
+            }
+            $scope.groupsAndPeople();
 
 
             $scope.resetMessage = function() {
@@ -655,13 +671,8 @@ m.directive('composeMessage', function() {
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';
-                console.log(msg.text);
-                console.log(typeof msg.text);
-                var newString = msg.text.replace("hi", "arielll")
-                console.log(newString)
                 var newtext = msg.text.replace("(/&nbsp;/)","heyyyyyy");
                 console.log(newtext)
-                console.log("see new text?")
                 var recipients = $scope.message.recipients;
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',
