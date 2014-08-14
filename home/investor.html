@@ -7,7 +7,7 @@
     <section class="statusBlock">
         <div class="row-fluid">
             <div class="subnav-controls">
-            
+
         </div>
 
   <!--   text in the window -->
@@ -19,7 +19,7 @@
 							<div class="front info-box">
 								<div ng-show="docsummary.num > 0" class="head-box"">
 									<h2>Document Management</h2>
-								
+
 								</div>
 								<div ng-hide="docsummary.num > 0" class="head-box">
 									<h2>Document Management</h2>
@@ -47,12 +47,12 @@
 								</div>
 							</div>
 						</div>
-		
+
 						<div ng-show="(myownership.shares > 0 || myownership.amount != null)">
 							<div class="front info-box">
 								<div class="head-box">
 									<h2>My Ownership</h2>
-								
+
 								</div>
 								<div class="body-box">
 									<div>
@@ -84,7 +84,7 @@
 							<div class="front info-box">
 								<div class="head-box">
 									<h2>Grant Vesting</h2>
-								
+
 								</div>
 								<div class="body-box">
 									<div>
@@ -112,7 +112,7 @@
 					</div>
 				</div>
 			</div>
-		
+
 			<internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
 				<tabset class="singletab" style="display:block;" ng-style="viewportheight">
 					<tab heading = "Information">
@@ -154,104 +154,13 @@
 					</tab>
 				</tabset>
 			</internal-right-rail>
-		</div>    
+		</div>
 
     </div>
 
 
     </section>
 
-</div>
-
-
-<!-- Modals below -->
-
-<div modal="profileModal" close="profileModalClose()" options="profileopts">
-    <div class="modalHeader">
-        <span>Edit Company Profile</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="profileModalClose()"></span>
-    </div>
-    <div class="modalText">
-        <div class="row-fluid">
-            <div class="span3 profile-image">
-                <img id="updateImage" ng-src="{{photoURL}}">
-                <form class="form-inline image-button">
-                    <fieldset>
-                        <div class="fileinputs">
-                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
-                            <div class="profile-fakefile">
-                                <span>Change</span>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <div class="span9 input-list">
-                <div>
-                    <span>Name*</span><input type="text" ng-model="editperson.name" maxlength="30">
-                </div>
-                <div>
-                    <span>Address</span><input type="text" ng-model="editperson.street">
-                </div>
-                <div class="city-state">
-                    <span>City/State</span>
-                    <input type="text" ng-model="editperson.city">
-                    <input type="text" ng-model="editperson.state" maxlength="2">
-                </div>
-                <div>
-                    <span>Zip Code</span><input type="text" maxlength="12" ng-model="editperson.postalcode">
-                </div>
-                <span class="capital-text">*Required</span>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button gray">
-            <button class="btn" ng-click="profileModalClose();">Cancel</button>
-        </div>
-        <div class="standard-button green">
-            <button class="btn" ng-click="profileModalClose(); profileUpdate(editperson);">Confirm</button>
-        </div>
-    </div>
-</div>
-
-
-<div modal="passwordModal" close="passwordModalClose()" options="opts">
-    <div class="modalHeader">
-        <span>Change Password</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="passwordModalClose()"></span>
-    </div>
-    <div class="modalCopy">
-        <form name="passwordChange" class="editPasswordBlock">
-            <div class="passwordChangeSuccess bodyText invisible" ng-show="passwordChanged">
-                <img src="/img/alert-star.png">Your Password has been changed. Please check your email for confirmation.</div>
-            <fieldset>
-                <div class="row-fluid field">
-                    <label>Current Password
-                        <input type="password" ng-class="{'content':!currentPassword}" name="currentPassword" ng-model="currentPassword"/>
-                    </label>
-                </div>
-                <div class="row-fluid field">
-                    <label>New Password
-                        <input type="password" name="newPassword" ng-class="{'content':!newPassword}" ng-model="newPassword"/>
-                    </label>
-                </div>
-                <div class="row-fluid field">
-                    <label>Confirm Password
-                        <input type="password" name="passwordconfirm" ng-class="{'content':!passwordConfirm}" ng-model="passwordConfirm"/>
-                    </label>
-                </div>
-                <div class="modal-footer">
-                    <div class="pull-left standard-button gray">
-                        <button class="btn" ng-click="passwordModalClose();">Cancel</button>
-                    </div>
-                    <div class="standard-button green">
-                        <button class="btn" ng-disabled="validPasswordNot()" ng-click="changePassword(); passwordModalClose();">Change</button>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
 </div>
 </div>
 </div>

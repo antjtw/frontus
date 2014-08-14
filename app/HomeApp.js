@@ -101,7 +101,6 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/company/messages', {
             templateUrl: '/messages/newMessage.html',
             controller: 'MsgCtrl'
-            
         }).
 
         otherwise({redirectTo:'/app/home/investor'});
@@ -188,9 +187,6 @@ app.controller('CompanyCtrl',
                 $scope.$emit('notification:success', 'Successfully created new company');
             }
 
-            $scope.uselessbrowser = !Modernizr.csstransforms3d;
-            //console.log($scope.uselessbrowser);
-
             SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
                 $scope.company = x[0];
                 angular.forEach($scope.currencies, function(c) {
@@ -212,7 +208,7 @@ app.controller('CompanyCtrl',
                     $scope.$emit("notification:success", "You have successfully changed your password.");
                 }
             }
-            
+
 			$scope.fullScreen = function() {
 				/*var elem = document.getElementById("vid");
 				if (elem.requestFullscreen) {
@@ -224,7 +220,7 @@ app.controller('CompanyCtrl',
 				} else if (elem.webkitRequestFullscreen) {
 				  elem.webkitRequestFullscreen();
 				}*/
-				
+
 				document.getElementById("vid-pic").style.visibility="hidden";
 			};
             $scope.getTokenInfo = function() {
@@ -411,32 +407,6 @@ app.controller('CompanyCtrl',
                 return -card.time;
             };
 
-            // Flipping tiles functionality
-
-            $scope.flipTile = function(x) {
-                if (!$scope.uselessbrowser) {
-                    $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
-                }
-            };
-
-
-            // Profile Change modal
-
-            $scope.profileModalOpen = function () {
-                $scope.profileModal = true;
-                $scope.editcompany = angular.copy($scope.company);
-            };
-
-            $scope.profileModalClose = function () {
-                $scope.profileModal = false;
-            };
-
-            $scope.profileopts = {
-                backdropFade: true,
-                dialogFade:true,
-                dialogClass: 'profile-modal wideModal modal'
-            };
-
             $scope.setFiles = function(element) {
                 $scope.files = [];
                 for (var i = 0; i < element.files.length; i++) {
@@ -475,17 +445,6 @@ app.controller('CompanyCtrl',
                         void(x);
                         $scope.$emit("notification:fail", "There was an error updating your company profile.");
                     });
-            };
-
-            // Settings Change modal
-
-            $scope.settingModalOpen = function () {
-                $scope.settingModal = true;
-                $scope.editcompany = angular.copy($scope.company);
-            };
-
-            $scope.settingModalClose = function () {
-                $scope.settingModal = false;
             };
 
             $scope.setCurrency = function(currency) {
@@ -543,8 +502,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.$emit("notification:success", "You have successfully changed your password.");
             }
         }
-
-        $scope.uselessbrowser = !Modernizr.csstransforms3d;
 
         //initialisation functions called
         $scope.company = navState.name;
@@ -826,28 +783,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $location.url(link);
         };
 
-        // Flipping tiles functionality
-
-        $scope.flipTile = function(x) {
-            if (!$scope.uselessbrowser) {
-                $scope['flipped'+String(x)] = !$scope['flipped'+String(x)];
-            }
-        };
-
-        // Password modal
-
-        $scope.passwordModalOpen = function () {
-            $scope.passwordModal = true;
-        };
-
-        $scope.passwordModalClose = function () {
-            $scope.closeMsg = 'I was closed at: ' + new Date();
-            $scope.passwordModal = false;
-            $scope.currentPassword="";
-            $scope.newPassword="";
-            $scope.passwordConfirm="";
-        };
-
         // Password code
         $scope.currentPassword="";
         $scope.newPassword="";
@@ -883,29 +818,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                     $scope.passwordConfirm = "";
                 }
             }).except(function(x) {alert("Oops.  Change failed: "+x); });
-        };
-
-        $scope.opts = {
-            backdropFade: true,
-            dialogFade:true,
-            dialogClass: 'wideModal modal'
-        };
-
-        // Profile Change modal
-
-        $scope.profileModalOpen = function () {
-            $scope.profileModal = true;
-            $scope.editperson = angular.copy($scope.person);
-        };
-
-        $scope.profileModalClose = function () {
-            $scope.profileModal = false;
-        };
-
-        $scope.profileopts = {
-            backdropFade: true,
-            dialogFade:true,
-            dialogClass: 'profile-modal wideModal modal'
         };
 
         $scope.setFiles = function(element) {
@@ -997,16 +909,6 @@ app.controller('HomeCtrl',['$scope','$route', 'SWBrijj', function($scope, $route
         }
     });
 }]);
-
-/*
- function initPage($scope, x, row) {
- if(typeof(row)==='undefined') row = 1;
- var y = x[0]; // the fieldnames
- var z = x[row]; // the values
-
- for(var i=0;i<y.length;i++) { if (z[i] !== null) { $scope[y[i]]=z[i]; } }
- $scope.$apply();
- } */
 
 function initFail(x) {
     void(x);
