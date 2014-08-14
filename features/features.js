@@ -1,5 +1,5 @@
 var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'ownerFilters', 'ui.event',
-    'ownerDirectives', 'ownerServices', '$strap.directives', 'd3', 'ui.jq'], function($routeProvider, $locationProvider){
+    'ownerDirectives', 'ownerServices', 'd3', 'ui.jq'], function($routeProvider, $locationProvider){
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
@@ -205,8 +205,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
     }
 ]);
 
-app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState) {
+app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState', '$modal',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState, $modal) {
 
         $scope.gotopage = function (link) {
             $location.url("/features/" + link);
@@ -1268,12 +1268,15 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
         // Captable transaction delete modal
         $scope.tranDeleteUp = function (transaction) {
             $scope.deleteTran = transaction;
-            $scope.tranDelete = true;
+            $scope.tranDelete = $modal.open({
+                templateUrl: "/features/modals/deleteTran.html",
+                scope: $scope,
+            });
         };
 
         $scope.deleteclose = function () {
             $scope.closeMsg = 'I was closed at: ' + new Date();
-            $scope.tranDelete = false;
+            $scope.tranDelete.dismiss();
         };
 
         $scope.revertTran = function (transaction) {
