@@ -1,0 +1,21 @@
+<div modal="tourModal" close="tourclose();" options="touropts">
+    <div class="modal-title">
+        <p>
+            {{invq? "How to Sign Documents" : "How to Share Documents"}}
+        </p>
+    </div>
+    <div class="modalText">
+        <div class="row-fluid">
+            <div class="span6">
+                <img src="{{invq? '/img/gif/investor-modal.gif' : '/img/gif/issuer-modal.gif'}}">
+            </div>
+            <div class="span5 gif-text">
+                <p>
+                    <span class="subtitle">{{invq? "Markers show annotations" : "Prepare your document for sharing"}}</span>
+                    {{invq? "Fields in red are required by the sender. Fields in yellow are optional. Your signature is legally binding, and will be returned to the sender for their signature." : "Draw fields to mark where information can be entered. Fill out all your own fields prior to sending. The recipient will see everything but your signature, which is hidden until you approve their information."}}
+                </p>
+                <p class='blue-link'><span ng-click="tourclose(); invq? signinggot() : sharinggot();">Ok, I got it!</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', 'User', '$q', 'basics',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q, basics) {
+        'navState', 'Annotations', 'Documents', 'User', '$q', 'basics', '$modal',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q, basics, $modal) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -64,12 +64,19 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             }
         });
 
+        var tourActive = false;
         $scope.helpModalUp = function () {
-            $scope.tourModal = true;
+            $scope.tourModal = $modal.open({
+                templateUrl: '/documents/modals/annotationTour.html',
+                scope: $scope,
+                windowClass: 'helpModal modal',
+            });
+            tourActive = true;
         };
 
         $scope.tourclose = function () {
-            $scope.tourModal = false;
+            tourActive = false;
+            $scope.tourModal.dismiss();
             if (!$scope.invq) {
                 $scope.checkProcessing();
             }
@@ -85,20 +92,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             SWBrijj.procm("account.update_user_settings", "knows_signing", "true").then(function(data) {
                 void(data);
             });
-        };
-
-        $scope.touropts = {
-            backdropFade: true,
-            dialogFade: true,
-            dialogClass: 'helpModal modal'
-        };
-
-        $scope.processedopts = {
-            backdropFade: true,
-            dialogFade: true,
-            dialogClass: 'processedImageModal modal',
-            backdropClick: false,
-            backdrop: 'static'
         };
 
         if (navState.role == "issuer") {
@@ -233,7 +226,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             SWBrijj.tblm('account.user_settings', ["knows_sharing"]).then(function(data) {
                 if (!data[0].knows_sharing) {
                     $scope.helpModalUp();
-                    $scope.imageProcessedModal = false;
+                    $scope.imageProcessedModal.dismiss();
                 }
             });
         }
@@ -243,15 +236,20 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.checkProcessing = function() {
-            if ($scope.tourModal)
+            if ($scope.tourActive) {
                 return; //don't step on other modal's toes
+            }
             SWBrijj.tblm("document.my_company_library", ["processing_approved"], "doc_id", $scope.docId).then(function (data)
             {
                 var approved = data.processing_approved;
                 if (!approved)
                 {
                     $scope.selectProcessing('adjusted');
-                    $scope.imageProcessedModal = true;
+                    $scope.imageProcessedModal = $modal.open({
+                        templateUrl: '/documents/modals/imageEnhanced.html',
+                        scope: $scope,
+                        windowClass: 'processedImageModal modal',
+                    });
                     $scope.getProcessedPage();
                 }
             });
@@ -278,7 +276,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.processedClose = function(erase) {
-            $scope.imageProcessedModal = false;
+            $scope.imageProcessedModal.dismiss();
             if (erase)
             {
                 SWBrijj.procm("document.undo_processing", $scope.docId).then(function(data)
@@ -326,9 +324,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.setNextAnnotationType = function (type) {
             $scope.nextAnnotationType = type;
         };
-        
+
         var checkUploadTimeout;
-        
+
         $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             void(oldUrl);
             // don't save note data if I'm being redirected to log in
@@ -512,7 +510,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 $scope.downloadOriginalPdf();
             }
         };
-        
+
         $scope.versionIsFinalized = function(version) {
             return basics.isCompleteSigned(version)
                 || basics.isCompleteVoided(version);
@@ -532,8 +530,8 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.goToPreparation = function() {
             $location.url('/app/documents/prepare?doc=' + $scope.doc.doc_id);
         };
-        
-        
+
+
         var mimetypes = ["application/pdf", // .pdf
             // microsoft office
             "application/msword", // .doc
@@ -569,7 +567,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 }
             });
         };
-        
+
         $scope.checkSignedUploaded = function () {
             SWBrijj.tblm('document.my_counterparty_library', ['when_signature_provided', 'signed_uploaded', 'signed_upload_attempted'], 'doc_id', $scope.doc.doc_id).then(function(doc) {
                 if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
@@ -594,7 +592,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 console.log(data);
             });
         }
-        
+
         $scope.uploadSigned = function(files) {
                 var fd = new FormData();
                 if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
@@ -612,7 +610,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 $scope.uploading = true;
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
-                    
+
                     SWBrijj.uploadSetType(x[0], "signed", $scope.doc.doc_id).then(function() {
                         checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
                         $scope.$emit("notification:success", "Uploading signed version . . .");

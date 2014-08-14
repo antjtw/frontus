@@ -1,0 +1,49 @@
+<div modal="signatureModal" close="sigclose();" options="touropts">
+    <div class="modal-title">
+        <p>
+            Pick your Signature
+        </p>
+    </div>
+    <div class="sigmodal modalText">
+        <div class="row-fluid">
+            <div class="imgsig span6">
+                <div ng-hide="scribblemode" style="height: 180px; width: 330px;" >
+                    <img id="signaturevisual" ng-src="{{signatureURL}}">
+                </div>
+                <div class="scribblewindow" ng-show="scribblemode" ng-style="{{signaturestyle}}" >
+                    <canvas id="scribbleboard"></canvas>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+            <div class="span6 gif-text">
+                <p>
+                    Upload an image or draw out your signature. We'll scale it to fit the signature box, and store it in your profile for future use.
+                </p>
+                <form class="form-inline">
+                    <fieldset>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFiles(this);"/>
+                            <div class="fakefile">
+                                <span>CHOOSE FILE</span>
+                            </div>
+                        </div>
+                        <div class="scribblebutton">
+                            <button ng-click="createNewSignature()">Draw Signature</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button green" style="margin-right: 30px;">
+            <button class="btn"
+                    ng-click="uploadSignatureNow();"
+                    ng-disabled="files.length===0">Done</button>
+        </div>
+        <div class="pull-right standard-button gray">
+            <button class="btn"
+                    ng-click="sigclose();">Cancel</button>
+        </div>
+    </div>
+</div>

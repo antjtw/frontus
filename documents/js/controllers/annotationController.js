@@ -284,7 +284,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.openBox = function() {
         $scope.active.annotation = $scope.annot;
         // kill any open datepicker if needed
-        $($scope.active.datepicker).datepicker("hide");
+        // TODO: convert for angular-ui-bootstrap
+        //$($scope.active.datepicker).datepicker("hide");
         $scope.active.datepicker = null;
         if (navState.role == "issuer" && !$scope.doc.countersignable(navState.role)) {
             $scope.getme = true;

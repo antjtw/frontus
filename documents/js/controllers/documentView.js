@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs', '$modal',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs, $modal) {
         $scope.cachebuster = Math.random();
         $scope.annots = [];
         $scope.signatureprocessing = false;
@@ -253,7 +253,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 if ($scope.scribblemode) {
                     var canvas = document.getElementById("scribbleboard");
                     fd = canvas.toDataURL();
-                    $scope.signatureModal = false;
+                    $scope.signatureModal.dismiss();
                     SWBrijj.uploadSignatureString(fd).then(function(x) {
                         uploadSuccess();
                     }).except(function(x) {
@@ -265,7 +265,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     for (var i = 0; i < $scope.files.length; i++) {
                         fd.append("uploadedFile", $scope.files[i]);
                     }
-                    $scope.signatureModal = false;
+                    $scope.signatureModal.dismiss();
                     SWBrijj.uploadSignatureImage(fd).then(function(x) {
                         uploadSuccess();
                     }).except(function(x) {
@@ -274,7 +274,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 }
             }
             else {
-                $scope.signatureModal = false;
+                $scope.signatureModal.dismiss();
             }
 
         };
@@ -593,11 +593,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.sigModalUp = function () {
-            $scope.signatureModal = true;
+            $scope.signatureModal = $modal.open({
+                templateUrl: '/documents/modals/uploadSignature.html',
+                scope: $scope,
+                windowClass: 'helpModal modal',
+            });
         };
 
         $scope.sigclose = function () {
-            $scope.signatureModal = false;
+            $scope.signatureModal.dismiss();
             $scope.scribblemode = false;
         };
 

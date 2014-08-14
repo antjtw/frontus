@@ -1,0 +1,30 @@
+<div modal="imageProcessedModal" options="processedopts" data-keyboard="false" data-backdrop="static">
+    <div class="row-fluid">
+        <div class="span7">
+            <div class="row-fluid">
+                <div class="rect leftOffset" ng-class="adjustedColor" ng-click="selectProcessing('adjusted')">
+                    <img id="processedModalAdjustedImage">
+                    <div class="modalText centeredText" ng-class="adjustedText">
+                        <span>Enhanced</span>
+                    </div>
+                </div>
+                <div class="rect" ng-class="originalColor" ng-click="selectProcessing('original')">
+                    <img id="processedModalOriginalImage">
+                    <div class="modalText centeredText" ng-class="originalText">
+                        <span>Original</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="modalText">
+                <div class="textBlock">
+                    <span class="subtitle">We fixed it!</span>
+                    <span>We've straightened up your document to make it look better!</span>
+                </div>
+                <div class='blue-link' ng-if="adjustedSelected"><span ng-click="processedClose(false)">Continue with enhancements</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
+                <div class='blue-link' ng-if="!adjustedSelected"><span ng-click="processedClose(true)">Continue with original</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
+            </div>
+        </div>
+    </div>
+</div>
