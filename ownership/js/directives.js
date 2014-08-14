@@ -177,7 +177,8 @@ own.directive('editableCaptableCell', [function() {
                 $scope.closeTranPicker = function(update) {
                     if (update) {
                         if (!$scope.destination_transaction) {
-                            $scope.destination_transaction = captable.newTran();
+                            $scope.destination_transaction =
+                                captable.newTran();
                         }
                         updateAttr($scope.picker.key, $scope.picker.val);
                     } else {
@@ -189,60 +190,6 @@ own.directive('editableCaptableCell', [function() {
                 $scope.pickTran = function(id) {
                     $scope.destination_transaction = id;
                 };
-
-    //Adding to a row with more than one transaction modal
-    /*
-    $scope.mComplete = function (transactions, picked, number, type) {
-        var inIssue = transactions[0].issue;
-        if (!picked) {
-            var newTran = captable.newTransaction(inIssue,
-                                                  $scope.activeTran[0].investor);
-            newTran.active = true;
-            newTran.atype = 0;
-            if (type == "u") { newTran.units = newTran.unitskey = number; }
-            else { newTran.paid = newtran.paidkey = number; }
-            angular.forEach($scope.ct.securities, function (issue) {
-                if (issue.issue == inIssue) {
-                    newTran = captable.inheritAllDataFromIssue(newTran, issue);
-                }
-            });
-            if (number < 0 && newTran.type == "Option") {
-                $scope.$emit("notification:fail",
-                        "Cannot have a negative amount for options");
-                return;
-            }
-            $scope.ct.trans.push(newTran);
-            $scope.activeTran.push(newTran);
-            for (var i = 0; i < $scope.activeTran.length; i++) {
-                if (i + 1 == $scope.activeTran.length) {
-                    $scope.activeTran[i].active = true;
-                } else {
-                    $scope.activeTran[i].active = false;
-                }
-            }
-        }
-        else {
-            if (type == "u") {
-                picked.units = picked.units + number;
-            }
-            else {
-                picked.amount = picked.amount + number;
-            }
-            var newTran = picked;
-        }
-        $scope.saveTran(newTran);
-    };
-
-    $scope.mReset = function () {
-        angular.forEach($scope.ct.investors, function (row) {
-            if (row.name == $scope.activeTran[0].investor) {
-                row.cells[$scope.activeTran[0].issue].u = row.cells[$scope.activeTran[0].issue].ukey;
-                row.cells[$scope.activeTran[0].issue].a = row.cells[$scope.activeTran[0].issue].akey;
-            }
-        });
-    };
-    */
-
             }
         ],
     };
@@ -355,6 +302,15 @@ own.directive('editableCellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+                $scope.makeNewTran = function(kind) {
+                    $scope.newTran = captable.newTransaction(
+                                         $scope.cell.security,
+                                         kind,
+                                         $scope.cell.investor);
+                };
+                $scope.validActions = function() {
+                    return ["exercise", "forfeit", "transfer"];
+                };
                 $scope.addTransaction = function() {
                     var tran = captable.addTransaction($scope.cell.investor,
                                      $scope.cell.security, 'grant');
@@ -412,8 +368,7 @@ own.directive('editableTransactionAttributes', [function() {
         restrict: 'E',
         replace: true,
         scope: {data: '=',
-                selected: '=selected',
-                undo: '=undo'},
+                selected: '=selected'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
         controller: ["$scope", "$filter", "captable", "attributes",

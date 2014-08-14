@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-        <editable-transaction-attributes data="tran" selected="cell" undo="undo">
+        <editable-transaction-attributes data="tran" selected="cell">
         </editable-transaction-attributes>
         <span class="blue-link delete-link"
               data-icon="&#xe00c;"
@@ -132,7 +132,44 @@
         </div>
     </div>
     <div class="capTab" ng-switch-when="actions">
-        Hello
+        <div class="capGuide top10">
+            <span>Action</span>
+            <ul>
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{newTran.kind || "Select an action"}}
+                        <span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="x in validActions()">
+                            <a ng-click="makeNewTran(x)">
+                                {{x}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div ng-if="newTran"
+                 ng-switch on="newTran.kind">
+                <div ng-switch-when="split">
+                </div>
+                <div ng-switch-when="convert">
+                </div>
+                <div ng-switch-when="transfer">
+                </div>
+                <div ng-switch-when="exercise">
+                </div>
+                <div ng-switch-default>
+                    <editable-transaction-attributes data="newTran">
+                    </editable-transaction-attributes>
+                </div>
+            </div>
+            <div class="standard-button small-standard-button">
+                <button class="btn">
+                    Submit
+                </button>
+            </div>
+        </div>
     </div>
     </accordion-group>
 </accordion>

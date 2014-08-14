@@ -140,18 +140,26 @@
             <ul>
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
-                        {{chosen_action}}
+                        Transfer
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="a in actions">
-                            <a ng-click="chooseAction(a)">
-                                {{a}}
+                        <li ng-repeat="x in valid_actions()">
+                            <a ng-click="newTran.kind = x;">
+                                {{x}}
                             </a>
                         </li>
                     </ul>
                 </li>
             </ul>
+            <div ng-if="newTran"
+                 ng-switch on="newTran.kind">
+            </div>
+            <div class="standard-button small-standard-button">
+                <button class="btn">
+                    Submit
+                </button>
+            </div>
         </div>
         </accordion-group>
     </accordion>

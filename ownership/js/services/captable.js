@@ -598,6 +598,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // TODO should we be grabbing the next transaction id?
         return tran;
     }
+    this.newTransaction = newTransaction;
     this.addSecurity = function(name) {
         // NOTE assume Option for now, user can change,
         var tran = newTransaction("Option", "issue security");

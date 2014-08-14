@@ -728,9 +728,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         'placeholder': 'Enter email address & press enter'
     };
 
-
-
-
     // Controls the orange border around the send boxes if an email is not given
     $scope.emailCheck = function (bool, person) {
         if (bool) {
@@ -997,16 +994,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         });
     };
 
-    // Functions derived from services for use in the table
-
-    //switches the sidebar based on the type of the issue
-    /*
-    $scope.dilution = function () {
-        $scope.sideBar = 9;
-        $scope.dilutedRows = calculate.dilution($scope.ct.investors, $scope.ct.securities);
-    };
-    */
-
     //switches the sidebar based on the type of the issue
     $scope.trantype = function (type, activetype) {
         return switchval.trantype(type, activetype);
@@ -1077,6 +1064,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.stretchheight = {height: String(newValue + 59) + "px"}
     });
 
+    /*
     function generic_watch(newval, oldval, obj) {
         if (!newval || !oldval) {return;}
         if (parseFloat(newval.interestrate) > 100 ||
@@ -1115,6 +1103,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.issue_watch = function(newval, oldval) {
         generic_watch(newval, oldval, $scope.ct.securities);
     };
+    */
 
     $scope.namePaste = function(ev, row) {
         alert('refactor namePaste');
