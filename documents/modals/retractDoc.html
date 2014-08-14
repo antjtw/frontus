@@ -1,0 +1,32 @@
+<div modal="retractDocModal" close="modals.retractVersionClose()" options="opts">
+    <div class="modalHeader">
+        <span>Retract Document</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="modals.retractVersionClose()"></span>
+    </div>
+    <div class="modalText deleteDocModal retractModal">
+        <span>Are you sure you want to retract {{docForModal.docname}} from {{docForModal.name || docForModal.investor}}?</span>
+
+        <div>
+            <ul class="checkboxOption">
+                <li class="pull-left">
+                    <button class="check-box-button" ng-class="{'selected':modalArchive}" ng-click="modalArchive = !modalArchive">
+                        <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                </li>
+                <li class="pull-left">
+                    <span>Archive from library</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="modals.retractVersionClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="retractVersion(docForModal, modalArchive); retractVersionClose();">Confirm</button>
+        </div>
+    </div>
+</div>

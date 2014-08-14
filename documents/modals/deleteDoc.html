@@ -1,0 +1,18 @@
+<div modal="deleteDocModal" close="modals.deleteDocClose()" options="opts">
+    <div class="modalHeader">
+        <span>Delete Document</span>
+        <span class="close" data-icon="&#xe00f;" aria-hiddden="true" ng-click="modals.deleteDocClose()"></span>
+    </div>
+    <div class="modalText deleteDocModal">
+        <span>Are you sure you want to delete </span>
+        <span>{{docForModal.docname}}?</span>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="modals.deleteDocClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="reallyDeleteDoc(docForModal); modals.deleteDocClose();">Confirm</button>
+        </div>
+    </div>
+</div>

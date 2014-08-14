@@ -161,52 +161,33 @@ app.controller('CompanyDocumentListController',
                 $scope.files = [];
                 $scope.uploadType = null;
                 $scope.uploadDocid = null;
-                $scope.documentUploadModal = true;
+                $scope.documentUploadModal = $modal.open({
+                    templateUrl: "/documents/modals/uploadDoc.html",
+                    scope: $scope,
+                    windowClass: "modal twoPieceModal",
+                });
             };
 
             $scope.modals.documentUploadClose = function() {
-                $scope.documentUploadModal = false;
+                $scope.documentUploadModal.dismiss();
             };
-            
+
             $scope.modals.signedUploadOpen = function(docid) {
                 $scope.files = [];
                 $scope.uploadType = 'signed';
                 $scope.uploadDocid = docid;
-                $scope.signedUploadModal = true;
+                $scope.signedUploadModal = $modal.open({
+                    templateUrl: "/documents/modals/uploadSignedDoc.html",
+                    scope: $scope,
+                    windowClass: "modal evenWiderModal",
+                });
             };
 
             $scope.modals.signedUploadClose = function() {
-                $scope.signedUploadModal = false;
-            };
-
-            $scope.wideopts = {
-                backdropFade: true,
-                dialogFade: true,
-                dialogClass: 'wideModal modal'
-            };
-            $scope.verywideopts = {
-                backdropFade: true,
-                dialogFade: true,
-                dialogClass: 'evenWiderModal modal'
-            };
-            $scope.doubleopts = {
-                backdropFade: true,
-                dialogFade: true,
-                dialogClass: 'twoPieceModal modal'
-            };
-            $scope.opts = {
-                backdropFade: true,
-                dialogFade: true,
-                dialogClass: 'modal'
-            };
-            $scope.narrowopts = {
-                backdropFade: true,
-                dialogFade: true,
-                dialogClass: 'narrowModal modal'
+                $scope.signedUploadModal.dismiss();
             };
 
             // File manipulation
-
 
             var mimetypes = ["application/pdf", // .pdf
                 // microsoft office
@@ -244,7 +225,7 @@ app.controller('CompanyDocumentListController',
                     $scope.modals.documentUploadClose();
                 });
             };
-            
+
             $scope.checkSignedUploaded = function() {
                 SWBrijj.tblm('document.my_counterparty_library', ['doc_id', 'when_signature_provided', 'signed_uploaded', 'signed_upload_attempted']).then(function(data) {
                     angular.forEach(data, function(doc) {
@@ -511,19 +492,23 @@ app.controller('CompanyDocumentListController',
             $scope.modals.retractVersionOpen = function(version) {
                 $scope.docForModal = version;
                 $scope.modalArchive = false;
-                $scope.retractDocModal = true;
+                $scope.retractDocModal = $modal.open({
+                    templateUrl: "/documents/modals/retractDoc.html",
+                    scope: $scope,
+                    windowClass: "modal",
+                });
             };
 
             $scope.modals.retractVersionClose = function() {
                 $scope.modalArchive = false;
-                $scope.retractDocModal = false;
+                $scope.retractDocModal.dismiss();
             };
 
 
             $scope.retractVersion = function(version, archive) {
                 SWBrijj.procm("document.retract_document", version.doc_id, archive).then(function(data) {
                     void(data);
-                    $scope.retractDocModal = false;
+                    $scope.retractDocModal.dismiss();
                     $scope.$emit("notification:success", "Document retracted from " + (version.name || version.investor));
                     version.when_retracted = new Date.today();
                     version.last_event_activity = "retracted";
@@ -548,12 +533,16 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.updateTitleOpen = function(doc) {
                 $scope.docForModal = doc;
-                $scope.updateTitleModal = true;
+                $scope.updateTitleModal = $modal.open({
+                    templateUrl: "/documents/modals/updateTitle.html",
+                    scope: $scope,
+                    windowClass: "modal",
+                });
                 $scope.docForModal.tempName = $scope.docForModal.docname;
             };
 
             $scope.modals.updateTitleClose = function() {
-                $scope.updateTitleModal = false;
+                $scope.updateTitleModal.dismiss();
                 $scope.docForModal = null;
             };
 
@@ -578,29 +567,41 @@ app.controller('CompanyDocumentListController',
             $scope.modals.updateTagsOpen = function(doc) {
                 $scope.docForModal = angular.copy(doc);
                 $scope.docForModal.new_tags = angular.copy(doc.tags);
-                $scope.updateTagsModal = true;
+                $scope.updateTagsModal = $modal.open({
+                    templateUrl: "/documents/modals/updateTags.html",
+                    scope: $scope,
+                    windowClass: "modal wideModal",
+                });
             };
             $scope.modals.updateTagsClose = function() {
-                $scope.updateTagsModal = false;
+                $scope.updateTagsModal.dismiss();
             };
 
             $scope.modals.deleteDocOpen = function(doc) {
                 $scope.docForModal = doc;
-                $scope.deleteDocModal = true;
+                $scope.deleteDocModal = $modal.open({
+                    templateUrl: "/documents/modals/deleteDoc.html",
+                    scope: $scope,
+                    windowClass: "modal",
+                });
             };
 
             $scope.modals.deleteDocClose = function() {
-                $scope.deleteDocModal = false;
+                $scope.deleteDocModal.dismiss();
             };
 
             $scope.modals.exportLinkDropboxOpen = function(doc, role) {
                 $scope.docForModal = doc;
                 $scope.roleForModal = role;
-                $scope.exportLinkDropboxModal = true;
+                $scope.exportLinkDropboxModal = $modal.open({
+                    templateUrl: "/documents/modals/dropboxExport.html",
+                    scope: $scope,
+                    windowClass: "modal evenWiderModal",
+                });
             };
 
             $scope.modals.exportLinkDropboxClose = function() {
-                $scope.exportLinkDropboxModal = false;
+                $scope.exportLinkDropboxModal.dismiss();
             };
 
             $scope.modals.exportToDropbox = function(doc, role) {
@@ -674,20 +675,28 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.voidDocOpen = function(doc) {
                 $scope.voiddocForModal = doc;
-                $scope.voidDocModal = true;
+                $scope.voidDocModal = $modal.open({
+                    templateUrl: "/documents/modals/voidDoc.html",
+                    scope: $scope,
+                    windowClass: "modal",
+                });
             };
 
             $scope.modals.voidDocClose = function() {
-                $scope.voidDocModal = false;
+                $scope.voidDocModal.dismiss();
             };
 
             $scope.modals.remindDocOpen = function(doc) {
                 $scope.reminddocForModal = doc;
-                $scope.remindDocModal = true;
+                $scope.remindDocModal = $modal.open({
+                    templateUrl: "/documents/modals/remindDoc.html",
+                    scope: $scope,
+                    windowClass: "modal",
+                });
             };
 
             $scope.modals.remindDocClose = function() {
-                $scope.remindDocModal = false;
+                $scope.remindDocModal.dismiss();
             };
 
             $scope.remindDocument = function(doc, message) {

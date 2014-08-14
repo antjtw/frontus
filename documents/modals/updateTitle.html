@@ -1,0 +1,18 @@
+<div modal="updateTitleModal" close="modals.updateTitleClose()" options="opts">
+    <div class="modalHeader">
+        <span>Rename Document</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="modals.updateTitleClose()"></span>
+    </div>
+    <div class="modalText updateTitleModal">
+        <input ng-model="docForModal.tempName" type="text">
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="modals.updateTitleClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="updateTitle()" ng-disabled="docForModal.tempName.length < 1">Confirm
+            </button>
+        </div>
+    </div>
+</div>

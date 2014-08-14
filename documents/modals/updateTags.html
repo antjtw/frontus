@@ -1,0 +1,29 @@
+<div modal="updateTagsModal" close="modals.updateTagsClose()" options="wideopts">
+    <div class="tagsModalHeader modalHeader">
+        <span>{{docForModal.docname | caplength:50}} Tags</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="modals.updateTagsClose()"></span>
+    </div>
+    <div class="modalText tagsModal">
+        <div>
+            <ul>
+                <li>Type a tag name and press "enter" or "," to add. Click the X to remove.</li>
+            </ul>
+        </div>
+        <div>
+            <bootstrap-tagsinput ng-model="docForModal.new_tags"
+                                 typeahead-source="getAvailableTags"
+                                 tagClass="getTagClass">
+            </bootstrap-tagsinput>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="modals.updateTagsClose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="updateTags(docForModal);">
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>

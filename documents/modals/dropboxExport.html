@@ -1,0 +1,21 @@
+<div modal="exportLinkDropboxModal" close="modals.exportLinkDropboxClose()" options="verywideopts">
+    <div class="modalText linkDropboxModal">
+        <div class="row-fluid">
+            <div class="span linkDropboxModalSpan smaller">
+                <img src="/img/ike-dropbox.png">
+            </div>
+            <div class="span linkDropboxModalSpan larger">
+                <div class="modalText linkDropboxModalText header greenLabel">
+                    <span>EXPORT TO DROPBOX</span>
+                </div>
+                <div class="modalText linkDropboxModalText header">
+                    <span>You haven't linked your dropbox yet!</span>
+                </div>
+                <div class="modalText linkDropboxModalText">
+                    <span>Click the link below to connect now.</span>
+                </div>
+                    <p class='blue-link'><span ng-click="modals.exportLinkDropboxClose(); startOauth('dropbox', docForModal, roleForModal);">Link Now</span>&nbsp;<span data-icon="&#xe016;" aria-hidden="true"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
