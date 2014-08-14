@@ -65,14 +65,14 @@ ownership.service('calculate', function () {
     this.debt = function (investors, issue, row) {
         return null;
         /*
-        var mon = parseFloat(issue.premoney);
+        var mon = parseFloat(issue.attrs.premoney);
         if (isNaN(parseFloat(mon))) {
             return null
         } else {
             angular.forEach(investors, function (r) {
-                if (r.cells[issue.issue] != undefined) {
-                    if ((isNaN(parseFloat(r.cells[issue.issue]['u'])) || r.cells[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r.cells[issue.issue]['a']))) {
-                        mon = mon + parseFloat(r.cells[issue.issue]['a']);
+                if (r.cells[issue.attrs.security] != undefined) {
+                    if ((isNaN(parseFloat(r.cells[issue.attrs.security]['u'])) || r.cells[issue.attrs.security]['u'] == 0 ) && !isNaN(parseFloat(r.cells[issue.attrs.security]['a']))) {
+                        mon = mon + parseFloat(r.cells[issue.attrs.security]['a']);
                     }
                 }
             });
