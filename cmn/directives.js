@@ -631,16 +631,13 @@ m.directive('composeMessage', function() {
                         angular.forEach($scope.myContact, function(ct){
                             ct.details.push(ct.namex)
                         })
-                        console.log($scope.myContacts)
                     })
                 })
                 SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
                     var myGroups = data;
-                    console.log(myGroups);
                     angular.forEach(myGroups, function(gr){
                         var b = JSON.parse(gr.ind_group)
                         $scope.myContacts.push(new Contact(b))
-                        console.log($scope.myContacts)
                     })
                     
                 })
