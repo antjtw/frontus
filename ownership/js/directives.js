@@ -132,6 +132,9 @@ own.directive('editableCaptableCell', [function() {
                 $scope.units = function(newval) {
                     if (angular.isDefined(newval)) {
                         if (!$scope.data) {
+                            console.log($scope.data);
+                            console.log($scope.selectedCell);
+                            console.log(captable.cellFor($scope.inv, $scope.sec));
                             alert("ahhh");
                         } else {
                             $scope.data.u = newval;

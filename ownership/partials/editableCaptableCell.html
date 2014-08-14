@@ -1,8 +1,6 @@
 <span class="captablepair-box">
     <input ng-if="!isDebt(data);"
            class="captablepair first-box"
-           placeholder="{{captable.cellSecurityType(key)
-                          | securityUnitLabel}}"
            ui-event="{focus: 'selectCell(inv, sec)',
                        blur: 'saveIt(data.u)'}"
            ng-model='units'
@@ -14,7 +12,6 @@
            class="captablepair default-pointer first-box"
            disabled>
     <input class="captablepair last-box"
-           placeholder="paid"
            ui-event="{focus: 'selectCell(inv, sec)',
                        blur: 'saveIt(data.a)'}"
            data-currency
