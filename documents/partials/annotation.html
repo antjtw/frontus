@@ -31,6 +31,14 @@
         </fieldset>
         <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot && !prepareFor">
             <ul>
+                <li>
+                    <ul>
+                        <li>
+                            <span>Annotation Type</span>
+                        </li>
+                        <input class="annotation-dropdown" ui-select2="select2TypeOptions" ng-model="annot.whattypesetter" ng-model-options="{getterSetter: true}" placeholder="{{annot.whattype}}">
+                    </ul>
+                </li>
                 <li ng-if="annot.type == 'text'">
                     <ul>
                         <li>
@@ -53,14 +61,6 @@
                                 </li>
                             </ul>
                         </li>
-                    </ul>
-                </li>
-                <li>
-                    <ul>
-                        <li>
-                            <span>Annotation Type</span>
-                        </li>
-                        <input class="annotation-dropdown" ui-select2="select2TypeOptions" ng-model="annot.whattypesetter" ng-model-options="{getterSetter: true}" placeholder="{{annot.whattype}}">
                     </ul>
                 </li>
                 <li class="content-section" ng-if="(annot.type_info.typename == 'date' || annot.type_info.typename == 'enum' || annot.type == 'highlight') && annot.forRole(navState.role)">
