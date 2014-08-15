@@ -3,9 +3,12 @@
 app.controller('DocumentPrepareController',
     ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'navState', '$window', '$location', '$rootScope',
     function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, navState, $window, $location, $rootScope) {
-        $scope.doc = Documents.getOriginal(ShareDocs.documents[0].doc_id);
-        $scope.doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
-        $scope.annots = $scope.doc.annotations;
+        $scope.doc_arr = [];
+        ShareDocs.documents.forEach(function(sharedoc) {
+            var doc = Documents.getOriginal(sharedoc.doc_id);
+            doc.getPreparedFor(ShareDocs.emails); // fetch preparation information (if needed)
+            $scope.doc_arr.push(doc);
+        });
 
         // give view access to services
         $scope.ShareDocs = ShareDocs;
@@ -51,8 +54,11 @@ app.controller('DocumentPrepareController',
         /* Save the overrides when navigating away */
         function saveOverrides() {
             if ($routeParams.bulk) { // don't save if we aren't in bulkPrep mode
-                for (var investor in $scope.doc.preparedFor) {
-                    $scope.doc.savePreparation(investor);
+                // TODO: this could get really slow, optimize the calls
+                for (doc in $scope.doc_arr) {
+                    for (var investor in ShareDocs.emails) {
+                        doc.savePreparation(investor);
+                    }
                 }
             }
         }

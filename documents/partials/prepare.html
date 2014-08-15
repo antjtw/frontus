@@ -34,34 +34,37 @@
                     <h2>Shareholder Terms</h2>
                     <span>Enter your shareholder's emails below. Prepare their copy with specific terms.</span>
                 </div>
-                <div class="docPrepRow header">
-                    <span>Recipient</span>
-                    <span ng-if="!state.bulkPrep">Copy Status</span>
-                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
-                        {{annot.type_info.display}}
-                    </span>
-                </div>
-                <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
-                    <span>{{Investor.getDisplayText(email)}}</span>
-                    <span ng-if="!state.bulkPrep">
-                        <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
-                            <span ng-if="investor.is_prepared">Edit</span>
-                            <span ng-if="!investor.is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
-                        </a>
-                    </span>
-                    <span ng-if="state.bulkPrep" ng-repeat="annot in annots | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
-                          ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[investor.investor].overrides[annot.id])}">
-                        <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
-                               placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
-                        <input ng-if="annot.type_info.typename == 'date'"
-                               type="text" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
-                               placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
-                        <select ng-if="annot.type_info.typename == 'enum'" ui-select2
-                                placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
-                            <option></option>
-                            <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
-                        </select>
-                    </span>
+                <div ng-repeat="doc in ShareDocs.documents">
+                    <h1>{{doc.docname}}</h1>
+                    <div class="docPrepRow header">
+                        <span>Recipient</span>
+                        <span ng-if="!state.bulkPrep">Copy Status</span>
+                        <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
+                            {{annot.type_info.display}}
+                        </span>
+                    </div>
+                    <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
+                        <span>{{Investor.getDisplayText(email)}}</span>
+                        <span ng-if="!state.bulkPrep">
+                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
+                                <span ng-if="investor.is_prepared">Edit</span>
+                                <span ng-if="!investor.is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
+                            </a>
+                        </span>
+                        <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
+                              ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[investor.investor].overrides[annot.id])}">
+                            <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                            <input ng-if="annot.type_info.typename == 'date'"
+                                   type="text" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                            <select ng-if="annot.type_info.typename == 'enum'" ui-select2
+                                    placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                                <option></option>
+                                <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
+                            </select>
+                        </span>
+                    </div>
                 </div>
             </div>
             <!-- <internal-right-rail toggle-side="toggleSide">
