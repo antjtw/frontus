@@ -150,10 +150,20 @@ div.pull-right.standard-button.green {
 }
 
 .row-fluid .span6 {
-	width: 46% !important;
+	width: 25% !important;
+	margin-left: calc(13% - 49px) !important;
 }
 .row-fluid .span6 h2{
 	width: 100% !important;
+	text-align: center;
+	left: calc(-49% + 88px);
+	line-height: 10px;
+}
+.row-fluid .span6 h2:first-of-type{
+	font-size: 20px;
+	font-family: 'FS Elliot Web Light' !important;
+	margin-top: 30px;
+	margin-bottom: 15px;
 }
 .span7 svg{
 	left: calc(81% - 124px);
@@ -299,6 +309,10 @@ iframe {
 d3vestedbar > svg {
 	height: 270px;
 	margin-left: 10px;
+}
+d3expdonut {
+	position: relative;
+	
 }
 .span3 {
 	left: calc(50% + 100px);

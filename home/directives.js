@@ -15,9 +15,9 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 height = 180,
                 radius = Math.min(width, height) / 2;
 
-            var colors = ["#1ABC96", "#3498DB", "F78D1E", "#34495E", "#FFBB00", "#2676AB"];
+            var colors = ["#1ABC96", "#CAC9C9", "#3498DB", "F78D1E", "#34495E", "#FFBB00", "#2676AB"];
             var corecolor = function(i) {
-                if (i > 5) {
+                if (i == 5) {
                    return i % 5 == 0 ? colors[5] : colors[i % 5]
                 }
                 else {
@@ -30,7 +30,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 .innerRadius(radius - 30);
 
             var pie = d3.layout.pie()
-                .sort(function(a, b) { return b.percent - a.percent; })
                 .value(function(d) { return d.percent; });
 
 
@@ -60,8 +59,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
                 if (data && data[0] && !isNaN(data[0].percent)) {
 
-                    data.sort(function(a, b) { return b.percent - a.percent; });
-
+            
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
                         .enter().append("g")
@@ -81,12 +79,13 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
+                        .style("font-size", "20px")
                         .attr("class", "percentlabel");
 
                     svg.select(".mainlabel")
                         .text('Ownership');
                     svg.select(".percentlabel")
-                        .text('100%');
+                        .text(data[0].percent.toFixed(2)+'%');
 
                     g.append("path")
                         .attr("d", arc)
@@ -94,40 +93,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", function(d , i) {
                             return corecolor(i); })
                         .attr("class", "pie-slices")
-                        .on("mouseover", function(d, i) {
-                            var colour = corecolor(i);
-                            var current = this;
-                            svg.selectAll(".pie-slices").transition()
-                                .duration(250)
-                                .style("fill", function() {
-                                    return (this === current) ? colour : "gray";
-                                })
-                                .style("opacity", function() {
-                                return (this === current) ? 1 : 0.5;
-                                });
-
-                            svg.select(".mainlabel")
-                                .text(d.data.name);
-
-                            svg.select('.percentlabel')
-                                .text(d.data.percent.toFixed(2) + "%");
-                        })
-
-                        .on("mouseout", function(d) {
-                            svg.selectAll(".pie-slices").transition()
-                                .duration(250)
-                                .style("fill", function(d , i) {
-                                    return corecolor(i); })
-                                .style("opacity", function() {
-                                    return 1;
-                                });
-
-                            svg.select(".mainlabel")
-                                .text('Ownership');
-
-                            svg.select(".percentlabel")
-                                .text('100%');
-                        });
+                        
                 }
 
             };
