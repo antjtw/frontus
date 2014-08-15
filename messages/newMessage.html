@@ -12,9 +12,9 @@
               <!--   </div>
 
              <!--    email button -->
-    <!--             <div class="box-button pull-right"
-                     ng-class="{'disabledme': companyIsZombie()}"
-                     ng-click="companyIsZombie() || gotoPage('/app/company/messages')"
+                <div class="box-button pull-right"
+                     ng-class="{'disabledme': companyIsZombie(), selected: compose == true}"
+                     ng-click="companyIsZombie() || toggleMain()"
                      data-placement="bottom" bs-tooltip="zombiemessage">
                     <ul>
                         <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
@@ -24,7 +24,7 @@
 
                         </li>
                     </ul>
-                </div> -->
+                </div>
 
                 
             </div>
@@ -32,7 +32,8 @@
         </div>
     </div>
   <!--   text in the window/directive-->
-  <compose-message></compose-message>
+  <compose-message ng-if= "compose == true"></compose-message>
+  <div ng-if="compose == false">This is where the inbox will go</div>
     
 
 </div>

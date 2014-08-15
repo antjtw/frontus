@@ -8,8 +8,19 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 $scope.sentMessages = data;
 
             })
-        }
+        };
         $scope.createInbox();
+
+
+        $scope.compose = false;
+        $scope.toggleMain = function(){
+            if($scope.compose == true){
+                $scope.compose = false
+            }
+            else{
+                $scope.compose = true
+            };
+        };
 
         
 
