@@ -692,11 +692,7 @@ m.directive('composeMessage', function() {
                     angular.forEach($scope.myContacts, function(contact){
                         if(recip === contact.namex){
                             for(i = 0; i < contact.details.length; i++){
-<<<<<<< HEAD
                                 // cannot send the same email to one person more than one time. ie if person is vip and selected, will only get email once
-=======
-                                // cannot send message to the same person more than once, ie if person is in group and listed, they will only get the email one time.
->>>>>>> msgfix
                                 if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
                                 };
