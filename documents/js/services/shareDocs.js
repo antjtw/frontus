@@ -15,7 +15,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
             if (el.doc_id == item.doc_id ||
                 (!el.doc_id && !item.doc_id &&
                     el.template_id==item.template_id)) {
-                el.signature_flow = item.signature_flow;
                 updated = true;
             }
         });
@@ -23,7 +22,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
             var obj = {
                 "doc_id": item.doc_id,
                 "template_id": item.template_id,
-                "signature_flow": item.signature_flow,
                 "docname": item.docname
             };
             this.documents.push(obj);
@@ -33,9 +31,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                 }, this);
             }
         }
-        if (item.signature_flow > 0) {
-            this.checkPreparedLists([item], this.emails);
-        }
+        this.checkPreparedLists([item], this.emails);
         return this.documents;
     };
     this.addEmail = function(email) {
@@ -56,23 +52,11 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                      item.template_id==el.template_id);
         });
     };
-    this.updateShareType = function(doc, tp) {
-        if (doc.template_id && tp > 0) {
-            tp = 1;
-        }
-        doc.signature_flow = tp;
-        this.upsertShareItem(doc);
-    };
 
     this.docsReadyToShare = function() {
         if (this.documents.length===0) {
             return false;
         }
-        angular.forEach(this.documents, function(doc) {
-            if (doc.signature_flow < 0) {
-                return false;
-            }
-        });
         if (!this.allPreparedCache()) {
             return false;
         }
@@ -106,11 +90,9 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         var check_defer = $q.defer();
         var promises = [];
         docs.forEach(function(doc) {
-            if (doc.signature_flow > 0) { // only signable docs need checking
-                investors.forEach(function(investor) {
-                    promises.push(this.checkPrepared(doc, investor, ignore_cache));
-                }, this);
-            }
+            investors.forEach(function(investor) {
+                promises.push(this.checkPrepared(doc, investor, ignore_cache));
+            }, this);
         }, this);
         $q.all(promises).then(function(results) {
             check_defer.resolve(results.every(function(res) {
@@ -131,34 +113,26 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
     };
     this.allPreparedCache = function() {
         return this.documents.every(function(doc) {
-            if (doc.signature_flow > 0) {
-                return this.emails.every(function(inv) {
-                    return this.prepCache[doc.doc_id][inv];
-                }, this);
-            } else {
-                // if document isn't for share, we're good regardless
-                return true;
-            }
+            return this.emails.every(function(inv) {
+                return this.prepCache[doc.doc_id][inv];
+            }, this);
         }, this);
     };
     this.emailNotPreparedCache = function(email) {
         return this.documents.some(function(doc) {
-            if (doc.signature_flow > 0) {
-                return !this.prepCache[doc.doc_id][email];
-            } else {
-                return false;
-            }
+            return !this.prepCache[doc.doc_id][email];
         }, this);
     };
 
     this.shareDocuments = function() {
         // TODO: confirm that documents haven't been shared before to the users listed
         var share_defer = $q.defer();
+        /* TODO: figure out, display, and communicate appropriate replacement for signature_flow
         angular.forEach(this.documents, function(doc) {
             if (doc.signature_flow === undefined || doc.signature_flow === null) {
                 doc.signature_flow = 0;
             }
-        });
+        });*/
         var share = this;
         this.checkAllPrepared().then(function(result) {
             if (result) {

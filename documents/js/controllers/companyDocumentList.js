@@ -898,15 +898,6 @@ app.controller('CompanyDocumentListController',
                     fullyLoadDocuments(function() {
                         angular.forEach($scope.documents, function(doc) {
                             if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
-                                ShareDocs.updateShareType(doc, 2);
-                                if (doc.preps) {
-                                    doc.preps.forEach(function(prep) {
-                                        // add the prepared users to the big list
-                                        if (ShareDocs.emails.indexOf(prep) == -1) {
-                                            ShareDocs.addEmail(prep);
-                                        }
-                                    });
-                                }
                                 if (doc.is_prepared) {
                                     $scope.$emit("notification:success",
                                         "Success! Document prepared for signature.");
@@ -919,24 +910,7 @@ app.controller('CompanyDocumentListController',
                 return st1;
             }
             // TODO: store as part of ShareDocs service
-            // If we can eliminate doc.signature_flow and only reference the ShareDocs version, that should work
-            function initShareState() {
-                loadPrepareState();
-                if (ShareDocs.documents.length > 0) {
-                    fullyLoadDocuments(function() {
-                        // TODO: rewrite to not depend on having a fully loaded $scope.documents
-                        angular.forEach($scope.documents, function(doc) {
-                            angular.forEach(ShareDocs.documents, function(docToShare) {
-                                if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
-                                    doc.signature_flow = docToShare.signature_flow;
-                                }
-                            });
-                        });
-                    });
-                }
-            }
-
-            initShareState();
+            loadPrepareState();
 
             // Sharing stuff that should be move to a directive
             $scope.ShareDocs = ShareDocs;
