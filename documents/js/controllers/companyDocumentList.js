@@ -701,15 +701,6 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            $scope.shareDocuments = function() {
-                $scope.processing = true;
-                ShareDocs.shareDocuments().finally(function(result) {
-                    $scope.processing = false;
-                    $location.search('share', null);
-                    $route.reload();
-                });
-            };
-
             // Infinite Scroll
             // TODO: move all of this into a service
             $scope.documents = [];
@@ -895,6 +886,7 @@ app.controller('CompanyDocumentListController',
                 var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
                 sessionStorage.removeItem("docPrepareState");
                 if (st1) {
+                    // TODO: don't fully Load Documents (may just work)
                     fullyLoadDocuments(function() {
                         angular.forEach($scope.documents, function(doc) {
                             if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
@@ -909,7 +901,6 @@ app.controller('CompanyDocumentListController',
                 }
                 return st1;
             }
-            // TODO: store as part of ShareDocs service
             loadPrepareState();
 
             // Sharing stuff that should be move to a directive

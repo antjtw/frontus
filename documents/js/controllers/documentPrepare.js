@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentPrepareController',
-    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'navState', '$window', '$location', '$rootScope',
-    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, navState, $window, $location, $rootScope) {
+    ['$scope', '$routeParams', 'Documents', 'SWBrijj', 'Investor', 'ShareDocs', 'navState', '$window', '$location', '$rootScope', '$route',
+    function($scope, $routeParams, Documents, SWBrijj, Investor, ShareDocs, navState, $window, $location, $rootScope, $route) {
         $scope.doc_arr = [];
         ShareDocs.documents.forEach(function(sharedoc) {
             var doc = Documents.getOriginal(sharedoc.doc_id);
@@ -47,6 +47,15 @@ app.controller('DocumentPrepareController',
             return annot.wouldBeValid(navState.role, override) ||
                    (((override === undefined) || (override == "")) &&
                     annot.filled(navState.role));
+        };
+
+        $scope.shareDocuments = function() {
+            $scope.processing = true;
+            ShareDocs.shareDocuments().finally(function(result) {
+                $scope.processing = false;
+                $location.search('share', null);
+                $route.reload();
+            });
         };
 
         $scope.encodeURIComponent = encodeURIComponent;

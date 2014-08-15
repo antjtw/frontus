@@ -78,8 +78,7 @@
                                     <button class="btn"
                                             ng-if="!companyIsZombie()"
                                             ng-click="shareDocuments()"
-                                            ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
-                                                          || !ShareDocs.docsReadyToShare()">
+                                            ng-disabled="processing || !ShareDocs.docsReadyToShare()">
                                         Share Documents
                                     </button>
                                 </div>
