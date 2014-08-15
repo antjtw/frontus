@@ -39,6 +39,7 @@ Cell = function() {
     this.x = null; // percentage
     this.transactions = [];
     this.security = null;
+    this.valid = true;
 };
 
 ownership.service('captable',
@@ -333,6 +334,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
         setCellUnits(cell);
         setCellAmount(cell);
+        cell.valid = validateCell(cell);
         console.log(cell);
     }
     this.updateCell = updateCell;
@@ -358,6 +360,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                     cell.investor = inv.name;
                     setCellUnits(cell);
                     setCellAmount(cell);
+                    cell.valid = validateCell(cell);
                     captable.cells.push(cell);
                 }
             });
@@ -584,6 +587,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (attr_obj) {
             angular.forEach(Object.keys(attr_obj),
                     function(el) { obj.attrs[el] = null; });
+        }
+        if (obj.attrs['physical'] == null)
+        {
+            obj.attrs['physical'] = false;
         }
     }
 
@@ -902,4 +909,78 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             return false;
         }
     }
+    function validateTransaction(transaction) {
+        var correct = true;
+        for (att in transaction.attrs)
+        {
+            if ((transaction.attrs[att]) && (String(transaction.attrs[att]).length > 0))
+            {
+                switch(attrs[transaction.attrs.security_type][transaction.kind][att]["type"])
+                {
+                    case "number":
+                        if (!calculate.isNumber(transaction.attrs[att]))
+                        {
+                            correct = false;
+                            console.log("wrong type number");
+                            console.log(transaction);
+                            console.log(att);
+                        }
+                        break;
+                    case "enum":
+                        if (attrs[transaction.attrs.security_type][transaction.kind][att]["labels"].indexOf(transaction.attrs[att]) == -1)
+                        {
+                            correct = false;
+                            console.log("wrong type enum");
+                            console.log(transaction);
+                            console.log(att);
+                        }
+                        break;
+                    case "date":
+                        break;
+                    default:
+                        if ((attrs[transaction.attrs.security_type][transaction.kind][att]["type"]) && 
+                            (typeof(transaction.attrs[att]) != attrs[transaction.attrs.security_type][transaction.kind][att]["type"]))
+                        {
+                            correct = false;
+                            console.log("wrong type default");
+                            console.log(transaction);
+                            console.log(att);
+                        }
+                }
+            }
+        }
+        for (att in attrs[transaction.attrs.security_type][transaction.kind])
+        {
+            if (attrs[transaction.attrs.security_type][transaction.kind][att]['required'])
+            {
+                if (!((transaction.attrs[att] != undefined) && (transaction.attrs[att] != null) && 
+                    (String(transaction.attrs[att]).length > 0)))
+                {
+                    correct = false;
+                    console.log("required not filled");
+                    console.log(transaction);
+                    console.log(att);
+                }
+            }
+        }
+        return correct;
+    }
+    this.validateTransaction = validateTransaction;
+    function validateCell(cell) {
+        console.log("validateCell");
+        if (!attrs)
+        {
+            console.log("attrs not defined");
+            return true;
+        }
+        var correct = true;
+        for (t in cell.transactions)
+        {
+            correct = correct && validateTransaction(cell.transactions[t]);
+            if (!correct)
+                return correct;
+        }
+        return correct;
+    }
+    this.validateCell = validateCell;
 });
