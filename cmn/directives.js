@@ -617,6 +617,7 @@ m.directive('composeMessage', function() {
             };
             $scope.getPeople()
 
+            // create the object for selct2
            $scope.myContacts = []
             $scope.groupsAndPeople = function(){
                 function Contact(namex, details){
@@ -628,21 +629,20 @@ m.directive('composeMessage', function() {
                     $scope.myEmails = data;
                     angular.forEach($scope.myEmails, function(email){
                         $scope.myContacts.push(new Contact(email.email));
-                        // issue here
-                        angular.forEach($scope.myContact, function(ct){
-                            ct.details.push(ct.namex)
-                        })
-                        console.log("mycontacts")
-                        console.log($scope.myContacts)
-                    })
-                })
+                        angular.forEach($scope.myContacts, function(ct){
+                            if(ct.details.indexOf(ct.namex)== -1){
+                                ct.details.push(ct.namex)
+                            }
+                            
+                        });
+                    });
+                });
                 SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
                     var myGroups = data;
-                    console.log(myGroups);
                     angular.forEach(myGroups, function(gr){
-                        var b = JSON.parse(gr.ind_group)
-                        $scope.myContacts.push(new Contact(b))
-                        console.log($scope.myContacts)
+                        var b = JSON.parse(gr.ind_group);
+                        $scope.myContacts.push(new Contact(b));
+                        console.log($scope.myContacts);
                     })
                     
                 })
@@ -690,18 +690,12 @@ m.directive('composeMessage', function() {
                             for(i = 0; i < contact.details.length; i++){
                                 if(recipients.indexOf(contact.details[i])== -1){
                                     recipients.push(contact.details[i]);
-                                }
+                                };
                                 
-                            }
-                        }
-                        else{
-                            console.log(recip)
-                            if(recipients.indexOf(recip)== -1){
-                                recipients.push(recip);
-                            }
-                        }
-                    })
-                })
+                            };
+                        };
+                    });
+                });
                 return recipients
             }
 
