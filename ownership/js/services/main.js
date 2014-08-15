@@ -54,6 +54,9 @@ function(SWBrijj, $q, $filter, displayCopy) {
                     {required: el.required,
                      display_name: el.display_name,
                      description: el.name in tips ? tips[el.name] : null,
+                     type: 
+                        $filter('attributeDbTypes')(el.typname, el.labels),
+                     labels: el.labels,
                      input_type:
                         $filter('attributeInputTypes')(el.name)};
             }
@@ -62,7 +65,7 @@ function(SWBrijj, $q, $filter, displayCopy) {
     }
     function loadAttributes() {
         var promise = $q.defer();
-        SWBrijj.tblm('_ownership.transaction_attributes')
+        SWBrijj.tblm('_ownership.transaction_attributes_types')
         .then(function(attrs) {
             promise.resolve(attrs);
         });

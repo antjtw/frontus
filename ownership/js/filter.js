@@ -274,6 +274,29 @@ ownership.filter('attributeInputTypes', function() {
         }
     };
 });
+ownership.filter('attributeDbTypes', function() {
+    return function(tp, labels) {
+        if (labels)
+        {
+            return "enum";
+        }
+        switch(tp) {
+            case "varchar":
+            case "text":
+            case "email":
+                return "string";
+            case "float8":
+            case "int4":
+                return "number";
+            case "bool":
+                return "boolean";
+            case "date":
+                return "date";
+            default:
+                return null;
+        }
+    };
+});
 ownership.filter('sortAttributeTypes', function() {
     var orderedAttributes = ["security",
                              "effective_date",

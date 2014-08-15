@@ -1,4 +1,4 @@
-<span class="captablepair-box">
+<span class="captablepair-box" ng-class="{invalid: !data.valid && data.transactions}">
     <input ng-if="!isDebt(data);"
            class="captablepair first-box"
            ui-event="{focus: 'selectCell(inv, sec)',

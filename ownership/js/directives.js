@@ -104,6 +104,7 @@ own.directive('editableCaptableCell', [function() {
         scope: {sec: '=',
                 inv: '=',
                 data: '=',
+                validateCell: '=',
                 selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
