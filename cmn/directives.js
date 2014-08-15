@@ -629,18 +629,15 @@ m.directive('composeMessage', function() {
                     $scope.myEmails = data;
                     angular.forEach($scope.myEmails, function(email){
                         $scope.myContacts.push(new Contact(email.email));
-                        // console.log($scope.myContacts)
-                        // issue here
                         angular.forEach($scope.myContacts, function(ct){
                             if(ct.details.indexOf(ct.namex)== -1){
                                 ct.details.push(ct.namex)
-                                console.log(ct.namex)
-                                // console.log(ct)
                             }
                             
                         });
                     });
                 });
+                // make this a promise later
                 SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
                     var myGroups = data;
                     angular.forEach(myGroups, function(gr){
@@ -693,18 +690,12 @@ m.directive('composeMessage', function() {
                     angular.forEach($scope.myContacts, function(contact){
                         if(recip === contact.namex){
                             for(i = 0; i < contact.details.length; i++){
-                                if(recipients.indexOf(contact.details[i])== -1){
+                                if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
-                                }
+                                };
                                 
-                            }
-                        }
-                        // else{
-                        //     console.log(recip)
-                        //     if(recipients.indexOf(recip)== -1){
-                        //         recipients.push(recip);
-                        //     }
-                        // }
+                            };
+                        };
                     })
                 })
                 return recipients
@@ -716,8 +707,8 @@ m.directive('composeMessage', function() {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
-                console.log($scope.createRecipients())
                 var recipients = $scope.createRecipients();
+                console.log(recipients);
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
