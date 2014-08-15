@@ -143,22 +143,6 @@
                 Prepare Document
             </button>
         </a>
-        <!-- TODO: for the prepare screen -->
-        <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message&hellip;"></textarea>
-        <div class="controls" my-loading-spinner="processing">
-            <div class="standard-button pull-right">
-                <button class="btn"
-                        ng-if="!companyIsZombie()"
-                        ng-click="shareDocuments()"
-                        ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
-                                      || !ShareDocs.docsReadyToShare()">
-                    Share Documents
-                </button>
-            </div>
-             <span class="pull-right pointer" ng-click="toggleSide();">
-                 Cancel
-             </span>
-        </div>
     </div>
 </div>
 </div>

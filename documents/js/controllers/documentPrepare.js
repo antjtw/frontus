@@ -55,11 +55,11 @@ app.controller('DocumentPrepareController',
         function saveOverrides() {
             if ($routeParams.bulk) { // don't save if we aren't in bulkPrep mode
                 // TODO: this could get really slow, optimize the calls
-                for (doc in $scope.doc_arr) {
-                    for (var investor in ShareDocs.emails) {
+                $scope.doc_arr.forEach(function(doc) {
+                    ShareDocs.emails.forEach(function(investor) {
                         doc.savePreparation(investor);
-                    }
-                }
+                    });
+                });
             }
         }
         $window.addEventListener('beforeunload', function(event) {

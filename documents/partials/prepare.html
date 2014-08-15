@@ -1,4 +1,5 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<script src="/cmn/spin.js"></script>
 <div class="container dynamic-page">
     <subnav>
         <div class="box-button pull-right"
@@ -29,12 +30,12 @@
     </subnav>
     <div class="row-fluid">
         <div class="leftTabWindow" ng-style="viewportheight">
-            <div class="span8 leftBlock" ng-class="{leftFullTableBlock: true, widthtransition25:oldSafari()}">
+            <div class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" style="height: 100%;">
                 <div class="docPrepTop">
                     <h2>Shareholder Terms</h2>
                     <span>Enter your shareholder's emails below. Prepare their copy with specific terms.</span>
                 </div>
-                <div ng-repeat="doc in ShareDocs.documents">
+                <div ng-repeat="doc in doc_arr">
                     <h1>{{doc.docname}}</h1>
                     <div class="docPrepRow header">
                         <span>Recipient</span>
@@ -46,20 +47,20 @@
                     <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
                         <span>{{Investor.getDisplayText(email)}}</span>
                         <span ng-if="!state.bulkPrep">
-                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
-                                <span ng-if="investor.is_prepared">Edit</span>
-                                <span ng-if="!investor.is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
+                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}'>
+                                <span ng-if="doc.preparedFor[email].is_prepared">Edit</span>
+                                <span ng-if="!doc.preparedFor[email].is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
                             </a>
                         </span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
-                              ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[investor.investor].overrides[annot.id])}">
+                              ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[email].overrides[annot.id])}">
                             <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
-                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id]>
                             <input ng-if="annot.type_info.typename == 'date'"
                                    type="text" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
-                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id]>
                             <select ng-if="annot.type_info.typename == 'enum'" ui-select2
-                                    placeholder="{{annot.val}}" ng-model=doc.preparedFor[investor.investor].overrides[annot.id]>
+                                    placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id]>
                                 <option></option>
                                 <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>
@@ -67,12 +68,26 @@
                     </div>
                 </div>
             </div>
-            <!-- <internal-right-rail toggle-side="toggleSide">
+            <internal-right-rail toggle-side="toggleSide">
                 <tabset>
-                    <tab heading="Tab">
+                    <tab heading="Share Documents">
+                        <div class="shareForm">
+                            <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message&hellip;"></textarea>
+                            <div class="controls" my-loading-spinner="processing">
+                                <div class="standard-button pull-right">
+                                    <button class="btn"
+                                            ng-if="!companyIsZombie()"
+                                            ng-click="shareDocuments()"
+                                            ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
+                                                          || !ShareDocs.docsReadyToShare()">
+                                        Share Documents
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </tab>
                 </tabset>
-            </internal-right-rail> -->
+            </internal-right-rail>
         </div>
     </div>
 </div>
