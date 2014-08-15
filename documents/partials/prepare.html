@@ -33,7 +33,6 @@
                 <div class="docPrepTop">
                     <h2>Shareholder Terms</h2>
                     <span>Enter your shareholder's emails below. Prepare their copy with specific terms.</span>
-                    <span>{{doc.docname}}</span>
                 </div>
                 <div class="docPrepRow header">
                     <span>Recipient</span>
@@ -43,7 +42,7 @@
                     </span>
                 </div>
                 <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
-                    <span>{{Investor.getDisplay(email)}}</span>
+                    <span>{{Investor.getDisplayText(email)}}</span>
                     <span ng-if="!state.bulkPrep">
                         <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
                             <span ng-if="investor.is_prepared">Edit</span>
