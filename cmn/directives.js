@@ -488,6 +488,12 @@ m.directive('messageSide', function(){
                                         if(myThings.event == 'open'){
                                             myThings.event = 'opened'
                                         }
+                                        if(myThings.event == 'dropped'){
+                                            myThings.event = 'failed'
+                                        }
+                                        if(myThings.event == 'bounce'){
+                                            myThings.event = 'bounced'
+                                        }
                                         if($scope.peopleDict[myThings.email]==null){
                                             myThings.personName = myThings.email;
                                         }
@@ -507,7 +513,7 @@ m.directive('messageSide', function(){
 
                             }
                         }
-                    $scope.message_data = myEvents;        
+                    $scope.message_data = myEvents;      
                 });
                
             };
