@@ -151,8 +151,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
                                                doc_id: doc.doc_id}));
         if (doc.template_id) {
             $location.url("/app/documents/company-view?template=" + doc.template_id);
-        } else if (doc.preps) {
-            $location.url("/app/documents/prepare?doc=" + doc.doc_id);
         } else {
             $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
         }
