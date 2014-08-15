@@ -628,6 +628,7 @@ m.directive('composeMessage', function() {
                     $scope.myEmails = data;
                     angular.forEach($scope.myEmails, function(email){
                         $scope.myContacts.push(new Contact(email.email));
+                        // issue here
                         angular.forEach($scope.myContact, function(ct){
                             ct.details.push(ct.namex)
                         })
@@ -687,6 +688,12 @@ m.directive('composeMessage', function() {
                                     recipients.push(contact.details[i]);
                                 }
                                 
+                            }
+                        }
+                        else{
+                            console.log(recip)
+                            if(recipients.indexOf(recip)== -1){
+                                recipients.push(recip);
                             }
                         }
                     })
