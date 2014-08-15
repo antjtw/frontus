@@ -336,6 +336,13 @@ app.controller('CompanyCtrl',
                                     }
                                 }
                             }
+                            angular.forEach($scope.trans, function (tran) {
+                            	angular.forEach($scope.rows, function (row) {
+                            		row[tran.issue]={};
+                            		row[tran.issue]["u"] = 0;
+                            		row[tran.issue]["a"] = 0;
+                            	});
+                            });
 
                             angular.forEach($scope.trans, function (tran) {
                                 angular.forEach($scope.rows, function (row) {
@@ -343,6 +350,7 @@ app.controller('CompanyCtrl',
                                         if (tran.issue in row) {
                                             row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
                                             row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
+                                            console.log(tran.issue);
                                             if (!isNaN(parseFloat(tran.forfeited))) {
                                                 row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                             }
@@ -357,8 +365,71 @@ app.controller('CompanyCtrl',
                                             }
                                         }
                                     }
+                                    
+                                    
                                 });
                             });
+                            	var moneyArray = [];
+                            	var securityArray = [];
+                            	angular.forEach($scope.rows, function (row) {
+                            		thisCounter=0;
+                            		issueCounter=0;
+                            		angular.forEach(row, function (item) {
+                            			
+                            			if (thisCounter>1) {
+                            				
+							
+											if (securityArray.length<=issueCounter) {
+												securityArray[issueCounter]=item.u;
+											}
+											else {
+												securityArray[issueCounter]+=item.u;
+											}
+											if (moneyArray.length<=issueCounter) {
+												moneyArray[issueCounter]=item.a;
+											}
+											else {
+												moneyArray[issueCounter]+=item.a;
+											}												
+											issueCounter++;
+                            			
+                            				
+                            			}
+                            			thisCounter++;
+                            		});
+                            	});
+                            	console.log(securityArray);
+                            	console.log(moneyArray);
+                            var maxIssue=-1;
+                            var maxIndex=-1;	
+                            var numCounter=0;
+                            while (numCounter<3) {
+								for (i=0;i<securityArray.length;i++) {
+									if (securityArray[i]>maxIssue) {
+										maxIssue=securityArray;
+										maxIndex=i;
+									}
+								}
+								if (numCounter==0) {
+									$scope.biggestIssue=securityArray[maxIndex];
+									securityArray.splice(maxIndex, 1);
+									$scope.biggestMoney=moneyArray[maxIndex];
+									moneyArray.splice(maxIndex,1);
+								}
+								if (numCounter==1) {
+									$scope.biggerIssue=securityArray[maxIndex];
+									securityArray.splice(maxIndex, 1);
+									$scope.biggerMoney=moneyArray[maxIndex];
+									moneyArray.splice(maxIndex,1);
+								}
+								if (numCounter==2) {
+									$scope.bigIssue=securityArray[maxIndex];
+									securityArray.splice(maxIndex, 1);
+									$scope.bigMoney=moneyArray[maxIndex];
+									moneyArray.splice(maxIndex,1);
+                            	}
+                            	numCounter++;	
+                            }
 
                             angular.forEach($scope.rows, function (row) {
                                 angular.forEach($scope.issues, function (issue) {
@@ -391,13 +462,55 @@ app.controller('CompanyCtrl',
                                 });
                             });
                             $scope.graphdata = [];
-                            angular.forEach($scope.issues, function (issue) {
-                                var issuepercent = $scope.issuepercent[issue.issue]['debt'] + (($scope.issuepercent[issue.issue]['units'] / totalunits) * (100-totaldebt));
-                                var name = issue.issue.length > 14 ? issue.issue.substring(0, (13)) + ".." : issue.issue;
-                                $scope.graphdata.push({'name':name, 'percent':issuepercent});
-                            });
-
-                        });
+                            $scope.graphdata2 = [];
+                            $scope.graphdata3 = [];
+                            var biggestSecurity = "";
+                            var bigSecurity = "";
+                            var counter = 0;
+                            var maxPercent = -1;
+							var maxName = "";
+                            while (counter < 3) {
+								maxPercent = -1;
+								maxName = "";
+								angular.forEach($scope.issues, function (issue) {
+									var issuepercent = $scope.issuepercent[issue.issue]['debt'] + (($scope.issuepercent[issue.issue]['units'] / totalunits) * (100-totaldebt));
+									var name = issue.issue.length > 14 ? issue.issue.substring(0, (13)) + ".." : issue.issue;
+									if (counter==0) {
+										if (issuepercent > maxPercent) {
+											maxPercent = issuepercent;
+											maxName = name;
+										}
+									}
+									if (counter==1) {
+										if (issuepercent > maxPercent && name != biggestSecurity) {
+											maxPercent = issuepercent;
+											maxName = name;
+										}
+									}
+									if (counter==2) {
+										if (issuepercent > maxPercent && name != biggestSecurity && name != bigSecurity) {
+											maxPercent = issuepercent;
+											maxName = name;
+										}
+									}
+								});
+								if (counter==0) {
+									biggestSecurity = maxName;
+									$scope.graphdata.push({'name':maxName, 'percent':maxPercent});
+									$scope.graphdata.push({'name':'whatever', 'percent':100-maxPercent});
+								}
+								if (counter==1) {
+									bigSecurity = maxName;
+									$scope.graphdata2.push({'name':maxName, 'percent':maxPercent});
+									$scope.graphdata2.push({'name':'whatever', 'percent':100-maxPercent});
+								}
+								if (counter==2) {
+									$scope.graphdata3.push({'name':maxName, 'percent':maxPercent});
+									$scope.graphdata3.push({'name':'whatever', 'percent':100-maxPercent});
+								}
+								counter++;
+							}
+						});
                     });
                     $scope.ownersummary.peoplenum = $scope.ownersummary.people.length;
                 });
@@ -754,6 +867,14 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 });
             });
         };
+          // Total Shares | Paid for an issue column (type is either u or a)
+    	var colTotal = memoize(calculate.colTotal);
+    	$scope.colTotal = function(header, rows, type) {
+        console.log(rows);
+        console.log("hello");
+        return colTotal(header, rows, type);
+        
+    };
 
         $scope.getDocumentInfo = function() {
             SWBrijj.tblm("document.this_investor_library").then(function(docs) {
