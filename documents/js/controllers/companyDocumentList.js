@@ -949,7 +949,6 @@ app.controller('CompanyDocumentListController',
                     return email;
                 }
             };
-            $scope.expandShareList = {};
 
             $scope.encodeURIComponent = encodeURIComponent;
         }

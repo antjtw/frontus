@@ -651,18 +651,6 @@ textarea.email-text {
     color: rgb(30, 45, 61);
 }
 
-.shareForm ul.recipients > li .incomplete-name {
-    color: #e74c3c;
-}
-
-.shareForm ul.recipients > li .investor-name {
-    cursor: pointer;
-}
-
-.shareForm ul.recipients > li .investor-name > span.lower-icon {
-    color: rgb(30, 45, 61);
-}
-
 .shareForm ul.recipients > li .investor-name .investor-name-display {
     display: inline-block;
     white-space: nowrap;
@@ -671,13 +659,6 @@ textarea.email-text {
     width: 230px;
 }
 
-.shareForm ul.recipients > li .investor-name > span.lower-icon, .shareForm ul.recipients > li .investor-name > a > span {
-    vertical-align: 20%;
-}
-
-.shareForm ul.recipients ul {
-    margin-left: 22px;
-}
 .shareForm ul.recipients > ul > li {
     margin-bottom: 3px;
 }
@@ -687,22 +668,6 @@ textarea.email-text {
     display: inline-block;
 }
 
-.shareForm ul.doc-list > li > a > span:first-of-type {
-    cursor: pointer;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 231px;
-}
-
-.shareForm ul.doc-list > li > a:hover {
-    color: #666;
-}
-
-.shareForm ul.recipients .incomplete {
-    color: #e74c3c;
-}
 .shareForm > textarea {
     margin-top: 20px;
 }
