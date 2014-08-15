@@ -1,19 +1,12 @@
 <div class="capGuide cap-overflow global">
-    <p class="belowTitle">
-        <span ng-bind="sec.name"> </span>
-        <span>
-            Security Name
-        </span>
-    </p>
-    <p class="belowTitle">
-        <span ng-bind="sec.effective_date | date:settings.shortdate">
-        </span>
-        <span>Date</span>
-    </p>
-    <p ng-show="sec.attrs.security_type" class="belowTitle">
-        <span ng-bind="sec.attrs.security_type"></span>
-        <span>Security Type</span>
-    </p>
+    <div class="detailsHeader">
+        <div>{{::sec.name}}</div>
+        <div>{{::sec.effective_date | date:settings.shortdate}}</div>
+        <p ng-show="sec.attrs.security_type" class="belowTitle">
+            <span ng-bind="sec.attrs.security_type"></span>
+            <span>Security Type</span>
+        </p>
+    </div>
     <accordion ng-class="{'lessmargin': sec.transactions.length == 1}"
                class="transaction-accordion" close-others="true">
     <accordion-group ng-repeat="tran in sec.transactions
@@ -27,9 +20,19 @@
             <span data-icon="&#xe034;" aria-hidden="true"
                   ng-show="!tran.active && sec.transactions.length > 1">
             </span>
-            <span>
-                {{tran.date | date:settings.shortdate}} Transaction
+            <span>Transaction</span>
+            <!--
+            <span class="pull-right"
+                  data-icon="&#xe611;" aria-hidden="true"
+                  ng-click="switchCapTab('details')"
+                  ng-class="{on: currentTab=='details'}">
             </span>
+            <span class="pull-right"
+                  data-icon="&#xe009;" aria-hidden="true"
+                  ng-click="switchCapTab('documents')"
+                  ng-class="{on: currentTab=='documents'}">
+            </span>
+            -->
         </accordion-heading>
         <div class="small-standard-button
                     standard-button

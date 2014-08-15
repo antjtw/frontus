@@ -28,7 +28,7 @@ div.last-saved {
 
 .capGuide {
     display: block;
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 20px;
 }
 
 .capGuide.top10 {
@@ -36,7 +36,7 @@ div.last-saved {
 }
 
 .capGuide.global {
-    margin-top: 20px;
+    margin-top: 40px;
     position: relative;
 }
 
@@ -572,7 +572,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading {
-    padding: 0;
+    padding: 10px 0 0 0;
 }
 
 .transaction-accordion .accordion-heading .accordion-toggle {
@@ -597,6 +597,9 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
     color: #1E2D3D;
+    font-size: 20px;
+    line-height: 32px;
+    font-family: "FS Elliot Web Light", sans-serif;
 }
 
 .transaction-accordion .accordion-group {
@@ -614,6 +617,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion {
+    border-top: 1px solid #C7C7C7;
     margin-top: 20px;
 }
 
@@ -932,11 +936,13 @@ p.belowTitle {
     width: 100%;
     float: left;
     position: relative;
+    margin-top: 10px;
 }
 
 .belowTitle > span:first-child {
    display: block;
    color: #1E2D3D;
+   text-transform: capitalize;
 }
 
 .belowTitle > span:last-of-type {
@@ -2352,4 +2358,26 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
     float: left;
+}
+
+.cellDetails > .detailsHeader {
+    height: 70px;
+}
+.detailsHeader {
+    height: 100px;
+    margin-bottom: 20px;
+}
+.detailsHeader > div {
+    font-family: "FS Elliot Web Light", sans-serif;
+    color: #1E2D3d;
+}
+.detailsHeader > div:first-child {
+    font-size: 24px;
+    line-height: 28px;
+}
+.detailsHeader > div:last-child {
+    font-size: 18px;
+}
+.detailsHeader > p {
+    margin-top: 20px;
 }
