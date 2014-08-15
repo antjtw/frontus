@@ -192,10 +192,6 @@ input:focus, textarea:focus {
 .accordion-heading:not:first-child {
     padding-top: 20px;
 }
-
-.accordion-heading > a:before {
-    content:'';
-}
 /* Document Viewer Styling */
 .DV-views {
     display:none;

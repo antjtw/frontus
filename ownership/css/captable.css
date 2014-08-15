@@ -580,7 +580,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading .accordion-toggle {
-    padding: 11px 12px;
+    padding: 0 0 0 0;
 }
 
 .transaction-accordion .accordion-heading > a > span:not(:last-of-type),
@@ -614,6 +614,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-top: none;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .transaction-accordion .capGuide.global {
