@@ -734,15 +734,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.messageData = {};
         $scope.messageData.recipients = [];
-        $scope.groupPeople = []
-
-
-        $scope.narrowopts = {
-            backdropFade: true,
-            dialogFade: true,
-            dialogClass: 'narrowModal modal'
-        };
-
+        $scope.groupPeople = [];
 
         $scope.revoke_admin = function() {
             angular.forEach($scope.selectedToRevokes, function(elem){
