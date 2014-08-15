@@ -258,7 +258,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return captable.securities.filter(secHasUnissued);
     };
     this.securityUnissuedPercentage = function(sec) {
-        return 100 * (numUnissued(sec) / sec.attrs.totalauth);
+        return 100 * (numUnissued(sec) / totalOwnershipUnits());
     };
     function rowFor(inv) {
         return captable.cells
@@ -519,7 +519,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         row.email = name.email;
         row.access_level = name.level;
         row.transactions = captable.transactions
-            .filter(function(el) {return el.attrs.investor == row.name;});
+            .filter(function(el) {
+                return (row.name && el.attrs.investor == row.name) ||
+                       (row.email && el.attrs.investor == row.email);
+            });
         return row;
     }
     function initUI() {
@@ -687,9 +690,51 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             }
         });
     }
-    function totalOwnershipUnits() {
-        // FIXME ledger entries, not cells
-        return captable.cells.reduce(sumCellUnits, 0);
+    /* 
+     * Sum all ledger entries associated with equity.
+     *
+     * Sum all ledger entries associated with derivatives.
+     *
+     * Sum all ledger entries associated with warrants
+     * and convertible debt.
+     */
+    function totalOwnershipUnits(dilution) {
+        if (!dilution) dilution = 1;
+        var entry_filter;
+        var ok_securities = [];
+        if (dilution <= 0) {
+            var ok_types = ["Equity Common",
+                            "Equity Preferred",
+                            "Options"];
+            angular.forEach(captable.securities, function(sec) {
+                if (sec && sec.attrs && ok_types.indexOf(
+                                    sec.attrs.security_type) !== -1)
+                {
+                    ok_securities.push(sec.name);
+                }
+            });
+            entry_filter = function(el) {
+                return ok_securities.indexOf(el.security) !== -1;
+            };
+        } else if (dilution == 1) {
+            ok_securities = [];
+            angular.forEach(captable.securities, function(sec) {
+                if (sec && sec.attrs && calculate.primaryMeasure(
+                               sec.attrs.security_type) == "units")
+                {
+                    ok_securities.push(sec.name);
+                }
+            });
+            entry_filter = function(el) {
+                return el && ok_securities.indexOf(el.security) !== -1;
+            };
+        } else if (dilution >= 2) {
+            console.log("TODO",
+                "implement dilution scenarios involving conversion");
+            return totalOwnershipUnits(1);
+        }
+        var res = sum_ledger(captable.ledger_entries.filter(entry_filter));
+        return res;
     }
     this.totalOwnershipUnits = totalOwnershipUnits;
     function investorOwnershipPercentage(inv) {
