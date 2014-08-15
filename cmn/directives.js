@@ -617,6 +617,7 @@ m.directive('composeMessage', function() {
             };
             $scope.getPeople()
 
+            // create the object for selct2
            $scope.myContacts = []
             $scope.groupsAndPeople = function(){
                 function Contact(namex, details){
@@ -628,31 +629,38 @@ m.directive('composeMessage', function() {
                     $scope.myEmails = data;
                     angular.forEach($scope.myEmails, function(email){
                         $scope.myContacts.push(new Contact(email.email));
-                        // issue here
-                        angular.forEach($scope.myContact, function(ct){
-                            ct.details.push(ct.namex)
-                        })
-                    })
-                })
+
+                        angular.forEach($scope.myContacts, function(ct){
+                            if(ct.details.indexOf(ct.namex)== -1){
+                                ct.details.push(ct.namex)
+                            }
+                            
+                        });
+                    });
+                });
+                // make this a promise later
                 SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
                     var myGroups = data;
                     angular.forEach(myGroups, function(gr){
-                        var b = JSON.parse(gr.ind_group)
-                        $scope.myContacts.push(new Contact(b))
-                    })
-                    
-                })
-                SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
-                    var emailGroups = data;
-                    angular.forEach(emailGroups, function(group){
-                        angular.forEach($scope.myContacts, function(contact){
-                            if(JSON.parse(group.json_array_elements)== contact.namex){
-                                contact.details.push(group.email);
-                            }
-                        })
-                    })
-                })
-            }
+                        var b = JSON.parse(gr.ind_group);
+                        $scope.myContacts.push(new Contact(b));
+                        SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
+                            var emailGroups = data;
+                            angular.forEach(emailGroups, function(group){
+                                angular.forEach($scope.myContacts, function(contact){
+                                    if(JSON.parse(group.json_array_elements) == contact.namex){
+                                        if(contact.details.indexOf(group.email)== -1){
+                                            contact.details.push(group.email);
+                                        };
+                                    };
+                                });
+                            });
+                        });
+                    });                
+                });
+                
+            };
+// >>>>>>> msgfix
             $scope.groupsAndPeople();
 
 
@@ -682,20 +690,15 @@ m.directive('composeMessage', function() {
                 var recipients = []
                 angular.forEach($scope.message.recipients, function(recip){
                     angular.forEach($scope.myContacts, function(contact){
-                        if(recip == contact.namex){
+                        if(recip === contact.namex){
                             for(i = 0; i < contact.details.length; i++){
-                                if(recipients.indexOf(contact.details[i])== -1){
+                                // cannot send the same email to one person more than one time. ie if person is vip and selected, will only get email once
+                                if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
-                                }
+                                };
                                 
-                            }
-                        }
-                        else{
-                            console.log(recip)
-                            if(recipients.indexOf(recip)== -1){
-                                recipients.push(recip);
-                            }
-                        }
+                            };
+                        };
                     })
                 })
                 return recipients
@@ -707,8 +710,8 @@ m.directive('composeMessage', function() {
                 var category = 'company-message';
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
-                console.log($scope.createRecipients())
                 var recipients = $scope.createRecipients();
+                console.log(recipients);
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_message',
                               JSON.stringify(recipients),
