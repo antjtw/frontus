@@ -727,7 +727,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             return totalOwnershipUnits(1);
         }
         var res = sum_ledger(captable.ledger_entries.filter(entry_filter));
-        console.log(res);
+        return res;
     }
     this.totalOwnershipUnits = totalOwnershipUnits;
     function investorOwnershipPercentage(inv) {

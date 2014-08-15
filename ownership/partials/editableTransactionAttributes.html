@@ -3,10 +3,10 @@
          class="rightTitle"
          ng-class="{double: inputType(key)!='text_field'}">
         <span ng-class="{'locked-security': key=='security_type'}">
-            {{key}}
+            {{displayName(key)}}
         </span>
         <input ng-if="useTextField(key)"
-               id="date{{data.attrs.$$hashKey}}"
+               id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, selected, undo)',
                           blur: 'saveIt(data, selected, undo)'}"
                type="text"

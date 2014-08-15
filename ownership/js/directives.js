@@ -375,8 +375,10 @@ own.directive('editableTransactionAttributes', [function() {
             function($scope, $filter, captable, attributes) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
+                $scope.tran_attrs = 
+                    attrs[$scope.data.attrs.security_type]
+                         [$scope.data.kind];
                 function filterSortKeys(attrs) {
-                    if (!attrs.security) return null;
                     var filtered = $filter('attrsForEdit')(attrs);
                     var sorted = Object.keys(filtered)
                             .sort(function(x1, x2) {
@@ -385,10 +387,7 @@ own.directive('editableTransactionAttributes', [function() {
                             });
                     return sorted;
                 }
-                $scope.keys = filterSortKeys($scope.data.attrs);
-                console.log("keys");
-                console.log($scope.keys);
-                console.log($scope.data.attrs);
+                $scope.keys = filterSortKeys($scope.tran_attrs);
                 function key_display_info(key) {
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};
@@ -397,6 +396,9 @@ own.directive('editableTransactionAttributes', [function() {
                     return key_display_info(key).input_type;
                 }
                 this.inputType = inputType;
+                $scope.displayName = function(key) {
+                    return key_display_info(key).display_name;
+                };
                 $scope.description = function(key) {
                     return key_display_info(key).description;
                 };
