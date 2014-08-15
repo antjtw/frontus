@@ -2,11 +2,31 @@
 
 var docs = angular.module('docServices');
 
-docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, $rootScope) {
-    this.emails = [];
-    this.documents = [];
-    this.message = "";
+docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SWBrijj, $q, $rootScope, $window) {
+    // Session storage
+    var sdref = this;
+    $window.addEventListener('beforeunload', function(event) {
+        sessionStorage.setItem('shareDocs-emails', angular.toJson(sdref.emails));
+        sessionStorage.setItem('shareDocs-documents', angular.toJson(sdref.documents));
+        sessionStorage.setItem('shareDocs-message', angular.toJson(sdref.message));
+    });
 
+    this.emails = angular.fromJson(sessionStorage.getItem('shareDocs-emails'));
+    this.documents = angular.fromJson(sessionStorage.getItem('shareDocs-documents'));
+    this.message = angular.fromJson(sessionStorage.getItem('shareDocs-message'));
+    sessionStorage.removeItem('shareDocs-emails');
+    sessionStorage.removeItem('shareDocs-documents');
+    sessionStorage.removeItem('shareDocs-messages');
+
+    if (this.emails === null) {
+        this.emails = [];
+    }
+    if (this.documents === null) {
+        this.documents = [];
+    }
+    if (this.message === null) {
+        this.message = "";
+    }
     this.prepCache = {}; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
 
     this.upsertShareItem = function(item) {
@@ -71,10 +91,9 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         if (!ignore_cache && this.prepCache[doc.doc_id][investor] !== undefined) {
             p.resolve(this.prepCache[doc.doc_id][investor]);
         }
-        var shares = this;
         SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
             var res = data[0].is_prepared_person;
-            shares.prepCache[doc.doc_id][investor] = res;
+            sdref.prepCache[doc.doc_id][investor] = res;
             p.resolve(res);
         }).except(function(err) {
             p.reject(err);
@@ -133,20 +152,19 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                 doc.signature_flow = 0;
             }
         });*/
-        var share = this;
         this.checkAllPrepared().then(function(result) {
             if (result) {
                 SWBrijj.document_multishare(
-                    share.emails.join(","),
-                    JSON.stringify(share.documents),
-                    share.message,
+                    sdref.emails.join(","),
+                    JSON.stringify(sdref.documents),
+                    sdref.message,
                     "22 November 2113"
                 ).then(function(data) {
                     $rootScope.$emit("notification:success", "Documents shared");
                     share_defer.resolve(data);
-                    share.emails = [];
-                    share.documents = [];
-                    share.message = "";
+                    sdref.emails = [];
+                    sdref.documents = [];
+                    sdref.message = "";
                     //$route.reload(); // TODO: close share bar?
                 }).except(function(err) {
                     console.error(err);
@@ -160,4 +178,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         });
         return share_defer.promise;
     };
+
+    this.checkAllPrepared(); // initialize cache
 }]);
