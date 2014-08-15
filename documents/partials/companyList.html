@@ -136,6 +136,14 @@
                 </span>
             </li>
         </ul>
+        <a class="standard-button"
+           href="/app/documents/prepare"
+           ng-disabled="companyIsZombie() || ShareDocs.emails.length === 0 || ShareDocs.documents.length === 0">
+            <button class="btn" ng-disabled="companyIsZombie() || ShareDocs.emails.length === 0 || ShareDocs.documents.length === 0">
+                Prepare Document
+            </button>
+        </a>
+        <!-- TODO: for the prepare screen -->
         <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message&hellip;"></textarea>
         <div class="controls" my-loading-spinner="processing">
             <div class="standard-button pull-right">

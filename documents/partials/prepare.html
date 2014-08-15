@@ -41,8 +41,8 @@
                         {{annot.type_info.display}}
                     </span>
                 </div>
-                <div ng-repeat="investor in doc.preparedFor" class="docPrepRow">
-                    <span><input ui-select2="select2Options" ng-model="investor.display" ng-change="updateInvestor(investor)"></span>
+                <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
+                    <span>{{Investor.getDisplay(email)}}</span>
                     <span ng-if="!state.bulkPrep">
                         <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(investor.investor)}}'>
                             <span ng-if="investor.is_prepared">Edit</span>
@@ -63,10 +63,6 @@
                         </select>
                     </span>
                 </div>
-                <div class="docPrepRow">
-                    <span><input type="text" ui-select2="select2Options" ng-model="newInvestor" ng-change="addInvestor()"></span>
-                    <span></span>
-                </div>
             </div>
             <!-- <internal-right-rail toggle-side="toggleSide">
                 <tabset>
@@ -76,5 +72,4 @@
             </internal-right-rail> -->
         </div>
     </div>
-    <preparation-bar></preparation-bar>
 </div>
