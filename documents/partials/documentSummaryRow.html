@@ -63,12 +63,10 @@
         <div ng-if="!viewState.hideSharebar && forShare()">
             <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
-                        {{ formatShareType(getShareType(doc)) }}
+                        Prepare
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li ng-show="!doc.template_id"> <a class="button" ng-click="updateShareType(doc,0);">View Only</a></li>
-                        <li> <a class="button" ng-click="updateShareType(doc,2);">Request Signature</a></li>
                         <li> <a class="button" ng-click="prepareDocument(doc);">Prepare</a></li>
                     </ul>
                 </li>

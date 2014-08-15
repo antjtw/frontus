@@ -2,11 +2,31 @@
 
 var docs = angular.module('docServices');
 
-docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, $rootScope) {
-    this.emails = [];
-    this.documents = [];
-    this.message = "";
+docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SWBrijj, $q, $rootScope, $window) {
+    // Session storage
+    var sdref = this;
+    $window.addEventListener('beforeunload', function(event) {
+        sessionStorage.setItem('shareDocs-emails', angular.toJson(sdref.emails));
+        sessionStorage.setItem('shareDocs-documents', angular.toJson(sdref.documents));
+        sessionStorage.setItem('shareDocs-message', angular.toJson(sdref.message));
+    });
 
+    this.emails = angular.fromJson(sessionStorage.getItem('shareDocs-emails'));
+    this.documents = angular.fromJson(sessionStorage.getItem('shareDocs-documents'));
+    this.message = angular.fromJson(sessionStorage.getItem('shareDocs-message'));
+    sessionStorage.removeItem('shareDocs-emails');
+    sessionStorage.removeItem('shareDocs-documents');
+    sessionStorage.removeItem('shareDocs-messages');
+
+    if (this.emails === null) {
+        this.emails = [];
+    }
+    if (this.documents === null) {
+        this.documents = [];
+    }
+    if (this.message === null) {
+        this.message = "";
+    }
     this.prepCache = {}; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
 
     this.upsertShareItem = function(item) {
@@ -15,7 +35,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
             if (el.doc_id == item.doc_id ||
                 (!el.doc_id && !item.doc_id &&
                     el.template_id==item.template_id)) {
-                el.signature_flow = item.signature_flow;
                 updated = true;
             }
         });
@@ -23,7 +42,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
             var obj = {
                 "doc_id": item.doc_id,
                 "template_id": item.template_id,
-                "signature_flow": item.signature_flow,
                 "docname": item.docname
             };
             this.documents.push(obj);
@@ -33,9 +51,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                 }, this);
             }
         }
-        if (item.signature_flow > 0) {
-            this.checkPreparedLists([item], this.emails);
-        }
+        this.checkPreparedLists([item], this.emails);
         return this.documents;
     };
     this.addEmail = function(email) {
@@ -56,23 +72,11 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
                      item.template_id==el.template_id);
         });
     };
-    this.updateShareType = function(doc, tp) {
-        if (doc.template_id && tp > 0) {
-            tp = 1;
-        }
-        doc.signature_flow = tp;
-        this.upsertShareItem(doc);
-    };
 
     this.docsReadyToShare = function() {
         if (this.documents.length===0) {
             return false;
         }
-        angular.forEach(this.documents, function(doc) {
-            if (doc.signature_flow < 0) {
-                return false;
-            }
-        });
         if (!this.allPreparedCache()) {
             return false;
         }
@@ -87,10 +91,9 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         if (!ignore_cache && this.prepCache[doc.doc_id][investor] !== undefined) {
             p.resolve(this.prepCache[doc.doc_id][investor]);
         }
-        var shares = this;
         SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
             var res = data[0].is_prepared_person;
-            shares.prepCache[doc.doc_id][investor] = res;
+            sdref.prepCache[doc.doc_id][investor] = res;
             p.resolve(res);
         }).except(function(err) {
             p.reject(err);
@@ -106,11 +109,9 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         var check_defer = $q.defer();
         var promises = [];
         docs.forEach(function(doc) {
-            if (doc.signature_flow > 0) { // only signable docs need checking
-                investors.forEach(function(investor) {
-                    promises.push(this.checkPrepared(doc, investor, ignore_cache));
-                }, this);
-            }
+            investors.forEach(function(investor) {
+                promises.push(this.checkPrepared(doc, investor, ignore_cache));
+            }, this);
         }, this);
         $q.all(promises).then(function(results) {
             check_defer.resolve(results.every(function(res) {
@@ -131,48 +132,39 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
     };
     this.allPreparedCache = function() {
         return this.documents.every(function(doc) {
-            if (doc.signature_flow > 0) {
-                return this.emails.every(function(inv) {
-                    return this.prepCache[doc.doc_id][inv];
-                }, this);
-            } else {
-                // if document isn't for share, we're good regardless
-                return true;
-            }
+            return this.emails.every(function(inv) {
+                return this.prepCache[doc.doc_id][inv];
+            }, this);
         }, this);
     };
     this.emailNotPreparedCache = function(email) {
         return this.documents.some(function(doc) {
-            if (doc.signature_flow > 0) {
-                return !this.prepCache[doc.doc_id][email];
-            } else {
-                return false;
-            }
+            return !this.prepCache[doc.doc_id][email];
         }, this);
     };
 
     this.shareDocuments = function() {
         // TODO: confirm that documents haven't been shared before to the users listed
         var share_defer = $q.defer();
+        /* TODO: figure out, display, and communicate appropriate replacement for signature_flow
         angular.forEach(this.documents, function(doc) {
             if (doc.signature_flow === undefined || doc.signature_flow === null) {
                 doc.signature_flow = 0;
             }
-        });
-        var share = this;
+        });*/
         this.checkAllPrepared().then(function(result) {
             if (result) {
                 SWBrijj.document_multishare(
-                    share.emails.join(","),
-                    JSON.stringify(share.documents),
-                    share.message,
+                    sdref.emails.join(","),
+                    JSON.stringify(sdref.documents),
+                    sdref.message,
                     "22 November 2113"
                 ).then(function(data) {
                     $rootScope.$emit("notification:success", "Documents shared");
                     share_defer.resolve(data);
-                    share.emails = [];
-                    share.documents = [];
-                    share.message = "";
+                    sdref.emails = [];
+                    sdref.documents = [];
+                    sdref.message = "";
                     //$route.reload(); // TODO: close share bar?
                 }).except(function(err) {
                     console.error(err);
@@ -186,4 +178,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", function(SWBrijj, $q, 
         });
         return share_defer.promise;
     };
+
+    this.checkAllPrepared(); // initialize cache
 }]);

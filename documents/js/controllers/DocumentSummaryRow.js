@@ -117,27 +117,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
-
-
-    $scope.getShareType = function(doc) {
-        if (!doc) {return 0;}
-        if (!doc.signature_flow && !doc.template_id) {
-            doc.signature_flow = 0;
-        } else if (!doc.signature_flow && doc.template_id) {
-            doc.signature_flow = -1;
-        }
-        return doc.signature_flow;
-    };
-    $scope.formatShareType = function(tp) {
-        if (!tp || tp === 0) {
-            return 'View Only';
-        } else if (tp < 0) {
-            return 'Prepare';
-        } else if (tp > 0) {
-            return 'Request Signature';
-        }
-    };
-
     $scope.titleClick = function() {
         if (!(!$scope.doc.uploaded_by || $scope.doc.pages > 0)) {
             return;
@@ -172,8 +151,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
                                                doc_id: doc.doc_id}));
         if (doc.template_id) {
             $location.url("/app/documents/company-view?template=" + doc.template_id);
-        } else if (doc.preps) {
-            $location.url("/app/documents/prepare?doc=" + doc.doc_id);
         } else {
             $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
         }
@@ -191,10 +168,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         SWBrijj.procd('sharewave-' + doc.doc_id + '.pdf', 'application/pdf', 'document.genOriginalPdf', doc.doc_id.toString()).then(function(url) {
             document.location.href = url;
         });
-    };
-
-    $scope.updateShareType = function(doc, tp) {
-        return ShareDocs.updateShareType(doc, tp);
     };
 }
 DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location', 'ShareDocs'];
