@@ -168,7 +168,7 @@
                         <help-tab doc="doc"></help-tab>
                     </tab>
                     <tab active="annottab" heading="Annotations" ng-if="prepareable() || prepareFor || actionNeeded()">
-                        <annotation-list doc="doc" active="active"></annotation-list>
+                        <annotation-list doc="doc" active="active" prepare-for="prepareFor"></annotation-list>
                     </tab>
                     <tab heading="Transactions" ng-if="doctrans.length > 0">
                         <doc-transaction-list trans="doctrans"></doc-transaction-list>

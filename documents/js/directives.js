@@ -108,6 +108,7 @@ app.directive('annotationList', [function() {
         scope: {
             doc: "=",
             active: "=",
+            prepareFor: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
         controller: ["$scope", "$element", "navState", "Annotations", "Documents",

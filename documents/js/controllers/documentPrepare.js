@@ -25,7 +25,6 @@ app.controller('DocumentPrepareController',
                 if (bulkPrep) {
                     $location.search('bulk', true).replace();
                 } else {
-                    saveOverrides();
                     $location.search('bulk', null).replace();
                 }
             }

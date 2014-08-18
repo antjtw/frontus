@@ -38,8 +38,9 @@
                 <div ng-repeat="doc in doc_arr">
                     <div class="docPrepRow header">
                         <span data-icon="&#xe009;">{{doc.docname}}
-                            <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()"></span>
-                            <span data-icon="&#xe60E;" ng-show="doc.issue"></span>
+                            <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" tooltip="Signature Requested"></span>
+                            <span data-icon="&#xe60E;" ng-show="doc.issue" tooltip="Link to {{doc.issue}}"></span>
+                            <span data-icon="&#xe60E;" ng-show="doc.issue && !doc.validTransaction()" style="color: #E74C3C;" tooltip="Required Fields for Transacation are Missing"></span>
                         </span>
                         <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Add Annotations</a></span>
                         <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Edit Annotations</a></span>
@@ -58,12 +59,12 @@
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
                               ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[email].overrides[annot.id])}">
                             <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
-                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id]>
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
                             <input ng-if="annot.type_info.typename == 'date'"
                                    type="text" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
-                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id]>
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
                             <select ng-if="annot.type_info.typename == 'enum'" ui-select2
-                                    placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id]>
+                                    placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
                                 <option></option>
                                 <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>

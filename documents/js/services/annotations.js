@@ -36,7 +36,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
     //
     // [i][4] other -> investorfixed, whosign, whattype, required, and id
 
-    var Annotation = function() {
+    var Annotation = function(doc) {
         this.position = {
             coords: {
                 //x: 0,
@@ -83,6 +83,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             }
 
         });
+        this.doc = doc;
     };
 
     Annotation.prototype = {
@@ -159,12 +160,20 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
                         (this.whattype == "ImgSignature" && User.signaturePresent));
             }
         },
-        filled: function(role) {
-            // signature present comes from the account
+        filled: function(role, user) {
             if (!this.forRole(role)) {
                 return false;
             }
-            return this.wouldBeValid(role, this.val);
+            if (this.whattype != "ImgSignature" && user &&
+                this.doc.preparedFor && this.doc.preparedFor[user] &&
+                this.doc.preparedFor[user].overrides[this.id] &&
+                this.doc.preparedFor[user].overrides[this.id].length > 0) {
+                // there's an override value for this user, so use that instead
+                console.log("checking override for " + user);
+                return this.wouldBeValid(role, this.doc.preparedFor[user].overrides[this.id]);
+            } else {
+                return this.wouldBeValid(role, this.val);
+            }
         },
         isCountersign: function() {
             return this.whosign == "Issuer" && (this.whattype == "Signature" || this.whattype == "ImgSignature");
@@ -188,8 +197,8 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
         },
     };
 
-    this.createBlankAnnotation = function() {
-        return new Annotation();
+    this.createBlankAnnotation = function(doc) {
+        return new Annotation(doc);
     };
 
     function generateAnnotationId() {
@@ -224,7 +233,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
                     annots = annots.concat(JSON.parse(data.iss_annotations));
                 }
                 annots.forEach(function(annot) {
-                    var new_annot = (new Annotation()).parseFromJson(annot, doc.annotation_types);
+                    var new_annot = (new Annotation(doc)).parseFromJson(annot, doc.annotation_types);
                     doc_annotations[doc.doc_id].push(new_annot);
                 });
             });
