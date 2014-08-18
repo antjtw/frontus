@@ -409,11 +409,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // or maybe add a save button for now
         console.log("saveTransaction");
         console.log(JSON.stringify(tran));
-        if (tran.transaction == undefined)
-        {
-            console.trace();
-            return;
-        }
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
