@@ -25,6 +25,7 @@ Security = function() {
     this.effective_date = null;
     this.insertion_date = null;
     this.transactions = [];
+    this.attrs = {};
 };
 Investor = function() {
     this.name = "";
@@ -141,6 +142,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                              };
     function parseTransaction(tran) {
         tran.attrs = JSON.parse(tran.attrs);
+        console.log(tran.kind);
         if (tran.kind in transactionParser) {
             transactionParser[tran.kind](tran);
         }
@@ -165,6 +167,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         security.attrs = tran.attrs;
 
         captable.securities.push(security);
+        console.log("secutities");
+        console.log(captable.securities.length);
+        console.log(security.transactions.length);
     }
     function parseRetireSecurity(tran) {
         var sec = securityFor(tran);
@@ -433,11 +438,24 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             var found = false;
             for (i in captable.transactions)
             {
-                if (captable.transactions[i] == tran)
+                if (captable.transactions[i].transaction == tran.transaction)
                 {
-                    captable.transactions[i].transaction = transaction;
-                    captable.transactions[i].valid = validateTransaction(tran);
-                    found = true;
+                    if (tran.transaction == null)
+                    {
+                        if ((captable.transactions[i].attrs.investor == tran.attrs.investor) &&
+                            (captable.transactions[i].attrs.security == tran.attrs.security))
+                        {//just in case multiple null transactions
+                            captable.transactions[i].transaction = transaction;
+                            captable.transactions[i].valid = validateTransaction(tran);
+                            found = true;
+                        }
+                    }
+                    else
+                    {
+                        captable.transactions[i].transaction = transaction;
+                        captable.transactions[i].valid = validateTransaction(tran);
+                        found = true;
+                    }
                 }
             }
             if (!found)
@@ -453,6 +471,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
+            console.log("error");
             console.log(e);
             if (errorFunc)
             {
@@ -603,7 +622,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             angular.forEach(Object.keys(attr_obj),
                     function(el) { obj.attrs[el] = null; });
         }
-        if (obj.attrs['physical'] == null)
+        if (('physical' in attr_obj) && (obj.attrs.physical == null))
         {
             obj.attrs['physical'] = false;
         }
@@ -628,15 +647,32 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.newTransaction = newTransaction;
     this.addSecurity = function(name) {
         // NOTE assume Option for now, user can change,
-        var tran = newTransaction("Option", "issue security");
-        tran.kind = "issue_security";
+        //var tran = newTransaction("Option", "issue security");
+        //tran.kind = "issue_security";
+        console.log("addSecurity");
+        var security = nullSecurity();
+        security.name = name;
+        security.effective_date = new Date(Date.now());
+        security.insertion_date = new Date(Date.now());
+        initAttrs(security, 'Option', 'issue security');
+        console.log(attrs['Option']);
+        security.attrs.security = name;
+        security.attrs.security_type = 'Option';
+        console.log(security.attrs);
+        captable.securities.push(security);
+        
+        var tran = new Transaction();
+        tran.kind = 'issue security';
+        tran.company = $rootScope.navState.company;
+        tran.attrs = security.attrs;
+       
         // Silly future date so that the issue always appears
         // on the leftmost side of the table
         tran.insertion_date = new Date(2100, 1, 1);
         // FIXME should we be using AddTran
         // which takes care of the ledger entries?
         captable.transactions.push(tran);
-        parseTransaction(tran);
+        saveTransaction(tran);
     };
     this.addInvestor = function(name) {
         var inv = new Investor();
@@ -968,6 +1004,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function validateTransaction(transaction) {
         var correct = true;
+        //console.log("validateTransaction");
         if (!attrs)
         {
             console.log("attrs not defined yet")
