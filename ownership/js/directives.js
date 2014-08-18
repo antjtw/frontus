@@ -368,7 +368,8 @@ own.directive('editableTransactionAttributes', [function() {
         restrict: 'E',
         replace: true,
         scope: {data: '=',
-                selected: '=selected'},
+                selected: '=selected',
+                undo: '=undo'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
         controller: ["$scope", "$filter", "captable", "attributes",
@@ -389,6 +390,9 @@ own.directive('editableTransactionAttributes', [function() {
                 }
                 $scope.keys = filterSortKeys($scope.tran_attrs);
                 function key_display_info(key) {
+                    //console.log("bug for some values, use below to debug");
+                    //console.log($scope.data.attrs.security_type);
+                    //console.log($scope.data.kind);
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};
                 }
