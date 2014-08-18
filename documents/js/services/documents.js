@@ -271,6 +271,20 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 return annot.whatttype == 'Signature' || annot.whattype == 'ImgSignature'
             });
         },
+        validTransaction: function() {
+            if (!this.issue) {
+                // no issue == no transaction == valid
+                return true;
+            }
+            return this.annotation_types.every(function(annot_type) {
+                if (annot_type.required) {
+                    if (!this.hasAnnotationType(annot_type.name)) {
+                        return false;
+                    }
+                }
+                return true;
+            }, this);
+        },
         getPreparedFor: function(defaultList) {
             var doc = this;
             function mergeDefaultList(defaultList){

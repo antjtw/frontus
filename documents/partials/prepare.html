@@ -38,8 +38,9 @@
                 <div ng-repeat="doc in doc_arr">
                     <div class="docPrepRow header">
                         <span data-icon="&#xe009;">{{doc.docname}}
-                            <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()"></span>
-                            <span data-icon="&#xe60E;" ng-show="doc.issue"></span>
+                            <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" tooltip="Signature Requested"></span>
+                            <span data-icon="&#xe60E;" ng-show="doc.issue" tooltip="Link to {{doc.issue}}"></span>
+                            <span data-icon="&#xe60E;" ng-show="doc.issue && !doc.validTransaction()" style="color: #E74C3C;" tooltip="Required Fields for Transacation are Missing"></span>
                         </span>
                         <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Add Annotations</a></span>
                         <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Edit Annotations</a></span>
