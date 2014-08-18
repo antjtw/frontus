@@ -1,4 +1,4 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature': annot.forRole(navState.role), 'processing':signatureprocessing, 'otherperson': !annot.forRole(navState.role)}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(navState.role, prepareFor), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature': annot.forRole(navState.role), 'processing':signatureprocessing, 'otherperson': !annot.forRole(navState.role)}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
     <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>

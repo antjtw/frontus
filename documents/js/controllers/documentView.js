@@ -421,7 +421,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.newnewBox = function(event) {
             if ($scope.isAnnotable && (!$scope.doc.when_shared && $rootScope.navState.role == "issuer") || (!$scope.doc.when_signed && $scope.doc.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                var a = Annotations.createBlankAnnotation();
+                var a = Annotations.createBlankAnnotation($scope.doc);
                 a.page = $scope.doc.currentPage;
                 a.position.docPanel = $scope.dp;
                 a.position.size.width = 0;
