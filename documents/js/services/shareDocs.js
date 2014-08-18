@@ -45,11 +45,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
                 "docname": item.docname
             };
             this.documents.push(obj);
-            if (item.preps) {
-                item.preps.forEach(function(prep_email) {
-                    this.addEmail(prep_email);
-                }, this);
-            }
         }
         this.checkPreparedLists([item], this.emails);
         return this.documents;
