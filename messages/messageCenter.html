@@ -8,12 +8,9 @@
         <div class="row-fluid">
             <div class="subnav-controls">
                 <div>
-                    <div class="pull-left">
-                        <div class="pull-left" >
-                            <span>Search</span>
-                            <input type="text" class="search-box" ng-model="filterText">
-                            
-                        </div>
+                    <div class="pull-left" ng-if="!compose">
+                        <span>Search</span>
+                        <input type="text" class="search-box" ng-model="filterText">
                     </div>
                     <div class="box-button pull-right"
                      ng-class="{'disabledme': companyIsZombie(), selected: compose == true}"
@@ -94,4 +91,3 @@
     </section>
 
 </div>
-
