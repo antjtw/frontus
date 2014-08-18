@@ -29,6 +29,21 @@ mod.directive('sentMessages', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
+           $scope.formatMsg = function(){
+                console.log("hiii")
+                console.log($scope.sents)
+           }
+           $scope.formatMsg();
+
+            $scope.showString = function(string){
+                if(string.length > 50){
+                    return string.slice(0, 50) + "..."
+                }
+                else{
+                    return string
+                }
+           }
+
 
         }]
     };

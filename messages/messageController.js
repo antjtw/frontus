@@ -46,20 +46,19 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 for(var i=0; i < msgs.length; i++){
                     $scope.sentMsgs.push(new sentMessage(msgs[i]))
                 }
-                console.log($scope.sentMsgs);
                 angular.forEach($scope.sentMsgs, function(obj){
                     angular.forEach(allSent, function(sent){
                         if(sent.when_requested.equals(obj.timex)){
-                            console.log("match!")
                             obj.subject = sent.subject
                             if(obj.recipients.indexOf(sent.tox)==-1){
                                 obj.recipients.push(sent.tox);
+                                obj.recipString = obj.recipients.join(", ");
                             }
                             
                         }
                     });
                 });
-                console.log($scope.sentMsgs);
+                console.log($scope.sentMsgs)
             });
         };
         $scope.getSentMessages();
