@@ -36,7 +36,7 @@
                     <span>Enter your shareholder's emails below. Prepare their copy with specific terms.</span>
                 </div>
                 <div ng-repeat="doc in doc_arr">
-                    <h1>{{doc.docname}}</h1>
+                    <h1>{{doc.docname}} <a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Add Annotations</a></h1>
                     <div class="docPrepRow header">
                         <span>Recipient</span>
                         <span ng-if="!state.bulkPrep">Copy Status</span>

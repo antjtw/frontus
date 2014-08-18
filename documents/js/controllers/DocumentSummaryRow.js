@@ -125,7 +125,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return;
         }
         if (!$scope.viewState.hideSharebar) {
-            $scope.prepareDocument($scope.doc);
+            $scope.toggleForShare();
         } else {
             if ($scope.doc.doc_id) { // can only view templates
                 $scope.viewOriginal($scope.doc);
@@ -142,18 +142,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
     // dropdown list functions
     $scope.viewProfile = function(investor) {
         document.location.href = "/app/company/profile/view?id=" + investor.email;
-    };
-
-    $scope.prepareDocument = function(doc) {
-        // store the fact that we went to go prep this document
-        sessionStorage.setItem("docPrepareState",
-                               angular.toJson({template_id: doc.templateId,
-                                               doc_id: doc.doc_id}));
-        if (doc.template_id) {
-            $location.url("/app/documents/company-view?template=" + doc.template_id);
-        } else {
-            $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true");
-        }
     };
 
     $scope.viewTemplate = function(doc) {
