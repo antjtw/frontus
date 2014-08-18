@@ -214,7 +214,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (calculate.isNumber(sec.attrs.totalauth)) {
             return sec.attrs.totalauth - securityTotalUnits(sec);
         } else {
-            return null;
+            return 0 - securityTotalUnits(sec);
         }
     }
     function selectedCellHistory() {
@@ -302,7 +302,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function sum_ledger(entries) {
         return entries.reduce(
                 function(prev, cur, index, arr) {
-                   return prev + (cur.credit - cur.debit); 
+                   return prev + (cur.credit - cur.debit);
                 }, 0);
     }
     function sum_transactions(trans) {
@@ -754,7 +754,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             .filter(function(el) { return el.investor == inv; })
             .reduce(sumCellUnits, 0);
         var res = x / totalOwnershipUnits() * 100;
-        return res;
+        return res != Infinity ? res : 0;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
     function securityTotalUnits(sec) {
