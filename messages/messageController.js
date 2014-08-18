@@ -16,9 +16,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.toggleMain = function(){
             if($scope.compose == true){
                 $scope.compose = false
+                console.log($scope.compose)
             }
             else{
                 $scope.compose = true
+                console.log($scope.compose)
             };
         };
 
