@@ -34,22 +34,6 @@
                             </li>
                         </ul>
                     </div>
-                  <!--   </div>
-
-                 <!--    email button -->
-                    <div class="box-button pull-right"
-                         ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || gotoPage('/app/company/messages')"
-                         data-placement="bottom" bs-tooltip="zombiemessage">
-                        <ul>
-                            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
-
-                            </li>
-                            <li> <span>Message</span>
-
-                            </li>
-                        </ul>
-                    </div>
 
                     <!-- peoplebutton -->
                     <div class="box-button pull-right"
@@ -121,12 +105,6 @@
                 <tab heading="Filter">
                     <people-filter people="allPeople" filter-param="filterParam"></people-filter>
                 </tab>
-                <tab heading = "Message Activity">
-                    <div style="clear: both;">
-                        <message-side></message-side>
-                    </div>
-                </tab>
-                
             </tabset>
         </internal-right-rail>
         <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
