@@ -871,38 +871,6 @@ app.controller('CompanyDocumentListController',
             $scope.$watch('state.maxRatio', stateChangeTrigger);
             $scope.$watch('state.show_archived', stateChangeTrigger);
 
-            // fully load all the documents in the weird case where we're in the middle of sharing / preparing a document
-            function fullyLoadDocuments(callback) {
-                if (loadState.document.fullyLoaded) {
-                    callback();
-                    return;
-                }
-                $scope.loaddocs();
-                window.setTimeout(function() {fullyLoadDocuments(callback);}, 250);
-                return 4;
-            }
-
-            function loadPrepareState() {
-                var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
-                sessionStorage.removeItem("docPrepareState");
-                if (st1) {
-                    // TODO: don't fully Load Documents (may just work)
-                    fullyLoadDocuments(function() {
-                        angular.forEach($scope.documents, function(doc) {
-                            if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
-                                if (doc.is_prepared) {
-                                    $scope.$emit("notification:success",
-                                        "Success! Document prepared for signature.");
-                                }
-                            }
-                        });
-                        $scope.finishedLoading = true;
-                    });
-                }
-                return st1;
-            }
-            loadPrepareState();
-
             // Sharing stuff that should be move to a directive
             $scope.ShareDocs = ShareDocs;
             function filterInvestors(investorList, emails) {
@@ -921,7 +889,11 @@ app.controller('CompanyDocumentListController',
                 placeholder: 'Add Recipients',
                 createSearchChoice: function(text) {
                     // if text was a legit user, would already be in the list, so don't check Investor service
-                    return {id: text, text: text};
+                    if (re.test(text)) {
+                        return {id: text, text: text};
+                    } else {
+                        return false;
+                    }
                 },
             };
             $scope.addShareEmail = function(email) {
