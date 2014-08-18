@@ -144,6 +144,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (tran.kind in transactionParser) {
             transactionParser[tran.kind](tran);
         }
+        tran.valid = validateTransaction(tran);
         return tran;
     }
     /* parseIssueSecurity
@@ -408,6 +409,11 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // or maybe add a save button for now
         console.log("saveTransaction");
         console.log(JSON.stringify(tran));
+        if (tran.transaction == undefined)
+        {
+            console.trace();
+            return;
+        }
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
@@ -416,8 +422,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 console.log("Error: no ledger entries");
                 return;
             }
-            var transaction = new_entries.splice(0, 1).transaction;
-            tran.transaction = transaction;
+            var transaction = new_entries.splice(0, 1)[0].transaction;
             spliced = [];
             for (new_entry in new_entries)
             {
@@ -430,10 +435,22 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 }
                 captable.ledger_entries.push(new_entries[new_entry]);
             }
-            splice_many_by(captable.transactions, function(el) {
-                        return el.transaction == tran.transaction;
-                });
-            captable.transactions.push(tran);
+            var found = false;
+            for (i in captable.transactions)
+            {
+                if (captable.transactions[i] == tran)
+                {
+                    captable.transactions[i].transaction = transaction;
+                    captable.transactions[i].valid = validateTransaction(tran);
+                    found = true;
+                }
+            }
+            if (!found)
+            {
+                tran.transaction = transaction;
+                tran.valid = validateTransaction(tran);
+                captable.transactions.push(tran);
+            }
             if (toUpdate)
             {
                 updateCell(toUpdate);
@@ -956,10 +973,22 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function validateTransaction(transaction) {
         var correct = true;
+        if (!attrs)
+        {
+            console.log("attrs not defined yet")
+            return true;
+        }
         for (att in transaction.attrs)
         {
             if ((transaction.attrs[att]) && (String(transaction.attrs[att]).length > 0))
             {
+                if (!attrs[transaction.attrs.security_type] || !attrs[transaction.attrs.security_type][transaction.kind] || !attrs[transaction.attrs.security_type][transaction.kind][att])
+                {
+                    correct = false;
+                    console.log("Invalid attribute");
+                    console.log(att);
+                    return correct;
+                }
                 switch(attrs[transaction.attrs.security_type][transaction.kind][att]["type"])
                 {
                     case "number":
@@ -967,8 +996,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                         {
                             correct = false;
                             console.log("wrong type number");
-                            console.log(transaction);
                             console.log(att);
+                            return correct;
                         }
                         break;
                     case "enum":
@@ -976,8 +1005,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                         {
                             correct = false;
                             console.log("wrong type enum");
-                            console.log(transaction);
                             console.log(att);
+                            return correct;
                         }
                         break;
                     case "date":
@@ -988,8 +1017,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                         {
                             correct = false;
                             console.log("wrong type default");
-                            console.log(transaction);
                             console.log(att);
+                            return correct;
                         }
                 }
             }
@@ -1003,8 +1032,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 {
                     correct = false;
                     console.log("required not filled");
-                    console.log(transaction);
                     console.log(att);
+                    return correct;
                 }
             }
         }
@@ -1021,7 +1050,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         var correct = true;
         for (t in cell.transactions)
         {
-            correct = correct && validateTransaction(cell.transactions[t]);
+            correct = correct && (cell.transactions[t].valid || validateTransaction(cell.transactions[t]));
             if (!correct)
                 return correct;
         }

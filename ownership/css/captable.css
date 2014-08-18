@@ -606,6 +606,10 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     font-family: "FS Elliot Web Light", sans-serif;
 }
 
+.invalidTran {
+    color: #FF0000 !important;
+}
+
 .transaction-accordion .accordion-group {
     border-bottom: none;
 }

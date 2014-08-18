@@ -17,7 +17,7 @@
               ng-show="!tran.active && cell.transactions.length > 1"
               ng-click="editEvidence()">
         </span>
-        <span ng-click="editEvidence()">
+        <span ng-click="editEvidence()" ng-class="{invalidTran: !tran.valid}">
             {{tran.date | date:settings.shortdate}} Transaction
         </span>
     </accordion-heading>
