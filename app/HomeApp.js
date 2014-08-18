@@ -99,7 +99,7 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'noteController'
         }).
         when('/app/company/messages', {
-            templateUrl: '/messages/newMessage.html',
+            templateUrl: '/messages/messageCenter.html',
             controller: 'MsgCtrl'
             
         }).
