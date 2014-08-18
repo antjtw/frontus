@@ -656,7 +656,7 @@ textarea.email-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 230px;
+    width: 260px;
 }
 
 .shareForm ul.recipients > ul > li {
@@ -2467,10 +2467,6 @@ div.profile-link > span:first-of-type {
 
 .docPrepRow .lower-icon {
     vertical-align: -10%;
-}
-
-.docPrepRow.header > span:first-of-type {
-    padding-left: 10px;
 }
 
 .docPrepRow .select2-container {

@@ -252,11 +252,24 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 return this.issuerCanAnnotate();
         },
         investorCanAnnotate: function() {
-            // always false? Can issuer annotate a document with a signature_deadline (has been shared)?
             return (!this.when_signed && this.signature_deadline && this.signature_flow===2);
         },
         issuerCanAnnotate: function() {//does not include if the document is being prepared
+            // always false? Can issuer annotate a document that has been signed?
             return (!this.when_countersigned && this.when_signed && this.signature_flow===2);
+        },
+        hasAnnotations: function() {
+            return this.annotations.length > 0;
+        },
+        hasIssuerAnnotations: function() {
+            return this.annotations.some(function(annot) {
+                return annot.whosign == 'Issuer';
+            });
+        },
+        hasSignatureAnnotations: function() {
+            return this.annotations.some(function(annot) {
+                return annot.whatttype == 'Signature' || annot.whattype == 'ImgSignature'
+            });
         },
         getPreparedFor: function(defaultList) {
             var doc = this;
