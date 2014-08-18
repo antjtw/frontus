@@ -480,6 +480,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     this.saveTransaction = saveTransaction;
+
     this.deleteTransaction = function(tran, cell) {
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
         .then(function(x) {
@@ -633,6 +634,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         tran.kind = kind;
         tran.company = $rootScope.navState.company;
         tran.insertion_date = new Date(Date.now());
+        tran.effective_date = new Date(Date.now());
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==sec && el.attrs.security_type;

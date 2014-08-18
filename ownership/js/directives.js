@@ -115,13 +115,13 @@ own.directive('editableCaptableCell', [function() {
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
                 $scope.saveIt = function(value) {
+                    captable.saveTransaction(
+                        $scope.data.transactions[0],
+                        $scope.data);
                 };
                 function updateAttr(key, val) {
                     if ($scope.data.transactions.length == 1) {
                         $scope.data.transactions[0].attrs[key] = val;
-                        captable.saveTransaction(
-                                $scope.data.transactions[0],
-                                $scope.data);
                     } else if ($scope.destination_transaction) {
                         // FIXME no straight update
                         // $scope.destination_transaction.attrs[key] = val;
