@@ -3,7 +3,7 @@ var app = angular.module('HomeApp',
     ['ngAnimate', 'ngRoute', 'ngResource', 'ui.bootstrap',
         '$strap.directives', 'ui.event', 'nav', 'brijj', 'ownerFilters',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
-        'homeDirectives', 'activityDirective', 'commonDirectives',
+        'homeDirectives', 'activityDirective', 'commonDirectives', 'messageDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
         'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular']);
 
