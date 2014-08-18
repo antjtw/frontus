@@ -24,6 +24,21 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             };
         };
 
+        $scope.getSentMessages = function(){
+            var msgs = [];
+            SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested', 'subject']).then(function(data){
+                console.log(data);
+                var allSent = data;
+                function sentMessage(timex, subject, recipients){
+                    this.timex = timex;
+                    this.subject = subject;
+                    this.recipients = [];
+                }
+              
+            })
+        }
+        $scope.getSentMessages();
+
         
 
 

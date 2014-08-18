@@ -1,8 +1,8 @@
 "use strict";
 
-var m = angular.module('messageDirectives', ['ui.select2', 'brijj', 'ui.filters']);
+var mod = angular.module('messageDirectives', ['ui.select2', 'brijj', 'ui.filters']);
 
-m.directive('messageFilter', function(){
+mod.directive('messageFilter', function(){
     return {
         scope: false,
         // replace: true,
