@@ -51,10 +51,10 @@ app.controller('DocumentPrepareController',
 
         $scope.shareDocuments = function() {
             $scope.processing = true;
-            ShareDocs.shareDocuments().finally(function(result) {
+            ShareDocs.shareDocuments().then(function(result) {
+                $location.url("/app/documents/company-list");
+            }).finally(function(result) {
                 $scope.processing = false;
-                $location.search('share', null);
-                $route.reload();
             });
         };
 
