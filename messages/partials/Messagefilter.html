@@ -1,1 +1,37 @@
-<div>Hello</div>
+<div class="row-fluid">
+<div class="message-side">
+<div class="messages tabbable">            
+    <ul class="activity-feed2">
+        <li class="event roles">
+            <div>
+                <ul>
+                    <li>
+                        <div>
+                            <span data-icon="&#xe034;"aria-hidden="true" class="msgarrow" ng-click="showStatus = !showStatus" ng-show="showStatus"></span>
+                            <span data-icon="&#xe031;"aria-hidden="true" class="msgarrow" ng-show="!showStatus" ng-click="showStatus = !showStatus"></span>
+                            <span style="cursor:pointer" ng-click = "showStatus= !showStatus">Status</span>
+
+                            <div ng-if="!showStatus">
+                                <div class="select_role" ng-click="assignFilter('issuer')" ng-class="{'picked': filterParam.param=='issuer'}">
+                                    <div class="select_role tinycol">Inbox</div>
+                                    <div class="select_role tinycol left">Number</div>
+                                    <div class="select_role tinycol">Drafts</div>
+                                    <div class="select_role tinycol left">Number</div>
+                                    <div class="select_role tinycol">Sent</div>
+                                    <div class="select_role tinycol left">Number</div>
+                                    <div class="select_role tinycol">Trash</div>
+                                    <div class="select_role tinycol left">Number</div>
+
+                                </div>
+                            </div>
+                        </div>          
+                    </li>                
+                </ul>
+            </div>
+        </li>
+           
+    </ul>
+</div>
+</div>
+</div>
+
