@@ -372,8 +372,8 @@ own.directive('editableTransactionAttributes', [function() {
                 undo: '=undo'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$scope", "$filter", "captable", "attributes",
-            function($scope, $filter, captable, attributes) {
+        controller: ["$scope", "$filter", "captable", "attributes", "calculate",
+            function($scope, $filter, captable, attributes, calculate) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
                 $scope.tran_attrs = 
@@ -414,6 +414,28 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
+                };
+                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
+                    if (evt) {
+                        if (evt != 'blur')
+                            keyPressed = true;
+                        var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                            var date = Date.parse(dateString);
+                            if (date) {
+                                tran[field] = calculate.timezoneOffset(date);
+                                captable.saveTransaction(tran, cell, errorFunc);
+                                keyPressed = false;
+                            }
+                        }
+                    } else { // User is using calendar
+                        if (tran[field] instanceof Date) {
+                            tran[field] = calculate.timezoneOffset(tran[field]);
+                            captable.saveTransaction(tran, cell, errorFunc);
+                            keyPressed = false;
+                        }
+                    }
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     captable.saveTransaction(tran, cell, errorFunc);

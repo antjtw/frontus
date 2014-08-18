@@ -1,4 +1,14 @@
 <div class="capGuide top10">
+    <div class='RightTitle'>
+        <span>Date</span>
+        <input id="effective_date{{::data.$$hashKey}}"
+               ng-model="data.effective_date"
+               ui-event="{blur: 'saveItDate(data, selected, undo, $event, \'effective_date\')'}"
+               ng-change="saveItDate(data, selected, undo, $event, 'effective_date')"
+               data-date-format={{settings.lowercasedate}}
+               type="text"
+               bs-datepicker>
+    </div>
     <div ng-repeat="key in keys"
          class="rightTitle"
          ng-class="{double: inputType(key)!='text_field'}">
