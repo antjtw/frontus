@@ -118,37 +118,57 @@ mod.directive('composeMessage', function() {
                 return recipients
             }
 
+            // SWBrijj.procm('mail.send_message',
+                //             JSON.stringify(recipients),
+                //             null
+                //             msg.subject,
+                //             newtext
+                //             navState.userid
+                // ).then(function(x) {
+                //     void(x);
+                //     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                //     $rootScope.$emit("notification:success",
+                //         "Message sent!");
+                //     //this works but i don't know why for the root scope
+                //     $rootScope.$emit('new:message');
+                //     $scope.resetMessage();
+                //     $scope.clicked = false;
+                // }).except(function(err) {
+                //     void(err);
+                //     $rootScope.$emit("notification:fail",
+                //         "Oops, something went wrong.");
+                //     $scope.clicked = false;
+                // });
 
-
-            // $scope.sendMessage = function(msg) {
-            //     var category = 'company-message';
-            //     var template = 'company-message.html';
-            //     var newtext = msg.text.replace(/\n/g, "<br/>");
-            //     var recipients = $scope.createRecipients();
-            //     $scope.clicked = true;
-            //     SWBrijj.procm('mail.send_message',
-            //                   JSON.stringify(recipients),
-                                // thread id(if it is replying to an existing thread, return an int. if no thread id, pass in null). either recipients or thread id should be null
-            //                   msg.subject,
-            //                   newtext
-            //                   add sender email from nav state
-
-            //     ).then(function(x) {
-            //         void(x);
-            //         $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-            //         $rootScope.$emit("notification:success",
-            //             "Message sent!");
-            //         //this works but i don't know why for the root scope
-            //         $rootScope.$emit('new:message');
-            //         $scope.resetMessage();
-            //         $scope.clicked = false;
-            //     }).except(function(err) {
-            //         void(err);
-            //         $rootScope.$emit("notification:fail",
-            //             "Oops, something went wrong.");
-            //         $scope.clicked = false;
-            //     });
-            // };
+            $scope.sendMessage = function(msg) {
+                var category = 'company-message';
+                var template = 'company-message.html';
+                var newtext = msg.text.replace(/\n/g, "<br/>");
+                var recipients = $scope.createRecipients();
+                recipients.push(navState.userid)
+                $scope.clicked = true;
+                console.log($scope.navState.userid)
+                SWBrijj.procm('mail.send_message',
+                            JSON.stringify(recipients),
+                            null,
+                            msg.subject,
+                            newtext
+                ).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                    $rootScope.$emit("notification:success",
+                        "Message sent!");
+                    //this works but i don't know why for the root scope
+                    $rootScope.$emit('new:message');
+                    $scope.resetMessage();
+                    $scope.clicked = false;
+                }).except(function(err) {
+                    void(err);
+                    $rootScope.$emit("notification:fail",
+                        "Oops, something went wrong.");
+                    $scope.clicked = false;
+                });
+            };
 
 
             

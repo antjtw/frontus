@@ -14,7 +14,7 @@
                     </div>
                     <div class="box-button pull-right"
                      ng-class="{'disabledme': companyIsZombie(), selected: compose == true}"
-                     ng-click="companyIsZombie() || toggleMain()"
+                     ng-click="companyIsZombie() ||  togglePage('compose')"
                      data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
@@ -31,9 +31,10 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
-            <compose-message ng-if="compose"></compose-message>
-            <sent-messages sents="sentMsgs" ng-if="page == sent"></sent-messages>
-            <div ng-if="page == null">Hi</div>
+            <compose-message ng-if="page == 'compose'"></compose-message>
+            <div ng-if="!page"> Hello you!</div>
+          <!--   <sent-messages sents="sentMsgs" ng-if="page == sent"></sent-messages>
+            <div ng-if="!page">Hi</div> -->
             <!-- div class="span12" ng-if="!compose">
                 <table class="status-table people-table">
                     <tbody>

@@ -24,6 +24,24 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             };
         };
 
+
+        $scope.page = null
+        $scope.togglePage = function(button){
+            if($scope.page !== button){
+                $scope.page = button
+                console.log($scope.page)
+            }
+            else if($scope.page == button){
+                $scope.page = null
+                console.log("hi")
+            }
+            else{
+                $scope.page = null
+                console.log("no button")
+            }
+          
+        }
+
         $scope.getSentMessages = function(){
             var msgs = [];
             $scope.sentMsgs = [];
@@ -62,11 +80,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             });
         };
         $scope.getSentMessages();
-
-        $scope.togglePage = function(button){
-            $scope.page == button
-        }
-
         
 
 
