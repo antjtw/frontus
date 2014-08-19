@@ -765,12 +765,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec)}}">
+                           value="{{captable.numUnissued(sec, ct.securities)}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec) || 0.00 | number:3}}%">
+                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:3}}%">
                 </td>
                 <td class="viewName">
                     {{::sec.name}} (Unissued)
@@ -782,7 +782,7 @@
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key)}}
+                                {{captable.numUnissued(key, ct.securities)}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"

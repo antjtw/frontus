@@ -212,9 +212,15 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 }
                 return prev;}, []);
     }
-    function numUnissued(sec) {
+    function numUnissued(sec, securities) {
+        var underlying = 0;
+        angular.forEach(securities, function(security) {
+            if (security != sec && security.attrs.optundersec == sec.name && calculate.isNumber(security.attrs.totalauth)) {
+                underlying += parseFloat(security.attrs.totalauth);
+            }
+        });
         if (calculate.isNumber(sec.attrs.totalauth)) {
-            return sec.attrs.totalauth - securityTotalUnits(sec);
+            return sec.attrs.totalauth - securityTotalUnits(sec) - underlying;
         } else {
             return 0 - securityTotalUnits(sec);
         }
@@ -260,8 +266,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.securitiesWithUnissuedUnits = function() {
         return captable.securities.filter(secHasUnissued);
     };
-    this.securityUnissuedPercentage = function(sec) {
-        return 100 * (numUnissued(sec) / totalOwnershipUnits());
+    this.securityUnissuedPercentage = function(sec, securities) {
+        return 100 * (numUnissued(sec, securities) / totalOwnershipUnits());
     };
     function rowFor(inv) {
         return captable.cells
