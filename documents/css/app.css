@@ -2394,6 +2394,7 @@ div.profile-link > span:first-of-type {
     border-bottom: 1px solid #E3E3E3;
     height: 40px;
     line-height: 40px;
+    white-space: nowrap;
 }
 
 .docPrepRow .bad {
@@ -2479,6 +2480,7 @@ div.profile-link > span:first-of-type {
 }
 .docPrepRow > span:first-child ~ span{
     min-width: 150px;
+    width: 150px;
 }
 
 /* 4 columns */
