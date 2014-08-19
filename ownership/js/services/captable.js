@@ -167,9 +167,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         security.attrs = tran.attrs;
 
         captable.securities.push(security);
-        console.log("secutities");
-        console.log(captable.securities.length);
-        console.log(security.transactions.length);
     }
     function parseRetireSecurity(tran) {
         var sec = securityFor(tran);
@@ -804,6 +801,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
             .reduce(sumCellAmount, 0);
+    };
+    this.transForSec = function(sec) {
+        return captable.transactions
+            .filter(function(el) { return el.attrs.security == sec.name; });
     };
     function sumCellUnits(prev, cur, idx, arr) {
         return prev + (calculate.isNumber(cur.u) ? cur.u : 0);

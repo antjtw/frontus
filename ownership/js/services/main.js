@@ -35,10 +35,13 @@ function(SWBrijj, $q, $filter, displayCopy) {
     //   How do I display a fact about a transaction attribute?
     var tips = displayCopy.captabletips;
     var attrs = {};
+    var secTypes = {};
     init();
     this.getAttrs = function() { return attrs; };
+    this.getSecTypes = function() {return secTypes; };
     function init() { loadAttributes().then(handleAttrs); }
     function handleAttrs(data) {
+        secTypes = [];
         angular.forEach(data, function(el) {
             if (!attrs[el.type])
             {
@@ -60,6 +63,7 @@ function(SWBrijj, $q, $filter, displayCopy) {
                      input_type:
                         $filter('attributeInputTypes')(el.name)};
             }
+            secTypes[el.type] = 'frgh';
         });
         console.log(attrs);
     }

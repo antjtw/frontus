@@ -223,7 +223,8 @@ own.directive('editableSecurityDetails', [function() {
     return {
         restrict: 'E',
         scope: {
-            sec: '='
+            sec: '=',
+            attrs: '=attrs'
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable",
@@ -252,6 +253,20 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
+                };
+                $scope.setIt = function(tran, k, v, att) {
+                    if (att)
+                    {
+                        tran.attrs[k] = v;
+                    }
+                    else
+                    {
+                        tran[k] = v;
+                    }
+                    $scope.saveIt(tran);
+                };
+                $scope.saveIt = function(tran, cell, errorFunc) {
+                    captable.saveTransaction(tran, cell, errorFunc);
                 };
             }
         ],
