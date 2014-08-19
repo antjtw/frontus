@@ -678,7 +678,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         security.attrs.security = name;
         security.attrs.security_type = 'Option';
         console.log(security.attrs);
-        captable.securities.push(security);
         
         var tran = new Transaction();
         tran.kind = 'issue security';
@@ -691,6 +690,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         // FIXME should we be using AddTran
         // which takes care of the ledger entries?
         captable.transactions.push(tran);
+        security.transactions.push(tran);
+        captable.securities.push(security);
         saveTransaction(tran);
     };
     this.addInvestor = function(name) {
