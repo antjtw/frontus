@@ -412,6 +412,9 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
+                $scope.pickIssue = function(key) {
+                    return key == "optundersec"
+                };
                 $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
                     if (evt) {
                         if (evt != 'blur')

@@ -15,7 +15,7 @@
         <span ng-class="{'locked-security': key=='security_type'}">
             {{displayName(key)}}
         </span>
-        <input ng-if="useTextField(key)"
+        <input ng-if="useTextField(key) && !pickIssue(key)"
                id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, selected, undo)',
                           blur: 'saveIt(data, selected, undo)'}"
@@ -38,6 +38,20 @@
                     </a>
                 </li>
             </ul>
+        </ul>
+        <ul ng-if="pickIssue(key)">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle">
+                    {{data.attrs[key]}}
+                    <span class="invisible-drop">'</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="i in ct.securities">
+                        <a ng-click="setIt(i.name)">
+                            {{i.name}}
+                        </a>
+                    </li>
+                </ul>
         </ul>
         <span ng-if="description(key)"
               class="tooltip-icon"
