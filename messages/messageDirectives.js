@@ -214,7 +214,8 @@ mod.directive('composeMessage', function() {
 
 mod.directive('messageFilter', function(){
     return {
-        scope: {sent: "=", page: "="},
+        scope: {sent: "=", 
+                page: "="},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -222,6 +223,12 @@ mod.directive('messageFilter', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
 
         function($scope, $rootScope, SWBrijj, $route) {
+
+            $scope.whichPage = function(){
+                console.log($scope.page);
+                console.log("hellooo");
+                $scope.page="sent"
+            }
 
 
         }]
@@ -241,6 +248,7 @@ mod.directive('sentMessages', function(){
 
            $scope.formatMsg = function(){
                 console.log($scope.sents)
+                // console.log($scope.)
            }
            $scope.formatMsg();
 

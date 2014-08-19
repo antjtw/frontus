@@ -1,6 +1,7 @@
 <div class="row-fluid">
 <div class="message-side">
-<div class="messages tabbable">            
+<div class="messages tabbable"> 
+    <li ng-click="whichPage()">Testing button</li>           
     <ul class="activity-feed2">
         <li class="event roles">
             <div>
@@ -17,7 +18,7 @@
                                     <div class="select_role tinycol left">Number</div>
                                     <div class="select_role tinycol">Drafts</div>
                                     <div class="select_role tinycol left">Number</div>
-                                    <div class="select_role tinycol" ng-click="page== sent">Sent</div>
+                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('sent')">Sent</div>
                                     <div class="select_role tinycol left">{{sent.length}}</div>
                                     <div class="select_role tinycol">Trash</div>
                                     <div class="select_role tinycol left">Number</div>
@@ -31,6 +32,7 @@
         </li>
            
     </ul>
+
 </div>
 </div>
 </div>

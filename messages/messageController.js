@@ -27,6 +27,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 
         $scope.page = null
         $scope.togglePage = function(button){
+            console.log("toggle page")
             if($scope.page !== button){
                 $scope.page = button
                 console.log($scope.page)
