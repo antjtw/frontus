@@ -11,14 +11,15 @@
         </tr>
         </tbody>
         <tbody ng-repeat="sent in sents">
-        <tr class="empty-row"></tr>
-        <tr class="forTooltip">
-            <td style="width:550px" class="shareholder-column docname-column sent"  tooltip="{{sent.recipString}}"><span>{{showString(sent.recipString)}}</span>
-            </td>
-        
-            <td><span>{{sent.subject}}</span></td>
-            <td style="width:10px;"></td>
-        </tr>
+            <tr class="empty-row"></tr>
+            <tr class="forTooltip">
+                <td style="width:550px" class="shareholder-column docname-column">
+                    <div bs-tooltip="sent.recipString" position="bottom">{{showString(sent.recipString)}}</div>
+                </td>
+            
+                <td><span>{{sent.subject}}</span></td>
+                <td style="width:10px;"></td>
+            </tr>
         </tbody>
     </table>
 </div>
