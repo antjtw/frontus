@@ -125,21 +125,21 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.selectCell = function(inv, sec) {
         $scope.currentTab = 'details';
         $scope.selectedSecurity = $scope.selectedInvestor = null;
-        if (!$scope.selectedCell || !cellIsSelected(inv, sec)) {
+        if (!$scope.editMode && $scope.selectedCell && cellIsSelected(inv, sec)) {
+            $scope.selectedCell = null;
+            History.forget($scope, 'selectedCell');
+            displayIntroSidebar();
+        } else {
             History.forget($scope, 'selectedCell');
             $scope.selectedCell =
                 captable.cellFor(inv, sec, $scope.editMode);
             History.watch('selectedCell', $scope);
             displayCellDetails();
-        } else if ($scope.selectedCell && !cellIsSelected(inv, sec)) {
-            $scope.selectedCell = null;
-            History.forget($scope, 'selectedCell');
-            displayIntroSidebar();
         }
     };
     $scope.selectSecurity = function(security_name) {
         $scope.selectedCell = $scope.selectedInvestor = null;
-        if ($scope.editMode && $scope.selectedSecurity &&
+        if (!$scope.editMode && $scope.selectedSecurity &&
             $scope.selectedSecurity.name == security_name)
         {
             displayIntroSidebar();
@@ -159,7 +159,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.selectInvestor = function(investor_name) {
         $scope.selectedCell = $scope.selectedSecurity = null;
         //deselectAllCells();
-        if ($scope.editMode && $scope.selectedInvestor &&
+        if (!$scope.editMode && $scope.selectedInvestor &&
                 $scope.selectedInvestor.name == investor_name) {
             displayIntroSidebar();
             $scope.selectedInvestor = null;
