@@ -631,6 +631,13 @@ textarea.email-text {
 .prepare-right {
     padding: 20px;
 }
+
+.shareForm .standard-button .btn {
+    /* TODO: remove once MVP.css is updated to 14px; */
+    font-size: 14px;
+    width: 150px;
+}
+
 .shareForm {
     padding-top: 40px;
     padding-bottom: 20px;
@@ -2514,75 +2521,4 @@ div.profile-link > span:first-of-type {
 
 .docPrepRow a {
     color: #3397da;
-}
-
-.docPrepRow .lower-icon {
-    vertical-align: -10%;
-}
-
-/* Preparation Bar */
-
-.preparation-bar {
-    position: fixed;
-    width: calc(100% - 80px);
-    bottom: 0;
-    height: 60px;
-    background-color: rgb(30, 45, 61);
-    text-align: center;
-}
-
-.preparation-bar .bar-button {
-    display: inline-block;
-    line-height: 60px;
-}
-
-.preparation-bar .bar-button > a {
-    font-family:'FS Elliot Web Light', sans-serif !important;
-    box-sizing: border-box;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 3px;
-    background-color: #1d2c3c;
-    border: 1px solid #3397da;
-    color: #FFFFFF;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.preparation-bar .bar-button.bar-center-buttons {
-    border: 1px solid #3397da;
-    line-height: 30px;
-    margin-top: 15px;
-    border-radius: 3px;
-    background-color: #1d2c3c;
-}
-
-.preparation-bar .bar-button.bar-center-buttons > a {
-    width: 130px;
-    text-align: center;
-    display: inline-block;
-    vertical-align: top;
-    line-height: 15px;
-    border: none;
-    border-radius: 0;
-}
-
-.preparation-bar .bar-button.bar-center-buttons > a.active-bar-button {
-    background-color: #3397da;
-}
-
-.preparation-bar .bar-button.right-button {
-    float: right;
-    margin-right: 20px;
-}
-
-.preparation-bar .bar-button.left-button {
-    float: left;
-    margin-left: 20px;
-}
-
-.preparation-bar .version-banner {
-    line-height: 60px;
-    font-size: 20px;
-    font-family:'FS Elliot Web Light', sans-serif !important;
 }

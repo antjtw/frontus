@@ -141,12 +141,6 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
     this.shareDocuments = function() {
         // TODO: confirm that documents haven't been shared before to the users listed
         var share_defer = $q.defer();
-        /* TODO: figure out, display, and communicate appropriate replacement for signature_flow
-        angular.forEach(this.documents, function(doc) {
-            if (doc.signature_flow === undefined || doc.signature_flow === null) {
-                doc.signature_flow = 0;
-            }
-        });*/
         this.checkAllPrepared().then(function(result) {
             if (result) {
                 SWBrijj.document_multishare(

@@ -1628,7 +1628,7 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
-    
+
 }
 
 .activity-feed2 li.event.roles > div:first-of-type{
@@ -1641,7 +1641,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 
-    
+
 
 .activity-icon {
     width: 30px;
@@ -4929,7 +4929,7 @@ li.event.roles > div > ul {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
-    border: 1px dashed #C7C7C7; 
+    border: 1px dashed #C7C7C7;
     width: 200px;
     margin-left: 20px;
 }
@@ -4947,10 +4947,13 @@ li.event.roles > div > ul {
 .noGroups span:last-of-type{
     position: relative;
     top: 3px;
-} 
+}
 
 .standard-button > button.disabledButton{
     background-color: #8CDDCA;
     cursor: auto;
 }
 
+.lower-icon {
+    vertical-align: -10%;
+}
