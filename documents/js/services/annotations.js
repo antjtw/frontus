@@ -169,7 +169,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
                 this.doc.preparedFor[user].overrides[this.id] &&
                 this.doc.preparedFor[user].overrides[this.id].length > 0) {
                 // there's an override value for this user, so use that instead
-                console.log("checking override for " + user);
                 return this.wouldBeValid(role, this.doc.preparedFor[user].overrides[this.id]);
             } else {
                 return this.wouldBeValid(role, this.val);

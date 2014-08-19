@@ -197,9 +197,9 @@
                         </doc-action>
                     </div>
                     <div ng-if="(invq && doc.signable()) || prepareFor" class="fields-progress">
-                        <span ng-show="numAnnotationsComplete() != numAnnotations()">{{numAnnotationsComplete()}}/{{numAnnotations()}} Complete</span>
-                        <span ng-show="numAnnotationsComplete() == numAnnotations()">Document is ready!</span>
-                        <meter cur="numAnnotationsComplete()" tot="numAnnotations()"></meter>
+                        <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) != doc.numAnnotations(navState.role)">{{doc.numAnnotationsComplete(navState.role, prepareFor)}}/{{doc.numAnnotations(navState.role)}} Complete</span>
+                        <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) == doc.numAnnotations(navState.role)">Document is ready!</span>
+                        <meter cur="doc.numAnnotationsComplete(navState.role, prepareFor)" tot="doc.numAnnotations(navState.role)"></meter>
                     </div>
                 </div>
             </internal-right-rail>
