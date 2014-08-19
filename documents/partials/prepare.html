@@ -42,7 +42,7 @@
                             <span class="name">{{doc.docname}}</span>
                             <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" tooltip="Signature Requested"></span>
                             <span data-icon="&#xe60E;" ng-show="doc.issue" tooltip="Link to {{doc.issue}}"></span>
-                            <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" class="bad" tooltip="Required Fields for Transaction are Missing"></span>
+                            <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
                         </span>
                         <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Add Annotations</a></span>
                         <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Edit Annotations</a></span>
@@ -53,7 +53,7 @@
                     <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
                         <span>
                             <span class="bad status">
-                                <span ng-if="!doc.preparedFor[email].is_prepared" data-icon="&#xe612;"></span>
+                                <span ng-if="!doc.preparedFor[email].is_prepared" data-icon="&#xe612;" tooltip-placement="right" tooltip="Some required fields are still empty for this person"></span>
                                 <!-- TODO: add a flag if this user has already been sent this document -->
                             </span>
                             <span class="name">{{Investor.getName(email)}}</span>
