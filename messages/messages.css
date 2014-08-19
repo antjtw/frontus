@@ -288,7 +288,9 @@ the compose message page styling*/
     -webkit-margin-after: 0px !important;  
 }
 
-
-
+.shareholder-column.docname-column.sent div.tooltip-inner{
+    max-width: 350px;
+    min-width: 200px;
+}
 
 

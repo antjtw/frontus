@@ -719,7 +719,6 @@ m.directive('composeMessage', function() {
                 ).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-              
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     //this works but i don't know why for the root scope
