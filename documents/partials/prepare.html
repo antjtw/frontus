@@ -3,7 +3,7 @@
 <div class="container dynamic-page">
     <subnav>
         <div class="box-button pull-right"
-             ng-click="$root.leave();"
+             ng-click="$root.leave(['-view', '/prepare']);"
              data-placement="bottom">
             <ul>
                 <li>
@@ -44,8 +44,8 @@
                             <span data-icon="&#xe60E;" ng-show="doc.issue" tooltip="Link to {{doc.issue}}"></span>
                             <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" class="bad" tooltip="Required Fields for Transaction are Missing"></span>
                         </span>
-                        <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Add Annotations</a></span>
-                        <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Edit Annotations</a></span>
+                        <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Add Annotations</a></span>
+                        <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Edit Annotations</a></span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
                             {{annot.type_info.display}}
                         </span>
@@ -59,7 +59,7 @@
                             <span class="name">{{Investor.getName(email)}}</span>
                         </span>
                         <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
-                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}'>
+                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}' class="pull-right">
                                 <span ng-if="doc.preparedFor[email].is_prepared">Edit</span>
                                 <span ng-if="!doc.preparedFor[email].is_prepared">Complete Annotations <span class="lower-icon" data-icon="&#xe016;"></span></span>
                             </a>
