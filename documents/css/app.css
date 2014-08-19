@@ -628,6 +628,9 @@ div.progress-bar {
 textarea.email-text {
     width: 270px;
 }
+.prepare-right {
+    padding: 20px;
+}
 .shareForm {
     padding-top: 40px;
     padding-bottom: 20px;

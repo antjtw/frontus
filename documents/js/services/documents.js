@@ -244,6 +244,20 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
             return num;
         },
+        numAnnotations: function(role) {
+            var num = 0;
+            angular.forEach(this.annotations, function(annot) {
+                num += annot.required && annot.forRole(role) ? 1 : 0;
+            });
+            return num;
+        },
+        numAnnotationsComplete: function(role, prepareFor) {
+            var num = 0;
+            angular.forEach(this.annotations, function(annot) {
+                num += annot.required && annot.forRole(role) && annot.filled(role, prepareFor) ? 1 : 0;
+            });
+            return num;
+        },
         annotable: function(role) {
             if (role == "investor")
                 return this.investorCanAnnotate();

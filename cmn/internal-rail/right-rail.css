@@ -296,12 +296,6 @@ button.right-rail-button.showRightTab {
     border-top: none;
 }
 
-/* Chrome visual bug fix */
-
-.span4.capright, .span4.capright span, .span4.capright input {
-    -webkit-transform: translateZ(0);
-}
-
 internal-right-rail tabset {
     display: block;
 }
