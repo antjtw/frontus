@@ -631,6 +631,13 @@ textarea.email-text {
 .prepare-right {
     padding: 20px;
 }
+
+.shareForm .standard-button .btn {
+    /* TODO: remove once MVP.css is updated to 14px; */
+    font-size: 14px;
+    width: 150px;
+}
+
 .shareForm {
     padding-top: 40px;
     padding-bottom: 20px;
