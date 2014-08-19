@@ -373,6 +373,8 @@ own.directive('editableTransactionAttributes', [function() {
             function($scope, $filter, captable, attributes, calculate) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
+                var ct = captable.getCapTable();
+                $scope.securities = ct.securities;
                 $scope.tran_attrs = 
                     attrs[$scope.data.attrs.security_type]
                          [$scope.data.kind];
@@ -414,6 +416,10 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.pickIssue = function(key) {
                     return key == "optundersec"
+                };
+                $scope.setIt = function(tran, cell, errorFunc, k, v) {
+                    tran.attrs[k] = v;
+                    captable.saveTransaction(tran, cell, errorFunc);
                 };
                 $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
                     if (evt) {

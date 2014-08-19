@@ -33,7 +33,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].input_type">
-                    <a ng-click="setIt(i)">
+                    <a ng-click="setIt(data, selected, undo, key, i)">
                         {{i}}
                     </a>
                 </li>
@@ -46,8 +46,8 @@
                     <span class="invisible-drop">'</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li ng-repeat="i in ct.securities">
-                        <a ng-click="setIt(i.name)">
+                    <li ng-repeat="i in securities">
+                        <a ng-click="setIt(data, selected, undo, 'optundersec', i.name)">
                             {{i.name}}
                         </a>
                     </li>
