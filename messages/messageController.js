@@ -63,6 +63,10 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
         $scope.getSentMessages();
 
+        $scope.togglePage = function(button){
+            $scope.page == button
+        }
+
         
 
 

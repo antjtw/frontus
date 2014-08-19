@@ -32,7 +32,8 @@
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <compose-message ng-if="compose"></compose-message>
-            <sent-messages sents="sentMsgs"></sent-messages>
+            <sent-messages sents="sentMsgs" ng-if="page == sent"></sent-messages>
+            <div ng-if="page == null">Hi</div>
             <!-- div class="span12" ng-if="!compose">
                 <table class="status-table people-table">
                     <tbody>
