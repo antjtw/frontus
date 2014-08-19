@@ -1609,7 +1609,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 .activity-feed2 > div > li:first-child {
 	margin-top: 40px;
-}	
+}
 
 .activity-feed2 li.event {
     min-height: 50px;
@@ -1628,7 +1628,7 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
-    
+
 }
 
 .activity-feed2 li.event.roles > div:first-of-type{
@@ -1641,7 +1641,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 
-    
+
 
 .activity-icon {
     width: 30px;
@@ -4926,7 +4926,7 @@ textarea.email-text {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
-    border: 1px dashed #C7C7C7; 
+    border: 1px dashed #C7C7C7;
     width: 200px;
     margin-left: 20px;
 }
@@ -4944,10 +4944,13 @@ textarea.email-text {
 .noGroups span:last-of-type{
     position: relative;
     top: 3px;
-} 
+}
 
 .standard-button > button.disabledButton{
     background-color: #8CDDCA;
     cursor: auto;
 }
 
+.lower-icon {
+    vertical-align: -10%;
+}

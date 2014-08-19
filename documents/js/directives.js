@@ -344,11 +344,3 @@ app.directive('docTransactionList', function() {
         }]
     };
 });
-
-app.directive('preparationBar', function() {
-    return {
-        restrict: "E",
-        scope: false,
-        templateUrl: '/documents/partials/preparationBar.html'
-    };
-});
