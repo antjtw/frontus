@@ -427,16 +427,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.$watch('annot.position.size', function(new_size) {
         if (new_size) {
-            if ($scope.annot.type == 'text')
-            {
-                $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
-                $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
-            }
-            else if ($scope.annot.type == 'highlight')
-            {
-                $scope.annotationHighlightStyle.width = (new_size.width) + "px";
-                $scope.annotationHighlightStyle.height = (new_size.height) + "px";
-            }
+            $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
+            $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            $scope.annotationHighlightStyle.width = (new_size.width) + "px";
+            $scope.annotationHighlightStyle.height = (new_size.height) + "px";
         }
     }, true);
 

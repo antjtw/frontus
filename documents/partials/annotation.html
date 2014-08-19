@@ -6,7 +6,7 @@
         <span data-icon="&#xe00f;"></span>
     </span>
     <div>
-        <fieldset ng-if="annot.type == 'text'" ng-click="openBox() && $event.stopPropagation();" ng-mousedown="$event.stopPropagation();" ng-mouseenter="boxHover = true" ng-mouseleave="boxHover = false">
+        <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'text')" ng-click="openBox() && $event.stopPropagation();" ng-mousedown="$event.stopPropagation();" ng-mouseenter="boxHover = true" ng-mouseleave="boxHover = false">
             <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode()) && (boxHover || active.annotation == annot)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
@@ -25,7 +25,7 @@
                 <input type="text" ng-model="current.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)" placeholder="{{current.placeholder}}">
             </div>
         </fieldset>
-        <fieldset ng-if="annot.type == 'highlight'" >
+        <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && !annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'highlight')">
             <div ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
             </div>
         </fieldset>

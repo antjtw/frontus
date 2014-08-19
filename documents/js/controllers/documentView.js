@@ -376,7 +376,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              });
         }
 
-
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             if (document.location.href.indexOf('-view') != -1) {

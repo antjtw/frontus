@@ -441,7 +441,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         if (!docs[doc_id]) {
             docs[doc_id] = new Document();
             docs[doc_id].doc_id = doc_id;
-            docs[doc_id].annotations = Annotations.getDocAnnotations(docs[doc_id]);
+            docs[doc_id].annotations = []; // don't call getDocAnnotations until we know more about the doc (original / version)
         }
         return docs[doc_id];
     };
