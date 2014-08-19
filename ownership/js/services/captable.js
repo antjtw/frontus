@@ -274,11 +274,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             return null;
         }
     };
-    function secHasUnissued(sec) {
-        return numUnissued(sec);
+    function secHasUnissued(securities) {
+        return function(sec) {
+            return numUnissued(sec, securities);
+        }
     }
     this.securitiesWithUnissuedUnits = function() {
-        return captable.securities.filter(secHasUnissued);
+        return captable.securities.filter(secHasUnissued(captable.securities));
     };
     this.securityUnissuedPercentage = function(sec, securities) {
         return 100 * (numUnissued(sec, securities) / totalOwnershipUnits());
