@@ -2400,14 +2400,21 @@ div.profile-link > span:first-of-type {
     color: #eb6f1c;
 }
 
+.docPrepRow .btn {
+    color: #FFFFFF;
+    background-color: #3498DB;
+}
+
 .docPrepRow:last-of-type {
     margin-bottom: 80px;
 }
 
 .docPrepRow.header {
-    line-height: 20px;
-    height: 20px;
     color: #33485d;
+}
+
+.docPrepRow.header [tooltip] {
+    vertical-align: -5%;
 }
 
 .docPrepRow > span {
@@ -2422,7 +2429,7 @@ div.profile-link > span:first-of-type {
 .docPrepRow > span:first-child > .status {
     width: 18px;
     display: inline-block;
-    vertical-align: -10%;
+    vertical-align: -5%;
 }
 
 .docPrepRow > span:first-child ~ span input {
