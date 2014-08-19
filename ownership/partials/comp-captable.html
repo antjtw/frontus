@@ -540,7 +540,7 @@
             </li>
         </ul>
     </div>
-    <div class="box-button pull-right"
+    <div ng-if="false" class="box-button pull-right"
          ng-click="revert()">
         <ul>
             <li>
@@ -551,7 +551,7 @@
             </li>
         </ul>
     </div>
-    <div class="box-button pull-right"
+    <div ng-show="editMode" class="box-button pull-right"
          ng-click="redo()">
         <ul>
             <li>
@@ -562,7 +562,7 @@
             </li>
         </ul>
     </div>
-    <div class="box-button pull-right"
+    <div ng-show="editMode" class="box-button pull-right"
          ng-click="undo()">
         <ul>
             <li>

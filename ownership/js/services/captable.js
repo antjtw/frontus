@@ -216,7 +216,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (calculate.isNumber(sec.attrs.totalauth)) {
             return sec.attrs.totalauth - securityTotalUnits(sec);
         } else {
-            return null;
+            return 0 - securityTotalUnits(sec);
         }
     }
     function selectedCellHistory() {
@@ -304,7 +304,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function sum_ledger(entries) {
         return entries.reduce(
                 function(prev, cur, index, arr) {
-                   return prev + (cur.credit - cur.debit); 
+                   return prev + (cur.credit - cur.debit);
                 }, 0);
     }
     function sum_transactions(trans) {
@@ -477,6 +477,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
     this.saveTransaction = saveTransaction;
+
     this.deleteTransaction = function(tran, cell) {
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
         .then(function(x) {
@@ -630,6 +631,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         tran.kind = kind;
         tran.company = $rootScope.navState.company;
         tran.insertion_date = new Date(Date.now());
+        tran.effective_date = new Date(Date.now());
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==sec && el.attrs.security_type;
@@ -787,7 +789,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             .filter(function(el) { return el.investor == inv; })
             .reduce(sumCellUnits, 0);
         var res = x / totalOwnershipUnits() * 100;
-        return res;
+        return res != Infinity ? res : 0;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
     function securityTotalUnits(sec) {

@@ -1,11 +1,21 @@
 <div class="capGuide top10">
+    <div class='rightTitle'>
+        <span>Date</span>
+        <input id="effective_date{{::data.$$hashKey}}"
+               ng-model="data.effective_date"
+               ui-event="{blur: 'saveItDate(data, selected, undo, $event, \'effective_date\')'}"
+               ng-change="saveItDate(data, selected, undo, $event, 'effective_date')"
+               data-date-format={{settings.lowercasedate}}
+               type="text"
+               bs-datepicker>
+    </div>
     <div ng-repeat="key in keys"
          class="rightTitle"
          ng-class="{double: inputType(key)!='text_field'}">
         <span ng-class="{'locked-security': key=='security_type'}">
             {{displayName(key)}}
         </span>
-        <input ng-if="useTextField(key)"
+        <input ng-if="useTextField(key) && !pickIssue(key)"
                id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, selected, undo)',
                           blur: 'saveIt(data, selected, undo)'}"
@@ -23,11 +33,25 @@
             </a>
             <ul class="dropdown-menu">
                 <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].input_type">
-                    <a ng-click="setIt(i)">
+                    <a ng-click="setIt(data, selected, undo, key, i)">
                         {{i}}
                     </a>
                 </li>
             </ul>
+        </ul>
+        <ul ng-if="pickIssue(key)">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle">
+                    {{data.attrs[key]}}
+                    <span class="invisible-drop">'</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="i in securities">
+                        <a ng-click="setIt(data, selected, undo, 'optundersec', i.name)">
+                            {{i.name}}
+                        </a>
+                    </li>
+                </ul>
         </ul>
         <span ng-if="description(key)"
               class="tooltip-icon"

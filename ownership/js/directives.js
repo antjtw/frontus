@@ -115,13 +115,13 @@ own.directive('editableCaptableCell', [function() {
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
                 $scope.saveIt = function(value) {
+                    captable.saveTransaction(
+                        $scope.data.transactions[0],
+                        $scope.data);
                 };
                 function updateAttr(key, val) {
                     if ($scope.data.transactions.length == 1) {
                         $scope.data.transactions[0].attrs[key] = val;
-                        captable.saveTransaction(
-                                $scope.data.transactions[0],
-                                $scope.data);
                     } else if ($scope.destination_transaction) {
                         // FIXME no straight update
                         // $scope.destination_transaction.attrs[key] = val;
@@ -132,14 +132,11 @@ own.directive('editableCaptableCell', [function() {
                 $scope.units = function(newval) {
                     if (angular.isDefined(newval)) {
                         if (!$scope.data) {
-                            console.log($scope.data);
-                            console.log($scope.selectedCell);
-                            console.log(captable.cellFor($scope.inv, $scope.sec));
-                            alert("ahhh");
-                        } else {
-                            $scope.data.u = newval;
-                            updateAttr('units', newval);
+                            $scope.data = $scope.selectedCell;
                         }
+                        $scope.data.u = newval;
+                        updateAttr('units', newval);
+
                     } else {
                         return ($scope.data ? $scope.data.u : null);
                     }
@@ -387,10 +384,12 @@ own.directive('editableTransactionAttributes', [function() {
                 undo: '=undo'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$scope", "$filter", "captable", "attributes",
-            function($scope, $filter, captable, attributes) {
+        controller: ["$scope", "$filter", "captable", "attributes", "calculate",
+            function($scope, $filter, captable, attributes, calculate) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
+                var ct = captable.getCapTable();
+                $scope.securities = ct.securities;
                 $scope.tran_attrs = 
                     attrs[$scope.data.attrs.security_type]
                          [$scope.data.kind];
@@ -429,6 +428,35 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
+                };
+                $scope.pickIssue = function(key) {
+                    return key == "optundersec"
+                };
+                $scope.setIt = function(tran, cell, errorFunc, k, v) {
+                    tran.attrs[k] = v;
+                    captable.saveTransaction(tran, cell, errorFunc);
+                };
+                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
+                    if (evt) {
+                        if (evt != 'blur')
+                            keyPressed = true;
+                        var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                            var date = Date.parse(dateString);
+                            if (date) {
+                                tran[field] = calculate.timezoneOffset(date);
+                                captable.saveTransaction(tran, cell, errorFunc);
+                                keyPressed = false;
+                            }
+                        }
+                    } else { // User is using calendar
+                        if (tran[field] instanceof Date) {
+                            tran[field] = calculate.timezoneOffset(tran[field]);
+                            captable.saveTransaction(tran, cell, errorFunc);
+                            keyPressed = false;
+                        }
+                    }
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     captable.saveTransaction(tran, cell, errorFunc);
