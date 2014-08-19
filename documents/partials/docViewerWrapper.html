@@ -119,11 +119,13 @@
                                 <span class="info" ng-if="navState.role == 'issuer'">
                                     <span ng-if="!doc.when_signature_provided">Signed by {{doc.name}}</span>
                                     <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
-                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                </span>
                                 <span class="info" ng-if="navState.role == 'investor'">
                                     <span ng-if="!doc.when_signature_provided">Signed</span>
                                     <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
-                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                </span>
                             </div>
                             <div class="inforow" ng-if="doc.when_shared && !doc.when_signed && navState.role == 'issuer' && doc.signature_flow > 0 && !doc.issue">
                                 <span class="activity-icon doc-upload-red-icon"></span>

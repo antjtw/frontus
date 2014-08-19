@@ -37,10 +37,11 @@
                 </div>
                 <div ng-repeat="doc in doc_arr">
                     <div class="docPrepRow header">
-                        <span data-icon="&#xe009;">{{doc.docname}}
+                        <span data-icon="&#xe009;">
+                            <span class="name">{{doc.docname}}</span>
                             <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" tooltip="Signature Requested"></span>
                             <span data-icon="&#xe60E;" ng-show="doc.issue" tooltip="Link to {{doc.issue}}"></span>
-                            <span data-icon="&#xe60E;" ng-show="doc.issue && !doc.validTransaction()" style="color: #E74C3C;" tooltip="Required Fields for Transacation are Missing"></span>
+                            <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" style="color: #E74C3C;" tooltip="Required Fields for Transaction are Missing"></span>
                         </span>
                         <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Add Annotations</a></span>
                         <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true">Edit Annotations</a></span>
@@ -49,11 +50,15 @@
                         </span>
                     </div>
                     <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
-                        <span>{{Investor.getDisplayText(email)}}</span>
+                        <span>
+                            <span ng-if="!doc.preparedFor[email].is_prepared" data-icon="&#xe612;"></span>
+                            <!-- TODO: add a flag if this user has already been sent this document -->
+                            <span class="name">{{Investor.getDisplayText(email)}}</span>
+                        </span>
                         <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
                             <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}'>
                                 <span ng-if="doc.preparedFor[email].is_prepared">Edit</span>
-                                <span ng-if="!doc.preparedFor[email].is_prepared">Prepare <span class="lower-icon" data-icon="&#xe016;"></span></span>
+                                <span ng-if="!doc.preparedFor[email].is_prepared">Complete Annotations <span class="lower-icon" data-icon="&#xe016;"></span></span>
                             </a>
                         </span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
@@ -75,7 +80,7 @@
             <internal-right-rail toggle-side="toggleSide">
                 <tabset>
                     <tab heading="Share Documents">
-                        <div class="shareForm">
+                        <div class="shareForm prepare-right">
                             <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message&hellip;"></textarea>
                             <div class="controls" my-loading-spinner="processing">
                                 <div class="standard-button pull-right">
