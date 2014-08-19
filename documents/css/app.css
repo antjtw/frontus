@@ -2396,6 +2396,10 @@ div.profile-link > span:first-of-type {
     line-height: 40px;
 }
 
+.docPrepRow .bad {
+    color: #eb6f1c;
+}
+
 .docPrepRow:last-of-type {
     margin-bottom: 80px;
 }
@@ -2409,6 +2413,16 @@ div.profile-link > span:first-of-type {
 .docPrepRow > span {
     display: inline-block;
     box-sizing: border-box;
+}
+
+.docPrepRow > span:first-child > span {
+    padding-left: 5px;
+}
+
+.docPrepRow > span:first-child > .status {
+    width: 18px;
+    display: inline-block;
+    vertical-align: -10%;
 }
 
 .docPrepRow > span:first-child ~ span input {
