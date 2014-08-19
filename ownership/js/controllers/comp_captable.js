@@ -147,6 +147,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             History.forget($scope, 'selectedSecurity');
         } else {
             History.forget($scope, 'selectedSecurity');
+            $scope.selectedSecurity = null;
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
                     return el.name == security_name;  

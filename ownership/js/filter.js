@@ -245,6 +245,18 @@ ownership.filter('attrsForEdit', function() {
     };
 });
 
+ownership.filter('selectablesecurities', function() {
+    return function(securities, key) {
+        var filtered_secs = [];
+        angular.forEach(securities, function(sec) {
+            if (sec.name != key) {
+                filtered_secs.push(sec);
+            }
+        });
+        return filtered_secs
+    }
+});
+
 ownership.filter('attributeInputTypes', function() {
     return function(tp) {
         // TODO generate from attributes service (db backed)

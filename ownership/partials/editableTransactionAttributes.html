@@ -46,7 +46,11 @@
                     <span class="invisible-drop">'</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li ng-repeat="i in securities">
+                    <li>
+                        <a ng-click="setIt(data, selected, undo, 'optundersec', '')">
+                        </a>
+                    </li>
+                    <li ng-repeat="i in securities | selectablesecurities:data.attrs['security']">
                         <a ng-click="setIt(data, selected, undo, 'optundersec', i.name)">
                             {{i.name}}
                         </a>
