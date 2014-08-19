@@ -107,7 +107,7 @@ mod.directive('composeMessage', function() {
                         if(recip === contact.namex){
                             for(i = 0; i < contact.details.length; i++){
                                 // cannot send message to the same person more than once, ie if person is in group and listed, they will only get the email one time.
-                                if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
+                                if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1 && contact.details[i] !== navState.userid){
                                     recipients.push(contact.details[i]);
                                 };
                                 

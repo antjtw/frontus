@@ -1,7 +1,6 @@
 <div class="row-fluid">
 <div class="message-side">
-<div class="messages tabbable"> 
-    <li ng-click="whichPage()">Testing button</li>           
+<div class="messages tabbable">          
     <ul class="activity-feed2">
         <li class="event roles">
             <div>
@@ -14,15 +13,15 @@
 
                             <div ng-if="!showStatus">
                                 <div class="select_role" ng-click="assignFilter('issuer')" ng-class="{'picked': filterParam.param=='issuer'}">
-                                    <div class="select_role tinycol">Inbox</div>
+                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage()">Inbox</div>
                                     <div class="select_role tinycol left">Number</div>
-                                    <div class="select_role tinycol">Drafts</div>
+                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('drafts')">Drafts</div>
                                     <div class="select_role tinycol left">Number</div>
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('sent')">Sent</div>
                                     <div class="select_role tinycol left">{{sent.length}}</div>
-                                    <div class="select_role tinycol">Trash</div>
+                                    <!-- <div class="select_role tinycol">Trash</div>
                                     <div class="select_role tinycol left">Number</div>
-
+ -->
                                 </div>
                             </div>
                         </div>          

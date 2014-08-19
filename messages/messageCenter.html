@@ -34,6 +34,7 @@
             <compose-message ng-if="page == 'compose'"></compose-message>
             <div ng-if="!page"> Inbox will go here</div>
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
+            <div ng-if="page =='drafts'">Drafts will go here</div>
             <!-- div class="span12" ng-if="!compose">
                 <table class="status-table people-table">
                     <tbody>
