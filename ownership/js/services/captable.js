@@ -958,7 +958,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return type == "Debt" || type == "Safe";
     };
     function updateEvidenceInDB(obj, action) {
-        debugger;
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
                           parseInt(obj.transaction, 10),
