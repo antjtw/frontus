@@ -58,6 +58,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         .then(function(results) {
             captable.ledger_entries = results[0];
             captable.transactions = results[1].map(parseTransaction);
+            for (s in captable.securities)
+            {
+                captable.securities[s].locked = secHasTran(captable.securities[s].name);
+            }
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
             generateSecuritySummaries();
@@ -70,6 +74,16 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }, logErrorPromise);
     }
     loadCapTable();
+    
+    function secHasTran(name)
+    {
+        for (t in captable.transactions)
+        {
+            if (captable.transactions[t].attrs.security == name && captable.transactions[t].kind != "issue security")
+                return true;
+        }
+        return false;
+    }
 
     function loadEvidence() {
         var promise = $q.defer();
@@ -619,10 +633,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (attr_obj) {
             angular.forEach(Object.keys(attr_obj),
                     function(el) { obj.attrs[el] = null; });
-        }
-        if (('physical' in attr_obj) && (obj.attrs.physical == null))
-        {
-            obj.attrs['physical'] = false;
+            if ((attr_obj.hasOwnProperty('physical')) && (obj.attrs.physical == null))
+            {
+                obj.attrs['physical'] = false;
+            }
         }
     }
 
@@ -690,6 +704,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         var tran = newTransaction(sec, kind, inv);
         captable.transactions.push(tran);
         updateCell(this.cellFor(inv, sec, true));
+        var security = captable.securities
+            .filter(function(el) { return el.name==sec; })[0];
+        security.locked = true;
         console.log(inv, sec, kind);
         return tran;
     };
@@ -704,6 +721,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         } else {
             var tran = newTransaction(sec, 'grant', inv);
             c.transactions.push(tran);
+            sec_obj.locked = true;
             captable.cells.push(c);
             return c;
         }
