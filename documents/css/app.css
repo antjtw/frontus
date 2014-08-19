@@ -2446,13 +2446,8 @@ div.profile-link > span:first-of-type {
 .docPrepRow > span:first-child:nth-last-child(3) ~ span {
     width: calc((100% - 4px) / 3);
 }
-/* 4 columns */
-.docPrepRow > span:first-child:nth-last-child(4),
-.docPrepRow > span:first-child:nth-last-child(4) ~ span {
-    width: calc((100% - 4px) / 4);
-}
 
-/* minimums for more than 4 columns */
+/* minimums for more than 3 columns */
 .docPrepRow > span:first-child {
     min-width: 261px; /* select2 wants to be this wide? */
 }
@@ -2460,6 +2455,10 @@ div.profile-link > span:first-of-type {
     min-width: 100px;
 }
 
+/* 4 columns */
+.docPrepRow > span:first-child:nth-last-child(4) ~ span {
+    width: calc((100% - 265px) / 3);
+}
 /* 5 columns */
 .docPrepRow > span:first-child:nth-last-child(5) ~ span {
     width: calc((100% - 265px) / 4);
