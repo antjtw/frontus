@@ -136,7 +136,7 @@ svg {
 }
 .spacing:first-of-type {
 	float: left;
-	width: calc(18% - 29px);
+	width: calc(15% - 25px);
 	height: 200px;
 }
 .spacing:nth-of-type(2) {
@@ -168,6 +168,7 @@ div.pull-right.standard-button.green {
 .row-fluid .span6 {
 	width: 25% !important;
 	margin-left: calc(13% - 49px) !important;
+	max-width: 259px;
 }
 .row-fluid .span6 h2{
 	width: 100% !important;
