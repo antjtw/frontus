@@ -14,7 +14,7 @@
                             <div ng-if="!showStatus">
                                 <div class="select_role" ng-click="assignFilter('issuer')" ng-class="{'picked': filterParam.param=='issuer'}">
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage()">Inbox</div>
-                                    <div class="select_role tinycol left">Number</div>
+                                    <div class="select_role tinycol left">{{inbox}}</div>
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('drafts')">Drafts</div>
                                     <div class="select_role tinycol left">Number</div>
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('sent')">Sent</div>

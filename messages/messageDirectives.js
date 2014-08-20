@@ -194,7 +194,8 @@ mod.directive('composeMessage', function() {
 mod.directive('messageFilter', function(){
     return {
         scope: {sent: "=", 
-                page: "="},
+                page: "=",
+                inbox: "@"},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -208,6 +209,12 @@ mod.directive('messageFilter', function(){
                 console.log("hellooo");
                 $scope.page="sent"
             }
+
+            $scope.messageLength = function(){
+                console.log($scope.inbox)
+                console.log("testtest")
+            }
+            $scope.messageLength()
 
 
         }]

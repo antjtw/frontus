@@ -102,7 +102,7 @@ app.config(function($routeProvider, $locationProvider){
             templateUrl: '/messages/messageCenter.html',
             controller: 'MsgCtrl'
         }).
-        when('app/company/messages/view', {
+        when('app/company/messages/:thread_id', {
             templateUrl: '/messages/viewMessage.html',
             controller: 'replyCtrl'
         }).

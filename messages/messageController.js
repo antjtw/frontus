@@ -21,8 +21,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
           
         }
 
-        $scope.gotoMessage = function(message){
-            var link = '/app/'
+
+
+        $scope.gotoMessage = function(){
+            var link = '/messages/viewMessage.html'
+            $location.url(link)
         }
 
         $scope.getSentMessages = function(){
@@ -68,6 +71,9 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 console.log(data)
                 $scope.messageThreads = data
+                console.log($scope.messageThreads)
+                $scope.threadLength = $scope.messageThreads.length
+                console.log($scope.threadLength)
                 angular.forEach($scope.messageThreads, function(thread){
                     var members = thread.members.replace("{", "")
                     var members2 = members.replace("}", "")
@@ -89,9 +95,10 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 
 app.controller('replyCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
     function($scope, $rootScope, SWBrijj, navState, $route, $location) {
-
+        
     }
 ]);
+
 
 
 

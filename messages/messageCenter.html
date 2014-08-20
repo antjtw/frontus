@@ -49,7 +49,7 @@
                     <tbody ng-repeat="messageThread in messageThreads">
                         <tr class="empty-row"></tr>
                         <tr class="forTooltip">
-                            <td style="width:550px" class="shareholder-column docname-column" ng-click="togglePage('reply'); getThread(messageThread)">
+                            <td style="width:550px" class="shareholder-column docname-column" ng-click="gotoMessage()">
                                 <div position="bottom"><span>{{messageThread.members}}</span></div>
                             </td>
                             <td><span>{{messageThread.subject}}</span></td>
@@ -66,7 +66,7 @@
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filters">
                     <div style="clear: both;">
-                        <message-filter sent="sentMsgs" page="page"></message-filter>
+                        <message-filter sent="sentMsgs" inbox="messageThreads" page="page"></message-filter>
                     </div>
                 </tab>
                 <tab heading = "Message Activity">
