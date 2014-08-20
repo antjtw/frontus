@@ -296,12 +296,6 @@ button.right-rail-button.showRightTab {
     border-top: none;
 }
 
-/* Chrome visual bug fix */
-
-.span4.capright, .span4.capright span, .span4.capright input {
-    -webkit-transform: translateZ(0);
-}
-
 internal-right-rail tabset {
     display: block;
 }
@@ -314,11 +308,18 @@ internal-right-rail .tab-content {
 }
 
 internal-right-rail #bottom-part {
-    border-top: 1px solid #C6C6C6;
-    background-color: #E3E3E3;
     position: absolute;
     bottom: 0;
     width: 100%;
+}
+
+internal-right-rail .btn {
+    font-size: 14px;
+}
+
+internal-right-rail .standard-button > button.btn span.lower-icon:before {
+    vertical-align: baseline;
+    vertical-align: -5%;
 }
 
 internal-right-rail .bottom-padded {

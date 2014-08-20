@@ -626,17 +626,56 @@ div.progress-bar {
 /* Select2 Styling */
 
 textarea.email-text {
-    width: 270px;
+    width: 296px;
 }
+.prepare-right {
+    padding: 20px;
+}
+
+.shareForm .standard-button .btn {
+    /* TODO: remove once MVP.css is updated to 14px; */
+    font-size: 14px;
+    width: 150px;
+}
+
 .shareForm {
     padding-top: 40px;
+    padding-bottom: 20px;
 }
 .shareForm .my-loading-spinner-container > div {
     left: 50%;
     height: 60px;
 }
 .shareForm > .sharepeople-input {
-    padding-bottom: 40px;
+    padding-bottom: 10px;
+}
+.shareForm .investor-name span[data-icon] {
+    color: #C7C7C7;
+}
+
+.shareForm ul.recipients span[data-icon].remove-icon {
+    cursor: pointer;
+    margin-left: 5px;
+}
+.shareForm ul.recipients > li {
+    margin-bottom: 6px;
+    color: rgb(30, 45, 61);
+}
+
+.shareForm ul.recipients > li .investor-name .investor-name-display {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 25px);
+}
+
+.shareForm ul.bad.recipients > li .investor-name .investor-name-display {
+    color: #E74C3C;
+}
+
+.shareForm > textarea {
+    margin-top: 20px;
 }
 .sharepeople-input .select2-container {
     width: 100%;
@@ -644,11 +683,22 @@ textarea.email-text {
 }
 .shareForm > .controls {
     padding-top: 20px;
+    overflow: auto;
 }
 .shareForm > .controls span {
     line-height: 32px;
     padding-right: 60px;
     color: #3498DB;
+}
+
+.shareForm > .controls .back.btn {
+    background-color: #8d8d8d;
+    width: auto;
+}
+
+.shareForm .standard-button .btn span[data-icon]:before {
+    vertical-align: baseline;
+    vertical-align: -10%;
 }
 
 /* doclist specific CSS for the captable style sliding right panel (sharebar) */
@@ -946,6 +996,17 @@ input[type='text']:disabled, textarea:disabled {
     margin: 1px 1px 1px 1px;
 }
 
+.evenWiderModal .documentUploadText {
+    text-align: left;
+    width: 450px;
+    padding: 0px 0px 0px 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.evenWiderModal .container {
+    padding: 15px 0px;
+}
+
 .modalText .documentUploadText {
     padding-top: 0px;
     margin: 1px 1px 1px 1px;
@@ -1039,6 +1100,22 @@ input[type='text']:disabled, textarea:disabled {
     left: 50px;
 }
 
+.evenWiderModal div.documentUpload.fakefile{
+    position: absolute;
+    top: 15px;
+    left: 50px;
+}
+
+input.file {
+    position: relative;
+    text-align: right;
+    opacity: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
 .twoPieceModal .documentUpload input.file {
     float: left;
     width: 135px;
@@ -1047,6 +1124,19 @@ input[type='text']:disabled, textarea:disabled {
 }
 
 .twoPieceModal div.modalText.documentUploadFileInputs {
+    display: inline-block;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+.evenWiderModal .documentUpload input.file {
+    float: left;
+    width: 135px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.evenWiderModal div.modalText.documentUploadFileInputs {
     display: inline-block;
     padding-left: 50px;
     padding-top: 20px;
@@ -1554,7 +1644,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .draggable.greenrequired div > textarea {
-    border: 1px solid #1ABC96;
+    border: 1px solid rgb(141, 141, 141);
 }
 
 .draggable.otherperson div > textarea {
@@ -1604,7 +1694,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky.greenrequired .dragger {
-    background-color: #1ABC96;
+    background-color: rgb(141, 141, 141);
 }
 
 .sticky.otherperson .dragger {
@@ -1739,7 +1829,9 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 .dropdown-required.select2-result > div.select2-result-label {
     color: #E74C3C;
 }
-
+.dropdown-required.select2-result > div.select2-result-label:after {
+    content: " (Required)";
+}
 
 div.textarea-container {
     line-height: 0;
@@ -1770,7 +1862,7 @@ div.imgsig > div {
 }
 
 div.imgsig > div:first-child {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 div.imgsig > div > img {
@@ -1792,7 +1884,7 @@ div.imgsig > div > img {
 }
 
 .scribblewindow {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 .scribblewindow > canvas {
@@ -1820,6 +1912,10 @@ div.imgsig > div > img {
 
 .standard-button.green.red-needed > button {
     background-color: #E74C3C;
+}
+
+annotation-list div.annotation-pages:first-child {
+    margin-top: 20px;
 }
 
 annotation-list div.annotation-pages:last-child {
@@ -1871,11 +1967,11 @@ annotation-list .annotmark.mine:hover, annotation-list .annotmark.mine.active {
 }
 
 annotation-list .annotmark.mine.complete {
-    color: #1ABC96;
+    color: rgb(141, 141, 141);
 }
 
 annotation-list .annotmark.mine.complete:hover, annotation-list .annotmark.mine.complete.active {
-    color: #15A085;
+    color: #666;
 }
 
 annotation-list .annotmark.mine.incomplete {
@@ -1886,9 +1982,16 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     color: #C44032;
 }
 
+annotation-list .annotmark > span {
+    float: right;
+    margin-right: 20px;
+    vertical-align: -10%;
+}
+
 help-tab > div {
-    margin-top: 20px;
-    margin-left: 20px;
+    margin: 0 20px 80px 20px;
+    border-top: 1px solid #C6C6C6;
+    padding-top: 20px;
 }
 
 help-tab > div > p {
@@ -1908,7 +2011,7 @@ help-tab > div > p > span {
 
 .docinfo .inforow {
     padding: 10px 0;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
 }
 
 .docinfo .inforow .info {
@@ -1947,13 +2050,35 @@ help-tab > div > p > span {
     vertical-align: top;
 }
 
+.docinfo .inforow .info input.file {
+    height: 32px;
+}
+
+.docinfo .inforow .info .fileInputContainer {
+    padding-top: 10px;
+    height: 30px;
+    width: 76px;
+}
+
+.docinfo .inforow .info .fileInputContainer .fakefile {
+    position: relative;
+    top: -32px;
+    left: 0px;
+}
+
+.standard-button .verydarkgray > button {
+    background-color: #C7C7C7;
+    width: 70px;
+    font-size: 14px;
+}
+
 .docinfo .docname {
     line-height: 24px;
     font-size: 20px;
     color: #1d2c3c;
     margin-top: 30px;
     padding-bottom: 30px;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
@@ -2006,7 +2131,7 @@ doc-transaction-details > div > div > span {
 }
 
 doc-transaction-details > div > div > button {
-    width: 68px;
+    width: 64px;
     height: 30px;
     background-color: #19bb95;
     border: none;
@@ -2030,8 +2155,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2039,8 +2167,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2048,8 +2179,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2057,8 +2191,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2069,7 +2206,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields.field-completed > span {
-    color: #19bc96;
+    color: rgb(141, 141, 141);
     -webkit-animation: completerequired 1s; /* Safari 4+ */
     -moz-animation:    completerequired 1s; /* Fx 5+ */
     -o-animation:      completerequired 1s; /* Opera 12+ */
@@ -2082,7 +2219,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields > span:first-of-type > span {
-    color: #19bc96;
+    color: rgb(141, 141, 141);
     vertical-align: -14%;
     font-size: 20px;
     -webkit-animation: completerequired 1s; /* Safari 4+ */
@@ -2095,15 +2232,28 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: #1d2c3c;
-    padding: 20px;
+    padding: 20px 0;
+    margin: 0 20px;
+    border-top: 1px solid #c6c6c6;
+}
+
+.fields-progress > div {
+    color: #1d2c3c;
+    margin-bottom: 10px;
 }
 
 .fields-progress > span {
-    color: #FFFFFF;
-    font-size: 14px;
-    margin-bottom: 5px;
-    font-family:'FS Elliot Web Light', sans-serif !important;
+    font-size: 12px;
+    margin-bottom: 0;
+    color: #666666;
+}
+
+.fields-progress .meter {
+    background-color: #e3e3e3;
+}
+
+.fields-progress .meter > span {
+    background-color: #1abc96;
 }
 
 
@@ -2116,7 +2266,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input, .greenrequired .select2-container .select2-choice, .greenrequired input  {
-    border-color: #1ABC96;
+    border-color: rgb(141, 141, 141);
 }
 
 /* Transaction Directive */
@@ -2237,4 +2387,156 @@ div.profile-link > span {
 
 div.profile-link > span:first-of-type {
     vertical-align: -16%;
+}
+
+/* Document Preparation Screen */
+
+.docPrepTop {
+    margin: 40px 0 60px 50px;
+}
+
+.docPrepTop h2 {
+    text-transform: uppercase;
+    line-height: 20px;
+    margin: 0;
+}
+
+.docPrepRow {
+    width: calc(100% - 80px);
+    margin: 0 auto 0 auto;
+    height: 40px;
+    line-height: 40px;
+    white-space: nowrap;
+}
+
+.docPrepRow .bad {
+    color: #eb6f1c;
+}
+
+.docPrepRow .good {
+    color: #1abc96;
+}
+
+.docPrepRow.header .btn {
+    color: #FFFFFF;
+    background-color: #3498DB;
+}
+
+.docPrepRow.header .btn.complete {
+    background-color: #c7c7c7;
+}
+
+.docPrepRow a.complete {
+    color: #8d8d8d;
+}
+
+.docPrepRow:last-of-type {
+    margin-bottom: 80px;
+}
+
+.docPrepRow.header {
+    color: #33485d;
+}
+
+.docPrepRow.header [tooltip] {
+    vertical-align: -5%;
+}
+
+.docPrepRow > span {
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.docPrepRow > span:first-child > span {
+    padding-left: 5px;
+}
+
+.docPrepRow > span:first-child > .status {
+    width: 18px;
+    display: inline-block;
+    vertical-align: -5%;
+}
+
+/* inputs */
+
+.docPrepRow > span:first-child ~ span input, .docPrepRow > span:first-child ~ span .select2-container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    vertical-align: top;
+    border-radius: 0;
+    border: 1px solid #fff;
+}
+
+.docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
+    border: 1px solid #666666;
+    background-color: #e3e3e3;
+}
+
+.docPrepRow .select2-container .select2-choice {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+    border-radius: 0;
+    border: 0;
+}
+
+.docPrepRow .select2-container .select2-choice .select2-arrow {
+    display: none;
+}
+
+/* span widths for tableish layout */
+
+/* 2 columns */
+.docPrepRow > span:first-child:nth-last-child(2),
+.docPrepRow > span:first-child:nth-last-child(2) ~ span {
+    width: calc((100% - 4px) / 2);
+}
+/* 3 columns */
+.docPrepRow > span:first-child:nth-last-child(3),
+.docPrepRow > span:first-child:nth-last-child(3) ~ span {
+    width: calc((100% - 4px) / 3);
+}
+
+/* minimums for more than 3 columns */
+.docPrepRow > span:first-child {
+    min-width: 261px; /* select2 wants to be this wide? */
+}
+.docPrepRow > span:first-child ~ span{
+    min-width: 150px;
+    width: 150px;
+}
+
+/* 4 columns */
+.docPrepRow > span:first-child:nth-last-child(4) ~ span {
+    width: calc((100% - 265px) / 3);
+}
+/* 5 columns */
+.docPrepRow > span:first-child:nth-last-child(5) ~ span {
+    width: calc((100% - 265px) / 4);
+}
+/* 6 columns */
+.docPrepRow > span:first-child:nth-last-child(6) ~ span {
+    width: calc((100% - 265px) / 5);
+}
+/* 7 columns */
+.docPrepRow > span:first-child:nth-last-child(7) ~ span {
+    width: calc((100% - 265px) / 6);
+}
+/* 8 columns */
+.docPrepRow > span:first-child:nth-last-child(8) ~ span {
+    width: calc((100% - 265px) / 7);
+}
+/* 9 columns */
+.docPrepRow > span:first-child:nth-last-child(9) ~ span {
+    width: calc((100% - 265px) / 8);
+}
+/* 10 columns */
+.docPrepRow > span:first-child:nth-last-child(10) ~ span {
+    width: calc((100% - 265px) / 9);
+}
+
+.docPrepRow a {
+    color: #3397da;
 }

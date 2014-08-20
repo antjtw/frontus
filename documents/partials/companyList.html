@@ -101,7 +101,7 @@
         <th colspan="2">Tags</th>
     </tr>
     </tbody>
-    <tbody document-summary-row doc="doc" view-state="state" modals="modals" doc-share-state="docShareState" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
+    <tbody document-summary-row doc="doc" view-state="state" modals="modals" ng-repeat="doc in documents | filter:searchFilter | orderBy:docOrder" class="animate">
     </tbody>
 </table>
 <table class="status-table" ng-show="investorDocs && viewBy==='name'" infinite-scroll="loaddocs()" infinite-scroll-distance="0" infinite-scroll-disabled="loadingDocs" infinite-scroll-container="scrollParent">
@@ -112,7 +112,7 @@
         <th></th>
     </tr>
     </tbody>
-    <tbody document-summary-row view-state="state" doc="investor" modals="modals" doc-share-state="docShareState" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder" class="animate">
+    <tbody document-summary-row view-state="state" doc="investor" modals="modals" ng-repeat="investor in investorDocs | filter:searchFilter | orderBy:investorOrder" class="animate">
     </tbody>
 </table>
 </div>
@@ -123,31 +123,63 @@
                 showSharebar:!state.hideSharebar,
                 slidingcss25:oldSafari()}" class="side-content span4 capright button-offset">
     <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
-    <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
+    <p>Select the documents to be shared on the left, and the recipients below by entering email addresses or selecting existing people.</p>
     <div class="shareForm">
-        <span>Recipients</span>
         <div class="sharepeople-input">
-            <input ui-select2="select2Options" ng-model="docShareState.emails">
+            <input ui-select2="sharingSelect2Options" ng-model="sharingemail" ng-change="addShareEmail(sharingemail); sharingemail = ''">
         </div>
-        <span>Message</span>
-        <textarea class="email-text" rows="4" cols="60" ng-model="messageText" ng-click="fakePlaceholder()"></textarea>
-        <div class="controls" my-loading-spinner="processing">
-            <div class="standard-button pull-right">
-                <button class="btn"
-                        ng-if="!companyIsZombie()"
-                        ng-click="shareDocuments(docShareState.doclist,
-                                   docShareState.emails, messageText)"
-                        ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
-                                      || !docsReadyToShare(docShareState.doclist)">
-                    Share Documents
-                </button>
-            </div>
-             <span class="pull-right pointer" ng-click="toggleSide(); saveShareState(true);">
-                 Cancel
-             </span>
-        </div>
+        <ul class="recipients">
+            <li ng-repeat="investor in ShareDocs.emails">
+                <span class="investor-name">
+                    <span class="investor-name-display">{{getInvestorDisplay(investor)}}</span>
+                    <a ng-click="removeShareEmail(investor)"><span data-icon="&#xe00f;" class="remove-icon"></span></a>
+                </span>
+            </li>
+        </ul>
+        <ul class="bad recipients" ng-show="badEmails.length > 0">
+            <li><p>Sorry, we couldn't understand the following email addresses. Please re-enter them.</p></li>
+            <li ng-repeat="email in badEmails">
+                <span class="investor-name">
+                    <span class="investor-name-display">{{email}}</span>
+                </span>
+            </li>
+        </ul>
+        <a class="standard-button"
+           href="/app/documents/prepare"
+           ng-disabled="companyIsZombie() || ShareDocs.emails.length === 0 || ShareDocs.documents.length === 0">
+            <button class="btn" ng-disabled="companyIsZombie() || ShareDocs.emails.length === 0 || ShareDocs.documents.length === 0">
+                Next <span data-icon="&#xe016;"></span>
+            </button>
+        </a>
     </div>
 </div>
+</div>
+
+<div modal="signedUploadModal" close="modals.signedUploadClose()" options="verywideopts">
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="modalText documentUploadFileInputs">
+                    <input multiple type="file" class='file'
+                        accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                        onchange="angular.element(this).scope().setFiles(this);"/>
+                    <div class="documentUpload fakefile">
+                        <div class="standard-button green">
+                            <button class="btn">Choose</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="span8">
+            <div class="modalText documentUploadText container">
+                <div class="modalText documentUploadText header">
+                    <span>UPLOAD SIGNED DOCUMENT</span>
+                </div>
+                <div class="modalText documentUploadText">
+                    <span>If your investor has signed offline and sent you a copy, upload it here. You'll be able to approve the final document after the upload.</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div modal="documentUploadModal" close="modals.documentUploadClose()" options="doubleopts">

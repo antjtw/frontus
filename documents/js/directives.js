@@ -70,37 +70,7 @@ app.directive('restrictContentEditable', function() {
     };
 });
 
-app.directive('contenteditable', function() {
-    return {
-        require: 'ngModel',
-        link: function(scope, elm, attrs, ctrl) {
-            // view -> model
-            var ff = function() {
-                scope.$apply(function() {
-                    ctrl.$setViewValue(elm.text());
-                });
-                scope.$emit('updated:name');
-            };
 
-            elm.on('blur', ff);
-            elm.bind("keydown keypress", function(event) {
-                if (event.which === 13) {
-                    // key = enter
-                    event.preventDefault();
-                    event.currentTarget.blur();
-                }
-            });
-
-            // model -> view
-            ctrl.$render = function() {
-                elm.text(ctrl.$viewValue);
-            };
-
-            // load init value from DOM
-            ctrl.$setViewValue(elm.text());
-        }
-    };
-});
 
 app.directive('documentSummaryRow', function() {
     // must be used in a tbody for valid html
@@ -109,8 +79,7 @@ app.directive('documentSummaryRow', function() {
         scope: {
             doc: '=',
             viewState: '=',
-            modals: '=',
-            docShareState: '='
+            modals: '='
         },
         templateUrl: '/documents/partials/documentSummaryRow.html',
         controller: DocumentSummaryRowController
@@ -133,16 +102,17 @@ app.directive('documentVersionRow', function() {
     };
 });
 
-app.directive('annotationList', ["User", function(User) {
+app.directive('annotationList', [function() {
     return {
         restrict: "E",
         scope: {
             doc: "=",
             active: "=",
+            prepareFor: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "navState", "Annotations", "Documents", "User",
-            function($scope, $element, navState, Annotations, Documents, User) {
+        controller: ["$scope", "$element", "navState", "Annotations", "Documents",
+            function($scope, $element, navState, Annotations, Documents) {
                 $scope.$watch("doc", function(doc) {
                     // we want a new page_visible array for every doc
                     $scope.page_visible = [];
@@ -153,7 +123,6 @@ app.directive('annotationList', ["User", function(User) {
                     return ret;
                 };
 
-                $scope.user = User;
                 $scope.navState = navState;
             }
         ],
@@ -185,6 +154,7 @@ app.directive('annotation', function() {
             doc: "=",
             removeannot: "&",
             sigModalUp: "&",
+            prepareFor: "=",
             active: "=",
         },
         replace: true,
@@ -293,7 +263,7 @@ app.directive('docTransactionDetails', function() {
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
         controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
-            var defaultSelectObj = {id: 0, text: "Prepare for signature only"};
+            var defaultSelectObj = {id: 0, text: "Prepare"};
             $scope.selectedIssue = defaultSelectObj;
             $scope.select2Options = {
                 data: [defaultSelectObj],

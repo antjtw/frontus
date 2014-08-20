@@ -13,15 +13,17 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         }
     };
 
-    $scope.myEmails = []
+    $scope.modals.uploadedSignedDocs = [];
+
+    $scope.myEmails = [];
     // this returns everyone you have ever emailed. yay
     $scope.getPeople = function(){
         SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-            $scope.emailList = data           
+            $scope.emailList = data;
             angular.forEach($scope.emailList, function(value, key){
                 $scope.myEmails.push(value['email']);
             });
-            return $scope.myEmails
+            return $scope.myEmails;
         });
         // $scope.myEmails = array
     };
@@ -35,14 +37,14 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         SWBrijj.tblmm('document.my_counterpart_document_library_view', 'original', version.original).then(function(data){
                 $scope.myLibrary = data
                 var alreadySent = []
-              
+
                 angular.forEach($scope.myLibrary, function(name){
                    alreadySent.push(name.investor)
                 });
                 if(alreadySent.indexOf(email[0]) > -1){
                      $scope.$emit('notification:fail', 'You have already shared this');
                      $route.reload();
-                    // $scope.buttondisabled = false;  
+                    // $scope.buttondisabled = false;
                 }
                 else{
                     $scope.reShare(version, email);
@@ -60,7 +62,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $rootScope.$emit('notification:fail', 'Something went wrong');
             // $scope.buttondisabled = false
         })
-      
+
     };
 
 
@@ -77,31 +79,26 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.shortVersionStatus = function(version) {
         if (!version) return "";
-        if ($scope.isVoided(version)) {
+        if ($scope.modals.uploadedSignedDocs.indexOf(version.doc_id) > -1) {
+            return "Uploading . . ."
+        } else if ($scope.isVoided(version)) {
             return "Voided"
-        }
-        else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred'){
+        } else if(version.sendgrid_event == 'dropped' || version.sendgrid_event =='bounce' || version.sendgrid_event =='deferred'){
             version.sendgrid_event ='bounce'
             return 'Bounced Share'
-        }
-        else if(version.sendgrid_event =='processed'){
+        } else if(version.sendgrid_event =='processed'){
             return 'doc processed'
-        }
-        else if ($scope.isPendingVoid(version)) {
+        } else if ($scope.isPendingVoid(version)) {
             return "Void requested by you"
-        }
-        else if (wasJustRejected(version) && lastEventByInvestor(version)) {
+        } else if (wasJustRejected(version) && lastEventByInvestor(version)) {
             return "Rejected by recipient";
-        } 
-        else if (wasJustRejected(version) &&
+        } else if (wasJustRejected(version) &&
                    !lastEventByInvestor(version)) {
             return "Rejected by you";
-        } 
-        else if ($scope.isPendingSignature(version)){
-                return "Sent for Signature";
-            
+        } else if ($scope.isPendingSignature(version)){
+            return "Sent for Signature";
         } else if ($scope.isPendingCountersignature(version)){
-                return "Review and Sign";                    
+            return "Review and Sign";
         } else if ($scope.isPendingInvestorFinalization(version)) {
             return "Signed and Sent for Approval";
         } else if ($scope.isPendingIssuerFinalization(version)) {
@@ -117,7 +114,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
         } else {
             return "Sent";
         }
-  
+
     };
 
     function lastEventByInvestor(doc) {
@@ -232,7 +229,7 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
             $scope.$emit("notification:fail", "Document unarchive failed.");
         });
     };
-    
+
     $scope.versionIsFinalized = function(version) {
             return basics.isCompleteSigned(version)
                 || basics.isCompleteVoided(version);
@@ -249,4 +246,3 @@ function DocumentVersionRowController($scope, $rootScope, SWBrijj, basics, $loca
     };
 
 }
-

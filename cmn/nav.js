@@ -151,15 +151,41 @@ navm.controller('NavCtrl',
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
-            if (newURL.indexOf(document.location.pathname)==-1) {
-                if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
-                    $rootScope.lastPage = "/app/documents/";
-                } else {
-                    $rootScope.lastPage = document.location.pathname;
-                    $rootScope.lastFullPage = document.location.href;
-                }
+            // TODO: store and retrieve pageHistory
+            if (!$rootScope.pageHistory) {
+                $rootScope.pageHistory = [];
+            }
+            if (document.location.pathname.indexOf("/register/") === -1 &&
+                document.location.pathname.indexOf("/login/") === -1) {
+                $rootScope.pageHistory.push({pathname: document.location.pathname, search: document.location.search, hash: document.location.hash});
             }
         });
+        $rootScope.leave = function(blacklist, default_url) {
+            if (blacklist == undefined) {
+                blacklist = ["-view"];
+            }
+            if (default_url == undefined) {
+                if (navState.role == "investor") {
+                    default_url = '/app/documents/investor-list';
+                } else {
+                    default_url = '/app/documents/company-list';
+                }
+            }
+            function leave(blacklist, default_url, history) {
+                if (!history || history.length === 0) {
+                    return $location.url(default_url);
+                }
+                url = history.pop();
+                if (blacklist.some(function(bad_pattern) {
+                    return url.pathname.indexOf(bad_pattern) !== -1;
+                })) {
+                    return leave(blacklist, default_url, history);
+                } else {
+                    return $location.url(url.pathname + url.search + url.hash);
+                }
+            }
+            return leave(blacklist, default_url, $rootScope.pageHistory);
+        };
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
@@ -657,7 +683,7 @@ navm.controller('NavCtrl',
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
                             if (rsp.discount) {
-                                $rootScope.billing.discount = 
+                                $rootScope.billing.discount =
                                     payments.format_discount(rsp.discount);
                             }
                             $rootScope.billing.current_card = rsp.cards.data[0];

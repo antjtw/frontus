@@ -5,7 +5,7 @@ var app = angular.module('HomeApp',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
         'homeDirectives', 'activityDirective', 'commonDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
-        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq']);
+        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -73,6 +73,11 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'DocumentViewWrapperController',
             reloadOnSearch: false
         }).
+        when('/app/documents/prepare', {
+            templateUrl: '/documents/partials/prepare.html',
+            controller: 'DocumentPrepareController',
+            reloadOnSearch: false
+        }).
         when('/app/documents/company-status', {
             templateUrl: '/documents/partials/companyStatus.html',
             controller: 'CompanyDocumentStatusController'
@@ -93,6 +98,11 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/modeling/convertible-notes', {
             templateUrl: '/modeling/pages/note.html',
             controller: 'noteController'
+        }).
+        when('/app/company/messages', {
+            templateUrl: '/messages/newMessage.html',
+            controller: 'MsgCtrl'
+
         }).
 
         otherwise({redirectTo:'/app/home/investor'});
@@ -203,7 +213,7 @@ app.controller('CompanyCtrl',
                     $scope.$emit("notification:success", "You have successfully changed your password.");
                 }
             }
-            
+
 			$scope.fullScreen = function() {
 				/*var elem = document.getElementById("vid");
 				if (elem.requestFullscreen) {
@@ -215,7 +225,7 @@ app.controller('CompanyCtrl',
 				} else if (elem.webkitRequestFullscreen) {
 				  elem.webkitRequestFullscreen();
 				}*/
-				
+
 				document.getElementById("vid-pic").style.visibility="hidden";
 			};
             $scope.getTokenInfo = function() {
@@ -1194,4 +1204,3 @@ function memoize( fn ) {
 function isArray(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
 }
-

@@ -520,7 +520,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         });
                         $scope.setLastLogins();
                         $scope.setGroups();
-                        // $scope.setGroups();
                         // $scope.resetFilter();
                     });
                     $scope.sort = 'name';
@@ -549,16 +548,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 angular.forEach($scope.people, function(person){
                     angular.forEach(groups, function(group){
                         if(group.email == person.email && group.groups !== null){
-                            // person.groups = JSON.parse(group.groups).sort().join(", ");
-                            console.log(JSON.parse(group.groups));
                             var gr = JSON.parse(group.groups);
                             var grSorted = gr.sort(function(a, b){
                                 if (a.toLowerCase() > b.toLowerCase()) return 1; 
                                  else if (a.toLowerCase() < b.toLowerCase()) return -1; 
                                 else return 0
                             });
-                            console.log(grSorted);
                             person.groups = grSorted.join(", ");
+                            console.log(person.groups)
                             person.groupsArray = JSON.parse(group.groups);
                         };
                     });

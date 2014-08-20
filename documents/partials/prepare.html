@@ -1,0 +1,113 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<script src="/cmn/spin.js"></script>
+<div class="container dynamic-page">
+    <subnav>
+        <div class="box-button pull-right"
+             ng-click="$root.leave(['-view', '/prepare']);"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span data-icon="&#xe602;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span>Exit</span>
+                </li>
+            </ul>
+        </div>
+        <div class="box-button pull-right"
+             ng-click="state.bulkPrep = !state.bulkPrep"
+             ng-class="{selected: state.bulkPrep}"
+             data-placement="bottom">
+            <ul>
+                <li>
+                    <span ng-show="!state.bulkPrep" data-icon="&#xe01f;" aria-hidden="true"></span>
+                    <span ng-show="state.bulkPrep" data-icon="&#xe01E;" aria-hidden="true"></span>
+                </li>
+                <li>
+                    <span ng-show="!state.bulkPrep">Bulk Prepare</span>
+                    <span ng-show="state.bulkPrep">Annotate</span>
+                </li>
+            </ul>
+        </div>
+    </subnav>
+    <div class="row-fluid">
+        <div class="leftTabWindow" ng-style="viewportheight">
+            <div class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" style="height: 100%;">
+                <div class="docPrepTop">
+                    <h2>Prepare Documents</h2>
+                    <span style="display: inline-block; width: 50%;">Select the blue button to add annotations, which will be applied to each recipients version. To add recipient-specific information, such as their name, leave those specific fields blank when annotating and then edit each recipients version to complete the fields.</span>
+                </div>
+                <div ng-repeat="doc in doc_arr">
+                    <div class="docPrepRow header">
+                        <span>
+                            <span data-icon="&#xe009;" class="status"></span>
+                            <span class="name">{{doc.docname}}</span>
+                            <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" tooltip="Signature Requested"></span>
+                            <span data-icon="&#xe60E;" ng-show="doc.issue" tooltip="Link to {{doc.issue}}"></span>
+                            <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
+                        </span>
+                        <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Add Annotations</a></span>
+                        <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right complete">Edit Annotations</a></span>
+                        <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
+                            {{annot.type_info.display}}
+                        </span>
+                    </div>
+                    <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
+                        <span>
+                            <span class="status">
+                                <span class="good" ng-if="doc.preparedFor[email].is_prepared" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
+                                <!-- TODO: add a flag if this user has already been sent this document -->
+                            </span>
+                            <span class="name">{{Investor.getName(email)}}</span>
+                        </span>
+                        <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
+                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}' class="pull-right" ng-class="{complete: doc.preparedFor[email].is_prepared}">
+                                <span ng-if="doc.preparedFor[email].is_prepared">Edit</span>
+                                <span ng-if="!doc.preparedFor[email].is_prepared">Complete Annotations <span class="lower-icon" data-icon="&#xe016;"></span></span>
+                            </a>
+                        </span>
+                        <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
+                              ng-class="{required: requiredField(annot) && !overrideFilled(annot, doc.preparedFor[email].overrides[annot.id])}">
+                            <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                            <input ng-if="annot.type_info.typename == 'date'"
+                                   type="text" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
+                                   placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                            <select ng-if="annot.type_info.typename == 'enum'" ui-select2
+                                    placeholder="{{annot.val}}" ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                                <option></option>
+                                <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <internal-right-rail toggle-side="toggleSide">
+                <tabset>
+                    <tab heading="Share Documents">
+                        <div class="shareForm prepare-right">
+                            <p>Once your documents are prepared, the green button below will email your recipients with a unique link to the documents on Sharewave.</p>
+                            <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Include an optional message&hellip;"></textarea>
+                            <div class="controls" my-loading-spinner="processing">
+                                <div class="standard-button pull-left">
+                                    <button class="back btn"
+                                            ng-click="$root.leave(['-view', '/prepare']);">
+                                        Back
+                                    </button>
+                                </div>
+                                <div class="standard-button pull-right">
+                                    <button class="btn"
+                                            ng-if="!companyIsZombie()"
+                                            ng-click="shareDocuments()"
+                                            ng-disabled="processing || !ShareDocs.docsReadyToShare()">
+                                        Share Documents
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                </tabset>
+            </internal-right-rail>
+        </div>
+    </div>
+</div>

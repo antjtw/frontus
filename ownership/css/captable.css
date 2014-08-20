@@ -2315,12 +2315,6 @@ span.tour-icon.issue-cog + .tooltip {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
-/* Chrome visual bug fix */
-
-.span4.capright, .span4.capright span, .span4.capright input {
-    -webkit-transform: translateZ(0);
-}
-
 .rightTabWindow > table.status-table.evidence > tbody > tr > td {
     text-align: left;
 }

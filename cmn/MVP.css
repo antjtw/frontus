@@ -1609,7 +1609,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 .activity-feed2 > div > li:first-child {
 	margin-top: 40px;
-}	
+}
 
 .activity-feed2 li.event {
     min-height: 50px;
@@ -1628,7 +1628,7 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
-    
+
 }
 
 .activity-feed2 li.event.roles > div:first-of-type{
@@ -1641,7 +1641,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 
-    
+
 
 .activity-icon {
     width: 30px;
@@ -1694,6 +1694,14 @@ ul.spaced-list > li:nth-child(odd) {
     background-position: 0 -30px;
 }
 
+.activity-icon.zoom-icon {
+    background-position: -60px -30px;
+}
+
+.activity-icon.people-icon {
+    background-position: -150px -30px;
+}
+
 .activity-icon.page-icon {
     background-position: -210px -30px;
 }
@@ -1720,6 +1728,9 @@ ul.spaced-list > li:nth-child(odd) {
 
 .activity-icon.doc-void-accept-icon {
     background-position: -60px -120px;
+}
+.activity-icon.doc-upload-red-icon {
+    background-position: -180px -90px;
 }
 
 
@@ -2075,7 +2086,7 @@ li.no-activity {
 }
 
 .link{
-   cursor: pointer; 
+   cursor: pointer;
 }
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:last-child:not(:first-child) {
@@ -3998,11 +4009,11 @@ button.icon-button:hover {
 }
 
 .select2-results .select2-highlighted {
-    background: #1ABC96;
+    background: #E3E3E3;
 }
 
 .select2-results .select2-highlighted .select2-result-label {
-    color: #fff;
+    color: #666666;
 }
 
 .select2-drop {
@@ -4063,9 +4074,9 @@ button.icon-button:hover {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
-.select2-container {
+/*.select2-container {
     height: 30px;
-}
+}*/
 
 .select2-container .select2-choice .select2-arrow {
     background-color: #FFFFFF;
@@ -4621,6 +4632,14 @@ div.upgradeWarning > span {
     cursor: pointer;
 }
 
+
+/*compose message css*/
+
+
+
+/*styling the editor*/
+
+
 /*Sidebar CSS */
 .sidebarHeader {
     display: block;
@@ -4638,8 +4657,6 @@ textarea.email-text {
 }
 
 .sidebarText {
-   /* padding: 10px 0 0 0;*/
-  /*  margin: 5px 0 20px 0;*/
     display: block;
     text-align: left;
 }
@@ -4662,18 +4679,10 @@ textarea.email-text {
     width: 130px;
     background-color: white;
     color: #2980B9;
+    font-size: 14px;
 }
 
 
-.preview-message {
-    text-align: left;
-    display: block;
-    font-family: 'FS Elliot Web Regular', sans-serif;
-    color: #2980B9;
-    padding-bottom: 10px;
-    cursor: pointer;
-    position: absolute;
-}
 
 .sidebarText span{
     font-size: 12px;
@@ -4718,17 +4727,7 @@ textarea.email-text {
     padding-left: 30px;
 }
 /*preview modal for email*/
-.modal.preview-modal {
-/*    text-align: center;*/
-/*    overflow-y: scroll;
-    overflow-x: scroll;*/
-    min-height: 400px;
-    max-height: 600px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    min-width: 600px;
-    left: 40%;
-}
+
 
 
 .capTab {
@@ -4787,7 +4786,7 @@ textarea.email-text {
 /*    position: relative;*/
 }
 
-/*//Message sidebar*/
+/*//Message status sidebar*/
 .message-side ul.activity-feed2 {
     width: 345px;
 }
@@ -4805,7 +4804,7 @@ textarea.email-text {
 }
 
 .messages .activity-feed2 span.recipients {
-    color: #8D8D8D;
+    color: #666;
     padding-left: 19px;
 
 }
@@ -4833,7 +4832,7 @@ textarea.email-text {
     padding-top: 12px;
 }
 
-.span4.capright.sidecontent{ 
+.span4.capright.sidecontent{
     padding-right: 0;
 }
 
@@ -4849,7 +4848,7 @@ textarea.email-text {
 
 .span4.capright.side{
     padding-right: 0px;
-} 
+}
 
 .scrollable-docs {
     max-height: 500px;
@@ -4869,30 +4868,31 @@ textarea.email-text {
 .recipients.details{
     font-size: 12px;
     padding-left: 1.5em;
-    padding-bottom: 1em; 
+    padding-bottom: 1em;
 }
 
 .messages .activity-feed2 span.recipients.blue-link{
     color: #3498DB;
-    cursor: pointer; 
+    cursor: pointer;
 }
-
 
 /*Filter sidebar*/
 
 .messages .activity-feed2 li.event.roles{
     margin-right: 0px;
+/*    margin-left: 0px;*/
+    padding-bottom: 12px;
 }
 .tinycol{
-    display: inline-block;
-    width: 40%;
-    padding-left: 20px;
-    margin-left: 10px;
+    padding-left: 30px;
+    float: left;
+    width: 60%;
 }
 
 .tinycol.left{
     text-align: right;
     padding-left: 10px;
+    width: 20%;
 }
 
 .group_button{
@@ -4926,7 +4926,7 @@ textarea.email-text {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
-    border: 1px dashed #C7C7C7; 
+    border: 1px dashed #C7C7C7;
     width: 200px;
     margin-left: 20px;
 }
@@ -4944,5 +4944,13 @@ textarea.email-text {
 .noGroups span:last-of-type{
     position: relative;
     top: 3px;
-} 
+}
 
+.standard-button > button.disabledButton{
+    background-color: #8CDDCA;
+    cursor: auto;
+}
+
+.lower-icon {
+    vertical-align: -10%;
+}
