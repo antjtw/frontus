@@ -68,47 +68,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.sideToggleName = "Hide";
     $('.tour-box').affix({});
 
-    // TODO get this in a service
-    // ownership.clean_company_access
-    // => then
-    // => $q.all([get_company_activity, user_tracker])
-    /*
-    SWBrijj.tblm("ownership.clean_company_access").then(function(data) {
-        Intercom('update', {company : {'captable_shares':data.length}});
-        $scope.userstatuses = data;
-        var userDict = {};
-
-        angular.forEach($scope.userstatuses, function(userStatus) {
-            userDict[userStatus.email] = {};
-            userDict[userStatus.email].name =
-                userStatus.name ? userStatus.name : userStatus.email;
-            userDict[userStatus.email].shown = false;
-            userDict[userStatus.email].level = userStatus.level;
-        });
-        SWBrijj.procm("ownership.get_company_activity")
-        .then(function(activities) {
-            SWBrijj.tblm("ownership.user_tracker")
-            .then(function(logins) {
-                angular.forEach($scope.userstatuses, function(person) {
-                    angular.forEach(activities, function(activity) {
-                        if (activity.email == person.email) {
-                            var act = activity.activity;
-                            var time = activity.event_time;
-                            userDict[person.email][act] = time;
-                        }
-                    });
-                    angular.forEach(logins, function (login) {
-                        if (login.email == person.email) {
-                            userDict[person.email].lastlogin =
-                                login.logintime;
-                        }
-                    });
-                });
-            }).except(logError);
-        }).except(logError);
-        $scope.userDict = userDict;
-    });
-    */
     $rootScope.$on('captable:initui', initUI);
     function initUI() {
         if (!$rootScope.companyIsZombie()) {
