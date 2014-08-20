@@ -108,12 +108,9 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 			
 			var myScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
-			console.log(data);
-			console.log(data[0]);
-			console.log(data[1]);
-			console.log(data[2]);
 			
-			console.log("boooo");
+			
+			
 			var arc = d3.svg.arc()
 			.innerRadius(radius-10)
 			.outerRadius(radius-30)
