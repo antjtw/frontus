@@ -156,7 +156,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                              };
     function parseTransaction(tran) {
         tran.attrs = JSON.parse(tran.attrs);
-        console.log(tran.kind);
         if (tran.kind in transactionParser) {
             transactionParser[tran.kind](tran);
         }
@@ -477,9 +476,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                     }
                 }
             }
+            tran.transaction = transaction;
             if (!found)
             {
-                tran.transaction = transaction;
                 tran.valid = validateTransaction(tran);
                 captable.transactions.push(tran);
             }
@@ -661,8 +660,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         initAttrs(tran, sec_obj.attrs.security_type, kind);
         tran.attrs.security = sec;
         tran.attrs.security_type = sec_obj.attrs.security_type;
-        tran.attrs.investor = inv;
-        // TODO should we be grabbing the next transaction id?
+        if (sec_obj.hasOwnProperty('investor'))
+        {
+            tran.attrs.investor = inv;
+        }
         return tran;
     }
     this.newTransaction = newTransaction;
@@ -1047,8 +1048,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 if (!attrs[transaction.attrs.security_type] || !attrs[transaction.attrs.security_type][transaction.kind] || !attrs[transaction.attrs.security_type][transaction.kind][att])
                 {
                     correct = false;
-                    console.log("Invalid attribute");
-                    console.log(att);
+                    //console.log("Invalid attribute");
+                    //console.log(att);
                     return correct;
                 }
                 switch(attrs[transaction.attrs.security_type][transaction.kind][att]["type"])

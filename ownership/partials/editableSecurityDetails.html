@@ -59,7 +59,7 @@
                             <span class="invisible-drop">'</span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li ng-repeat="(key, value) in attrs">
+                            <li ng-repeat="key in 'security_type' | attributeInputTypes">
                                 <a ng-click="setIt(tran, 'security_type', key, true)">
                                     {{key}}
                                 </a>
@@ -103,11 +103,6 @@
             </div>
             <editable-transaction-attributes ng-if="tran" data="tran">
             </editable-transaction-attributes>
-            <span class="blue-link delete-link"
-                  data-icon="&#xe00c;"
-                  ng-click="captable.deleteTransaction(tran, sec);">
-                Delete transaction
-            </span>
         </div>
         <div class="capTab" ng-switch-when="documents">
             <div ng-if="tran.evidence_data.length==0"
@@ -156,7 +151,7 @@
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="x in valid_actions()">
+                        <li ng-repeat="x in valid_actions(sec.attrs.security_type)">
                             <a ng-click="newTran.kind = x;">
                                 {{x}}
                             </a>
