@@ -691,6 +691,11 @@ textarea.email-text {
     color: #3498DB;
 }
 
+.shareForm > .controls .back.btn {
+    background-color: #8d8d8d;
+    width: auto;
+}
+
 .shareForm .standard-button .btn span[data-icon]:before {
     vertical-align: baseline;
     vertical-align: -10%;
@@ -2399,7 +2404,6 @@ div.profile-link > span:first-of-type {
 .docPrepRow {
     width: calc(100% - 80px);
     margin: 0 auto 0 auto;
-    border-bottom: 1px solid #E3E3E3;
     height: 40px;
     line-height: 40px;
     white-space: nowrap;
@@ -2409,9 +2413,21 @@ div.profile-link > span:first-of-type {
     color: #eb6f1c;
 }
 
-.docPrepRow .btn {
+.docPrepRow .good {
+    color: #1abc96;
+}
+
+.docPrepRow.header .btn {
     color: #FFFFFF;
     background-color: #3498DB;
+}
+
+.docPrepRow.header .btn.complete {
+    background-color: #c7c7c7;
+}
+
+.docPrepRow a.complete {
+    color: #8d8d8d;
 }
 
 .docPrepRow:last-of-type {
@@ -2449,12 +2465,13 @@ div.profile-link > span:first-of-type {
     height: 40px;
     vertical-align: top;
     border-radius: 0;
+    border: 1px solid #fff;
 }
 
-.docPrepRow .required > input, .docPrepRow .required > .select2-container {
-    border: 1px solid #E74C3C;
+.docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
+    border: 1px solid #666666;
+    background-color: #e3e3e3;
 }
-
 
 .docPrepRow .select2-container .select2-choice {
     box-sizing: border-box;
@@ -2462,7 +2479,7 @@ div.profile-link > span:first-of-type {
     height: 100%;
     padding-left: 0;
     border-radius: 0;
-    border-color: #e3e3e3;
+    border: 0;
 }
 
 .docPrepRow .select2-container .select2-choice .select2-arrow {

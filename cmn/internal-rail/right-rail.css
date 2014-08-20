@@ -318,7 +318,8 @@ internal-right-rail .btn {
 }
 
 internal-right-rail .standard-button > button.btn span.lower-icon:before {
-    vertical-align: text-top;
+    vertical-align: baseline;
+    vertical-align: -5%;
 }
 
 internal-right-rail .bottom-padded {
