@@ -9,7 +9,7 @@
 
         <div>
             <div class="message_elem">
-                <div class="message_headline">To</div>
+                <div class="message_headline">BCC</div>
                 <div class="message_input">
                     <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter an email address or group name" style="width: 100%;">
                         <option ng-repeat="myContact in myContacts" value="{{myContact.namex}}">{{myContact.namex}}</option>
@@ -17,6 +17,10 @@
                 </div>
             </div>
         <div>
+        <!-- <div>
+            <div>Create group message, where every message is reply all</div>
+        </div> -->
+
 
         <div class="message_elem">
             <div class="message_headline"> Subject</div>

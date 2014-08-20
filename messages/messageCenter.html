@@ -33,6 +33,7 @@
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <compose-message ng-if="page == 'compose'"></compose-message>
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
+            <reply-message ng-if="page == 'reply'"></reply-message>
             <div ng-if="page =='drafts'">Drafts will go here</div>
             <div ng-if="!page">
             <div class="span12">
@@ -47,7 +48,7 @@
                     <tbody ng-repeat="messageThread in messageThreads">
                         <tr class="empty-row"></tr>
                         <tr class="forTooltip">
-                            <td style="width:550px" class="shareholder-column docname-column">
+                            <td style="width:550px" class="shareholder-column docname-column" ng-click="togglePage('reply')">
                                 <div position="bottom"><span>{{messageThread.members}}</span></div>
                             </td>
                             <td><span>{{messageThread.subject}}</span></td>
@@ -60,7 +61,7 @@
 
         </div>
 
-        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight" ng-if="page !== 'reply'">
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filters">
                     <div style="clear: both;">
@@ -71,6 +72,15 @@
                     <div style="clear: both;">
                         <message-side></message-side>
                     </div>
+                </tab>
+                
+            </tabset>
+        </internal-right-rail>
+
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight" ng-if="page == 'reply'">
+            <tabset style="display:block;" ng-style="viewportheight">
+                <tab heading="Message status">
+                   
                 </tab>
                 
             </tabset>

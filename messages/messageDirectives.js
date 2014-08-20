@@ -130,7 +130,8 @@ mod.directive('composeMessage', function() {
                             JSON.stringify(recipients),
                             null,
                             msg.subject,
-                            newtext
+                            newtext,
+                            null
                 ).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
@@ -243,3 +244,24 @@ mod.directive('sentMessages', function(){
         }]
     };
 });
+
+mod.directive('replyMessage', function(){
+    return {
+        scope: false,
+        // replace: true,
+        // transclude: false,
+        restrict: 'E',
+        templateUrl: '/messages/partials/replyMessage.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+
+        function($scope, $rootScope, SWBrijj, $route) {
+
+           
+
+
+        }]
+    };
+});
+
+
+
