@@ -262,16 +262,39 @@ mod.directive('replyMessage', function(){
             }
             $scope.showThread()
 
-            $scope.showMessage = function(){
-                console.log($scope.message)
-            }
-
-           
-
+            
 
         }]
     };
 });
 
+mod.directive('threadInformation', function(){
+    return {
+        scope: {message: "="},
+        // replace: true,
+        // transclude: false,
+        restrict: 'E',
+        templateUrl: '/messages/partials/threadInformation.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+
+        function($scope, $rootScope, SWBrijj, $route) {
+
+            $scope.showMessage = function(){
+                console.log($scope.message)
+                console.log("i'm on the side")
+            }
+            $scope.showMessage()
+
+            // $scope.formatMessage = function(){
+            //     console.log($scope.message.time)
+            //     console.log(typeof $scope.message.time
+            //         )
+            //     console.log(typeof JSON.parse($scope.message.time))
+            // }
+            // $scope.formatMessage();
+
+        }]
+    };
+});
 
 

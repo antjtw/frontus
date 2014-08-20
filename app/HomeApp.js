@@ -101,8 +101,8 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/company/messages', {
             templateUrl: '/messages/messageCenter.html',
             controller: 'MsgCtrl'
-            
         }).
+
 
         otherwise({redirectTo:'/app/home/investor'});
 });

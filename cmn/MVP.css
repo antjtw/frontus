@@ -4951,3 +4951,22 @@ textarea.email-text {
     cursor: auto;
 }
 
+.sidebarInfo {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.sidebarInfo .infoBox .headline{
+    color: #003045;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    font-size: 20px;
+}
+
+.infoBox{
+    margin-top: 20px;
+    border-bottom: 1px solid #C7C7C7;
+    padding-bottom: 20px;
+}
+
+
