@@ -55,7 +55,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 loadRowNames(),
                 loadAttributes(),
                 loadEvidence(),
-                loadAccess(),
                 loadActivity(),
                 loadLogins()])
         .then(function(results) {
@@ -66,6 +65,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 captable.securities[s].locked = secHasTran(captable.securities[s].name);
             }
             captable.investors = results[2].map(rowFromName);
+            console.log(results[2]);
             captable.attributes = results[3];
             generateSecuritySummaries();
 
@@ -73,7 +73,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             attachEvidence(results[4]);
             generateCells();
 
-            linkUsers(captable.investors, results[5], results[6], results[7]);
+            linkUsers(captable.investors, results[5], results[6]);
 
             console.log(captable);
         }, logErrorPromise);
@@ -130,15 +130,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         .then(function(trans) {
             promise.resolve(trans);
         }).except(logErrorPromise);
-        return promise.promise;
-    }
-
-    function loadAccess() {
-        var promise = $q.defer();
-        SWBrijj.tblm('ownership.clean_company_access')
-            .then(function(access) {
-                promise.resolve(access);
-            }).except(logErrorPromise);
         return promise.promise;
     }
 
@@ -429,51 +420,23 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         });
     }
 
-    function linkUsers(investors, statuses, activities, logins) {
-        console.log(investors);
-        console.log(statuses);
-        console.log(activities);
-        console.log(logins);
-
-        // TODO reimplement this, need sharing to be working first as otherwise I have no emails to work with!
-        /*
-         SWBrijj.tblm("ownership.clean_company_access").then(function(data) {
-         Intercom('update', {company : {'captable_shares':data.length}});
-         $scope.userstatuses = data;
-         var userDict = {};
-
-         angular.forEach($scope.userstatuses, function(userStatus) {
-         userDict[userStatus.email] = {};
-         userDict[userStatus.email].name =
-         userStatus.name ? userStatus.name : userStatus.email;
-         userDict[userStatus.email].shown = false;
-         userDict[userStatus.email].level = userStatus.level;
-         });
-         SWBrijj.procm("ownership.get_company_activity")
-         .then(function(activities) {
-         SWBrijj.tblm("ownership.user_tracker")
-         .then(function(logins) {
-         angular.forEach($scope.userstatuses, function(person) {
-         angular.forEach(activities, function(activity) {
-         if (activity.email == person.email) {
-         var act = activity.activity;
-         var time = activity.event_time;
-         userDict[person.email][act] = time;
-         }
-         });
-         angular.forEach(logins, function (login) {
-         if (login.email == person.email) {
-         userDict[person.email].lastlogin =
-         login.logintime;
-         }
-         });
-         });
-         }).except(logError);
-         }).except(logError);
-         $scope.userDict = userDict;
-         });
-         */
+    function linkUsers(investors, activities, logins) {
+        angular.forEach(investors, function(investor) {
+            angular.forEach(activities, function(activity) {
+                if (activity.email == investor.email) {
+                    var act = activity.activity;
+                    var time = activity.event_time;
+                    investor[act] = time;
+                }
+            });
+            angular.forEach(logins, function (login) {
+                if (login.email == investor.email) {
+                    investor.lastlogin = login.logintime;
+                }
+            });
+        });
     }
+
     function investorSorting(inv) {
         if (inv === "") { return -100; } // keep new inv rows at bottom
         return investorOwnershipPercentage(inv);

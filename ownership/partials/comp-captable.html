@@ -3,7 +3,7 @@
 <link href="/lib/introjs/introjs.css" rel="stylesheet">
 <div class="maincontent">
 <div class="container dynamic-page">
-<div modal="capShare" close="close()" options="transferopts">
+<div modal="capShare" close="close()" options="ct.transferopts">
     <div class="modalHeader">
         <span>Share Cap Table</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
@@ -23,7 +23,7 @@
                     </tr>
                 </tbody>
                 <tbody class="scrollable-body">
-                    <tr ng-repeat="row in ct.investors | shareList track by $index">
+                    <tr ng-repeat="row in ct.investors track by $index">
                         <td>
                             <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </td>
@@ -667,7 +667,7 @@
                             Next
                         </span>
                     </span>
-                    <span ng-if="!row.email">
+                    <span ng-if="true">
                         <input class="name-row"
                                placeholder="Add Name"
                                style="width:140px;"
@@ -679,7 +679,7 @@
                                ng-paste="namePaste($event, row);"
                                onkeydown="testForEnter(event);">
                     </span>
-                    <span ng-if="row.email">
+                    <span ng-if="false">
                         <input class="name-row"
                                disabled
                                style="width:140px;"
@@ -881,32 +881,32 @@
                         </div>
                         <div ng-if="selectedInvestor.email"
                              class="summary-bar">
-                            <div ng-if="userDict[selectedInvestor.email].lastlogin"
+                            <div ng-if="selectedInvestor.lastlogin"
                                  class="belowTitle">
                                 <img src="/img/activity/login.png">
                                 <div>
                                     <span>
-                                        {{userDict[selectedInvestor.email].lastlogin | date:settings.shortdate}}
+                                        {{selectedInvestor.lastlogin | date:settings.shortdate}}
                                     </span>
                                     <span>Last Login</span>
                                 </div>
                             </div>
-                            <div ng-if="userDict[selectedInvestor.email].received"
+                            <div ng-if="selectedInvestor.received"
                                  class="belowTitle">
                                 <img src="/img/activity/received.png">
                                 <div>
                                     <span>
-                                        {{userDict[selectedInvestor.email].received | date:settings.shortdate}}
+                                        {{selectedInvestor.received | date:settings.shortdate}}
                                     </span>
                                     <span>Delivered</span>
                                 </div>
                             </div>
-                            <div ng-if="userDict[selectedInvestor.email].viewed"
+                            <div ng-if="selectedInvestor.viewed"
                                  class="belowTitle">
                                 <img src="/img/activity/view.png">
                                 <div>
                                     <span>
-                                        {{userDict[selectedInvestor.email].viewed | date:settings.shortdate}}
+                                        {{selectedInvestor.viewed | date:settings.shortdate}}
                                     </span>
                                     <span>Last Viewed</span>
                                 </div>
@@ -915,7 +915,7 @@
                                 <img src="/img/activity/permissions.png">
                                 <div>
                                     <span>
-                                        {{selectedInvestor.level}}
+                                        {{selectedInvestor.access_level}}
                                     </span>
                                     <span>Permissions</span>
                                 </div>

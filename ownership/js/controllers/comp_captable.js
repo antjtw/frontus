@@ -129,6 +129,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 .filter(function(el) {
                     return el.name == investor_name;
                 })[0];
+            console.log($scope.selectedInvestor);
             History.watch('selectedInvestor', $scope);
             displayInvestorDetails();
         }
