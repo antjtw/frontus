@@ -46,7 +46,7 @@
 								<div class="span6" ng-show="biggestIssue != 0">
 									<d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
 									<h2>{{graphdata[0].name}}</h2>
-									<h2>{{biggestIssue}} Shares</h2>
+									<h2>{{biggestIssue}} Issued</h2>
 									<h2 ng-show="biggestMoney != 0">${{biggestMoney}} Invested</h2>
 						
 									
@@ -54,13 +54,13 @@
 								<div class="span6" ng-show="biggerIssue != 0">
 									<d3expdonut class="exploded-donut" data='graphdata2'></d3expdonut>
 									<h2>{{graphdata2[0].name}}</h2>	
-									<h2>{{biggerIssue}} Shares</h2>
+									<h2>{{biggerIssue}} Issued</h2>
 									<h2 ng-show="biggerMoney != 0">${{biggerMoney}} Invested</h2>				
 								</div>
 								<div class="span6" ng-show="bigIssue != 0">
 									<d3expdonut class="exploded-donut" data='graphdata3'></d3expdonut>
 									<h2>{{graphdata3[0].name}}</h2>
-									<h2>{{bigIssue}} Shares</h2>
+									<h2>{{bigIssue}} Issued</h2>
 									<h2 ng-show="bigMoney != 0">${{bigMoney}} Invested</h2>
 								</div>
 								<div id="button-space" ng-show="bigIssue == 0"></div>
