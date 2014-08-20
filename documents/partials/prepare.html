@@ -20,10 +20,12 @@
              data-placement="bottom">
             <ul>
                 <li>
-                    <span data-icon="&#xe01f;" aria-hidden="true"></span>
+                    <span ng-show="!state.bulkPrep" data-icon="&#xe01f;" aria-hidden="true"></span>
+                    <span ng-show="state.bulkPrep" data-icon="&#xe01E;" aria-hidden="true"></span>
                 </li>
                 <li>
-                    <span>Bulk Prepare</span>
+                    <span ng-show="!state.bulkPrep">Bulk Prepare</span>
+                    <span ng-show="state.bulkPrep">Annotate</span>
                 </li>
             </ul>
         </div>
@@ -33,7 +35,7 @@
             <div class="span8 leftBlock" ng-class="{leftFullTableBlock: toggleSide, widthtransition25:oldSafari()}" style="height: 100%;">
                 <div class="docPrepTop">
                     <h2>Prepare Documents</h2>
-                    <span>Mark up documents and make changes for individual investors. When you're ready, add a message and we'll notify your investors what to do next.</span>
+                    <span style="display: inline-block; width: 50%;">Select the blue button to add annotations, which will be applied to each recipients version. To add recipient-specific information, such as their name, leave those specific fields blank when annotating and then edit each recipients version to complete the fields.</span>
                 </div>
                 <div ng-repeat="doc in doc_arr">
                     <div class="docPrepRow header">
@@ -84,7 +86,8 @@
                 <tabset>
                     <tab heading="Share Documents">
                         <div class="shareForm prepare-right">
-                            <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message&hellip;"></textarea>
+                            <p>Once your documents are prepared, the green button below will email your recipients with a unique link to the documents on Sharewave.</p>
+                            <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Include an optional message&hellip;"></textarea>
                             <div class="controls" my-loading-spinner="processing">
                                 <div class="standard-button pull-right">
                                     <button class="btn"
