@@ -386,7 +386,6 @@ own.directive('editableTransactionAttributes', [function() {
         restrict: 'E',
         replace: true,
         scope: {data: '=',
-                selected: '=selected',
                 undo: '=undo'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
