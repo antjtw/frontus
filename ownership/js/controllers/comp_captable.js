@@ -90,6 +90,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             History.forget($scope, 'selectedCell');
             $scope.selectedCell =
                 captable.cellFor(inv, sec, $scope.editMode);
+            if ($scope.selectedCell.units == null || $scope.selectedCell.amount == null) {
+                $scope.selectedCell.transactions[0].attrs.investor = $scope.selectedCell.investor;
+                console.log($scope.selectedCell);
+            }
             History.watch('selectedCell', $scope);
             displayCellDetails();
         }

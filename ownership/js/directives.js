@@ -313,12 +313,17 @@ own.directive('editableCellDetails', [function() {
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable",
             function($scope, $rootScope, attributes, captable) {
-                $scope.captable = captable;
-                var ct = captable.getCapTable();
+
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
-                captable.evidence_object = null;
-                $scope.windowToggle = false;
+                var ct = captable.getCapTable();
+
+                $scope.loaddirective = function() {
+                    $scope.captable = captable;
+                    captable.evidence_object = null;
+                    $scope.windowToggle = false;
+                };
+
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
@@ -329,12 +334,11 @@ own.directive('editableCellDetails', [function() {
                                          $scope.cell.investor);
                 };
                 $scope.nonactions = ["issue security", "grant", "purchase"];
+
                 $scope.addTransaction = function() {
                     var tran = captable.addTransaction($scope.cell.investor,
                                      $scope.cell.security, 'grant');
                     tran.active = true;
-                    // FIXME fails when this is the first transaction
-                    // of the cell
                 };
                 // TODO this has to do more. 
                 // OR, whatever is watching the transaction object
@@ -363,6 +367,11 @@ own.directive('editableCellDetails', [function() {
                     captable.saveTransaction(tran, true);
                     $scope.newTran = null;
                 };
+
+                $scope.loaddirective();
+                $scope.$watch('cell', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
