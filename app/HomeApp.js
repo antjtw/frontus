@@ -391,9 +391,11 @@ app.controller('CompanyCtrl',
                             	console.log(securityArray);
                             	console.log(moneyArray);
                             	console.log("hiiiiiii");
-                            	
+                            $scope.bigIssue=0;	
+                            $scope.biggerIssue=0;
+                            $scope.biggestIssue=0;
                             var numCounter=0;
-                            while (numCounter<3) {
+                            while (numCounter<3 && securityArray.length>0) {
                             	var maxIssue=-1;
                             	var maxIndex=-1;
 								for (i=0;i<securityArray.length;i++) {
@@ -415,6 +417,8 @@ app.controller('CompanyCtrl',
 								}
 								if (numCounter==1) {
 									$scope.biggerIssue=securityArray[maxIndex];
+									console.log("helloooo");
+									console.log($scope.biggerIssue);
 									securityArray.splice(maxIndex, 1);
 									$scope.biggerMoney=moneyArray[maxIndex];
 									moneyArray.splice(maxIndex,1);

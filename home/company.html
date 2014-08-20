@@ -41,7 +41,9 @@
 						</div>
 						<div ng-show="ownersummary && ownersummary.peoplenum != 0">
 							<div class="detail-row row-fluid">
-								<div class="span6">
+								<div ng-show="bigIssue == 0" class="spacing"></div>
+								<div ng-show="biggerIssue == 0" class="spacing"></div>
+								<div class="span6" ng-show="biggestIssue != 0">
 									<d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
 									<h2>{{graphdata[0].name}}</h2>
 									<h2>{{biggestIssue}} Shares</h2>
@@ -49,19 +51,19 @@
 						
 									
 								</div>
-								<div class="span6">
+								<div class="span6" ng-show="biggerIssue != 0">
 									<d3expdonut class="exploded-donut" data='graphdata2'></d3expdonut>
 									<h2>{{graphdata2[0].name}}</h2>	
 									<h2>{{biggerIssue}} Shares</h2>
 									<h2 ng-show="biggerMoney != 0">${{biggerMoney}} Invested</h2>				
 								</div>
-								<div class="span6">
+								<div class="span6" ng-show="bigIssue != 0">
 									<d3expdonut class="exploded-donut" data='graphdata3'></d3expdonut>
 									<h2>{{graphdata3[0].name}}</h2>
 									<h2>{{bigIssue}} Shares</h2>
 									<h2 ng-show="bigMoney != 0">${{bigMoney}} Invested</h2>
-									
 								</div>
+								<div id="button-space" ng-show="bigIssue == 0"></div>
 								<div class="standard-button green" id="own-button">
 									<button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View<span data-icon="&#xe016;"></span></button>
 								</div>
