@@ -510,17 +510,20 @@ app.controller('CompanyCtrl',
 									$scope.graphdata.push({'name':maxName, 'percent':maxPercent});
 									$scope.graphdata.push({'name':'whatever', 'percent':100-maxPercent});
 									$scope.graphdata.push({'name':'zero', 'percent': 0});
+									console.log($scope.graphdata[2]);
 								}
 								if (counter==1) {
 									bigSecurity = maxName;
 									$scope.graphdata2.push({'name':maxName, 'percent':maxPercent});
 									$scope.graphdata2.push({'name':'whatever', 'percent':100-maxPercent});
 									$scope.graphdata2.push($scope.graphdata[0]);
+									console.log($scope.graphdata2[2]);
 								}
 								if (counter==2) {
 									$scope.graphdata3.push({'name':maxName, 'percent':maxPercent});
 									$scope.graphdata3.push({'name':'whatever', 'percent':100-maxPercent});
 									$scope.graphdata3.push({'name':'something', 'percent': $scope.graphdata[0].percent+$scope.graphdata2[0].percent});
+									console.log($scope.graphdata3[2]);
 								}
 								counter++;
 							}
