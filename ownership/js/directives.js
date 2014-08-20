@@ -359,6 +359,10 @@ own.directive('editableCellDetails', [function() {
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
                 };
+                $scope.submitAction = function(tran) {
+                    captable.saveTransaction(tran, true);
+                    $scope.newTran = null;
+                };
             }
         ],
     };
@@ -386,7 +390,8 @@ own.directive('editableTransactionAttributes', [function() {
         restrict: 'E',
         replace: true,
         scope: {data: '=',
-                undo: '=undo'},
+                undo: '=undo',
+                save: '=save'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
         controller: ["$scope", "$filter", "captable", "attributes", "calculate",
@@ -443,7 +448,10 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     tran.attrs[k] = v;
-                    captable.saveTransaction(tran, cell, errorFunc);
+                    if ($scope.save)
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
                 };
                 $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
                     if (evt) {
@@ -455,20 +463,29 @@ own.directive('editableTransactionAttributes', [function() {
                             var date = Date.parse(dateString);
                             if (date) {
                                 tran[field] = calculate.timezoneOffset(date);
-                                captable.saveTransaction(tran, cell, errorFunc);
+                                if ($scope.save)
+                                {
+                                    captable.saveTransaction(tran, cell, errorFunc);
+                                }
                                 keyPressed = false;
                             }
                         }
                     } else { // User is using calendar
                         if (tran[field] instanceof Date) {
                             tran[field] = calculate.timezoneOffset(tran[field]);
-                            captable.saveTransaction(tran, cell, errorFunc);
+                            if ($scope.save)
+                            {
+                                captable.saveTransaction(tran, cell, errorFunc);
+                            }
                             keyPressed = false;
                         }
                     }
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
-                    captable.saveTransaction(tran, cell, errorFunc);
+                    if ($scope.save)
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
                 };
 
                 $scope.loaddirective();

@@ -87,7 +87,7 @@
                 -->
             </div>
         </div>
-        <editable-transaction-attributes data="tran" undo="undo">
+        <editable-transaction-attributes data="tran" undo="undo" save="true">
         </editable-transaction-attributes>
         <span class="blue-link delete-link"
               data-icon="&#xe00c;"
@@ -154,8 +154,13 @@
             </ul>
             <span>Random span<br>to make space<br>for the dropdown.</span>
             <div ng-if="newTran">
-                <editable-transaction-attributes data="newTran">
+                <editable-transaction-attributes data="newTran" save="false">
                 </editable-transaction-attributes>
+            </div>
+            <div class="standard-button">
+                <button class="btn" ng-click="submitAction(newTran);">
+                    Submit
+                </button>
             </div>
         </div>
     </div>
