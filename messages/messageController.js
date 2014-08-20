@@ -3,26 +3,8 @@
 app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
     function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
-        $scope.createInbox = function(){
-            SWBrijj.tblm('mail.my_company_outbox', ['tox', 'message', 'subject', 'id']).then(function(data){
-                $scope.sentMessages = data;
-
-            })
-        };
-        $scope.createInbox();
 
 
-        $scope.compose = false;
-        $scope.toggleMain = function(){
-            if($scope.compose == true){
-                $scope.compose = false;
-                console.log($scope.compose);
-            }
-            else{
-                $scope.compose = true
-                console.log($scope.compose)
-            };
-        };
 
 
         $scope.page = null
@@ -81,6 +63,22 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             });
         };
         $scope.getSentMessages();
+
+        $scope.getMessageThreads = function(){
+            SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members']).then(function(data){
+                console.log(data)
+                $scope.messageThreads = data
+                angular.forEach($scope.messageThreads, function(thread){
+                    console.log(typeof thread.members)
+                    var members = thread.members.replace("{", "")
+                    var members2 = members.replace("}", "")
+                    var members3 = members2.replace(",", ", ")
+                    console.log(members3)
+                    thread.members = members3
+                })
+            })
+        }
+        $scope.getMessageThreads();
         
 
 

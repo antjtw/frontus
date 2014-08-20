@@ -107,7 +107,7 @@ mod.directive('composeMessage', function() {
                         if(recip === contact.namex){
                             for(i = 0; i < contact.details.length; i++){
                                 // cannot send message to the same person more than once, ie if person is in group and listed, they will only get the email one time.
-                                if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1 && contact.details[i] !== navState.userid){
+                                if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
                                 };
                                 
@@ -117,28 +117,6 @@ mod.directive('composeMessage', function() {
                 })
                 return recipients
             }
-
-            // SWBrijj.procm('mail.send_message',
-                //             JSON.stringify(recipients),
-                //             null
-                //             msg.subject,
-                //             newtext
-                //             navState.userid
-                // ).then(function(x) {
-                //     void(x);
-                //     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-                //     $rootScope.$emit("notification:success",
-                //         "Message sent!");
-                //     //this works but i don't know why for the root scope
-                //     $rootScope.$emit('new:message');
-                //     $scope.resetMessage();
-                //     $scope.clicked = false;
-                // }).except(function(err) {
-                //     void(err);
-                //     $rootScope.$emit("notification:fail",
-                //         "Oops, something went wrong.");
-                //     $scope.clicked = false;
-                // });
 
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
