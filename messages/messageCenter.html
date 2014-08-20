@@ -48,7 +48,7 @@
                     <tbody ng-repeat="messageThread in messageThreads">
                         <tr class="empty-row"></tr>
                         <tr class="forTooltip">
-                            <td style="width:550px" class="shareholder-column docname-column" ng-click="togglePage('reply'); getThread(messageThread.thread_id)">
+                            <td style="width:550px" class="shareholder-column docname-column" ng-click="togglePage('reply'); getThread(messageThread)">
                                 <div position="bottom"><span>{{messageThread.members}}</span></div>
                             </td>
                             <td><span>{{messageThread.subject}}</span></td>
@@ -79,8 +79,15 @@
 
         <internal-right-rail toggle-side="hideRail" ng-style="viewportheight" ng-if="page == 'reply'">
             <tabset style="display:block;" ng-style="viewportheight">
-                <tab heading="Message status">
-                   
+                <tab heading="Information">
+                    <div style="clear:both;">
+                        <thread-information></thread-information>
+                    </div>
+                </tab>
+                <tab heading="People">
+                    <div style="clear:both;">
+                        
+                    </div>
                 </tab>
                 
             </tabset>
