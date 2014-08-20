@@ -703,7 +703,7 @@
                         inv='row.name'
                         data="captable.cellFor(row.name, key.name)"
                         select-cell="selectCell"
-                        selected-cell="selectedCell">
+                        selected-cell="selectedCell"></editable-captable-cell>
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -754,7 +754,7 @@
                     ng-repeat="key in ct.securities
                 | orderBy:['effective_date', 'insertion_date']">
                     <captable-cell inv='row.name' sec='key.name'
-                        data='captable.cellFor(row.name, key.name)'>
+                        data='captable.cellFor(row.name, key.name)'></captable-cell>
                 </td>
             </tr>
             </tbody>
@@ -854,20 +854,20 @@
                      ng-switch on="sideBar">
                     <span ng-switch-when="1">
                         <editable-security-details
-                            sec="selectedSecurity">
+                            sec="selectedSecurity"></editable-security-details>
                     </span>
                     <span ng-switch-when="2">
                         <editable-cell-details
                                    cell="selectedCell"
                                    currenttab="currentTab"
-                                   undo="undo">
+                                   undo="undo"></editable-cell-details>
                     </span>
                     <span ng-switch-when="5">
-                        <security-details sec="selectedSecurity">
+                        <security-details sec="selectedSecurity"></security-details>
                     </span>
                     <span ng-switch-when="4">
                         <cell-details cell="selectedCell"
-                                      currenttab="currentTab">
+                                      currenttab="currentTab"></cell-details>
                     </span>
                     <span class="capGuide in-brief"
                           ng-switch-when="3">
