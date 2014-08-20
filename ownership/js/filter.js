@@ -257,14 +257,30 @@ ownership.filter('selectablesecurities', function() {
     }
 });
 
-ownership.filter('attributeInputTypes', function() {
+ownership.filter('validActions', ['attributes', function(attributes) {
+    return function(sec_type) {
+        // TODO generate from attributes service (db backed)
+        var attrs = attributes.getAttrs();
+        var nonActions = ['issue security', 'grant', 'purchase'];
+        var ret = [];
+        for (a in attrs[sec_type])
+        {
+            if (nonActions.indexOf(a) == -1)
+            {
+                ret.push(a);
+            }
+        }
+        return ret;
+    };
+}]);
+
+ownership.filter('attributeInputTypes', ['attributes', function(attributes) {
     return function(tp) {
         // TODO generate from attributes service (db backed)
+        var attrs = attributes.getAttrs();
         switch(tp) {
             case "security_type":
-                return ["Warrant", "Option", "Safe",
-                        "Equity Preferred", "Equity Common", "Debt",
-                        "Convertible Debt"];
+                return Object.keys(attrs);
             case "kind": // this is "transaction_type"
                 return ["purchase", "forfeit", "transfer", "convert",
                         "grant", "exercise"];
@@ -285,7 +301,7 @@ ownership.filter('attributeInputTypes', function() {
                 return "text_field";
         }
     };
-});
+}]);
 ownership.filter('attributeDbTypes', function() {
     return function(tp, labels) {
         if (labels)

@@ -87,7 +87,7 @@
                 -->
             </div>
         </div>
-        <editable-transaction-attributes data="tran" selected="cell" undo="undo">
+        <editable-transaction-attributes data="tran" undo="undo">
         </editable-transaction-attributes>
         <span class="blue-link delete-link"
               data-icon="&#xe00c;"
@@ -144,7 +144,7 @@
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="x in validActions()">
+                        <li ng-repeat="x in tran.attrs.security_type | validActions">
                             <a ng-click="makeNewTran(x)">
                                 {{x}}
                             </a>
@@ -152,25 +152,10 @@
                     </ul>
                 </li>
             </ul>
-            <div ng-if="newTran"
-                 ng-switch on="newTran.kind">
-                <div ng-switch-when="split">
-                </div>
-                <div ng-switch-when="convert">
-                </div>
-                <div ng-switch-when="transfer">
-                </div>
-                <div ng-switch-when="exercise">
-                </div>
-                <div ng-switch-default>
-                    <editable-transaction-attributes data="newTran">
-                    </editable-transaction-attributes>
-                </div>
-            </div>
-            <div class="standard-button small-standard-button">
-                <button class="btn">
-                    Submit
-                </button>
+            <span>Random span<br>to make space<br>for the dropdown.</span>
+            <div ng-if="newTran">
+                <editable-transaction-attributes data="newTran">
+                </editable-transaction-attributes>
             </div>
         </div>
     </div>

@@ -1,9 +1,9 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
          "SWBrijj", "calculate", "switchval", "navState", "captable",
-         "displayCopy", "History", "attributes",
+         "displayCopy", "History",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, switchval, navState, captable, displayCopy, History, attributes)
+         calculate, switchval, navState, captable, displayCopy, History)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -35,8 +35,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.liquidpref = ['None', '1X', '2X', '3X'];
     $scope.extraPeople = [];
     function logError(err) { console.log(err); }
-    
-    $scope.attrs = attributes.getAttrs();
 
     $scope.selectedCell = null;
     $scope.selectedInvestor = null;
@@ -168,16 +166,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     $scope.showPari = function(list) {
         return list.length > 0;
-    };
-    
-    $scope.getSecTypes = function() {
-        var types = [];
-        for (var t in $scope.attrs())
-        {
-            types.push(t);
-        }
-        console.log(types);
-        return types;
     };
 
     // Preformatting on the date to factor in the local timezone offset

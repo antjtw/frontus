@@ -220,8 +220,7 @@ own.directive('editableSecurityDetails', [function() {
     return {
         restrict: 'E',
         scope: {
-            sec: '=',
-            attrs: '=attrs'
+            sec: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable",
@@ -329,9 +328,7 @@ own.directive('editableCellDetails', [function() {
                                          kind,
                                          $scope.cell.investor);
                 };
-                $scope.validActions = function() {
-                    return ["exercise", "forfeit", "transfer"];
-                };
+                $scope.nonactions = ["issue security", "grant", "purchase"];
                 $scope.addTransaction = function() {
                     var tran = captable.addTransaction($scope.cell.investor,
                                      $scope.cell.security, 'grant');
@@ -389,7 +386,6 @@ own.directive('editableTransactionAttributes', [function() {
         restrict: 'E',
         replace: true,
         scope: {data: '=',
-                selected: '=selected',
                 undo: '=undo'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
