@@ -536,12 +536,6 @@ app.controller('CompanyDocumentListController',
                     });
             };
 
-            //Email
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-            //My parentheses format
-            var regExp = /\(([^)]+)\)/;
-
             // TODO: all of these modals should be separate directives
 
             $scope.modals.updateTitleOpen = function(doc) {
@@ -880,6 +874,10 @@ app.controller('CompanyDocumentListController',
                     });
                 });
             }
+
+            //Email
+            var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
             $scope.sharingSelect2Options = {
                 data: function() {
                     return {
@@ -889,19 +887,38 @@ app.controller('CompanyDocumentListController',
                 placeholder: 'Add Recipients',
                 createSearchChoice: function(text) {
                     // if text was a legit user, would already be in the list, so don't check Investor service
-                    if (re.test(text)) {
+                    if (text.indexOf(',') != -1) {
+                        // comma separated list detected. We don't even care anymore, just validate in $scope.addShareEmail
+                        return {id: text, text: "multiple emails"};
+                    }
+                    if (emailRegExp.test(text)) {
                         return {id: text, text: text};
                     } else {
                         return false;
                     }
                 },
             };
-            $scope.addShareEmail = function(email) {
+            $scope.badEmails = [];
+            $scope.addShareEmail = function(email_input) {
                 // this gets triggered multiple times with multiple types when the data changes
-                if (typeof(email) === "string") {
-                    ShareDocs.addEmail(email);
+                if (typeof(email_input) === "string") {
+                    email_input.split(',').forEach(function(email) {
+                        email = email.trim();
+                        if (email.length < 3) {
+                            // can't be an email, probably gibberish
+                            return;
+                        }
+                        if (emailRegExp.test(email)) {
+                            ShareDocs.addEmail(email);
+                        } else {
+                            // doesn't look like an email, warn the user
+                            if ($scope.badEmails.indexOf(email) === -1) {
+                                $scope.badEmails.push(email);
+                            }
+                        }
+                    });
                 }
-            }
+            };
             $scope.removeShareEmail = function(email) {
                 ShareDocs.removeEmail(email);
             };

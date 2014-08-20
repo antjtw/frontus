@@ -649,9 +649,10 @@ textarea.email-text {
 .shareForm > .sharepeople-input {
     padding-bottom: 10px;
 }
-.shareForm span[data-icon] {
+.shareForm .investor-name span[data-icon] {
     color: #C7C7C7;
 }
+
 .shareForm ul.recipients span[data-icon].remove-icon {
     cursor: pointer;
     margin-left: 5px;
@@ -666,16 +667,11 @@ textarea.email-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 260px;
+    width: calc(100% - 25px);
 }
 
-.shareForm ul.recipients > ul > li {
-    margin-bottom: 3px;
-}
-
-.shareForm ul.doc-list > li > a {
-    cursor: pointer;
-    display: inline-block;
+.shareForm ul.bad.recipients > li .investor-name .investor-name-display {
+    color: #E74C3C;
 }
 
 .shareForm > textarea {
@@ -693,6 +689,11 @@ textarea.email-text {
     line-height: 32px;
     padding-right: 60px;
     color: #3498DB;
+}
+
+.shareForm .standard-button .btn span[data-icon]:before {
+    vertical-align: baseline;
+    vertical-align: -10%;
 }
 
 /* doclist specific CSS for the captable style sliding right panel (sharebar) */
