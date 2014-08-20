@@ -47,21 +47,21 @@
                             <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
                         </span>
                         <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Add Annotations</a></span>
-                        <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Edit Annotations</a></span>
+                        <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right complete">Edit Annotations</a></span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
                             {{annot.type_info.display}}
                         </span>
                     </div>
                     <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
                         <span>
-                            <span class="bad status">
-                                <span ng-if="!doc.preparedFor[email].is_prepared" data-icon="&#xe612;" tooltip-placement="right" tooltip="Some required fields are still empty for this person"></span>
+                            <span class="status">
+                                <span class="good" ng-if="doc.preparedFor[email].is_prepared" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
                                 <!-- TODO: add a flag if this user has already been sent this document -->
                             </span>
                             <span class="name">{{Investor.getName(email)}}</span>
                         </span>
                         <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
-                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}' class="pull-right">
+                            <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}' class="pull-right" ng-class="{complete: doc.preparedFor[email].is_prepared}">
                                 <span ng-if="doc.preparedFor[email].is_prepared">Edit</span>
                                 <span ng-if="!doc.preparedFor[email].is_prepared">Complete Annotations <span class="lower-icon" data-icon="&#xe016;"></span></span>
                             </a>
@@ -89,6 +89,12 @@
                             <p>Once your documents are prepared, the green button below will email your recipients with a unique link to the documents on Sharewave.</p>
                             <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Include an optional message&hellip;"></textarea>
                             <div class="controls" my-loading-spinner="processing">
+                                <div class="standard-button pull-left">
+                                    <button class="back btn"
+                                            ng-click="$root.leave(['-view', '/prepare']);">
+                                        Back
+                                    </button>
+                                </div>
                                 <div class="standard-button pull-right">
                                     <button class="btn"
                                             ng-if="!companyIsZombie()"
