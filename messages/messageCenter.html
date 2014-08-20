@@ -33,7 +33,7 @@
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <compose-message ng-if="page == 'compose'"></compose-message>
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
-            <reply-message ng-if="page == 'reply'"></reply-message>
+            <reply-message ng-if="page == 'reply'" thread="myThread"></reply-message>
             <div ng-if="page =='drafts'">Drafts will go here</div>
             <div ng-if="!page">
             <div class="span12">
@@ -48,7 +48,7 @@
                     <tbody ng-repeat="messageThread in messageThreads">
                         <tr class="empty-row"></tr>
                         <tr class="forTooltip">
-                            <td style="width:550px" class="shareholder-column docname-column" ng-click="togglePage('reply')">
+                            <td style="width:550px" class="shareholder-column docname-column" ng-click="togglePage('reply'); getThread(messageThread.thread_id)">
                                 <div position="bottom"><span>{{messageThread.members}}</span></div>
                             </td>
                             <td><span>{{messageThread.subject}}</span></td>

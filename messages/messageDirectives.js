@@ -247,7 +247,7 @@ mod.directive('sentMessages', function(){
 
 mod.directive('replyMessage', function(){
     return {
-        scope: false,
+        scope: {thread: "="},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -255,6 +255,16 @@ mod.directive('replyMessage', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
 
         function($scope, $rootScope, SWBrijj, $route) {
+
+            $scope.showThread = function(){
+                console.log($scope.thread)
+                console.log("hehh")
+            }
+            $scope.showThread()
+
+            $scope.showMessage = function(){
+                console.log($scope.message)
+            }
 
            
 

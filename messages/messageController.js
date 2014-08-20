@@ -77,6 +77,12 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             })
         }
         $scope.getMessageThreads();
+
+        $scope.getThread = function(elem){  
+            $scope.myThread = elem
+            console.log(elem)
+
+        }
         
 
 
