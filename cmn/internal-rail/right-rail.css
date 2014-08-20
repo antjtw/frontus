@@ -313,8 +313,12 @@ internal-right-rail #bottom-part {
     width: 100%;
 }
 
-internal-right-rail #bottom-part.preparescreen {
-    bottom: 60px;
+internal-right-rail .btn {
+    font-size: 14px;
+}
+
+internal-right-rail .standard-button > button.btn span.lower-icon:before {
+    vertical-align: text-top;
 }
 
 internal-right-rail .bottom-padded {
