@@ -225,15 +225,19 @@ own.directive('editableSecurityDetails', [function() {
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable",
             function($scope, displayCopy, captable) {
-                $scope.captable = captable;
-                $scope.tips = displayCopy.captabletips;
-                $scope.displayAttr = captable.displayAttr;
-                $scope.currentTab = 'details';
-                $scope.actions = ["split", "grant", "exercise"];
-                $scope.switchCapTab = function(tab) {
-                    $scope.currentTab = tab;
+
+                $scope.loaddirective = function() {
+                    $scope.captable = captable;
+                    $scope.tips = displayCopy.captabletips;
+                    $scope.displayAttr = captable.displayAttr;
+                    $scope.currentTab = 'details';
+                    $scope.actions = ["split", "grant", "exercise"];
+                    $scope.switchCapTab = function(tab) {
+                        $scope.currentTab = tab;
+                    };
+                    $scope.ct = captable.getCapTable();
                 };
-                $scope.ct = captable.getCapTable();
+
                 $scope.addTransaction = function() {
                     var tran = captable.addTransaction(null, $scope.sec.name, 'split');
                     tran.active = true;
@@ -264,17 +268,11 @@ own.directive('editableSecurityDetails', [function() {
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     captable.saveTransaction(tran, cell, errorFunc);
                 };
-                $scope.nonactions = ["issue security", "grant", "purchase"];
-                $scope.valid_actions = function(type) {
-                    var actions = [];
-                    for (a in $scope.attrs[type])
-                    {
-                        if ($scope.nonactions.indexOf(a) == -1)
-                            actions.push(a);
-                    }
-                    console.log(actions);
-                    return actions;
-                }
+
+                $scope.loaddirective();
+                $scope.$watch('sec', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
@@ -396,11 +394,15 @@ own.directive('editableTransactionAttributes', [function() {
             function($scope, $filter, captable, attributes, calculate) {
                 var attrs = attributes.getAttrs();
                 $scope.attrs = attrs;
-                var ct = captable.getCapTable();
-                $scope.securities = ct.securities;
-                $scope.tran_attrs = 
-                    attrs[$scope.data.attrs.security_type]
-                         [$scope.data.kind];
+                $scope.loaddirective = function() {
+                    var ct = captable.getCapTable();
+                    $scope.securities = ct.securities;
+                    $scope.tran_attrs =
+                        attrs[$scope.data.attrs.security_type]
+                            [$scope.data.kind];
+                    $scope.keys = filterSortKeys($scope.tran_attrs);
+                };
+
                 function filterSortKeys(attrs) {
                     var filtered = $filter('attrsForEdit')(attrs);
                     var sorted = Object.keys(filtered)
@@ -410,7 +412,7 @@ own.directive('editableTransactionAttributes', [function() {
                             });
                     return sorted;
                 }
-                $scope.keys = filterSortKeys($scope.tran_attrs);
+
                 function key_display_info(key) {
                     //console.log("bug for some values, use below to debug");
                     //console.log($scope.data.attrs.security_type);
@@ -469,6 +471,11 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     captable.saveTransaction(tran, cell, errorFunc);
                 };
+
+                $scope.loaddirective();
+                $scope.$watch('data', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };

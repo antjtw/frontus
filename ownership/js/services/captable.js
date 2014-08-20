@@ -54,7 +54,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 loadTransactionLog(),
                 loadRowNames(),
                 loadAttributes(),
-                loadEvidence()])
+                loadEvidence(),
+                loadAccess(),
+                loadActivity(),
+                loadLogins()])
         .then(function(results) {
             captable.ledger_entries = results[0];
             captable.transactions = results[1].map(parseTransaction);
@@ -69,6 +72,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             handleTransactions(captable.transactions);
             attachEvidence(results[4]);
             generateCells();
+
+            linkUsers(captable.investors, results[5], results[6], results[7]);
 
             console.log(captable);
         }, logErrorPromise);
@@ -127,6 +132,34 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }).except(logErrorPromise);
         return promise.promise;
     }
+
+    function loadAccess() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.clean_company_access')
+            .then(function(access) {
+                promise.resolve(access);
+            }).except(logErrorPromise);
+        return promise.promise;
+    }
+
+    function loadActivity() {
+        var promise = $q.defer();
+        SWBrijj.procm('ownership.get_company_activity')
+            .then(function(activity) {
+                promise.resolve(activity);
+            }).except(logErrorPromise);
+        return promise.promise;
+    }
+
+    function loadLogins() {
+        var promise = $q.defer();
+        SWBrijj.tblm('ownership.user_tracker')
+            .then(function(logins) {
+                promise.resolve(logins);
+            }).except(logErrorPromise);
+        return promise.promise;
+    }
+
     // TODO refactor to use attributes service
     function loadAttributes() {
         var promise = $q.defer();
@@ -393,6 +426,52 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 return investorSorting(inv.name);
             };
         });
+    }
+
+    function linkUsers(investors, statuses, activities, logins) {
+        console.log(investors);
+        console.log(statuses);
+        console.log(activities);
+        console.log(logins);
+
+        // TODO reimplement this, need sharing to be working first as otherwise I have no emails to work with!
+        /*
+         SWBrijj.tblm("ownership.clean_company_access").then(function(data) {
+         Intercom('update', {company : {'captable_shares':data.length}});
+         $scope.userstatuses = data;
+         var userDict = {};
+
+         angular.forEach($scope.userstatuses, function(userStatus) {
+         userDict[userStatus.email] = {};
+         userDict[userStatus.email].name =
+         userStatus.name ? userStatus.name : userStatus.email;
+         userDict[userStatus.email].shown = false;
+         userDict[userStatus.email].level = userStatus.level;
+         });
+         SWBrijj.procm("ownership.get_company_activity")
+         .then(function(activities) {
+         SWBrijj.tblm("ownership.user_tracker")
+         .then(function(logins) {
+         angular.forEach($scope.userstatuses, function(person) {
+         angular.forEach(activities, function(activity) {
+         if (activity.email == person.email) {
+         var act = activity.activity;
+         var time = activity.event_time;
+         userDict[person.email][act] = time;
+         }
+         });
+         angular.forEach(logins, function (login) {
+         if (login.email == person.email) {
+         userDict[person.email].lastlogin =
+         login.logintime;
+         }
+         });
+         });
+         }).except(logError);
+         }).except(logError);
+         $scope.userDict = userDict;
+         });
+         */
     }
     function investorSorting(inv) {
         if (inv === "") { return -100; } // keep new inv rows at bottom
@@ -959,7 +1038,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return type == "Debt" || type == "Safe";
     };
     function updateEvidenceInDB(obj, action) {
-        debugger;
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
                           parseInt(obj.transaction, 10),
