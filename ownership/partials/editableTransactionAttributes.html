@@ -25,7 +25,7 @@
                ui-event="{blur: 'saveIt(data, true, undo)'}"
                type="text"
                bs-datepicker>
-        <ul ng-if="useDropdown(key)">
+        <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
             <li class="dropdown standard">
             <a class="dropdown-toggle">
                 {{data.attrs[key]}}
@@ -39,7 +39,7 @@
                 </li>
             </ul>
         </ul>
-        <ul ng-if="pickIssue(key)">
+        <ul class="dropdown-list drop-selector" ng-if="pickIssue(key)">
             <li class="dropdown standard">
                 <a class="dropdown-toggle">
                     {{data.attrs[key]}}
