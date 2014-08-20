@@ -674,9 +674,7 @@
                                ng-model="row.name"
                                ng-change="nameChangeLR(row)"
                                ui-event="{focus: 'selectInvestor(row.name)',
-                                           blur: 'updateRow(row)'}"
-                               onpaste="return false"
-                               ng-paste="namePaste($event, row);"
+                                           blur: 'updateInvestor(row)'}"
                                onkeydown="testForEnter(event);">
                     </span>
                     <span ng-if="false">
@@ -718,6 +716,8 @@
                            class="name-row"
                            style="width: 140px;"
                            ui-event="{blur: 'addInvestor(new_inv)'}"
+                           onpaste="return false"
+                           ng-paste="namePaste($event, row);"
                            ng-model="$parent.new_inv">
                 </td>
                 <td ng-repeat="key in ct.securities" class="capsums-col">

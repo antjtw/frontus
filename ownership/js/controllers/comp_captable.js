@@ -127,10 +127,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 .filter(function(el) {
                     return el.name == investor_name;
                 })[0];
-            console.log($scope.selectedInvestor);
             History.watch('selectedInvestor', $scope);
             displayInvestorDetails();
         }
+    };
+    $scope.updateInvestor = function(investor) {
+        // TODO Changing investor name needs implementing here
+        console.log("update investor");
+        console.log(investor);
     };
     $scope.addSecurity = function(new_sec) {
         captable.addSecurity(new_sec);
@@ -1067,27 +1071,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     */
 
     $scope.namePaste = function(ev, row) {
-        alert('refactor namePaste');
-        /*
         var pastednames = ev.originalEvent.clipboardData.getData('text/plain');
         var splitnames = pastednames.split("\n");
-        var startindex = $scope.ct.investors.indexOf(row);
         var number = splitnames.length;
         for (var i = 0; i < number; i++) {
-            if (!$scope.ct.investors[startindex]) {
-                captable.addRow()
-                    .editable = "yes";
-            }
-            if ($scope.ct.investors[startindex].editable == "0") {
-                $scope.ct.investors[startindex].editable = "yes";
-            }
-            $scope.ct.investors[startindex].name = splitnames[i];
-            $scope.updateRow($scope.ct.investors[startindex]);
-            startindex += 1;
+            var name = splitnames[i];
+            captable.addInvestor(name);
         }
-        captable.addRow();
         return false;
-        */
     };
 
     $scope.numberPaste = function(ev, row, key, type) {
