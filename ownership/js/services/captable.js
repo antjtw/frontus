@@ -65,7 +65,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 captable.securities[s].locked = secHasTran(captable.securities[s].name);
             }
             captable.investors = results[2].map(rowFromName);
-            console.log(results[2]);
             captable.attributes = results[3];
             generateSecuritySummaries();
 
@@ -74,8 +73,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             generateCells();
 
             linkUsers(captable.investors, results[5], results[6]);
-
-            console.log(captable);
+            sortSecurities(captable.securities);
+            sortInvestors(captable.investors);
         }, logErrorPromise);
     }
     loadCapTable();
@@ -444,6 +443,36 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 }
             });
         });
+    }
+
+    function sortSecurities(securities) {
+        return securities.sort(securitySort)
+    }
+
+    function sortInvestors(investors) {
+        return investors.sort(percentageSort)
+    }
+
+    function securitySort(a,b) {
+        if (a.effective_date < b.effective_date)
+            return -1;
+        if (a.effective_date > b.effective_date)
+            return 1;
+        if (a.effective_date = b.effective_date) {
+            if (a.insertion_date < b.insertion_date)
+                return -1;
+            if (a.insertion_date > b.insertion_date)
+                return 1;
+        }
+        return 0;
+    }
+
+    function percentageSort(a,b) {
+        if (a.percentage() > b.percentage())
+            return -1;
+        if (a.percentage() < b.percentage())
+            return 1;
+        return 0;
     }
 
     function investorSorting(inv) {

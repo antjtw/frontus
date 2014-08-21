@@ -596,8 +596,7 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="sec in ct.securities
-                  | orderBy:['effective_date', 'insertion_date']"
+                <th ng-repeat="sec in ct.securities"
                     ng-click="selectSecurity(sec.name)">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
@@ -623,8 +622,7 @@
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
-                    ng-repeat="sec in ct.securities
-                    | orderBy:['effective_date', 'insertion_date']"
+                    ng-repeat="sec in ct.securities"
                     ng-click="selectSecurity(sec.name)">
                     <span>{{::sec.name}}</span>
                     <span class="next-button"
@@ -638,8 +636,7 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']">
+                <td ng-repeat="one in ct.securities">
                     <span>{{securityUnitLabel(one.name)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -648,7 +645,7 @@
             </tr>
             <!-- Editable investors -->
             <tbody ng-if="editMode;">
-            <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true"
+            <tr ng-repeat="row in ct.investors"
                 ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col">
                     <input class="input-right"
@@ -685,8 +682,7 @@
                                ng-model="row.name">
                     </span>
                 </td>
-                <td ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']"
+                <td ng-repeat="key in ct.securities"
                     ng-class="{tranSelected: selectedCell
                         && selectedCell.investor == row.name
                         && selectedCell.security == key.name}">
@@ -729,7 +725,7 @@
             <!-- Un-editable view -->
             <!-- Regular Rows -->
             <tbody ng-if="!editMode">
-            <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true">
+            <tr ng-repeat="row in ct.investors">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
@@ -751,8 +747,7 @@
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
                                hoverable: captable.cellFor(row.name, key.name).a
                                           || captable.cellFor(row.name, key.name).u}"
-                    ng-repeat="key in ct.securities
-                | orderBy:['effective_date', 'insertion_date']">
+                    ng-repeat="key in ct.securities">
                     <captable-cell inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
                 </td>
@@ -776,8 +771,7 @@
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.securities
-                  | orderBy:['effective_date', 'insertion_date']">
+                    ng-repeat="key in ct.securities">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
@@ -799,8 +793,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']">
+                    ng-repeat="one in ct.securities">
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -820,8 +813,7 @@
                 <td class="tableFields">
                 </td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities
-                | orderBy:['effective_date', 'insertion_date']">
+                    ng-repeat="one in ct.securities">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">

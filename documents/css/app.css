@@ -626,8 +626,18 @@ div.progress-bar {
 /* Select2 Styling */
 
 textarea.email-text {
-    width: 270px;
+    width: 296px;
 }
+.prepare-right {
+    padding: 20px;
+}
+
+.shareForm .standard-button .btn {
+    /* TODO: remove once MVP.css is updated to 14px; */
+    font-size: 14px;
+    width: 150px;
+}
+
 .shareForm {
     padding-top: 40px;
     padding-bottom: 20px;
@@ -639,9 +649,10 @@ textarea.email-text {
 .shareForm > .sharepeople-input {
     padding-bottom: 10px;
 }
-.shareForm span[data-icon] {
+.shareForm .investor-name span[data-icon] {
     color: #C7C7C7;
 }
+
 .shareForm ul.recipients span[data-icon].remove-icon {
     cursor: pointer;
     margin-left: 5px;
@@ -651,58 +662,18 @@ textarea.email-text {
     color: rgb(30, 45, 61);
 }
 
-.shareForm ul.recipients > li .incomplete-name {
-    color: #e74c3c;
-}
-
-.shareForm ul.recipients > li .investor-name {
-    cursor: pointer;
-}
-
-.shareForm ul.recipients > li .investor-name > span.lower-icon {
-    color: rgb(30, 45, 61);
-}
-
 .shareForm ul.recipients > li .investor-name .investor-name-display {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 230px;
+    width: calc(100% - 25px);
 }
 
-.shareForm ul.recipients > li .investor-name > span.lower-icon, .shareForm ul.recipients > li .investor-name > a > span {
-    vertical-align: 20%;
+.shareForm ul.bad.recipients > li .investor-name .investor-name-display {
+    color: #E74C3C;
 }
 
-.shareForm ul.recipients ul {
-    margin-left: 22px;
-}
-.shareForm ul.recipients > ul > li {
-    margin-bottom: 3px;
-}
-
-.shareForm ul.doc-list > li > a {
-    cursor: pointer;
-    display: inline-block;
-}
-
-.shareForm ul.doc-list > li > a > span:first-of-type {
-    cursor: pointer;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 231px;
-}
-
-.shareForm ul.doc-list > li > a:hover {
-    color: #666;
-}
-
-.shareForm ul.recipients .incomplete {
-    color: #e74c3c;
-}
 .shareForm > textarea {
     margin-top: 20px;
 }
@@ -718,6 +689,16 @@ textarea.email-text {
     line-height: 32px;
     padding-right: 60px;
     color: #3498DB;
+}
+
+.shareForm > .controls .back.btn {
+    background-color: #8d8d8d;
+    width: auto;
+}
+
+.shareForm .standard-button .btn span[data-icon]:before {
+    vertical-align: baseline;
+    vertical-align: -10%;
 }
 
 /* doclist specific CSS for the captable style sliding right panel (sharebar) */
@@ -1848,7 +1829,9 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 .dropdown-required.select2-result > div.select2-result-label {
     color: #E74C3C;
 }
-
+.dropdown-required.select2-result > div.select2-result-label:after {
+    content: " (Required)";
+}
 
 div.textarea-container {
     line-height: 0;
@@ -2421,9 +2404,30 @@ div.profile-link > span:first-of-type {
 .docPrepRow {
     width: calc(100% - 80px);
     margin: 0 auto 0 auto;
-    border-bottom: 1px solid #E3E3E3;
     height: 40px;
     line-height: 40px;
+    white-space: nowrap;
+}
+
+.docPrepRow .bad {
+    color: #eb6f1c;
+}
+
+.docPrepRow .good {
+    color: #1abc96;
+}
+
+.docPrepRow.header .btn {
+    color: #FFFFFF;
+    background-color: #3498DB;
+}
+
+.docPrepRow.header .btn.complete {
+    background-color: #c7c7c7;
+}
+
+.docPrepRow a.complete {
+    color: #8d8d8d;
 }
 
 .docPrepRow:last-of-type {
@@ -2431,105 +2435,108 @@ div.profile-link > span:first-of-type {
 }
 
 .docPrepRow.header {
-    line-height: 20px;
-    height: 20px;
     color: #33485d;
+}
+
+.docPrepRow.header [tooltip] {
+    vertical-align: -5%;
 }
 
 .docPrepRow > span {
     display: inline-block;
-    width: 49%;
     box-sizing: border-box;
 }
 
-.docPrepRow a {
-    color: #3397da;
+.docPrepRow > span:first-child > span {
+    padding-left: 5px;
 }
 
-.docPrepRow .lower-icon {
-    vertical-align: -10%;
+.docPrepRow > span:first-child > .status {
+    width: 18px;
+    display: inline-block;
+    vertical-align: -5%;
 }
 
-.docPrepRow.header > span:first-of-type {
-    padding-left: 10px;
+/* inputs */
+
+.docPrepRow > span:first-child ~ span input, .docPrepRow > span:first-child ~ span .select2-container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    vertical-align: top;
+    border-radius: 0;
+    border: 1px solid #fff;
 }
 
-.docPrepRow .select2-container {
-    width: 95%;
+.docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
+    border: 1px solid #666666;
+    background-color: #e3e3e3;
 }
 
 .docPrepRow .select2-container .select2-choice {
-    border: none;
+    box-sizing: border-box;
     width: 100%;
+    height: 100%;
+    padding-left: 0;
+    border-radius: 0;
+    border: 0;
 }
 
 .docPrepRow .select2-container .select2-choice .select2-arrow {
     display: none;
 }
 
-/* Preparation Bar */
+/* span widths for tableish layout */
 
-.preparation-bar {
-    position: fixed;
-    width: calc(100% - 80px);
-    bottom: 0;
-    height: 60px;
-    background-color: rgb(30, 45, 61);
-    text-align: center;
+/* 2 columns */
+.docPrepRow > span:first-child:nth-last-child(2),
+.docPrepRow > span:first-child:nth-last-child(2) ~ span {
+    width: calc((100% - 4px) / 2);
+}
+/* 3 columns */
+.docPrepRow > span:first-child:nth-last-child(3),
+.docPrepRow > span:first-child:nth-last-child(3) ~ span {
+    width: calc((100% - 4px) / 3);
 }
 
-.preparation-bar .bar-button {
-    display: inline-block;
-    line-height: 60px;
+/* minimums for more than 3 columns */
+.docPrepRow > span:first-child {
+    min-width: 261px; /* select2 wants to be this wide? */
+}
+.docPrepRow > span:first-child ~ span{
+    min-width: 150px;
+    width: 150px;
 }
 
-.preparation-bar .bar-button > a {
-    font-family:'FS Elliot Web Light', sans-serif !important;
-    box-sizing: border-box;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 3px;
-    background-color: #1d2c3c;
-    border: 1px solid #3397da;
-    color: #FFFFFF;
-    padding: 5px 10px;
-    cursor: pointer;
+/* 4 columns */
+.docPrepRow > span:first-child:nth-last-child(4) ~ span {
+    width: calc((100% - 265px) / 3);
+}
+/* 5 columns */
+.docPrepRow > span:first-child:nth-last-child(5) ~ span {
+    width: calc((100% - 265px) / 4);
+}
+/* 6 columns */
+.docPrepRow > span:first-child:nth-last-child(6) ~ span {
+    width: calc((100% - 265px) / 5);
+}
+/* 7 columns */
+.docPrepRow > span:first-child:nth-last-child(7) ~ span {
+    width: calc((100% - 265px) / 6);
+}
+/* 8 columns */
+.docPrepRow > span:first-child:nth-last-child(8) ~ span {
+    width: calc((100% - 265px) / 7);
+}
+/* 9 columns */
+.docPrepRow > span:first-child:nth-last-child(9) ~ span {
+    width: calc((100% - 265px) / 8);
+}
+/* 10 columns */
+.docPrepRow > span:first-child:nth-last-child(10) ~ span {
+    width: calc((100% - 265px) / 9);
 }
 
-.preparation-bar .bar-button.bar-center-buttons {
-    border: 1px solid #3397da;
-    line-height: 30px;
-    margin-top: 15px;
-    border-radius: 3px;
-    background-color: #1d2c3c;
-}
-
-.preparation-bar .bar-button.bar-center-buttons > a {
-    width: 130px;
-    text-align: center;
-    display: inline-block;
-    vertical-align: top;
-    line-height: 15px;
-    border: none;
-    border-radius: 0;
-}
-
-.preparation-bar .bar-button.bar-center-buttons > a.active-bar-button {
-    background-color: #3397da;
-}
-
-.preparation-bar .bar-button.right-button {
-    float: right;
-    margin-right: 20px;
-}
-
-.preparation-bar .bar-button.left-button {
-    float: left;
-    margin-left: 20px;
-}
-
-.preparation-bar .version-banner {
-    line-height: 60px;
-    font-size: 20px;
-    font-family:'FS Elliot Web Light', sans-serif !important;
+.docPrepRow a {
+    color: #3397da;
 }

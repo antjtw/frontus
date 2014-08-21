@@ -102,16 +102,17 @@ app.directive('documentVersionRow', function() {
     };
 });
 
-app.directive('annotationList', ["User", function(User) {
+app.directive('annotationList', [function() {
     return {
         restrict: "E",
         scope: {
             doc: "=",
             active: "=",
+            prepareFor: "=",
         },
         templateUrl: "/documents/partials/annotationList.html",
-        controller: ["$scope", "$element", "navState", "Annotations", "Documents", "User",
-            function($scope, $element, navState, Annotations, Documents, User) {
+        controller: ["$scope", "$element", "navState", "Annotations", "Documents",
+            function($scope, $element, navState, Annotations, Documents) {
                 $scope.$watch("doc", function(doc) {
                     // we want a new page_visible array for every doc
                     $scope.page_visible = [];
@@ -122,7 +123,6 @@ app.directive('annotationList', ["User", function(User) {
                     return ret;
                 };
 
-                $scope.user = User;
                 $scope.navState = navState;
             }
         ],
@@ -342,13 +342,5 @@ app.directive('docTransactionList', function() {
             };
 
         }]
-    };
-});
-
-app.directive('preparationBar', function() {
-    return {
-        restrict: "E",
-        scope: false,
-        templateUrl: '/documents/partials/preparationBar.html'
     };
 });
