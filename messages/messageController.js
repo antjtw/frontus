@@ -97,6 +97,18 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams',
     function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams) {
         console.log($routeParams.thread);
+        var threadId = parseInt($routeParams.thread)
+
+        $scope.getMessageThread = function(){
+            console.log(typeof $routeParams.thread)
+            console.log("hi")
+            SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
+                console.log(data);
+
+            })
+        }
+        $scope.getMessageThread();
+
         
     }
 ]);
