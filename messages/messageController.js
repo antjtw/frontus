@@ -23,10 +23,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 
 
 
-        $scope.gotoMessage = function(){
-            var link = '/messages/viewMessage.html'
-            $location.url(link)
-        }
+        $scope.gotoMessage = function(message){
+            console.log(message)
+            var link = '/app/company/message'
+            
+        }  
 
         $scope.getSentMessages = function(){
             var msgs = [];
@@ -93,8 +94,9 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
     }
 ]);
 
-app.controller('replyCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location) {
+app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams) {
+        console.log($routeParams.thread);
         
     }
 ]);

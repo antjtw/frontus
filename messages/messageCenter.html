@@ -49,8 +49,8 @@
                     <tbody ng-repeat="messageThread in messageThreads">
                         <tr class="empty-row"></tr>
                         <tr class="forTooltip">
-                            <td style="width:550px" class="shareholder-column docname-column" ng-click="gotoMessage()">
-                                <div position="bottom"><span>{{messageThread.members}}</span></div>
+                            <td style="width:550px" class="shareholder-column docname-column">
+                                <a href="/app/company/messages/thread?thread={{messageThread.thread_id}}"position="bottom"><span>{{messageThread.members}}</span></a>
                             </td>
                             <td><span>{{messageThread.subject}}</span></td>
                             <td style="width:10px;"></td>
