@@ -930,13 +930,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $location.url(link);
     };
 
-    $scope.securityUnitLabel = function(security_name) {
-        var type;
-        angular.forEach($scope.ct.securities, function(sec) {
-            if (sec.name == security_name) {
-                type = $filter('issueUnitLabel')(sec);
-            }
-        });
+    $scope.securityUnitLabel = function(security) {
+        var type = $filter('issueUnitLabel')(security.attrs.security_type);
         return type;
     };
 

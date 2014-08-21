@@ -157,9 +157,9 @@ ownership.filter('received', function () {
 
 ownership.filter('issueUnitLabel', function() {
     return function(iss) {
-        if (iss.type == "Option") {
+        if (iss == "Option") {
             return "options";
-        } else if (iss.type == "Warrant") {
+        } else if (iss == "Warrant") {
             return "warrants";
         } else {
             return "shares";

@@ -585,6 +585,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.saveTransaction = saveTransaction;
 
     this.deleteTransaction = function(tran, cell) {
+        console.log(angular.copy(cell));
+        console.log(angular.copy(tran));
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
         .then(function(x) {
             var res = x[0].delete_transaction;
@@ -593,6 +595,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                     "Transaction deleted");
                 splice_many(captable.transactions, [tran]);
                 splice_many(cell.transactions, [tran]);
+                angular.forEach(cell.ledger_entries, function(entry) {
+                    if (entry.transaction == tran.transaction) {
+                        splice_many(captable.ledger_entries, [entry]);
+                        splice_many(cell.ledger_entries, [entry]);
+                    }
+                });
+                updateCell(cell);
             } else {
                 $rootScope.$emit("notification:fail",
                     "Oops, something went wrong.");
