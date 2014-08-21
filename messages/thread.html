@@ -5,16 +5,8 @@
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
-    <section class="statusBlock">
         <div class="row-fluid">
             <div class="subnav-controls">
-                <div>
-                    <div class="pull-left" ng-if="!compose">
-                        <span>Search</span>
-                        <input type="text" class="search-box" ng-model="filterText">
-                    </div>
-                   
-                </div>
                 <div class="DivHelper"></div>
             </div>
         </div>
@@ -22,14 +14,30 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+
             <div class="replyMessage">
-           <div class="message_info" >
-            <div class="replyMessage">
-                <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
+                <div class="replySide">
+                  {{navState.userid}}
+                </div>
+                <div class="replyInput">
+                    <div ng-bind-html="sentMessage"></div>
+                </div>
+                
+                
             </div>
-        </div>
-    </div>
-            
+
+            <div class="replyMessage">
+                <div class="replySide"> 
+
+                    {{navState.userid}}
+                </div>
+                <div class="replyInput">
+                    <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
+                </div>
+                <div>
+                    <div style="display: inline-block;">hsdfsdfsdfi</div>
+                </div>
+            </div>           
         </div>
 
 
@@ -52,7 +60,5 @@
 
     </div>
 
-
-    </section>
 
 </div>

@@ -78,7 +78,7 @@
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control h2{
+.ta-scroll-window.form-control h2{
     font-size: 1.5em;
     color: rgb(141, 141, 141);
     line-height: 1.231;
@@ -107,19 +107,19 @@
     font-weight: normal;
 }
 
-.message_input .ta-scroll-window.form-control blockquote h1{
+.ta-scroll-window.form-control blockquote h1{
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control blockquote h2 {
+.ta-scroll-window.form-control blockquote h2 {
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control blockquote h3 {
+.ta-scroll-window.form-control blockquote h3 {
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control ul {
+ .ta-scroll-window.form-control ul {
     display: block;
     list-style-type: decimal;
     -webkit-margin-before: 1em;
@@ -129,19 +129,19 @@
     -webkit-padding-start: 40px;
 }
 
-.message_input .ta-scroll-window.form-control ul li{
+.ta-scroll-window.form-control ul li{
     list-style: disc outside none;
 }
-.message_input .ta-scroll-window.form-control ul ul li{
+.ta-scroll-window.form-control ul ul li{
     list-style-type: circle;
   
 }
 
-.message_input .ta-scroll-window.form-control ul ul ul li{
+.ta-scroll-window.form-control ul ul ul li{
     list-style-type: square;
 }
 
-.message_input .ta-scroll-window.form-control ul ul {
+.ta-scroll-window.form-control ul ul {
     -webkit-margin-before: 0px !important;
     -webkit-margin-after: 0px !important;  
 }
@@ -298,7 +298,21 @@ the compose message page styling*/
 .replyMessage{
     margin-left: auto; 
     margin-right: auto;
-    width:800px; 
-    padding-top: 40px
+    padding-top: 40px;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.replyInput {
+    display: inline-block;
+    position: relative;
+    min-width: 500px;
+    max-width: 800px;
+}
+
+.replySide {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 

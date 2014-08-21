@@ -106,6 +106,9 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 console.log(data);
                 $scope.myThread = data
                 console.log($scope.myThread)
+                angular.forEach($scope.myThread, function(thread){
+                    $scope.sentMessage = thread.message
+                })
 
             })
         }
