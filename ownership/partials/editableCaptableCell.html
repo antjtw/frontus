@@ -1,7 +1,7 @@
 <span class="captablepair-box" ng-class="{invalid: !data.valid && data.transactions}">
-    <input ng-if="!isDebt(data);"
+    <input ng-if="!isDebt(sec);"
            class="captablepair first-box"
-           ui-event="{focus: 'selectCell(inv, sec)',
+           ui-event="{focus: 'selectCell(inv, sec.name)',
                        blur: 'saveIt(data.u)'}"
            ng-model='units'
            ng-model-options="{getterSetter: true}"
@@ -9,11 +9,11 @@
            placeholder="units"
            ng-paste="numberPaste($event, row, data.security, 'u');"
            onkeydown="testForEnter(event);">
-    <input ng-if="isDebt(data);"
+    <input ng-if="isDebt(sec);"
            class="captablepair default-pointer first-box"
            disabled>
     <input class="captablepair last-box"
-           ui-event="{focus: 'selectCell(inv, sec)',
+           ui-event="{focus: 'selectCell(inv, sec.name)',
                        blur: 'saveIt(data.a)'}"
            data-currency
            ng-model='amount'
