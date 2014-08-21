@@ -118,9 +118,11 @@ own.directive('editableCaptableCell', [function() {
                     $scope.destination_transaction = null;
                 };
                 $scope.saveIt = function(value) {
-                    captable.saveTransaction(
-                        $scope.data.transactions[0],
-                        $scope.data);
+                    if ($scope.data) {
+                        captable.saveTransaction(
+                            $scope.data.transactions[0],
+                            $scope.data);
+                    }
                 };
                 function updateAttr(key, val) {
                     if ($scope.data.transactions.length == 1) {
