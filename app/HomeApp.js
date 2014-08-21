@@ -347,9 +347,8 @@ app.controller('CompanyCtrl',
                                     }
                                 }
                             }
-<<<<<<< HEAD
                         });
-                    });*/
+                    });
 
                     if ($scope.trans) {
                         for (var i = 0, l = $scope.trans.length; i < l; i++) {
@@ -368,16 +367,16 @@ app.controller('CompanyCtrl',
                                     row[tran.attrs.security]["a"] = calculate.sum(row[tran.attrs.security]["a"], calculate.isNumber(tran.attrs.amount)? Number(tran.attrs.amount) : 0);
                                     /*if (!isNaN(parseFloat(tran.forfeited))) {TODO: don't know what forfeited should do
                                         row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
-                                    }*/
+                                    }
                                 }
                                 else {
                                     row[tran.attrs.security] = {};
                                     row[tran.attrs.security]["u"] = calculate.isNumber(tran.attrs.units)? Number(tran.attrs.units) : 0;
                                     row[tran.attrs.security]["a"] = calculate.isNumber(tran.attrs.amount)? Number(tran.attrs.amount) : 0;
-                                    /*if (!isNaN(parseFloat(tran.forfeited))) {TODO: don't know what forfeited should do
+                                    if (!isNaN(parseFloat(tran.forfeited))) {TODO: don't know what forfeited should do
                                         row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                         row[tran.issue]["ukey"] = row[tran.issue]["u"];
-                                    }*/
+                                    }
                                 }
                             }
                         });
@@ -412,7 +411,7 @@ app.controller('CompanyCtrl',
                                 }
                             }
                         });
-=======
+*/
                             angular.forEach($scope.trans, function (tran) {
                             	angular.forEach($scope.rows, function (row) {
                             		row[tran.issue]={};
@@ -603,8 +602,6 @@ app.controller('CompanyCtrl',
 								counter++;
 							}
 						});
->>>>>>> master
-                    });
                     $scope.graphdata = [];
                     angular.forEach($scope.issues, function (issue) {
                         var issuepercent = $scope.issuepercent[issue.attrs.security]['debt'] + (($scope.issuepercent[issue.attrs.security]['units'] / totalunits) * (100-totaldebt));
@@ -615,7 +612,6 @@ app.controller('CompanyCtrl',
                       //  });
                     //});
                     $scope.ownersummary.peoplenum = $scope.ownersummary.people.length;
-                });
                 SWBrijj.tblm("ownership.clean_company_access").then(function (people) {
                     $scope.ownersummary.shares = people.length;
                 });
