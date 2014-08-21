@@ -37,7 +37,7 @@
                     <h2>Prepare Documents</h2>
                     <span style="display: inline-block; width: 50%;">Select the blue button to add annotations, which will be applied to each recipients version. To add recipient-specific information, such as their name, leave those specific fields blank when annotating and then edit each recipients version to complete the fields.</span>
                 </div>
-                <div ng-repeat="doc in doc_arr">
+                <div ng-repeat="doc in doc_arr" class="docPrep">
                     <div class="docPrepRow header">
                         <span>
                             <span data-icon="&#xe009;" class="status"></span>
@@ -59,7 +59,10 @@
                             </span>
                             <span class="name">
                                 {{Investor.getName(email)}}
-                                <span class="bad lower-icon" ng-if="already_shared[doc.doc_id][email]" data-icon="&#xe044;" tooltip="{{email}} received a copy of {{doc.docname}} on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}."></span>
+                            </span>
+                            <span class="warning" ng-if="already_shared[doc.doc_id][email]">
+                                <span>{{email}} received a copy of {{doc.docname}} on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
+                                <span><a ng-click="ShareDocs.removeEmail(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
                             </span>
                         </span>
                         <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
