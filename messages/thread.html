@@ -19,7 +19,7 @@
                 <div class="replySide">
                   {{navState.userid}}
                 </div>
-                <div class="replyInput">
+                <div class="replyInput">{{threadMembers}}
                     <div ng-bind-html="sentMessage"></div>
                 </div>
                 
@@ -39,8 +39,8 @@
                     {{navState.userid}}
                     </div>
                     <div class="replyInput">
-                        <div class="standard-button" tooltip="{{zombiemessage()}}">
-                            <button class="btn">
+                        <div class="standard-button">
+                            <button class="btn" ng-click="replyMessage()">
                                 Reply
                             </button>
                         </div>

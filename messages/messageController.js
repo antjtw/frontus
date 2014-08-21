@@ -65,19 +65,19 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 $scope.messageThreads = data;
                 $scope.threadLength = $scope.messageThreads.length;
                 angular.forEach($scope.messageThreads, function(thread){
-                    var members = thread.members.replace("{", "")
-                    var members2 = members.replace("}", "")
-                    var members3 = members2.replace(",", ", ")
-                    thread.members = members3
-                })
-            })
-        }
+                    var members = thread.members.replace("{", "");
+                    var members2 = members.replace("}", "");
+                    var members3 = members2.replace(",", ", ");
+                    thread.members = members3;
+                });
+            });
+        };
         $scope.getMessageThreads();
 
         $scope.getThread = function(elem){  
-            $scope.myThread = elem
-            console.log(elem)
-        }
+            $scope.myThread = elem;
+            console.log(elem);
+        };
         
     }
 ]);
@@ -95,12 +95,20 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.myThread = data
                 console.log($scope.myThread)
                 angular.forEach($scope.myThread, function(thread){
-                    $scope.sentMessage = thread.message
-                })
-
-            })
-        }
+                    $scope.sentMessage = thread.message;
+                    $scope.threadMembers = thread.members;
+                });
+            });
+        };
         $scope.getMessageThread();
+
+        $scope.replyMessage = function(msg){
+            console.log("i will respond to a message");
+            console.log($scope.message.text)
+        };
+
+
+
 
         
     }
