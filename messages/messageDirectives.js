@@ -128,6 +128,33 @@ mod.directive('composeMessage', function() {
                 return recipients
             }
 
+            $scope.sendBulkMessage = function(msg) {
+                var category = 'company-message';
+                var template = 'company-message.html';
+                var newtext = msg.text.replace(/\n/g, "<br/>");
+                var recipients = $scope.createRecipients();
+                $scope.clicked = true;
+                SWBrijj.procm('mail.send_bulk_message',
+                            JSON.stringify(recipients),
+                            msg.subject,
+                            newtext,
+                            null
+                ).then(function(x) {
+                    void(x);
+                    $rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                    $rootScope.$emit("notification:success",
+                        "Message sent!");
+                    $rootScope.$emit('new:message');
+                    $scope.resetMessage();
+                    $scope.clicked = false;
+                }).except(function(err) {
+                    void(err);
+                    $rootScope.$emit("notification:fail",
+                        "Oops, something went wrong.");
+                    $scope.clicked = false;
+                });
+            };
+
             $scope.sendMessage = function(msg) {
                 var category = 'company-message';
                 var template = 'company-message.html';

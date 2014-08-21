@@ -72,7 +72,7 @@
     <div class = "standard-button" tooltip="{{zombiemessage()}}">
         <button class="btn" style="font-size: 14px"
             ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
-            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
+            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendBulkMessage(message)">
             Send
         </button>
     </div>
