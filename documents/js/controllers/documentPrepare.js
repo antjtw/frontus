@@ -44,7 +44,7 @@ app.controller('DocumentPrepareController',
 
         $scope.overrideFilled = function(annot, override) {
             return annot.wouldBeValid(navState.role, override) ||
-                   (((override === undefined) || (override == "")) &&
+                   (((override === undefined) || (override === "")) &&
                     annot.filled(navState.role));
         };
 
@@ -83,6 +83,21 @@ app.controller('DocumentPrepareController',
                 return;
             }
             saveOverrides();
+        });
+
+        $scope.already_shared = {};
+        $scope.$watch('ShareDocs.documents', function(docs) {
+            // we want to reinitialize this everytime the page loads, just incase something changed
+            if (docs && docs.length > 0) {
+                docs.forEach(function(d) {
+                    $scope.already_shared[d.doc_id] = {};
+                    SWBrijj.tblmm('document.shared_with', 'original', d.doc_id).then(function(res) {
+                        res.forEach(function(share) {
+                            $scope.already_shared[d.doc_id][share.investor] = share;
+                        });
+                    });
+                });
+            }
         });
     }]
 );
