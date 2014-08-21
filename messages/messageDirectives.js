@@ -37,14 +37,11 @@ mod.directive('composeMessage', function() {
             $scope.selectGroupMessage = function(){
                 if($scope.groupMessage == false){
                     $scope.groupMessage = true;
-                    console.log("i will send a group message");
                 }
                 else if($scope.groupMessage == true){
                     $scope.groupMessage = false;
-                    console.log("i will use the send bulk message option")
-                }
-
-            }
+                };
+            };
 
             // create the object for selct2
            $scope.myContacts = []

@@ -63,7 +63,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                         }
                     });
                 });
-                console.log($scope.sentMsgs)
             });
         };
         $scope.getSentMessages();

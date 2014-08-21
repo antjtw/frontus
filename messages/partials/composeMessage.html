@@ -17,11 +17,17 @@
                 </div>
             </div>
         <div>
+
+
         <div>
-            <div>
-                <button class="check-box-button group" ng-class="{'selected': groupMessage}" ng-click="selectGroupMessage()">
+            <div class="message_elem">
+                <div class="message_headline" style="visibility:hidden">Group</div>
+                <div class="message_input">
+                    <button class="check-box-button group" ng-class="{'selected': groupMessage}" ng-click="selectGroupMessage()">
                     <span data-icon="&#xe023;" aria-hidden="true"></span>
-            </button>Create group message, where every message is reply all</div>
+                    </button> Create group message, where every message is reply all
+                </div>
+            </div>
         </div>
 
 
@@ -52,15 +58,24 @@
     Preview Message 
 </div>
 
-<div class="msgButtons">
+<div class="msgButtons" ng-if="groupMessage">
     <div class = "standard-button green" tooltip="{{zombiemessage()}}">
+        <button class="btn" style="font-size: 14px"
+            ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
+            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
+            Send Group Message
+        </button>
+    </div>
+</div>
+
+<div class="msgButtons" ng-if="!groupMessage">
+    <div class = "standard-button" tooltip="{{zombiemessage()}}">
         <button class="btn" style="font-size: 14px"
             ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
             ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
             Send
         </button>
     </div>
-
 </div>
 
 <div class="msgButtons left">
