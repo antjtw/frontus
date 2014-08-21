@@ -17,17 +17,9 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             else{
                 $scope.page = null
                 console.log("no button")
-            }
+            };
           
-        }
-
-
-
-        $scope.gotoMessage = function(message){
-            console.log(message)
-            var link = '/app/company/message'
-            
-        }  
+        };
 
         $scope.getSentMessages = function(){
             var msgs = [];
@@ -38,7 +30,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                     this.timex = timex;
                     this.subject = subject;
                     this.recipients = [];
-                }
+                };
                 angular.forEach(allSent, function(val){
                     if (!msgs.some(function(timestamp, idx, arr){
                          return timestamp.equals(val.when_requested);
@@ -70,10 +62,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 console.log(data)
-                $scope.messageThreads = data
-                console.log($scope.messageThreads)
-                $scope.threadLength = $scope.messageThreads.length
-                console.log($scope.threadLength)
+                $scope.messageThreads = data;
+                $scope.threadLength = $scope.messageThreads.length;
                 angular.forEach($scope.messageThreads, function(thread){
                     var members = thread.members.replace("{", "")
                     var members2 = members.replace("}", "")
@@ -87,7 +77,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.getThread = function(elem){  
             $scope.myThread = elem
             console.log(elem)
-
         }
         
     }

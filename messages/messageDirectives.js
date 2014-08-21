@@ -147,6 +147,7 @@ mod.directive('composeMessage', function() {
                     $rootScope.$emit('new:message');
                     $scope.resetMessage();
                     $scope.clicked = false;
+                    console.log("reloading page!")
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",
