@@ -175,6 +175,8 @@ app.controller('captableController',
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
             $scope.issuekeys.push($scope.issues[i].key);
+            console.log($scope.issuekeys);
+            console.log($scope.rows);
         }
 
         angular.forEach($scope.issues, function(issue) {
@@ -2819,7 +2821,10 @@ app.controller('captableController',
     // Total Shares | Paid for an issue column (type is either u or a)
     var colTotal = memoize(calculate.colTotal);
     $scope.colTotal = function(header, rows, type) {
+        console.log(rows);
+        console.log("hello");
         return colTotal(header, rows, type);
+        
     };
 
     // Total percentage ownership for each shareholder row
