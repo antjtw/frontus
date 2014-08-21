@@ -66,39 +66,6 @@
                             </li>
                         </ul>
                     </ul>
-                    <!--
-                    <ul>
-                        <li class="dropdown standard">
-                            <a class="dropdown-toggle">
-                                {{tran.kind}}
-                                <span class="invisible-drop">'</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li ng-repeat="i in transaction_types(tran)">
-                                    <a ng-click="setIt(tran, 'kind', i)">
-                                        {{i}}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    -->
-                </div>
-                <div class="rightTitle security-type">
-                    <!--
-                    <div ng-click="transferSharesUp(activeTran);"
-                         ng-show="tran.attrs.security_type == 'Equity'">
-                        <span data-icon="&#xe60a;" aria-hidden="true">
-                        </span>
-                        <span>Transfer</span>
-                    </div>
-                    -->
-                    <div ng-click="convertSharesUp(activeTran);"
-                         ng-show="tran.attrs.security_type == 'Debt'">
-                        <span data-icon="&#xe60c;" aria-hidden="true">
-                        </span>
-                        <span>Convert</span>
-                    </div>
                 </div>
             </div>
             <editable-transaction-attributes ng-if="tran" data="tran" save="true">
