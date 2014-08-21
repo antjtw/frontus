@@ -350,7 +350,7 @@ app.controller('CompanyCtrl',
                                         if (tran.issue in row) {
                                             row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
                                             row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
-                                            console.log(tran.issue);
+                                           
                                             if (!isNaN(parseFloat(tran.forfeited))) {
                                                 row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
                                             }
@@ -398,9 +398,6 @@ app.controller('CompanyCtrl',
                             			thisCounter++;
                             		});
                             	});
-                            	console.log(securityArray);
-                            	console.log(moneyArray);
-                            	console.log("hiiiiiii");
                             $scope.bigIssue=0;	
                             $scope.biggerIssue=0;
                             $scope.biggestIssue=0;
@@ -415,20 +412,18 @@ app.controller('CompanyCtrl',
 									}
 									
 								}
-								console.log(maxIssue);
-								console.log(maxIndex);
+								
+								
 								if (numCounter==0) {
 									$scope.biggestIssue=securityArray[maxIndex];
 									securityArray.splice(maxIndex, 1);
-									console.log(securityArray);
+								
 									$scope.biggestMoney=moneyArray[maxIndex];
-									console.log($scope.biggestIssue);
+								
 									moneyArray.splice(maxIndex,1);
 								}
 								if (numCounter==1) {
 									$scope.biggerIssue=securityArray[maxIndex];
-									console.log("helloooo");
-									console.log($scope.biggerIssue);
 									securityArray.splice(maxIndex, 1);
 									$scope.biggerMoney=moneyArray[maxIndex];
 									moneyArray.splice(maxIndex,1);
@@ -521,6 +516,7 @@ app.controller('CompanyCtrl',
 									$scope.graphdata3.push({'name':maxName, 'percent':maxPercent});
 									$scope.graphdata3.push({'name':'whatever', 'percent':100-maxPercent});
 									$scope.graphdata3.push({'name':'something', 'percent': $scope.graphdata[0].percent+$scope.graphdata2[0].percent});
+
 								}
 								counter++;
 							}
@@ -884,8 +880,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
           // Total Shares | Paid for an issue column (type is either u or a)
     	var colTotal = memoize(calculate.colTotal);
     	$scope.colTotal = function(header, rows, type) {
-        console.log(rows);
-        console.log("hello");
+      
+        
         return colTotal(header, rows, type);
         
     };

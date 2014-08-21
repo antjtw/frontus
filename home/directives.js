@@ -10,7 +10,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
             nosort: "@"
         },
         link: function(scope, iElement, iAttrs) {
-
+			
             var width = 180,
                 height = 180,
                 radius = Math.min(width, height) / 2;
@@ -55,11 +55,11 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 svg.selectAll('g').remove();
                 svg.selectAll('circle').remove();
                 svg.selectAll('text').remove();
-                svg.selectAll('rect').remove();
+                svg.selectAll('rect').remove();*/
 
                 if (data && data[0] && !isNaN(data[0].percent)) {
 
-            
+            	/*
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
                         .enter().append("g")
@@ -108,7 +108,11 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 			
 			var myScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
-			
+			console.log(data);
+			console.log(data[0]);
+			console.log(data[1]);
+			console.log(data[2]);
+
 			var arc = d3.svg.arc()
 			.innerRadius(radius-10)
 			.outerRadius(radius-30)
@@ -154,7 +158,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
 			.text(data[0].percent.toFixed(1)+'%');
 			
 			
-		}}
+		}}}
 	}
 }]);
 
