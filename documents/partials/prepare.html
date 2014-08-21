@@ -56,9 +56,11 @@
                         <span>
                             <span class="status">
                                 <span class="good" ng-if="doc.preparedFor[email].is_prepared" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
-                                <!-- TODO: add a flag if this user has already been sent this document -->
                             </span>
-                            <span class="name">{{Investor.getName(email)}}</span>
+                            <span class="name">
+                                {{Investor.getName(email)}}
+                                <span class="bad lower-icon" ng-if="already_shared[doc.doc_id][email]" data-icon="&#xe044;" tooltip="{{email}} received a copy of {{doc.docname}} on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}."></span>
+                            </span>
                         </span>
                         <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
                             <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}' class="pull-right" ng-class="{complete: doc.preparedFor[email].is_prepared}">

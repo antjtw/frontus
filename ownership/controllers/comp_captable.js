@@ -1681,7 +1681,7 @@ app.controller('captableController',
                 $scope.viewme = ['investor', ev.doc_id];
             } else {
                 console.log(ev.investor);
-                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+encodeURIComponent(ev.investor)+'&page=1')
+                $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.doc_id+'&page=1')
             }
         } else if (ev.original != null) {
             if (!$scope.toggleView()) {
