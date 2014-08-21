@@ -140,6 +140,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         console.log(investor);
     };
     $scope.addSecurity = function(new_sec) {
+        console.log(new_sec);
+        console.log(typeof(new_sec));
+        if (new_sec == "" || new_sec == undefined || new_sec == null)
+            return;
         captable.addSecurity(new_sec);
         $scope.selectSecurity(new_sec);
         $scope.new_sec = "";
