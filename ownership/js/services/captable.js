@@ -720,8 +720,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
      */
     function initAttrs(obj, sec_type, kind) {
         var attr_obj = attrs[sec_type][kind];
-        console.log("attrs");
-        console.log(attr_obj);
         if (attr_obj) {
             angular.forEach(Object.keys(attr_obj),
                     function(el) { obj.attrs[el] = null; });
@@ -821,6 +819,20 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         console.log(inv, sec, kind);
         return tran;
     };
+    function defaultKind(sec) {
+        var options = Object.keys(attrs[sec]);
+        if (options.indexOf('grant') != -1)
+            return 'grant';
+        if (options.indexOf('purchase') != -1)
+            return 'purchase';
+        if (options.length == 1)
+            return options[0];
+        if (options.length == 0)
+            return null;
+        if (options.indexOf('issue security') == 0)
+            return options[1];
+        return options[0];
+    }
     function createCell(inv, sec) {
         var c = new Cell();
         c.investor = inv;
@@ -830,7 +842,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if (!sec_obj.attrs || !sec_obj.attrs.security_type) {
             return null;
         } else {
-            var tran = newTransaction(sec, 'grant', inv);
+            var tran = newTransaction(sec, defaultKind(sec_obj.attrs.security_type), inv);
             c.transactions.push(tran);
             sec_obj.locked = true;
             captable.cells.push(c);
