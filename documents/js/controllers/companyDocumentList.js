@@ -635,6 +635,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.reallyDeleteDoc = function(doc) {
+                ShareDocs.removeShareItem(doc);
                 SWBrijj.procm("document.delete_document", doc.doc_id).then(function(data) {
                     void(data);
                     $rootScope.billing.usage.documents_total -= 1;
