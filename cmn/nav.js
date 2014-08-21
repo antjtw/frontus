@@ -162,7 +162,7 @@ navm.controller('NavCtrl',
         });
         $rootScope.leave = function(blacklist, default_url) {
             if (blacklist == undefined) {
-                blacklist = ["-view", "/prepare"];
+                blacklist = ["-view"];
             }
             if (default_url == undefined) {
                 if (navState.role == "investor") {

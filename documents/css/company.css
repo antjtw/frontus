@@ -122,16 +122,32 @@
 	margin: 30px !important;
 	margin-left: -50px !important;
 }
-#doc-button {
-	margin-top: 100px;
-}
+
 #own-button {
 	margin-left: 23px;
+}
+svg {
+	font-family: 'FS Elliot Web Light';
 }
 .same-row .body-box:last-child > div:first-child > div > div:last-child {
 	position: absolute;
 	float: left;
 	margin: 50px;
+}
+.spacing:first-of-type {
+	float: left;
+	width: calc(15% - 25px);
+	height: 200px;
+}
+.spacing:nth-of-type(2) {
+	float: left;
+	width: 15%;
+	height: 200px;
+}
+#button-space {
+	float: right;
+	height: 260px;
+	width: 21%;
 }
 .company-page > .info-box > .body-box > div:first-child > div > div {
 	margin: 50px;
@@ -150,17 +166,29 @@ div.pull-right.standard-button.green {
 }
 
 .row-fluid .span6 {
-	width: 46% !important;
+	width: 25% !important;
+	margin-left: calc(13% - 49px) !important;
+	max-width: 259px;
 }
 .row-fluid .span6 h2{
 	width: 100% !important;
+	text-align: center;
+	left: calc(-49% + 88px);
+	line-height: 10px;
+	position: relative;
+}
+.row-fluid .span6 h2:first-of-type{
+	font-size: 20px;
+	font-family: 'FS Elliot Web Light' !important;
+	margin-top: 30px;
+	margin-bottom: 15px;
 }
 .span7 svg{
 	left: calc(81% - 124px);
 	position: absolute;
 }
 .span6 svg {
-	margin-top: 20px;
+	margin-top: 30px;
 	margin-bottom: -20px;
 }
 
@@ -186,6 +214,23 @@ div.pull-right.standard-button.green {
 	margin-top: 20px;
 	font-family: 'FS Elliot Web Light', sans-serif;
 }
+#a_home_own_post {
+	background-color: rgb(51,151,218);
+	color: white;
+	padding-right: 5px;
+	padding-left: 25px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 20px;
+	font-family: 'FS Elliot Web Light', sans-serif;
+	float: right;
+	margin: 18px;
+}
+
+#a_home_own_post > span {
+	margin-left: 31px;
+	margin-right: -25px;
+}
 #a_home_doc_pre span{
 	position: relative;
 	top: 2px;
@@ -197,6 +242,26 @@ div.pull-right.standard-button.green {
 	position: absolute;
 	right: 25px;
 	top: 0px;
+}
+.span15 > div:first-child {
+	margin-top: 20px;
+}
+.span15 > div > div {
+	margin: 22px;
+	margin-right: 152px;
+	float: right;
+}
+.span15 img {
+	margin: 10px;
+	float: left;
+	margin-left: 20px;
+}
+.span15 h2 {
+	margin-top: 20px;
+	float: left;
+}
+.span15 > div {
+	height: 70px;
 }
 .body-box {
 	position: relative;
@@ -299,6 +364,10 @@ iframe {
 d3vestedbar > svg {
 	height: 270px;
 	margin-left: 10px;
+}
+d3expdonut {
+	position: relative;
+	
 }
 .span3 {
 	left: calc(50% + 100px);

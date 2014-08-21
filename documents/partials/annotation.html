@@ -1,4 +1,4 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(user.signaturePresent, navState.role), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature': annot.forRole(navState.role), 'processing':signatureprocessing, 'otherperson': !annot.forRole(navState.role)}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(navState.role, prepareFor), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature': annot.forRole(navState.role), 'processing':signatureprocessing, 'otherperson': !annot.forRole(navState.role)}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
     <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
@@ -6,31 +6,39 @@
         <span data-icon="&#xe00f;"></span>
     </span>
     <div>
-        <fieldset ng-if="annot.type == 'text'" ng-click="openBox() && $event.stopPropagation();" ng-mousedown="$event.stopPropagation();" ng-mouseenter="boxHover = true" ng-mouseleave="boxHover = false">
+        <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'text')" ng-click="openBox() && $event.stopPropagation();" ng-mousedown="$event.stopPropagation();" ng-mouseenter="boxHover = true" ng-mouseleave="boxHover = false">
             <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode()) && (boxHover || active.annotation == annot)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
-                          placeholder="{{annot.type_info.display}}"
+                          placeholder="{{current.placeholder}}"
                           ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum'"
-                          ng-keyup="addLineBreaks($event)" ng-model="annot.val" style="resize:none"
+                          ng-keyup="addLineBreaks($event)" ng-model="current.val" style="resize:none"
                           class="row-fluid" ng-style="annotationSizeStyle"/>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <select class="height-force" ui-select2="select2Options" ng-model="annot.val" ng-style="annotationSizeStyle">
+                <select class="height-force" ui-select2 ng-model="current.val" ng-style="annotationSizeStyle" placeholder="{{current.placeholder}}">
                     <option></option>
                     <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                 </select>
             </div>
             <div ng-if="dateBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)">
+                <input type="text" ng-model="current.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)" placeholder="{{current.placeholder}}">
             </div>
         </fieldset>
-        <fieldset ng-if="annot.type == 'highlight'" >
+        <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && !annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'highlight')">
             <div ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
             </div>
         </fieldset>
         <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot && !prepareFor">
             <ul>
+                <li>
+                    <ul>
+                        <li>
+                            <span>Annotation Type</span>
+                        </li>
+                        <input class="annotation-dropdown" ui-select2="select2TypeOptions" ng-model="annot.whattypesetter" ng-model-options="{getterSetter: true}" placeholder="{{annot.whattype}}">
+                    </ul>
+                </li>
                 <li ng-if="annot.type == 'text'">
                     <ul>
                         <li>
@@ -55,31 +63,21 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <ul>
-                        <li>
-                            <span>Annotation Type</span>
-                        </li>
-                        <select class="annotation-dropdown" ui-select2="select2Options" ng-model="annot.whattype">
-                            <option ng-class="{'dropdown-required': type.required, 'dropdown-suggested': type.required == false}" class="annotation-dropdown-item"  ng-repeat="type in doc.annotation_types | filter: unusedType | orderBy:doc.annotationOrder" value="{{type.name}}">{{doc.dropdownDisplay(type)}}</option>
-                        </select>
-                    </ul>
-                </li>
                 <li class="content-section" ng-if="(annot.type_info.typename == 'date' || annot.type_info.typename == 'enum' || annot.type == 'highlight') && annot.forRole(navState.role)">
                     <ul>
                         <li>
-                            <span>Contents</span>
+                            <span>Contents <span ng-if='["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1'>(Digits only)</span>
                         </li>
                         <li ng-if="annot.type == 'highlight' && annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'">
                             <div class="textarea-container">
-                                <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="annot.val"/>
+                                <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="current.val"/>
                             </div>
                         </li>
                         <li ng-if="annot.type_info.typename == 'date'">
-                            <input type="text" ng-model="annot.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
+                            <input type="text" ng-model="current.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
                         </li>
                         <li ng-if="annot.type_info.typename == 'enum'">
-                            <select ui-select2="select2Options" ng-model="annot.val">
+                            <select ui-select2 ng-model="current.val" placeholder="{{current.placeholder}}">
                                 <option></option>
                                 <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>

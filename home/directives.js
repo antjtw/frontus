@@ -10,14 +10,14 @@ app.directive('d3expdonut', ['d3', function(d3) {
             nosort: "@"
         },
         link: function(scope, iElement, iAttrs) {
-
+			
             var width = 180,
                 height = 180,
                 radius = Math.min(width, height) / 2;
 
-            var colors = ["#1ABC96", "#3498DB", "F78D1E", "#34495E", "#FFBB00", "#2676AB"];
+            /*var colors = ["#1ABC96", "#CAC9C9", "#3498DB", "F78D1E", "#34495E", "#FFBB00", "#2676AB"];
             var corecolor = function(i) {
-                if (i > 5) {
+                if (i == 5) {
                    return i % 5 == 0 ? colors[5] : colors[i % 5]
                 }
                 else {
@@ -30,7 +30,6 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 .innerRadius(radius - 30);
 
             var pie = d3.layout.pie()
-                .sort(function(a, b) { return b.percent - a.percent; })
                 .value(function(d) { return d.percent; });
 
 
@@ -46,22 +45,21 @@ app.directive('d3expdonut', ['d3', function(d3) {
                 .append("g")
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-            scope.$watch('data', function(newVals, oldVals) {
+            */scope.$watch('data', function(newVals, oldVals) {
                 return scope.render(newVals);
             }, true);
 
             scope.render = function(data){
 
-                svg.selectAll('path').remove();
+                /*svg.selectAll('path').remove();
                 svg.selectAll('g').remove();
                 svg.selectAll('circle').remove();
                 svg.selectAll('text').remove();
-                svg.selectAll('rect').remove();
+                svg.selectAll('rect').remove();*/
 
                 if (data && data[0] && !isNaN(data[0].percent)) {
 
-                    data.sort(function(a, b) { return b.percent - a.percent; });
-
+            	/*
                     var g = svg.selectAll(".arc")
                         .data(pie(data))
                         .enter().append("g")
@@ -81,12 +79,13 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         })
                         .attr("dy", ".5em")
                         .style("text-anchor", "middle")
+                        .style("font-size", "20px")
                         .attr("class", "percentlabel");
 
                     svg.select(".mainlabel")
                         .text('Ownership');
                     svg.select(".percentlabel")
-                        .text('100%');
+                        .text(data[0].percent.toFixed(2)+'%');
 
                     g.append("path")
                         .attr("d", arc)
@@ -94,45 +93,71 @@ app.directive('d3expdonut', ['d3', function(d3) {
                         .style("fill", function(d , i) {
                             return corecolor(i); })
                         .attr("class", "pie-slices")
-                        .on("mouseover", function(d, i) {
-                            var colour = corecolor(i);
-                            var current = this;
-                            svg.selectAll(".pie-slices").transition()
-                                .duration(250)
-                                .style("fill", function() {
-                                    return (this === current) ? colour : "gray";
-                                })
-                                .style("opacity", function() {
-                                return (this === current) ? 1 : 0.5;
-                                });
-
-                            svg.select(".mainlabel")
-                                .text(d.data.name);
-
-                            svg.select('.percentlabel')
-                                .text(d.data.percent.toFixed(2) + "%");
-                        })
-
-                        .on("mouseout", function(d) {
-                            svg.selectAll(".pie-slices").transition()
-                                .duration(250)
-                                .style("fill", function(d , i) {
-                                    return corecolor(i); })
-                                .style("opacity", function() {
-                                    return 1;
-                                });
-
-                            svg.select(".mainlabel")
-                                .text('Ownership');
-
-                            svg.select(".percentlabel")
-                                .text('100%');
-                        });
+                        
                 }
 
             };
         }
     };
+}]); */
+			var vis = d3.select(iElement[0])
+				.append('svg')
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+			
+			var myScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
+			
+			
+			
+			var arc = d3.svg.arc()
+			.innerRadius(radius-10)
+			.outerRadius(radius-30)
+			.startAngle(myScale(data[2].percent))
+			.endAngle(myScale(data[0].percent+data[2].percent));
+			
+			var arc2 = d3.svg.arc()
+			.innerRadius(radius-10)
+			.outerRadius(radius-30)
+			.startAngle(myScale(data[0].percent+data[2].percent))
+			.endAngle(myScale(data[0].percent+data[2].percent)+data[1].percent);
+			
+			vis.append("path")
+			.attr("d", arc2)
+			.attr("transform", "translate(0,0)")
+			.style("fill", "#C7C7C7");
+			
+			vis.append("path")
+			.attr("d", arc)
+			.attr("transform", "translate(0,0)")
+			.style("fill", "#1ABC96");
+			
+  			vis.append("text")
+			.attr("transform", function() {
+				return "translate(0,10)";
+			})
+			.attr("dy", ".5em")
+			.style("text-anchor", "middle")
+			.attr("class", "mainlabel");
+
+		vis.append("text")
+			.attr("transform", function() {
+				return "translate(0,-15)";
+			})
+			.attr("dy", ".5em")
+			.style("text-anchor", "middle")
+			.style("font-size", "30px")
+			.attr("class", "percentlabel");
+
+		vis.select(".mainlabel")
+			.text('Ownership');
+		vis.select(".percentlabel")
+			.text(data[0].percent.toFixed(1)+'%');
+			
+			
+		}}}
+	}
 }]);
 
 app.directive('d3myownership', ['d3', function(d3) {
@@ -154,10 +179,11 @@ app.directive('d3myownership', ['d3', function(d3) {
 
             var arc = d3.svg.arc()
                 .outerRadius(radius)
+                
                 .innerRadius(radius - 15);
 
             var pie = d3.layout.pie()
-                .sort(null)
+                //.sort(null)
 /*                .startAngle(-1.57079633)
                 .endAngle(4.71238898)*/
                 .value(function(d) { return d.percent; });

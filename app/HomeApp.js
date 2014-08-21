@@ -83,7 +83,8 @@ app.config(function($routeProvider, $locationProvider){
         }).
         when('/app/documents/prepare', {
             templateUrl: '/documents/partials/prepare.html',
-            controller: 'DocumentPrepareController'
+            controller: 'DocumentPrepareController',
+            reloadOnSearch: false
         }).
         when('/app/documents/company-status', {
             templateUrl: '/documents/partials/companyStatus.html',
@@ -109,7 +110,7 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/company/messages', {
             templateUrl: '/messages/newMessage.html',
             controller: 'MsgCtrl'
-            
+
         }).
 
         otherwise({redirectTo:'/app/home/investor'});
@@ -220,7 +221,7 @@ app.controller('CompanyCtrl',
                     $scope.$emit("notification:success", "You have successfully changed your password.");
                 }
             }
-            
+
 			$scope.fullScreen = function() {
 				/*var elem = document.getElementById("vid");
 				if (elem.requestFullscreen) {
@@ -232,7 +233,7 @@ app.controller('CompanyCtrl',
 				} else if (elem.webkitRequestFullscreen) {
 				  elem.webkitRequestFullscreen();
 				}*/
-				
+
 				document.getElementById("vid-pic").style.visibility="hidden";
 			};
             $scope.getTokenInfo = function() {
@@ -346,6 +347,7 @@ app.controller('CompanyCtrl',
                                     }
                                 }
                             }
+<<<<<<< HEAD
                         });
                     });*/
 
@@ -410,6 +412,198 @@ app.controller('CompanyCtrl',
                                 }
                             }
                         });
+=======
+                            angular.forEach($scope.trans, function (tran) {
+                            	angular.forEach($scope.rows, function (row) {
+                            		row[tran.issue]={};
+                            		row[tran.issue]["u"] = 0;
+                            		row[tran.issue]["a"] = 0;
+                            	});
+                            });
+
+                            angular.forEach($scope.trans, function (tran) {
+                                angular.forEach($scope.rows, function (row) {
+                                    if (row.name == tran.investor) {
+                                        if (tran.issue in row) {
+                                            row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], tran.units);
+                                            row[tran.issue]["a"] = calculate.sum(row[tran.issue]["a"], tran.amount);
+                                           
+                                            if (!isNaN(parseFloat(tran.forfeited))) {
+                                                row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                                            }
+                                        }
+                                        else {
+                                            row[tran.issue] = {};
+                                            row[tran.issue]["u"] = tran.units;
+                                            row[tran.issue]["a"] = tran.amount;
+                                            if (!isNaN(parseFloat(tran.forfeited))) {
+                                                row[tran.issue]["u"] = calculate.sum(row[tran.issue]["u"], (-tran.forfeited));
+                                                row[tran.issue]["ukey"] = row[tran.issue]["u"];
+                                            }
+                                        }
+                                    }
+                                    
+                                    
+                                });
+                            });
+                            	var moneyArray = [];
+                            	var securityArray = [];
+                            	angular.forEach($scope.rows, function (row) {
+                            		thisCounter=0;
+                            		issueCounter=0;
+                            		angular.forEach(row, function (item) {
+                            			
+                            			if (thisCounter>1) {
+                            				
+							
+											if (securityArray.length<=issueCounter) {
+												securityArray[issueCounter]=item.u;
+											}
+											else {
+												securityArray[issueCounter]+=item.u;
+											}
+											if (moneyArray.length<=issueCounter) {
+												moneyArray[issueCounter]=item.a;
+											}
+											else {
+												moneyArray[issueCounter]+=item.a;
+											}												
+											issueCounter++;
+                            			
+                            				
+                            			}
+                            			thisCounter++;
+                            		});
+                            	});
+                            	
+                            $scope.bigIssue=0;	
+                            $scope.biggerIssue=0;
+                            $scope.biggestIssue=0;
+                            var numCounter=0;
+                            while (numCounter<3 && securityArray.length>0) {
+                            	var maxIssue=-1;
+                            	var maxIndex=-1;
+								for (i=0;i<securityArray.length;i++) {
+									if (securityArray[i]>maxIssue) {
+										maxIssue=securityArray[i];
+										maxIndex=i;
+									}
+									
+								}
+								
+								
+								if (numCounter==0) {
+									$scope.biggestIssue=securityArray[maxIndex];
+									securityArray.splice(maxIndex, 1);
+								
+									$scope.biggestMoney=moneyArray[maxIndex];
+								
+									moneyArray.splice(maxIndex,1);
+								}
+								if (numCounter==1) {
+									$scope.biggerIssue=securityArray[maxIndex];
+									
+									
+									securityArray.splice(maxIndex, 1);
+									$scope.biggerMoney=moneyArray[maxIndex];
+									moneyArray.splice(maxIndex,1);
+								}
+								if (numCounter==2) {
+									$scope.bigIssue=securityArray[maxIndex];
+									securityArray.splice(maxIndex, 1);
+									$scope.bigMoney=moneyArray[maxIndex];
+									moneyArray.splice(maxIndex,1);
+                            	}
+                            	numCounter++;	
+                            }
+
+                            angular.forEach($scope.rows, function (row) {
+                                angular.forEach($scope.issues, function (issue) {
+                                    if (row[issue.issue] != undefined) {
+                                        if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u']))) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                            row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                                        }
+                                    }
+                                });
+                            });
+                            $scope.issuepercent = {};
+                            angular.forEach($scope.issues, function (issue) {
+                                $scope.issuepercent[issue.issue] = {'units':0,'debt':0};
+                                $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(issue.issue));
+                            });
+                            var totalunits = 0;
+                            var totaldebt = 0;
+                            angular.forEach($scope.rows, function (row) {
+                                angular.forEach($scope.issues, function (issue) {
+                                    if (row[issue.issue]) {
+                                        if (row[issue.issue]['u']) {
+                                            totalunits += row[issue.issue]['u'];
+                                            $scope.issuepercent[issue.issue]['units'] += row[issue.issue]['u'];
+                                        }
+                                        if (row[issue.issue]['x']) {
+                                            totaldebt += row[issue.issue]['x'];
+                                            $scope.issuepercent[issue.issue]['debt'] += row[issue.issue]['x'];
+                                        }
+                                    }
+                                });
+                            });
+                            $scope.graphdata = [];
+                            $scope.graphdata2 = [];
+                            $scope.graphdata3 = [];
+                            var biggestSecurity = "";
+                            var bigSecurity = "";
+                            var counter = 0;
+                            var maxPercent = -1;
+							var maxName = "";
+                            while (counter < 3) {
+								maxPercent = -1;
+								maxName = "";
+								angular.forEach($scope.issues, function (issue) {
+									var issuepercent = $scope.issuepercent[issue.issue]['debt'] + (($scope.issuepercent[issue.issue]['units'] / totalunits) * (100-totaldebt));
+									var name = issue.issue.length > 14 ? issue.issue.substring(0, (13)) + ".." : issue.issue;
+									if (counter==0) {
+										if (issuepercent > maxPercent) {
+											maxPercent = issuepercent;
+											maxName = name;
+										}
+									}
+									if (counter==1) {
+										if (issuepercent > maxPercent && name != biggestSecurity) {
+											maxPercent = issuepercent;
+											maxName = name;
+										}
+									}
+									if (counter==2) {
+										if (issuepercent > maxPercent && name != biggestSecurity && name != bigSecurity) {
+											maxPercent = issuepercent;
+											maxName = name;
+										}
+									}
+								});
+								if (counter==0) {
+									biggestSecurity = maxName;
+									$scope.graphdata.push({'name':maxName, 'percent':maxPercent});
+									$scope.graphdata.push({'name':'whatever', 'percent':100-maxPercent});
+									$scope.graphdata.push({'name':'zero', 'percent': 0});
+									
+								}
+								if (counter==1) {
+									bigSecurity = maxName;
+									$scope.graphdata2.push({'name':maxName, 'percent':maxPercent});
+									$scope.graphdata2.push({'name':'whatever', 'percent':100-maxPercent});
+									$scope.graphdata2.push($scope.graphdata[0]);
+									
+								}
+								if (counter==2) {
+									$scope.graphdata3.push({'name':maxName, 'percent':maxPercent});
+									$scope.graphdata3.push({'name':'whatever', 'percent':100-maxPercent});
+									$scope.graphdata3.push({'name':'something', 'percent': $scope.graphdata[0].percent+$scope.graphdata2[0].percent});
+									
+								}
+								counter++;
+							}
+						});
+>>>>>>> master
                     });
                     $scope.graphdata = [];
                     angular.forEach($scope.issues, function (issue) {
@@ -775,6 +969,14 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 });
             });
         };
+          // Total Shares | Paid for an issue column (type is either u or a)
+    	var colTotal = memoize(calculate.colTotal);
+    	$scope.colTotal = function(header, rows, type) {
+      
+        
+        return colTotal(header, rows, type);
+        
+    };
 
         $scope.getDocumentInfo = function() {
             SWBrijj.tblm("document.this_investor_library").then(function(docs) {

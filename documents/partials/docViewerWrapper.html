@@ -119,11 +119,13 @@
                                 <span class="info" ng-if="navState.role == 'issuer'">
                                     <span ng-if="!doc.when_signature_provided">Signed by {{doc.name}}</span>
                                     <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
-                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                </span>
                                 <span class="info" ng-if="navState.role == 'investor'">
                                     <span ng-if="!doc.when_signature_provided">Signed</span>
                                     <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
-                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                </span>
                             </div>
                             <div class="inforow" ng-if="doc.when_shared && !doc.when_signed && navState.role == 'issuer' && doc.signature_flow > 0 && !doc.issue">
                                 <span class="activity-icon doc-upload-red-icon"></span>
@@ -168,13 +170,13 @@
                         <help-tab doc="doc"></help-tab>
                     </tab>
                     <tab active="annottab" heading="Annotations" ng-if="prepareable() || prepareFor || actionNeeded()">
-                        <annotation-list doc="doc" active="active"></annotation-list>
+                        <annotation-list doc="doc" active="active" prepare-for="prepareFor"></annotation-list>
                     </tab>
                     <tab heading="Transactions" ng-if="doctrans.length > 0">
                         <doc-transaction-list trans="doctrans"></doc-transaction-list>
                     </tab>
                 </tabset>
-                <div id="bottom-part" class="confirmPanelContainer" ng-if="prepareFor || actionNeeded()" ng-class="{'preparescreen': prepareFor}">
+                <div id="bottom-part" class="confirmPanelContainer" ng-if="prepareable() || prepareFor || actionNeeded()">
                     <div class="confirmPanel">
                         <doc-action approve-action="signDocument()" approve-verb="Sign" ng-if="invq && doc.signable()" disabled="unfilledAnnotation()">
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
@@ -196,16 +198,18 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
                     </div>
+                    <div ng-if="prepareFor" class="sides-padded bottom-padded">{{prepareFor}} version</div>
                     <div ng-if="(invq && doc.signable()) || prepareFor" class="fields-progress">
-                        <span ng-show="numAnnotationsComplete() != numAnnotations()">{{numAnnotationsComplete()}}/{{numAnnotations()}} Complete</span>
-                        <span ng-show="numAnnotationsComplete() == numAnnotations()">Document is ready!</span>
-                        <meter cur="numAnnotationsComplete()" tot="numAnnotations()"></meter>
+                        <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) != doc.numAnnotations(navState.role)">{{doc.numAnnotationsComplete(navState.role, prepareFor)}}/{{doc.numAnnotations(navState.role)}} Complete</span>
+                        <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) == doc.numAnnotations(navState.role)">Document is ready!</span>
+                        <meter cur="doc.numAnnotationsComplete(navState.role, prepareFor)" tot="doc.numAnnotations(navState.role)"></meter>
                     </div>
+                    <div ng-if="prepareable()" class="sides-padded bottom-padded">When you've finished adding annotations select the green button below to return to the prepare screen.</div>
+                    <div ng-if="prepareable() || prepareFor" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></button></div>
                 </div>
             </internal-right-rail>
         </div>
     </div>
-    <preparation-bar ng-if="prepareable() || prepareFor"></preparation-bar>
 </div>
 
 <div modal="imageProcessedModal" options="processedopts" data-keyboard="false" data-backdrop="static">
@@ -229,8 +233,11 @@
         <div class="span5">
             <div class="modalText">
                 <div class="textBlock">
-                    <span class="subtitle">We fixed it!</span>
-                    <span>We've straightened up your document to make it look better!</span>
+                    <span ng-if="adjustedSelected" class="subtitle">We fixed it!</span>
+                    <span ng-if="adjustedSelected">We've straightened up your document to make it look better!</span>
+
+                    <span ng-if="!adjustedSelected" class="subtitle">Ignore and continue</span>
+                    <span ng-if="!adjustedSelected">We've made the document more legible, are you sure you'd like to continue with the original document?</span>
                 </div>
                 <div class='blue-link' ng-if="adjustedSelected"><span ng-click="processedClose(false)">Continue with enhancements</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
                 <div class='blue-link' ng-if="!adjustedSelected"><span ng-click="processedClose(true)">Continue with original</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
