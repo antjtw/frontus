@@ -150,10 +150,9 @@ own.directive('editableCaptableCell', [function() {
                         var num = parseFloat(newval);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
-                        } else {
-                            $scope.data.a = num;
-                            updateAttr('amount', num);
                         }
+                        $scope.data.a = num;
+                        updateAttr('amount', num);
                     } else {
                         return ($scope.data ? $scope.data.a : null);
                     }
