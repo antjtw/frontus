@@ -93,7 +93,10 @@ app.controller('DocumentPrepareController',
                     $scope.already_shared[d.doc_id] = {};
                     SWBrijj.tblmm('document.shared_with', 'original', d.doc_id).then(function(res) {
                         res.forEach(function(share) {
-                            $scope.already_shared[d.doc_id][share.investor] = share;
+                            if ((!$scope.already_shared[d.doc_id][share.investor]) ||
+                                $scope.already_shared[d.doc_id][share.investor].when_shared < share.when_shared) {
+                                $scope.already_shared[d.doc_id][share.investor] = share;
+                            }
                         });
                     });
                 });
