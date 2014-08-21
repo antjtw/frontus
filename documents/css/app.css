@@ -14,30 +14,6 @@ h2.large-h2 {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
-.smart-doc-list {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.smart-doc-list > ul > li {
-    border: 1px solid #E3E3E3;
-    overflow: visible;
-    height: 60px;
-}
-
-.smart-doc-list > ul > li >ul >li{
-    display: inline-block;
-    float: left;
-    line-height: 60px;
-    color: #666666;
-    margin-left: 10px;
-}
-
-.smart-doc-list > ul > li >ul >li:last-of-type {
-    float: right;
-    margin-right: 10px;
-}
-
 .thisone {
     color: #1ABC96;
 }
@@ -147,7 +123,6 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .status-table.doc-status > tbody > tr > td.tooltip-date, .status-table.doc-status > tbody > tr > th  {
     text-align: center;
-//    width: 60px;
 }
 
 .status-table.doc-status > tbody:first-child > tr > th:first-child {

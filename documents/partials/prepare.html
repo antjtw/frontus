@@ -59,8 +59,7 @@
                             </span>
                             <span class="name">
                                 {{Investor.getName(email)}}
-                                <span class="bad lower-icon" ng-if="already_shared[doc.doc_id][email]" data-icon="&#xe044;" tooltip="{{email}} received a copy of {{doc.docname}} on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}.
- SHARING WILL FAIL!"></span>
+                                <span class="bad lower-icon" ng-if="already_shared[doc.doc_id][email]" data-icon="&#xe044;" tooltip="{{email}} received a copy of {{doc.docname}} on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}."></span>
                             </span>
                         </span>
                         <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
