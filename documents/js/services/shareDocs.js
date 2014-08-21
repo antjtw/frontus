@@ -54,13 +54,13 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
             this.emails.push(email);
             this.checkEmail(email);
         }
-    }
+    };
     this.removeEmail = function(email) {
         var idx = this.emails.indexOf(email);
         if (idx != -1) {
             this.emails.splice(idx, 1);
         }
-    }
+    };
     this.removeShareItem = function(item) {
         this.documents = this.documents.filter(function(el) {
             return !(item.doc_id==el.doc_id &&
@@ -117,7 +117,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
             check_defer.reject(err);
         });
         return check_defer.promise;
-    }
+    };
     this.checkEmail = function(investor) {
         return this.checkPreparedLists(this.documents, [investor]);
     };
