@@ -278,31 +278,14 @@ ownership.filter('validActions', ['attributes', function(attributes) {
     };
 }]);
 
-ownership.filter('attributeInputTypes', ['attributes', function(attributes) {
-    return function(tp) {
-        // TODO generate from attributes service (db backed)
+ownership.filter('attributeTypes', ['attributes', function(attributes) {
+    return function(tp, sec_type) {
         var attrs = attributes.getAttrs();
         switch(tp) {
             case "security_type":
                 return Object.keys(attrs);
             case "kind": // this is "transaction_type"
-                return ["purchase", "forfeit", "transfer", "convert",
-                        "grant", "exercise"];
-                // also "split" "issue security" but those operate on
-            case "liquidpref":
-                return ['None', '1X', '2X', '3X'];
-            case "interestratefreq":
-                return ["weekly", "bi-weekly", "monthly",
-                        "quarterly", "yearly"];
-            case "vestfreq":
-                return ["weekly", "bi-weekly", "monthly",
-                        "quarterly", "yearly"];
-            case "date":
-                return "date_picker";
-            case "common":
-                return "checkbox";
-            default:
-                return "text_field";
+                return Object.keys(attrs[sec_type]);
         }
     };
 }]);
