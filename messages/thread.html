@@ -22,11 +22,13 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
-           <div class="message_info" style="margin-left: 40px">
-            <div class="message_input">
+            <div class="replyMessage">
+           <div class="message_info" >
+           <!--  <div class="message_input"> -->
                 <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
-            </div>
+      <!--       </div> -->
         </div>
+    </div>
             
         </div>
 
