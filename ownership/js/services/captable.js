@@ -74,6 +74,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
             linkUsers(captable.investors, results[5], results[6]);
             sortSecurities(captable.securities);
+            sortInvestors(captable.investors);
         }, logErrorPromise);
     }
     loadCapTable();
@@ -448,6 +449,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return securities.sort(securitySort)
     }
 
+    function sortInvestors(investors) {
+        return investors.sort(percentageSort)
+    }
+
     function securitySort(a,b) {
         if (a.effective_date < b.effective_date)
             return -1;
@@ -459,6 +464,14 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             if (a.insertion_date > b.insertion_date)
                 return 1;
         }
+        return 0;
+    }
+
+    function percentageSort(a,b) {
+        if (a.percentage() > b.percentage())
+            return -1;
+        if (a.percentage() < b.percentage())
+            return 1;
         return 0;
     }
 

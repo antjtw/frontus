@@ -645,7 +645,7 @@
             </tr>
             <!-- Editable investors -->
             <tbody ng-if="editMode;">
-            <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true"
+            <tr ng-repeat="row in ct.investors"
                 ng-show="([row] | noUnissue).length > 0">
                 <td class="capsums-col">
                     <input class="input-right"
@@ -725,7 +725,7 @@
             <!-- Un-editable view -->
             <!-- Regular Rows -->
             <tbody ng-if="!editMode">
-            <tr ng-repeat="row in ct.investors | orderBy:'percentage()':true">
+            <tr ng-repeat="row in ct.investors">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
