@@ -650,7 +650,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 $scope.ct.securities[i] = angular.copy($scope.issueRevert);
                 $scope.activeIssue = angular.copy($scope.issueRevert);
             }
-        };
+        }
     };
 
     // Captable Sharing Modal

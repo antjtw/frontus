@@ -813,7 +813,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         inv.percentage = function() {return investorSorting(inv.name);};
         SWBrijj.procm('_ownership.add_investor', inv.name)
         .then(function(x) {
-            captable.investors.splice(0, 0, inv);
+            captable.investors.push(inv);
         }).except(function(err) {
             console.log(err);
         });
