@@ -59,9 +59,7 @@ function(SWBrijj, $q, $filter, displayCopy) {
                      description: el.name in tips ? tips[el.name] : null,
                      type: 
                         $filter('attributeDbTypes')(el.typname, el.labels),
-                     labels: el.labels,
-                     input_type:
-                        $filter('attributeInputTypes')(el.name)};
+                     labels: JSON.parse(el.labels)};
             }
             secTypes[el.type] = 'frgh';
         });

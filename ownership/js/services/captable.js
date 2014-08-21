@@ -720,6 +720,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         {
             tran.attrs.investor = inv;
         }
+        if (tran.attrs.hasOwnProperty('investor_from'))
+        {
+            tran.attrs.investor_from = inv;
+        }
         return tran;
     }
     this.newTransaction = newTransaction;

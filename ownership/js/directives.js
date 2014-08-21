@@ -407,9 +407,10 @@ own.directive('editableTransactionAttributes', [function() {
         controller: ["$scope", "$filter", "captable", "attributes", "calculate",
             function($scope, $filter, captable, attributes, calculate) {
                 var attrs = attributes.getAttrs();
+                var ct;
                 $scope.attrs = attrs;
                 $scope.loaddirective = function() {
-                    var ct = captable.getCapTable();
+                    ct = captable.getCapTable();
                     $scope.securities = ct.securities;
                     $scope.tran_attrs =
                         attrs[$scope.data.attrs.security_type]
@@ -426,6 +427,15 @@ own.directive('editableTransactionAttributes', [function() {
                             });
                     return sorted;
                 }
+                
+                $scope.getInvestors = function() {
+                    var invs = [];
+                    for (i in ct.investors)
+                    {
+                        invs.push(ct.investors[i].name);
+                    }
+                    return invs;
+                }
 
                 function key_display_info(key) {
                     //console.log("bug for some values, use below to debug");
@@ -435,7 +445,13 @@ own.directive('editableTransactionAttributes', [function() {
                                 [$scope.data.kind][key] || {};
                 }
                 function inputType(key) {
-                    return key_display_info(key).input_type;
+                    switch (key_display_info(key).type)
+                    {
+                        case "enum":
+                            return key_display_info(key).labels;
+                        default:
+                            return "text_field";
+                    };
                 }
                 this.inputType = inputType;
                 $scope.displayName = function(key) {
@@ -448,7 +464,18 @@ own.directive('editableTransactionAttributes', [function() {
                     return $scope.description(key)!==null;
                 };
                 $scope.useTextField = function(key) {
-                    return inputType(key) == "text_field";
+                    var text = inputType(key) == "text_field";
+                    if (!text)
+                        return false;
+                    var assisted = ['investor', 'investor_to', 'investor_from'];
+                    return (assisted.indexOf(key) == -1);
+                };
+                $scope.useAssistedTextField = function(key) {
+                    var text = inputType(key) == "text_field";
+                    if (!text)
+                        return false;
+                    var assisted = ['investor', 'investor_to', 'investor_from'];
+                    return (assisted.indexOf(key) != -1);
                 };
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));

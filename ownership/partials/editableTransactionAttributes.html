@@ -21,6 +21,20 @@
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                ng-model="data.attrs[key]">
+        <ul class="dropdown-list drop-selector" ng-if="useAssistedTextField(key) && !pickIssue(key)">
+            <li class="dropdown standard">
+            <a class="dropdown-toggle">
+                {{data.attrs[key]}}
+                <span class="invisible-drop">'</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li ng-repeat="i in getInvestors()">
+                    <a ng-click="setIt(data, true, undo, key, i)">
+                        {{i}}
+                    </a>
+                </li>
+            </ul>
+        </ul>
         <input ng-if="useDatePicker(key)"
                ui-event="{blur: 'saveIt(data, true, undo)'}"
                type="text"
@@ -32,7 +46,7 @@
                 <span class="invisible-drop">'</span>
             </a>
             <ul class="dropdown-menu">
-                <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].input_type">
+                <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].labels">
                     <a ng-click="setIt(data, true, undo, key, i)">
                         {{i}}
                     </a>
