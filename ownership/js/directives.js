@@ -110,10 +110,13 @@ own.directive('editableCaptableCell', [function() {
         controller: ["$scope", "$rootScope",
                      "calculate", "captable", "History",
             function($scope, $rootScope, calculate, captable, history) {
-                $scope.destination_transaction = null;
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
+
+                $scope.loaddirective = function() {
+                    $scope.destination_transaction = null;
+                };
                 $scope.saveIt = function(value) {
                     captable.saveTransaction(
                         $scope.data.transactions[0],
@@ -147,10 +150,9 @@ own.directive('editableCaptableCell', [function() {
                         var num = parseFloat(newval);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
-                        } else {
-                            $scope.data.a = num;
-                            updateAttr('amount', num);
                         }
+                        $scope.data.a = num;
+                        updateAttr('amount', num);
                     } else {
                         return ($scope.data ? $scope.data.a : null);
                     }
@@ -189,6 +191,11 @@ own.directive('editableCaptableCell', [function() {
                 $scope.pickTran = function(id) {
                     $scope.destination_transaction = id;
                 };
+
+                $scope.loaddirective();
+                $scope.$watch('selectedCell', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };

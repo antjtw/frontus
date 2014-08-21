@@ -307,26 +307,22 @@ td:hover .hoverable {
     background-color: #FFFFFF;
 }
 
-.tableView td.tranSelected {
-    border: 2px solid #E3E3E3;
-}
-
-.tableView.captable .tranSelected > input {
+.tableView.captable .tranSelected input {
     padding: 7px 0 7px 4px;
 }
 
-.tableView.captable .tranSelected > input:last-child {
+.tableView.captable .tranSelected input:last-child {
     padding: 7px 0 7px 6px;
     width: 65px;
 }
 
-.tableView.captable .tranSelected > input.first-box {
+.tableView.captable .tranSelected input.first-box {
     border-left: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
 }
 
-.tableView.captable .tranSelected > input.last-box {
+.tableView.captable .tranSelected input.last-box {
     border-right: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
@@ -777,7 +773,7 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
 }
 
 .rightTitle.security-type > span.locked-security {
-    width: 146px;
+    width: 216px;
     padding-left: 10px;
     margin-left: 2px;
     border-radius: 3px;

@@ -1054,10 +1054,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return captable.attributes.filter(
                 function(el) { return el.name==key; })[0].display_name;
     };
-    this.isDebt = function(cell) {
-        if (!cell) return;
-        var type = cellSecurityType(cell);
-        return type == "Debt" || type == "Safe";
+    this.isDebt = function(security) {
+        if (!security) return;
+        return security.attrs.security_type == "Debt" || security.attrs.security_type == "Safe" || security.attrs.security_type == "Convertible Debt";
     };
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
