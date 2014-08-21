@@ -148,7 +148,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         displaySecurityDetails();
     };
     $scope.addSecurity = function(new_sec) {
-        if (new_sec == "" || new_sec == undefined || new_sec == null)
+        if (new_sec.name == "" || new_sec == undefined || new_sec == null)
             return;
         captable.addSecurity(new_sec);
         $scope.selectSecurity(new_sec.name);
