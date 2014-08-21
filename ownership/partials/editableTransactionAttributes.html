@@ -15,7 +15,7 @@
         <span ng-class="{'locked-security': key=='security_type'}">
             {{displayName(key)}}
         </span>
-        <input ng-if="useTextField(key) && !pickIssue(key)"
+        <input ng-if="useTextField(key) && !pickIssue(key) && !useDatePicker(key)"
                id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
@@ -36,7 +36,11 @@
             </ul>
         </ul>
         <input ng-if="useDatePicker(key)"
-               ui-event="{blur: 'saveIt(data, true, undo)'}"
+               id="{{key}}{{::data.$$hashKey}}"
+               ng-model="data.attrs[key]"
+               ui-event="{blur: 'saveItDate(data, true, undo, $event, key)'}"
+               ng-change="saveItDate(data, true, undo, $event, key)"
+               data-date-format={{settings.lowercasedate}}
                type="text"
                bs-datepicker>
         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">

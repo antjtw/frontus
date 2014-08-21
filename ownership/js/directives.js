@@ -433,8 +433,8 @@ own.directive('editableTransactionAttributes', [function() {
                 save: '=save'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$scope", "$filter", "captable", "attributes", "calculate",
-            function($scope, $filter, captable, attributes, calculate) {
+        controller: ["$rootScope","$scope", "$filter", "captable", "attributes", "calculate",
+            function($rootScope, $scope, $filter, captable, attributes, calculate) {
                 var attrs = attributes.getAttrs();
                 var ct;
                 $scope.attrs = attrs;
@@ -509,6 +509,10 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
+                var datefields = ['vestingbegins'];
+                $scope.useDatePicker = function(key) {
+                    return datefields.indexOf(key) >= 0
+                };
                 $scope.pickIssue = function(key) {
                     return key == "optundersec"
                 };
@@ -520,15 +524,26 @@ own.directive('editableTransactionAttributes', [function() {
                     }
                 };
                 $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
-                    if (evt) {
-                        if (evt != 'blur')
-                            keyPressed = true;
-                        var dateString = angular.element(field + '#' + tran.$$hashKey).val();
-                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
-                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                            var date = Date.parse(dateString);
-                            if (date) {
-                                tran[field] = calculate.timezoneOffset(date);
+                    if (field == "effective_date") {
+                        if (evt) {
+                            if (evt != 'blur')
+                                keyPressed = true;
+                            var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                                var date = Date.parse(dateString);
+                                if (date) {
+                                    tran[field] = calculate.timezoneOffset(date);
+                                    if ($scope.save)
+                                    {
+                                        captable.saveTransaction(tran, cell, errorFunc);
+                                    }
+                                    keyPressed = false;
+                                }
+                            }
+                        } else { // User is using calendar
+                            if (tran[field] instanceof Date) {
+                                tran[field] = calculate.timezoneOffset(tran[field]);
                                 if ($scope.save)
                                 {
                                     captable.saveTransaction(tran, cell, errorFunc);
@@ -536,16 +551,35 @@ own.directive('editableTransactionAttributes', [function() {
                                 keyPressed = false;
                             }
                         }
-                    } else { // User is using calendar
-                        if (tran[field] instanceof Date) {
-                            tran[field] = calculate.timezoneOffset(tran[field]);
-                            if ($scope.save)
-                            {
-                                captable.saveTransaction(tran, cell, errorFunc);
+                    } else {
+                        if (evt) {
+                            if (evt != 'blur')
+                                keyPressed = true;
+                            var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                                var date = Date.parse(dateString);
+                                if (date) {
+                                    tran.attrs[field] = moment(calculate.timezoneOffset(date)).format($rootScope.settings.lowercasedate.toUpperCase());
+                                    if ($scope.save)
+                                    {
+                                        captable.saveTransaction(tran, cell, errorFunc);
+                                    }
+                                    keyPressed = false;
+                                }
                             }
-                            keyPressed = false;
+                        } else { // User is using calendar
+                            if (tran.attrs[field] instanceof Date) {
+                                tran.attrs[field] = moment(calculate.timezoneOffset(tran.attrs[field])).format($rootScope.settings.lowercasedate.toUpperCase());
+                                if ($scope.save)
+                                {
+                                    captable.saveTransaction(tran, cell, errorFunc);
+                                }
+                                keyPressed = false;
+                            }
                         }
                     }
+
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     if ($scope.save)

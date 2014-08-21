@@ -585,8 +585,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.saveTransaction = saveTransaction;
 
     this.deleteTransaction = function(tran, cell) {
-        console.log(angular.copy(cell));
-        console.log(angular.copy(tran));
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
         .then(function(x) {
             var res = x[0].delete_transaction;
