@@ -121,11 +121,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 /** @name doc#signature_deadline
                  * @type {Date} */
 
-                 SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
-                     $scope.docviews = data;
-                 }).except(function(x) {
-                     console.log(x);
-                 });
+                SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
+                    $scope.docviews = data;
+                }).except(function(x) {
+                    console.log(x);
+                });
                 $scope.docId = doc.doc_id;
                 $scope.initDocView();
             };
@@ -143,35 +143,16 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             };
 
             $scope.getData = function() {
-                var flag = !isNaN(parseInt($scope.urlInves));
-                if ($scope.docKey || flag) {
-                    var field = "original";
-                    var tempdocid = $scope.docKey;
-                    if (flag) {
-                        field = "doc_id";
-                        tempdocid = parseInt($scope.urlInves);
-                    }
+                if ($scope.docKey) {
+                    var field = "doc_id";
+                    var tempdocid = parseInt($scope.urlInves);
                     if (counterparty) {
                         SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
-                            if (flag) {
-                                SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[0].doc_id).then(function(data) {
-                                    $scope.doctrans = data;
-                                });
-                                $scope.getVersion(data[0]);
-                                return;
-                            }
-                            else {
-                                // probably unused at this point
-                                for (var i = 0; i < data.length; i++) {
-                                    if (data[i].investor == $scope.urlInves) {
-                                        SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[i].doc_id).then(function(data) {
-                                            $scope.doctrans = data;
-                                        });
-                                        $scope.getVersion(data[i]);
-                                        return;
-                                    }
-                                }
-                            }
+                            SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[0].doc_id).then(function(data) {
+                                $scope.doctrans = data;
+                            });
+                            $scope.getVersion(data[0]);
+                            return;
                         });
                     } else {
                         SWBrijj.tblmm("ownership.doc_evidence", "doc_id", tempdocid).then(function(data) {
