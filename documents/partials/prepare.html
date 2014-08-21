@@ -41,7 +41,7 @@
                     <div class="docPrepRow header">
                         <span>
                             <span data-icon="&#xe009;" class="status"></span>
-                            <span class="name">{{doc.docname}}</span>
+                            <span>{{doc.docname}}</span>
                             <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" tooltip="Signature Requested"></span>
                             <span data-icon="&#xe60E;" ng-show="doc.issue" tooltip="Link to {{doc.issue}}"></span>
                             <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
@@ -52,7 +52,7 @@
                             {{annot.type_info.display}}
                         </span>
                     </div>
-                    <div ng-repeat="email in ShareDocs.emails" class="docPrepRow">
+                    <div ng-repeat="email in ShareDocs.emails" class="docPrepRow" ng-class="{warningheight: already_shared[doc.doc_id][email]}">
                         <span>
                             <span class="status">
                                 <span class="good" ng-if="doc.preparedFor[email].is_prepared" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
@@ -61,11 +61,11 @@
                                 {{Investor.getName(email)}}
                             </span>
                             <span class="warning" ng-if="already_shared[doc.doc_id][email]">
-                                <span>{{email}} received a copy of {{doc.docname}} on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
+                                <span>{{email}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
                                 <span><a ng-click="ShareDocs.removeEmail(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
                             </span>
                         </span>
-                        <span ng-if="!state.bulkPrep" ng-show="doc.hasIssuerAnnotations()">
+                        <span ng-if="!state.bulkPrep && doc.hasIssuerAnnotations()">
                             <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}' class="pull-right" ng-class="{complete: doc.preparedFor[email].is_prepared}">
                                 <span ng-if="doc.preparedFor[email].is_prepared">Edit</span>
                                 <span ng-if="!doc.preparedFor[email].is_prepared">Complete Annotations <span class="lower-icon" data-icon="&#xe016;"></span></span>
@@ -83,6 +83,9 @@
                                 <option></option>
                                 <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
                             </select>
+                        </span>
+                        <span ng-if="!state.bulkPrep && !doc.hasIssuerAnnotations()">
+                            <!-- no content, needed for table width -->
                         </span>
                     </div>
                 </div>

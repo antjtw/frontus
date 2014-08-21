@@ -2421,9 +2421,20 @@ div.profile-link > span:first-of-type {
     vertical-align: -5%;
 }
 
+.docPrepRow.header > span:first-child > span[tooltip] {
+    color: #a6a6a6;
+}
+
 .docPrepRow > span {
     display: table-cell;
     border-bottom: 1px solid #c3c3c3;
+    min-height: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.docPrepRow .name {
+    color: #666666;
 }
 
 .docPrepRow > span:first-child > span {
@@ -2454,9 +2465,16 @@ div.profile-link > span:first-of-type {
     box-sizing: border-box;
     width: 100%;
     height: 40px;
-    vertical-align: top;
     border-radius: 0;
     border: 1px solid #fff;
+    margin: 0;
+}
+
+.docPrepRow.warningheight > span,
+.docPrepRow.warningheight > span:first-child ~ span input,
+.docPrepRow.warningHeight > span:first-child ~ span .select2-container {
+    /* the browser will make the td's as high as they need, but won't adjust percentage based widths inside */
+    height: 120px;
 }
 
 .docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
