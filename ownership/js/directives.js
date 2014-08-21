@@ -131,11 +131,12 @@ own.directive('editableCaptableCell', [function() {
                 }
                 $scope.units = function(newval) {
                     if (angular.isDefined(newval)) {
+                        var num = parseFloat(newval);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
                         }
-                        $scope.data.u = newval;
-                        updateAttr('units', newval);
+                        $scope.data.u = num;
+                        updateAttr('units', num);
 
                     } else {
                         return ($scope.data ? $scope.data.u : null);
@@ -143,11 +144,12 @@ own.directive('editableCaptableCell', [function() {
                 };
                 $scope.amount = function(newval) {
                     if (angular.isDefined(newval)) {
+                        var num = parseFloat(newval);
                         if (!$scope.data) {
-                            alert("ahh");
+                            $scope.data = $scope.selectedCell;
                         } else {
-                            $scope.data.a = newval;
-                            updateAttr('amount', newval);
+                            $scope.data.a = num;
+                            updateAttr('amount', num);
                         }
                     } else {
                         return ($scope.data ? $scope.data.a : null);
