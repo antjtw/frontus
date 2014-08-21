@@ -613,6 +613,7 @@
                     <input placeholder="Add Security"
                            class="capEditHeaders"
                            ng-click="createNewSec()"
+                           ui-event="{blur:'addSecurity(new_sec)'}"
                            ng-model="$parent.new_sec.transactions[0].attrs.security">
                 </th>
             </tr>

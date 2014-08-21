@@ -290,7 +290,9 @@ own.directive('editableSecurityDetails', [function() {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
                 };
-
+                $scope.editSecName = function(tran) {
+                    $scope.sec.name = $scope.sec.attrs.security = tran.attrs.security;
+                };
                 $scope.loaddirective();
                 $scope.$watch('sec', function(newval, oldval) {
                     $scope.loaddirective();
