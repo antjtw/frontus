@@ -445,7 +445,21 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
 
     function sortSecurities(securities) {
-        console.log(securities);
+        return securities.sort(securitySort)
+    }
+
+    function securitySort(a,b) {
+        if (a.effective_date < b.effective_date)
+            return -1;
+        if (a.effective_date > b.effective_date)
+            return 1;
+        if (a.effective_date = b.effective_date) {
+            if (a.insertion_date < b.insertion_date)
+                return -1;
+            if (a.insertion_date > b.insertion_date)
+                return 1;
+        }
+        return 0;
     }
 
     function investorSorting(inv) {
