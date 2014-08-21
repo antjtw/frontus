@@ -253,7 +253,12 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
+                    if (!$scope.windowToggle)
+                        $scope.newTran = null;
                 };
+                $scope.$on('newSelection', function(evt) {
+                    $scope.newTran = null;
+                });
                 $scope.setIt = function(tran, k, v, att) {
                     if (att)
                     {
@@ -333,6 +338,9 @@ own.directive('editableCellDetails', [function() {
                                          kind,
                                          $scope.cell.investor);
                 };
+                $scope.$on('newSelection', function(evt) {
+                    $scope.newTran = null;
+                });
                 $scope.nonactions = ["issue security", "grant", "purchase"];
 
                 $scope.addTransaction = function() {
@@ -362,6 +370,8 @@ own.directive('editableCellDetails', [function() {
                     ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
+                    if (!$scope.windowToggle)
+                        $scope.newTran = null;
                 };
                 $scope.submitAction = function(tran) {
                     captable.saveTransaction(tran, true);
