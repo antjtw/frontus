@@ -24,7 +24,8 @@
         </accordion-heading>
         <div class="small-standard-button
                     standard-button
-                    btn-group darkgray">
+                    btn-group darkgray"
+            ng-if="!sec.creating">
             <button class="btn"
                     ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
@@ -50,6 +51,10 @@
         <div class="capTab" ng-switch-when="details">
             <div class="capGuide global">
                 <div class="rightTitle">
+                    <span ng-if="sec.creating">Security Name</span>
+                    <input ng-if="sec.creating"
+                           type="text"
+                           ng-model="tran.attrs.security">
                     <span>Security Type</span>
                     <span class="locked-security" ng-if="sec.locked">{{tran.attrs.security_type}}</span>
                     <ul class="dropdown-list drop-selector" ng-if="!sec.locked">
@@ -68,8 +73,13 @@
                     </ul>
                 </div>
             </div>
-            <editable-transaction-attributes ng-if="tran" data="tran" save="true">
+            <editable-transaction-attributes ng-if="tran" data="tran" save="!sec.creating">
             </editable-transaction-attributes>
+            <div class="standard-button" ng-if="sec.creating">
+                <button class="btn" ng-click="addSecurity(sec);">
+                    Submit
+                </button>
+            </div>
         </div>
         <div class="capTab" ng-switch-when="documents">
             <div ng-if="tran.evidence_data.length==0"
@@ -139,7 +149,7 @@
     </accordion>
     <span class="add-transaction-link"
           ng-click="addTransaction()"
-          ng-if="currentTab!='documents'">
+          ng-if="currentTab!='documents' && !sec.creating">
       <span data-icon="&#xe053;" aria-hidden="true"></span>
       <span>Add Transaction</span>
     </span>

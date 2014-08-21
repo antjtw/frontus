@@ -756,33 +756,45 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return tran;
     }
     this.newTransaction = newTransaction;
-    this.addSecurity = function(name) {
-        // NOTE assume Option for now, user can change,
-        //var tran = newTransaction("Option", "issue security");
-        //tran.kind = "issue_security";
-        console.log("addSecurity");
+    this.newSecurity = function() {
         var security = nullSecurity();
-        security.name = name;
+        security.name = "";
         security.effective_date = new Date(Date.now());
         security.insertion_date = new Date(Date.now());
         initAttrs(security, 'Option', 'issue security');
-        console.log(attrs['Option']);
         security.attrs.security = name;
         security.attrs.security_type = 'Option';
-        console.log(security.attrs);
+        security.creating = true;
         
         var tran = new Transaction();
         tran.kind = 'issue security';
         tran.company = $rootScope.navState.company;
         tran.attrs = security.attrs;
-       
         // Silly future date so that the issue always appears
         // on the leftmost side of the table
         tran.insertion_date = new Date(2100, 1, 1);
+        
+        security.transactions.push(tran);
+        return security;
+    }
+    this.addSecurity = function(security) {
+        // NOTE assume Option for now, user can change,
+        //var tran = newTransaction("Option", "issue security");
+        //tran.kind = "issue_security";
+        console.log("addSecurity");
+        
+        var tran = security.transactions[0]; //the transaction that was edited
+        
+        security.name = tran.attrs.security;
+        security.effective_date = tran.effective_date;
+        security.insertion_date = tran.insertion_date;
+        security.attrs = tran.attrs;
+        console.log(security.attrs);
+        
         // FIXME should we be using AddTran
         // which takes care of the ledger entries?
         captable.transactions.push(tran);
-        security.transactions.push(tran);
+        security.creating = false;
         captable.securities.push(security);
         saveTransaction(tran);
     };

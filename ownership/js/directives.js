@@ -258,6 +258,9 @@ own.directive('editableSecurityDetails', [function() {
                     if (!$scope.windowToggle)
                         $scope.newTran = null;
                 };
+                $scope.addSecurity = function() {
+                    $scope.$emit('addSecurity');
+                };
                 $scope.$on('newSelection', function(evt) {
                     $scope.newTran = null;
                 });
@@ -273,7 +276,10 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.saveIt(tran);
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
-                    captable.saveTransaction(tran, cell, errorFunc);
+                    if (!$scope.sec.creating)
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
                 };
 
                 $scope.loaddirective();

@@ -139,15 +139,25 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         console.log("update investor");
         console.log(investor);
     };
+    $scope.createNewSec = function() {
+        $scope.new_sec = captable.newSecurity();
+        $scope.selectedCell = $scope.selectedInvestor = null;
+        History.forget($scope, 'selectedSecurity');
+        $scope.selectedSecurity = $scope.new_sec;
+        History.watch('selectedSecurity', $scope);
+        displaySecurityDetails();
+    };
     $scope.addSecurity = function(new_sec) {
-        console.log(new_sec);
-        console.log(typeof(new_sec));
         if (new_sec == "" || new_sec == undefined || new_sec == null)
             return;
         captable.addSecurity(new_sec);
-        $scope.selectSecurity(new_sec);
-        $scope.new_sec = "";
+        $scope.selectSecurity(new_sec.name);
+        $scope.new_sec = null;
     };
+    $scope.$on('addSecurity', function(evt) {
+        void(evt);
+        $scope.addSecurity($scope.new_sec);
+    });
     $scope.addInvestor = function(new_inv) {
         if (new_inv) captable.addInvestor(new_inv);
         $scope.selectInvestor(new_inv);

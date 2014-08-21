@@ -612,8 +612,8 @@
                 <th>
                     <input placeholder="Add Security"
                            class="capEditHeaders"
-                           ui-event="{blur: 'addSecurity(new_sec)'}"
-                           ng-model="$parent.new_sec">
+                           ng-click="createNewSec()"
+                           ng-model="$parent.new_sec.transactions[0].attrs.security">
                 </th>
             </tr>
             <!-- Uneditable headers -->
