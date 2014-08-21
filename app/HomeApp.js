@@ -302,6 +302,23 @@ app.controller('CompanyCtrl',
             $scope.getOwnershipInfo = function() {
                 $scope.ct = captable.getCapTable();
                 console.log($scope.ct);
+                $scope.issueArray=[];
+            	var index=-1;
+            	$scope.totalIssued=0;
+                angular.forEach($scope.ct.ledger_entries, function (entry) {
+                	$scope.totalIssued+=(entry.credit-entry.debit);
+                	index = $scope.issueArray.indexOf(entry.security);
+                	if index==-1 {
+                		$scope.issueArray.push(entry.security);
+                		$scope.issueArray.push(entry.credit-entry.debit);
+                	}
+                	else {
+                		$scope.issueArray[index+1]+=(entry.credit-entry.debit);
+                	}
+                	
+                }
+                });
+                console.log($scope.totalIssued);
                 $scope.ownersummary = {};
                 $scope.rows = [];
                 $scope.uniquerows = [];
@@ -559,8 +576,10 @@ app.controller('CompanyCtrl',
                             while (counter < 3) {
 								maxPercent = -1;
 								maxName = "";
-								angular.forEach($scope.issues, function (issue) {
-									var issuepercent = $scope.issuepercent[issue.issue]['debt'] + (($scope.issuepercent[issue.issue]['units'] / totalunits) * (100-totaldebt));
+								for (var i=1; i<$scope.issueArray.length; i+=2) {
+								//angular.forEach($scope.issues, function (issue) {
+									//var issuepercent = $scope.issuepercent[issue.issue]['debt'] + (($scope.issuepercent[issue.issue]['units'] / totalunits) * (100-totaldebt));
+									var issuepercent = $scope.issueArray[i]/$scope.totalIssued*100;
 									var name = issue.issue.length > 14 ? issue.issue.substring(0, (13)) + ".." : issue.issue;
 									if (counter==0) {
 										if (issuepercent > maxPercent) {
