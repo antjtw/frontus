@@ -147,11 +147,11 @@
             <ul>
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
-                        Transfer
+                        {{newTran.kind || "Select an action"}}
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="x in valid_actions(sec.attrs.security_type)">
+                        <li ng-repeat="x in sec.attrs.security_type | validActions: 'security'">
                             <a ng-click="newTran.kind = x;">
                                 {{x}}
                             </a>

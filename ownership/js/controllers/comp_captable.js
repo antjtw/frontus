@@ -93,6 +93,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             History.watch('selectedCell', $scope);
             displayCellDetails();
         }
+        $scope.$broadcast("newSelection");
     };
     $scope.selectSecurity = function(security_name) {
         $scope.selectedCell = $scope.selectedInvestor = null;
@@ -112,6 +113,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             History.watch('selectedSecurity', $scope);
             displaySecurityDetails();
         }
+        $scope.$broadcast("newSelection");
     };
     $scope.selectInvestor = function(investor_name) {
         $scope.selectedCell = $scope.selectedSecurity = null;
@@ -130,6 +132,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             History.watch('selectedInvestor', $scope);
             displayInvestorDetails();
         }
+        $scope.$broadcast("newSelection");
     };
     $scope.updateInvestor = function(investor) {
         // TODO Changing investor name needs implementing here
