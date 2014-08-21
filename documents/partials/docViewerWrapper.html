@@ -39,6 +39,20 @@
                 </li>
             </ul>
         </div>
+        <div class="box-button pull-right"
+             ng-class="{'disabledme': companyIsZombie()}"
+             ng-show="!invq && !urlInves && !prepareable() && !prepareFor"
+             ng-click="companyIsZombie() || shareThisDoc();"
+             data-placement="bottom" bs-tooltip="zombiemessage">
+            <ul>
+                <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+
+                </li>
+                <li> <span>Share</span>
+
+                </li>
+            </ul>
+        </div>
         <div ng-show="!prepareFor && !prepareable()" class="box-button pull-right"
              ng-click="downloadPDF();"
              data-placement="bottom">
