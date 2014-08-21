@@ -300,19 +300,14 @@ mod.directive('threadInformation', function(){
             $scope.showMessage = function(){
                 $scope.myMessage = $scope.thread
                 angular.forEach($scope.myMessage, function(msg){
-                    console.log(msg.time)
-                    $scope.myTime = msg.time
+                    console.log(msg.time);
+                    $scope.myTime = msg.time;
+                    $scope.mySubject = msg.subject;
                 });
             };
             $scope.showMessage()
 
-            // $scope.formatMessage = function(){
-            //     console.log($scope.message.time)
-            //     console.log(typeof $scope.message.time
-            //         )
-            //     console.log(typeof JSON.parse($scope.message.time))
-            // }
-            // $scope.formatMessage();
+
 
         }]
     };
