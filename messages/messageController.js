@@ -104,6 +104,8 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             console.log("hi")
             SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
                 console.log(data);
+                $scope.myThread = data
+                console.log($scope.myThread)
 
             })
         }

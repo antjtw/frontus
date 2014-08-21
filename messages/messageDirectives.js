@@ -22,7 +22,7 @@ mod.directive('composeMessage', function() {
                 else{
                     return null
                 }
-            }
+            };
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
@@ -252,6 +252,7 @@ mod.directive('sentMessages', function(){
     };
 });
 
+// not sure where this directive goes
 mod.directive('replyMessage', function(){
     return {
         scope: {thread: "="},
@@ -275,9 +276,10 @@ mod.directive('replyMessage', function(){
     };
 });
 
+// this is the information on the side of the page
 mod.directive('threadInformation', function(){
     return {
-        scope: {message: "="},
+        scope: {thread: "="},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -286,10 +288,22 @@ mod.directive('threadInformation', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
+
+
+            $scope.myMessage = "blerge!";
+            console.log($scope.thread);
+            $scope.$watch('thread', function(){
+                console.log($scope.thread);
+                $scope.showMessage();
+            });
+
             $scope.showMessage = function(){
-                console.log($scope.message)
-                console.log("i'm on the side")
-            }
+                $scope.myMessage = $scope.thread
+                angular.forEach($scope.myMessage, function(msg){
+                    console.log(msg.time)
+                    $scope.myTime = msg.time
+                });
+            };
             $scope.showMessage()
 
             // $scope.formatMessage = function(){

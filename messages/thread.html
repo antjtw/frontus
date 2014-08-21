@@ -22,6 +22,7 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+            {{myThread}}
             
         </div>
 
@@ -31,7 +32,8 @@
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Information">
                     <div style="clear:both;">
-                        <thread-information></thread-information>
+                        hi
+                        <thread-information thread="myThread"></thread-information>
                     </div>
                 </tab>
                 <tab heading="People">
