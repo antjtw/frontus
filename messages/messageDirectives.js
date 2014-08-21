@@ -33,6 +33,19 @@ mod.directive('composeMessage', function() {
             };
             $scope.getPeople()
 
+            $scope.groupMessage = false
+            $scope.selectGroupMessage = function(){
+                if($scope.groupMessage == false){
+                    $scope.groupMessage = true;
+                    console.log("i will send a group message");
+                }
+                else if($scope.groupMessage == true){
+                    $scope.groupMessage = false;
+                    console.log("i will use the send bulk message option")
+                }
+
+            }
+
             // create the object for selct2
            $scope.myContacts = []
             $scope.groupsAndPeople = function(){
@@ -126,6 +139,7 @@ mod.directive('composeMessage', function() {
                 recipients.push(navState.userid)
                 $scope.clicked = true;
                 console.log($scope.navState.userid)
+                console.log(newtext)
                 SWBrijj.procm('mail.send_message',
                             JSON.stringify(recipients),
                             null,
