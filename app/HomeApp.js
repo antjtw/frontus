@@ -176,9 +176,9 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
 
 app.controller('CompanyCtrl',
     ['$scope', '$rootScope', '$route', '$location',
-        '$routeParams', 'SWBrijj', 'navState', 'calculate',
+        '$routeParams', 'SWBrijj', 'navState', 'calculate', 'captable',
         function($scope, $rootScope, $route, $location,
-                 $routeParams, SWBrijj, navState, calculate)
+                 $routeParams, SWBrijj, navState, calculate, captable)
         {
             $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
@@ -300,6 +300,8 @@ app.controller('CompanyCtrl',
             };
 
             $scope.getOwnershipInfo = function() {
+                $scope.ct = captable.getCapTable();
+                console.log($scope.ct);
                 $scope.ownersummary = {};
                 $scope.rows = [];
                 $scope.uniquerows = [];
