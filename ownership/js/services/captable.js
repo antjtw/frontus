@@ -716,7 +716,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         initAttrs(tran, sec_obj.attrs.security_type, kind);
         tran.attrs.security = sec;
         tran.attrs.security_type = sec_obj.attrs.security_type;
-        if (sec_obj.hasOwnProperty('investor'))
+        if (tran.attrs.hasOwnProperty('investor'))
         {
             tran.attrs.investor = inv;
         }
