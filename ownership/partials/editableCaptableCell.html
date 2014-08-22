@@ -2,7 +2,7 @@
     <input ng-if="!isDebt(sec);"
            class="captablepair first-box"
            ui-event="{focus: 'selectCell(inv, sec.name)',
-                       blur: 'saveIt(data.u)'}"
+                       blur: 'saveIt(\'units\', data.u)'}"
            ng-model='units'
            ng-model-options="{getterSetter: true}"
            onpaste="return false"
@@ -14,7 +14,7 @@
            disabled>
     <input class="captablepair last-box"
            ui-event="{focus: 'selectCell(inv, sec.name)',
-                       blur: 'saveIt(data.a)'}"
+                       blur: 'saveIt(\'amount\', data.a)'}"
            data-currency
            ng-model='amount'
            ng-model-options="{getterSetter: true}"

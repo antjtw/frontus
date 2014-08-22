@@ -117,22 +117,27 @@ own.directive('editableCaptableCell', [function() {
                 $scope.loaddirective = function() {
                     $scope.destination_transaction = null;
                 };
-                $scope.saveIt = function(value) {
+                $scope.saveIt = function(key, value) {
                     if ($scope.data) {
-                        captable.saveTransaction(
-                            $scope.data.transactions[0],
-                            $scope.data);
+                        if ($scope.data.transactions.length > 1) {
+                            $scope.openTranPicker(key, value);
+                        } else {
+                            captable.saveTransaction(
+                                $scope.data.transactions[0],
+                                $scope.data);
+                        }
                     }
                 };
                 function updateAttr(key, val) {
                     if ($scope.data.transactions.length == 1) {
                         $scope.data.transactions[0].attrs[key] = val;
                     } else if ($scope.destination_transaction) {
-                        // FIXME no straight update
-                        // $scope.destination_transaction.attrs[key] = val;
-                    } else {
-                        $scope.openTranPicker(key, val);
+                        $scope.destination_transaction.attrs[key] = val;
+                        captable.saveTransaction(
+                            $scope.destination_transaction,
+                            $scope.data);
                     }
+                    $scope.destination_transaction = null;
                 }
                 $scope.units = function(newval) {
                     if (angular.isDefined(newval)) {
@@ -166,26 +171,30 @@ own.directive('editableCaptableCell', [function() {
                 $scope.openTranPicker = function(key, val) {
                     $scope.picker = {
                         "key": key,
-                        "val": val,
-                        "history": captable.selectedCellHistory()
+                        "diff": 0
                     };
-                    var k = key[0]; // units -> units; amount -> a
-                    var hist_len = $scope.picker.history.length;
-                    console.log($scope.picker.history.length);
-                    $scope.picker.diff =
-                        $scope.picker.history[hist_len-1][k] -
-                        $scope.picker.history[hist_len-2][k];
-                    $scope.tranPicker = true;
+                    angular.forEach($scope.selectedCell.transactions, function(cell) {
+                        if (calculate.isNumber(cell.attrs[key])) {
+                            $scope.picker.diff += parseFloat(cell.attrs[key]);
+                        }
+                    });
+                    $scope.picker.diff = $scope.selectedCell.u - $scope.picker.diff;
+                    if ($scope.picker.diff != 0) {
+                        $scope.tranPicker = true;
+                    }
                 };
                 $scope.closeTranPicker = function(update) {
                     if (update) {
                         if (!$scope.destination_transaction) {
                             $scope.destination_transaction =
-                                captable.newTran();
+                                captable.newTransaction($scope.selectedCell.security, captable.defaultKind($scope.sec.attrs['security_type']), $scope.selectedCell.investor);
                         }
-                        updateAttr($scope.picker.key, $scope.picker.val);
+                        if (calculate.isNumber($scope.destination_transaction.attrs[$scope.picker.key])) {
+                            $scope.picker.diff = $scope.picker.diff + parseFloat($scope.destination_transaction.attrs[$scope.picker.key]);
+                        }
+                        updateAttr($scope.picker.key, $scope.picker.diff);
                     } else {
-                        // reset
+                        $scope.selectedCell.u -= $scope.picker.diff
                     }
                     $scope.picker = {};
                     $scope.tranPicker = false;
