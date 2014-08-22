@@ -234,7 +234,8 @@ mod.directive('messageFilter', function(){
     return {
         scope: {sent: "=", 
                 page: "=",
-                inbox: "@"},
+                inbox: "=",
+                ilength: "="},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -245,13 +246,16 @@ mod.directive('messageFilter', function(){
 
             $scope.whichPage = function(){
                 console.log($scope.page);
-                console.log("hellooo");
                 $scope.page="sent"
-            }
+            };
+
+       
 
             $scope.messageLength = function(){
-                console.log($scope.inbox)
-                console.log("testtest")
+                console.log($scope.inbox);
+                console.log("testtest");
+                console.log($scope.ilength);
+                console.log("heyyyy");
             }
             $scope.messageLength()
 
@@ -270,12 +274,6 @@ mod.directive('sentMessages', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
 
         function($scope, $rootScope, SWBrijj, $route) {
-
-           $scope.formatMsg = function(){
-                console.log($scope.sents)
-                // console.log($scope.)
-           }
-           $scope.formatMsg();
 
             $scope.showString = function(string){
                 if(string.length > 50){

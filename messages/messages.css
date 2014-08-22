@@ -314,6 +314,7 @@ the compose message page styling*/
     vertical-align: top;
     margin-right: 20px;
     margin-left: 20px;
+    width: 180px;
 }
 
 .threadMembers div.tooltip-inner{

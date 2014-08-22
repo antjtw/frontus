@@ -27,11 +27,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
             else{
                 return string
-            }
-           }
-
-
-
+            };
+        };
 
         $scope.getSentMessages = function(){
             var msgs = [];
@@ -75,11 +72,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
-                console.log(data)
                 $scope.messageThreads = data;
                 $scope.threadLength = $scope.messageThreads.length;
-                console.log($scope.messageThreads);
-                console.log("remove messages you sent from inbox")
                 angular.forEach($scope.messageThreads, function(thr){
                     console.log(navState.userid);
                     if(thr.sender !== navState.userid){
@@ -93,6 +87,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                     thread.members = members3;
                 });
                 console.log($scope.myMessages.length)
+                $scope.inboxLength = $scope.myMessages.length
             });
         };
         $scope.getMessageThreads();
