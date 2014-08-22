@@ -34,7 +34,6 @@
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <compose-message ng-if="page == 'compose'"></compose-message>
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
-            <reply-message ng-if="page == 'reply'" thread="myThread"></reply-message>
             <div ng-if="page =='drafts'">Drafts will go here</div>
             <div ng-if="!page">
             <div class="span12">
@@ -46,13 +45,15 @@
                         <th></th>
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="messageThread in messageThreads">
+                    <tbody ng-repeat="myMessage in myMessages">
                         <tr class="empty-row"></tr>
-                        <tr class="forTooltip">
+                        <tr class="threadMembers">
                             <td style="width:550px" class="shareholder-column docname-column">
-                                <a href="/app/company/messages/thread?thread={{messageThread.thread_id}}"position="bottom"><span>{{messageThread.members}}</span></a>
+                                <div tooltip="{{myMessage.members}}">
+                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><span>{{showString(myMessage.members)}}</span></a>
+                                </div>
                             </td>
-                            <td><span>{{messageThread.subject}}</span></td>
+                            <td><span>{{myMessage.subject}}</span></td>
                             <td style="width:10px;"></td>
                         </tr>
                     </tbody>

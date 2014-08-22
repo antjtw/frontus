@@ -17,7 +17,8 @@
 
             <div class="replyMessage">
                 <div class="replySide">
-                  {{navState.userid}}
+                   <!--  this should be who the message is from -->
+                  {{navState.name}}
                 </div>
                 <div class="replyInput">{{threadMembers}}
                     <div ng-bind-html="sentMessage"></div>
@@ -29,7 +30,7 @@
             <div class="replyMessage">
                 <div class="replySide"> 
 
-                    {{navState.userid}}
+                    {{navState.name}}
                 </div>
                 <div class="replyInput">
                     <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>

@@ -3,7 +3,7 @@
 app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
     function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
-    $scope.page = null
+        $scope.page = null
         $scope.togglePage = function(button){
             console.log("toggle page")
             if($scope.page !== button){
@@ -20,6 +20,18 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             };
           
         };
+
+        $scope.showString = function(string){
+            if(string.length > 50){
+                return string.slice(0, 50) + "..."
+            }
+            else{
+                return string
+            }
+           }
+
+
+
 
         $scope.getSentMessages = function(){
             var msgs = [];
@@ -59,20 +71,33 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
         $scope.getSentMessages();
 
+        $scope.myMessages = [];
+
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 console.log(data)
                 $scope.messageThreads = data;
                 $scope.threadLength = $scope.messageThreads.length;
-                angular.forEach($scope.messageThreads, function(thread){
+                console.log($scope.messageThreads);
+                console.log("remove messages you sent from inbox")
+                angular.forEach($scope.messageThreads, function(thr){
+                    console.log(navState.userid);
+                    if(thr.sender !== navState.userid){
+                        $scope.myMessages.push(thr);
+                    };
+                });
+                angular.forEach($scope.myMessages, function(thread){
                     var members = thread.members.replace("{", "");
                     var members2 = members.replace("}", "");
-                    var members3 = members2.replace(",", ", ");
+                    var members3 = members2.replace(",", ",  ");
                     thread.members = members3;
                 });
+                console.log($scope.myMessages.length)
             });
         };
         $scope.getMessageThreads();
+
+
 
         $scope.getThread = function(elem){  
             $scope.myThread = elem;
@@ -85,7 +110,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams',
     function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams) {
         console.log($routeParams.thread);
-        var threadId = parseInt($routeParams.thread)
+        var threadId = parseInt($routeParams.thread);
+
+        $scope.getSenderCompany = function(){
+
+        }
 
         $scope.getMessageThread = function(){
             console.log(typeof $routeParams.thread)
@@ -95,8 +124,12 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.myThread = data
                 console.log($scope.myThread)
                 angular.forEach($scope.myThread, function(thread){
+                    console.log(thread);
                     $scope.sentMessage = thread.message;
-                    $scope.threadMembers = thread.members;
+                    var members = thread.members.replace("{", "");
+                    var members2 = members.replace("}", "");
+                    var members3 = members2.replace(",", ", ");
+                    $scope.threadMembers = members3;
                 });
             });
         };
@@ -105,6 +138,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.replyMessage = function(msg){
             console.log("i will respond to a message");
             console.log($scope.message.text)
+            console.log($scope.threadMembers)
         };
 
 
