@@ -1909,6 +1909,18 @@ annotation-list h6 {
     cursor: pointer;
 }
 
+annotation-list .tutorial {
+    padding-top: 20px;
+}
+
+annotation-list .tutorial h6 {
+    cursor: auto;
+}
+
+annotation-list .tutorial .gif-text {
+    padding-top: 10px;
+}
+
 annotation-list [data-icon]:before {
     padding-right: 2px;
 }
@@ -1919,14 +1931,6 @@ annotation-list .annotmark {
     margin-left: 25px;
     cursor: pointer;
     text-transform: capitalize;
-}
-
-annotation-list .textIcon {
-    data-icon: &#xe60d;
-}
-
-annotation-list .annotmark.mine.complete.highlightIcon {
-    data-icon: &#xe60f;
 }
 
 annotation-list .annotmark:hover, annotation-list .annotmark.active {
