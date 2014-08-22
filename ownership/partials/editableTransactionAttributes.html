@@ -65,11 +65,11 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a ng-click="setIt(data, true, undo, 'optundersecurity', '')">
+                        <a ng-click="setIt(data, true, undo, key, '')">
                         </a>
                     </li>
                     <li ng-repeat="i in securities | selectablesecurities:data.attrs['security']">
-                        <a ng-click="setIt(data, true, undo, 'optundersecurity', i.name)">
+                        <a ng-click="setIt(data, true, undo, key, i.name)">
                             {{i.name}}
                         </a>
                     </li>
