@@ -138,6 +138,9 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.updateInvestor = function(investor) {
         captable.updateInvestorName(investor);
     };
+    $scope.updateSecurity = function(security) {
+        captable.updateSecurityName(security);
+    };
     $scope.createNewSec = function() {
         $scope.new_sec = captable.newSecurity();
         $scope.selectedCell = $scope.selectedInvestor = null;

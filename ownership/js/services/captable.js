@@ -22,6 +22,7 @@ Transaction = function() {
 };
 Security = function() {
     this.name = "";
+    this.new_name = "";
     this.effective_date = null;
     this.insertion_date = null;
     this.transactions = [];
@@ -197,7 +198,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
      */
     function parseIssueSecurity(tran) {
         var security = nullSecurity();
-        security.name = tran.attrs.security;
+        security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
         security.insertion_date = tran.insertion_date;
         security.transactions.push(tran);
@@ -322,6 +323,12 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 return cell.investor == inv;
             });
     }
+    function colFor(sec) {
+        return captable.cells
+            .filter(function(cell) {
+                return cell.security == sec;
+            });
+    }
     function transForInv(inv) {
         return captable.transactions
             .filter(function(tran) {
@@ -337,6 +344,21 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
     }
     this.transForInv = transForInv;
+    function transForSec(sec) {
+        return captable.transactions
+            .filter(function(tran) {
+                for (k in tran.attrs)
+                {
+                    if (k.indexOf('security') != -1)
+                    {
+                        if (tran.attrs[k] == sec)
+                            return true;
+                    }
+                }
+                return false;
+            });
+    }
+    this.transForSec = transForSec;
     this.updateInvestorName = function(investor) {
         SWBrijj.procm('_ownership.rename_investor', investor.name, investor.new_name).then(function (data) {
             var cells = rowFor(investor.name);
@@ -364,6 +386,29 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             console.log(x);
             $scope.undo();
         });
+    };
+    this.updateSecurityName = function(security) {
+        var cells = colFor(security.name);
+        for (c in cells)
+        {
+            cells[c].security = security.new_name;
+        }
+        var trans = transForSec(security.name);
+        for (t in trans)
+        {
+            for (a in trans[t].attrs)
+            {
+                if (a.indexOf('security') != -1)
+                {
+                    if (trans[t].attrs[a] == security.name)
+                    {
+                        trans[t].attrs[a] = security.new_name;
+                    }
+                }
+            }
+            saveTransaction(trans[t], true);
+        }
+        security.name = security.new_name;
     };
     function cellPrimaryMeasure(cell) {
         return calculate.primaryMeasure( cellSecurityType(cell) );
@@ -807,7 +852,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.newTransaction = newTransaction;
     this.newSecurity = function() {
         var security = nullSecurity();
-        security.name = "";
+        security.newName = security.name = "";
         security.effective_date = new Date(Date.now());
         security.insertion_date = new Date(Date.now());
         initAttrs(security, 'Option', 'issue security');
@@ -834,7 +879,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         
         var tran = security.transactions[0]; //the transaction that was edited
         
-        security.name = tran.attrs.security;
+        security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
         security.insertion_date = tran.insertion_date;
         security.attrs = tran.attrs;
