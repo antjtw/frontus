@@ -1096,8 +1096,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.numberPaste = function(ev, row, key, type) {
-        alert('refactor numberPaste');
-        /*
         var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
         var splitvalues = pastedvalues.split("\n");
         var startindex = $scope.ct.investors.indexOf(row);
@@ -1109,32 +1107,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             } else {
                 splitvalues[i] = calculate.cleannumber(splitvalues[i]);
                 if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.investors[startindex].cells[key][type])) {
-                    var anewTran = captable.newTransaction(key,
-                                        $scope.ct.investors[startindex].name);
+                    var anewTran = captable.newTransaction($scope.ct.investors[startindex].name, 'grant', key);
                     anewTran.active = false;
-                    anewTran.atype = 0;
-                    if (type == "u") {
-                        anewTran.units = splitvalues[i];
-                        anewTran.unitskey = splitvalues[i];
-                    } else {
-                        anewTran.amount = splitvalues[i];
-                        anewTran.paid = splitvalues[i];
-                        anewTran.paidkey = splitvalues[i];
-                    }
-                    angular.forEach($scope.ct.trans, function(tran) {
-                        var found = -1;
-                        if (tran.investor == anewTran.investor && tran.issue == anewTran.issue && isNaN(parseFloat(tran.tran_id))) {
-                            found = $scope.ct.trans.indexOf(tran);
-                        }
-                        if (found != -1) {
-                            $scope.ct.trans.splice(found, 1)
-                        }
-                    });
-                    if ($scope.activeTran[0].investor == anewTran.investor) {
-                        anewTran.active = true;
-                        $scope.activeTran = [];
-                        $scope.activeTran.push(anewTran);
-                    }
                     $scope.ct.trans.push(anewTran);
                     $scope.saveTran(anewTran);
                 }
@@ -1142,7 +1116,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             }
         }
         return false;
-        */
     };
 
 }]);
