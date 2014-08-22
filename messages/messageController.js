@@ -55,7 +55,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 angular.forEach($scope.sentMsgs, function(obj){
                     angular.forEach(allSent, function(sent){
                         if(sent.when_requested.equals(obj.timex)){
-                            obj.subject = sent.subject
+                            obj.subject = sent.subject;
                             if(obj.recipients.indexOf(sent.tox)==-1){
                                 obj.recipients.push(sent.tox);
                                 obj.recipString = obj.recipients.join(", ");
@@ -149,10 +149,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         }
         $scope.getPhotoUrl();
-
-        // $scope.myPhotoUrl = '/photo/user?id=company:' + navState.company;
-
-        // http://share.wave/photo/user?id=investor:elizabeth@sharewave.com
 
   
 
