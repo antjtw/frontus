@@ -884,6 +884,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             return options[1];
         return options[0];
     }
+    this.defaultKind = defaultKind;
     function createCell(inv, sec) {
         var c = new Cell();
         c.investor = inv;

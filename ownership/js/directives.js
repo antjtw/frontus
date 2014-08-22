@@ -187,7 +187,7 @@ own.directive('editableCaptableCell', [function() {
                     if (update) {
                         if (!$scope.destination_transaction) {
                             $scope.destination_transaction =
-                                captable.newTransaction($scope.selectedCell.security, 'grant', $scope.selectedCell.investor);
+                                captable.newTransaction($scope.selectedCell.security, captable.defaultKind($scope.sec.attrs['security_type']), $scope.selectedCell.investor);
                         }
                         if (calculate.isNumber($scope.destination_transaction.attrs[$scope.picker.key])) {
                             $scope.picker.diff = $scope.picker.diff + parseFloat($scope.destination_transaction.attrs[$scope.picker.key]);
