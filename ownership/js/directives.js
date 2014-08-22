@@ -519,7 +519,7 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
-                var datefields = ['vestingbegins'];
+                var datefields = [];
                 $scope.useDatePicker = function(key) {
                     return datefields.indexOf(key) >= 0
                 };
