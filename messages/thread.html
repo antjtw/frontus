@@ -17,7 +17,7 @@
 
             <div class="replyMessage" ng-repeat="myThread in myThreads">
                 <div class="replySide">
-                    <img src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
+                    <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
                   {{myThread.sender}}
 
@@ -30,7 +30,7 @@
 
             <div class="replyMessage">
                 <div class="replySide"> 
-                    <img src="{{getPhotoUrl(navState.userid)}}" class="replyPic">
+                    <img ng-src="{{getPhotoUrl(navState.userid)}}" class="replyPic">
                     <div>{{navState.name}}</div>
                 </div>
                 <div class="replyInput" style="width: 70%">
