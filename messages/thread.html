@@ -30,10 +30,10 @@
 
             <div class="replyMessage">
                 <div class="replySide"> 
-
-                    {{navState.name}}
+                    <img src="{{getPhotoUrl(navState.userid)}}" class="replyPic">
+                    <div>{{navState.name}}</div>
                 </div>
-                <div class="replyInput">
+                <div class="replyInput" style="width: 70%">
                     <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
                 </div>
                 <div style="margin-top: 20px; margin-bottom: 20px">

@@ -136,14 +136,15 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.getPhotoUrl = function(sender){
-            console.log("hello")
             if(sender == navState.userid){
                 return '/photo/user?id=company:' + navState.company;
-                console.log('/photo/user?id=company:' + navState.company)
             }
             else if(sender !== navState.userid){
                 return '/img/ike.png'
                 console.log('/photo/user?id=investor:' + sender)
+            }
+            else{
+                return '/img/ike.png'
             }
 
         }
