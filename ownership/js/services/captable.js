@@ -600,8 +600,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.saveTransaction = saveTransaction;
 
     this.deleteTransaction = function(tran, cell) {
-        console.log(angular.copy(cell));
-        console.log(angular.copy(tran));
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
         .then(function(x) {
             var res = x[0].delete_transaction;
@@ -828,7 +826,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         inv.percentage = function() {return investorSorting(inv.name);};
         SWBrijj.procm('_ownership.add_investor', inv.name)
         .then(function(x) {
-            captable.investors.splice(0, 0, inv);
+            captable.investors.push(inv);
         }).except(function(err) {
             console.log(err);
         });
