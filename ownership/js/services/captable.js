@@ -251,7 +251,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function numUnissued(sec, securities) {
         var underlying = 0;
         angular.forEach(securities, function(security) {
-            if (security != sec && security.attrs.optundersec == sec.name && calculate.isNumber(security.attrs.totalauth)) {
+            if (security != sec && security.attrs.optundersecurity == sec.name && calculate.isNumber(security.attrs.totalauth)) {
                 underlying += parseFloat(security.attrs.totalauth);
             }
         });
@@ -321,6 +321,21 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 return cell.investor == inv;
             });
     }
+    function transForInv(inv) {
+        return captable.transactions
+            .filter(function(tran) {
+                for (k in tran.attrs)
+                {
+                    if (k.indexOf('investor') != -1)
+                    {
+                        if (tran.attrs[k] == inv)
+                            return true;
+                    }
+                }
+                return false;
+            });
+    }
+    this.transForInv = transForInv;
     function cellPrimaryMeasure(cell) {
         return calculate.primaryMeasure( cellSecurityType(cell) );
     }

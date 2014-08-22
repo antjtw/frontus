@@ -129,6 +129,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 .filter(function(el) {
                     return el.name == investor_name;
                 })[0];
+            $scope.selectedInvestor.old_name = $scope.selectedInvestor.name;
             History.watch('selectedInvestor', $scope);
             displayInvestorDetails();
         }
@@ -138,6 +139,20 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         // TODO Changing investor name needs implementing here
         console.log("update investor");
         console.log(investor);
+        var trans = captable.transForInv(investor.old_name);
+        for (t in trans)
+        {
+            for (a in trans[t].attrs)
+            {
+                if (a.indexOf('investor') != -1)
+                {
+                    if (trans[t].attrs[a] == investor.old_name)
+                    {
+                        trans[t].attrs[a] = investor.name;
+                    }
+                }
+            }
+        }
     };
     $scope.createNewSec = function() {
         $scope.new_sec = captable.newSecurity();
@@ -953,14 +968,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return (output);
     };
 
-    $scope.typeLocked = function(issue) {
-        if (issue.liquidpref || issue.interestrate || issue.valcap || issue.discount || issue.optundersec || issue.vestcliff || issue.vestingbegins || issue.vestfreq) {
+    /*$scope.typeLocked = function(issue) {
+        if (issue.liquidpref || issue.interestrate || issue.valcap || issue.discount || issue.optundersecurity || issue.vestcliff || issue.vestingbegins || issue.vestfreq) {
             return false
         }
         else {
             return true
         }
-    };
+    };*/
 
     $scope.chosenTab = function(tab, type) {
         return (tab.title == type);

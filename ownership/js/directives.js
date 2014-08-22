@@ -510,7 +510,7 @@ own.directive('editableTransactionAttributes', [function() {
                     return isArray(inputType(key));
                 };
                 $scope.pickIssue = function(key) {
-                    return key == "optundersec"
+                    return key == "optundersecurity"
                 };
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     tran.attrs[k] = v;

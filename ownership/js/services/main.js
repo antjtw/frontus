@@ -197,7 +197,7 @@ ownership.value('displayCopy', {
             "When a majority shareholder enters a sale, " +
             "minority shareholders have the right to join " +
             "the deal and sell their shares",
-        optundersec:
+        optundersecurity:
             "The security each granted share will convert "
             + "to upon exercise",
         totalgranted:
