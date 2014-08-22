@@ -19,3 +19,16 @@
         </div>
     </div>
 </div>
+<div ng-if="doc.annotations.length === 0 && navState.role == 'issuer'">
+    <p style="padding-top: 30px; color: #1e2d3d;">
+        How to Share Documents
+    </p>
+    <div>
+        <img src="/img/gif/issuer-modal.gif">
+    </div>
+    <div class="gif-text">
+        <p>
+            Draw fields to mark where information can be entered. Fill out all your own fields prior to sending. The recipient will see everything but your signature, which is hidden until you approve their information.
+        </p>
+    </div>
+</div>

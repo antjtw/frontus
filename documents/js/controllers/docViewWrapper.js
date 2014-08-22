@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', '$q', 'basics',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics) {
+        'navState', 'Annotations', 'Documents', '$q', 'basics', 'ShareDocs',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics, ShareDocs) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -554,39 +554,44 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             }).except(function(data) {
                 console.log(data);
             });
-        }
+        };
 
         $scope.uploadSigned = function(files) {
-                var fd = new FormData();
-                if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
-                    _kmq.push(['record', 'doc uploader']);
-                    analytics.track('doc uploader');
-                }
-                for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
-                if (fd.length > 1)
-                {
-                    //throw error. Multiple docs doesn't make sense
-                    $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
-                    return;
-                }
-                var upxhr = SWBrijj.uploadSigned(fd);
-                $scope.uploading = true;
-                upxhr.then(function(x) {
-                    $scope.uploadprogress = x;
+            var fd = new FormData();
+            if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
+                _kmq.push(['record', 'doc uploader']);
+                analytics.track('doc uploader');
+            }
+            for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
+            if (fd.length > 1)
+            {
+                //throw error. Multiple docs doesn't make sense
+                $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
+                return;
+            }
+            var upxhr = SWBrijj.uploadSigned(fd);
+            $scope.uploading = true;
+            upxhr.then(function(x) {
+                $scope.uploadprogress = x;
 
-                    SWBrijj.uploadSetType(x[0], "signed", $scope.doc.doc_id).then(function() {
-                        checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
-                        $scope.$emit("notification:success", "Uploading signed version . . .");
-                        $scope.files = [];
-                    }).except(function(x) {
-                        console.log(x);
-                    });
-                }).except(function(x) {
-                    $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                SWBrijj.uploadSetType(x[0], "signed", $scope.doc.doc_id).then(function() {
+                    checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
+                    $scope.$emit("notification:success", "Uploading signed version . . .");
                     $scope.files = [];
-                    $scope.uploading = false;
+                }).except(function(x) {
+                    console.log(x);
                 });
-            };
+            }).except(function(x) {
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                $scope.files = [];
+                $scope.uploading = false;
+            });
+        };
+
+        $scope.shareThisDoc = function() {
+            ShareDocs.upsertShareItem($scope.doc);
+            $location.url("/app/documents/company-list?share");
+        };
 
         $scope.getData();
     }
