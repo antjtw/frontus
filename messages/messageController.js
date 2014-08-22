@@ -116,7 +116,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             console.log("hi")
             SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
                 $scope.myThreads = data
-                console.log($scope.myThreads)
                 angular.forEach($scope.myThreads, function(thread){
                     console.log(thread);
                     $scope.sentMessage = thread.message;
@@ -135,6 +134,26 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             console.log($scope.message.text)
             console.log($scope.threadMembers)
         };
+
+        $scope.getPhotoUrl = function(sender){
+            console.log("hello")
+            if(sender == navState.userid){
+                return '/photo/user?id=company:' + navState.company;
+                console.log('/photo/user?id=company:' + navState.company)
+            }
+            else if(sender !== navState.userid){
+                return '/img/ike.png'
+                console.log('/photo/user?id=investor:' + sender)
+            }
+
+        }
+        $scope.getPhotoUrl();
+
+        // $scope.myPhotoUrl = '/photo/user?id=company:' + navState.company;
+
+        // http://share.wave/photo/user?id=investor:elizabeth@sharewave.com
+
+  
 
 
 

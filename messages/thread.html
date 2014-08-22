@@ -17,8 +17,11 @@
 
             <div class="replyMessage" ng-repeat="myThread in myThreads">
                 <div class="replySide">
+                    <img src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
                   {{myThread.sender}}
+
+
                 </div>
                 <div class="replyInput">{{myThread.threadMembers}}
                     <div ng-bind-html="myThread.message"></div>
