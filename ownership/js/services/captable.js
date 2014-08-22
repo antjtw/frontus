@@ -394,6 +394,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             cells[c].security = security.new_name;
         }
         var trans = transForSec(security.name);
+        console.log("updateSecurity");
+        console.log(trans);
         for (t in trans)
         {
             for (a in trans[t].attrs)
@@ -1041,10 +1043,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
             .reduce(sumCellAmount, 0);
-    };
-    this.transForSec = function(sec) {
-        return captable.transactions
-            .filter(function(el) { return el.attrs.security == sec.name; });
     };
     function sumCellUnits(prev, cur, idx, arr) {
         return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
