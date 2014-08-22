@@ -364,8 +364,8 @@ own.directive('editableCellDetails', [function() {
                 $scope.nonactions = ["issue security", "grant", "purchase"];
 
                 $scope.addTransaction = function() {
-                    var tran = captable.addTransaction($scope.cell.investor,
-                                     $scope.cell.security, 'grant');
+                    var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security, 
+                                     captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
                 };
                 // TODO this has to do more. 
@@ -474,6 +474,15 @@ own.directive('editableTransactionAttributes', [function() {
                                 [$scope.data.kind][key] || {};
                 }
                 function inputType(key) {
+                    if (key.indexOf("investor") != -1)
+                    {
+                        return "investor";
+                    }
+                    if (key.indexOf("security") != -1 &&
+                            key.indexOf("type") == -1)
+                    {
+                        return "security";
+                    }
                     switch (key_display_info(key).type)
                     {
                         case "enum":
@@ -493,18 +502,10 @@ own.directive('editableTransactionAttributes', [function() {
                     return $scope.description(key)!==null;
                 };
                 $scope.useTextField = function(key) {
-                    var text = inputType(key) == "text_field";
-                    if (!text)
-                        return false;
-                    var assisted = ['investor', 'investor_to', 'investor_from'];
-                    return (assisted.indexOf(key) == -1);
+                    return inputType(key) == "text_field";
                 };
-                $scope.useAssistedTextField = function(key) {
-                    var text = inputType(key) == "text_field";
-                    if (!text)
-                        return false;
-                    var assisted = ['investor', 'investor_to', 'investor_from'];
-                    return (assisted.indexOf(key) != -1);
+                $scope.pickInvestor = function(key) {
+                    return inputType(key) == "investor";
                 };
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
@@ -514,7 +515,7 @@ own.directive('editableTransactionAttributes', [function() {
                     return datefields.indexOf(key) >= 0
                 };
                 $scope.pickIssue = function(key) {
-                    return key == "optundersecurity"
+                    return inputType(key) == "security";
                 };
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     tran.attrs[k] = v;

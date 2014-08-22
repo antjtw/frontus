@@ -15,26 +15,12 @@
         <span ng-class="{'locked-security': key=='security_type'}">
             {{displayName(key)}}
         </span>
-        <input ng-if="useTextField(key) && !pickIssue(key) && !useDatePicker(key)"
+        <input ng-if="useTextField(key) && !useDatePicker(key)"
                id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                ng-model="data.attrs[key]">
-        <ul class="dropdown-list drop-selector" ng-if="useAssistedTextField(key) && !pickIssue(key)">
-            <li class="dropdown standard">
-            <a class="dropdown-toggle">
-                {{data.attrs[key]}}
-                <span class="invisible-drop">'</span>
-            </a>
-            <ul class="dropdown-menu">
-                <li ng-repeat="i in getInvestors()">
-                    <a ng-click="setIt(data, true, undo, key, i)">
-                        {{i}}
-                    </a>
-                </li>
-            </ul>
-        </ul>
         <input ng-if="useDatePicker(key)"
                id="{{key}}{{::data.$$hashKey}}"
                ng-model="data.attrs[key]"
@@ -51,6 +37,20 @@
             </a>
             <ul class="dropdown-menu">
                 <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].labels">
+                    <a ng-click="setIt(data, true, undo, key, i)">
+                        {{i}}
+                    </a>
+                </li>
+            </ul>
+        </ul>
+        <ul class="dropdown-list drop-selector" ng-if="pickInvestor(key)">
+            <li class="dropdown standard">
+            <a class="dropdown-toggle">
+                {{data.attrs[key]}}
+                <span class="invisible-drop">'</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li ng-repeat="i in getInvestors()">
                     <a ng-click="setIt(data, true, undo, key, i)">
                         {{i}}
                     </a>
