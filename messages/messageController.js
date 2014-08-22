@@ -83,11 +83,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 angular.forEach($scope.myMessages, function(thread){
                     var members = thread.members.replace("{", "");
                     var members2 = members.replace("}", "");
-                    var members3 = members2.replace(",", ",  ");
                     var array = members2.split(",");
-                    console.log(array);
                     if(array.indexOf(navState.userid) > -1){
-                        console.log("remove")
                         array[array.indexOf(navState.userid)] = "me"
                     }
                     thread.members = array.join(", ");
@@ -129,10 +126,13 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
         $scope.getMessageThread();
 
+        $scope.message = {};
+
         $scope.replyMessage = function(msg){
             console.log("i will respond to a message");
-            console.log($scope.message.text)
-            console.log($scope.threadMembers)
+            console.log($scope.message.text);
+            console.log($scope.threadMembers);
+            console.log($routeParams.thread);
         };
 
         $scope.getPhotoUrl = function(sender){
