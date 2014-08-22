@@ -7,7 +7,7 @@
            ng-model-options="{getterSetter: true}"
            onpaste="return false"
            placeholder="units"
-           ng-paste="numberPaste($event, row, data.security, 'u');"
+           ng-paste="numberPaste($event, inv, sec, 'units');"
            onkeydown="testForEnter(event);">
     <input ng-if="isDebt(sec);"
            class="captablepair default-pointer first-box"
@@ -20,7 +20,7 @@
            ng-model-options="{getterSetter: true}"
            onpaste="return false"
            placeholder="amount"
-           ng-paste="numberPaste($event, row, data.security, 'a');"
+           ng-paste="numberPaste($event, inv, data.security, 'amount');"
            onkeydown="testForEnter(event);">
     <div modal="tranPicker"
          close="closeTranPicker"

@@ -1098,29 +1098,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return false;
     };
 
-    $scope.numberPaste = function(ev, row, key, type) {
-        var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
-        var splitvalues = pastedvalues.split("\n");
-        var startindex = $scope.ct.investors.indexOf(row);
-        var number = splitvalues.length;
-        for (var i = 0; i < number; i++) {
-            if (!$scope.ct.investors[startindex] ||
-                    $scope.ct.investors[startindex].editable == "0") {
-                break;
-            } else {
-                splitvalues[i] = calculate.cleannumber(splitvalues[i]);
-                if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.investors[startindex].cells[key][type])) {
-                    var anewTran = captable.newTransaction($scope.ct.investors[startindex].name, 'grant', key);
-                    anewTran.active = false;
-                    $scope.ct.trans.push(anewTran);
-                    $scope.saveTran(anewTran);
-                }
-                startindex += 1;
-            }
-        }
-        return false;
-    };
-
 }]);
 
 // IE fix to remove enter to submit form

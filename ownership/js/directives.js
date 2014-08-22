@@ -113,6 +113,7 @@ own.directive('editableCaptableCell', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
+                $scope.ct = captable.getCapTable()
 
                 $scope.loaddirective = function() {
                     $scope.destination_transaction = null;
@@ -201,6 +202,35 @@ own.directive('editableCaptableCell', [function() {
                 };
                 $scope.pickTran = function(id) {
                     $scope.destination_transaction = id;
+                };
+
+                // Todo working except for the current cell which saves correct but doesn't render.
+                $scope.numberPaste = function(ev, row, sec, type) {
+                    var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
+                    var splitvalues = pastedvalues.split("\n");
+                    var startindex = -1;
+                    angular.forEach($scope.ct.investors, function(investor) {
+                        if (investor.name == row) {
+                            startindex = $scope.ct.investors.indexOf(investor)
+                        }
+                    });
+                    var number = splitvalues.length;
+                    for (var i = 0; i < number; i++) {
+                        splitvalues[i] = calculate.cleannumber(splitvalues[i]);
+                        var anewTran = captable.addTransaction($scope.ct.investors[startindex].name, sec.name, 'grant');
+                        anewTran.attrs[type] = splitvalues[i];
+                        console.log(type);
+                        console.log(anewTran);
+                        captable.saveTransaction(
+                            anewTran,
+                            true);
+                        if (i == 0) {
+                            //$scope.data = $scope.selectedCell;
+                            //$scope.data.transactions[0] = anewTran;
+                        }
+                        startindex += 1;
+                    }
+                    return false;
                 };
 
                 $scope.loaddirective();
