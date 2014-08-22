@@ -1258,6 +1258,17 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                     //console.log(att);
                     return correct;
                 }
+                if (att.indexOf('security_type') != -1)
+                {
+                    if (!attrs.hasOwnProperty(transaction.attrs[att]))
+                    {
+                        correct = false;
+                        console.log("invalid security type");
+                        console.log(att);
+                        return correct;
+                    }
+                    break;
+                }
                 switch(attrs[transaction.attrs.security_type][transaction.kind][att]["type"])
                 {
                     case "number":
