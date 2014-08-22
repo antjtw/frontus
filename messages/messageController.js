@@ -3,30 +3,28 @@
 app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
     function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
-        $scope.page = null
+        $scope.page = null;
+        $scope.myMessages = [];
         $scope.togglePage = function(button){
             console.log("toggle page")
             if($scope.page !== button){
-                $scope.page = button
-                console.log($scope.page)
+                $scope.page = button;
             }
             else if($scope.page == button){
-                $scope.page = null
-                console.log("hi")
+                $scope.page = null;
             }
             else{
-                $scope.page = null
-                console.log("no button")
+                $scope.page = null;
             };
           
         };
 
         $scope.showString = function(string){
             if(string.length > 50){
-                return string.slice(0, 50) + "..."
+                return string.slice(0, 50) + "...";
             }
             else{
-                return string
+                return string;
             };
         };
 
@@ -68,14 +66,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
         $scope.getSentMessages();
 
-        $scope.myMessages = [];
-
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 $scope.messageThreads = data;
                 $scope.threadLength = $scope.messageThreads.length;
                 angular.forEach($scope.messageThreads, function(thr){
-                    console.log(navState.userid);
                     if(thr.sender !== navState.userid){
                         $scope.myMessages.push(thr);
                     };
@@ -98,7 +93,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 
         $scope.getThread = function(elem){  
             $scope.myThread = elem;
-            console.log(elem);
         };
         
     }
@@ -144,7 +138,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 console.log('/photo/user?id=investor:' + sender)
             }
             else{
-                return '/img/ike.png'
+                return '/img/ike.png';
             }
 
         }
