@@ -7,8 +7,7 @@
             <th></th>
         </tr>
         </tbody>
-        {{sents}}
-        <tbody ng-repeat="sent in sents| orderBy:'subject'">
+        <tbody ng-repeat="sent in sents| orderBy:'timex':true">
             <tr class="empty-row"></tr>
             <tr class="forTooltip">
                 <td style="width:550px" class="shareholder-column docname-column">
