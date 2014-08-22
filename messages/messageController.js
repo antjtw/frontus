@@ -85,14 +85,13 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                     var members2 = members.replace("}", "");
                     var members3 = members2.replace(",", ",  ");
                     var array = members2.split(",");
-                    console.log(navState.userid)
                     console.log(array);
-                    if(array.indexOf(navState.userId) > -1){
-                        console.log("found a match")
+                    if(array.indexOf(navState.userid) > -1){
+                        console.log("remove")
+                        array[array.indexOf(navState.userid)] = "me"
                     }
-                    thread.members = members3;
+                    thread.members = array.join(", ");
                 });
-                console.log($scope.myMessages.length)
                 $scope.inboxLength = $scope.myMessages.length
             });
         };
@@ -115,7 +114,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.getMessageThread = function(){
             console.log(typeof $routeParams.thread)
-            console.log("hi")
             SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
                 $scope.myThreads = data
                 angular.forEach($scope.myThreads, function(thread){
