@@ -125,6 +125,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     var members2 = members.replace("}", "");
                     var members3 = members2.replace(",", ", ");
                     $scope.threadMembers = members3;
+                    $scope.sender = thread.sender;
                 });
             });
         };

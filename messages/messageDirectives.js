@@ -337,9 +337,9 @@ mod.directive('threadInformation', function(){
             $scope.showMessage = function(){
                 $scope.myMessage = $scope.thread
                 angular.forEach($scope.myMessage, function(msg){
-                    console.log(msg.time);
                     $scope.myTime = msg.time;
                     $scope.mySubject = msg.subject;
+                    console.log(msg.sender)
                 });
             };
             $scope.showMessage()
