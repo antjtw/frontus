@@ -45,7 +45,7 @@
                         <th></th>
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="myMessage in myMessages">
+                    <tbody ng-repeat="myMessage in myMessages |orderBy:'time':true">
                         <tr class="empty-row"></tr>
                         <tr class="threadMembers">
                             <td style="width:550px" class="shareholder-column docname-column">

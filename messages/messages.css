@@ -317,7 +317,7 @@ the compose message page styling*/
     width: 180px;
 }
 
-.threadMembers div.tooltip-inner{
+.threadMembers div div.tooltip-inner{
     max-width: none;
 }
 
