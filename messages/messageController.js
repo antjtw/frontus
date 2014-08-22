@@ -134,21 +134,13 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 return '/photo/user?id=company:' + navState.company;
             }
             else if(sender !== navState.userid){
-                return '/img/ike.png'
-                console.log('/photo/user?id=investor:' + sender)
-            }
+                return '/img/ike.png';
+                    }
             else{
                 return '/img/ike.png';
             }
-
-        }
+        };
         $scope.getPhotoUrl();
-
-  
-
-
-
-
         
     }
 ]);
