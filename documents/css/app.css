@@ -2425,7 +2425,7 @@ div.profile-link > span:first-of-type {
     vertical-align: -5%;
 }
 
-.docPrepRow.header > span:first-child > span[tooltip] {
+.docPrepRow.header > span:first-child > span.info {
     color: #a6a6a6;
 }
 
@@ -2476,8 +2476,8 @@ div.profile-link > span:first-of-type {
 
 .docPrepRow > span:first-child ~ span.required input,
 .docPrepRow > span:first-child ~ span .ng-invalid,
-.docPrepRow > span:first-child ~ span.required .select2-container {
-    color: #e74c3c;
+.docPrepRow > span:first-child ~ span.required .select2-choice {
+    color: #eb6f1c;
 }
 
 .docPrepRow.warningheight > span,

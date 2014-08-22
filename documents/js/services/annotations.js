@@ -303,7 +303,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             });
         }
         return doc_annotations[doc.doc_id];
-    }
+    };
 
 
     this.getIssuerNotesForUpload = function(doc_id) {

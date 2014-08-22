@@ -6,7 +6,7 @@ var docs = angular.module('docServices');
 docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
-    var transaction_attributes_callback = null;
+    var transaction_attributes_callbacks = [];
     SWBrijj.transaction_attributes().then(function(data) {
         var issue_type, action_type, field_key;
         for (issue_type in data)
@@ -39,8 +39,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         }
         transaction_attributes = data;
         // callback in case the a document tried to initalize before this call returned
-        if (transaction_attributes_callback) {
-            transaction_attributes_callback();
+        if (transaction_attributes_callbacks.length > 0) {
+            transaction_attributes_callbacks.forEach(function(callback) {
+                callback();
+            });
+            transaction_attributes_callbacks = [];
         }
     });
     var defaultTypes = [
@@ -57,11 +60,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
     function updateAnnotationTypes(issue_type, transaction_type, type_list, annotation_list) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
+            var fields = [];
             if (issue_type) {
                 var viable_actions = transaction_attributes[issue_type].actions;
-                var fields = viable_actions[transaction_type].fields;
-            } else {
-                fields = [];
+                fields = viable_actions[transaction_type].fields;
             }
             type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
             var tmp_array = [];
@@ -73,7 +75,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             var args = [type_list.length, 0].concat(tmp_array);
             Array.prototype.splice.apply(type_list, args);
             // TODO: remove duplicate types, favoring the transaction type
-
             annotation_list.forEach(function(annot) {
                 annot.updateTypeInfo(type_list);
             });
@@ -81,7 +82,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         if (transaction_attributes) {
             reallyDo();
         } else {
-            transaction_attributes_callback = reallyDo;
+            transaction_attributes_callbacks.push(reallyDo);
         }
     }
 
@@ -228,7 +229,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             angular.forEach(this.annotation_types, function(annot) {
                 num += annot.required ? 1 : 0;
             });
-            return num
+            return num;
         },
         numFieldsComplete: function() {
             var num = 0;
@@ -361,7 +362,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         addPreparedFor: function(investor) {
             var doc = this;
             var hash = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: false, overrides: {}};
-            if (investor == "") {
+            if (investor === "") {
                 return;
             }
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
@@ -384,7 +385,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             var doc = this;
             SWBrijj.update('document.my_personal_preparations', {investor: new_investor}, {doc_id: this.doc_id, investor: old_investor}).then(function(result){
                 doc.preparedFor[new_investor] = doc.preparedFor[old_investor];
-                delete doc.preparedFor[old_investor]
+                delete doc.preparedFor[old_investor];
                 doc.preparedFor[new_investor].investor = new_investor;
                 doc.preparedFor[new_investor].display = Investor.getDisplay(new_investor);
             }).except(function(error) {
@@ -407,7 +408,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 if (note.whosign == "Issuer" && this.preparedFor && this.preparedFor[investor]) {
                     // don't save the override if it's empty or equal to the base value
                     if (this.preparedFor[investor].overrides[note.id] &&
-                        this.preparedFor[investor].overrides[note.id] != "" &&
+                        this.preparedFor[investor].overrides[note.id] !== "" &&
                         this.preparedFor[investor].overrides[note.id] != note.val) {
                         notes.push({id: note.id, val: this.preparedFor[investor].overrides[note.id]});
                     }
@@ -455,6 +456,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         oldDoc.pages = realPages;
         oldDoc.annotations = Annotations.getDocAnnotations(oldDoc); // refresh annotations (in case doc overwrote);
         if (oldDoc.issue_type) {
+
             updateAnnotationTypes(oldDoc.issue_type, oldDoc.transaction_type, oldDoc.annotation_types, oldDoc.annotations);
         }
         if (oldDoc.tags) {
