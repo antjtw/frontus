@@ -2474,6 +2474,12 @@ div.profile-link > span:first-of-type {
     margin: 0;
 }
 
+.docPrepRow > span:first-child ~ span.required input,
+.docPrepRow > span:first-child ~ span .ng-invalid,
+.docPrepRow > span:first-child ~ span.required .select2-container {
+    color: #e74c3c;
+}
+
 .docPrepRow.warningheight > span,
 .docPrepRow.warningheight > span:first-child ~ span input,
 .docPrepRow.warningHeight > span:first-child ~ span .select2-container {
@@ -2482,7 +2488,7 @@ div.profile-link > span:first-of-type {
 }
 
 .docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
-    border: 1px solid #666666;
+    border: 1px solid #666666 !important; /* !important to override .ng-invalid in MVP.css */
     background-color: #e3e3e3;
 }
 

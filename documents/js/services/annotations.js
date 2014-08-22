@@ -146,7 +146,71 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             });
             return json;
         },
+        getValWithOverride: function(user) {
+            if (user && this.doc.preparedFor && this.doc.preparedFor[user] &&
+                 this.doc.preparedFor[user].overrides[this.id] &&
+                 this.doc.preparedFor[user].overrides[this.id].length > 0) { // an override of "" won't be saved
+                return this.doc.preparedFor[user].overrides[this.id];
+            } else {
+                return this.val;
+            }
+        },
+        isInvalid: function(user) {
+            // user is an optional parameter
+            // 1) if it's empty and not required, return false (empty is fine)
+            if (!this.required && this.isEmpty(user)) {
+                return false;
+            }
+            // 2) check the annot.wouldBeInvalid to see if the field looks bad (always invalid, even if field unrequired)
+            if (this.wouldBeInvalid(user)) {
+                return true;
+            }
+            // 3) if it's required return true if value is empty, else return false (either not required, or filled with a saneish value)
+            if (this.required && this.isEmpty(user)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        wouldBeInvalid: function(user) {
+            var value = this.getValWithOverride(user);
+            // find any excuse (excepting emptiness) to mark this value as invalid
+            var type = this.type_info.typename;
+            if (["int8", "int4", "float8"].indexOf(type) != -1) {
+                // TODO: handle currency symobols and commas
+                var num = Number(value);
+                return isNaN(num); // "" evaluates as 0, which is fine is it's not invalid
+            } else if (type == "enum") {
+                return this.type_info.labels.indexOf(value) == -1;
+            } else if (type == "date") {
+                var dateRE = /^\d{2}\/\d{2}\/\d{4}$/;
+                if (!dateRE.test(value)) {
+                    // doesn't look like a date format we like
+                    return true;
+                }
+                var dateparts = value.split('/');
+                dateparts[0] = Number(dateparts[0]);
+                dateparts[1] = Number(dateparts[1]);
+                dateparts[2] = Number(dateparts[2]);
+                // TODO: pull the company date setting and validate against that
+                if (dateparts[0] > 31 || dateparts[1] > 31) {
+                    return true;
+                }
+                if (dateparts[0] > 12 && dateparts[1] > 12) {
+                    // only [0] or [1] can be the day portion, so one must be <= 12
+                    return true;
+                }
+                return false;
+            }
+            // we don't test text, signature, or imgsignature, as they can't be invalid.
+            return false;
+        },
+        isEmpty: function(user) {
+            return ((this.whattype == "ImgSignature" && !User.signaturePresent) || // ImgSignature
+                    (this.getValWithOverride(user).length === 0)); // all others (assume a base text type)
+        },
         wouldBeValid: function(role, value) {
+            // DEPRECATED
             // can be used to check override values
             // TODO: validate format of XX/XX/XXXX if type == "date"
             var type = this.type_info.typename;
@@ -161,6 +225,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             }
         },
         filled: function(role, user) {
+            // DEPRECATED
             if (!this.forRole(role)) {
                 return false;
             }

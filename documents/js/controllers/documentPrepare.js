@@ -38,16 +38,6 @@ app.controller('DocumentPrepareController',
             }
         };
 
-        $scope.requiredField = function(annot) {
-            return annot.required && !annot.filled(navState.role);
-        };
-
-        $scope.overrideFilled = function(annot, override) {
-            return annot.wouldBeValid(navState.role, override) ||
-                   (((override === undefined) || (override === "")) &&
-                    annot.filled(navState.role));
-        };
-
         $scope.shareDocuments = function() {
             $scope.processing = true;
             ShareDocs.shareDocuments().then(function(result) {
