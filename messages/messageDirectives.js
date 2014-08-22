@@ -58,8 +58,7 @@ mod.directive('composeMessage', function() {
                         angular.forEach($scope.myContacts, function(ct){
                             if(ct.details.indexOf(ct.namex)== -1){
                                 ct.details.push(ct.namex)
-                            }
-                            
+                            };
                         });
                     });
                 });
@@ -82,8 +81,7 @@ mod.directive('composeMessage', function() {
                             });
                         });
                     });                
-                });
-                
+                });                
             };
             $scope.groupsAndPeople();
 
@@ -102,8 +100,7 @@ mod.directive('composeMessage', function() {
 
             
 
-            $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
-            
+            $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;            
             $scope.howMany = function(){
                 if(location.host == 'share.wave'){
                     console.log($scope.message.recipients + "i'm at sharewave!");
@@ -147,7 +144,6 @@ mod.directive('composeMessage', function() {
                     $rootScope.$emit('new:message');
                     $scope.resetMessage();
                     $scope.clicked = false;
-                    console.log("reloading page!")
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",
@@ -163,8 +159,6 @@ mod.directive('composeMessage', function() {
                 var recipients = $scope.createRecipients();
                 recipients.push(navState.userid)
                 $scope.clicked = true;
-                console.log($scope.navState.userid)
-                console.log(newtext)
                 SWBrijj.procm('mail.send_message',
                             JSON.stringify(recipients),
                             null,
@@ -290,28 +284,6 @@ mod.directive('sentMessages', function(){
 });
 
 // not sure where this directive goes
-mod.directive('replyMessage', function(){
-    return {
-        scope: {thread: "="},
-        // replace: true,
-        // transclude: false,
-        restrict: 'E',
-        templateUrl: '/messages/partials/replyMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
-
-        function($scope, $rootScope, SWBrijj, $route) {
-
-            $scope.showThread = function(){
-                console.log($scope.thread)
-                console.log("hehh")
-            }
-            $scope.showThread()
-
-            
-
-        }]
-    };
-});
 
 // this is the information on the side of the page
 mod.directive('threadInformation', function(){
@@ -325,9 +297,6 @@ mod.directive('threadInformation', function(){
 
         function($scope, $rootScope, SWBrijj, $route) {
 
-
-
-            $scope.myMessage = "blerge!";
             console.log($scope.thread);
             $scope.$watch('thread', function(){
                 console.log($scope.thread);
@@ -339,12 +308,9 @@ mod.directive('threadInformation', function(){
                 angular.forEach($scope.myMessage, function(msg){
                     $scope.myTime = msg.time;
                     $scope.mySubject = msg.subject;
-                    console.log(msg.sender)
                 });
             };
-            $scope.showMessage()
-
-
+            $scope.showMessage();
 
         }]
     };

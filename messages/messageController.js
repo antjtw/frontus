@@ -138,7 +138,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     }
             else{
                 return '/img/ike.png';
-            }
+            };
         };
         $scope.getPhotoUrl();
         
