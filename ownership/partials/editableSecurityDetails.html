@@ -50,12 +50,6 @@
         <div class="capTab" ng-switch-when="details">
             <div class="capGuide global">
                 <div class="rightTitle">
-                    <span ng-if="!sec.locked">Security Name</span>
-                    <input ng-if="!sec.locked"
-                           type="text"
-                           ui-event="{keyup: 'editSecName(tran)',
-                                blur: 'editSecName(tran)'}"
-                           ng-model="tran.attrs.security">
                     <span>Security Type</span>
                     <span class="locked-security" ng-if="sec.locked">{{tran.attrs.security_type}}</span>
                     <ul class="dropdown-list drop-selector" ng-if="!sec.locked">
