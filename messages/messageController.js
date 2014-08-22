@@ -84,6 +84,12 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                     var members = thread.members.replace("{", "");
                     var members2 = members.replace("}", "");
                     var members3 = members2.replace(",", ",  ");
+                    var array = members2.split(",");
+                    console.log(navState.userid)
+                    console.log(array);
+                    if(array.indexOf(navState.userId) > -1){
+                        console.log("found a match")
+                    }
                     thread.members = members3;
                 });
                 console.log($scope.myMessages.length)
@@ -106,10 +112,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams) {
         console.log($routeParams.thread);
         var threadId = parseInt($routeParams.thread);
-
-        $scope.getSenderCompany = function(){
-
-        }
 
         $scope.getMessageThread = function(){
             console.log(typeof $routeParams.thread)
