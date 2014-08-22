@@ -115,10 +115,9 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             console.log(typeof $routeParams.thread)
             console.log("hi")
             SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
-                console.log(data);
-                $scope.myThread = data
-                console.log($scope.myThread)
-                angular.forEach($scope.myThread, function(thread){
+                $scope.myThreads = data
+                console.log($scope.myThreads)
+                angular.forEach($scope.myThreads, function(thread){
                     console.log(thread);
                     $scope.sentMessage = thread.message;
                     var members = thread.members.replace("{", "");

@@ -15,16 +15,14 @@
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
 
-            <div class="replyMessage">
+            <div class="replyMessage" ng-repeat="myThread in myThreads">
                 <div class="replySide">
                    <!--  this should be who the message is from -->
-                  {{sender}}
+                  {{myThread.sender}}
                 </div>
-                <div class="replyInput">{{threadMembers}}
-                    <div ng-bind-html="sentMessage"></div>
-                </div>
-                
-                
+                <div class="replyInput">{{myThread.threadMembers}}
+                    <div ng-bind-html="myThread.message"></div>
+                </div>    
             </div>
 
             <div class="replyMessage">
@@ -37,7 +35,7 @@
                 </div>
                 <div style="margin-top: 20px; margin-bottom: 20px">
                     <div style="display: inline-block; width: 220px; visibility: hidden">
-                    {{navState.userid}}
+                    this is a placeholder for spacing purposes
                     </div>
                     <div class="replyInput">
                         <div class="standard-button">
