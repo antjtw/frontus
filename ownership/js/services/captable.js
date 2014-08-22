@@ -29,6 +29,7 @@ Security = function() {
 };
 Investor = function() {
     this.name = "";
+    this.new_name = "";
     this.email = "";
     this.access_level = "";
     this.editable = true;
@@ -336,6 +337,34 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
     }
     this.transForInv = transForInv;
+    this.updateInvestorName = function(investor) {
+        SWBrijj.procm('_ownership.rename_investor', investor.name, investor.new_name).then(function (data) {
+            var cells = rowFor(investor.name);
+            for (c in cells)
+            {
+                cells[c].investor = investor.new_name;
+            }
+            var trans = transForInv(investor.name);
+            for (t in trans)
+            {
+                for (a in trans[t].attrs)
+                {
+                    if (a.indexOf('investor') != -1)
+                    {
+                        if (trans[t].attrs[a] == investor.name)
+                        {
+                            trans[t].attrs[a] = investor.new_name;
+                        }
+                    }
+                }
+                saveTransaction(trans[t], true);
+            }
+            investor.name = investor.new_name;
+        }).except(function(x) {
+            console.log(x);
+            $scope.undo();
+        });
+    };
     function cellPrimaryMeasure(cell) {
         return calculate.primaryMeasure( cellSecurityType(cell) );
     }
@@ -672,7 +701,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     };
     function rowFromName(name) {
         var row = new Investor();
-        row.name = name.name;
+        row.new_name = row.name = name.name;
         row.email = name.email;
         row.access_level = name.level;
         row.transactions = captable.transactions
@@ -821,7 +850,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     this.addInvestor = function(name) {
         var inv = new Investor();
         inv.editable = true;
-        inv.name = name;
+        inv.new_name = inv.name = name;
         inv.company = $rootScope.navState.company;
         inv.percentage = function() {return investorSorting(inv.name);};
         SWBrijj.procm('_ownership.add_investor', inv.name)

@@ -129,30 +129,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 .filter(function(el) {
                     return el.name == investor_name;
                 })[0];
-            $scope.selectedInvestor.old_name = $scope.selectedInvestor.name;
+            //$scope.selectedInvestor.old_name = $scope.selectedInvestor.name;
             History.watch('selectedInvestor', $scope);
             displayInvestorDetails();
         }
         $scope.$broadcast("newSelection");
     };
     $scope.updateInvestor = function(investor) {
-        // TODO Changing investor name needs implementing here
-        console.log("update investor");
-        console.log(investor);
-        var trans = captable.transForInv(investor.old_name);
-        for (t in trans)
-        {
-            for (a in trans[t].attrs)
-            {
-                if (a.indexOf('investor') != -1)
-                {
-                    if (trans[t].attrs[a] == investor.old_name)
-                    {
-                        trans[t].attrs[a] = investor.name;
-                    }
-                }
-            }
-        }
+        captable.updateInvestorName(investor);
     };
     $scope.createNewSec = function() {
         $scope.new_sec = captable.newSecurity();
