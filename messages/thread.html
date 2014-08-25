@@ -19,11 +19,13 @@
                 <div class="replySide">
                     <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
-                  {{myThread.sender}}
+                   <div>
+                  {{myThread.senderName}}
+                    </div>
 
 
                 </div>
-                <div class="replyInput">{{myThread.threadMembers}}
+                <div class="replyInput">
                     <div style="padding-bottom: 20px">{{myThread.time |date :'MMM d, y h:mm a' }}</div>
                     <div ng-bind-html="myThread.message"></div>
                 </div>    
@@ -32,7 +34,7 @@
             <div class="replyMessage">
                 <div class="replySide"> 
                     <img ng-src="{{getPhotoUrl(navState.userid)}}" class="replyPic">
-                    <div>{{navState.userid}}</div>
+                    <div>{{navState.name}}</div>
                 </div>
                 <div class="replyInput" style="width: 70%">
                     <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
@@ -43,7 +45,7 @@
                     </div>
                     <div class="replyInput">
                         <div class="standard-button">
-                            <button class="btn" ng-click="replyMessage()">
+                            <button class="btn" ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message)}">
                                 Reply
                             </button>
                         </div>

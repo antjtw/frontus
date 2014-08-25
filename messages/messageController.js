@@ -10,12 +10,12 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             if($scope.page !== button){
                 $scope.page = button;
             }
-            else if($scope.page == button){
+            else if($scope.page === button){
                 $scope.page = null;
             }
             else{
                 $scope.page = null;
-            };
+            }
           
         };
 
@@ -25,7 +25,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
             else{
                 return string;
-            };
+            }
         };
 
         $scope.getSentMessages = function(){
@@ -37,14 +37,14 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                     this.timex = timex;
                     this.subject = subject;
                     this.recipients = [];
-                };
+                }
                 angular.forEach(allSent, function(val){
                     if (!msgs.some(function(timestamp, idx, arr){
                          return timestamp.equals(val.when_requested);
                     })) 
                     {
                         msgs.push(val.when_requested);
-                    };
+                    }
                      
                 });
                 for(var i=0; i < msgs.length; i++){
@@ -118,10 +118,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
                 $scope.getPeopleNames().then(function(){
                     $scope.myThreads = data;
-                    console.log($scope.myThreads);
-                    console.log($scope.myPeople);
                     angular.forEach($scope.myThreads, function(thread){
-                        console.log(thread.sender);
                         angular.forEach($scope.myPeople, function(ppl){
                             console.log(ppl.name);
                             if(thread.sender === ppl.email){
@@ -131,37 +128,25 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                                 else if(ppl.name !== null){
                                     thread.senderName = ppl.name;
                                 }
-                                
-
                             };
                         });
                     });
                     console.log($scope.myThreads)
-
-
                 });
             });
         };
         $scope.getMessages();
 
-
-
-        // $scope.getMessageThread = function(){
-        //     SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
-        //         $scope.myThreads = data
-        //         angular.forEach($scope.myThreads, function(thread){
-        //             $scope.sentMessage = thread.message;
-        //             var members = thread.members.replace("{", "");
-        //             var members2 = members.replace("}", "");
-        //             var members3 = members2.replace(",", ", ");
-        //             $scope.threadMembers = members3;
-        //         });
-        //     });
-        // };
-        // $scope.getMessageThread();
+        $scope.readyToSend = function(msg){
+            if(msg.text ===""){
+                return false;
+            }
+            else{
+                return true;
+            }
+        };
 
         $scope.message = {};
-
         $scope.replyMessage = function(msg){
             console.log("i will respond to a message");
             console.log($scope.message.text);
