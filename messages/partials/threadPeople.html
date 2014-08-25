@@ -1,6 +1,3 @@
-people threading will go here. woo hooo happy monday!
-
-{{threads[0]}}
 <div class="sidebarInfo">
   <div class="infoBox">
     <div class="headline">
@@ -8,10 +5,11 @@ people threading will go here. woo hooo happy monday!
     </div>
   </div>
 
-  <div class="infoBox" ng-repeat="recipient in threads[0].recipients track by $index">
-    <img ng-src="{{getPhotoUrl(recipient)}}"><div class="details">
-      {{recipient}}
-      
+  <div class="infoBox" ng-repeat="msgPerson in msgPeople">
+    <img ng-src="{{getPhotoUrl(msgPerson.email)}}" class="replyPic">
+    <div style="display: inline-block;">
+      {{msgPerson.namex}}<br/>
+      {{msgPerson.email}}
     </div>
 
   </div>
