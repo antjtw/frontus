@@ -173,6 +173,9 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             }
         },
         wouldBeInvalid: function(user) {
+            if (this.isEmpty(user)) {
+                return false; // empty doesn't mean invalid
+            }
             var value = this.getValWithOverride(user);
             // find any excuse (excepting emptiness) to mark this value as invalid
             var type = this.type_info.typename;
@@ -210,7 +213,8 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
                 return !User.signaturePresent;
             } else {
                 // all others (assume a base text type)
-                return this.getValWithOverride(user).length === 0;
+                var val = this.getValWithOverride(user);
+                return (val === undefined || val.length === 0);
             }
         },
         wouldBeValid: function(role, value) {

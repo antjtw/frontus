@@ -56,7 +56,7 @@
                     <div ng-repeat="email in ShareDocs.emails" class="docPrepRow" ng-class="{warningheight: already_shared[doc.doc_id][email]}">
                         <span>
                             <span class="status">
-                                <span class="good" ng-if="doc.preparedFor[email].is_prepared" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
+                                <span class="good" ng-if="doc.preparedFor[email].is_prepared && !doc.hasInvalidAnnotation(email)" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
                                 <span class="bad" data-icon="&#xe612;" ng-show="doc.hasInvalidAnnotation(email)" tooltip-placement="right" tooltip="Some fields for this user are invalid"></span>
                             </span>
                             <span class="name">

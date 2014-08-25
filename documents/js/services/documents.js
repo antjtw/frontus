@@ -284,7 +284,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         hasInvalidAnnotation: function(user) {
             return this.annotations.some(function(annot) {
                 if (annot.forRole($rootScope.navState.role)) {
-                    return annot.isInvalid(user);
+                    return annot.wouldBeInvalid(user);
                 } else {
                     // only current role ever matters for validity
                     return false;
