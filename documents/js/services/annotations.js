@@ -206,8 +206,12 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             return false;
         },
         isEmpty: function(user) {
-            return ((this.whattype == "ImgSignature" && !User.signaturePresent) || // ImgSignature
-                    (this.getValWithOverride(user).length === 0)); // all others (assume a base text type)
+            if (this.whattype == "ImgSignature") {
+                return !User.signaturePresent;
+            } else {
+                // all others (assume a base text type)
+                return this.getValWithOverride(user).length === 0;
+            }
         },
         wouldBeValid: function(role, value) {
             // DEPRECATED

@@ -281,9 +281,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 return annot.whosign == 'Issuer';
             });
         },
+        hasInvalidAnnotation: function(user) {
+            return this.annotations.some(function(annot) {
+                if (annot.forRole($rootScope.navState.role)) {
+                    return annot.isInvalid(user);
+                } else {
+                    // only current role ever matters for validity
+                    return false;
+                }
+            });
+        },
         hasSignatureAnnotations: function() {
             return this.annotations.some(function(annot) {
-                return annot.whatttype == 'Signature' || annot.whattype == 'ImgSignature'
+                return annot.whatttype == 'Signature' || annot.whattype == 'ImgSignature';
             });
         },
         validTransaction: function() {
