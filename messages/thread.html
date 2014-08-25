@@ -14,6 +14,7 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+            {{navState}}
 
             <div class="replyMessage" ng-repeat="myThread in myThreads">
                 <div class="replySide">
@@ -45,8 +46,9 @@
                     </div>
                     <div class="replyInput">
                         <div class="standard-button">
-                            <button class="btn" ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message)}">
-                                Reply
+                            <button class="btn" ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message)}"
+                            ng-click="replyMessage(message)">
+                                Reply All
                             </button>
                         </div>
                     </div>

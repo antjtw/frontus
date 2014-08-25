@@ -120,7 +120,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.myThreads = data;
                     angular.forEach($scope.myThreads, function(thread){
                         angular.forEach($scope.myPeople, function(ppl){
-                            console.log(ppl.name);
                             if(thread.sender === ppl.email){
                                 if(ppl.name == null){
                                     thread.senderName = ppl.email;
@@ -131,7 +130,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             };
                         });
                     });
-                    console.log($scope.myThreads)
                 });
             });
         };
@@ -146,12 +144,53 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
+
+        $scope.getArrayfromPosgres = function(array){
+            var array1 = array.replace("{", "");
+            var array2 = array1.replace("}", "");
+            var array3 = array2.split(",");
+            return array3;
+        }
+
         $scope.message = {};
         $scope.replyMessage = function(msg){
-            console.log("i will respond to a message");
             console.log($scope.message.text);
-            console.log($scope.threadMembers);
-            console.log($routeParams.thread);
+            // var msgInfo = $scope.myThreads[$scope.myThreads.length - 1];
+            var msgInfo = $scope.myThreads[0]
+            console.log(msgInfo);
+            console.log(msgInfo.members);
+            console.log(msgInfo.thread_id);
+            console.log(navState);
+            var recipients = $scope.getArrayfromPosgres(msgInfo.members);
+            if(recipients.indexOf(navState.userid == -1)){
+                recipients.push(navState.userid)
+            }
+            console.log(recipients)
+            var category = 'company-message';
+            var template = 'company-message.html';
+            var newtext = msg.text.replace(/\n/g, "<br/>");
+            console.log(newtext);
+            SWBrijj.procm('mail.send_message',
+                JSON.stringify(recipients),
+                msgInfo.thread_id,
+                msgInfo.subject,
+                newtext,
+                null               
+            ).then(function(x) {
+                void(x);
+                $rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                $rootScope.$emit("notification:success",
+                    "Message sent!");
+                $rootScope.$emit('new:message');
+                // $scope.resetMessage();
+                $scope.clicked = false;
+            }).except(function(err) {
+                void(err);
+                $rootScope.$emit("notification:fail",
+                    "Oops, something went wrong.");
+                $scope.clicked = false;
+            });
+
         };
 
         $scope.getPhotoUrl = function(sender){
