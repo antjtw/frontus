@@ -49,7 +49,11 @@ ownership.service('captable',
 function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
     function role() {
-        if ($rootScope.navState) return $rootScope.navState.role;
+        if ($rootScope.navState) {
+            return $rootScope.navState.role;
+        } else {
+            return 'issuer';
+        }
     }
     var attrs = attributes.getAttrs();
     var captable = new CapTable();
