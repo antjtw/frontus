@@ -10,8 +10,8 @@
         <tbody ng-repeat="sent in sents| orderBy:'time':true">
             <tr class="empty-row"></tr>
             <tr class="forTooltip">
-                <td style="width:550px" class="shareholder-column docname-column">
-                    <a href="/app/company/messages/thread?thread={{sent.thread_id}}" position="bottom">{{sent.members}}</div>
+                <td style="width:550px" class="shareholder-column docname-column" bs-tooltip="sent.members">
+                    <a href="/app/company/messages/thread?thread={{sent.thread_id}}" position="bottom">{{showString(sent.members)}}</div>
                 </td>
             
                 <td>

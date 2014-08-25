@@ -14,7 +14,7 @@
                         <input type="text" class="search-box" ng-model="filterText">
                     </div>
                     <div class="box-button pull-right"
-                     ng-class="{'disabledme': companyIsZombie(), selected: compose == true}"
+                     ng-class="{selected: compose == true}"
                      ng-click="companyIsZombie() ||  togglePage('compose')" 
                      data-placement="bottom" bs-tooltip="zombiemessage">
                         <ul>

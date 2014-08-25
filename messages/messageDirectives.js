@@ -243,16 +243,6 @@ mod.directive('messageFilter', function(){
                 $scope.page="sent"
             };
 
-       
-
-            // $scope.messageLength = function(){
-            //     console.log($scope.inbox);
-            //     console.log("testtest");
-            //     console.log($scope.ilength);
-            //     console.log("heyyyy");
-            // }
-            // $scope.messageLength();
-
 
         }]
     };
@@ -290,18 +280,10 @@ mod.directive('sentMessages', function(){
 
             $scope.formatSents = function(){
                 angular.forEach($scope.sents, function(msg){
-                    console.log(msg.members);
                     msg.members = $scope.getArrayfromPosgres(msg.members).join(", ")
-
                 });
-
             };
             $scope.formatSents();
-
-
-            
-
-
         }]
     };
 });
