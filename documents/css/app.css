@@ -2425,7 +2425,7 @@ div.profile-link > span:first-of-type {
     vertical-align: -5%;
 }
 
-.docPrepRow.header > span:first-child > span.info {
+.docPrepRow.header > span > span.info {
     color: #a6a6a6;
 }
 
@@ -2476,13 +2476,34 @@ div.profile-link > span:first-of-type {
 
 .docPrepRow > span:first-child ~ span.required input,
 .docPrepRow > span:first-child ~ span .ng-invalid,
-.docPrepRow > span:first-child ~ span.required .select2-choice {
+.docPrepRow > span:first-child ~ span.required .select2-chosen {
+    /* moz colors the placeholder automatically based on input color */
     color: #eb6f1c;
+}
+
+.docPrepRow > span:first-child ~ span.required input::placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required input::-webkit-input-placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::-webkit-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span .ng-invalid:-ms-input-placeholder,
+.docPrepRow > span:first-child ~ span.required input:-ms-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required .select2-default .select2-chosen { /* no placeholder */
+    color: #eb6f1c;
+    opacity: 0.6;
 }
 
 .docPrepRow.warningheight > span,
 .docPrepRow.warningheight > span:first-child ~ span input,
-.docPrepRow.warningHeight > span:first-child ~ span .select2-container {
+.docPrepRow.warningHeight > span:first-child ~ span .select2-choice {
     /* the browser will make the td's as high as they need, but won't adjust percentage based widths inside */
     height: 120px;
 }
