@@ -329,6 +329,9 @@ the compose message page styling*/
     margin-left: 40px;
     padding-bottom: 10px;
     border-radius: 50%;
+}
 
+.shareholder-column.docname-column *:hover{
+    color: #666;
 }
 
