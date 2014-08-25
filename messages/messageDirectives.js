@@ -260,8 +260,8 @@ mod.directive('sentMessages', function(){
         function($scope, $rootScope, SWBrijj, $route) {
 
             $scope.showString = function(string){
-                if(string.length > 50){
-                    return string.slice(0, 50) + "...";
+                if(string.length > 70){
+                    return string.slice(0, 70) + "...";
                 }
                 else{
                     return string;

@@ -50,7 +50,7 @@
                         <tr class="threadMembers">
                             <td style="width:550px" class="shareholder-column docname-column">
                                <!--  <div tooltip="{{myMessage.members}}"> -->
-                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><span>{{showString(myMessage.members)}}</span></a>
+                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.members">{{showString(myMessage.members)}}</div></a>
                               <!--   </div> -->
                             </td>
                             <td><span>{{myMessage.subject}}</span></td>
