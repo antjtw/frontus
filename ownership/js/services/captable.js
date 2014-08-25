@@ -68,7 +68,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             }
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
-            generateSecuritySummaries();
+            //What is this function supposed to do???
+            //generateSecuritySummaries();
 
             handleTransactions(captable.transactions);
             attachEvidence(results[4]);
