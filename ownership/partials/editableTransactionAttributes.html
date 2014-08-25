@@ -20,7 +20,15 @@
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
-               ng-model="data.attrs[key]">
+               ng-model="data.attrs[key]"
+               ng-required="isRequired(key)">
+        <input ng-if="useNumberField(key) && !useDatePicker(key)"
+               id="date{{::data.attrs.$$hashKey}}"
+               ui-event="{keyup: 'saveIt(data, true, undo)',
+                          blur: 'saveIt(data, true, undo)'}"
+               type="number"
+               ng-model="data.attrs[key]"
+               ng-required="isRequired(key)">
         <input ng-if="useDatePicker(key)"
                id="{{key}}{{::data.$$hashKey}}"
                ng-model="data.attrs[key]"
@@ -28,6 +36,7 @@
                ng-change="saveItDate(data, true, undo, $event, key)"
                data-date-format={{settings.lowercasedate}}
                type="text"
+               ng-required="isRequired(key)"
                bs-datepicker>
         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
             <li class="dropdown standard">
