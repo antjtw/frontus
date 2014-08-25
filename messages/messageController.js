@@ -121,14 +121,14 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     angular.forEach($scope.myThreads, function(thread){
                         angular.forEach($scope.myPeople, function(ppl){
                             if(thread.sender === ppl.email){
-                                if(ppl.name == null){
-                                    thread.senderName = ppl.email;
-                                }
-                                else if(ppl.name !== null){
-                                    thread.senderName = ppl.name;
-                                }
-                            };
+                                thread.senderName = ppl.name;
+                            }
                         });
+                    });
+                    angular.forEach($scope.myThreads, function(th){
+                        if(th.senderName == undefined){
+                            th.senderName = th.sender;
+                        }
                     });
                 });
             });
@@ -155,12 +155,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.message = {};
         $scope.replyMessage = function(msg){
             console.log($scope.message.text);
-            // var msgInfo = $scope.myThreads[$scope.myThreads.length - 1];
             var msgInfo = $scope.myThreads[0]
-            console.log(msgInfo);
-            console.log(msgInfo.members);
-            console.log(msgInfo.thread_id);
-            console.log(navState);
             var recipients = $scope.getArrayfromPosgres(msgInfo.members);
             if(recipients.indexOf(navState.userid == -1)){
                 recipients.push(navState.userid)
@@ -182,6 +177,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $rootScope.$emit("notification:success",
                     "Message sent!");
                 $rootScope.$emit('new:message');
+                $route.reload();
                 // $scope.resetMessage();
                 $scope.clicked = false;
             }).except(function(err) {

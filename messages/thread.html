@@ -14,15 +14,16 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
-            {{navState}}
-
             <div class="replyMessage" ng-repeat="myThread in myThreads">
                 <div class="replySide">
                     <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
-                   <div>
+                   <div ng-if="myThread.senderName !== undefined">
                   {{myThread.senderName}}
                     </div>
+           <!--          <div ng-show="myThread.sendername === undefined">
+                        {{myThread.sender}}
+                    </div> -->
 
 
                 </div>
