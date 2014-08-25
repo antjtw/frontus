@@ -117,23 +117,34 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.getMessages = function(){
             SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
                 $scope.getPeopleNames().then(function(){
-                    $scope.threads = data;
-                    console.log($scope.threads);
+                    $scope.myThreads = data;
+                    console.log($scope.myThreads);
                     console.log($scope.myPeople);
+                    angular.forEach($scope.myThreads, function(thread){
+                        console.log(thread.sender);
+                        angular.forEach($scope.myPeople, function(ppl){
+                            console.log(ppl.name);
+                            if(thread.sender === ppl.email){
+                                if(ppl.name == null){
+                                    thread.senderName = ppl.email;
+                                }
+                                else if(ppl.name !== null){
+                                    thread.senderName = ppl.name;
+                                }
+                                
+
+                            };
+                        });
+                    });
+                    console.log($scope.myThreads)
+
+
                 });
             });
         };
         $scope.getMessages();
 
-        // $scope.getMessages = function(){
-        //     SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
-        //         $scope.getPeopleNames().then.function(){
-        //             $scope.threads = data
-        //             console.log($scope.myPeople);
-        //         };
-        //     });
-        // };
-        // $scope.getMessages();
+
 
         // $scope.getMessageThread = function(){
         //     SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
