@@ -152,7 +152,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                             });
                             SWBrijj.tblmm("document.my_company_doc_sendgrid_opens", "doc_id", data[0].doc_id).then(function(event) {
                                 if (event && event[0]) {
-                                    $scope.sendgrid = {'when_email_opened' : event[0].max};
+                                    $scope.sendgrid = {'when_email_opened' : event[0].opened};
                                 }
                                 $scope.getVersion(data[0]);
                                 return;
