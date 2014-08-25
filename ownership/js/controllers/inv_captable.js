@@ -1,7 +1,7 @@
 app.controller('invCaptableController',
-    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval',
+    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$filter',
      '$routeParams', '$rootScope', '$location', 'navState', 'captable',
-function($scope, $parse, SWBrijj, calculate, switchval,
+function($scope, $parse, SWBrijj, calculate, switchval, $filter,
          $routeParams, $rootScope, $location, navState, captable)
 {
     if (navState.role == 'issuer') {
@@ -27,6 +27,10 @@ function($scope, $parse, SWBrijj, calculate, switchval,
     $scope.activeTran = [];
 
     $scope.investorOrder = "name";
+    $scope.securityUnitLabel = function(security) {
+        var type = $filter('issueUnitLabel')(security.attrs.security_type);
+        return type;
+    };
     SWBrijj.procm('ownership.return_status').then(function (x) {
         $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
@@ -392,6 +396,7 @@ function($scope, $parse, SWBrijj, calculate, switchval,
 
     // Functions derived from services for use in the table
 
+    /*
     //switches the sidebar based on the type of the issue
     $scope.trantype = function (type, activetype) {
         return switchval.trantype(type, activetype);
@@ -465,6 +470,7 @@ function($scope, $parse, SWBrijj, calculate, switchval,
         });
         return type
     };
+*/
 
     $scope.tabvisible = function(tab) {
         if (tab.title == "Activity") {
