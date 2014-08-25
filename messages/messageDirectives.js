@@ -328,9 +328,9 @@ mod.directive('threadPeople', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/messages/partials/threadPeople.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'navState',
 
-        function($scope, $rootScope, SWBrijj, $route) {
+        function($scope, $rootScope, SWBrijj, $route, navState) {
 
             $scope.getPhotoUrl = function(sender){
                 if(sender == navState.userid){
@@ -358,6 +358,8 @@ mod.directive('threadPeople', function(){
                 var array3 = array2.split(",");
                 return array3;
             };
+
+
 
             $scope.getParticipants = function(){
                 console.log($scope.threads);

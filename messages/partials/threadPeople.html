@@ -9,7 +9,7 @@ people threading will go here. woo hooo happy monday!
   </div>
 
   <div class="infoBox" ng-repeat="recipient in threads[0].recipients track by $index">
-    <div class="details">
+    <img ng-src="{{getPhotoUrl(recipient)}}"><div class="details">
       {{recipient}}
       
     </div>
