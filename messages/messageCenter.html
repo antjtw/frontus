@@ -1,0 +1,88 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="/messages/messages.css">
+<div class="maincontent openflow">
+<div class="container dynamic-page doclistFlow">
+<div class="row-fluid">
+    <section class="statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+                    <div class="pull-left" ng-if="!compose">
+                        <span>Search</span>
+                        <input type="text" class="search-box" ng-model="filterText">
+                    </div>
+                    <div class="box-button pull-right"
+                     ng-class="{selected: compose == true}"
+                     ng-click="companyIsZombie() ||  togglePage('compose')" 
+                     data-placement="bottom" bs-tooltip="zombiemessage">
+                        <ul>
+                            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
+                            </li>
+                            <li> <span>Compose</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+        </div>
+
+  <!--   text in the window -->
+    <div class="row-fluid leftTabWindow">
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+            <compose-message ng-if="page == 'compose'"></compose-message>
+            <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
+            <div ng-if="page =='drafts'">Drafts will go here</div>
+            <div ng-if="!page">
+            <div class="span12">
+                <table class="status-table people-table">
+                    <tbody>
+                    <tr>
+                        <th class="button"><span class="title">Name</span></th>
+                        <th class="button"><span class="title">Subject</span></th>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                    <tbody ng-repeat="myMessage in myMessages | orderBy:'time':true">
+                        <tr class="empty-row"></tr>
+                        <tr class="threadMembers">
+                            <td style="width:550px" class="shareholder-column docname-column">
+                               <!--  <div tooltip="{{myMessage.members}}"> -->
+                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.members">{{showString(myMessage.members)}}</div></a>
+                              <!--   </div> -->
+                            </td>
+                            <td><span>{{myMessage.subject}}</span></td>
+                            <td style="width:10px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+
+        </div>
+
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight" ng-if="page !== 'reply'">
+            <tabset style="display:block;" ng-style="viewportheight">
+                <tab heading="Filters">
+                    <div style="clear: both;">
+                        <message-filter sent="sentMsgs" inbox="myMessages" page="page" ilength ="inboxLength"></message-filter>
+                    </div>
+                </tab>
+                <tab heading = "Message Activity">
+                    <div style="clear: both;">
+                        <message-side></message-side>
+                    </div>
+                </tab>
+                
+            </tabset>
+        </internal-right-rail>
+
+
+    </div>
+
+
+    </section>
+
+</div>

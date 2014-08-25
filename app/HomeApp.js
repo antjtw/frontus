@@ -3,7 +3,7 @@ var app = angular.module('HomeApp',
     ['ngAnimate', 'ngRoute', 'ngResource', 'ui.bootstrap',
         '$strap.directives', 'ui.event', 'nav', 'brijj', 'ownerFilters',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
-        'homeDirectives', 'activityDirective', 'commonDirectives',
+        'homeDirectives', 'activityDirective', 'commonDirectives', 'messageDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
         'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular']);
 
@@ -100,10 +100,14 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'noteController'
         }).
         when('/app/company/messages', {
-            templateUrl: '/messages/newMessage.html',
+            templateUrl: '/messages/messageCenter.html',
             controller: 'MsgCtrl'
-
         }).
+        when('/app/company/messages/thread', {
+            templateUrl: '/messages/thread.html',
+            controller: 'threadCtrl'
+        }).
+
 
         otherwise({redirectTo:'/app/home/investor'});
 });

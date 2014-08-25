@@ -460,8 +460,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             return;
         }
         $scope.sidebarPage = null;
-        // $scope.hideRail = false;
-
         $scope.filterParam = {};
         $scope.oldRoles = [];
         

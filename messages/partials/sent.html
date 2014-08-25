@@ -1,0 +1,23 @@
+<div class="span12">
+    <table class="status-table people-table">
+        <tbody>
+        <tr>
+            <th class="button" ng-click="sortBy('name')"><span class="title">Name</span></th>
+            <th class="button" ng-click="sortBy('role')"><span class="title">Subject</span></th>
+            <th></th>
+        </tr>
+        </tbody>
+        <tbody ng-repeat="sent in sents| orderBy:'time':true">
+            <tr class="empty-row"></tr>
+            <tr class="forTooltip">
+                <td style="width:550px" class="shareholder-column docname-column">
+                    <a href="/app/company/messages/thread?thread={{sent.thread_id}}" position="bottom"><div bs-tooltip="sent.members">{{showString(sent.members)}}</div></a>
+                </td>
+            
+                <td style="width: 400px">
+                    <span>{{sent.subject}}</span></td>
+                <td style="width:10px;"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
