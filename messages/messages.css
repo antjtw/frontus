@@ -29,6 +29,10 @@
     background-color: #f1f1f1;
 }
 
+.tooltip{
+    top: 0px;
+}
+
 
 
 .message_elem{
