@@ -47,6 +47,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return null;
     }
     $scope.undo = function() {
+        console.log("undo");
         History.undo(selectedThing(), $scope);
     };
     $scope.redo = function() {

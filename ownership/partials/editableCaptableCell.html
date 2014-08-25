@@ -20,7 +20,7 @@
            ng-model-options="{getterSetter: true}"
            onpaste="return false"
            placeholder="amount"
-           ng-paste="numberPaste($event, inv, data.security, 'amount');"
+           ng-paste="numberPaste($event, inv, sec, 'amount');"
            onkeydown="testForEnter(event);">
     <div modal="tranPicker"
          close="closeTranPicker"
