@@ -251,7 +251,7 @@ mod.directive('messageFilter', function(){
                 console.log($scope.ilength);
                 console.log("heyyyy");
             }
-            $scope.messageLength()
+            $scope.messageLength();
 
 
         }]
@@ -271,10 +271,10 @@ mod.directive('sentMessages', function(){
 
             $scope.showString = function(string){
                 if(string.length > 50){
-                    return string.slice(0, 50) + "..."
+                    return string.slice(0, 50) + "...";
                 }
                 else{
-                    return string
+                    return string;
                 }
            }
 

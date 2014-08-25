@@ -98,27 +98,56 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
     }
 ]);
 
-app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams) {
+app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams', '$q',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams, $q) {
         console.log($routeParams.thread);
         var threadId = parseInt($routeParams.thread);
 
-        $scope.getMessageThread = function(){
-            console.log(typeof $routeParams.thread)
+
+
+        $scope.getPeopleNames = function(){
+            var promise = $q.defer();
+            SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                $scope.myPeople = data;
+                promise.resolve($scope.myPeople);             
+            });  
+            return promise.promise             
+        };
+
+        $scope.getMessages = function(){
             SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
-                $scope.myThreads = data
-                angular.forEach($scope.myThreads, function(thread){
-                    console.log(thread);
-                    $scope.sentMessage = thread.message;
-                    var members = thread.members.replace("{", "");
-                    var members2 = members.replace("}", "");
-                    var members3 = members2.replace(",", ", ");
-                    $scope.threadMembers = members3;
-                    $scope.sender = thread.sender;
+                $scope.getPeopleNames().then(function(){
+                    $scope.threads = data;
+                    console.log($scope.threads);
+                    console.log($scope.myPeople);
                 });
             });
         };
-        $scope.getMessageThread();
+        $scope.getMessages();
+
+        // $scope.getMessages = function(){
+        //     SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
+        //         $scope.getPeopleNames().then.function(){
+        //             $scope.threads = data
+        //             console.log($scope.myPeople);
+        //         };
+        //     });
+        // };
+        // $scope.getMessages();
+
+        // $scope.getMessageThread = function(){
+        //     SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
+        //         $scope.myThreads = data
+        //         angular.forEach($scope.myThreads, function(thread){
+        //             $scope.sentMessage = thread.message;
+        //             var members = thread.members.replace("{", "");
+        //             var members2 = members.replace("}", "");
+        //             var members3 = members2.replace(",", ", ");
+        //             $scope.threadMembers = members3;
+        //         });
+        //     });
+        // };
+        // $scope.getMessageThread();
 
         $scope.message = {};
 
@@ -141,7 +170,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             };
         };
         $scope.getPhotoUrl();
-        
+    
     }
 ]);
 
