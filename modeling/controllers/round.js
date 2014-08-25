@@ -27,7 +27,6 @@ app.controller('roundController',
             round.units = 0;
             round.amount = 0;
             round.issue = round.name;
-            console.log(round);
             if (round.attrs.security_type == "Convertible Debt") {
                 round.convertme = false;
                 $scope.debtpresent = true;
@@ -75,15 +74,14 @@ app.controller('roundController',
 
     $scope.debtcost = function() {
         $scope.totaldebtcost = 0;
-        var convertTran = {'date': $scope.rounddate};
         angular.forEach($scope.rounds, function (round) {
             if (round.attrs && round.attrs.security_type == "Convertible Debt" && round.convertme) {
                 angular.forEach($scope.ct.transactions, function (tran) {
                     if (tran.kind == "purchase" && tran.attrs.security == round.name) {
                         var actualdiscount;
-                        convertTran.tran = angular.copy(tran);
-                        convertTran.newtran = angular.copy(tran);
-                        tran.interestamount = calculate.debtinterest(convertTran);
+                        tran.convert_date = $scope.rounddate;
+                        tran.interestamount = calculate.debtinterest(tran);
+                        console.log(tran.interestamount);
                         if (!isNaN(parseFloat(tran.valcap))) {
                             actualdiscount = Math.max(tran.attrs.discount, (1 - (tran.attrs.valcap / $scope.premoney)) *100);
                         } else {
@@ -128,12 +126,12 @@ app.controller('roundController',
 
         angular.forEach($scope.rounds, function (round) {
             if (round.attrs && round.attrs.security_type == "Convertible Debt" && round.convertme) {
-                angular.forEach(round.transactions, function (tran) {
-                    if (tran.kind == "purchase") {
+                angular.forEach($scope.ct.transactions, function (tran) {
+                    if (tran.kind == "purchase" && tran.attrs.security == round.name) {
                         convertTran = {};
                         convertTran.method = "Valuation";
                         convertTran.tran = angular.copy(tran);
-                        convertTran.tran.amount = tran.attrs.interestamount;
+                        convertTran.tran.attrs.amount = tran.attrs.interestamount;
                         convertTran.newtran = tran;
                         convertTran.toissue = {};
                         convertTran.toissue.premoney = $scope.premoney;
