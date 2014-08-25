@@ -214,9 +214,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 return (annot.whattype == annotType) && !annot.forRole($rootScope.navState.role);
             });
         },
-        hasFilledAnnotation: function(annotType) {
+        hasFilledAnnotation: function(annotType, prepareFor) {
             return this.annotations.some(function(annot) {
-                return (annot.whattype == annotType) && (annot.filled($rootScope.navState.role));
+                return (annot.whattype == annotType) && (!annot.isInvalid(prepareFor));
             });
         },
         hasAnnotationType: function(annotType) {
@@ -255,7 +255,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         numAnnotationsComplete: function(role, prepareFor) {
             var num = 0;
             angular.forEach(this.annotations, function(annot) {
-                num += annot.required && annot.forRole(role) && annot.filled(role, prepareFor) ? 1 : 0;
+                num += annot.required && annot.forRole(role) && !annot.isInvalid(prepareFor) ? 1 : 0;
             });
             return num;
         },
