@@ -323,7 +323,7 @@ mod.directive('threadInformation', function(){
 
 mod.directive('threadPeople', function(){
     return {
-        scope: {threads: "="},
+        scope: {threads: "=", investors: "="},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -336,9 +336,12 @@ mod.directive('threadPeople', function(){
                 if(sender == navState.userid){
                     return '/photo/user?id=company:' + navState.company;
                 }
-                else if(sender !== navState.userid){
-                    return '/photo/user?id=investor:' + sender;
-                    }
+                else if(sender !== navState.userid && $scope.investors.indexOf(sender) > - 1){
+                    return '/photo/user?id=issuer:' + sender;
+                }
+                else if(sender !== navState.userid && $scope.investors.indexOf(sender) === - 1){
+                     return '/photo/user?id=investor:' + sender;
+                }
                 else{
                     return '/img/ike.png';
                 };
