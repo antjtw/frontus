@@ -181,6 +181,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                              };
     function parseTransaction(tran) {
         tran.attrs = JSON.parse(tran.attrs);
+        for (a in tran.attrs)
+        {//TODO this loop is to get rid of bad data. Hopefully it should only be temporary and unneccessary for the final/deployed version
+            if (tran.attrs[a] && attrs[tran.attrs['security_type']] && attrs[tran.attrs['security_type']][tran.kind] && attrs[tran.attrs['security_type']][tran.kind][a] && attrs[tran.attrs['security_type']][tran.kind][a]['type'] == "number")
+            {
+                tran.attrs[a] = Number(tran.attrs[a]);
+            }
+        }
         if (tran.kind in transactionParser) {
             transactionParser[tran.kind](tran);
         }
@@ -602,7 +609,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         //
         // or maybe add a save button for now
         console.log("saveTransaction");
-        //console.log(JSON.stringify(tran));
+        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {

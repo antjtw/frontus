@@ -259,7 +259,6 @@ ownership.filter('selectablesecurities', function() {
 
 ownership.filter('validActions', ['attributes', function(attributes) {
     return function(sec_type, action_type) {
-        // TODO generate from attributes service (db backed)
         var attrs = attributes.getAttrs();
         var nonActions = ['issue security', 'grant', 'purchase'];
         var ret = [];
@@ -275,6 +274,13 @@ ownership.filter('validActions', ['attributes', function(attributes) {
             }
         }
         return ret;
+    };
+}]);
+
+ownership.filter('isRequired', ['attributes', function(attributes) {
+    return function(sec_type, action, key) {
+        var attrs = attributes.getAttrs();
+        return attrs[sec_type][action][key]['required'];
     };
 }]);
 
