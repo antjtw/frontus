@@ -43,13 +43,14 @@
                             <span data-icon="&#xe009;" class="status"></span>
                             <span>{{doc.docname}}</span>
                             <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" class="info" tooltip="Signature Requested"></span>
-                            <span data-icon="&#xe60E;" ng-show="doc.issue" class="info" tooltip="Link to {{doc.issue}}"></span>
+                            <span data-icon="&#xe60E;" ng-show="doc.issue" class="info" tooltip="Linked to {{doc.issue}}"></span>
                             <span data-icon="&#xe612;" ng-show="doc.issue && !doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
                         </span>
                         <span ng-if="!state.bulkPrep && !doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right">Add Annotations</a></span>
                         <span ng-if="!state.bulkPrep && doc.hasAnnotations();"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right complete">Edit Annotations</a></span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
-                            {{annot.type_info.display}}
+                            {{annot.type_info.display}}&nbsp;
+                            <span ng-if="annot.required" data-icon="&#xe603;" class="info lower-icon" tooltip="{{annot.type_info.display}} is required"></span>
                         </span>
                     </div>
                     <div ng-repeat="email in ShareDocs.emails" class="docPrepRow" ng-class="{warningheight: already_shared[doc.doc_id][email]}">
