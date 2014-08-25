@@ -29,50 +29,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
 
 
-        // $scope.getSentMessages = function(){
-        //     var msgs = [];
-        //     $scope.sentMsgs = [];
-        //     SWBrijj.tblm('mail.msgstatus', ['our_id', 'event',  'tox', 'category', 'when_requested', 'subject']).then(function(data){
-        //         var allSent = data;
-        //         function sentMessage(timex, subject, recipients){
-        //             this.timex = timex;
-        //             this.subject = subject;
-        //             this.recipients = [];
-        //         }
-        //         angular.forEach(allSent, function(val){
-        //             if (!msgs.some(function(timestamp, idx, arr){
-        //                  return timestamp.equals(val.when_requested);
-        //             })) 
-        //             {
-        //                 msgs.push(val.when_requested);
-        //             }
-                     
-        //         });
-        //         for(var i=0; i < msgs.length; i++){
-        //             $scope.sentMsgs.push(new sentMessage(msgs[i]))
-        //         }
-        //         angular.forEach($scope.sentMsgs, function(obj){
-        //             angular.forEach(allSent, function(sent){
-        //                 if(sent.when_requested.equals(obj.timex)){
-        //                     obj.subject = sent.subject;
-        //                     if(obj.recipients.indexOf(sent.tox)==-1){
-        //                         obj.recipients.push(sent.tox);
-        //                         obj.recipString = obj.recipients.join(", ");
-        //                     }
-                            
-        //                 }
-        //             });
-        //         });
-        //     });
-        // };
-        // $scope.getSentMessages();
 
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 $scope.messageThreads = data;
-                console.log($scope.messageThreads);
                 $scope.sentMsgs = data;
-                $scope.threadLength = $scope.messageThreads.length;
                 angular.forEach($scope.messageThreads, function(thr){
                     if(thr.sender !== navState.userid){
                         $scope.myMessages.push(thr);
@@ -87,7 +48,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                     }
                     thread.members = array.join(", ");
                 });
-                $scope.inboxLength = $scope.myMessages.length
+               
             });
         };
         $scope.getMessageThreads();
@@ -158,7 +119,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.message = {};
         $scope.replyMessage = function(msg){
             var msgInfo = $scope.myThreads[0]
-            // var recipients = $scope.getArrayfromPosgres(msgInfo.members);
+            var recipients = $scope.getArrayfromPosgres(msgInfo.members);
             // if(recipients.indexOf(navState.userid == -1)){
             //     recipients.push(navState.userid)
             // }
@@ -168,17 +129,13 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.procm('mail.send_message',
                 null,
                 msgInfo.thread_id,
-                null,
+                msgInfo.subject,
                 newtext,
                 null               
             ).then(function(x) {
                 void(x);
                 $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-                $rootScope.$emit("notification:success",
-                    "Message sent!");
-                $rootScope.$emit('new:message');
-                $route.reload();
-                // $scope.resetMessage();
+                $location.url('/app/company/messages/');
                 $scope.clicked = false;
             }).except(function(err) {
                 void(err);

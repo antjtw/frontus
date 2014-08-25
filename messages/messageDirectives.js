@@ -9,11 +9,11 @@ mod.directive('composeMessage', function() {
         // transclude: false,
         restrict: 'E',
         templateUrl: '/messages/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location',
 
         
 
-        function($scope, $rootScope, SWBrijj, navState) {
+        function($scope, $rootScope, SWBrijj, navState, $location) {
 
             $scope.zombiemessage = function(){
                 if(navState.role == "issuer" && ($rootScope.billing.currentPlan == "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
@@ -139,11 +139,13 @@ mod.directive('composeMessage', function() {
                 ).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                  
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     $rootScope.$emit('new:message');
-                    $scope.resetMessage();
+                    // $scope.resetMessage();
                     $scope.clicked = false;
+                    $location.url('/app/company/messages/');
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",
@@ -168,11 +170,10 @@ mod.directive('composeMessage', function() {
                 ).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                    
                     $rootScope.$emit("notification:success",
                         "Message sent!");
-                    //this works but i don't know why for the root scope
-                    $rootScope.$emit('new:message');
-                    $scope.resetMessage();
+                    $location.url('/app/company/messages/');
                     $scope.clicked = false;
                 }).except(function(err) {
                     void(err);
@@ -288,9 +289,8 @@ mod.directive('sentMessages', function(){
     };
 });
 
-// not sure where this directive goes
 
-// this is the information on the side of the page
+// this is the information on the side of the page that is not currently implemented
 mod.directive('threadInformation', function(){
     return {
         scope: {thread: "="},
@@ -316,6 +316,62 @@ mod.directive('threadInformation', function(){
                 });
             };
             $scope.showMessage();
+
+        }]
+    };
+});
+
+mod.directive('threadPeople', function(){
+    return {
+        scope: {threads: "="},
+        // replace: true,
+        // transclude: false,
+        restrict: 'E',
+        templateUrl: '/messages/partials/threadPeople.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+
+        function($scope, $rootScope, SWBrijj, $route) {
+
+            $scope.getPhotoUrl = function(sender){
+                if(sender == navState.userid){
+                    return '/photo/user?id=company:' + navState.company;
+                }
+                else if(sender !== navState.userid){
+                    return '/img/ike.png';
+                        }
+                else{
+                    return '/img/ike.png';
+                };
+            };
+
+            $scope.$watch('threads', function(){
+                console.log($scope.threads);
+                // console.log($scope.threads[0])
+                $scope.getParticipants();
+            })
+
+            $scope.memberNames = [];
+
+            $scope.getArrayfromPosgres = function(array){
+                var array1 = array.replace("{", "");
+                var array2 = array1.replace("}", "");
+                var array3 = array2.split(",");
+                return array3;
+            };
+
+            $scope.getParticipants = function(){
+                console.log($scope.threads);
+                angular.forEach($scope.threads, function(th){
+                    th.recipients = $scope.getArrayfromPosgres(th.members)
+                })
+                // console.log($scope.threads[0])
+
+            }
+            $scope.getParticipants();
+
+          
+
+           
 
         }]
     };

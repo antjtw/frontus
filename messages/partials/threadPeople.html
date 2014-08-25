@@ -1,0 +1,23 @@
+people threading will go here. woo hooo happy monday!
+
+{{threads[0]}}
+<div class="sidebarInfo">
+  <div class="infoBox">
+    <div class="headline">
+      {{threads[0].subject}}
+    </div>
+  </div>
+
+  <div class="infoBox" ng-repeat="recipient in threads[0].recipients track by $index">
+    <div class="details">
+      {{recipient}}
+      
+    </div>
+
+  </div>
+
+
+
+
+
+</div>
