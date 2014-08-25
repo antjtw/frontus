@@ -112,6 +112,10 @@
                                 <span class="info" ng-if="navState.role == 'issuer'"><span>Delivered to {{doc.name}}</span><span>{{doc.when_shared  | date:settings.dateandtime}}</span></span>
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Received</span><span>{{doc.when_shared  | date:settings.dateandtime}}</span></span>
                             </div>
+                            <div class="inforow" ng-if="sendgrid.when_email_opened && doc.when_shared">
+                                <span class="activity-icon received-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Opened email</span><span>{{sendgrid.when_email_opened  | date:settings.dateandtime}}</span></span>
+                            </div>
                             <div class="inforow" ng-if="doc.last_viewed && navState.role == 'issuer'">
                                 <span class="activity-icon doc-view-icon"></span>
                                 <span class="info"><span>Viewed by {{doc.name}}</span><span>{{doc.last_viewed  | date:settings.dateandtime}}</span></span>

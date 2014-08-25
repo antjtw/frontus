@@ -120,7 +120,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                  * @type {number} */
                 /** @name doc#signature_deadline
                  * @type {Date} */
-
                 SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
                     $scope.docviews = data;
                 }).except(function(x) {
@@ -151,8 +150,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                             SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[0].doc_id).then(function(data) {
                                 $scope.doctrans = data;
                             });
-                            $scope.getVersion(data[0]);
-                            return;
+                            SWBrijj.tblmm("document.my_company_doc_sendgrid_opens", "doc_id", data[0].doc_id).then(function(event) {
+                                $scope.sendgrid = {'when_email_opened' : event[0].max};
+                                $scope.getVersion(data[0]);
+                                return;
+                            });
                         });
                     } else {
                         SWBrijj.tblmm("ownership.doc_evidence", "doc_id", tempdocid).then(function(data) {
