@@ -1,7 +1,9 @@
 app.controller('invCaptableController',
-    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$routeParams', '$rootScope', '$location', 'navState', 'captable',
-        function($scope, $parse, SWBrijj, calculate, switchval, $routeParams, $rootScope, $location, navState, captable) {
-
+    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval',
+     '$routeParams', '$rootScope', '$location', 'navState', 'captable',
+function($scope, $parse, SWBrijj, calculate, switchval,
+         $routeParams, $rootScope, $location, navState, captable)
+{
     if (navState.role == 'issuer') {
         $location.path('/company-captable');
         return;
@@ -9,6 +11,9 @@ app.controller('invCaptableController',
 
     var company = navState.company;
     $scope.currentCompany = company;
+    
+    $scope.ct = captable.getCapTable();
+    $scope.captable = captable;
 
     $scope.issuetypes = [];
     $scope.freqtypes = [];
@@ -32,6 +37,7 @@ app.controller('invCaptableController',
         }
     });
 
+    /*
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
@@ -233,6 +239,7 @@ app.controller('invCaptableController',
             });
         });
     });
+    */
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -486,9 +493,10 @@ app.controller('invCaptableController',
     };
 
     // This should really be in a directive (or more properly get some clever css set-up to do it for me...
-    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-        $scope.stretchheight = {height: String(newValue + 59) + "px"}
+    $scope.$watch(
+    function() {
+        return $(".leftBlock").height();
+    }, function(newValue, oldValue) {
+        $scope.stretchheight = {height: String(newValue + 59) + "px"};
     });
-
-
 }]);
