@@ -216,7 +216,12 @@ own.directive('editableCaptableCell', [function() {
                     });
                     var number = splitvalues.length;
                     for (var i = 0; i < number; i++) {
-                        splitvalues[i] = calculate.cleannumber(splitvalues[i]);
+                        splitvalues[i] = Number(calculate.cleannumber(splitvalues[i]));
+                        if (isNaN(splitvalues[i]))
+                        {
+                            startindex += 1;
+                            break;
+                        }
                         if (i == 0)
                         {
                             var anewTran = captable.newTransaction(sec.name, captable.defaultKind(sec.transactions[0].attrs.security_type), $scope.ct.investors[startindex].name);
@@ -527,6 +532,8 @@ own.directive('editableTransactionAttributes', [function() {
                     {
                         case "enum":
                             return key_display_info(key).labels;
+                        case "number":
+                            return "number";
                         default:
                             return "text_field";
                     };
@@ -544,6 +551,9 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useTextField = function(key) {
                     return inputType(key) == "text_field";
                 };
+                $scope.useNumberField = function(key) {
+                    return inputType(key) == "number";
+                };
                 $scope.pickInvestor = function(key) {
                     return inputType(key) == "investor";
                 };
@@ -553,6 +563,12 @@ own.directive('editableTransactionAttributes', [function() {
                 var datefields = [];
                 $scope.useDatePicker = function(key) {
                     return datefields.indexOf(key) >= 0
+                };
+                $scope.isRequired = function(key) {
+                    console.log("isRequired");
+                    console.log($scope.data.attrs.security_type, $scope.data.kind, key);
+                    console.log($filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key));
+                    return $filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key);
                 };
                 $scope.pickIssue = function(key) {
                     return inputType(key) == "security";
