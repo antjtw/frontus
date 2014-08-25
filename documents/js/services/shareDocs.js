@@ -69,7 +69,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
     };
 
     this.docsReadyToShare = function() {
-        if (this.documents.length===0) {
+        if (this.documents.length===0 || this.emails.length === 0) {
             return false;
         }
         if (!this.allPreparedCache()) {
