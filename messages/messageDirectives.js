@@ -245,13 +245,13 @@ mod.directive('messageFilter', function(){
 
        
 
-            $scope.messageLength = function(){
-                console.log($scope.inbox);
-                console.log("testtest");
-                console.log($scope.ilength);
-                console.log("heyyyy");
-            }
-            $scope.messageLength();
+            // $scope.messageLength = function(){
+            //     console.log($scope.inbox);
+            //     console.log("testtest");
+            //     console.log($scope.ilength);
+            //     console.log("heyyyy");
+            // }
+            // $scope.messageLength();
 
 
         }]
@@ -276,7 +276,30 @@ mod.directive('sentMessages', function(){
                 else{
                     return string;
                 }
-           }
+            };
+
+
+
+
+            $scope.getArrayfromPosgres = function(array){
+                var array1 = array.replace("{", "");
+                var array2 = array1.replace("}", "");
+                var array3 = array2.split(",");
+                return array3;
+            }
+
+            $scope.formatSents = function(){
+                angular.forEach($scope.sents, function(msg){
+                    console.log(msg.members);
+                    msg.members = $scope.getArrayfromPosgres(msg.members).join(", ")
+
+                });
+
+            };
+            $scope.formatSents();
+
+
+            
 
 
         }]
