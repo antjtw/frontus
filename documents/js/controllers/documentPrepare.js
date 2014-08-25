@@ -38,16 +38,6 @@ app.controller('DocumentPrepareController',
             }
         };
 
-        $scope.requiredField = function(annot) {
-            return annot.required && !annot.filled(navState.role);
-        };
-
-        $scope.overrideFilled = function(annot, override) {
-            return annot.wouldBeValid(navState.role, override) ||
-                   (((override === undefined) || (override === "")) &&
-                    annot.filled(navState.role));
-        };
-
         $scope.shareDocuments = function() {
             $scope.processing = true;
             ShareDocs.shareDocuments().then(function(result) {
@@ -102,5 +92,19 @@ app.controller('DocumentPrepareController',
                 });
             }
         });
+
+        $scope.docsReadyToShare = function() {
+            if (!ShareDocs.docsReadyToShare()) {
+                return false;
+            }
+            if ($scope.doc_arr.some(function(doc) {
+                return ShareDocs.emails.some(function(email) {
+                    return doc.hasInvalidAnnotation(email);
+                });
+            })) {
+                return false;
+            }
+            return true;
+        };
     }]
 );

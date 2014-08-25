@@ -1909,6 +1909,18 @@ annotation-list h6 {
     cursor: pointer;
 }
 
+annotation-list .tutorial {
+    padding-top: 20px;
+}
+
+annotation-list .tutorial h6 {
+    cursor: auto;
+}
+
+annotation-list .tutorial .gif-text {
+    padding-top: 10px;
+}
+
 annotation-list [data-icon]:before {
     padding-right: 2px;
 }
@@ -1919,14 +1931,6 @@ annotation-list .annotmark {
     margin-left: 25px;
     cursor: pointer;
     text-transform: capitalize;
-}
-
-annotation-list .textIcon {
-    data-icon: &#xe60d;
-}
-
-annotation-list .annotmark.mine.complete.highlightIcon {
-    data-icon: &#xe60f;
 }
 
 annotation-list .annotmark:hover, annotation-list .annotmark.active {
@@ -2421,7 +2425,7 @@ div.profile-link > span:first-of-type {
     vertical-align: -5%;
 }
 
-.docPrepRow.header > span:first-child > span[tooltip] {
+.docPrepRow.header > span > span.info {
     color: #a6a6a6;
 }
 
@@ -2470,15 +2474,42 @@ div.profile-link > span:first-of-type {
     margin: 0;
 }
 
+.docPrepRow > span:first-child ~ span.required input,
+.docPrepRow > span:first-child ~ span .ng-invalid,
+.docPrepRow > span:first-child ~ span.required .select2-chosen {
+    /* moz colors the placeholder automatically based on input color */
+    color: #eb6f1c;
+}
+
+.docPrepRow > span:first-child ~ span.required input::placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required input::-webkit-input-placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::-webkit-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span .ng-invalid:-ms-input-placeholder,
+.docPrepRow > span:first-child ~ span.required input:-ms-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required .select2-default .select2-chosen { /* no placeholder */
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+
 .docPrepRow.warningheight > span,
 .docPrepRow.warningheight > span:first-child ~ span input,
-.docPrepRow.warningHeight > span:first-child ~ span .select2-container {
+.docPrepRow.warningHeight > span:first-child ~ span .select2-choice {
     /* the browser will make the td's as high as they need, but won't adjust percentage based widths inside */
     height: 120px;
 }
 
 .docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
-    border: 1px solid #666666;
+    border: 1px solid #666666 !important; /* !important to override .ng-invalid in MVP.css */
     background-color: #e3e3e3;
 }
 

@@ -441,7 +441,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.unfilledAnnotation = function() {
             return $scope.doc.annotations.some(function(annot) {
-                return (annot.required && annot.forRole(navState.role) && !annot.filled(navState.role));
+                return (annot.forRole(navState.role) && annot.isInvalid(navState.role));
             });
         };
 
@@ -461,9 +461,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, truthiness, !$scope.versionIsFinalized($scope.doc)).then(function(url) {
                 document.location.href = url;
             }).except(function(x) {
-                    console.log(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
-                });
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
         };
 
         $scope.downloadPDF = function() {
