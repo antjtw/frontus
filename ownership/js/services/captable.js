@@ -48,6 +48,9 @@ Cell = function() {
 ownership.service('captable',
 function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
+    function role() {
+        if ($rootScope.navState) return $rootScope.navState.role;
+    }
     var attrs = attributes.getAttrs();
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
@@ -77,7 +80,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             linkUsers(captable.investors, results[5], results[6]);
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
-        }, logErrorPromise);
+        }, logError);
+        console.log(captable);
     }
     loadCapTable();
     
@@ -93,18 +97,20 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
     function loadEvidence() {
         var promise = $q.defer();
+        // TODO investor_evidence
         SWBrijj.tblm('ownership.my_company_evidence')
         .then(function(evidence) {
             promise.resolve(evidence);
-        }).except(logErrorPromise);
+        }).except(logError);
         return promise.promise;
     }
     function loadRowNames() {
         var promise = $q.defer();
+        // TODO investor_row_names?
         SWBrijj.tblm('_ownership.my_company_row_names')
         .then(function(names) {
             promise.resolve(names);
-        }).except(logErrorPromise);
+        }).except(logError);
         return promise.promise;
     }
     function handleTransactions(trans) {
@@ -119,18 +125,20 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
     function loadLedger() {
         var promise = $q.defer();
-        SWBrijj.tblm('_ownership.my_company_ledger')
+        SWBrijj.tblm(role() == 'issuer' ? '_ownership.my_company_ledger'
+                                      : '_ownership.my_investor_ledger')
         .then(function(entries) {
             promise.resolve(entries);
-        }).except(logErrorPromise);
+        }).except(logError);
         return promise.promise;
     }
     function loadTransactionLog() {
         var promise = $q.defer();
-        SWBrijj.tblm('_ownership.my_company_draft_transactions')
+        SWBrijj.tblm(role() == 'issuer' ? '_ownership.my_company_draft_transactions'
+                                      : '_ownership.my_investor_draft_transactions')
         .then(function(trans) {
             promise.resolve(trans);
-        }).except(logErrorPromise);
+        }).except(logError);
         return promise.promise;
     }
 
@@ -139,7 +147,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         SWBrijj.procm('ownership.get_company_activity')
             .then(function(activity) {
                 promise.resolve(activity);
-            }).except(logErrorPromise);
+            }).except(logError);
         return promise.promise;
     }
 
@@ -148,7 +156,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         SWBrijj.tblm('ownership.user_tracker')
             .then(function(logins) {
                 promise.resolve(logins);
-            }).except(logErrorPromise);
+            }).except(logError);
         return promise.promise;
     }
 
@@ -159,7 +167,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                      ['name', 'display_name'])
         .then(function(attrs) {
             promise.resolve(attrs);
-        }).except(logErrorPromise);
+        }).except(logError);
         return promise.promise;
     }
     /* Based on the type of each transaction,
@@ -537,11 +545,11 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     }
 
     function sortSecurities(securities) {
-        return securities.sort(securitySort)
+        return securities.sort(securitySort);
     }
 
     function sortInvestors(investors) {
-        return investors.sort(percentageSort)
+        return investors.sort(percentageSort);
     }
 
     function securitySort(a,b) {
@@ -788,10 +796,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         setVestingDates(iss);
     }
     function logError(err) { console.log(err); }
-    function logErrorPromise(err) {
-        console.log(err);
-        promise.reject(err);
-    }
     function nullCell() {
         return new Cell();
     }
@@ -872,7 +876,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         
         security.transactions.push(tran);
         return security;
-    }
+    };
     this.addSecurity = function(security) {
         // NOTE assume Option for now, user can change,
         //var tran = newTransaction("Option", "issue security");
@@ -925,9 +929,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             return 'purchase';
         if (options.length == 1)
             return options[0];
-        if (options.length == 0)
+        if (options.length === 0)
             return null;
-        if (options.indexOf('issue security') == 0)
+        if (options.indexOf('issue security') === 0)
             return options[1];
         return options[0];
     }
