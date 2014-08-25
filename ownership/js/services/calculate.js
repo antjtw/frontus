@@ -688,7 +688,6 @@ ownership.service('calculate', function () {
     };
 
 
-
     // TODO fix this
     this.conversion = function(convertTran) {
         if (convertTran.method == "Valuation") {

@@ -29,7 +29,7 @@
                 </div>
                 <div ng-show="debtpresent" class="modeling-header"><span>Convert Notes</span></div>
                 <div class="modeling-input-row debt">
-                    <div ng-show="round.type == 'Debt'" ng-repeat="round in initialrounds">
+                    <div ng-show="round.attrs.security_type == 'Convertible Debt'" ng-repeat="round in initialrounds">
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
