@@ -483,7 +483,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         setCellUnits(cell);
         setCellAmount(cell);
         cell.valid = validateCell(cell);
-        console.log(cell);
     }
     this.updateCell = updateCell;
     function generateCells() {
@@ -603,7 +602,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         //
         // or maybe add a save button for now
         console.log("saveTransaction");
-        console.log(JSON.stringify(tran));
+        //console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
@@ -914,7 +913,6 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         var security = captable.securities
             .filter(function(el) { return el.name==sec; })[0];
         security.locked = true;
-        console.log(inv, sec, kind);
         return tran;
     };
     function defaultKind(sec) {
