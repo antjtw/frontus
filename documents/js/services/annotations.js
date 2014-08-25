@@ -214,7 +214,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             } else {
                 // all others (assume a base text type)
                 var val = this.getValWithOverride(user);
-                return (val === undefined || val.length === 0);
+                return (val === undefined || val === null || val.length === 0);
             }
         },
         wouldBeValid: function(role, value) {

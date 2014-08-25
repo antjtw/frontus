@@ -92,5 +92,19 @@ app.controller('DocumentPrepareController',
                 });
             }
         });
+
+        $scope.docsReadyToShare = function() {
+            if (!ShareDocs.docsReadyToShare()) {
+                return false;
+            }
+            if ($scope.doc_arr.some(function(doc) {
+                return ShareDocs.emails.some(function(email) {
+                    return doc.hasInvalidAnnotation(email);
+                });
+            })) {
+                return false;
+            }
+            return true;
+        };
     }]
 );
