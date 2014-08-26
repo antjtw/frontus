@@ -345,6 +345,19 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.sec.name = $scope.sec.attrs.security = tran.attrs.security;
                     captable.saveTransaction(tran);
                 };
+                $scope.makeNewTran = function(kind) {
+                    $scope.newTran = captable.newTransaction(
+                                         $scope.cell.security,
+                                         kind,
+                                         $scope.cell.investor);
+                };
+                $scope.submitAction = function(tran) {
+                    captable.saveTransaction(tran, true);
+                    $scope.newTran = null;
+                };
+                $scope.$on('newSelection', function(evt) {
+                    $scope.newTran = null;
+                });
                 $scope.loaddirective();
                 $scope.$watch('sec', function(newval, oldval) {
                     $scope.loaddirective();

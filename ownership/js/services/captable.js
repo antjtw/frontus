@@ -46,7 +46,7 @@ Cell = function() {
 };
 
 ownership.service('captable',
-function($rootScope, calculate, SWBrijj, $q, attributes, History) {
+function($rootScope, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
         if ($rootScope.navState) {
@@ -330,12 +330,67 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
     };
     function cellsForTran(tran) {
+        var invs = [];
+        var secs = [];
+        for (a in tran.attrs)
+        {
+            if (a.indexOf('investor') != -1)
+            {
+                invs.push(a);
+            }
+            if (a.indexOf('security') != -1 && a.indexOf('type') == -1)
+            {
+                secs.push(a);
+            }
+        }
         return captable.cells.filter(function(cell) {
-            return (tran.attrs.investor == cell.investor ||
-                    tran.attrs.investor_to == cell.investor ||
-                    tran.attrs.investor_from == cell.investor) &&
-                   tran.attrs.security == cell.security;
+            var inv = false;
+            var sec = false;
+            for (a in invs)
+            {
+                if (tran.attrs[a] == cell.investor)
+                {
+                    inv = true;
+                    break;
+                }
+            }
+            for (a in secs)
+            {
+                if (tran.attrs[a] == cell.security)
+                {
+                    sec = true;
+                    break;
+                }
+            }
+            return inv && sec;
         });
+    }
+    function transForCell(inv, sec) {
+        var invs = $filter('getInvestorAttributes')();
+        var secs = $filter('getSecurityAttributes')();
+        var trans = captable.transactions.filter(
+            function(tran) {
+                var i = false;
+                var s = false;
+                for (a in invs)
+                {
+                    if (tran.attrs[invs[a]] == inv)
+                    {
+                        i = true;
+                        break;
+                    }
+                }
+                for (a in secs)
+                {
+                    if (tran.attrs[secs[a]] == sec)
+                    {
+                        s = true;
+                        break;
+                    }
+                }
+                return i && s;
+            });
+        return trans;
     }
     function secHasUnissued(securities) {
         return function(sec) {
@@ -499,13 +554,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         cell.ledger_entries = cell.transactions = null;
         cell.a = cell.u = null;
         
-        cell.transactions = captable.transactions.filter(
-            function(tran) {
-                return (tran.attrs.investor == cell.investor ||
-                        tran.attrs.investor_to == cell.investor ||
-                        tran.attrs.investor_from == cell.investor) &&
-                       tran.attrs.security == cell.security;
-            });
+        cell.transactions = transForCell(cell.investor, cell.security);
         cell.ledger_entries = captable.ledger_entries.filter(
             function(ent) {
                 return ent.investor == cell.investor &&
@@ -514,18 +563,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         setCellUnits(cell);
         setCellAmount(cell);
         cell.valid = validateCell(cell);
+        console.log(cell.ledger_entries);
     }
     this.updateCell = updateCell;
     function generateCells() {
         angular.forEach(captable.investors, function(inv) {
             angular.forEach(captable.securities, function(sec) {
-                var transactions = captable.transactions.filter(
-                    function(tran) {
-                        return (tran.attrs.investor == inv.name ||
-                                tran.attrs.investor_to == inv.name ||
-                                tran.attrs.investor_from == inv.name) &&
-                               tran.attrs.security == sec.name;
-                    });
+                var transactions = transForCell(inv.name, sec.name);
                 if (transactions.length > 0) {
                     var cell = nullCell();
                     cell.transactions = transactions;
@@ -642,7 +686,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 console.log("Error: no ledger entries");
                 return;
             }
+            console.log(new_entries.length);
             var transaction = new_entries.splice(0, 1)[0].transaction;
+            console.log(new_entries.length);
+            console.log(new_entries);
             spliced = [];
             for (new_entry in new_entries)
             {
@@ -742,6 +789,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             if (res > 0) {
                 $rootScope.$emit("notification:success",
                     "Security deleted");
+                $rootScope.$broadcast("deleteSecurity");
 
                 var idx = captable.securities.indexOf(sec);
                 if (idx !== -1) { captable.securities.splice(idx, 1); }
@@ -869,8 +917,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 return el.name==sec && el.attrs.security_type;
             })[0];
         initAttrs(tran, sec_obj.attrs.security_type, kind);
+        /*
         tran.attrs.security = sec;
         tran.attrs.security_type = sec_obj.attrs.security_type;
+        */
+        angular.forEach(tran.attrs, function(value, key) {
+            if (sec_obj.key) tran.attrs.key = sec_obj.key;
+        });
         if (tran.attrs.hasOwnProperty('investor'))
         {
             tran.attrs.investor = inv;
