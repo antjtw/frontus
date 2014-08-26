@@ -4989,5 +4989,6 @@ textarea.email-text {
 
 .go-to{
     color: #666;
+    cursor: pointer;
 }
 
