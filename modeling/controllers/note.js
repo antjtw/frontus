@@ -186,7 +186,7 @@ app.controller('noteController',
             $scope.fromtran.interestratefreq = null;
             $scope.fixinputs = false;
         } else {
-            $scope.selectedNote = tran.investor +"'s " + tran.issue;
+            $scope.selectedNote = tran.attrs.investor +"'s " + tran.attrs.security;
             $scope.fields.fromtranamount = tran.attrs.amount != null ? $scope.addCommas(String(tran.attrs.amount)) : null;
             $scope.fields.fromtranvalcap = tran.attrs.valcap != null ? $scope.addCommas(String(tran.attrs.valcap)): null;
             $scope.fields.fromtrandiscount = tran.attrs.discount != null ? $scope.addCommas(String(tran.attrs.discount)) : null;
