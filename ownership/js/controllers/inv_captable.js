@@ -31,6 +31,11 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
         var type = $filter('issueUnitLabel')(security.attrs.security_type);
         return type;
     };
+    SWBrijj.procm('_ownership.my_visible_investors').then(function(x) {
+        console.log(x);
+    }).except(function(x) {
+        console.log(x);
+    });
     SWBrijj.procm('ownership.return_status').then(function (x) {
         $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {

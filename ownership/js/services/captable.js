@@ -59,6 +59,12 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     var attrs = attributes.getAttrs();
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
+    this.reloadCapTable = function() {
+        //captable = new CapTable();
+        /*
+        loadCapTable();
+        */
+    };
     function loadCapTable() {
         $q.all([loadLedger(),
                 loadTransactionLog(),
@@ -103,17 +109,21 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
     function loadEvidence() {
         var promise = $q.defer();
-        // TODO investor_evidence
-        SWBrijj.tblm('ownership.my_company_evidence')
-        .then(function(evidence) {
-            promise.resolve(evidence);
-        }).except(logError);
+        if (role() == 'issuer') {
+            SWBrijj.tblm('ownership.my_company_evidence')
+            .then(function(evidence) {
+                promise.resolve(evidence);
+            }).except(logError);
+        } else {
+            promise.resolve([]);
+        }
         return promise.promise;
     }
     function loadRowNames() {
         var promise = $q.defer();
-        // TODO investor_row_names?
-        SWBrijj.tblm('_ownership.my_company_row_names')
+        SWBrijj.tblm(role() == 'issuer'
+                        ? '_ownership.my_company_row_names'
+                        : '_ownership.my_investor_row_names')
         .then(function(names) {
             promise.resolve(names);
         }).except(logError);
