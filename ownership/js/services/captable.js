@@ -46,7 +46,7 @@ Cell = function() {
 };
 
 ownership.service('captable',
-function($rootScope, calculate, SWBrijj, $q, attributes, History, $filter) {
+function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
         if ($rootScope.navState) {
@@ -686,10 +686,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History, $filter) {
                 console.log("Error: no ledger entries");
                 return;
             }
-            console.log(new_entries.length);
             var transaction = new_entries.splice(0, 1)[0].transaction;
-            console.log(new_entries.length);
-            console.log(new_entries);
             spliced = [];
             for (new_entry in new_entries)
             {
