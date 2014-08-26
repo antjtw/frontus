@@ -9,37 +9,24 @@
                                 | orderBy:'date' track by $index"
                     ng-switch on="currentTab">
         <accordion-heading>
-            <span data-icon="&#xe031;"
-                  aria-hidden="true"
-                  ng-show="tran.active && sec.transactions.length > 1">
-            </span>
-            <span data-icon="&#xe034;"
-                  aria-hidden="true"
-                  ng-show="!tran.active && sec.transactions.length > 1"
-                  ng-click="editEvidence()">
-            </span>
             <span ng-click="editEvidence()">
                 {{tran.effective_date | date:settings.shortdate}} Transaction
             </span>
         </accordion-heading>
-        <div class="small-standard-button
-                    standard-button
-                    btn-group darkgray">
-            <button class="btn"
+        <div class="darkgray faux-tabs triplet">
+            <button
                     ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
                 <span>
                     Details
                 </span>
-            </button>
-            <button class="btn"
+            </button><button
                     ng-click="switchCapTab('documents');"
                     ng-class="{on: currentTab=='documents'}">
                 <span>
                     Evidence
                 </span>
-            </button>
-            <button class="btn"
+            </button><button
                     ng-click="switchCapTab('actions');"
                     ng-class="{on: currentTab=='actions'}">
                 <span>
@@ -70,7 +57,7 @@
             </div>
             <editable-transaction-attributes ng-if="tran" data="tran" save="true">
             </editable-transaction-attributes>
-            <span class="blue-link delete-link"
+            <span class="delete-link"
                   ng-if="tran.kind != 'issue security'"
                   data-icon="&#xe00c;"
                   ng-click="captable.deleteSecurityTransaction(tran, sec);">
