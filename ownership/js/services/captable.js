@@ -1324,6 +1324,18 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             console.log("attrs not defined yet")
             return true;
         }
+        if (!transaction.attrs.security_type)
+        {
+            console.log("security_type not defined");
+            console.log(transaction);
+            return false;
+        }
+        if (!attrs[transaction.attrs.security_type])
+        {
+            console.log("wrong security type?");
+            console.log(transaction.attrs.security_type);
+            return false;
+        }
         for (att in transaction.attrs)
         {
             if ((transaction.attrs[att]) && (String(transaction.attrs[att]).length > 0))
