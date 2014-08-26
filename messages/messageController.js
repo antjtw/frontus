@@ -28,6 +28,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
         };
 
+        $scope.showSearch = function(){
+            console.log($scope.searchText);
+        }
+        $scope.showSearch();
+
 
 
 
@@ -117,6 +122,8 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 return true;
             }
         };
+
+
 
 
         $scope.getArrayfromPosgres = function(array){

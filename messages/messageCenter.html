@@ -11,8 +11,10 @@
                 <div>
                     <div class="pull-left" ng-if="!compose">
                         <span>Search</span>
-                        <input type="text" class="search-box" ng-model="search.$">
+                        <input type="text" class="search-box" ng-model="filterText">
                     </div>
+
+
                     <div class="box-button pull-right"
                      ng-class="{selected: compose == true}"
                      ng-click="companyIsZombie() ||  togglePage('compose')" 
@@ -44,7 +46,9 @@
                         <th></th>
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="myMessage in myMessages | orderBy:'time':true |filter:searchText">
+
+                   
+                    <tbody ng-repeat="myMessage in myMessages | orderBy:'time':true |filter: filterText">
                         <tr class="empty-row"></tr>
                         <tr class="threadMembers">
                             <td style="width:450px" class="shareholder-column docname-column">

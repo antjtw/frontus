@@ -117,6 +117,9 @@ mod.directive('composeMessage', function() {
                                 if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
                                 };
+                                if(recipients.indexOf(navState.userid) > -1){
+                                    recipients.splice(indexOf(navState.userid, 1));
+                                }
                                 
                             };
                         };
@@ -130,6 +133,7 @@ mod.directive('composeMessage', function() {
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
                 var recipients = $scope.createRecipients();
+                console.log(recipients);
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_bulk_message',
                             JSON.stringify(recipients),
