@@ -77,7 +77,7 @@
                         <a ng-click="setIt(data, true, undo, key, '')">
                         </a>
                     </li>
-                    <li ng-repeat="i in securities | selectablesecurities:data.attrs['security']">
+                    <li ng-repeat="i in securities | selectablesecurities:data">
                         <a ng-click="setIt(data, true, undo, key, i.name)">
                             {{i.name}}
                         </a>

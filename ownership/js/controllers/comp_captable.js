@@ -140,6 +140,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.updateInvestor = function(investor) {
         captable.updateInvestorName(investor);
     };
+    $scope.removeInvestor = function(investor) {
+        captable.removeInvestor(investor);
+        $scope.selectedInvestor = null;
+        displayIntroSidebar();
+        History.forget($scope, 'selectedInvestor');
+    };
     $scope.updateSecurity = function(security) {
         captable.updateSecurityName(security);
     };

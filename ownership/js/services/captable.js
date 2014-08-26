@@ -60,8 +60,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
     this.reloadCapTable = function() {
-        captable = new CapTable();
+        //captable = new CapTable();
+        /*
         loadCapTable();
+        */
     };
     function loadCapTable() {
         $q.all([loadLedger(),
