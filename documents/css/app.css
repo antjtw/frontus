@@ -14,30 +14,6 @@ h2.large-h2 {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
-.smart-doc-list {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.smart-doc-list > ul > li {
-    border: 1px solid #E3E3E3;
-    overflow: visible;
-    height: 60px;
-}
-
-.smart-doc-list > ul > li >ul >li{
-    display: inline-block;
-    float: left;
-    line-height: 60px;
-    color: #666666;
-    margin-left: 10px;
-}
-
-.smart-doc-list > ul > li >ul >li:last-of-type {
-    float: right;
-    margin-right: 10px;
-}
-
 .thisone {
     color: #1ABC96;
 }
@@ -147,7 +123,6 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .status-table.doc-status > tbody > tr > td.tooltip-date, .status-table.doc-status > tbody > tr > th  {
     text-align: center;
-//    width: 60px;
 }
 
 .status-table.doc-status > tbody:first-child > tr > th:first-child {
@@ -1934,6 +1909,18 @@ annotation-list h6 {
     cursor: pointer;
 }
 
+annotation-list .tutorial {
+    padding-top: 20px;
+}
+
+annotation-list .tutorial h6 {
+    cursor: auto;
+}
+
+annotation-list .tutorial .gif-text {
+    padding-top: 10px;
+}
+
 annotation-list [data-icon]:before {
     padding-right: 2px;
 }
@@ -1944,14 +1931,6 @@ annotation-list .annotmark {
     margin-left: 25px;
     cursor: pointer;
     text-transform: capitalize;
-}
-
-annotation-list .textIcon {
-    data-icon: &#xe60d;
-}
-
-annotation-list .annotmark.mine.complete.highlightIcon {
-    data-icon: &#xe60f;
 }
 
 annotation-list .annotmark:hover, annotation-list .annotmark.active {
@@ -2401,12 +2380,20 @@ div.profile-link > span:first-of-type {
     margin: 0;
 }
 
+.docPrep {
+    display: table;
+    margin: 0 40px 80px 40px;
+    min-width: calc(100% - 80px);
+}
+
+.docPrep a {
+    cursor: pointer;
+}
+
 .docPrepRow {
-    width: calc(100% - 80px);
-    margin: 0 auto 0 auto;
-    height: 40px;
-    line-height: 40px;
-    white-space: nowrap;
+    width: 100%;
+    min-height: 40px;
+    display: table-row;
 }
 
 .docPrepRow .bad {
@@ -2430,10 +2417,6 @@ div.profile-link > span:first-of-type {
     color: #8d8d8d;
 }
 
-.docPrepRow:last-of-type {
-    margin-bottom: 80px;
-}
-
 .docPrepRow.header {
     color: #33485d;
 }
@@ -2442,9 +2425,20 @@ div.profile-link > span:first-of-type {
     vertical-align: -5%;
 }
 
+.docPrepRow.header > span > span.info {
+    color: #a6a6a6;
+}
+
 .docPrepRow > span {
-    display: inline-block;
-    box-sizing: border-box;
+    display: table-cell;
+    border-bottom: 1px solid #c3c3c3;
+    min-height: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.docPrepRow .name {
+    color: #666666;
 }
 
 .docPrepRow > span:first-child > span {
@@ -2457,19 +2451,65 @@ div.profile-link > span:first-of-type {
     vertical-align: -5%;
 }
 
+.docPrepRow > span:first-child > span.warning {
+    display: block;
+    padding-left: 31px;
+    width: calc(100% - 31px);
+    white-space: normal;
+    padding-top: 4px;
+}
+
+.docPrepRow > span:first-child > span.warning > span:last-child{
+    display: inline-block;
+}
+
 /* inputs */
 
 .docPrepRow > span:first-child ~ span input, .docPrepRow > span:first-child ~ span .select2-container {
     box-sizing: border-box;
     width: 100%;
     height: 40px;
-    vertical-align: top;
     border-radius: 0;
     border: 1px solid #fff;
+    margin: 0;
+}
+
+.docPrepRow > span:first-child ~ span.required input,
+.docPrepRow > span:first-child ~ span .ng-invalid,
+.docPrepRow > span:first-child ~ span.required .select2-chosen {
+    /* moz colors the placeholder automatically based on input color */
+    color: #eb6f1c;
+}
+
+.docPrepRow > span:first-child ~ span.required input::placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required input::-webkit-input-placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::-webkit-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span .ng-invalid:-ms-input-placeholder,
+.docPrepRow > span:first-child ~ span.required input:-ms-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required .select2-default .select2-chosen { /* no placeholder */
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+
+.docPrepRow.warningheight > span,
+.docPrepRow.warningheight > span:first-child ~ span input,
+.docPrepRow.warningHeight > span:first-child ~ span .select2-choice {
+    /* the browser will make the td's as high as they need, but won't adjust percentage based widths inside */
+    height: 120px;
 }
 
 .docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
-    border: 1px solid #666666;
+    border: 1px solid #666666 !important; /* !important to override .ng-invalid in MVP.css */
     background-color: #e3e3e3;
 }
 
@@ -2486,55 +2526,12 @@ div.profile-link > span:first-of-type {
     display: none;
 }
 
-/* span widths for tableish layout */
-
-/* 2 columns */
-.docPrepRow > span:first-child:nth-last-child(2),
-.docPrepRow > span:first-child:nth-last-child(2) ~ span {
-    width: calc((100% - 4px) / 2);
-}
-/* 3 columns */
-.docPrepRow > span:first-child:nth-last-child(3),
-.docPrepRow > span:first-child:nth-last-child(3) ~ span {
-    width: calc((100% - 4px) / 3);
-}
-
-/* minimums for more than 3 columns */
 .docPrepRow > span:first-child {
-    min-width: 261px; /* select2 wants to be this wide? */
+    min-width: 300px;
+    width: 300px;
 }
 .docPrepRow > span:first-child ~ span{
     min-width: 150px;
-    width: 150px;
-}
-
-/* 4 columns */
-.docPrepRow > span:first-child:nth-last-child(4) ~ span {
-    width: calc((100% - 265px) / 3);
-}
-/* 5 columns */
-.docPrepRow > span:first-child:nth-last-child(5) ~ span {
-    width: calc((100% - 265px) / 4);
-}
-/* 6 columns */
-.docPrepRow > span:first-child:nth-last-child(6) ~ span {
-    width: calc((100% - 265px) / 5);
-}
-/* 7 columns */
-.docPrepRow > span:first-child:nth-last-child(7) ~ span {
-    width: calc((100% - 265px) / 6);
-}
-/* 8 columns */
-.docPrepRow > span:first-child:nth-last-child(8) ~ span {
-    width: calc((100% - 265px) / 7);
-}
-/* 9 columns */
-.docPrepRow > span:first-child:nth-last-child(9) ~ span {
-    width: calc((100% - 265px) / 8);
-}
-/* 10 columns */
-.docPrepRow > span:first-child:nth-last-child(10) ~ span {
-    width: calc((100% - 265px) / 9);
 }
 
 .docPrepRow a {

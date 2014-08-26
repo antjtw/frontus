@@ -565,9 +565,6 @@ own.directive('editableTransactionAttributes', [function() {
                     return datefields.indexOf(key) >= 0
                 };
                 $scope.isRequired = function(key) {
-                    console.log("isRequired");
-                    console.log($scope.data.attrs.security_type, $scope.data.kind, key);
-                    console.log($filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key));
                     return $filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key);
                 };
                 $scope.pickIssue = function(key) {
