@@ -12,6 +12,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     var company = navState.company;
     $scope.currentCompany = company;
     
+    captable.reloadCapTable();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
