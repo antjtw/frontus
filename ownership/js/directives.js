@@ -501,6 +501,7 @@ own.directive('editableTransactionAttributes', [function() {
                 var ct;
                 $scope.attrs = attrs;
                 $scope.loaddirective = function() {
+                    debugger;
                     ct = captable.getCapTable();
                     $scope.securities = ct.securities;
                     $scope.tran_attrs =
