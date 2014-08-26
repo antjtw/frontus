@@ -518,7 +518,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         });
                         $scope.setLastLogins();
                         $scope.setGroups();
-                        // $scope.resetFilter();
                     });
                     $scope.sort = 'name';
                 });

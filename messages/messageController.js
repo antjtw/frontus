@@ -28,9 +28,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
         };
 
-
-
-
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 $scope.messageThreads = data;
@@ -71,7 +68,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.myInvestors=[]
         $scope.isInvestor = function(){
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
-                console.log(data);
                 var myInvestors = data
                 angular.forEach(myInvestors, function(inv){
                     $scope.myInvestors.push(inv.email);
@@ -120,6 +116,8 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
 
+
+
         $scope.getArrayfromPosgres = function(array){
             var array1 = array.replace("{", "");
             var array2 = array1.replace("}", "");
@@ -137,7 +135,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.procm('mail.send_message',
                 null,
                 msgInfo.thread_id,
-                msgInfo.subject,
+                null,
                 newtext,
                 null               
             ).then(function(x) {

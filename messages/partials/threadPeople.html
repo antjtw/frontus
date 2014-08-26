@@ -7,9 +7,11 @@
 
   <div class="infoBox" ng-repeat="msgPerson in msgPeople">
     <img ng-src="{{getPhotoUrl(msgPerson.email)}}" class="replyPic">
-    <div style="display: inline-block;">
-      {{msgPerson.namex}}<br/>
-      {{msgPerson.email}}
+    <div style="display: inline-block; vertical-align: middle;">
+      <div class="emailName">{{msgPerson.namex}}</div>
+      <div class="personEmail">{{msgPerson.email}}</div>
+      <div ng-if="msgPerson.login !== undefined" ng-click="goToPerson(msgPerson)"><span data-icon="&#xe001;"aria-hidden="true">Go to full profile</span></div>
+
     </div>
 
   </div>
