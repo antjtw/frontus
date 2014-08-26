@@ -398,12 +398,12 @@ own.directive('editableCellDetails', [function() {
                 currentTab: '=currenttab',
                 undo: '=undo'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "attributes", "captable",
-            function($scope, $rootScope, attributes, captable) {
+        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate",
+            function($scope, $rootScope, attributes, captable, calculate) {
 
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
-                var ct = captable.getCapTable();
+                $scope.ct = captable.getCapTable();
 
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
@@ -415,10 +415,14 @@ own.directive('editableCellDetails', [function() {
                     $scope.currentTab = tab;
                 };
                 $scope.makeNewTran = function(kind) {
-                    $scope.newTran = captable.newTransaction(
-                                         $scope.cell.security,
-                                         kind,
-                                         $scope.cell.investor);
+                    if (kind == "convert") {
+                        $scope.convertSharesUp()
+                    } else {
+                        $scope.newTran = captable.newTransaction(
+                            $scope.cell.security,
+                            kind,
+                            $scope.cell.investor);
+                    }
                 };
                 $scope.$on('newSelection', function(evt) {
                     $scope.newTran = null;
@@ -449,7 +453,7 @@ own.directive('editableCellDetails', [function() {
                     }
                 };
                 $scope.editEvidence = function(obj) {
-                    ct.evidence_object = obj;
+                    $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
                     if (!$scope.windowToggle)
@@ -464,6 +468,93 @@ own.directive('editableCellDetails', [function() {
                 $scope.$watch('cell', function(newval, oldval) {
                     $scope.loaddirective();
                 }, true);
+
+                // Captable Conversion Modal
+                $scope.convertSharesUp = function() {
+                    $scope.convertTran = {};
+                    angular.forEach($scope.cell.transactions, function(tran) {
+                        if (tran.active) {
+                            $scope.convertTran.tran = tran;
+                        }
+                    });
+                    $scope.convertTran.newtran = {};
+                    $scope.convertTran.step = '1';
+                    $scope.convertTran.date = new Date.today();
+                    $scope.convertModal = true;
+
+                    $scope.$watch('convertTran.ppshare', function(newval, oldval) {
+                        if (!calculate.isNumber(newval)) {
+                            $scope.convertTran.ppshare = oldval;
+                        }
+                    }, true);
+                };
+
+                $scope.convertSharesClose = function() {
+                    $scope.convertModal = false;
+                };
+
+                $scope.convertgoto = function(number) {
+                    $scope.convertTran.step = number;
+                    if (number == '2') {
+                        $scope.convertTran.toissue.ppshare = $scope.convertTran.toissue.attrs.ppshare;
+                        $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
+                        $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran.tran);
+                        $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
+                    }
+                };
+
+                $scope.convertopts = {
+                    backdropFade: true,
+                    dialogFade: true,
+                    dialogClass: 'convertModal modal'
+                };
+
+                // Filters the dropdown to only equity securities
+                $scope.justEquity = function(securities) {
+                    var list = [];
+                    angular.forEach(securities, function(issue) {
+                        if (issue.attrs.security_type == "Equity Common" || issue.attrs.security_type == "Equity Preferred") {
+                            list.push(issue);
+                        }
+                    });
+                    return list;
+                };
+
+                $scope.assignConvert = function(tran) {
+                    $scope.convertTran.tran = tran;
+                };
+
+                // Performs the assignment for the dropdown selectors
+                $scope.assignConvert = function(field, value) {
+                    $scope.convertTran[field] = value;
+                    console.log($scope.convertTran);
+                    if (field == "toissue") {
+                        $scope.convertTran.method = null;
+                    }
+                };
+
+                // Date grabber
+                $scope.dateConvert = function (evt) {
+                    //Fix the dates to take into account timezone differences
+                    if (evt) { // User is typing
+                        if (evt != 'blur')
+                            keyPressed = true;
+                        var dateString = angular.element('converttrandate').val();
+                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                            var date = Date.parse(dateString);
+                            if (date) {
+                                $scope.convertTran.date = calculate.timezoneOffset(date);
+                                keyPressed = false;
+                            }
+                        }
+                    } else { // User is using calendar
+                        if ($scope.convertTran.date instanceof Date) {
+                            $scope.convertTran.date = calculate.timezoneOffset($scope.convertTran.date);
+                            keyPressed = false;
+                        }
+                    }
+                };
             }
         ],
     };

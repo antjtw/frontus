@@ -157,3 +157,109 @@
 </span>
 <doc-mini-viewer docid="viewme"></doc-mini-viewer>
 </div>
+
+<div modal="convertModal" close="convertSharesClose();" options="convertopts">
+    <div class="modalHeader">
+        <span>Convert Shares</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="convertSharesClose()"></span>
+    </div>
+    <div ng-show="convertTran.step == '1'" class="modalText convert-step-one">
+        <div>
+            <span>Transaction {{convertTran.tran.effective_date}}</span>
+        </div>
+        <div class="pull-right">
+            <span>Convert To</span>
+            <ul class="dropdown-list drop-selector">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{convertTran.toissue.name | maxLength}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in justEquity(ct.securities)">
+                            <span ng-click="assignConvert('toissue', i);">{{i.name | maxLength}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div ng-show="convertTran.toissue.name">
+            <span>Date</span>
+            <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
+                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                   onkeydown="testForEnter(event);">
+        </div>
+        <div ng-show="convertTran.toissue.name" class="pull-right">
+            <span>Method</span>
+            <ul class="dropdown-list drop-selector">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{convertTran.method}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <span ng-show="convertTran.toissue.attrs.ppshare" ng-click="assignConvert('method', 'Valuation')">Valuation</span>
+                            <span ng-click="assignConvert('method', 'Price Per Share')">Price Per Share</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div ng-show="convertTran.method == 'Price Per Share'" class="pull-right">
+            <span class="double">Conversion PPS</span>
+            <input type="text" ng-model="convertTran.ppshare" onkeydown="testForEnter(event);">
+        </div>
+    </div>
+    <div ng-show="convertTran.step == '2'" class="modalText">
+        <div class="convert-listing">
+            <span>From</span>
+            <ul>
+                <li>{{convertTran.tran.attrs.security}}</li>
+                <li>Security</li>
+                <li ng-show="convertTran.tran.attrs.discount && convertTran.method != 'Price Per Share'">
+                    <span ng-hide="convertTran.newtran.valcappercentage">{{convertTran.tran.attrs.discount}}%</span>
+                    <span ng-show="convertTran.newtran.valcappercentage">{{convertTran.newtran.valcappercentage}}% (w/ valuation cap)</span>
+                </li>
+                <li ng-show="convertTran.tran.attrs.discount && convertTran.method != 'Price Per Share'">Percent Discount</li>
+                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.attrs.valcap && convertTran.method != 'Price Per Share'">{{convertTran.tran.attrs.valcap}}</li>
+                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.attrs.valcap && convertTran.method != 'Price Per Share'">Valuation Cap</li>
+            </ul>
+        </div>
+        <div class="convert-listing">
+            <span>To</span>
+            <ul>
+                <li>{{convertTran.toissue.name}}</li>
+                <li>Security</li>
+                <li ng-show="convertTran.toissue.attrs.premoney">{{convertTran.toissue.attrs.premoney}}</li>
+                <li ng-show="convertTran.toissue.attrs.premoney">Pre-Money Valuation</li>
+                <li ng-show="convertTran.toissue.attrs.ppshare">{{convertTran.toissue.ppshare}}</li>
+                <li ng-show="convertTran.toissue.attrs.ppshare">Security PPS</li>
+            </ul>
+        </div>
+        <div class="convert-summary">
+            <span>Summary</span>
+            <ul>
+                <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
+                <li><span>{{convertTran.newtran.attrs.amount}}</span><span>Debt + Interest</span></li>
+                <li><span>{{convertTran.newtran.attrs.ppshare}}</span><span>Effective PPS</span></li>
+                <li><span>{{convertTran.newtran.attrs.units}}</span><span>Resulting Shares</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div ng-show="convertTran.step == '1'" class="pull-left standard-button gray">
+            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
+        </div>
+        <div ng-show="convertTran.step == '1'" class="pull-right standard-button blue arrow-right">
+            <button class="btn" ng-disabled="!convertTran.toissue.name || !convertTran.method || !convertTran.date" ng-click="convertgoto('2');">Review</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-left standard-button blue">
+            <button class="btn" ng-click="convertgoto('1');">Back</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-right standard-button">
+            <button class="btn" ng-click="performConvert(convertTran); convertSharesClose();">Submit</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-right standard-button small-standard-button gray cancel-convert">
+            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
+        </div>
+    </div>
+</div>
