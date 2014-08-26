@@ -452,9 +452,6 @@ own.directive('editableCellDetails', [function() {
                 $scope.loaddirective();
                 $scope.$watch('cell', function(newval, oldval) {
                     $scope.loaddirective();
-                    console.log("loaded");
-                    console.log($scope.cell);
-                    console.log($scope.cell.transactions);
                 }, true);
             }
         ],
