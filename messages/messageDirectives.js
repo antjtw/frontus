@@ -323,7 +323,7 @@ mod.directive('threadInformation', function(){
 
 mod.directive('threadPeople', function(){
     return {
-        scope: {threads: "="},
+        scope: {threads: "=", investors: "="},
         // replace: true,
         // transclude: false,
         restrict: 'E',
@@ -336,9 +336,12 @@ mod.directive('threadPeople', function(){
                 if(sender == navState.userid){
                     return '/photo/user?id=company:' + navState.company;
                 }
-                else if(sender !== navState.userid){
-                    return '/img/ike.png';
-                        }
+                else if(sender !== navState.userid && $scope.investors.indexOf(sender) > - 1){
+                    return '/photo/user?id=issuer:' + sender;
+                }
+                else if(sender !== navState.userid && $scope.investors.indexOf(sender) === - 1){
+                     return '/photo/user?id=investor:' + sender;
+                }
                 else{
                     return '/img/ike.png';
                 };
@@ -352,8 +355,6 @@ mod.directive('threadPeople', function(){
             };
 
             $scope.$watch('threads', function(){
-                console.log($scope.threads);
-                // console.log($scope.threads[0])
                 if($scope.threads !== undefined){
                     $scope.myThread = $scope.threads[0]
                     var members = $scope.myThread.members;
@@ -364,28 +365,24 @@ mod.directive('threadPeople', function(){
             })
             function personName(name, email){
                 this.namex = name;
-                this.email = email
+                this.email = email;
             };
 
             $scope.msgPeople = [];
             $scope.getNames = function(array){
-                console.log(array);
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     var names = data;
-                    console.log(names);
                     angular.forEach(names, function(ind){
-                        console.log(ind)
                         for(var i = 0; i < array.length; i ++){
                             if(array[i]== ind.email && ind.name !== null){
                                 $scope.msgPeople.push(new personName(ind.name, ind.email))
                             }
                             else if(array[i]== ind.email && ind.name== null){
-                                $scope.msgPeople.push(new personName(ind.email, ind.email))
-
+                                $scope.msgPeople.push(new personName(ind.email, ind.email));
                             }
                         }
                         
-                    })          
+                    });          
                 });  
             };
 

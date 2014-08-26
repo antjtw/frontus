@@ -68,8 +68,18 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         console.log($routeParams.thread);
         var threadId = parseInt($routeParams.thread);
 
-
-
+        $scope.myInvestors=[]
+        $scope.isInvestor = function(){
+            SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
+                console.log(data);
+                var myInvestors = data
+                angular.forEach(myInvestors, function(inv){
+                    $scope.myInvestors.push(inv.email);
+                });
+                return $scope.myInvestors;
+            });
+        };
+        
         $scope.getPeopleNames = function(){
             var promise = $q.defer();
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
@@ -121,9 +131,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.replyMessage = function(msg){
             var msgInfo = $scope.myThreads[0]
             var recipients = $scope.getArrayfromPosgres(msgInfo.members);
-            // if(recipients.indexOf(navState.userid == -1)){
-            //     recipients.push(navState.userid)
-            // }
             var category = 'company-message';
             var template = 'company-message.html';
             var newtext = msg.text.replace(/\n/g, "<br/>");
@@ -147,18 +154,21 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         };
 
-        $scope.getPhotoUrl = function(sender){
-            if(sender == navState.userid){
-                return '/photo/user?id=company:' + navState.company;
-            }
-            else if(sender !== navState.userid){
-                return '/img/ike.png';
-                    }
-            else{
-                return '/img/ike.png';
+         $scope.getPhotoUrl = function(sender){
+                if(sender == navState.userid){
+                    return '/photo/user?id=company:' + navState.company;
+                }
+                else if(sender !== navState.userid && $scope.myInvestors.indexOf(sender) > - 1){
+                    return '/photo/user?id=issuer:' + sender;
+                }
+                else if(sender !== navState.userid && $scope.myInvestors.indexOf(sender) === - 1){
+                     return '/photo/user?id=investor:' + sender;
+                }
+                else{
+                    return '/img/ike.png';
+                };
             };
-        };
-        $scope.getPhotoUrl();
+       
     
     }
 ]);
