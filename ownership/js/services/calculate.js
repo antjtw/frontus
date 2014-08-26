@@ -639,6 +639,7 @@ ownership.service('calculate', function () {
     };
 
     this.debtinterest = function(tran) {
+        console.log(tran);
         var amount = tran.attrs.amount;
         if (tran.effective_date && tran.attrs.interestrate && tran.attrs.interestratefreq && tran.attrs.amount) {
             // TODO move to filter
