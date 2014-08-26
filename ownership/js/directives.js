@@ -347,9 +347,7 @@ own.directive('editableSecurityDetails', [function() {
                 };
                 $scope.makeNewTran = function(kind) {
                     $scope.newTran = captable.newTransaction(
-                                         $scope.cell.security,
-                                         kind,
-                                         $scope.cell.investor);
+                                         $scope.sec.name, kind, null);
                 };
                 $scope.submitAction = function(tran) {
                     captable.saveTransaction(tran, true);
