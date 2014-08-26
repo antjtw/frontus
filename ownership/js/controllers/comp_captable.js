@@ -12,6 +12,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     var company = navState.company;
     $scope.currentCompany = company;
     
+    captable.reloadCapTable();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
@@ -139,6 +140,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.updateInvestor = function(investor) {
         captable.updateInvestorName(investor);
     };
+    $scope.removeInvestor = function(investor) {
+        captable.removeInvestor(investor);
+        $scope.selectedInvestor = null;
+        displayIntroSidebar();
+        History.forget($scope, 'selectedInvestor');
+    };
     $scope.updateSecurity = function(security) {
         captable.updateSecurityName(security);
     };
@@ -157,9 +164,15 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.selectSecurity(new_sec.name);
         $scope.new_sec = null;
     };
+    $scope.deleteSecurity = function(sec) {
+        captable.deleteSecurity(sec);
+        displayIntroSidebar();
+        $scope.selectedSecurity = null;
+        History.forget($scope, 'selectedSecurity');
+    };
     $scope.updateSecName = function(sec) {
         sec.name = sec.attrs.security = sec.transactions[0].attrs.security;
-    }
+    };
     $scope.$on('addSecurity', function(evt) {
         void(evt);
         $scope.addSecurity($scope.new_sec);
