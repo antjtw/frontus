@@ -158,8 +158,13 @@ svg {
 div.pull-right.standard-button.green {
 	margin-bottom: 20px !important;
 }
-.same-row .row-fluid .span6 {
+.same-row .row-fluid .span15 {
 	width: 100% !important;
+	padding: 0px !important;
+	margin-top: -30px;
+}
+.row-fluid .span15 span {
+	font-size: 20px;
 }
 .same-row .row-fluid .span7 {
 	width: 63% !important;
@@ -183,6 +188,7 @@ div.pull-right.standard-button.green {
 	margin-top: 30px;
 	margin-bottom: 15px;
 }
+
 .span7 svg{
 	left: calc(81% - 124px);
 	position: absolute;

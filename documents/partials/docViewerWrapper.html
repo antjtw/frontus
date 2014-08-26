@@ -39,6 +39,20 @@
                 </li>
             </ul>
         </div>
+        <div class="box-button pull-right"
+             ng-class="{'disabledme': companyIsZombie()}"
+             ng-show="!invq && !urlInves && !prepareable() && !prepareFor"
+             ng-click="companyIsZombie() || shareThisDoc();"
+             data-placement="bottom" bs-tooltip="zombiemessage">
+            <ul>
+                <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
+
+                </li>
+                <li> <span>Share</span>
+
+                </li>
+            </ul>
+        </div>
         <div ng-show="!prepareFor && !prepareable()" class="box-button pull-right"
              ng-click="downloadPDF();"
              data-placement="bottom">
@@ -95,12 +109,16 @@
                             </div>
                             <div class="inforow" ng-if="doc.when_shared">
                                 <span class="activity-icon doc-share-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'"><span>Delivered to {{doc.name}}</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
-                                <span class="info" ng-if="navState.role == 'investor'"><span>Received</span><span>{{doc.when_shared  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Delivered to {{doc.name}}</span><span>{{doc.when_shared  | date:settings.dateandtime}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Received</span><span>{{doc.when_shared  | date:settings.dateandtime}}</span></span>
+                            </div>
+                            <div class="inforow" ng-if="sendgrid.when_email_opened && doc.when_shared">
+                                <span class="activity-icon received-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Opened email</span><span>{{sendgrid.when_email_opened  | date:settings.dateandtime}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.last_viewed && navState.role == 'issuer'">
                                 <span class="activity-icon doc-view-icon"></span>
-                                <span class="info"><span>Viewed by {{doc.name}}</span><span>{{doc.last_viewed  | date:settings.fulldate}}</span></span>
+                                <span class="info"><span>Viewed by {{doc.name}}</span><span>{{doc.last_viewed  | date:settings.dateandtime}}</span></span>
 
                                 <div class="investor-views" ng-if="doc.last_viewed && navState.role == 'issuer'">
                                     <span class="toggle-icon" data-icon="&#xe034;"aria-hidden="true" ng-show="!showViews" ng-click = "showViews = !showViews"></span>
@@ -119,12 +137,12 @@
                                 <span class="info" ng-if="navState.role == 'issuer'">
                                     <span ng-if="!doc.when_signature_provided">Signed by {{doc.name}}</span>
                                     <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
-                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                    <span>{{doc.when_signed  | date:settings.dateandtime}}</span>
                                 </span>
                                 <span class="info" ng-if="navState.role == 'investor'">
                                     <span ng-if="!doc.when_signature_provided">Signed</span>
                                     <span ng-if="doc.when_signature_provided">Signed offline and uploaded</span>
-                                    <span>{{doc.when_signed  | date:settings.fulldate}}</span>
+                                    <span>{{doc.when_signed  | date:settings.dateandtime}}</span>
                                 </span>
                             </div>
                             <div class="inforow" ng-if="doc.when_shared && !doc.when_signed && navState.role == 'issuer' && doc.signature_flow > 0 && !doc.issue">
@@ -148,20 +166,20 @@
                             </div>
                             <div class="inforow" ng-if="doc.when_countersigned">
                                 <span class="activity-icon doc-final-icon"></span>
-                                <span class="info"><span>Approved</span><span>{{doc.when_countersigned  | date:settings.fulldate}}</span></span>
+                                <span class="info"><span>Approved</span><span>{{doc.when_countersigned  | date:settings.dateandtime}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_retracted">
                                 <span class="activity-icon doc-retract-icon"></span>
-                                <span class="info"><span>Retracted</span><span>{{doc.when_retracted  | date:settings.fulldate}}</span></span>
+                                <span class="info"><span>Retracted</span><span>{{doc.when_retracted  | date:settings.dateandtime}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_void_requested">
                                 <span class="activity-icon doc-void-request-icon"></span>
-                                <span class="info"><span>Void requested</span><span>{{doc.when_void_requested  | date:settings.fulldate}}</span></span>
+                                <span class="info"><span>Void requested</span><span>{{doc.when_void_requested  | date:settings.dateandtime}}</span></span>
                             </div>
                             <div class="inforow" ng-if="doc.when_void_accepted">
                                 <span class="activity-icon doc-void-accept-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'"><span>Void accepted by {{doc.name}}</span><span>{{doc.when_void_requested  | date:settings.fulldate}}</span></span>
-                                <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.fulldate}}</span></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>Void accepted by {{doc.name}}</span><span>{{doc.when_void_requested  | date:settings.dateandtime}}</span></span>
+                                <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.dateandtime}}</span></span>
                             </div>
                         </div>
                         <div ng-if="prepareable()">

@@ -38,16 +38,6 @@ app.controller('DocumentPrepareController',
             }
         };
 
-        $scope.requiredField = function(annot) {
-            return annot.required && !annot.filled(navState.role);
-        };
-
-        $scope.overrideFilled = function(annot, override) {
-            return annot.wouldBeValid(navState.role, override) ||
-                   (((override === undefined) || (override == "")) &&
-                    annot.filled(navState.role));
-        };
-
         $scope.shareDocuments = function() {
             $scope.processing = true;
             ShareDocs.shareDocuments().then(function(result) {
@@ -84,5 +74,37 @@ app.controller('DocumentPrepareController',
             }
             saveOverrides();
         });
+
+        $scope.already_shared = {};
+        $scope.$watch('ShareDocs.documents', function(docs) {
+            // we want to reinitialize this everytime the page loads, just incase something changed
+            if (docs && docs.length > 0) {
+                docs.forEach(function(d) {
+                    $scope.already_shared[d.doc_id] = {};
+                    SWBrijj.tblmm('document.shared_with', 'original', d.doc_id).then(function(res) {
+                        res.forEach(function(share) {
+                            if ((!$scope.already_shared[d.doc_id][share.investor]) ||
+                                $scope.already_shared[d.doc_id][share.investor].when_shared < share.when_shared) {
+                                $scope.already_shared[d.doc_id][share.investor] = share;
+                            }
+                        });
+                    });
+                });
+            }
+        });
+
+        $scope.docsReadyToShare = function() {
+            if (!ShareDocs.docsReadyToShare()) {
+                return false;
+            }
+            if ($scope.doc_arr.some(function(doc) {
+                return ShareDocs.emails.some(function(email) {
+                    return doc.hasInvalidAnnotation(email);
+                });
+            })) {
+                return false;
+            }
+            return true;
+        };
     }]
 );
