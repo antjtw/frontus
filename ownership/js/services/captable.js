@@ -46,7 +46,7 @@ Cell = function() {
 };
 
 ownership.service('captable',
-function($rootScope, calculate, SWBrijj, $q, attributes, History, $filter) {
+function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
         if ($rootScope.navState) {
@@ -786,6 +786,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History, $filter) {
             if (res > 0) {
                 $rootScope.$emit("notification:success",
                     "Security deleted");
+                $rootScope.$broadcast("deleteSecurity");
 
                 var idx = captable.securities.indexOf(sec);
                 if (idx !== -1) { captable.securities.splice(idx, 1); }
@@ -913,8 +914,13 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History, $filter) {
                 return el.name==sec && el.attrs.security_type;
             })[0];
         initAttrs(tran, sec_obj.attrs.security_type, kind);
+        /*
         tran.attrs.security = sec;
         tran.attrs.security_type = sec_obj.attrs.security_type;
+        */
+        angular.forEach(tran.attrs, function(value, key) {
+            if (sec_obj.key) tran.attrs.key = sec_obj.key;
+        });
         if (tran.attrs.hasOwnProperty('investor'))
         {
             tran.attrs.investor = inv;

@@ -164,12 +164,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.selectSecurity(new_sec.name);
         $scope.new_sec = null;
     };
-    $scope.deleteSecurity = function(sec) {
-        captable.deleteSecurity(sec);
+    $scope.$on('deleteSecurity', function(sec) {
         displayIntroSidebar();
         $scope.selectedSecurity = null;
         History.forget($scope, 'selectedSecurity');
-    };
+    });
     $scope.updateSecName = function(sec) {
         sec.name = sec.attrs.security = sec.transactions[0].attrs.security;
     };
