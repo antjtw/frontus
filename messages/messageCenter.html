@@ -11,7 +11,7 @@
                 <div>
                     <div class="pull-left" ng-if="!compose">
                         <span>Search</span>
-                        <input type="text" class="search-box" ng-model="filterText">
+                        <input type="text" ng-model="filterText" class="search-box">
                     </div>
 
 
@@ -46,15 +46,12 @@
                         <th></th>
                     </tr>
                     </tbody>
-
-                   
-                    <tbody ng-repeat="myMessage in myMessages | orderBy:'time':true |filter: filterText">
+                    <tbody >
                         <tr class="empty-row"></tr>
-                        <tr class="threadMembers">
+                        <tr class="threadMembers" ng-repeat="myMessage in myMessages | orderBy:'time':true |filter: filterText">
                             <td style="width:450px" class="shareholder-column docname-column">
-                               <!--  <div tooltip="{{myMessage.members}}"> -->
+
                                 <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.members">{{showString(myMessage.members)}}</div></a>
-                              <!--   </div> -->
                             </td>
                             <td><span>{{myMessage.subject}}</span></td>
                             <td style="width:10px;"></td>

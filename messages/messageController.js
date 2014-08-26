@@ -28,14 +28,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
         };
 
-        $scope.showSearch = function(){
-            console.log($scope.searchText);
-        }
-        $scope.showSearch();
-
-
-
-
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 $scope.messageThreads = data;
@@ -143,7 +135,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.procm('mail.send_message',
                 null,
                 msgInfo.thread_id,
-                msgInfo.subject,
+                null,
                 newtext,
                 null               
             ).then(function(x) {

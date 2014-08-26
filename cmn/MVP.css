@@ -4969,4 +4969,9 @@ textarea.email-text {
     padding-bottom: 20px;
 }
 
+.emailName{
+    padding-top: 5px;
+    color: #666;
+}
+
 

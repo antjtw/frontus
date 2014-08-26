@@ -133,7 +133,6 @@ mod.directive('composeMessage', function() {
                 var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
                 var recipients = $scope.createRecipients();
-                console.log(recipients);
                 $scope.clicked = true;
                 SWBrijj.procm('mail.send_bulk_message',
                             JSON.stringify(recipients),
@@ -332,9 +331,9 @@ mod.directive('threadPeople', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/messages/partials/threadPeople.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'navState',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'navState', '$q', '$location',
 
-        function($scope, $rootScope, SWBrijj, $route, navState) {
+        function($scope, $rootScope, SWBrijj, $route, navState, $q, $location) {
 
             $scope.getPhotoUrl = function(sender){
                 if(sender == navState.userid){
@@ -374,22 +373,53 @@ mod.directive('threadPeople', function(){
 
             $scope.msgPeople = [];
             $scope.getNames = function(array){
+                console.log(array);
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
-                    var names = data;
-                    angular.forEach(names, function(ind){
+                    $scope.setLastLogins().then(function(){
+                        var names = data;
                         for(var i = 0; i < array.length; i ++){
-                            if(array[i]== ind.email && ind.name !== null){
-                                $scope.msgPeople.push(new personName(ind.name, ind.email))
-                            }
-                            else if(array[i]== ind.email && ind.name== null){
-                                $scope.msgPeople.push(new personName(ind.email, ind.email));
-                            }
+                            angular.forEach(names, function(ind){
+                             if(array[i]== ind.email && ind.name !== null){
+                                    $scope.msgPeople.push(new personName(ind.name, ind.email))
+                                }
+                                else if(array[i]== ind.email && ind.name== null){
+                                    $scope.msgPeople.push(new personName(ind.email, ind.email));
+                                }
+                              
+                            });
                         }
-                        
-                    });          
-                });  
+                        angular.forEach($scope.myLogins, function(lg){
+                            angular.forEach($scope.msgPeople, function(person){
+                                if(person.email == lg.email){
+                                    person.login = lg.logintime
+                                }
+                            })
+                        })   
+                    });
+
+                });                  
             };
 
+            $scope.setLastLogins = function() {
+                var promise = $q.defer();
+                SWBrijj.tblm("global.user_tracker").then(function(logins) {
+                    $scope.myLogins = logins;
+                    promise.resolve($scope.myLogins);
+
+                });
+                return promise.promise
+            };
+
+            $scope.goToPerson = function(person){
+                console.log(person)
+                if(person.email == navState.userid){
+                    var link = '/app/account/profile';
+                }
+                else{
+                    var link = '/app/company/profile/view?id=' + encodeURIComponent(person.email);
+                }              
+                $location.url(link);
+            };
            
 
           

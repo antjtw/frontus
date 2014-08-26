@@ -386,9 +386,7 @@ m.directive('messageSide', function(){
 
             $rootScope.$on('new:message', function(x){
                 $scope.newMessages();
-
-                // setTimeout($scope.newMessages, 5500);
-            })
+            });
 
 
             $scope.gotoPerson = function(person) {
@@ -515,8 +513,7 @@ m.directive('messageSide', function(){
 
             $scope.gotoPerson = function(person) {
                 if(person.login == undefined){
-                    $scope.hasLink = false;
-                  
+                    $scope.hasLink = false;     
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + encodeURIComponent(person.email);
