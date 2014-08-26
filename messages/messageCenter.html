@@ -33,7 +33,7 @@
     <div class="row-fluid leftTabWindow">
         <compose-message ng-if="page == 'compose'"></compose-message>
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose'">
-            <div ng-if="myMessages.length == 0" style="margin-top: 40px; text-align: center;">You don't have any messages in your inbox. Click compose to start sending away!</div>
+            <div ng-if="myMessages.length == 0 && sentMessages.length == 0" style="margin-top: 40px; text-align: center;">You don't have any messages in your inbox. Click compose to start sending away!</div>
             
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
             <div ng-if="!page && myMessages.length > 0">
