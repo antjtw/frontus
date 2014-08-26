@@ -49,8 +49,8 @@ ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
-        if ($rootScope.navState) {
-            return $rootScope.navState.role;
+        if (navState) {
+            return navState.role;
         } else {
             alert('race condition');
             return 'issuer';
