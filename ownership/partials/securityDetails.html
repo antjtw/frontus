@@ -1,0 +1,89 @@
+<div class="capGuide cap-overflow global">
+    <div class="detailsHeader">
+        <div>{{::sec.name}}</div>
+        <div>{{::sec.effective_date | date:settings.shortdate}}</div>
+        <p ng-show="sec.attrs.security_type" class="belowTitle">
+            <span ng-bind="sec.attrs.security_type"></span>
+            <span>Security Type</span>
+        </p>
+    </div>
+    <accordion ng-class="{'lessmargin': sec.transactions.length == 1}"
+               class="transaction-accordion" close-others="true">
+    <accordion-group ng-repeat="tran in sec.transactions
+                                | orderBy:'date' track by $index"
+                     is-open="tran.active"
+                     ng-switch on="currentTab">
+        <accordion-heading>
+            <span data-icon="&#xe031;" aria-hidden="true"
+                  ng-show="tran.active && sec.transactions.length > 1">
+            </span>
+            <span data-icon="&#xe034;" aria-hidden="true"
+                  ng-show="!tran.active && sec.transactions.length > 1">
+            </span>
+            <span>Transaction</span>
+            <!--
+            <span class="pull-right"
+                  data-icon="&#xe611;" aria-hidden="true"
+                  ng-click="switchCapTab('details')"
+                  ng-class="{on: currentTab=='details'}">
+            </span>
+            <span class="pull-right"
+                  data-icon="&#xe009;" aria-hidden="true"
+                  ng-click="switchCapTab('documents')"
+                  ng-class="{on: currentTab=='documents'}">
+            </span>
+            -->
+        </accordion-heading>
+        <div class="small-standard-button
+                    standard-button
+                    btn-group darkgray">
+            <button class="btn"
+                    ng-click="switchCapTab('details');"
+                    ng-class="{on: currentTab=='details'}">
+                <span>
+                    Details
+                </span>
+            </button>
+            <button class="btn"
+                    ng-click="switchCapTab('documents');"
+                    ng-class="{on: currentTab=='documents'}">
+                <span>
+                    Evidence
+                </span>
+            </button>
+        </div>
+        <div class="capTab" ng-switch-when="details">
+            <div class="capGuide cap-overflow global">
+                <div class="belowTitle">
+                    <span>{{tran.kind}}</span>
+                    <span>Transaction Type</span>
+                </div>
+            </div>
+            <transaction-attributes data="tran">
+        </div>
+        <div class="capTab" ng-switch-when="documents">
+            <div ng-if="tran.evidence_data.length==0"
+                 class="linkedDocuments viewOnly">
+                Connect documents that support this transaction by clicking Edit above.
+            </div>
+            <div ng-if="tran.evidence_data.length>0"
+                 class="linkedDocuments viewOnly">
+                <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
+                    <ul class="pull-left">
+                        <li>
+                            <span ng-click="viewEvidence(doc)">
+                                {{doc.docname}}
+                            </span>
+                        </li>
+                        <li ng-if="doc.name||doc.investor">
+                            <span>
+                                {{doc.name || doc.investor}}'s version
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </accordion-group>
+    </accordion>
+</div>

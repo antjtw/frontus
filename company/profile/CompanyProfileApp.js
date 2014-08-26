@@ -135,7 +135,8 @@ app.controller('CompContactCtrl',
                 $scope.cnamekey = $scope.cname;
                 $scope.companykey = $scope.company;
                 $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
-                $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+                var randnum = Math.random();
+                $scope.photoURL = '/photo/user?id=company:' + $scope.company + '&dontcache=' + randnum;
                 angular.forEach($scope.currencies, function(c) {
                     if (c.indexOf($scope.currency) !== -1) {
                         $scope.longcurrency = c;
@@ -146,16 +147,17 @@ app.controller('CompContactCtrl',
 
             $scope.uploadFile = function() {
                 $scope.photoURL = "/img/image-loader-140.gif";
+                var randnum = Math.random();
                 var fd = new FormData();
                 for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
                 SWBrijj.uploadLogo(fd).then(function(x) {
                     void(x);
-                    $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+                    $scope.photoURL = '/photo/user?id=company:' + $scope.company + '&dontcache=' + randnum;
                     $scope.$emit("notification:success", "Company logo successfully updated");
                 }).except(function(x) {
                         void(x);
                         $scope.$emit("notification:fail", "Company logo change was unsuccessful, please try again.");
-                        $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+                        $scope.photoURL = '/photo/user?id=company:' + $scope.company + '&dontcache=' + randnum;
                     });
             };
 

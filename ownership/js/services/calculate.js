@@ -1,118 +1,106 @@
-var ownership = angular.module('ownerServices', []);
+var ownership = angular.module('ownerServices');
 
-// Captable functions for basic mathematics. Should be expanded by peeling some of the reusable pieces out of the controller.
+// Captable functions for basic mathematics.
+// FIXME make into library of pure functions
 ownership.service('calculate', function () {
 
+    this.primaryMeasure = function(sec_type) {
+        switch (sec_type) {
+            case "Equity Common":
+            case "Equity Preferred":
+            case "Option":
+            case "Warrant":
+                return "units";
+            case "Debt":
+            case "Convertible Debt":
+            case "Safe":
+                return "amount";
+        }
+        return null;
+    };
+
+    this.whenVestingBegins = function(obj) {
+        if (isNumber(obj.vestingbeginsdisplay, 10)) {
+            return angular.copy(obj.date).addMonths(
+                parseInt(obj.vestingbeginsdisplay, 10));
+        } else {
+            return obj.vestingbegins;
+        }
+    };
+    this.complement = function(a, b) {
+        return a.filter(function(el) {return b.indexOf(el)==-1;});
+    };
     this.toFloat = function(value) {
-        value = isNaN(parseFloat(value)) ? null : parseFloat(value);
-        return value;
+        return isNaN(parseFloat(value)) ? null : parseFloat(value);
     };
 
-    // The remainder calculated for outstanding units rows.
-    this.whatsleft = function (total, issue, rows) {
+    // The remainder calculated for outstanding units investors.
+    this.whatsleft = function (total, issue, investors) {
         var leftover = total;
-        angular.forEach(rows, function (row) {
-            if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
-                leftover = leftover - row[issue.issue]['u'];
+        angular.forEach(investors, function (row) {
+            if (issue.issue in row.cells &&
+                    row.nameeditable !== 0 &&
+                    isNumber(row.cells[issue.issue].u)) {
+                leftover -= row.cells[issue.issue].u;
             }
         });
-        return leftover
-    };
-
-    // Calculate and update the unissued rows on the captable
-    this.unissued = function (rows, issues, issuename) {
-        var keepgoing = true;
-        var deleterow = -1;
-        var leftovers;
-        angular.forEach(issues, function (issue) {
-            if (issue.issue == issuename) {
-                if (!isNaN(parseFloat(issue.totalauth))) {
-                    leftovers = issue.totalauth;
-                    angular.forEach(rows, function (row) {
-                        if (issue.issue in row && row.nameeditable != 0 && !isNaN(parseFloat(row[issue.issue]['u']))) {
-                            leftovers = leftovers - row[issue.issue]['u'];
-                        }
-                    });
-                }
-            }
-        });
-
-        angular.forEach(issues, function(issue) {
-            if (issue.optundersec == issuename && !isNaN(parseFloat(issue.totalauth))) {
-                leftovers = leftovers - issue.totalauth;
-            }
-        });
-
-        var shares = {"u": leftovers, "ukey": leftovers, "x": null};
-        angular.forEach(rows, function (row) {
-            if (keepgoing) {
-                if (row.name == issuename + " (unissued)") {
-                    keepgoing = false;
-                    if (leftovers != 0) {
-                        row[issuename] = shares;
-                    }
-                    else {
-                        deleterow = rows.indexOf(row);
-                    }
-                }
-            }
-        });
-        if (keepgoing != false) {
-            if (!isNaN(parseFloat(leftovers)) && leftovers != 0) {
-                rows.splice(-1, 0, {"name": issuename + " (unissued)", "editable": 0, "nameeditable": 0});
-                rows[(rows.length) - 2][issuename] = shares;
-            }
-        }
-        if (deleterow > -1) {
-            rows.splice(deleterow, 1);
-        }
-        return rows
+        return leftover;
     };
 
     // Simple summation checking that the added value is a number.
     this.sum = function (current, additional) {
-        if (isNaN(parseFloat(current)) && !isNaN(parseFloat(additional))) {
+        if ((!current || !isNumber(current)) &&
+                isNumber(additional)) {
             current = 0;
         }
-        if (!isNaN(parseFloat(additional))) {
-            return (current + parseFloat(additional));
-        }
-        else {
+        if (isNumber(additional)) {
+            return current + parseFloat(additional);
+        } else {
             return current;
         }
     };
 
-    // Calculates the debt for the captable based on transactions with paid but no shares. Must be called on each row.
-    this.debt = function (rows, issue, row) {
+    // Calculates the debt for the captable based on transactions
+    // with paid but no shares. Must be called on each row.
+    this.debt = function (investors, issue, row) {
         return null;
-/*        var mon = parseFloat(issue.premoney);
+        /*
+        var mon = parseFloat(issue.attrs.premoney);
         if (isNaN(parseFloat(mon))) {
             return null
-        }
-        else {
-            angular.forEach(rows, function (r) {
-                if (r[issue.issue] != undefined) {
-                    if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r[issue.issue]['a']))) {
-                        mon = mon + parseFloat(r[issue.issue]['a']);
+        } else {
+            angular.forEach(investors, function (r) {
+                if (r.cells[issue.attrs.security] != undefined) {
+                    if ((isNaN(parseFloat(r.cells[issue.attrs.security]['u'])) || r.cells[issue.attrs.security]['u'] == 0 ) && !isNaN(parseFloat(r.cells[issue.attrs.security]['a']))) {
+                        mon = mon + parseFloat(r.cells[issue.attrs.security]['a']);
                     }
                 }
             });
         }
-        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)*/
+        return ((parseFloat(row.cells[issue.issue]['a']) / parseFloat(mon)) * 100)
+        */
     };
 
-    // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array.
-    this.vested = function (rows, trans) {
+    // Calculates the vested amounts for the grant table.
+    // This takes in the row array and returns the new row array.
+    // TODO break up and move to captable service
+    this.vested = function (investors, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
             var vestbegin = angular.copy(tran.vestingbegins);
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+            if (isNumber(tran.vestcliff) &&
+                    isNumber(tran.terms) &&
+                    tran.vestfreq !== null &&
+                    tran.date !== null &&
+                    vestbegin !== null)
+            {
                 if (Date.compare(Date.today(), vestbegin) > -1) {
-                    if (!isNaN(parseFloat(vesting[tran.investor]))) {
-                        vesting[tran.investor] = vesting[tran.investor] + (tran.units * (tran.vestcliff / 100));
-                    }
-                    else {
-                        vesting[tran.investor] = (tran.units * (tran.vestcliff / 100));
+                    if (isNumber(vesting[tran.investor])) {
+                        vesting[tran.investor] +=
+                            tran.units * (tran.vestcliff / 100);
+                    } else {
+                        vesting[tran.investor] = 
+                            tran.units * (tran.vestcliff / 100);
                     }
                     var cycleDate = angular.copy(tran.date);
                     var remainingterm = angular.copy(tran.terms);
@@ -122,54 +110,54 @@ ownership.service('calculate', function () {
                     }
                     remainingterm = remainingterm;
                     var finalDate = vestbegin.addMonths(remainingterm);
-                    var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+                    var monthlyperc = (100 - tran.vestcliff) /
+                                                    remainingterm;
+                    // TODO make into filter
                     var x = 1;
                     if (tran.vestfreq == "monthly") {
-                        x = 1
-                    }
-                    else if (tran.vestfreq == "weekly") {
-                        x = 0.25
-                    }
-                    else if (tran.vestfreq == "bi-weekly") {
-                        x = 0.5
-                    }
-                    else if (tran.vestfreq == "quarterly") {
+                        x = 1;
+                    } else if (tran.vestfreq == "weekly") {
+                        x = 0.25;
+                    } else if (tran.vestfreq == "bi-weekly") {
+                        x = 0.5;
+                    } else if (tran.vestfreq == "quarterly") {
                         x = 3;
-                    }
-                    else if (tran.vestfreq == "yearly") {
+                    } else if (tran.vestfreq == "yearly") {
                         x = 12;
                     }
                     if (x < 1) {
                         cycleDate.addWeeks(x * 4);
-                    }
-                    else {
+                    } else {
                         cycleDate.addMonths(x);
                     }
-                    while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                        vesting[tran.investor] = vesting[tran.investor] + (x * ((monthlyperc / 100) * tran.units));
+                    while (Date.compare(Date.today(), cycleDate) > -1 &&
+                               Date.compare(finalDate.addDays(1),
+                                            cycleDate) > -1)
+                    {
+                        vesting[tran.investor] +=
+                            (x * ((monthlyperc / 100) * tran.units));
                         if (x < 1) {
                             cycleDate.addWeeks(x * 4);
-                        }
-                        else {
+                        } else {
                             cycleDate.addMonths(x);
                         }
                     }
                 }
             }
         });
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (!isNaN(vesting[row.name])) {
-                var result =Math.round(vesting[row.name]*1000)/1000
-                row.vested = result;
+                row.vested = Math.round(vesting[row.name]*1000)/1000;
                 if (parseFloat(row.vested) > (parseFloat(row.granted)-parseFloat(row.forfeited))) {
                     row.vested = (parseFloat(row.granted)-parseFloat(row.forfeited));
                 }
             }
         });
-        return rows
+        return investors;
     };
 
     // Calculates vested on each transaction returning dictionary of date:amount vested
+    // TODO move to captable service
     this.tranvested = function (tran) {
         var tranvested = [];
         var vestbegin = angular.copy(tran.vestingbegins);
@@ -179,10 +167,17 @@ ownership.service('calculate', function () {
         }
 
         var vestedunits = 0;
-        if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
+        if (isNumber(tran.vestcliff) &&
+                isNumber(tran.terms) &&
+                tran.vestfreq !== null &&
+                tran.date !== null &&
+                vestbegin !== null)
+        {
             var cycleDate = angular.copy(tran.date).add(1).days();
             if (Date.compare(Date.today(), vestbegin) > -1) {
-                tranvested.push({"date" : angular.copy(vestbegin), "units" : (tran.units * (tran.vestcliff / 100))});
+                tranvested.push({"date" : angular.copy(vestbegin),
+                                 "units" : tran.units *
+                                           (tran.vestcliff / 100)});
                 vestedunits += (tran.units * (tran.vestcliff / 100));
             }
             if (vestedunits > maxunits) {
@@ -196,21 +191,17 @@ ownership.service('calculate', function () {
             }
             cycleDate.add(-1).days();
             var finalDate = vestbegin.addMonths(remainingterm);
-            var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
+            var monthlyperc = (100 - tran.vestcliff) / remainingterm;
             var x = 1;
             if (tran.vestfreq == "monthly") {
-                x = 1
-            }
-            else if (tran.vestfreq == "weekly") {
-                x = 0.25
-            }
-            else if (tran.vestfreq == "bi-weekly") {
-                x = 0.5
-            }
-            else if (tran.vestfreq == "quarterly") {
+                x = 1;
+            } else if (tran.vestfreq == "weekly") {
+                x = 0.25;
+            } else if (tran.vestfreq == "bi-weekly") {
+                x = 0.5;
+            } else if (tran.vestfreq == "quarterly") {
                 x = 3;
-            }
-            else if (tran.vestfreq == "yearly") {
+            } else if (tran.vestfreq == "yearly") {
                 x = 12;
             }
             finalDate.add(-1).days();
@@ -238,7 +229,8 @@ ownership.service('calculate', function () {
     };
 
     // Calculates the vested amounts for the
-    this.detailedvested = function (rows, trans) {
+    // TODO move to captable service
+    this.detailedvested = function (investors, trans) {
         var vesting = {};
         angular.forEach(trans, function (tran) {
             var vestbegin = angular.copy(tran.vestingbegins)
@@ -296,7 +288,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (vesting[row.name]) {
                 row.vested = {}
                 for (var issue in vesting[row.name]) {
@@ -307,7 +299,7 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        return rows
+        return investors
     };
 
     this.myvested = function (trans) {
@@ -325,7 +317,7 @@ ownership.service('calculate', function () {
             var startdate = angular.copy(tran.date);
             while (remainingterm > 0) {
                 startdate.addMonths(1);
-                remainingterm -= 1
+                remainingterm -= 1;
             }
             lastcolumn = Date.compare(startdate, lastcolumn) > -1 ? startdate : lastcolumn;
         });
@@ -393,51 +385,51 @@ ownership.service('calculate', function () {
                 }
             }
         });
-        return [myvested,tranvested];
+        return [myvested, tranvested];
     };
 
-    // Generates the diluted rows
-    this.dilution = function (rows, issues) {
+    // Generates the diluted investors
+    this.dilution = function (investors, securities) {
         var dilutedRows = [];
-        angular.forEach(rows, function (row) {
-            if (row.name != undefined) {
+        angular.forEach(investors, function (row) {
+            if (row.name !== undefined) {
                 var something = null;
-                var temprow = {"name": row.name, "email": row.email};
-                angular.forEach(issues, function (issue) {
+                var temprow = {"name": row.name, "email": row.email, cells: []};
+                angular.forEach(securities, function (issue) {
                     if (issue.issue) {
-                        temprow[issue.issue] = {};
-                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row[issue.issue]['u'] > 0) {
-                            temprow[issue.issue] = row[issue.issue];
+                        temprow.cells[issue.issue] = {};
+                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row.cells[issue.issue]['u'] > 0) {
+                            temprow.cells[issue.issue] = row.cells[issue.issue];
                             something = true;
                         }
-                        if (row[issue.issue]['exercised'] && row.vested && row[issue.issue]['exercised'] > row.vested[issue.issue]) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                        if (row.cells[issue.issue]['exercised'] && row.vested && row.cells[issue.issue]['exercised'] > row.vested[issue.issue]) {
+                            if (row.cells[issue.issue]['u'] < row.cells[issue.issue]['exercised']) {
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
                             }
                             else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['exercised'];
                             }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
                             something = true;
                         }
-                        else if (row[issue.issue]['exercised'] && !row.vested) {
-                            if (row[issue.issue]['u'] < row[issue.issue]['exercised']) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                        else if (row.cells[issue.issue]['exercised'] && !row.vested) {
+                            if (row.cells[issue.issue]['u'] < row.cells[issue.issue]['exercised']) {
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
                             }
                             else {
-                                temprow[issue.issue]['u'] = row[issue.issue]['exercised'];
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['exercised'];
                             }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
                             something = true;
                         }
                         else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
-                            if (row[issue.issue]['u'] < row.vested[issue.issue]) {
-                                temprow[issue.issue]['u'] = row[issue.issue]['u'];
+                            if (row.cells[issue.issue]['u'] < row.vested[issue.issue]) {
+                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
                             }
                             else {
-                                temprow[issue.issue]['u'] = row.vested[issue.issue];
+                                temprow.cells[issue.issue]['u'] = row.vested[issue.issue];
                             }
-                            temprow[issue.issue]['a'] = row[issue.issue]['a'];
+                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
                             something = true;
                         }
                     }
@@ -453,10 +445,10 @@ ownership.service('calculate', function () {
 
 
 
-    // Returns the number of shareholders (rows -1 for the empty row)
-    this.numShareholders = function (rows) {
+    // Returns the number of shareholders (investors -1 for the empty row)
+    this.numShareholders = function (investors) {
         var number = 0
-        angular.forEach(rows, function(row) {
+        angular.forEach(investors, function(row) {
             if (row.editable == "yes") {
                 number += 1
             }
@@ -464,14 +456,14 @@ ownership.service('calculate', function () {
         return number;
     };
 
-    // Calculates the Total Shares owned by an investor across all rounds
-    this.shareSum = function (row) {
+    // TODO must refactor this for sharePercentage to work
+    this.shareSum = function(row) {
         var total = 0;
-        for (var key in row) {
-            if (row.hasOwnProperty(key)) {
-                if (row[key] != null) {
-                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
-                        total = total + parseFloat(row[key]['u']);
+        for (var key in row.cells) {
+            if (row.cells.hasOwnProperty(key)) {
+                if (row.cells[key] != null) {
+                    if (!isNaN(parseFloat(row.cells[key]['u'])) && String(key) != "$$hashKey") {
+                        total = total + parseFloat(row.cells[key]['u']);
                     }
                 }
             }
@@ -479,52 +471,26 @@ ownership.service('calculate', function () {
         return total;
     };
 
-    // Returns the percentage ownership for each shareholder
-    this.sharePercentage = function (row, rows, issuekeys, sharesum, totalshares) {
-        var percentage = 0;
-        var totalpercentage = 0;
-        for (var i = 0, l = issuekeys.length; i < l; i++) {
-            if (row[issuekeys[i]] != undefined) {
-                if (row[issuekeys[i]]['x'] != undefined) {
-                    percentage = percentage + row[issuekeys[i]]['x'];
-                }
-            }
-        }
-        for (var j = 0, a = rows.length; j < a; j++) {
-            for (var i = 0, l = issuekeys.length; i < l; i++) {
-                if (rows[j][issuekeys[i]] != undefined) {
-                    if (rows[j][issuekeys[i]]['x'] != undefined) {
-                        totalpercentage = totalpercentage + rows[j][issuekeys[i]]['x'];
-                    }
-                }
-            }
-        }
-        return (percentage + (sharesum / totalshares * (100 - totalpercentage)));
+    /*
+    this.sharePercentage = function (sharesum, totalshares) {
+        return (sharesum / totalshares * 100);
     };
+    */
 
-    // Calculates total shares for the captable
-    this.totalShares = function (rows) {
-        var total = 0;
-        angular.forEach(rows, function (row) {
-            for (var key in row) {
-                if (row.hasOwnProperty(key)) {
-                    if (row[key] != null) {
-                        if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
-                            total = total + parseFloat(row[key]['u']);
-                        }
-                    }
-                }
-            }
-        });
-        return total;
-    };
+    function totalShares(cells) {
+        return cells.reduce(function(prev, cur, idx, arr) {
+            return prev + isNumber(cur.u) ? cur.u : 0;
+        }, 0);
+    }
+    this.totalShares = totalShares;
 
     //Calculates the total for a column, will do either shares or money depending
-    this.colTotal = function (header, rows, type) {
+    //// TODO this won't work
+    this.colTotal = function (header, investors, type) {
         var total = 0;
-        for (var i = 0, a = rows.length; i < a; i++) {
-            if (rows[i][header]) {
-                var possfloat = parseFloat(rows[i][header][type]);
+        for (var i = 0, a = investors.length; i < a; i++) {
+            if (investors[i].cells[header]) {
+                var possfloat = parseFloat(investors[i].cells[header][type]);
                 if (!isNaN(possfloat) && String(header) != "$$hashKey") {
                     total += possfloat;
                 }
@@ -534,14 +500,14 @@ ownership.service('calculate', function () {
     };
 
     //Calculates the total for a column, without unissued shares
-    this.colTotalIssued = function (header, rows, type) {
+    this.colTotalIssued = function (header, investors, type) {
         var total = 0;
-        angular.forEach(rows, function (row) {
+        angular.forEach(investors, function (row) {
             if (row.editable == "yes") {
-                for (var key in row) {
+                for (var key in row.cells) {
                     if (key == header) {
-                        if (!isNaN(parseFloat(row[key][type])) && String(key) != "$$hashKey") {
-                            total = total + parseFloat(row[key][type]);
+                        if (!isNaN(parseFloat(row.cells[key][type])) && String(key) != "$$hashKey") {
+                            total = total + parseFloat(row.cells[key][type]);
                         }
                     }
                 }
@@ -550,13 +516,13 @@ ownership.service('calculate', function () {
         return total;
     };
 
-    //Calculates the total money for all issues and transactions
-    this.totalPaid = function (rows) {
+    //Calculates the total money for all securities and transactions
+    this.totalPaid = function (investors) {
         var total = 0;
-        angular.forEach(rows, function (row) {
-            for (var key in row) {
-                if (row[key] != null && !isNaN(parseFloat(row[key]['a'])) && String(key) != "$$hashKey") {
-                    total = total + parseFloat(row[key]['a']);
+        angular.forEach(investors, function (row) {
+            for (var key in row.cells) {
+                if (row.cells[key] != null && !isNaN(parseFloat(row.cells[key]['a'])) && String(key) != "$$hashKey") {
+                    total = total + parseFloat(row.cells[key]['a']);
                 }
             }
         });
@@ -564,23 +530,23 @@ ownership.service('calculate', function () {
     };
 
     //Returns the price per share for the most recent issue assuming such a value is given
-    this.pricePerShare = function (issues, finishedsorting) {
-        if (finishedsorting && issues[issues.length-2]) {
-            return issues[issues.length-2].ppshare;
+    this.pricePerShare = function (securities, finishedsorting) {
+        if (finishedsorting && securities[securities.length-2]) {
+            return securities[securities.length-2].ppshare;
         }
     };
 
     //Returns the price per share for the most recent issue assuming such a value is given
-    this.lastIssue = function (issues, finishedsorting) {
-        if (finishedsorting && issues[issues.length-2]) {
-            return issues[issues.length-2].date;
+    this.lastIssue = function (securities, finishedsorting) {
+        if (finishedsorting && securities[securities.length-2]) {
+            return securities[securities.length-2].date;
         }
     };
 
     //Returns the post money valuation for the most recent issue assuming such a value is given
-    this.lastPostMoney = function (issues, finishedsorting) {
-        if (finishedsorting && issues[issues.length-2]) {
-            return issues[issues.length-2].postmoney;
+    this.lastPostMoney = function (securities, finishedsorting) {
+        if (finishedsorting && securities[securities.length-2]) {
+            return securities[securities.length-2].postmoney;
         }
     };
 
@@ -604,6 +570,14 @@ ownership.service('calculate', function () {
             amount = null;
         }
         return amount;
+    };
+
+    var memformatamount = memoize(this.funcformatAmount);
+    this.formatAmount = function(amount) {
+        return memformatamount(amount);
+    };
+    this.formatDollarAmount = function(amount, settings) {
+        return this.formatMoneyAmount(memformatamount(amount), settings);
     };
 
     var sizes = {0:'', 1:'K', 2:'M', 3:'B'};
@@ -664,10 +638,13 @@ ownership.service('calculate', function () {
         }
     };
 
-    this.debtinterest = function(convertTran) {
-        if (convertTran.date && convertTran.tran.date && convertTran.tran.interestrate && convertTran.tran.interestratefreq && convertTran.tran.amount) {
+    this.debtinterest = function(tran) {
+        console.log(tran);
+        var amount = tran.attrs.amount;
+        if (tran.effective_date && tran.attrs.interestrate && tran.attrs.interestratefreq && tran.attrs.amount) {
+            // TODO move to filter
             var x =1;
-            switch (convertTran.tran.interestratefreq)
+            switch (tran.attrs.interestratefreq)
             {
                 case 'monthly':
                     x=1;
@@ -687,10 +664,10 @@ ownership.service('calculate', function () {
                 default:
                     x=1;
             }
-            var cycleDate = angular.copy(convertTran.tran.date);
+            var cycleDate = angular.copy(tran.effective_date);
             var length = 500;
-            if (convertTran.tran.term) {
-               length = parseInt(convertTran.tran.term)
+            if (tran.attrs.term) {
+               length = parseInt(tran.attrs.term)
             }
             if (x < 1) {
                 cycleDate.addWeeks(x * 4);
@@ -698,9 +675,9 @@ ownership.service('calculate', function () {
             else {
                 cycleDate.addMonths(x);
             }
-            var finalDate = angular.copy(convertTran.tran.date).addMonths(length);
-            while (Date.compare(convertTran.date, cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                convertTran.newtran.amount = parseFloat(convertTran.newtran.amount) + ((parseFloat(convertTran.tran.interestrate)/100) * parseFloat(convertTran.newtran.amount));
+            var finalDate = angular.copy(tran.effective_date).addMonths(length);
+            while (Date.compare(tran.convert_date, cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
+                amount = parseFloat(amount) + ((parseFloat(tran.attrs.interestrate)/100) * parseFloat(amount));
                 if (x < 1) {
                     cycleDate.addWeeks(x * 4);
                 }
@@ -709,17 +686,18 @@ ownership.service('calculate', function () {
                 }
             }
         }
-        return convertTran.newtran.amount;
+        return amount;
     };
 
 
-
     this.conversion = function(convertTran) {
+        console.log(convertTran);
         if (convertTran.method == "Valuation") {
-            var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? (parseFloat(convertTran.tran.discount)/100) : 0;
+            var discount = !isNaN(parseFloat(convertTran.tran.attrs.discount)) ? (parseFloat(convertTran.tran.attrs.discount)/100) : 0;
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
-            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
-                var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));
+            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.attrs.valcap))) {
+                console.log("trying valuation");
+                var premoneypercent = (1-(parseFloat(convertTran.tran.attrs.valcap) / parseFloat(convertTran.toissue.premoney)));
                 convertTran.newtran.prevalcappercentage = String(premoneypercent*100);
                 if (premoneypercent > (discount)) {
                     regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-premoneypercent);
@@ -727,23 +705,35 @@ ownership.service('calculate', function () {
                 }
             }
             if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {
-                convertTran.newtran.ppshare = regularppshare;
-                convertTran.newtran.units = parseFloat(convertTran.newtran.amount) / convertTran.newtran.ppshare;
+                convertTran.newtran.attrs.ppshare = regularppshare;
+                convertTran.newtran.units = parseFloat(convertTran.newtran.attrs.amount) / convertTran.newtran.attrs.ppshare;
             }
             return convertTran.newtran;
         }
         else if (convertTran.method == "Price Per Share") {
-            convertTran.newtran.ppshare = convertTran.ppshare;
+            convertTran.newtran.attrs.ppshare = convertTran.ppshare;
             convertTran.newtran.units = parseFloat(convertTran.newtran.amount) / convertTran.ppshare;
         }
         return convertTran.newtran;
     };
 
-    this.cleannumber = function(potentialnumber) {
-        var finalnumber = String(potentialnumber).replace(/\,/g,'');
-        finalnumber = String(finalnumber).replace(/\$/g , '');
-        return finalnumber
+    this.undoIf = function(fn, cur, prev) {
+        return fn(cur) ? prev : cur;
     };
+    this.numberIsInvalid = function(num) {
+        return !(/^(\d+)*(\.\d+)*$/.test(num)) && num != null && num != "";
+    };
+    this.cleannumber = function(potentialnumber) {
+        if (potentialnumber) {
+            var finalnumber = String(potentialnumber).replace(/\,/g,'');
+            finalnumber = String(finalnumber).replace(/\$/g , '');
+            return finalnumber
+        }
+    };
+    function isNumber(val) {
+        return !isNaN(parseFloat(val));
+    }
+    this.isNumber = isNumber;
 
     // Converts strings to boolean
     this.strToBool = function (string) {
@@ -782,220 +772,7 @@ ownership.service('calculate', function () {
     this.monthDiff = function(d1, d2) {
         var diffYears = d1.getFullYear()-d2.getFullYear();
         var diffMonths = d1.getMonth()-d2.getMonth();
-
         return (diffYears*12 + diffMonths);
     }
 
 });
-
-ownership.service('switchval', function () {
-
-    // Toggles the sidebar based on the type of the issue
-    this.trantype = function (type, activetype) {
-        if (activetype == "Option" && type == "Option") {
-            return true;
-        }
-        else if (activetype == "Debt" && type == "Debt") {
-            return true;
-        }
-        else if (activetype == "Equity" && type == "Equity") {
-            return true;
-        }
-        else if (activetype == "Safe" && type == "Safe") {
-            return true;
-        }
-        else if (activetype == "Warrant" && type == "Warrant") {
-            return true;
-        }
-        else {
-            return false;
-        }
-    };
-
-    this.typeswitch = function (tran) {
-        if (tran.type = "Option") {
-            tran.atype = 1;
-        }
-        else if (tran.type = "Debt") {
-            tran.atype = 2;
-        }
-        else {
-            tran.atype = 0;
-        }
-        return tran;
-    };
-
-    this.typereverse = function (tran) {
-        if (tran == 1) {
-            tran = "Option";
-        }
-        else if (tran == 2) {
-            tran = "Debt";
-        }
-        else {
-            tran = "Equity";
-        }
-        return tran;
-    };
-});
-
-ownership.service('sorting', function () {
-
-    this.issuekeys = function (keys, issues) {
-        var sorted = [];
-        angular.forEach(issues, function (issue) {
-            angular.forEach(keys, function (key) {
-                if (issue.issue == key) {
-                    sorted.push(key);
-                }
-            });
-        });
-        return sorted;
-    };
-
-    this.issuedate = function (a, b) {
-        if (a.date < b.date)
-            return -1;
-        if (a.date > b.date)
-            return 1;
-        if (a.date = b.date) {
-            if (a.created < b.created)
-                return -1;
-            if (a.created > b.created)
-                return 1;
-        }
-        return 0;
-    };
-
-    /*    // Sorts the rows by issue type from earliest to latest
-     this.row = function (prop) {
-     return function (a, b) {
-     var i = 0;
-     // Working for the earliest issue to the latest
-     while (i < prop.length) {
-
-     // Filters out the unissued shares lines
-     if (a['nameeditable'] == 0) {
-     if (b['nameeditable'] == 0) {
-     if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-     return 1;
-     if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-     return -1;
-     }
-     return -1
-     }
-     if (b['nameeditable'] == 0) {
-     if (a['nameeditable'] == 0) {
-     if (Math.abs(a[prop[i]]['u']) < Math.abs(b[prop[i]]['u']))
-     return -1;
-     if (Math.abs(a[prop[i]]['u']) > Math.abs(b[prop[i]]['u']))
-     return 1;
-     }
-     return -1
-     }
-     // Ranks the adjacent rows and returns the order for the pair
-     if (a[prop[i]]['u'] < b[prop[i]]['u'])
-     return 1;
-     if (a[prop[i]]['u'] > b[prop[i]]['u'])
-     return -1;
-     i++
-     }
-     return 0;
-     }
-     };*/
-
-    // Sorts the rows by greatest ownership
-    this.basicrow = function () {
-        return function (a, b) {
-            if (a.startpercent > b.startpercent) return -1
-            else if (b.startpercent > a.startpercent) return 1
-            else return 0;
-        }
-    };
-
-});
-
-app.run(function ($rootScope) {
-
-    $rootScope.rowOrdering = function (row) {
-        var total = 0;
-        for (var key in row) {
-            if (row.hasOwnProperty(key)) {
-                if (key != "name") {
-                    if (!isNaN(parseFloat(row[key]['u'])) && String(key) != "$$hashKey") {
-                        total = total + parseFloat(row[key]['u']);
-                    }
-                }
-            }
-        }
-        return -total;
-    };
-
-//Calculates total grants in each issue
-    $rootScope.totalGranted = function (issue, trans) {
-        var granted = 0;
-        angular.forEach(trans, function (tran) {
-            if (tran.issue == issue && tran.type == "Option" && !isNaN(parseFloat(tran.units))) {
-                granted = granted + parseFloat(tran.units);
-                if (tran.forfeited) {
-                    granted = granted - tran.forfeited;
-                }
-            }
-        });
-        return granted;
-    };
-
-//Calculates total grant actions in grant table
-    $rootScope.totalGrantAction = function (type, grants) {
-        var total = 0;
-        angular.forEach(grants, function (grant) {
-            if (grant.action == type && !isNaN(parseFloat(grant.unit))) {
-                total = total + parseFloat(grant.unit);
-            }
-        });
-        return total;
-    };
-
-//Calculates total granted to and forfeited in grant table
-    $rootScope.totalTranAction = function (type, trans) {
-        var total = 0;
-        angular.forEach(trans, function (tran) {
-            if (type == "granted") {
-                if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) > 0) {
-                    total = total + parseFloat(tran.units);
-                }
-            }
-            else if (type == "forfeited") {
-                if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) < 0) {
-                    total = total + parseFloat(tran.units);
-                }
-            }
-        });
-        return total;
-    };
-
-//Calculates total vested in column
-    $rootScope.totalVestedAction = function (rows) {
-        var total = 0;
-        angular.forEach(rows, function (row) {
-            if (!isNaN(parseFloat(row.vested))) {
-                total = total + parseFloat(row.vested);
-            }
-        });
-        return total;
-    };
-
-    $rootScope.postIssues = function (keys, issue) {
-        console.log(keys);
-        console.log(issue);
-    };
-
-    $rootScope.myPercentage = function (everyone) {
-        return (100 - everyone);
-    };
-
-});
-
-function hidePopover() {
-    angular.element('.popover').hide();
-}

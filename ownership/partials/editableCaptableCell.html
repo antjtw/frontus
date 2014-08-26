@@ -1,0 +1,90 @@
+<span class="captablepair-box" ng-class="{invalid: !data.valid && data.transactions}">
+    <input ng-if="!isDebt(sec);"
+           class="captablepair first-box"
+           ui-event="{focus: 'selectCell(inv, sec.name)',
+                       blur: 'saveIt(\'units\', data.u)'}"
+           data-currency
+           ng-model='units'
+           ng-model-options="{getterSetter: true}"
+           onpaste="return false"
+           placeholder="units"
+           ng-paste="numberPaste($event, inv, sec, 'units');"
+           onkeydown="testForEnter(event);">
+    <input ng-if="isDebt(sec);"
+           class="captablepair default-pointer first-box"
+           disabled>
+    <input class="captablepair last-box"
+           ui-event="{focus: 'selectCell(inv, sec.name)',
+                       blur: 'saveIt(\'amount\', data.a)'}"
+           data-currency
+           ng-model='amount'
+           ng-model-options="{getterSetter: true}"
+           onpaste="return false"
+           placeholder="amount"
+           ng-paste="numberPaste($event, inv, sec, 'amount');"
+           onkeydown="testForEnter(event);">
+    <div modal="tranPicker"
+         close="closeTranPicker"
+         options="opts">
+        <div class="modalHeader">
+            <span>Is this a new transaction?</span>
+            <span class="close"
+                  data-icon="&#xe00f;"
+                  aria-hidden="true"
+                  ng-click="closeTranPicker(false);">
+            </span>
+        </div>
+        <div class="modalText">
+            <form>
+                <p>
+                    Is this a new transaction,
+                    or do you want to modify an existing transaction?
+                </p>
+                <br>
+                <div>
+                    <ul class="dropdown-list drop-selector">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                <span ng-if="!destination_transaction">
+                                    New Transaction
+                                </span>
+                                <span ng-if="destination_transaction">
+                                    <!-- TODO display more than date.-->
+                                    {{destination_transaction.effective_date
+                                      | date:settings.formatdate}}
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="pickTran(null)">
+                                        New Transaction
+                                    </a>
+                                </li>
+                                <li ng-repeat="t in data.transactions">
+                                    <a ng-click="pickTran(t)">
+                                        {{t.effective_date
+                                          | date:settings.formatdate}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <div class="pull-left standard-button gray">
+                <button class="btn"
+                        ng-click="closeTranPicker(false)">
+                    Undo
+                </button>
+            </div>
+            <div class="standard-button green">
+                <button class="btn"
+                        ng-click="closeTranPicker(true)">
+                    Complete
+                </button>
+            </div>
+        </div>
+    </div>
+</span>

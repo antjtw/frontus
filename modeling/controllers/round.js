@@ -1,10 +1,9 @@
 app.controller('roundController',
-    ['$scope', '$rootScope', '$location', '$parse', 'SWBrijj', 'calculate',
-        function($scope, $rootScope, $location, $parse, SWBrijj, calculate) {
+    ['$scope', '$rootScope', '$location', '$parse', 'SWBrijj', 'calculate','captable',
+        function($scope, $rootScope, $location, $parse, SWBrijj, calculate, captable) {
     $scope.optioncollapsed = true;
     $scope.debtcollapsed = true;
     $rootScope.greypage = true;
-
 
     $scope.fields = {'premoney': 8000000, 'investment': 2000000, 'optionpool': 20, 'convertdate': new Date.today()};
     $scope.initialrounds = [];
@@ -12,49 +11,61 @@ app.controller('roundController',
     $scope.initialtotals = {};
     $scope.totals = {};
 
-    $scope.getRounds = function() {
-        var rounds = [];
-        SWBrijj.tblm('ownership.company_issue').then(function (issues) {
-            SWBrijj.tblm('ownership.company_transaction').then(function (trans) {
-                $scope.trans = trans;
-                rounds = issues;
-                var existingoptions = 0;
-                totals = {'units': 0, 'amount': 0};
-                angular.forEach(rounds, function(round) {
-                    round.units = 0;
-                    round.amount = 0;
-                    round.name = round.issue;
-                    if (round.type == "Debt") {
-                        round.convertme = false;
-                        $scope.debtpresent = true;
-                    }
-                    angular.forEach(trans, function(tran) {
-                        if (tran.issue == round.issue) {
-                            round.units += tran.units;
-                            round.amount += tran.amount;
-                            totals.units += tran.units;
-                            totals.amount += tran.amount;
-                        }
-                    });
-                    if (!isNaN(round.totalauth)) {
-                        if (round.totalauth > round.units && round.type == "Option") {
-                            var unauth = (round.totalauth - round.units);
-                            existingoptions += unauth;
-                            totals.units += unauth;
-                        }
-                    }
-                });
+    $scope.ct = captable.getCapTable();
 
-                rounds.push({'issue': "Options Unissued", 'name': "Options Unissued" , 'units': existingoptions});
-                angular.forEach(rounds, function(round) {
-                    round.start_percent = (round.units / totals.units) * 100;
-                    round.percent = round.start_percent;
+    $scope.$watch('ct', function(newval, oldval) {
+        if (newval.securities.length > 0) {
+            $scope.ct = angular.copy($scope.ct);
+            $scope.getRounds();
+        }
+    }, true);
+
+    $scope.getRounds = function() {
+        var existingoptions = 0;
+        var rounds = angular.copy($scope.ct.securities);
+        totals = {'units': 0, 'amount': 0};
+        angular.forEach(rounds, function(round) {
+            round.units = 0;
+            round.amount = 0;
+            round.issue = round.name;
+            if (round.attrs.security_type == "Convertible Debt") {
+                round.convertme = false;
+                $scope.debtpresent = true;
+            }
+
+            if (round.attrs.security_type == "Option") {
+                angular.forEach($scope.ct.transactions, function(tran) {
+                    if (tran.kind == "grant" && tran.attrs.security == round.name) {
+                        round.units += tran.attrs.units;
+                        totals.units += tran.attrs.units;
+                    }
                 });
-                $scope.initialrounds = rounds;
-                $scope.initialtotals = totals;
-                $scope.calculate();
-            });
+                if (!isNaN(round.attrs.totalauth)) {
+                    if (round.attrs.totalauth > round.units) {
+                        var unauth = (round.attrs.totalauth - round.units);
+                        existingoptions += unauth;
+                        totals.units += unauth;
+                    }
+                }
+            }
+            else {
+                angular.forEach($scope.ct.ledger_entries, function(tran) {
+                    if (tran.security == round.name) {
+                        round[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
+                        totals[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
+                    }
+                });
+            }
         });
+
+        rounds.push({'issue': "Options Unissued", 'name': "Options Unissued" , 'units': existingoptions});
+        angular.forEach(rounds, function(round) {
+            round.start_percent = (round.units / totals.units) * 100;
+            round.percent = round.start_percent;
+        });
+        $scope.initialrounds = rounds;
+        $scope.initialtotals = totals;
+        $scope.calculate();
     };
 
     $scope.optionpoolcost = function() {
@@ -75,23 +86,23 @@ app.controller('roundController',
 
     $scope.debtcost = function() {
         $scope.totaldebtcost = 0;
-        var convertTran = {'date': $scope.rounddate};
         angular.forEach($scope.rounds, function (round) {
-            angular.forEach($scope.trans, function (tran) {
-                if (round.type == "Debt" && round.issue == tran.issue && round.convertme) {
-                    var actualdiscount;
-                    convertTran.tran = angular.copy(tran);
-                    convertTran.newtran = angular.copy(tran);
-                    tran.interestamount = calculate.debtinterest(convertTran);
-                    if (!isNaN(parseFloat(tran.valcap))) {
-                        actualdiscount = Math.max(tran.discount, (1 - (tran.valcap / $scope.premoney)) *100);
-                    } else {
-                        actualdiscount = tran.discount;
+            if (round.attrs && round.attrs.security_type == "Convertible Debt" && round.convertme) {
+                angular.forEach($scope.ct.transactions, function (tran) {
+                    if (tran.kind == "purchase" && tran.attrs.security == round.name) {
+                        var actualdiscount;
+                        tran.convert_date = $scope.rounddate;
+                        tran.interestamount = calculate.debtinterest(tran);
+                        if (!isNaN(parseFloat(tran.attrs.valcap))) {
+                            actualdiscount = Math.max(tran.attrs.discount, (1 - (tran.attrs.valcap / $scope.premoney)) *100);
+                        } else {
+                            actualdiscount = tran.attrs.discount;
+                        }
+                        $scope.effectivepremoney -= (tran.interestamount / (1 - (actualdiscount/100)));
+                        $scope.totaldebtcost += (tran.interestamount / (1 - (actualdiscount/100)));
                     }
-                    $scope.effectivepremoney -= (tran.interestamount / (1 - (actualdiscount/100)));
-                    $scope.totaldebtcost += (tran.interestamount / (1 - (actualdiscount/100)));
-                }
-            });
+                });
+            }
         });
     };
 
@@ -125,21 +136,23 @@ app.controller('roundController',
         $scope.lessdebt = 0;
 
         angular.forEach($scope.rounds, function (round) {
-            angular.forEach($scope.trans, function (tran) {
-                if (round.type == "Debt" && round.issue == tran.issue && round.convertme) {
-                    convertTran = {};
-                    convertTran.method = "Valuation";
-                    convertTran.tran = angular.copy(tran);
-                    convertTran.tran.amount = tran.interestamount;
-                    convertTran.newtran = tran;
-                    convertTran.toissue = {};
-                    convertTran.toissue.premoney = $scope.premoney;
-                    convertTran.toissue.ppshare = $scope.effectiveppshare;
-                    converted = calculate.conversion(convertTran);
-                    round.units += converted.units;
-                    $scope.totals.units += converted.units;
-                }
-            });
+            if (round.attrs && round.attrs.security_type == "Convertible Debt" && round.convertme) {
+                angular.forEach($scope.ct.transactions, function (tran) {
+                    if (tran.kind == "purchase" && tran.attrs.security == round.name) {
+                        convertTran = {};
+                        convertTran.method = "Valuation";
+                        convertTran.tran = angular.copy(tran);
+                        convertTran.tran.attrs.amount = tran.attrs.interestamount;
+                        convertTran.newtran = tran;
+                        convertTran.toissue = {};
+                        convertTran.toissue.premoney = $scope.premoney;
+                        convertTran.toissue.ppshare = $scope.effectiveppshare;
+                        converted = calculate.conversion(convertTran);
+                        round.units += converted.units;
+                        $scope.totals.units += converted.units;
+                    }
+                });
+            }
         });
 
 
@@ -203,8 +216,6 @@ app.controller('roundController',
         $scope.dilution = ((finaltotals - $scope.initialtotals.units)/ $scope.initialtotals.units) * 100;
         $scope.doneround = true;
     };
-
-    $scope.getRounds();
 
     $scope.currency = function () {
         return calculate.currencysymbol($scope.settings);
