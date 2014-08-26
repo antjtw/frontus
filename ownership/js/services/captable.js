@@ -46,7 +46,7 @@ Cell = function() {
 };
 
 ownership.service('captable',
-function($rootScope, calculate, SWBrijj, $q, attributes, History, $filter) {
+function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
         if ($rootScope.navState) {
