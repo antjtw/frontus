@@ -35,9 +35,10 @@
     <div class="row-fluid leftTabWindow">
         <compose-message ng-if="page == 'compose'"></compose-message>
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose'">
+            <div ng-if="sentMsgs.length == 0" style="margin-top: 40px; text-align: center;">You haven't sent any messages yet. Click compose to start sending away!</div>
             
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
-            <div ng-if="!page">
+            <div ng-if="!page && sentMsgs.length > 0">
             <div class="span12">
                 <table class="status-table people-table">
                     <tbody>
@@ -79,8 +80,6 @@
                 
             </tabset>
         </internal-right-rail>
-
-
 
     </div>
 
