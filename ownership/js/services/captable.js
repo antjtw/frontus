@@ -702,12 +702,8 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 $rootScope.$emit("notification:success",
                     "Transaction deleted");
                 splice_many(captable.transactions, [tran]);
-                splice_many(cell.transactions, [tran]);
-                angular.forEach(cell.ledger_entries, function(entry) {
-                    if (entry.transaction == tran.transaction) {
-                        splice_many(captable.ledger_entries, [entry]);
-                        splice_many(cell.ledger_entries, [entry]);
-                    }
+                splice_many_by(captable.ledger_entries, function(el) {
+                        return el.transaction == tran.transaction;
                 });
                 updateCell(cell);
             } else {
