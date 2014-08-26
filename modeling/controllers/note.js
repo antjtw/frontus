@@ -145,15 +145,15 @@ app.controller('noteController',
                 if (isNaN(percentdiscount)) {
                     percentdiscount = 0;
                 }
-                if (percentdiscount < parseFloat($scope.fromtran.discount)) {
-                    percentdiscount = parseFloat($scope.fromtran.discount);
+                if (percentdiscount < parseFloat($scope.fromtran.attrs.discount)) {
+                    percentdiscount = parseFloat($scope.fromtran.attrs.discount);
                 }
                 var convalue = convertedpoint.units;
                 var fixedpercentage = 0;
-                if (!isNaN(parseFloat($scope.fromtran.valcap))) {
-                    fixedpercentage = (((1 - (parseFloat(graphpointtran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
+                if (!isNaN(parseFloat($scope.fromtran.attrs.valcap))) {
+                    fixedpercentage = (((1 - (parseFloat(graphpointtran.percentsold)/100)) * parseFloat($scope.fromtran.attrs.amount)) / parseFloat($scope.fromtran.attrs.valcap));
                 }
-                var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ graphpointtran.toissue.postmoney);
+                var shiftpercentage = ((parseFloat($scope.fromtran.attrs.amount)/ (1- (parseFloat($scope.fromtran.attrs.discount) /100)))/ graphpointtran.toissue.postmoney);
                 valcaphit = (fixedpercentage > shiftpercentage) && !oncehit ? true : false;
                 if (valcaphit && !oncehit) {
                     oncehit = true;
@@ -169,9 +169,9 @@ app.controller('noteController',
 
             $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran.tran);
             $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
-            var convalue = $scope.convertTran.newtran.units;
-            var fixedpercentage = (((1 - (parseFloat($scope.convertTran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
-            var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ $scope.convertTran.toissue.postmoney);
+            var convalue = $scope.convertTran.newtran.attrs.units;
+            var fixedpercentage = (((1 - (parseFloat($scope.convertTran.percentsold)/100)) * parseFloat($scope.fromtran.attrs.amount)) / parseFloat($scope.fromtran.attrs.valcap));
+            var shiftpercentage = ((parseFloat($scope.fromtran.attrs.amount)/ (1- (parseFloat($scope.fromtran.attrs.discount) /100)))/ $scope.convertTran.toissue.postmoney);
             $scope.convertTran.ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage) * 100;
         }
     };
@@ -187,12 +187,12 @@ app.controller('noteController',
             $scope.fixinputs = false;
         } else {
             $scope.selectedNote = tran.investor +"'s " + tran.issue;
-            $scope.fields.fromtranamount = tran.amount != null ? $scope.addCommas(String(tran.amount)) : null;
-            $scope.fields.fromtranvalcap = tran.valcap != null ? $scope.addCommas(String(tran.valcap)): null;
-            $scope.fields.fromtrandiscount = tran.discount != null ? $scope.addCommas(String(tran.discount)) : null;
-            $scope.fromtran.interestrate = tran.interestrate;
-            $scope.fromtran.interestratefreq = tran.interestratefreq;
-            $scope.fromtran.date = tran.date;
+            $scope.fields.fromtranamount = tran.attrs.amount != null ? $scope.addCommas(String(tran.attrs.amount)) : null;
+            $scope.fields.fromtranvalcap = tran.attrs.valcap != null ? $scope.addCommas(String(tran.attrs.valcap)): null;
+            $scope.fields.fromtrandiscount = tran.attrs.discount != null ? $scope.addCommas(String(tran.attrs.discount)) : null;
+            $scope.fromtran.attrs.interestrate = tran.attrs.interestrate;
+            $scope.fromtran.attrs.interestratefreq = tran.attrs.interestratefreq;
+            $scope.fromtran.effective_date = tran.effective_date;
 
             $scope.fixinputs = true;
         }
