@@ -33,8 +33,9 @@
 
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
-        <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
-            <compose-message ng-if="page == 'compose'"></compose-message>
+        <compose-message ng-if="page == 'compose'"></compose-message>
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose'">
+            
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
             <div ng-if="!page">
             <div class="span12">
@@ -63,7 +64,7 @@
 
         </div>
 
-        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight" ng-if="page !== 'reply'">
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filters">
                     <div style="clear: both;">
@@ -78,6 +79,7 @@
                 
             </tabset>
         </internal-right-rail>
+
 
 
     </div>
