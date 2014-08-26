@@ -160,10 +160,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
     function loadActivity() {
         var promise = $q.defer();
-        SWBrijj.procm('ownership.get_company_activity')
-            .then(function(activity) {
-                promise.resolve(activity);
-            }).except(logError);
+        if (role() == 'issuer') {
+            SWBrijj.procm('ownership.get_company_activity')
+                .then(function(activity) {
+                    promise.resolve(activity);
+                }).except(logError);
+        } else {
+            promise.resolve([]);
+        }
         return promise.promise;
     }
 
@@ -1206,7 +1210,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
         }).except(logError);
     }
-    loadEligibleEvidence();
+    if (role() == 'issuer') { loadEligibleEvidence(); }
     function setTransactionEmail(tran) {
         angular.forEach(captable.investors, function (row) {
             if ((row.name == tran.investor) && row.email) {
