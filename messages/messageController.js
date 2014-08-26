@@ -135,7 +135,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             SWBrijj.procm('mail.send_message',
                 null,
                 msgInfo.thread_id,
-                msgInfo.subject,
+                'Re: ' + msgInfo.subject,
                 newtext,
                 null               
             ).then(function(x) {
