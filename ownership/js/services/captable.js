@@ -49,8 +49,8 @@ ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
-        if ($rootScope.navState) {
-            return $rootScope.navState.role;
+        if (navState) {
+            return navState.role;
         } else {
             alert('race condition');
             return 'issuer';
@@ -160,10 +160,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
     function loadActivity() {
         var promise = $q.defer();
-        SWBrijj.procm('ownership.get_company_activity')
-            .then(function(activity) {
-                promise.resolve(activity);
-            }).except(logError);
+        if (role() == 'issuer') {
+            SWBrijj.procm('ownership.get_company_activity')
+                .then(function(activity) {
+                    promise.resolve(activity);
+                }).except(logError);
+        } else {
+            promise.resolve([]);
+        }
         return promise.promise;
     }
 
@@ -951,11 +955,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         initAttrs(tran, sec_obj.attrs.security_type, kind);
         tran.attrs.security = sec;
         tran.attrs.security_type = sec_obj.attrs.security_type;
-        /*
         angular.forEach(tran.attrs, function(value, key) {
-            if (sec_obj.key) tran.attrs.key = sec_obj.key;
+            if (sec_obj.attrs[key]) tran.attrs[key] = sec_obj.attrs[key];
         });
-        */
         if (tran.attrs.hasOwnProperty('investor'))
         {
             tran.attrs.investor = inv;
@@ -1243,7 +1245,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
         }).except(logError);
     }
-    loadEligibleEvidence();
+    if (role() == 'issuer') { loadEligibleEvidence(); }
     function setTransactionEmail(tran) {
         angular.forEach(captable.investors, function (row) {
             if ((row.name == tran.investor) && row.email) {
