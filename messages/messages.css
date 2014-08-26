@@ -323,13 +323,7 @@ the compose message page styling*/
     max-width: none;
 }
 
-.replyPic{
-    height: 50px;
-    width: 50px;
-    margin-left: 40px;
-    padding-bottom: 10px;
-    border-radius: 50%;
-}
+
 
 .shareholder-column.docname-column *:hover{
     color: #666;
