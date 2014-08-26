@@ -243,6 +243,12 @@ own.directive('editableCaptableCell', [function() {
                 $scope.$watch('selectedCell', function(newval, oldval) {
                     $scope.loaddirective();
                 }, true);
+                $scope.$watch('data', function(newval, oldval) {
+                    if (!newval && oldval)
+                    {
+                        $scope.selectCell(oldval.investor, oldval.security);
+                    }
+                }, true);
             }
         ],
     };
@@ -446,6 +452,9 @@ own.directive('editableCellDetails', [function() {
                 $scope.loaddirective();
                 $scope.$watch('cell', function(newval, oldval) {
                     $scope.loaddirective();
+                    console.log("loaded");
+                    console.log($scope.cell);
+                    console.log($scope.cell.transactions);
                 }, true);
             }
         ],
