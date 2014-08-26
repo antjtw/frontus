@@ -638,11 +638,12 @@ ownership.service('calculate', function () {
         }
     };
 
-    this.debtinterest = function(convertTran) {
-        if (convertTran.date && convertTran.tran.date && convertTran.tran.interestrate && convertTran.tran.interestratefreq && convertTran.tran.amount) {
+    this.debtinterest = function(tran) {
+        var amount = tran.attrs.amount;
+        if (tran.effective_date && tran.attrs.interestrate && tran.attrs.interestratefreq && tran.attrs.amount) {
             // TODO move to filter
             var x =1;
-            switch (convertTran.tran.interestratefreq)
+            switch (tran.attrs.interestratefreq)
             {
                 case 'monthly':
                     x=1;
@@ -662,10 +663,10 @@ ownership.service('calculate', function () {
                 default:
                     x=1;
             }
-            var cycleDate = angular.copy(convertTran.tran.date);
+            var cycleDate = angular.copy(tran.effective_date);
             var length = 500;
-            if (convertTran.tran.term) {
-               length = parseInt(convertTran.tran.term)
+            if (tran.attrs.term) {
+               length = parseInt(tran.attrs.term)
             }
             if (x < 1) {
                 cycleDate.addWeeks(x * 4);
@@ -673,9 +674,9 @@ ownership.service('calculate', function () {
             else {
                 cycleDate.addMonths(x);
             }
-            var finalDate = angular.copy(convertTran.tran.date).addMonths(length);
-            while (Date.compare(convertTran.date, cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                convertTran.newtran.amount = parseFloat(convertTran.newtran.amount) + ((parseFloat(convertTran.tran.interestrate)/100) * parseFloat(convertTran.newtran.amount));
+            var finalDate = angular.copy(tran.effective_date).addMonths(length);
+            while (Date.compare(tran.convert_date, cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
+                amount = parseFloat(amount) + ((parseFloat(tran.attrs.interestrate)/100) * parseFloat(amount));
                 if (x < 1) {
                     cycleDate.addWeeks(x * 4);
                 }
@@ -684,18 +685,18 @@ ownership.service('calculate', function () {
                 }
             }
         }
-        return convertTran.newtran.amount;
+        return amount;
     };
 
 
-
-    // TODO fix this
     this.conversion = function(convertTran) {
+        console.log(convertTran);
         if (convertTran.method == "Valuation") {
-            var discount = !isNaN(parseFloat(convertTran.tran.discount)) ? (parseFloat(convertTran.tran.discount)/100) : 0;
+            var discount = !isNaN(parseFloat(convertTran.tran.attrs.discount)) ? (parseFloat(convertTran.tran.attrs.discount)/100) : 0;
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
-            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.valcap))) {
-                var premoneypercent = (1-(parseFloat(convertTran.tran.valcap) / parseFloat(convertTran.toissue.premoney)));
+            if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.attrs.valcap))) {
+                console.log("trying valuation");
+                var premoneypercent = (1-(parseFloat(convertTran.tran.attrs.valcap) / parseFloat(convertTran.toissue.premoney)));
                 convertTran.newtran.prevalcappercentage = String(premoneypercent*100);
                 if (premoneypercent > (discount)) {
                     regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-premoneypercent);
@@ -703,13 +704,13 @@ ownership.service('calculate', function () {
                 }
             }
             if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {
-                convertTran.newtran.ppshare = regularppshare;
-                convertTran.newtran.units = parseFloat(convertTran.newtran.amount) / convertTran.newtran.ppshare;
+                convertTran.newtran.attrs.ppshare = regularppshare;
+                convertTran.newtran.units = parseFloat(convertTran.newtran.attrs.amount) / convertTran.newtran.attrs.ppshare;
             }
             return convertTran.newtran;
         }
         else if (convertTran.method == "Price Per Share") {
-            convertTran.newtran.ppshare = convertTran.ppshare;
+            convertTran.newtran.attrs.ppshare = convertTran.ppshare;
             convertTran.newtran.units = parseFloat(convertTran.newtran.amount) / convertTran.ppshare;
         }
         return convertTran.newtran;

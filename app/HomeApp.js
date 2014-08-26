@@ -874,6 +874,10 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.getDocumentInfo();
         });
 
+        SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
+            $scope.company = x[0];
+        });
+
         $scope.getTokenInfo = function() {
             SWBrijj.tblm('oauth.user_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
                 $scope.backupInfo = data[0];

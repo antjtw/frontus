@@ -12,6 +12,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     var company = navState.company;
     $scope.currentCompany = company;
     
+    captable.reloadCapTable();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
@@ -47,6 +48,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return null;
     }
     $scope.undo = function() {
+        console.log("undo");
         History.undo(selectedThing(), $scope);
     };
     $scope.redo = function() {
@@ -129,21 +131,40 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 .filter(function(el) {
                     return el.name == investor_name;
                 })[0];
+            //$scope.selectedInvestor.old_name = $scope.selectedInvestor.name;
             History.watch('selectedInvestor', $scope);
             displayInvestorDetails();
         }
         $scope.$broadcast("newSelection");
     };
     $scope.updateInvestor = function(investor) {
-        // TODO Changing investor name needs implementing here
-        console.log("update investor");
-        console.log(investor);
+        captable.updateInvestorName(investor);
+    };
+    $scope.updateSecurity = function(security) {
+        captable.updateSecurityName(security);
+    };
+    $scope.createNewSec = function() {
+        $scope.new_sec = captable.newSecurity();
+        $scope.selectedCell = $scope.selectedInvestor = null;
+        History.forget($scope, 'selectedSecurity');
+        $scope.selectedSecurity = $scope.new_sec;
+        History.watch('selectedSecurity', $scope);
+        displaySecurityDetails();
     };
     $scope.addSecurity = function(new_sec) {
+        if (new_sec.name == "" || new_sec == undefined || new_sec == null)
+            return;
         captable.addSecurity(new_sec);
-        $scope.selectSecurity(new_sec);
-        $scope.new_sec = "";
+        $scope.selectSecurity(new_sec.name);
+        $scope.new_sec = null;
     };
+    $scope.updateSecName = function(sec) {
+        sec.name = sec.attrs.security = sec.transactions[0].attrs.security;
+    }
+    $scope.$on('addSecurity', function(evt) {
+        void(evt);
+        $scope.addSecurity($scope.new_sec);
+    });
     $scope.addInvestor = function(new_inv) {
         if (new_inv) captable.addInvestor(new_inv);
         $scope.selectInvestor(new_inv);
@@ -636,7 +657,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 $scope.ct.securities[i] = angular.copy($scope.issueRevert);
                 $scope.activeIssue = angular.copy($scope.issueRevert);
             }
-        };
+        }
     };
 
     // Captable Sharing Modal
@@ -916,13 +937,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $location.url(link);
     };
 
-    $scope.securityUnitLabel = function(security_name) {
-        var type;
-        angular.forEach($scope.ct.securities, function(sec) {
-            if (sec.name == security_name) {
-                type = $filter('issueUnitLabel')(sec);
-            }
-        });
+    $scope.securityUnitLabel = function(security) {
+        var type = $filter('issueUnitLabel')(security.attrs.security_type);
         return type;
     };
 
@@ -941,14 +957,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return (output);
     };
 
-    $scope.typeLocked = function(issue) {
-        if (issue.liquidpref || issue.interestrate || issue.valcap || issue.discount || issue.optundersec || issue.vestcliff || issue.vestingbegins || issue.vestfreq) {
+    /*$scope.typeLocked = function(issue) {
+        if (issue.liquidpref || issue.interestrate || issue.valcap || issue.discount || issue.optundersecurity || issue.vestcliff || issue.vestingbegins || issue.vestfreq) {
             return false
         }
         else {
             return true
         }
-    };
+    };*/
 
     $scope.chosenTab = function(tab, type) {
         return (tab.title == type);
@@ -1082,56 +1098,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             captable.addInvestor(name);
         }
         return false;
-    };
-
-    $scope.numberPaste = function(ev, row, key, type) {
-        alert('refactor numberPaste');
-        /*
-        var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
-        var splitvalues = pastedvalues.split("\n");
-        var startindex = $scope.ct.investors.indexOf(row);
-        var number = splitvalues.length;
-        for (var i = 0; i < number; i++) {
-            if (!$scope.ct.investors[startindex] ||
-                    $scope.ct.investors[startindex].editable == "0") {
-                break;
-            } else {
-                splitvalues[i] = calculate.cleannumber(splitvalues[i]);
-                if (calculate.isNumber(splitvalues[i]) && !calculate.isNumber($scope.ct.investors[startindex].cells[key][type])) {
-                    var anewTran = captable.newTransaction(key,
-                                        $scope.ct.investors[startindex].name);
-                    anewTran.active = false;
-                    anewTran.atype = 0;
-                    if (type == "u") {
-                        anewTran.units = splitvalues[i];
-                        anewTran.unitskey = splitvalues[i];
-                    } else {
-                        anewTran.amount = splitvalues[i];
-                        anewTran.paid = splitvalues[i];
-                        anewTran.paidkey = splitvalues[i];
-                    }
-                    angular.forEach($scope.ct.trans, function(tran) {
-                        var found = -1;
-                        if (tran.investor == anewTran.investor && tran.issue == anewTran.issue && isNaN(parseFloat(tran.tran_id))) {
-                            found = $scope.ct.trans.indexOf(tran);
-                        }
-                        if (found != -1) {
-                            $scope.ct.trans.splice(found, 1)
-                        }
-                    });
-                    if ($scope.activeTran[0].investor == anewTran.investor) {
-                        anewTran.active = true;
-                        $scope.activeTran = [];
-                        $scope.activeTran.push(anewTran);
-                    }
-                    $scope.ct.trans.push(anewTran);
-                    $scope.saveTran(anewTran);
-                }
-                startindex += 1;
-            }
-        }
-        return false;
-        */
     };
 
 }]);

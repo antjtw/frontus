@@ -157,9 +157,9 @@ ownership.filter('received', function () {
 
 ownership.filter('issueUnitLabel', function() {
     return function(iss) {
-        if (iss.type == "Option") {
+        if (iss == "Option") {
             return "options";
-        } else if (iss.type == "Warrant") {
+        } else if (iss == "Warrant") {
             return "warrants";
         } else {
             return "shares";
@@ -249,17 +249,18 @@ ownership.filter('selectablesecurities', function() {
     return function(securities, key) {
         var filtered_secs = [];
         angular.forEach(securities, function(sec) {
-            if (sec.name != key) {
+            if (sec.name != key.attrs.security &&
+                sec.attrs.security_type.indexOf('Equity') != -1)
+            {
                 filtered_secs.push(sec);
             }
         });
-        return filtered_secs
-    }
+        return filtered_secs;
+    };
 });
 
 ownership.filter('validActions', ['attributes', function(attributes) {
     return function(sec_type, action_type) {
-        // TODO generate from attributes service (db backed)
         var attrs = attributes.getAttrs();
         var nonActions = ['issue security', 'grant', 'purchase'];
         var ret = [];
@@ -278,31 +279,21 @@ ownership.filter('validActions', ['attributes', function(attributes) {
     };
 }]);
 
-ownership.filter('attributeInputTypes', ['attributes', function(attributes) {
-    return function(tp) {
-        // TODO generate from attributes service (db backed)
+ownership.filter('isRequired', ['attributes', function(attributes) {
+    return function(sec_type, action, key) {
+        var attrs = attributes.getAttrs();
+        return attrs[sec_type][action][key]['required'];
+    };
+}]);
+
+ownership.filter('attributeTypes', ['attributes', function(attributes) {
+    return function(tp, sec_type) {
         var attrs = attributes.getAttrs();
         switch(tp) {
             case "security_type":
                 return Object.keys(attrs);
             case "kind": // this is "transaction_type"
-                return ["purchase", "forfeit", "transfer", "convert",
-                        "grant", "exercise"];
-                // also "split" "issue security" but those operate on
-            case "liquidpref":
-                return ['None', '1X', '2X', '3X'];
-            case "interestratefreq":
-                return ["weekly", "bi-weekly", "monthly",
-                        "quarterly", "yearly"];
-            case "vestfreq":
-                return ["weekly", "bi-weekly", "monthly",
-                        "quarterly", "yearly"];
-            case "date":
-                return "date_picker";
-            case "common":
-                return "checkbox";
-            default:
-                return "text_field";
+                return Object.keys(attrs[sec_type]);
         }
     };
 }]);

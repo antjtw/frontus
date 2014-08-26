@@ -15,15 +15,28 @@
         <span ng-class="{'locked-security': key=='security_type'}">
             {{displayName(key)}}
         </span>
-        <input ng-if="useTextField(key) && !pickIssue(key)"
+        <input ng-if="useTextField(key) && !useDatePicker(key)"
                id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
-               ng-model="data.attrs[key]">
+               ng-model="data.attrs[key]"
+               ng-required="isRequired(key)">
+        <input ng-if="useNumberField(key) && !useDatePicker(key)"
+               id="date{{::data.attrs.$$hashKey}}"
+               ui-event="{keyup: 'saveIt(data, true, undo)',
+                          blur: 'saveIt(data, true, undo)'}"
+               type="number"
+               ng-model="data.attrs[key]"
+               ng-required="isRequired(key)">
         <input ng-if="useDatePicker(key)"
-               ui-event="{blur: 'saveIt(data, true, undo)'}"
+               id="{{key}}{{::data.$$hashKey}}"
+               ng-model="data.attrs[key]"
+               ui-event="{blur: 'saveItDate(data, true, undo, $event, key)'}"
+               ng-change="saveItDate(data, true, undo, $event, key)"
+               data-date-format={{settings.lowercasedate}}
                type="text"
+               ng-required="isRequired(key)"
                bs-datepicker>
         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
             <li class="dropdown standard">
@@ -32,7 +45,21 @@
                 <span class="invisible-drop">'</span>
             </a>
             <ul class="dropdown-menu">
-                <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].input_type">
+                <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].labels">
+                    <a ng-click="setIt(data, true, undo, key, i)">
+                        {{i}}
+                    </a>
+                </li>
+            </ul>
+        </ul>
+        <ul class="dropdown-list drop-selector" ng-if="pickInvestor(key)">
+            <li class="dropdown standard">
+            <a class="dropdown-toggle">
+                {{data.attrs[key]}}
+                <span class="invisible-drop">'</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li ng-repeat="i in getInvestors()">
                     <a ng-click="setIt(data, true, undo, key, i)">
                         {{i}}
                     </a>
@@ -47,11 +74,11 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a ng-click="setIt(data, true, undo, 'optundersec', '')">
+                        <a ng-click="setIt(data, true, undo, key, '')">
                         </a>
                     </li>
                     <li ng-repeat="i in securities | selectablesecurities:data.attrs['security']">
-                        <a ng-click="setIt(data, true, undo, 'optundersec', i.name)">
+                        <a ng-click="setIt(data, true, undo, key, i.name)">
                             {{i.name}}
                         </a>
                     </li>

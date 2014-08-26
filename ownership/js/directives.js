@@ -110,32 +110,44 @@ own.directive('editableCaptableCell', [function() {
         controller: ["$scope", "$rootScope",
                      "calculate", "captable", "History",
             function($scope, $rootScope, calculate, captable, history) {
-                $scope.destination_transaction = null;
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
-                $scope.saveIt = function(value) {
-                    captable.saveTransaction(
-                        $scope.data.transactions[0],
-                        $scope.data);
+                $scope.ct = captable.getCapTable()
+
+                $scope.loaddirective = function() {
+                    $scope.destination_transaction = null;
+                };
+                $scope.saveIt = function(key, value) {
+                    if ($scope.data) {
+                        if ($scope.data.transactions.length > 1) {
+                            $scope.openTranPicker(key, value);
+                        } else {
+                            captable.saveTransaction(
+                                $scope.data.transactions[0],
+                                $scope.data);
+                        }
+                    }
                 };
                 function updateAttr(key, val) {
                     if ($scope.data.transactions.length == 1) {
                         $scope.data.transactions[0].attrs[key] = val;
                     } else if ($scope.destination_transaction) {
-                        // FIXME no straight update
-                        // $scope.destination_transaction.attrs[key] = val;
-                    } else {
-                        $scope.openTranPicker(key, val);
+                        $scope.destination_transaction.attrs[key] = val;
+                        captable.saveTransaction(
+                            $scope.destination_transaction,
+                            $scope.data);
                     }
+                    $scope.destination_transaction = null;
                 }
                 $scope.units = function(newval) {
                     if (angular.isDefined(newval)) {
+                        var num = parseFloat(newval);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
                         }
-                        $scope.data.u = newval;
-                        updateAttr('units', newval);
+                        $scope.data.u = num;
+                        updateAttr('units', num);
 
                     } else {
                         return ($scope.data ? $scope.data.u : null);
@@ -143,12 +155,12 @@ own.directive('editableCaptableCell', [function() {
                 };
                 $scope.amount = function(newval) {
                     if (angular.isDefined(newval)) {
+                        var num = parseFloat(newval);
                         if (!$scope.data) {
-                            alert("ahh");
-                        } else {
-                            $scope.data.a = newval;
-                            updateAttr('amount', newval);
+                            $scope.data = $scope.selectedCell;
                         }
+                        $scope.data.a = num;
+                        updateAttr('amount', num);
                     } else {
                         return ($scope.data ? $scope.data.a : null);
                     }
@@ -160,26 +172,30 @@ own.directive('editableCaptableCell', [function() {
                 $scope.openTranPicker = function(key, val) {
                     $scope.picker = {
                         "key": key,
-                        "val": val,
-                        "history": captable.selectedCellHistory()
+                        "diff": 0
                     };
-                    var k = key[0]; // units -> units; amount -> a
-                    var hist_len = $scope.picker.history.length;
-                    console.log($scope.picker.history.length);
-                    $scope.picker.diff =
-                        $scope.picker.history[hist_len-1][k] -
-                        $scope.picker.history[hist_len-2][k];
-                    $scope.tranPicker = true;
+                    angular.forEach($scope.selectedCell.transactions, function(cell) {
+                        if (calculate.isNumber(cell.attrs[key])) {
+                            $scope.picker.diff += parseFloat(cell.attrs[key]);
+                        }
+                    });
+                    $scope.picker.diff = $scope.selectedCell.u - $scope.picker.diff;
+                    if ($scope.picker.diff != 0) {
+                        $scope.tranPicker = true;
+                    }
                 };
                 $scope.closeTranPicker = function(update) {
                     if (update) {
                         if (!$scope.destination_transaction) {
                             $scope.destination_transaction =
-                                captable.newTran();
+                                captable.newTransaction($scope.selectedCell.security, captable.defaultKind($scope.sec.attrs['security_type']), $scope.selectedCell.investor);
                         }
-                        updateAttr($scope.picker.key, $scope.picker.val);
+                        if (calculate.isNumber($scope.destination_transaction.attrs[$scope.picker.key])) {
+                            $scope.picker.diff = $scope.picker.diff + parseFloat($scope.destination_transaction.attrs[$scope.picker.key]);
+                        }
+                        updateAttr($scope.picker.key, $scope.picker.diff);
                     } else {
-                        // reset
+                        $scope.selectedCell.u -= $scope.picker.diff
                     }
                     $scope.picker = {};
                     $scope.tranPicker = false;
@@ -187,6 +203,52 @@ own.directive('editableCaptableCell', [function() {
                 $scope.pickTran = function(id) {
                     $scope.destination_transaction = id;
                 };
+
+                // TODO working except for if there are already transactions in the cells
+                $scope.numberPaste = function(ev, row, sec, type) {
+                    var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
+                    var splitvalues = pastedvalues.split("\n");
+                    var startindex = -1;
+                    angular.forEach($scope.ct.investors, function(investor) {
+                        if (investor.name == row) {
+                            startindex = $scope.ct.investors.indexOf(investor)
+                        }
+                    });
+                    var number = splitvalues.length;
+                    for (var i = 0; i < number; i++) {
+                        splitvalues[i] = Number(calculate.cleannumber(splitvalues[i]));
+                        if (isNaN(splitvalues[i]))
+                        {
+                            startindex += 1;
+                            break;
+                        }
+                        if (i == 0)
+                        {
+                            var anewTran = captable.newTransaction(sec.name, captable.defaultKind(sec.transactions[0].attrs.security_type), $scope.ct.investors[startindex].name);
+                        }
+                        else
+                        {
+                            var anewTran = captable.addTransaction($scope.ct.investors[startindex].name, sec.name, captable.defaultKind(sec.transactions[0].attrs.security_type));
+                        }
+                        anewTran.attrs[type] = splitvalues[i];
+                        captable.saveTransaction(
+                            anewTran,
+                            true);
+                        startindex += 1;
+                    }
+                    return false;
+                };
+
+                $scope.loaddirective();
+                $scope.$watch('selectedCell', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
+                $scope.$watch('data', function(newval, oldval) {
+                    if (!newval && oldval)
+                    {
+                        $scope.selectCell(oldval.investor, oldval.security);
+                    }
+                }, true);
             }
         ],
     };
@@ -256,6 +318,9 @@ own.directive('editableSecurityDetails', [function() {
                     if (!$scope.windowToggle)
                         $scope.newTran = null;
                 };
+                $scope.addSecurity = function() {
+                    $scope.$emit('addSecurity');
+                };
                 $scope.$on('newSelection', function(evt) {
                     $scope.newTran = null;
                 });
@@ -271,9 +336,15 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.saveIt(tran);
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
-                    captable.saveTransaction(tran, cell, errorFunc);
+                    if (!$scope.sec.creating)
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
                 };
-
+                $scope.editSecName = function(tran) {
+                    $scope.sec.name = $scope.sec.attrs.security = tran.attrs.security;
+                    captable.saveTransaction(tran);
+                };
                 $scope.loaddirective();
                 $scope.$watch('sec', function(newval, oldval) {
                     $scope.loaddirective();
@@ -344,8 +415,8 @@ own.directive('editableCellDetails', [function() {
                 $scope.nonactions = ["issue security", "grant", "purchase"];
 
                 $scope.addTransaction = function() {
-                    var tran = captable.addTransaction($scope.cell.investor,
-                                     $scope.cell.security, 'grant');
+                    var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security, 
+                                     captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
                 };
                 // TODO this has to do more. 
@@ -413,12 +484,13 @@ own.directive('editableTransactionAttributes', [function() {
                 save: '=save'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$scope", "$filter", "captable", "attributes", "calculate",
-            function($scope, $filter, captable, attributes, calculate) {
+        controller: ["$rootScope","$scope", "$filter", "captable", "attributes", "calculate",
+            function($rootScope, $scope, $filter, captable, attributes, calculate) {
                 var attrs = attributes.getAttrs();
+                var ct;
                 $scope.attrs = attrs;
                 $scope.loaddirective = function() {
-                    var ct = captable.getCapTable();
+                    ct = captable.getCapTable();
                     $scope.securities = ct.securities;
                     $scope.tran_attrs =
                         attrs[$scope.data.attrs.security_type]
@@ -435,6 +507,15 @@ own.directive('editableTransactionAttributes', [function() {
                             });
                     return sorted;
                 }
+                
+                $scope.getInvestors = function() {
+                    var invs = [];
+                    for (i in ct.investors)
+                    {
+                        invs.push(ct.investors[i].name);
+                    }
+                    return invs;
+                }
 
                 function key_display_info(key) {
                     //console.log("bug for some values, use below to debug");
@@ -444,7 +525,24 @@ own.directive('editableTransactionAttributes', [function() {
                                 [$scope.data.kind][key] || {};
                 }
                 function inputType(key) {
-                    return key_display_info(key).input_type;
+                    if (key.indexOf("investor") != -1)
+                    {
+                        return "investor";
+                    }
+                    if (key.indexOf("security") != -1 &&
+                            key.indexOf("type") == -1)
+                    {
+                        return "security";
+                    }
+                    switch (key_display_info(key).type)
+                    {
+                        case "enum":
+                            return key_display_info(key).labels;
+                        case "number":
+                            return "number";
+                        default:
+                            return "text_field";
+                    };
                 }
                 this.inputType = inputType;
                 $scope.displayName = function(key) {
@@ -459,11 +557,24 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useTextField = function(key) {
                     return inputType(key) == "text_field";
                 };
+                $scope.useNumberField = function(key) {
+                    return inputType(key) == "number";
+                };
+                $scope.pickInvestor = function(key) {
+                    return inputType(key) == "investor";
+                };
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
+                var datefields = [];
+                $scope.useDatePicker = function(key) {
+                    return datefields.indexOf(key) >= 0
+                };
+                $scope.isRequired = function(key) {
+                    return $filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key);
+                };
                 $scope.pickIssue = function(key) {
-                    return key == "optundersec"
+                    return inputType(key) == "security";
                 };
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     tran.attrs[k] = v;
@@ -473,15 +584,26 @@ own.directive('editableTransactionAttributes', [function() {
                     }
                 };
                 $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
-                    if (evt) {
-                        if (evt != 'blur')
-                            keyPressed = true;
-                        var dateString = angular.element(field + '#' + tran.$$hashKey).val();
-                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
-                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                            var date = Date.parse(dateString);
-                            if (date) {
-                                tran[field] = calculate.timezoneOffset(date);
+                    if (field == "effective_date") {
+                        if (evt) {
+                            if (evt != 'blur')
+                                keyPressed = true;
+                            var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                                var date = Date.parse(dateString);
+                                if (date) {
+                                    tran[field] = calculate.timezoneOffset(date);
+                                    if ($scope.save)
+                                    {
+                                        captable.saveTransaction(tran, cell, errorFunc);
+                                    }
+                                    keyPressed = false;
+                                }
+                            }
+                        } else { // User is using calendar
+                            if (tran[field] instanceof Date) {
+                                tran[field] = calculate.timezoneOffset(tran[field]);
                                 if ($scope.save)
                                 {
                                     captable.saveTransaction(tran, cell, errorFunc);
@@ -489,16 +611,35 @@ own.directive('editableTransactionAttributes', [function() {
                                 keyPressed = false;
                             }
                         }
-                    } else { // User is using calendar
-                        if (tran[field] instanceof Date) {
-                            tran[field] = calculate.timezoneOffset(tran[field]);
-                            if ($scope.save)
-                            {
-                                captable.saveTransaction(tran, cell, errorFunc);
+                    } else {
+                        if (evt) {
+                            if (evt != 'blur')
+                                keyPressed = true;
+                            var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                                var date = Date.parse(dateString);
+                                if (date) {
+                                    tran.attrs[field] = moment(calculate.timezoneOffset(date)).format($rootScope.settings.lowercasedate.toUpperCase());
+                                    if ($scope.save)
+                                    {
+                                        captable.saveTransaction(tran, cell, errorFunc);
+                                    }
+                                    keyPressed = false;
+                                }
                             }
-                            keyPressed = false;
+                        } else { // User is using calendar
+                            if (tran.attrs[field] instanceof Date) {
+                                tran.attrs[field] = moment(calculate.timezoneOffset(tran.attrs[field])).format($rootScope.settings.lowercasedate.toUpperCase());
+                                if ($scope.save)
+                                {
+                                    captable.saveTransaction(tran, cell, errorFunc);
+                                }
+                                keyPressed = false;
+                            }
                         }
                     }
+
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     if ($scope.save)

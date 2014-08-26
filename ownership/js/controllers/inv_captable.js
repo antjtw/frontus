@@ -1,7 +1,9 @@
 app.controller('invCaptableController',
-    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$routeParams', '$rootScope', '$location', 'navState',
-        function($scope, $parse, SWBrijj, calculate, switchval, $routeParams, $rootScope, $location, navState) {
-
+    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$filter',
+     '$routeParams', '$rootScope', '$location', 'navState', 'captable',
+function($scope, $parse, SWBrijj, calculate, switchval, $filter,
+         $routeParams, $rootScope, $location, navState, captable)
+{
     if (navState.role == 'issuer') {
         $location.path('/company-captable');
         return;
@@ -9,6 +11,9 @@ app.controller('invCaptableController',
 
     var company = navState.company;
     $scope.currentCompany = company;
+    
+    $scope.ct = captable.getCapTable();
+    $scope.captable = captable;
 
     $scope.issuetypes = [];
     $scope.freqtypes = [];
@@ -22,6 +27,10 @@ app.controller('invCaptableController',
     $scope.activeTran = [];
 
     $scope.investorOrder = "name";
+    $scope.securityUnitLabel = function(security) {
+        var type = $filter('issueUnitLabel')(security.attrs.security_type);
+        return type;
+    };
     SWBrijj.procm('ownership.return_status').then(function (x) {
         $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
@@ -32,6 +41,7 @@ app.controller('invCaptableController',
         }
     });
 
+    /*
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
@@ -233,6 +243,7 @@ app.controller('invCaptableController',
             });
         });
     });
+    */
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -385,6 +396,7 @@ app.controller('invCaptableController',
 
     // Functions derived from services for use in the table
 
+    /*
     //switches the sidebar based on the type of the issue
     $scope.trantype = function (type, activetype) {
         return switchval.trantype(type, activetype);
@@ -458,6 +470,7 @@ app.controller('invCaptableController',
         });
         return type
     };
+*/
 
     $scope.tabvisible = function(tab) {
         if (tab.title == "Activity") {
@@ -486,9 +499,10 @@ app.controller('invCaptableController',
     };
 
     // This should really be in a directive (or more properly get some clever css set-up to do it for me...
-    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-        $scope.stretchheight = {height: String(newValue + 59) + "px"}
+    $scope.$watch(
+    function() {
+        return $(".leftBlock").height();
+    }, function(newValue, oldValue) {
+        $scope.stretchheight = {height: String(newValue + 59) + "px"};
     });
-
-
 }]);
