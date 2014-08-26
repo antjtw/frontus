@@ -15,6 +15,7 @@ app.controller('roundController',
 
     $scope.$watch('ct', function(newval, oldval) {
         if (newval.securities.length > 0) {
+            $scope.ct = angular.copy($scope.ct);
             $scope.getRounds();
         }
     }, true);
@@ -92,8 +93,7 @@ app.controller('roundController',
                         var actualdiscount;
                         tran.convert_date = $scope.rounddate;
                         tran.interestamount = calculate.debtinterest(tran);
-                        console.log(tran.interestamount);
-                        if (!isNaN(parseFloat(tran.valcap))) {
+                        if (!isNaN(parseFloat(tran.attrs.valcap))) {
                             actualdiscount = Math.max(tran.attrs.discount, (1 - (tran.attrs.valcap / $scope.premoney)) *100);
                         } else {
                             actualdiscount = tran.attrs.discount;

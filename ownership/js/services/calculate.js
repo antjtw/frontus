@@ -698,11 +698,8 @@ ownership.service('calculate', function () {
                 console.log("trying valuation");
                 var premoneypercent = (1-(parseFloat(convertTran.tran.attrs.valcap) / parseFloat(convertTran.toissue.premoney)));
                 convertTran.newtran.prevalcappercentage = String(premoneypercent*100);
-                console.log(premoneypercent);
-                console.log(discount);
                 if (premoneypercent > (discount)) {
                     regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-premoneypercent);
-                    console.log(regularppshare);
                     convertTran.newtran.caphit = true;
                 }
             }
