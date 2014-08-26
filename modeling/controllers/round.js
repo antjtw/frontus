@@ -31,18 +31,29 @@ app.controller('roundController',
                 round.convertme = false;
                 $scope.debtpresent = true;
             }
-            angular.forEach($scope.ct.ledger_entries, function(tran) {
-                if (tran.security == round.name) {
-                    round[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
-                    totals[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
+
+            if (round.attrs.security_type == "Option") {
+                angular.forEach($scope.ct.transactions, function(tran) {
+                    if (tran.kind == "grant" && tran.attrs.security == round.name) {
+                        round.units += tran.attrs.units;
+                        totals.units += tran.attrs.units;
+                    }
+                });
+                if (!isNaN(round.attrs.totalauth)) {
+                    if (round.attrs.totalauth > round.units) {
+                        var unauth = (round.attrs.totalauth - round.units);
+                        existingoptions += unauth;
+                        totals.units += unauth;
+                    }
                 }
-            });
-            if (!isNaN(round.totalauth)) {
-                if (round.attrs.totalauth > round.units && round.attrs.security_type == "Option") {
-                    var unauth = (round.totalauth - round.units);
-                    existingoptions += unauth;
-                    totals.units += unauth;
-                }
+            }
+            else {
+                angular.forEach($scope.ct.ledger_entries, function(tran) {
+                    if (tran.security == round.name) {
+                        round[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
+                        totals[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
+                    }
+                });
             }
         });
 
