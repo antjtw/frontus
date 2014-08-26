@@ -33,7 +33,6 @@ app.controller('noteController',
                 $scope.debttrans.push(tran);
             }
         });
-        console.log($scope.debttrans);
     };
 
     $scope.ct = captable.getCapTable();
@@ -88,7 +87,6 @@ app.controller('noteController',
             //Default values before the loop
             $scope.convertTran.tran = $scope.fromtran;
             $scope.convertTran.newtran = angular.copy($scope.fromtran);
-            console.log($scope.convertTran);
             $scope.convertTran.newtran.attrs.amount = calculate.debtinterest($scope.convertTran.tran);
 
             //Bottom limit for the range calculation
