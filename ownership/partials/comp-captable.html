@@ -534,7 +534,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{shareSum(row) || 0}}">
+                           value="{{shareSum(row) || 0 | number:3}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -613,7 +613,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::rowSum(row.name)}}">
+                           value="{{::rowSum(row.name) | number:3}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -644,7 +644,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities)}}">
+                           value="{{captable.numUnissued(sec, ct.securities) | number:3}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -660,7 +660,7 @@
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities)}}
+                                {{captable.numUnissued(key, ct.securities) | number:3}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -687,7 +687,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits();}}">
+                           value="{{captable.totalOwnershipUnits() | number:3}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -854,7 +854,8 @@
                                      class="belowTitle">
                                     <img src="/img/activity/invested.png">
                                     <div>
-                                        <span ng-bind="totalPaid(ct.investors)">
+                                        <span>
+                                            {{totalPaid(ct.investors) | number:3}}
                                         </span>
                                         <span>Total Invested</span>
                                     </div>
@@ -863,7 +864,8 @@
                                      class="belowTitle">
                                     <img src="/img/activity/sharews.png">
                                     <div>
-                                        <span ng-bind="captable.totalOwnershipUnits()">
+                                        <span>
+                                            {{captable.totalOwnershipUnits() | number:3}}
                                         </span>
                                         <span>
                                             Fully Diluted Units

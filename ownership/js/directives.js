@@ -351,6 +351,7 @@ own.directive('editableSecurityDetails', [function() {
                 };
                 $scope.submitAction = function(tran) {
                     captable.saveTransaction(tran, true);
+                    $scope.sec.transactions.push(tran);
                     $scope.newTran = null;
                 };
                 $scope.$on('newSelection', function(evt) {
