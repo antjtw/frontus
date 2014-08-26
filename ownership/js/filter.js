@@ -286,6 +286,18 @@ ownership.filter('isRequired', ['attributes', function(attributes) {
     };
 }]);
 
+ownership.filter('getInvestorAttributes', ['attributes', function(attributes) {
+    return function() {
+        return attributes.getSpecialAttrs()['investor'];
+    };
+}]);
+
+ownership.filter('getSecurityAttributes', ['attributes', function(attributes) {
+    return function() {
+        return attributes.getSpecialAttrs()['security'];
+    };
+}]);
+
 ownership.filter('attributeTypes', ['attributes', function(attributes) {
     return function(tp, sec_type) {
         var attrs = attributes.getAttrs();
