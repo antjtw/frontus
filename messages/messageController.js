@@ -71,7 +71,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.myInvestors=[]
         $scope.isInvestor = function(){
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
-                console.log(data);
                 var myInvestors = data
                 angular.forEach(myInvestors, function(inv){
                     $scope.myInvestors.push(inv.email);

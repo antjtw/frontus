@@ -11,7 +11,7 @@
                 <div>
                     <div class="pull-left" ng-if="!compose">
                         <span>Search</span>
-                        <input type="text" class="search-box" ng-model="filterText">
+                        <input type="text" class="search-box" ng-model="search.$">
                     </div>
                     <div class="box-button pull-right"
                      ng-class="{selected: compose == true}"
@@ -34,7 +34,6 @@
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <compose-message ng-if="page == 'compose'"></compose-message>
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
-            <div ng-if="page =='drafts'">Drafts will go here</div>
             <div ng-if="!page">
             <div class="span12">
                 <table class="status-table people-table">
@@ -45,10 +44,10 @@
                         <th></th>
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="myMessage in myMessages | orderBy:'time':true">
+                    <tbody ng-repeat="myMessage in myMessages | orderBy:'time':true |filter:searchText">
                         <tr class="empty-row"></tr>
                         <tr class="threadMembers">
-                            <td style="width:550px" class="shareholder-column docname-column">
+                            <td style="width:450px" class="shareholder-column docname-column">
                                <!--  <div tooltip="{{myMessage.members}}"> -->
                                 <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.members">{{showString(myMessage.members)}}</div></a>
                               <!--   </div> -->
