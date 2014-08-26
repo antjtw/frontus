@@ -70,6 +70,12 @@
             </div>
             <editable-transaction-attributes ng-if="tran" data="tran" save="true">
             </editable-transaction-attributes>
+            <span class="blue-link delete-link"
+                  ng-if="tran.kind != 'issue security'"
+                  data-icon="&#xe00c;"
+                  ng-click="captable.deleteSecurityTransaction(tran, sec);">
+                Delete transaction
+            </span>
         </div>
         <div class="capTab" ng-switch-when="documents">
             <div ng-if="tran.evidence_data.length==0"

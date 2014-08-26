@@ -348,7 +348,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var sec = false;
             for (a in invs)
             {
-                if (tran.attrs[a] == cell.investor)
+                if (tran.attrs[invs[a]] == cell.investor)
                 {
                     inv = true;
                     break;
@@ -356,13 +356,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             for (a in secs)
             {
-                if (tran.attrs[a] == cell.security)
+                if (tran.attrs[secs[a]] == cell.security)
                 {
                     sec = true;
                     break;
                 }
             }
-            return inv && sec;
+            return (inv || (invs.length == 0 && tran.kind != 'issue security')) && sec;
         });
     }
     function transForCell(inv, sec) {
@@ -372,8 +372,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             function(tran) {
                 var i = false;
                 var s = false;
+                var hasInv = false;
                 for (a in invs)
                 {
+                    if (tran.attrs[invs[a]])
+                    {
+                        hasInv = true;
+                    }
                     if (tran.attrs[invs[a]] == inv)
                     {
                         i = true;
@@ -388,7 +393,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         break;
                     }
                 }
-                return i && s;
+                return (i || (!hasInv && tran.kind != 'issue security')) && s;
             });
         return trans;
     }
@@ -563,7 +568,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         setCellUnits(cell);
         setCellAmount(cell);
         cell.valid = validateCell(cell);
-        console.log(cell.ledger_entries);
     }
     this.updateCell = updateCell;
     function generateCells() {
@@ -767,7 +771,38 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
                 else
                 {
-                    updateCell(cell);
+                    var cells = cellsForTran(tran);
+                    for (c in cells)
+                    {
+                        updateCell(cells[c]);
+                    }
+                }
+            } else {
+                $rootScope.$emit("notification:fail",
+                    "Oops, something went wrong.");
+            }
+        }).except(function(err) {
+            console.log(err);
+            $rootScope.$emit("notification:fail",
+                "Oops, something went wrong.");
+        });
+    };
+    this.deleteSecurityTransaction = function(tran, sec) {
+        SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
+        .then(function(x) {
+            var res = x[0].delete_transaction;
+            if (res > 0) {
+                $rootScope.$emit("notification:success",
+                    "Transaction deleted");
+                splice_many(captable.transactions, [tran]);
+                splice_many_by(captable.ledger_entries, function(el) {
+                        return el.transaction == tran.transaction;
+                });
+                splice_many(sec.transactions, [tran]);
+                var cells = colFor(sec.name);
+                for (c in cells)
+                {
+                    updateCell(cells[c]);
                 }
             } else {
                 $rootScope.$emit("notification:fail",
