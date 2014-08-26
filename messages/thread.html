@@ -18,14 +18,10 @@
                 <div class="replySide">
                     <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
-                   <div ng-if="myThread.senderName !== undefined">
-                  {{myThread.senderName}}
-                    </div>
-
-
+                   <div ng-if="myThread.senderName !== undefined">{{myThread.senderName}}</div>
+                    <div>{{myThread.time |date :'MMM d, y h:mm a' }}</div>
                 </div>
-                <div class="replyInput">
-                    <div style="padding-bottom: 20px">{{myThread.time |date :'MMM d, y h:mm a' }}</div>
+                <div class="replyInput" style="width: 70%">
                     <div ng-bind-html="myThread.message"></div>
                 </div>    
             </div>
