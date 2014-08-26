@@ -52,6 +52,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         if ($rootScope.navState) {
             return $rootScope.navState.role;
         } else {
+            alert('race condition');
             return 'issuer';
         }
     }
@@ -705,7 +706,15 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 splice_many_by(captable.ledger_entries, function(el) {
                         return el.transaction == tran.transaction;
                 });
-                updateCell(cell);
+                if (cell.transactions.length == 1)
+                {
+                    splice_many(captable.cells, [cell]);
+                    cell = null;
+                }
+                else
+                {
+                    updateCell(cell);
+                }
             } else {
                 $rootScope.$emit("notification:fail",
                     "Oops, something went wrong.");

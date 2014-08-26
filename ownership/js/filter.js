@@ -249,12 +249,14 @@ ownership.filter('selectablesecurities', function() {
     return function(securities, key) {
         var filtered_secs = [];
         angular.forEach(securities, function(sec) {
-            if (sec.name != key) {
+            if (sec.name != key.attrs.security &&
+                sec.attrs.security_type.indexOf('Equity') != -1)
+            {
                 filtered_secs.push(sec);
             }
         });
-        return filtered_secs
-    }
+        return filtered_secs;
+    };
 });
 
 ownership.filter('validActions', ['attributes', function(attributes) {
