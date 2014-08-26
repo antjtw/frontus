@@ -304,10 +304,7 @@ mod.directive('threadInformation', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
 
         function($scope, $rootScope, SWBrijj, $route) {
-
-            console.log($scope.thread);
             $scope.$watch('thread', function(){
-                console.log($scope.thread);
                 $scope.showMessage();
             });
 

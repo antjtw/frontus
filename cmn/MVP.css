@@ -4980,7 +4980,23 @@ li.event.roles > div > ul {
 .emailName{
     padding-top: 5px;
     color: #666;
+    font-size: 14px;
 }
 
+.replyPic{
+    height: 50px;
+    width: 50px;
+    margin-left: 20px;
+    padding-bottom: 10px;
+    border-radius: 50%;
+}
+
+.personEmail {
+    padding-bottom: 10px;
+}
+
+.go-to{
+    color: #666;
+}
 
 
