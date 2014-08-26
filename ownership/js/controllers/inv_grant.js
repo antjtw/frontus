@@ -1,7 +1,6 @@
-
 app.controller('invGrantController',
-    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', 'sorting', '$routeParams', '$rootScope', '$location', 'navState',
-        function($scope, $parse, SWBrijj, calculate, switchval, sorting, $rootScope, navState) {
+    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$routeParams', '$rootScope', '$location', 'navState',
+        function($scope, $parse, SWBrijj, calculate, switchval, $rootScope, navState) {
 
     if (navState.role == 'issuer') {
         $location.path('/company-grants');
@@ -15,7 +14,7 @@ app.controller('invGrantController',
     $scope.uniquerows = [];
     $scope.freqtypes = [];
     $scope.issues = [];
-    $scope.issuekeys = [];
+    $scope.security_names = [];
 
     $scope.optionView = "Security";
 
@@ -41,7 +40,7 @@ app.controller('invGrantController',
                         $scope.allissues[i]['trans'] = [];
                         $scope.issues.push($scope.allissues[i]);
                     }
-                    $scope.issuekeys.push($scope.allissues[i].issue);
+                    $scope.security_names.push($scope.allissues[i].issue);
                 }
 
                 // Assign the grants to the respective transactions
@@ -139,7 +138,7 @@ app.controller('invGrantController',
         var activeAct = [];
 
         // Only the issues that are not the active transactions (for underlying issue)
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(currenttran.issue);
         allowablekeys.splice(index, 1);
         currenttran.allowKeys = allowablekeys;

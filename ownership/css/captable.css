@@ -28,7 +28,7 @@ div.last-saved {
 
 .capGuide {
     display: block;
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 20px;
 }
 
 .capGuide.top10 {
@@ -36,7 +36,7 @@ div.last-saved {
 }
 
 .capGuide.global {
-    margin-top: 20px;
+    margin-top: 40px;
     position: relative;
 }
 
@@ -64,7 +64,7 @@ div.last-saved {
 
 .descriptionRow {
     height: 20px;
-    color: #C7C7C7;
+    color: #A6A6A6;
     font-size: 12px;
     text-transform: capitalize;
 }
@@ -98,7 +98,8 @@ div.last-saved {
     background-clip: padding-box;
 }
 
-.tableView .unissued-rows td {
+.tableView .unissued-rows td:hover {
+    cursor: default !important;
 }
 
 .tableView.captable td.viewName {
@@ -210,11 +211,16 @@ div.last-saved {
 
 .tableView.captable .unissued-rows {
     font-style: italic;
+    cursor: default;
 }
 
 .captablepair-box {
     position: relative;
     display: block;
+}
+
+.invalid {
+    border: 1px solid #FF0000;
 }
 
 .tableView .total-row {
@@ -289,7 +295,10 @@ p.captablepair {
     background: none;
 }
 
-.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields.hoverable:hover {
+.tableView.captable th.staticHeaders:hover,
+.tableView.captable td.viewName:hover,
+.tableView.captable td.tableFields.hoverable:hover,
+td:hover .hoverable {
     background-color: rgba(26, 188, 150, 0.1);
     cursor: pointer;
 }
@@ -298,26 +307,22 @@ p.captablepair {
     background-color: #FFFFFF;
 }
 
-.tableView td.tranSelected {
-    border: 2px solid #E3E3E3;
-}
-
-.tableView.captable .tranSelected > input {
+.tableView.captable .tranSelected input {
     padding: 7px 0 7px 4px;
 }
 
-.tableView.captable .tranSelected > input:last-child {
+.tableView.captable .tranSelected input:last-child {
     padding: 7px 0 7px 6px;
     width: 65px;
 }
 
-.tableView.captable .tranSelected > input.first-box {
+.tableView.captable .tranSelected input.first-box {
     border-left: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
 }
 
-.tableView.captable .tranSelected > input.last-box {
+.tableView.captable .tranSelected input.last-box {
     border-right: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
@@ -567,11 +572,11 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading {
-    padding: 0;
+    padding: 10px 0 0 0;
 }
 
 .transaction-accordion .accordion-heading .accordion-toggle {
-    padding: 11px 12px;
+    padding: 0 0 0 0;
 }
 
 .transaction-accordion .accordion-heading > a > span:not(:last-of-type),
@@ -592,6 +597,13 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
     color: #1E2D3D;
+    font-size: 20px;
+    line-height: 32px;
+    font-family: "FS Elliot Web Light", sans-serif;
+}
+
+.invalidTran {
+    color: #FF0000 !important;
 }
 
 .transaction-accordion .accordion-group {
@@ -602,6 +614,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-top: none;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .transaction-accordion .capGuide.global {
@@ -609,6 +623,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion {
+    border-top: 1px solid #C7C7C7;
     margin-top: 20px;
 }
 
@@ -715,12 +730,12 @@ div.rightTitle {
     position: relative;
 }
 
-div.rightTitle.double > span, p.rightTitle.double > span {
+div.rightTitle.double > span, div.rightTitle.double > span {
     line-height: 14px;
     margin-top: 2px;
 }
 
-div.rightTitle.double > ul, p.rightTitle.double > input {
+div.rightTitle.double > ul, div.rightTitle.double > input {
     vertical-align: top;
 }
 
@@ -758,7 +773,7 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
 }
 
 .rightTitle.security-type > span.locked-security {
-    width: 146px;
+    width: 216px;
     padding-left: 10px;
     margin-left: 2px;
     border-radius: 3px;
@@ -827,7 +842,7 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     background-color: #E3E3E3;
 }
 
-p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
+div.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     display: inline-block;
     width: 24px;
@@ -842,12 +857,12 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     color: #C6C6C6;
 }
 
-p.rightTitle {
+div.rightTitle {
     position: relative;
     margin: 0 0 5px;
 }
 
-p.rightTitle.common-toggle span.tooltip-icon + .tooltip {
+div.rightTitle.common-toggle span.tooltip-icon + .tooltip {
     left: -23px !important;
 }
 
@@ -927,11 +942,13 @@ p.belowTitle {
     width: 100%;
     float: left;
     position: relative;
+    margin-top: 10px;
 }
 
 .belowTitle > span:first-child {
    display: block;
    color: #1E2D3D;
+   text-transform: capitalize;
 }
 
 .belowTitle > span:last-of-type {
@@ -2341,4 +2358,26 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
     float: left;
+}
+
+.cellDetails > .detailsHeader {
+    height: 70px;
+}
+.detailsHeader {
+    height: 100px;
+    margin-bottom: 20px;
+}
+.detailsHeader > div {
+    font-family: "FS Elliot Web Light", sans-serif;
+    color: #1E2D3d;
+}
+.detailsHeader > div:first-child {
+    font-size: 24px;
+    line-height: 28px;
+}
+.detailsHeader > div:last-child {
+    font-size: 18px;
+}
+.detailsHeader > p {
+    margin-top: 20px;
 }

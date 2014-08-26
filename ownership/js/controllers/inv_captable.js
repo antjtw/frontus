@@ -1,7 +1,9 @@
 app.controller('invCaptableController',
-    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', 'sorting', '$routeParams', '$rootScope', '$location', 'navState',
-        function($scope, $parse, SWBrijj, calculate, switchval, sorting, $routeParams, $rootScope, $location, navState) {
-
+    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$filter',
+     '$routeParams', '$rootScope', '$location', 'navState', 'captable',
+function($scope, $parse, SWBrijj, calculate, switchval, $filter,
+         $routeParams, $rootScope, $location, navState, captable)
+{
     if (navState.role == 'issuer') {
         $location.path('/company-captable');
         return;
@@ -9,10 +11,13 @@ app.controller('invCaptableController',
 
     var company = navState.company;
     $scope.currentCompany = company;
+    
+    $scope.ct = captable.getCapTable();
+    $scope.captable = captable;
 
     $scope.issuetypes = [];
     $scope.freqtypes = [];
-    $scope.issuekeys = [];
+    $scope.security_names = [];
     $scope.tf = ["yes", "no"];
     $scope.issues = [];
     $scope.issueSort = 'date';
@@ -22,6 +27,15 @@ app.controller('invCaptableController',
     $scope.activeTran = [];
 
     $scope.investorOrder = "name";
+    $scope.securityUnitLabel = function(security) {
+        var type = $filter('issueUnitLabel')(security.attrs.security_type);
+        return type;
+    };
+    SWBrijj.procm('_ownership.my_visible_investors').then(function(x) {
+        console.log(x);
+    }).except(function(x) {
+        console.log(x);
+    });
     SWBrijj.procm('ownership.return_status').then(function (x) {
         $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
@@ -32,11 +46,12 @@ app.controller('invCaptableController',
         }
     });
 
+    /*
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
         $scope.issues = data;
         for (var i = 0, l = $scope.issues.length; i < l; i++) {
             $scope.issues[i].key = $scope.issues[i].issue;
-            $scope.issuekeys.push($scope.issues[i].key);
+            $scope.security_names.push($scope.issues[i].key);
         };
 
         // Pivot shenanigans
@@ -204,7 +219,7 @@ app.controller('invCaptableController',
 
 
                     angular.forEach($scope.rows, function (row) {
-                        angular.forEach($scope.issuekeys, function (issuekey) {
+                        angular.forEach($scope.security_names, function (issuekey) {
                             if (issuekey in row) {
                             }
                             else {
@@ -215,12 +230,12 @@ app.controller('invCaptableController',
 
                     // Calculate the start percentage for sorting purposes
                     angular.forEach($scope.rows, function(row) {
-                        row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.issuekeys, shareSum(row), totalShares($scope.rows))
+                        row.startpercent = calculate.sharePercentage(row, $scope.rows, $scope.security_names, shareSum(row), totalShares($scope.rows))
                     });
 
 
                     $scope.issues.sort(sorting.issuedate);
-                    $scope.issuekeys = sorting.issuekeys($scope.issuekeys, $scope.issues);
+                    $scope.security_names = sorting.security_names($scope.security_names, $scope.issues);
                     $scope.rows.sort(sorting.basicrow());
 
                     SWBrijj.procm('ownership.get_everyone_else').then(function (x) {
@@ -233,6 +248,7 @@ app.controller('invCaptableController',
             });
         });
     });
+    */
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -250,7 +266,7 @@ app.controller('invCaptableController',
         $scope.activeInvestor = currenttran;
 
         // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(currentcolumn);
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
@@ -307,7 +323,7 @@ app.controller('invCaptableController',
         issue.state = true;
 
         // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(issue.issue);
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
@@ -342,7 +358,7 @@ app.controller('invCaptableController',
 
         if (investor.name == "") {
             var values = {"name": "", "editable": "0"}
-            angular.forEach($scope.issuekeys, function (key) {
+            angular.forEach($scope.security_names, function (key) {
                 values[key] = {"u": null, "a": null};
             });
             $scope.rows.push(values);
@@ -385,6 +401,7 @@ app.controller('invCaptableController',
 
     // Functions derived from services for use in the table
 
+    /*
     //switches the sidebar based on the type of the issue
     $scope.trantype = function (type, activetype) {
         return switchval.trantype(type, activetype);
@@ -421,8 +438,8 @@ app.controller('invCaptableController',
 
     // Total percentage ownership for each shareholder row
     var sharePercentage = memoize(calculate.sharePercentage);
-    $scope.sharePercentage = function(row, rows, issuekeys) {
-        return sharePercentage(row, rows, issuekeys, shareSum(row), totalShares(rows));
+    $scope.sharePercentage = function(row, rows, security_names) {
+        return sharePercentage(row, rows, security_names, shareSum(row), totalShares(rows));
     };
 
     // Total percentage ownership for each shareholder row
@@ -458,6 +475,7 @@ app.controller('invCaptableController',
         });
         return type
     };
+*/
 
     $scope.tabvisible = function(tab) {
         if (tab.title == "Activity") {
@@ -486,9 +504,10 @@ app.controller('invCaptableController',
     };
 
     // This should really be in a directive (or more properly get some clever css set-up to do it for me...
-    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-        $scope.stretchheight = {height: String(newValue + 59) + "px"}
+    $scope.$watch(
+    function() {
+        return $(".leftBlock").height();
+    }, function(newValue, oldValue) {
+        $scope.stretchheight = {height: String(newValue + 59) + "px"};
     });
-
-
 }]);

@@ -192,10 +192,6 @@ input:focus, textarea:focus {
 .accordion-heading:not:first-child {
     padding-top: 20px;
 }
-
-.accordion-heading > a:before {
-    content:'';
-}
 /* Document Viewer Styling */
 .DV-views {
     display:none;
@@ -3375,9 +3371,6 @@ button.icon-button:hover {
     -moz-border-radius-bottomright: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-}
-.btn-group > .btn + .btn {
-    margin-left: 0px;
 }
 .edittoggle > .btn.active {
     color: #FFFFFF;

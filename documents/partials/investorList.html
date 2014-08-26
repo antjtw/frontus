@@ -68,9 +68,9 @@
                                         <span data-icon="&#xe011;" aria-hidden="true"></span>
                                     </a>
                                     <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li ng-click="gotoDoc(doc)">View Document</li>
-                                        <li ng-show="!docIsComplete(doc) || doc.signature_flow == 0" ng-click="exportOriginalToPdf(doc)">Download Original</li>
-                                        <li ng-show="doc.signature_flow>0" ng-click="exportVersionToPdf(doc)">Download Document</li>
+                                        <li ng-click="gotoDoc(doc)">View</li>
+                                        <li ng-show="doc.signature_flow == 0" ng-click="exportOriginalToPdf(doc)">Download</li>
+                                        <li ng-show="doc.signature_flow>0" ng-click="exportVersionToPdf(doc)">Download</li>
                                     </ul>
                                 </li>
                             </ul>

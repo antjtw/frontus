@@ -107,7 +107,7 @@
 <div class="row-fluid" ng-click="resetSideBar();">
     <div class="captable-controls subnav-controls">
         <div>
-            <div class="pull-left" ng-show="maintoggle && issues.length!==0">
+            <div class="pull-left" ng-show="editMode && issues.length!==0">
                 <span>View by</span>
                 <ul class="dropdown-list drop-selector">
                     <li class="dropdown standard">
@@ -165,7 +165,7 @@
     </table>
     <div class="row-fluid">
 
-        <table class="tableView bodyText grant-table" ng-class="{'viewmode': maintoggle}"
+        <table class="tableView bodyText grant-table" ng-class="{'viewmode': editMode}"
                ng-show="issues.length!==0 && optionView == 'Security'">
             <tr class="column-label">
                 <th></th>
@@ -175,25 +175,25 @@
                 <th>Forfeited</th>
                 <th>Exercised</th>
             </tr>
-            <tbody ng-hide="((!issue.trans || issue.trans.length==1) && maintoggle)" ng-repeat="issue in issues">
+            <tbody ng-hide="((!issue.trans || issue.trans.length==1) && editMode)" ng-repeat="issue in issues">
             <tr class="status-row">
                 <td class="status-toggle pointer" ng-class="{'status-toggle-on': issue.shown}"
                     ng-click="opendetails(issue.issue, 'issue')">
                     <span ng-hide="issue.shown || !issue.trans" data-icon="&#xe017;" aria-hidden="true"></span>
                     <span ng-show="issue.shown && issue.trans" data-icon="&#xe01c;" aria-hidden="true"></span>
                 </td>
-                <td ng-class="{'selectablerow': maintoggle}" ng-click="!maintoggle || getActiveIssue(issue, '', 'view')">
-                    <input ng-show="!maintoggle" placeholder="Add new security"
+                <td ng-class="{'selectablerow': editMode}" ng-click="!editMode || getActiveIssue(issue, '', 'view')">
+                    <input ng-show="!editMode" placeholder="Add new security"
                            ui-event="{focus : 'getActiveIssue(issue)', blur : 'saveIssue(issue, \'issue\')'}"
                            ng-model="issue.issue">
-                    <span ng-show="maintoggle">{{issue.issue}}</span>
+                    <span ng-show="editMode">{{issue.issue}}</span>
                 </td>
                 <td>{{formatAmount(issueGranted(issue))}}</td>
                 <td>{{formatAmount(issueVested(issue))}}</td>
                 <td>{{formatAmount(issueActions(issue, 'forfeited'))}}</td>
                 <td>{{formatAmount(issueActions(issue, 'exercised'))}}</td>
             </tr>
-            <tr class="transaction-rows" ng-show="issue.shown && !maintoggle" ng-repeat="tran in issue.trans">
+            <tr class="transaction-rows" ng-show="issue.shown && !editMode" ng-repeat="tran in issue.trans">
                 <td></td>
                 <td><input bs-typeahead="rownames"
                            placeholder="Add new investor"
@@ -219,7 +219,7 @@
                            ng-model="tran.exercised">
                 </td>
             </tr>
-            <tr class="transaction-rows" ng-show="issue.shown && maintoggle" ng-repeat="tran in issue.trans | noempty">
+            <tr class="transaction-rows" ng-show="issue.shown && editMode" ng-repeat="tran in issue.trans | noempty">
                 <td class="viewField"></td>
                 <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
                     ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
@@ -274,7 +274,7 @@
                 <td>{{formatAmount(issueActions(investor, 'forfeited'))}}</td>
                 <td>{{formatAmount(issueActions(investor, 'exercised'))}}</td>
             </tr>
-            <tr class="transaction-rows" ng-show="investor.shown && maintoggle"
+            <tr class="transaction-rows" ng-show="investor.shown && editMode"
                 ng-repeat="tran in investor.trans | noempty">
                 <td class="viewField"></td>
 
@@ -314,14 +314,14 @@
 <div ng-switch on="sideBar">
 <span ng-switch-when="1">
 
-              <div class="capGuide global" ng-show="mode == 1 && !maintoggle">
+              <div class="capGuide global" ng-show="mode == 1 && !editMode">
 
                   <div class="rightTitle security-type">
                       <span>Investor</span>
                       <input disabled ng-model="activeTran.investor">
                   </div>
 
-                  <p class="rightTitle"><span>Date</span><input ng-show="mode == 1 && !maintoggle"
+                  <p class="rightTitle"><span>Date</span><input ng-show="mode == 1 && !editMode"
                                                                 ng-disabled="toggleView();"
                                                                 id="date{{activeTran.$$hashKey}}"
                                                                 ui-event="{keydown:'saveTranDate(activeTran, \'date\', $event)', blur:'saveTranDate(activeTran, \'date\', \'blur\')'}"
@@ -401,7 +401,7 @@
                   <span class="blue-link delete-link grant-link" ng-click="tranDeleteUp(activeTran);">Delete transaction</span>
               </div>
 
-            <div class="capGuide grants" ng-show="mode == 2 && !maintoggle">
+            <div class="capGuide grants" ng-show="mode == 2 && !editMode">
 
                 <h2>Forfeit Information</h2>
 
@@ -418,7 +418,7 @@
                 </ul>
             </div>
 
-            <div class="capGuide grants" ng-show="mode == 3 && !maintoggle">
+            <div class="capGuide grants" ng-show="mode == 3 && !editMode">
 
                 <h2>Exercise Information</h2>
 
@@ -435,7 +435,7 @@
                 </ul>
             </div>
 
-            <div class="capGuide grants" ng-show="mode == 4 && !maintoggle">
+            <div class="capGuide grants" ng-show="mode == 4 && !editMode">
 
                 <h2>Vested Information</h2>
 
@@ -456,7 +456,7 @@
 
         <span ng-switch-when="4">
 
-              <div class="capGuide grants" ng-show="mode == 1 && !maintoggle">
+              <div class="capGuide grants" ng-show="mode == 1 && !editMode">
 
                   <div class="rightTitle security-type">
                       <span>Security name</span>
@@ -559,7 +559,7 @@
 
         <span ng-switch-when="5">
 
-              <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
+              <div class="capGuide grants" ng-show="mode == 1 && editMode">
 
                   <p class="belowTitle"><span ng-bind="activeIssue.issue"></span><span>Security Name</span></p>
 
@@ -611,7 +611,7 @@
 
 <!-- Explain -->
         <span ng-switch-when="3">
-              <div class="capGuide grants" ng-show="mode == 1 && maintoggle">
+              <div class="capGuide grants" ng-show="mode == 1 && editMode">
 
                   <p ng-show="activeTran.investor" class="belowTitle"><span ng-bind="activeTran.investor"></span><span>Investor</span></p>
 
@@ -651,7 +651,7 @@
                   </p>
               </div>
 
-              <div class="capGuide grants" ng-show="mode == 2 && maintoggle">
+              <div class="capGuide grants" ng-show="mode == 2 && editMode">
 
                   <h2>Forfeit Information</h2>
 
@@ -667,7 +667,7 @@
                   </ul>
               </div>
 
-            <div class="capGuide grants" ng-show="mode == 3 && maintoggle">
+            <div class="capGuide grants" ng-show="mode == 3 && editMode">
 
                 <h2>Exercised Information</h2>
 
@@ -684,7 +684,7 @@
                 </ul>
             </div>
 
-            <div class="capGuide grants" ng-show="mode == 4 && maintoggle">
+            <div class="capGuide grants" ng-show="mode == 4 && editMode">
 
                 <h2 style="margin-bottom: 0px;">Vested Information</h2>
 

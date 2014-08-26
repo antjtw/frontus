@@ -1,0 +1,155 @@
+<div class="capGuide global" ng-class="{'issue-rail':tourstate==3}">
+    <accordion ng-class="{'lessmargin': (sec.transactions.length == 1)}"
+               class="transaction-accordion"
+               close-others="true">
+    <accordion-group is-open="tran.active"
+                     is-disabled="sec.transactions.length==1"
+                     ng-hide="windowToggle && !tran.active"
+                     ng-repeat="tran in sec.transactions
+                                | orderBy:'date' track by $index"
+                    ng-switch on="currentTab">
+        <accordion-heading>
+            <span data-icon="&#xe031;"
+                  aria-hidden="true"
+                  ng-show="tran.active && sec.transactions.length > 1">
+            </span>
+            <span data-icon="&#xe034;"
+                  aria-hidden="true"
+                  ng-show="!tran.active && sec.transactions.length > 1"
+                  ng-click="editEvidence()">
+            </span>
+            <span ng-click="editEvidence()">
+                {{tran.effective_date | date:settings.shortdate}} Transaction
+            </span>
+        </accordion-heading>
+        <div class="small-standard-button
+                    standard-button
+                    btn-group darkgray">
+            <button class="btn"
+                    ng-click="switchCapTab('details');"
+                    ng-class="{on: currentTab=='details'}">
+                <span>
+                    Details
+                </span>
+            </button>
+            <button class="btn"
+                    ng-click="switchCapTab('documents');"
+                    ng-class="{on: currentTab=='documents'}">
+                <span>
+                    Evidence
+                </span>
+            </button>
+            <button class="btn"
+                    ng-click="switchCapTab('actions');"
+                    ng-class="{on: currentTab=='actions'}">
+                <span>
+                    Actions
+                </span>
+            </button>
+        </div>
+        <div class="capTab" ng-switch-when="details">
+            <div class="capGuide global">
+                <div class="rightTitle">
+                    <span>Security Type</span>
+                    <span class="locked-security" ng-if="sec.locked">{{tran.attrs.security_type}}</span>
+                    <ul class="dropdown-list drop-selector" ng-if="!sec.locked">
+                        <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{tran.attrs.security_type}}
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="key in 'security_type' | attributeTypes">
+                                <a ng-click="setIt(tran, 'security_type', key, true)">
+                                    {{key}}
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+            <editable-transaction-attributes ng-if="tran" data="tran" save="true">
+            </editable-transaction-attributes>
+        </div>
+        <div class="capTab" ng-switch-when="documents">
+            <div ng-if="tran.evidence_data.length==0"
+                 class="linkedDocuments">
+                Connect documents that support this transaction by clicking the link below.
+            </div>
+            <div ng-if="tran.evidence_data.length>0"
+                 class="linkedDocuments">
+                <div ng-repeat="doc in tran.evidence_data"
+                     class="row-fluid">
+                    <ul class="pull-left">
+                        <li>
+                            <span ng-click="viewEvidence(doc)">
+                                {{doc.docname}}
+                            </span>
+                        </li>
+                        <li ng-if="doc.name||doc.investor">
+                            <span>
+                                {{doc.name || doc.investor}}'s version
+                            </span>
+                        </li>
+                    </ul>
+                    <span class="pull-right" data-icon="&#xe00f;"
+                          ng-click="removeEvidence(doc, tran)">
+                    </span>
+                </div>
+            </div>
+            <span ng-hide="windowToggle"
+                  class="blue-link delete-link linkedDocuments"
+                  ng-click="editEvidence(tran);"
+                  data-icon="&#xe008;">
+                Add Documents
+            </span>
+            <div ng-show="windowToggle"
+                 class="standard-button linkedDocuments">
+                <button class="btn" ng-click="editEvidence();">
+                    Finished!
+                </button>
+            </div>
+        </div>
+        <div class="capTab" ng-switch-when="actions">
+            <span>Action</span>
+            <ul>
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{newTran.kind || "Select an action"}}
+                        <span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="x in tran.attrs.security_type | validActions: 'security'">
+                            <a ng-click="makeNewTran(x)">
+                                {{x}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <span>Random span<br>to make space<br>for the dropdown.</span>
+            <div ng-if="newTran">
+                <editable-transaction-attributes data="newTran" save="false">
+                </editable-transaction-attributes>
+            </div>
+            <div class="standard-button">
+                <button class="btn" ng-click="submitAction(newTran);">
+                    Submit
+                </button>
+            </div>
+        </div>
+        </accordion-group>
+    </accordion>
+    <span class="add-transaction-link"
+          ng-click="addTransaction()"
+          ng-if="currentTab!='documents' && !sec.creating">
+      <span data-icon="&#xe053;" aria-hidden="true"></span>
+      <span>Add Transaction</span>
+    </span>
+    <doc-mini-viewer docid="viewme"></doc-mini-viewer>
+    <span class="blue-link delete-link"
+          ng-click="captable.deleteSecurity(sec)"
+          data-icon="&#xe00c;">
+        Delete Security
+    </span>
+</div>
