@@ -149,19 +149,15 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
                     sdref.message,
                     "22 November 2113"
                 ).then(function(data) {
-                    $rootScope.$emit("notification:success", "Documents shared");
                     share_defer.resolve(data);
                     sdref.emails = [];
                     sdref.documents = [];
                     sdref.message = "";
-                    //$route.reload(); // TODO: close share bar?
                 }).except(function(err) {
                     console.error(err);
-                    $rootScope.$emit("notification:fail", "Oops, something went wrong.");
                     share_defer.reject(err);
                 });
             } else {
-                $rootScope.$emit("notification:fail", "Please confirm all documents being shared are prepared for all recipients.");
                 share_defer.reject("Not all documents prepared for all people");
             }
         });

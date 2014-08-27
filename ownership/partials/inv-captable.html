@@ -50,7 +50,7 @@
                            value="{{myPercentage(everyone.percentage) | number:3}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor==row,
-                               'hoverable': row.name}"
+                               hoverable: row.name}"
                     class="viewName"
                     ng-click="selectInvestor(row.name);">
                     {{::row.name}}
@@ -128,6 +128,7 @@
     </div>
 </div>
 
+<!-- TODO internal-right-rail directive -->
 <div ng-style="viewportheightnobar"
      ng-class="{rightNoTableBlock:toggleSide(), slidingcss25:oldSafari()}" class="span4 capright button-offset">
     <button type="button" class="btn"
@@ -137,6 +138,15 @@
         {{sideToggleName}}
     </button>
     <div class="row-fluid">
+<!--
+<internal-right-rail toggle-side="sideToggle">
+    <tabset ng-class="{'tabBorder': windowToggle}"
+            ng-style="viewportheight">
+        <tab ng-repeat="tab in tabs"
+             active="tab.active"
+             ng-if="tabvisible(tab)"
+             heading="{{::tab.title}}">
+-->
         <div ng-switch on="sideBar">
             <span ng-switch-when="1">
                 <!-- Global Tab -->
@@ -596,6 +606,11 @@
             </span>
         </div>
     </div>
+<!--
+            </tab>
+        </tabset>
+    </internal-right-rail>
+-->
 </div>
       </div>
   </div>

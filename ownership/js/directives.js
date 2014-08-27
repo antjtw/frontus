@@ -124,8 +124,7 @@ own.directive('editableCaptableCell', [function() {
                             $scope.openTranPicker(key, value);
                         } else {
                             captable.saveTransaction(
-                                $scope.data.transactions[0],
-                                $scope.data);
+                                $scope.data.transactions[0], true);
                         }
                     }
                 };
@@ -135,14 +134,14 @@ own.directive('editableCaptableCell', [function() {
                     } else if ($scope.destination_transaction) {
                         $scope.destination_transaction.attrs[key] = val;
                         captable.saveTransaction(
-                            $scope.destination_transaction,
-                            $scope.data);
+                            $scope.destination_transaction, true);
                     }
                     $scope.destination_transaction = null;
                 }
                 $scope.units = function(newval) {
                     if (angular.isDefined(newval)) {
                         var num = parseFloat(newval);
+                        console.log("newval", newval, num);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
                         }
@@ -174,12 +173,12 @@ own.directive('editableCaptableCell', [function() {
                         "key": key,
                         "diff": 0
                     };
-                    angular.forEach($scope.selectedCell.transactions, function(cell) {
-                        if (calculate.isNumber(cell.attrs[key])) {
-                            $scope.picker.diff += parseFloat(cell.attrs[key]);
-                        }
-                    });
-                    $scope.picker.diff = $scope.selectedCell.u - $scope.picker.diff;
+                    var newVal = $scope.selectedCell[key[0]];
+                    if (key == 'units')
+                        captable.setCellUnits($scope.selectedCell);
+                    else
+                        captable.setCellAmount($scope.selectedCell);
+                    $scope.picker.diff = newVal - $scope.selectedCell[key[0]];
                     if ($scope.picker.diff != 0) {
                         $scope.tranPicker = true;
                     }
@@ -194,8 +193,6 @@ own.directive('editableCaptableCell', [function() {
                             $scope.picker.diff = $scope.picker.diff + parseFloat($scope.destination_transaction.attrs[$scope.picker.key]);
                         }
                         updateAttr($scope.picker.key, $scope.picker.diff);
-                    } else {
-                        $scope.selectedCell.u -= $scope.picker.diff
                     }
                     $scope.picker = {};
                     $scope.tranPicker = false;
