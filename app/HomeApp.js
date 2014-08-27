@@ -316,7 +316,8 @@ app.controller('CompanyCtrl',
             	$scope.totalIssued=0;
             	
                 angular.forEach($scope.ct.ledger_entries, function (entry) {
-                	console.log(calculate.primaryMeasure(entry.security_type));
+                	console.log($scope.issueArray[5]);
+                	console.log($scope.issueArray);
                 	if (calculate.primaryMeasure(entry.security_type)=='units'){
                 		$scope.totalIssued+=(entry.credit-entry.debit);
                 		console.log("what");
@@ -337,7 +338,7 @@ app.controller('CompanyCtrl',
                 	}
                 	else {
                 		
-                		
+                		console.log("ADDING TO OPTIONS");
                 		$scope.issueArray[index+1]+=(entry.credit-entry.debit);
                 	}
                 });
