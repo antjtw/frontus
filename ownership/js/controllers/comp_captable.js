@@ -611,28 +611,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.capEditEmail = false;
     };
 
-    /*
-    $scope.alterEmail = function() {
-        if ($scope.newEmail != "") {
-            SWBrijj.proc('ownership.update_row_share',
-                         $scope.newEmail,
-                         $scope.oldEmail,
-                         $scope.activeInvestorName)
-            .then(function(data) {
-                $scope.lastsaved = Date.now();
-                angular.forEach($scope.ct.investors, function (row) {
-                    if (row.name == $scope.activeInvestorName) {
-                        $scope.$emit("notification:success",
-                                     "Email address updated");
-                        row.emailkey = row.email = $scope.newEmail;
-                        $scope.activeInvestorEmail = $scope.newEmail;
-                    }
-                });
-            });
-        }
-    };
-    */
-
     $scope.opts = {
         backdropFade: true,
         dialogFade: true
@@ -886,15 +864,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return (output);
     };
 
-    /*$scope.typeLocked = function(issue) {
-        if (issue.liquidpref || issue.interestrate || issue.valcap || issue.discount || issue.optundersecurity || issue.vestcliff || issue.vestingbegins || issue.vestfreq) {
-            return false
-        }
-        else {
-            return true
-        }
-    };*/
-
     $scope.chosenTab = function(tab, type) {
         return (tab.title == type);
     };
@@ -916,13 +885,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.numShareholders = function() {
         return calculate.numShareholders($scope.ct.investors);
     };
-
-    /*
-    var totalShares = memoize(calculate.totalShares)
-    $scope.totalShares = function(investors) {
-        return $scope.formatAmount(totalShares(investors));
-    };
-    */
 
     // Total Shares | Paid for an issue column (type is either u or a)
     var totalPaid = memoize(calculate.totalPaid);
@@ -948,13 +910,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return colTotal(header, investors, type);
     };
 
-    /*
-    var sharePercentage = memoize(calculate.sharePercentage);
-    $scope.sharePercentage = function(row, investors) {
-        return sharePercentage(shareSum(row), totalShares(investors));
-    };
-    */
-
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {
         return $scope.formatDollarAmount(calculate.pricePerShare($scope.ct.securities, $scope.finishedsorting));
@@ -976,47 +931,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
         $scope.stretchheight = {height: String(newValue + 59) + "px"}
     });
-
-    /*
-    function generic_watch(newval, oldval, obj) {
-        if (!newval || !oldval) {return;}
-        if (parseFloat(newval.interestrate) > 100 ||
-            parseFloat(newval.interestrate) < 0)
-        {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].interestrate = oldval.interestrate;
-                }
-            }
-        }
-        if (parseFloat(newval.discount) > 100 ||
-            parseFloat(newval.discount) < 0)
-        {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].discount = oldval.discount;
-                }
-            }
-        }
-        if (parseFloat(newval.vestcliff) > 100 ||
-            parseFloat(newval.vestcliff) < 0)
-        {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].vestcliff = oldval.vestcliff;
-                }
-            }
-        }
-    }
-
-    $scope.ct.transaction_watch = function(newval, oldval) {
-        generic_watch(newval, oldval, $scope.ct.trans);
-    };
-
-    $scope.issue_watch = function(newval, oldval) {
-        generic_watch(newval, oldval, $scope.ct.securities);
-    };
-    */
 
     $scope.namePaste = function(ev, row) {
         var pastednames = ev.originalEvent.clipboardData.getData('text/plain');

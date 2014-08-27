@@ -693,7 +693,6 @@ ownership.service('calculate', function () {
 
     this.conversion = function(convertTran) {
         convertTran.newtran.attrs.method = convertTran.method;
-        convertTran.newtran.attrs.to_security = convertTran.toissue.attrs.security;
         if (convertTran.method == "Valuation") {
             var discount = !isNaN(parseFloat(convertTran.tran.attrs.discount)) ? (parseFloat(convertTran.tran.attrs.discount)/100) : 0;
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);

@@ -651,7 +651,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return -1;
         if (a.effective_date > b.effective_date)
             return 1;
-        if (a.effective_date = b.effective_date) {
+        if (a.effective_date == b.effective_date) {
             if (a.insertion_date < b.insertion_date)
                 return -1;
             if (a.insertion_date > b.insertion_date)
@@ -1227,33 +1227,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
         });
     }
-    /*
-    var issuetypes = [];
-    this.getIssueTypes = function() {return issuetypes;};
-    function loadIssueTypes() {
-        SWBrijj.procm('ownership.get_transaction_types')
-        .then(function (results) {
-            angular.forEach(results, function (result) {
-                // extra enum value, hard to remove
-                if (result.get_transaction_types != "warrant") {
-                    issuetypes.push(result.get_transaction_types);
-                }
-            });
-        }).except(logError);
-    }
-    loadIssueTypes();
-    var freqtypes = [];
-    this.getFrequencyTypes = function() {return freqtypes;};
-    function loadFrequencyTypes() {
-        SWBrijj.procm('ownership.get_freqtypes')
-        .then(function (results) {
-            angular.forEach(results, function (result) {
-                freqtypes.push(result.get_freqtypes);
-            });
-        }).except(logError);
-    }
-    loadFrequencyTypes();
-    */
     var eligible_evidence = [];
     this.getEligibleEvidence = function() {
         return eligible_evidence;

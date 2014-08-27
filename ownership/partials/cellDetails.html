@@ -6,7 +6,6 @@
     </div>
     <accordion class="lessmargin transaction-accordion" close-others="true">
     <accordion-group is-open="tran.active"
-                     is-disabled="cell.transactions.length == 1"
                      ng-repeat="tran in cell.transactions
                                 | orderBy:'date' track by $index"
                      ng-switch on="currentTab">
