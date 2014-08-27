@@ -136,12 +136,6 @@
         </div>
         </accordion-group>
     </accordion>
-    <span class="add-transaction-link"
-          ng-click="addTransaction()"
-          ng-if="currentTab!='documents' && !sec.creating">
-      <span data-icon="&#xe053;" aria-hidden="true"></span>
-      <span>Add Transaction</span>
-    </span>
     <doc-mini-viewer docid="viewme"></doc-mini-viewer>
     <span class="blue-link delete-link"
           ng-click="captable.deleteSecurity(sec)"
