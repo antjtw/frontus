@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location) {
+app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q) {
 
         $scope.page = null;
         $scope.myMessages = [];
@@ -22,29 +22,62 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             if(string.length > 50){
                 return string.slice(0, 50) + "...";
             }
-            else{
+            else {
                 return string;
             }
         };
 
+        $scope.getArrayfromPosgres = function(array){
+            var array1 = array.replace("{", "");
+            var array2 = array1.replace("}", "");
+            var array3 = array2.split(",");
+            return array3;
+        };
+
+        $scope.getPeopleNames = function(){
+            var promise = $q.defer();
+            SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                $scope.myPeople = data;
+                promise.resolve($scope.myPeople);             
+            });  
+            return promise.promise;             
+        };
+
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
-                $scope.messageThreads = data;
-                $scope.sentMsgs = data;
-                angular.forEach($scope.messageThreads, function(thr){
-                    if(thr.sender !== navState.userid){
-                        $scope.myMessages.push(thr);
-                    };
-                });
-                angular.forEach($scope.myMessages, function(thread){
-                    var members = thread.members.replace("{", "");
-                    var members2 = members.replace("}", "");
-                    var array = members2.split(",");
-                    if(array.indexOf(navState.userid) > -1){
-                        array[array.indexOf(navState.userid)] = "me"
-                    }
-                    thread.members = array.join(", ");
-                });
+                $scope.getPeopleNames().then(function(){
+                    $scope.messageThreads = data;
+                    $scope.sentMsgs = data;
+                    var allContactEmails = [];
+                    angular.forEach($scope.messageThreads, function(thr){
+                        if(thr.sender !== navState.userid){
+                            $scope.myMessages.push(thr);
+                        }
+                    });
+                    angular.forEach($scope.sentMsgs, function(thread){
+                        var array = $scope.getArrayfromPosgres(thread.members);
+                        thread.members = array;
+                        thread.names = [];
+                        for(var i = 0; i < array.length; i ++){
+                            angular.forEach($scope.myPeople, function(ind){
+                                allContactEmails.push(ind.email);
+                                if(array[i] == navState.userid && thread.names.indexOf("me")== -1){
+                                    thread.names.push("me")
+                                }
+                                else if(array[i]== ind.email && array[i] !== navState.userid && thread.names.indexOf(ind.email)== -1){
+                                    thread.names.push(ind.name)
+                                }
+                                else if(allContactEmails.indexOf(array[i])== -1 && array[i] !== navState.userid && thread.names.indexOf(array[i])== -1){
+                                    thread.names.push(array[i])
+                                }
+                            });
+                            thread.nameStrings = thread.names.join(", ")
+                        };
+
+                    });
+
+
+                });                
                
             });
         };
