@@ -1,7 +1,7 @@
 // Grants page controller
 app.controller('grantController',
-    ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj', 'calculate', 'switchval', 'sorting', 'navState',
-        function($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, sorting, navState) {
+    ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj', 'calculate', 'switchval', 'navState',
+        function($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, navState) {
     $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
@@ -27,12 +27,12 @@ app.controller('grantController',
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
     $scope.issues = [];
-    $scope.issuekeys = [];
+    $scope.security_names = [];
     $scope.equityissues = [];
     $scope.possibleActions = ['exercised', 'forfeited'];
 
     // False is edit mode, true is view mode
-    $scope.maintoggle = true;
+    $scope.editMode = true;
     $scope.optionView = "Security";
 
     $scope.newSchedule = false;
@@ -83,7 +83,7 @@ app.controller('grantController',
                         $scope.allissues[i]['trans'] = [];
                         $scope.issues.push($scope.allissues[i]);
                     }
-                    $scope.issuekeys.push($scope.allissues[i].issue);
+                    $scope.security_names.push($scope.allissues[i].issue);
                     if ($scope.allissues[i].type == "Equity") {
                         $scope.equityissues.push($scope.allissues[i].issue);
                     }
@@ -147,12 +147,12 @@ app.controller('grantController',
                 if ($scope.issues.length == 1) {
                     $rootScope.$on('billingLoaded', function(x) {
                         if (!$rootScope.companyIsZombie()) {
-                            $scope.maintoggle = false;
+                            $scope.editMode = false;
                         }
                     });
                     if ($rootScope.selectedPlan) {
                         if (!$rootScope.companyIsZombie()) {
-                            $scope.maintoggle = false;
+                            $scope.editMode = false;
                         }
                     }
                 }
@@ -240,7 +240,7 @@ app.controller('grantController',
             var activeAct = [];
 
             // Only the issues that are not the active transactions (for underlying issue)
-            var allowablekeys = angular.copy($scope.issuekeys);
+            var allowablekeys = angular.copy($scope.security_names);
             var index = allowablekeys.indexOf(currenttran.issue);
             allowablekeys.splice(index, 1);
             currenttran.allowKeys = allowablekeys;
@@ -296,7 +296,7 @@ app.controller('grantController',
         issue.state = true;
 
         // Get the all the issues that aren't the current issue for the drop downs
-        var allowablekeys = angular.copy($scope.issuekeys);
+        var allowablekeys = angular.copy($scope.security_names);
         var index = allowablekeys.indexOf(issue.issue);
         allowablekeys.splice(index, 1);
         $scope.allowKeys = allowablekeys;
@@ -428,8 +428,8 @@ app.controller('grantController',
 
                     $scope.issueRevert = angular.copy(issue);
 
-                    var index = $scope.issuekeys.indexOf(issue.key);
-                    $scope.issuekeys[index] = issue.issue;
+                    var index = $scope.security_names.indexOf(issue.key);
+                    $scope.security_names[index] = issue.issue;
                     issue.key = issue.issue;
                 });
             }
@@ -440,7 +440,7 @@ app.controller('grantController',
                 SWBrijj.proc('ownership.create_issue', d1, expire, issue['issue'], calculate.toFloat(issue['price'])).then(function (data) {
                     $scope.lastsaved = Date.now();
                     issue.key = issue['issue'];
-                    $scope.issuekeys.push(issue.key);
+                    $scope.security_names.push(issue.key);
                     $scope.issues.push({"name": "", "date": new Date(2100, 1, 1), "type" : "Option"});
 
                     // Create the first empty underlying transaction
@@ -451,7 +451,7 @@ app.controller('grantController',
                     newTran.vestingbegins = null;
                     issue.trans =[newTran];
 
-                    var allowablekeys = angular.copy($scope.issuekeys);
+                    var allowablekeys = angular.copy($scope.security_names);
                     var index = allowablekeys.indexOf(issue.issue);
                     allowablekeys.splice(index, 1);
                     $scope.allowKeys = allowablekeys;
@@ -472,8 +472,8 @@ app.controller('grantController',
                 if (oneissue['key'] == issue['key']) {
                     var index = $scope.issues.indexOf(oneissue);
                     $scope.issues.splice(index, 1);
-                    var indexed = $scope.issuekeys.indexOf(oneissue.key);
-                    $scope.issuekeys.splice(indexed, 1);
+                    var indexed = $scope.security_names.indexOf(oneissue.key);
+                    $scope.security_names.splice(indexed, 1);
                 }
             });
             $scope.sideBar = "x";
@@ -971,14 +971,14 @@ app.controller('grantController',
 
     //
     $scope.editViewToggle = function() {
-        $scope.maintoggle = !$scope.maintoggle;
-        if (!$scope.maintoggle) {
+        $scope.editMode = !$scope.editMode;
+        if (!$scope.editMode) {
             $scope.optionView = "Security";
         }
     };
 
     $scope.togglename = function() {
-        return $scope.maintoggle ? "Edit" : "View";
+        return $scope.editMode ? "Edit" : "View";
     };
 
     $scope.setView = function(field) {

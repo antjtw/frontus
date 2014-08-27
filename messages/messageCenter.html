@@ -1,0 +1,87 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="/messages/messages.css">
+<div class="maincontent openflow">
+<div class="container dynamic-page doclistFlow">
+<div class="row-fluid">
+    <section class="statusBlock">
+        <div class="row-fluid">
+            <div class="subnav-controls">
+                <div>
+                    <div class="pull-left" ng-if="!compose">
+                        <span>Search</span>
+                        <input type="text" ng-model="filterText" class="search-box">
+                    </div>
+                    <div class="box-button pull-right"
+                     ng-class="{selected: compose == true}"
+                     ng-click="companyIsZombie() ||  togglePage('compose')" 
+                     data-placement="bottom" bs-tooltip="zombiemessage">
+                        <ul>
+                            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
+                            </li>
+                            <li> <span>Compose</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="DivHelper"></div>
+            </div>
+        </div>
+
+  <!--   text in the window -->
+    <div class="row-fluid leftTabWindow">
+        <compose-message ng-if="page == 'compose'"></compose-message>
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose'">
+            <div ng-if="myMessages.length == 0 && sentMessages.length == 0" style="margin-top: 40px; text-align: center;">You don't have any messages in your inbox. Click compose to start sending away!</div>
+            
+            <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
+            <div ng-if="!page && myMessages.length > 0">
+            <div class="span12">
+                <table class="status-table people-table">
+                    <tbody>
+                    <tr>
+                        <th class="button"><span class="title">Recipients</span></th>
+                        <th class="button"><span class="title">Subject</span></th>
+                        <th></th>
+                    </tr>
+                    </tbody>
+                    <tbody >
+                        <tr class="empty-row"></tr>
+                        <tr class="threadMembers" ng-repeat="myMessage in myMessages | orderBy:'time':true |filter: filterText">
+                            <td style="width:450px" class="shareholder-column docname-column">
+
+                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.members">{{showString(myMessage.members)}}</div></a>
+                            </td>
+                            <td><span>{{myMessage.subject}}</span></td>
+                            <td style="width:10px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+
+        </div>
+
+        <internal-right-rail toggle-side="hideRail" ng-style="viewportheight" ng-if="page !== 'compose'">
+            <tabset style="display:block;" ng-style="viewportheight">
+                <tab heading="Filters">
+                    <div style="clear: both;">
+                        <message-filter sent="sentMsgs" inbox="myMessages" page="page" ilength ="inboxLength"></message-filter>
+                    </div>
+                </tab>
+                <tab heading = "Message Activity">
+                    <div style="clear: both;">
+                        <message-side></message-side>
+                    </div>
+                </tab>
+                
+            </tabset>
+        </internal-right-rail>
+
+    </div>
+
+
+    </section>
+
+</div>

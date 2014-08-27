@@ -192,10 +192,6 @@ input:focus, textarea:focus {
 .accordion-heading:not:first-child {
     padding-top: 20px;
 }
-
-.accordion-heading > a:before {
-    content:'';
-}
 /* Document Viewer Styling */
 .DV-views {
     display:none;
@@ -3376,9 +3372,6 @@ button.icon-button:hover {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
 }
-.btn-group > .btn + .btn {
-    margin-left: 0px;
-}
 .edittoggle > .btn.active {
     color: #FFFFFF;
     background-color: #1ABC96;
@@ -4954,6 +4947,50 @@ li.event.roles > div > ul {
     cursor: auto;
 }
 
+
 .lower-icon {
     vertical-align: -10%;
 }
+
+.sidebarInfo {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.sidebarInfo .infoBox .headline{
+    color: #003045;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    font-size: 20px;
+}
+
+.infoBox{
+    margin-top: 20px;
+    border-bottom: 1px solid #C7C7C7;
+    padding-bottom: 20px;
+}
+
+.emailName{
+    padding-top: 5px;
+    color: #666;
+    font-size: 14px;
+}
+
+.replyPic{
+    height: 50px;
+    width: 50px;
+    margin-left: 20px;
+    padding-bottom: 10px;
+    border-radius: 50%;
+}
+
+.personEmail {
+    padding-bottom: 10px;
+}
+
+.go-to{
+    color: #666;
+    cursor: pointer;
+}
+
+

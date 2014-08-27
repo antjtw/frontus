@@ -1,0 +1,24 @@
+<div class="sidebarInfo">
+  <div class="infoBox">
+    <div class="headline">
+      {{threads[0].subject}}
+    </div>
+  </div>
+
+  <div class="infoBox" ng-repeat="msgPerson in msgPeople">
+    <img ng-src="{{getPhotoUrl(msgPerson.email)}}" class="replyPic">
+    <div style="display: inline-block; vertical-align: middle; padding-left: 10px">
+      <div class="emailName">{{msgPerson.namex}}</div>
+      <div class="personEmail">{{msgPerson.email}}</div>
+      <div ng-if="msgPerson.login !== undefined" ng-click="goToPerson(msgPerson)" class="go-to"><span data-icon="&#xe001;"aria-hidden="true">Go to full profile</span></div>
+      
+    </div>
+
+   
+
+
+
+
+
+
+</div>

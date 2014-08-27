@@ -13,7 +13,7 @@
     font-family: 'FS Elliot Web Regular', sans-serif;
     color: #2980B9;
     cursor: pointer;
-    position: absolute;
+/*    position: absolute;*/
     margin-left: 90px;
     padding-top: 20px;
 }
@@ -31,6 +31,7 @@
 
 
 
+
 .message_elem{
     margin-bottom: 20px;
     max-width: 1000px;
@@ -40,7 +41,7 @@
     max-width: 1000px;
 }
 
-.message_info .ta-scroll-window{
+.ta-scroll-window{
     border: 1px solid #E3E3E3;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -50,14 +51,14 @@
 
 
 
-.message_input .ta-root.focussed .ta-scroll-window.form-control{
+ .ta-root.focussed .ta-scroll-window.form-control{
     -webkit-box-shadow: none;
     border: 1px solid #E3E3E3;
     padding: 0px;
 }
 
 /*style the inside of the text box*/
-.message_input .ta-scroll-window.form-control *{
+ .ta-scroll-window.form-control *{
     font-family: "Helvetica Neue", Helvetica !important;
     color: rgb(141, 141, 141) !important;
 }
@@ -67,18 +68,18 @@
   max-height: 500px;
 }
 
-.message_input .btn.active, .btn:active{
+ .btn.active, .btn:active{
   box-shadow: none;
 }
 
-.message_input .ta-scroll-window.form-control h1{
+.ta-scroll-window.form-control h1{
     font-size: 2em;
     color: rgb(141, 141, 141);
     line-height: 1.231;
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control h2{
+.ta-scroll-window.form-control h2{
     font-size: 1.5em;
     color: rgb(141, 141, 141);
     line-height: 1.231;
@@ -86,40 +87,40 @@
 }
 
 
-.message_input .ta-scroll-window.form-control a {
+ .ta-scroll-window.form-control a {
   color: blue !important;
 }
-.message_input .ta-scroll-window.form-control h3 {
+ .ta-scroll-window.form-control h3 {
     font-size: 1.17em;
     color: rgb(141, 141, 141);
     line-height: 1.231;
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control blockquote  * {
+.ta-scroll-window.form-control blockquote  * {
      display: block;
      margin: 0 0 0 40px;   
 }
 
 
-.message_input .ta-scroll-window.form-control blockquote p{
+ .ta-scroll-window.form-control blockquote p{
     font-size: 14px;
     font-weight: normal;
 }
 
-.message_input .ta-scroll-window.form-control blockquote h1{
+.ta-scroll-window.form-control blockquote h1{
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control blockquote h2 {
+.ta-scroll-window.form-control blockquote h2 {
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control blockquote h3 {
+.ta-scroll-window.form-control blockquote h3 {
     font-weight: bold;
 }
 
-.message_input .ta-scroll-window.form-control ul {
+ .ta-scroll-window.form-control ul {
     display: block;
     list-style-type: decimal;
     -webkit-margin-before: 1em;
@@ -129,31 +130,31 @@
     -webkit-padding-start: 40px;
 }
 
-.message_input .ta-scroll-window.form-control ul li{
+.ta-scroll-window.form-control ul li{
     list-style: disc outside none;
 }
-.message_input .ta-scroll-window.form-control ul ul li{
+.ta-scroll-window.form-control ul ul li{
     list-style-type: circle;
   
 }
 
-.message_input .ta-scroll-window.form-control ul ul ul li{
+.ta-scroll-window.form-control ul ul ul li{
     list-style-type: square;
 }
 
-.message_input .ta-scroll-window.form-control ul ul {
+.ta-scroll-window.form-control ul ul {
     -webkit-margin-before: 0px !important;
     -webkit-margin-after: 0px !important;  
 }
 
 
-.message_input .btn[disabled]{
+ .btn[disabled]{
     background-color: white;
     color: black;
     border-right: 1px solid #E3E3E3;
 }
 
-.message_input .btn-group > .btn{
+.btn-group > .btn{
     border-right: 1px solid #E3E3E3;
     border-radius: 0px;
 }
@@ -161,7 +162,7 @@
 /*preview message class*/
 
 
-.message_input .btn-toolbar{
+.btn-toolbar{
     margin-top: 0px;
     margin-bottom: 0px;
     border-top: 1px solid #E3E3E3;
@@ -290,5 +291,41 @@ the compose message page styling*/
 
 
 
+.forTooltip div.tooltip-inner{
+    max-width: 350px;
+    min-width: 200px;
+}
 
+.replyMessage{
+    margin-left: auto; 
+    margin-right: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.replyInput {
+    display: inline-block;
+    position: relative;
+/*    min-width: 500px;
+    max-width: 800px;*/
+}
+
+.replySide {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    margin-left: 20px;
+    width: 180px;
+}
+
+.threadMembers div.tooltip-inner{
+    max-width: none;
+}
+
+
+
+.shareholder-column.docname-column *:hover{
+    color: #666;
+}
 

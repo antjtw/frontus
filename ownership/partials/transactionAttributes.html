@@ -1,0 +1,20 @@
+<div class="capGuide cap-overflow global">
+    <p ng-repeat="(key, val) in data.attrs | attrsForDisplay"
+       class="belowTitle">
+        <span ng-if="key!='interestrate' && key!='interestratefreq'">
+            {{val | formatAmount:settings:key}}
+        </span>
+        <span ng-if="key=='interestrate'">
+            {{data.interestrate}}% {{data.interestratefreq}}
+        </span>
+        <span ng-if="hasTip(key)"
+              class="forTooltip"
+              tooltip-placement="right"
+              tooltip="{{tips[key]}}">
+            {{displayAttr(key)}}
+        </span>
+        <span ng-if="!hasTip(key)">
+            {{displayAttr(key)}}
+        </span>
+    </p>
+</div>

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
+
 <div class="compose_message">
    
     <div>
@@ -9,7 +9,8 @@
 
         <div>
             <div class="message_elem">
-                <div class="message_headline">To</div>
+                <div class="message_headline" ng-if="groupMessage">CC</div>
+                <div class="message_headline" ng-if="!groupMessage">BCC</div>
                 <div class="message_input">
                     <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter an email address or group name" style="width: 100%;">
                         <option ng-repeat="myContact in myContacts" value="{{myContact.namex}}">{{myContact.namex}}</option>
@@ -17,6 +18,19 @@
                 </div>
             </div>
         <div>
+
+
+        <div>
+            <div class="message_elem">
+                <div class="message_headline" style="visibility:hidden">Group</div>
+                <div class="message_input">
+                    <button class="check-box-button group" ng-class="{'selected': groupMessage}" ng-click="selectGroupMessage()">
+                    <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button> Create group message, where every message is reply all
+                </div>
+            </div>
+        </div>
+
 
         <div class="message_elem">
             <div class="message_headline"> Subject</div>
@@ -45,15 +59,24 @@
     Preview Message 
 </div>
 
-<div class="msgButtons">
+<div class="msgButtons" ng-if="groupMessage">
     <div class = "standard-button green" tooltip="{{zombiemessage()}}">
         <button class="btn" style="font-size: 14px"
             ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
             ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
+            Send Group Message
+        </button>
+    </div>
+</div>
+
+<div class="msgButtons" ng-if="!groupMessage">
+    <div class = "standard-button" tooltip="{{zombiemessage()}}">
+        <button class="btn" style="font-size: 14px"
+            ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
+            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendBulkMessage(message)">
             Send
         </button>
     </div>
-
 </div>
 
 <div class="msgButtons left">
