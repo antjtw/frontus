@@ -183,7 +183,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     // TODO refactor to use attributes service
     function loadAttributes() {
         var promise = $q.defer();
-        SWBrijj.tblm('ownership.transaction_attributes',
+        SWBrijj.tblm('_ownership.transaction_attributes',
                      ['name', 'display_name'])
         .then(function(attrs) {
             promise.resolve(attrs);

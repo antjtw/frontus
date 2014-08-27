@@ -7,8 +7,7 @@
             <span>Security Type</span>
         </p>
     </div>
-    <accordion ng-class="{'lessmargin': sec.transactions.length == 1}"
-               class="transaction-accordion" close-others="true">
+    <accordion class="lessmargin transaction-accordion" close-others="true">
     <accordion-group ng-repeat="tran in sec.transactions
                                 | orderBy:'date' track by $index"
                      is-open="tran.active"
@@ -21,13 +20,15 @@
                     ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
                 <span>
+                    <span data-icon="&#xe611;" aria-hidden="true"></span>
                     Details
                 </span>
             </button><button
                     ng-click="switchCapTab('documents');"
                     ng-class="{on: currentTab=='documents'}">
                 <span>
-                    Evidence
+                    <span data-icon="&#xe009;" aria-hidden="true"></span>
+                    Documents
                 </span>
             </button>
         </div>
@@ -38,7 +39,7 @@
                     <span>Transaction Type</span>
                 </div>
             </div>
-            <transaction-attributes data="tran">
+            <transaction-attributes data="tran"></transaction-attributes>
         </div>
         <div class="capTab" ng-switch-when="documents">
             <div ng-if="tran.evidence_data.length==0"

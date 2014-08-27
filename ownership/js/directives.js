@@ -355,6 +355,7 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.newTran = null;
                 });
                 $scope.loaddirective();
+
                 $scope.$watch('sec', function(newval, oldval) {
                     $scope.loaddirective();
                 }, true);
