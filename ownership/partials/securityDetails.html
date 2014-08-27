@@ -14,41 +14,22 @@
                      is-open="tran.active"
                      ng-switch on="currentTab">
         <accordion-heading>
-            <span data-icon="&#xe031;" aria-hidden="true"
-                  ng-show="tran.active && sec.transactions.length > 1">
-            </span>
-            <span data-icon="&#xe034;" aria-hidden="true"
-                  ng-show="!tran.active && sec.transactions.length > 1">
-            </span>
-            <span>Transaction</span>
-            <!--
-            <span class="pull-right"
-                  data-icon="&#xe611;" aria-hidden="true"
-                  ng-click="switchCapTab('details')"
-                  ng-class="{on: currentTab=='details'}">
-            </span>
-            <span class="pull-right"
-                  data-icon="&#xe009;" aria-hidden="true"
-                  ng-click="switchCapTab('documents')"
-                  ng-class="{on: currentTab=='documents'}">
-            </span>
-            -->
+            <span>{{tran.effective_date | date:settings.shortdate}}</span>
         </accordion-heading>
-        <div class="small-standard-button
-                    standard-button
-                    btn-group darkgray">
-            <button class="btn"
+        <div class="darkgray faux-tabs">
+            <button
                     ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
                 <span>
+                    <span data-icon="&#xe611;" aria-hidden="true"></span>
                     Details
                 </span>
-            </button>
-            <button class="btn"
+            </button><button
                     ng-click="switchCapTab('documents');"
                     ng-class="{on: currentTab=='documents'}">
                 <span>
-                    Evidence
+                    <span data-icon="&#xe009;" aria-hidden="true"></span>
+                    Documents
                 </span>
             </button>
         </div>
@@ -59,7 +40,7 @@
                     <span>Transaction Type</span>
                 </div>
             </div>
-            <transaction-attributes data="tran">
+            <transaction-attributes data="tran"></transaction-attributes>
         </div>
         <div class="capTab" ng-switch-when="documents">
             <div ng-if="tran.evidence_data.length==0"

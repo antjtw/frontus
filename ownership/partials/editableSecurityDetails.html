@@ -9,40 +9,30 @@
                                 | orderBy:'date' track by $index"
                     ng-switch on="currentTab">
         <accordion-heading>
-            <span data-icon="&#xe031;"
-                  aria-hidden="true"
-                  ng-show="tran.active && sec.transactions.length > 1">
-            </span>
-            <span data-icon="&#xe034;"
-                  aria-hidden="true"
-                  ng-show="!tran.active && sec.transactions.length > 1"
-                  ng-click="editEvidence()">
-            </span>
             <span ng-click="editEvidence()">
                 {{tran.effective_date | date:settings.shortdate}} Transaction
             </span>
         </accordion-heading>
-        <div class="small-standard-button
-                    standard-button
-                    btn-group darkgray">
-            <button class="btn"
+        <div class="darkgray faux-tabs triplet">
+            <button
                     ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
                 <span>
+                    <span data-icon="&#xe611;" aria-hidden="true"></span>
                     Details
                 </span>
-            </button>
-            <button class="btn"
+            </button><button
                     ng-click="switchCapTab('documents');"
                     ng-class="{on: currentTab=='documents'}">
                 <span>
-                    Evidence
+                    <span data-icon="&#xe009;" aria-hidden="true"></span>
+                    Documents
                 </span>
-            </button>
-            <button class="btn"
+            </button><button
                     ng-click="switchCapTab('actions');"
                     ng-class="{on: currentTab=='actions'}">
                 <span>
+                    <span data-icon="&#xe613;" aria-hidden="true"></span>
                     Actions
                 </span>
             </button>
@@ -70,6 +60,12 @@
             </div>
             <editable-transaction-attributes ng-if="tran" data="tran" save="true">
             </editable-transaction-attributes>
+            <span class="delete-link"
+                  ng-if="tran.kind != 'issue security'"
+                  data-icon="&#xe00c;"
+                  ng-click="captable.deleteSecurityTransaction(tran, sec);">
+                Delete transaction
+            </span>
         </div>
         <div class="capTab" ng-switch-when="documents">
             <div ng-if="tran.evidence_data.length==0"
@@ -111,6 +107,7 @@
             </div>
         </div>
         <div class="capTab" ng-switch-when="actions">
+            <span>Action</span>
             <ul>
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
@@ -118,19 +115,21 @@
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="x in sec.attrs.security_type | validActions: 'security'">
-                            <a ng-click="newTran.kind = x;">
+                        <li ng-repeat="x in tran.attrs.security_type | validActions: 'security'">
+                            <a ng-click="makeNewTran(x)">
                                 {{x}}
                             </a>
                         </li>
                     </ul>
                 </li>
             </ul>
-            <div ng-if="newTran"
-                 ng-switch on="newTran.kind">
+            <span>Random span<br>to make space<br>for the dropdown.</span>
+            <div ng-if="newTran">
+                <editable-transaction-attributes data="newTran" save="false">
+                </editable-transaction-attributes>
             </div>
-            <div class="standard-button small-standard-button">
-                <button class="btn">
+            <div class="standard-button">
+                <button class="btn" ng-click="submitAction(newTran);">
                     Submit
                 </button>
             </div>

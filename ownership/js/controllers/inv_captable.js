@@ -15,6 +15,7 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
+    /*
     $scope.issuetypes = [];
     $scope.freqtypes = [];
     $scope.security_names = [];
@@ -22,15 +23,23 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
     $scope.issues = [];
     $scope.issueSort = 'date';
     $scope.rowSort = '-name';
+    */
+    /*
     $scope.rows = [];
     $scope.uniquerows = [];
     $scope.activeTran = [];
 
     $scope.investorOrder = "name";
+    */
     $scope.securityUnitLabel = function(security) {
         var type = $filter('issueUnitLabel')(security.attrs.security_type);
         return type;
     };
+    SWBrijj.procm('_ownership.my_visible_investors').then(function(x) {
+        console.log(x);
+    }).except(function(x) {
+        console.log(x);
+    });
     SWBrijj.procm('ownership.return_status').then(function (x) {
         $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
@@ -39,6 +48,7 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
         if ($scope.level == 'Full View') {
             $scope.fullview = true;
         }
+        console.log($scope.level);
     });
 
     /*
@@ -243,7 +253,6 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
             });
         });
     });
-    */
 
     $scope.findValue = function (row, header) {
         angular.forEach($scope.rows, function (picked) {
@@ -360,6 +369,7 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
         }
         $scope.activeInvestorName = investor.name;
     };
+    */
 
     // Toggles sidebar back and forth
     $scope.toggleSide = function () {
@@ -375,6 +385,7 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
 
     };
 
+    /*
     $scope.canHover = function (row) {
         if (row['u'] || row['a']) {
             return true
@@ -383,6 +394,7 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
             return false
         }
     };
+    */
 
     //switches the sidebar based on the type of the issue
     $scope.formatAmount = function (amount) {
@@ -488,19 +500,18 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
         var total = 0;
         angular.forEach($scope.tabs, function(tab) {
             if ($scope.tabvisible(tab)) {
-                total += 1
+                total += 1;
             }
         });
         return total;
-    }
+    };
 
     $scope.singleTransaction = function(trans) {
         return (trans.length == 1);
     };
 
     // This should really be in a directive (or more properly get some clever css set-up to do it for me...
-    $scope.$watch(
-    function() {
+    $scope.$watch(function() {
         return $(".leftBlock").height();
     }, function(newValue, oldValue) {
         $scope.stretchheight = {height: String(newValue + 59) + "px"};

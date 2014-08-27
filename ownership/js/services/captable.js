@@ -46,11 +46,11 @@ Cell = function() {
 };
 
 ownership.service('captable',
-function($rootScope, calculate, SWBrijj, $q, attributes, History) {
+function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
-        if ($rootScope.navState) {
-            return $rootScope.navState.role;
+        if (navState) {
+            return navState.role;
         } else {
             alert('race condition');
             return 'issuer';
@@ -60,8 +60,10 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
     this.reloadCapTable = function() {
-        captable = new CapTable();
+        //captable = new CapTable();
+        /*
         loadCapTable();
+        */
     };
     function loadCapTable() {
         $q.all([loadLedger(),
@@ -158,10 +160,14 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
 
     function loadActivity() {
         var promise = $q.defer();
-        SWBrijj.procm('ownership.get_company_activity')
-            .then(function(activity) {
-                promise.resolve(activity);
-            }).except(logError);
+        if (role() == 'issuer') {
+            SWBrijj.procm('ownership.get_company_activity')
+                .then(function(activity) {
+                    promise.resolve(activity);
+                }).except(logError);
+        } else {
+            promise.resolve([]);
+        }
         return promise.promise;
     }
 
@@ -328,12 +334,72 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         }
     };
     function cellsForTran(tran) {
+        var invs = [];
+        var secs = [];
+        for (a in tran.attrs)
+        {
+            if (a.indexOf('investor') != -1)
+            {
+                invs.push(a);
+            }
+            if (a.indexOf('security') != -1 && a.indexOf('type') == -1)
+            {
+                secs.push(a);
+            }
+        }
         return captable.cells.filter(function(cell) {
-            return (tran.attrs.investor == cell.investor ||
-                    tran.attrs.investor_to == cell.investor ||
-                    tran.attrs.investor_from == cell.investor) &&
-                   tran.attrs.security == cell.security;
+            var inv = false;
+            var sec = false;
+            for (a in invs)
+            {
+                if (tran.attrs[invs[a]] == cell.investor)
+                {
+                    inv = true;
+                    break;
+                }
+            }
+            for (a in secs)
+            {
+                if (tran.attrs[secs[a]] == cell.security)
+                {
+                    sec = true;
+                    break;
+                }
+            }
+            return (inv || (invs.length == 0 && tran.kind != 'issue security')) && sec;
         });
+    }
+    function transForCell(inv, sec) {
+        var invs = $filter('getInvestorAttributes')();
+        var secs = $filter('getSecurityAttributes')();
+        var trans = captable.transactions.filter(
+            function(tran) {
+                var i = false;
+                var s = false;
+                var hasInv = false;
+                for (a in invs)
+                {
+                    if (tran.attrs[invs[a]])
+                    {
+                        hasInv = true;
+                    }
+                    if (tran.attrs[invs[a]] == inv)
+                    {
+                        i = true;
+                        break;
+                    }
+                }
+                for (a in secs)
+                {
+                    if (tran.attrs[secs[a]] == sec)
+                    {
+                        s = true;
+                        break;
+                    }
+                }
+                return (i || (!hasInv && tran.kind != 'issue security')) && s;
+            });
+        return trans;
     }
     function secHasUnissued(securities) {
         return function(sec) {
@@ -497,13 +563,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         cell.ledger_entries = cell.transactions = null;
         cell.a = cell.u = null;
         
-        cell.transactions = captable.transactions.filter(
-            function(tran) {
-                return (tran.attrs.investor == cell.investor ||
-                        tran.attrs.investor_to == cell.investor ||
-                        tran.attrs.investor_from == cell.investor) &&
-                       tran.attrs.security == cell.security;
-            });
+        cell.transactions = transForCell(cell.investor, cell.security);
         cell.ledger_entries = captable.ledger_entries.filter(
             function(ent) {
                 return ent.investor == cell.investor &&
@@ -517,13 +577,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
     function generateCells() {
         angular.forEach(captable.investors, function(inv) {
             angular.forEach(captable.securities, function(sec) {
-                var transactions = captable.transactions.filter(
-                    function(tran) {
-                        return (tran.attrs.investor == inv.name ||
-                                tran.attrs.investor_to == inv.name ||
-                                tran.attrs.investor_from == inv.name) &&
-                               tran.attrs.security == sec.name;
-                    });
+                var transactions = transForCell(inv.name, sec.name);
                 if (transactions.length > 0) {
                     var cell = nullCell();
                     cell.transactions = transactions;
@@ -721,7 +775,38 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
                 }
                 else
                 {
-                    updateCell(cell);
+                    var cells = cellsForTran(tran);
+                    for (c in cells)
+                    {
+                        updateCell(cells[c]);
+                    }
+                }
+            } else {
+                $rootScope.$emit("notification:fail",
+                    "Oops, something went wrong.");
+            }
+        }).except(function(err) {
+            console.log(err);
+            $rootScope.$emit("notification:fail",
+                "Oops, something went wrong.");
+        });
+    };
+    this.deleteSecurityTransaction = function(tran, sec) {
+        SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
+        .then(function(x) {
+            var res = x[0].delete_transaction;
+            if (res > 0) {
+                $rootScope.$emit("notification:success",
+                    "Transaction deleted");
+                splice_many(captable.transactions, [tran]);
+                splice_many_by(captable.ledger_entries, function(el) {
+                        return el.transaction == tran.transaction;
+                });
+                splice_many(sec.transactions, [tran]);
+                var cells = colFor(sec.name);
+                for (c in cells)
+                {
+                    updateCell(cells[c]);
                 }
             } else {
                 $rootScope.$emit("notification:fail",
@@ -740,6 +825,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             if (res > 0) {
                 $rootScope.$emit("notification:success",
                     "Security deleted");
+                $rootScope.$broadcast("deleteSecurity");
 
                 var idx = captable.securities.indexOf(sec);
                 if (idx !== -1) { captable.securities.splice(idx, 1); }
@@ -869,6 +955,9 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         initAttrs(tran, sec_obj.attrs.security_type, kind);
         tran.attrs.security = sec;
         tran.attrs.security_type = sec_obj.attrs.security_type;
+        angular.forEach(tran.attrs, function(value, key) {
+            if (sec_obj.attrs[key]) tran.attrs[key] = sec_obj.attrs[key];
+        });
         if (tran.attrs.hasOwnProperty('investor'))
         {
             tran.attrs.investor = inv;
@@ -1156,7 +1245,7 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
             });
         }).except(logError);
     }
-    loadEligibleEvidence();
+    if (role() == 'issuer') { loadEligibleEvidence(); }
     function setTransactionEmail(tran) {
         angular.forEach(captable.investors, function (row) {
             if ((row.name == tran.investor) && row.email) {
@@ -1273,6 +1362,18 @@ function($rootScope, calculate, SWBrijj, $q, attributes, History) {
         {
             console.log("attrs not defined yet")
             return true;
+        }
+        if (!transaction.attrs.security_type)
+        {
+            console.log("security_type not defined");
+            console.log(transaction);
+            return false;
+        }
+        if (!attrs[transaction.attrs.security_type])
+        {
+            console.log("wrong security type?");
+            console.log(transaction.attrs.security_type);
+            return false;
         }
         for (att in transaction.attrs)
         {

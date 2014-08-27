@@ -140,6 +140,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.updateInvestor = function(investor) {
         captable.updateInvestorName(investor);
     };
+    $scope.removeInvestor = function(investor) {
+        captable.removeInvestor(investor);
+        $scope.selectedInvestor = null;
+        displayIntroSidebar();
+        History.forget($scope, 'selectedInvestor');
+    };
     $scope.updateSecurity = function(security) {
         captable.updateSecurityName(security);
     };
@@ -158,9 +164,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.selectSecurity(new_sec.name);
         $scope.new_sec = null;
     };
+    $scope.$on('deleteSecurity', function(sec) {
+        displayIntroSidebar();
+        $scope.selectedSecurity = null;
+        History.forget($scope, 'selectedSecurity');
+    });
     $scope.updateSecName = function(sec) {
         sec.name = sec.attrs.security = sec.transactions[0].attrs.security;
-    }
+    };
     $scope.$on('addSecurity', function(evt) {
         void(evt);
         $scope.addSecurity($scope.new_sec);
@@ -365,88 +376,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.windowToggle = false;
         }
         return $scope.windowToggle;
-    };
-    // Captable Conversion Modal
-    $scope.convertSharesUp = function(trans) {
-        $scope.convertTran = {};
-        $scope.convertTran.tran = trans[0];
-        $scope.convertTran.newtran = {}
-        $scope.convertTran.step = '1';
-        $scope.convertTran.date = new Date.today();
-        $scope.convertTransOptions = trans;
-        $scope.convertModal = true;
-
-        $scope.$watch('convertTran.ppshare', function(newval, oldval) {
-            if (!calculate.isNumber(newval)) {
-                $scope.convertTran.ppshare = oldval;
-            }
-        }, true);
-    };
-
-    $scope.convertSharesClose = function() {
-        $scope.convertModal = false;
-    };
-
-    $scope.convertgoto = function(number) {
-        $scope.convertTran.step = number;
-        if (number == '2') {
-            $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
-            $scope.convertTran.newtran = captable.inheritAllDataFromIssue($scope.convertTran.newtran, $scope.convertTran.toissue);
-            $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
-            $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
-        }
-    };
-
-    $scope.convertopts = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'convertModal modal'
-    };
-
-    // Filters the dropdown to only equity securities
-    $scope.justEquity = function(securities, tran) {
-        var list = [];
-        angular.forEach(securities, function(issue) {
-            if (issue.type == "Equity" && issue.issue != tran.issue) {
-                list.push(issue);
-            }
-        });
-        return list;
-    };
-
-    $scope.assignConvert = function(tran) {
-        $scope.convertTran.tran = tran;
-    }
-
-    // Performs the assignment for the dropdown selectors
-    $scope.assignConvert = function(field, value) {
-        $scope.convertTran[field] = value;
-        if (field == "toissue") {
-            $scope.convertTran.method = null;
-        }
-    };
-
-    // Date grabber
-    $scope.dateConvert = function (evt) {
-        //Fix the dates to take into account timezone differences
-        if (evt) { // User is typing
-            if (evt != 'blur')
-                keyPressed = true;
-            var dateString = angular.element('converttrandate').val();
-            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
-            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                var date = Date.parse(dateString);
-                if (date) {
-                    $scope.convertTran.date = calculate.timezoneOffset(date);
-                    keyPressed = false;
-                }
-            }
-        } else { // User is using calendar
-            if ($scope.convertTran.date instanceof Date) {
-                $scope.convertTran.date = calculate.timezoneOffset($scope.convertTran.date);
-                keyPressed = false;
-            }
-        }
     };
 
     $scope.splitSharesUp = function(issue) {

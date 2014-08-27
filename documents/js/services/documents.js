@@ -281,6 +281,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 return annot.whosign == 'Issuer';
             });
         },
+        hasInvestorAnnotations: function() {
+            return this.annotations.some(function(annot) {
+                return annot.whosign == 'Investor';
+            });
+        },
         hasInvalidAnnotation: function(user) {
             return this.annotations.some(function(annot) {
                 if (annot.forRole($rootScope.navState.role)) {
