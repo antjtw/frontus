@@ -6,7 +6,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.page = null;
         $scope.myMessages = [];
         $scope.togglePage = function(button){
-            console.log("toggle me!")
             if($scope.page !== button){
                 $scope.page = button;
             }
@@ -23,7 +22,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             if(string.length > 50){
                 return string.slice(0, 50) + "...";
             }
-            else{
+            else {
                 return string;
             }
         };
@@ -41,7 +40,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 $scope.myPeople = data;
                 promise.resolve($scope.myPeople);             
             });  
-            return promise.promise             
+            return promise.promise;             
         };
 
         $scope.getMessageThreads = function(){
@@ -49,15 +48,12 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 $scope.getPeopleNames().then(function(){
                     $scope.messageThreads = data;
                     $scope.sentMsgs = data;
-                    var allContactEmails = []
-                    console.log($scope.sentMsgs);
-                    // do this at the end
+                    var allContactEmails = [];
                     angular.forEach($scope.messageThreads, function(thr){
                         if(thr.sender !== navState.userid){
                             $scope.myMessages.push(thr);
-                        };
+                        }
                     });
-
                     angular.forEach($scope.sentMsgs, function(thread){
                         var array = $scope.getArrayfromPosgres(thread.members);
                         thread.members = array;
@@ -72,11 +68,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                                     thread.names.push(ind.name)
                                 }
                                 else if(allContactEmails.indexOf(array[i])== -1 && array[i] !== navState.userid && thread.names.indexOf(array[i])== -1){
-                                    console.log(array[i]);
                                     thread.names.push(array[i])
                                 }
-                               
-                                
                             });
                             thread.nameStrings = thread.names.join(", ")
                         };
