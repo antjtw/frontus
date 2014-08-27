@@ -41,7 +41,20 @@ app.controller('DocumentPrepareController',
         $scope.shareDocuments = function() {
             $scope.processing = true;
             ShareDocs.shareDocuments().then(function(result) {
+                if ($scope.doc_arr.some(function(doc) {
+                    return doc.issue && !doc.hasSignatureAnnotations() && !doc.hasInvestorAnnotations();
+                })) {
+                    $rootScope.$emit("notification:success", "Documents shared & transactions generating");
+                } else {
+                    $rootScope.$emit("notification:success", "Documents shared");
+                }
                 $location.url("/app/documents/company-list");
+            }).catch(function(err) {
+                if (err == "Not all documents prepared for all people") {
+                    $rootScope.$emit("notification:fail", "Please confirm all documents being shared are prepared for all recipients.");
+                } else {
+                    $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+                }
             }).finally(function(result) {
                 $scope.processing = false;
             });
