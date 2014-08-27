@@ -752,11 +752,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-right: 0;
 }
 
-div.rightTitle {
-    margin: 0 0 10px 0;
-    position: relative;
-}
-
 div.rightTitle.double > span, div.rightTitle.double > span {
     line-height: 14px;
     margin-top: 2px;
@@ -887,6 +882,14 @@ div.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
 div.rightTitle {
     position: relative;
     margin: 0 0 5px;
+}
+
+div.rightTitle.left-space {
+    margin-left: 20px;
+}
+
+div.rightTitle.actionpicker {
+    margin-bottom: 60px;
 }
 
 div.rightTitle.common-toggle span.tooltip-icon + .tooltip {
@@ -2438,4 +2441,8 @@ span.tour-icon.issue-cog + .tooltip {
     background-color: #F1F1F1;
     border-top: 2px solid #19bb95;
     color: #19bb95;
+}
+
+.action-button.standard-button {
+    margin: 20px 0 0 20px;
 }
