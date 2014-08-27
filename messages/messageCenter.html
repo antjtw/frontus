@@ -51,7 +51,8 @@
                         <tr class="threadMembers" ng-repeat="myMessage in myMessages | orderBy:'time':true | filter:filterText">
                             <td style="width:450px" class="shareholder-column docname-column">
 
-                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.members">{{showString(myMessage.members)}}</div></a>
+                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.nameStrings">Names :{{myMessage.nameStrings}}<br/>
+                                    Members: {{myMessage.members}}</div></a>
                             </td>
                             <td><span>{{myMessage.subject}}</span></td>
                             <td style="width:10px;"></td>

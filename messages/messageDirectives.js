@@ -273,21 +273,7 @@ mod.directive('sentMessages', function(){
             };
 
 
-
-
-            $scope.getArrayfromPosgres = function(array){
-                var array1 = array.replace("{", "");
-                var array2 = array1.replace("}", "");
-                var array3 = array2.split(",");
-                return array3;
-            }
-
-            $scope.formatSents = function(){
-                angular.forEach($scope.sents, function(msg){
-                    msg.members = $scope.getArrayfromPosgres(msg.members).join(", ")
-                });
-            };
-            $scope.formatSents();
+         
         }]
     };
 });
