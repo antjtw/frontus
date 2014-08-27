@@ -230,8 +230,8 @@
             <ul>
                 <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
                 <li><span>{{convertTran.newtran.attrs.amount}}</span><span>Debt + Interest</span></li>
-                <li><span>{{convertTran.newtran.attrs.ppshare}}</span><span>Effective PPS</span></li>
-                <li><span>{{convertTran.newtran.attrs.units}}</span><span>Resulting Shares</span></li>
+                <li><span>{{convertTran.newtran.attrs.effectivepps}}</span><span>Effective PPS</span></li>
+                <li><span>{{convertTran.newtran.attrs.amount / convertTran.newtran.attrs.effectivepps}}</span><span>Resulting Shares</span></li>
             </ul>
         </div>
     </div>

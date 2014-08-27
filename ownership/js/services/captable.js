@@ -310,7 +310,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return el.name == obj.attrs.security;
         })[0];
     }
-    this.cellFor = function(inv, sec, create) {
+    function cellFor(inv, sec, create) {
         var cells = captable.cells
             .filter(function(cell) {
                 return cell.investor == inv &&
@@ -332,6 +332,27 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return null;
         }
     };
+    this.cellFor = cellFor;
+    function cellsForLedger(entries) {
+        var checked = {};
+        var cells = [];
+        for (e in entries)
+        {
+            if (entries[e].security && entries[e].investor)
+            {
+                if (!checked[entries[e].security])
+                    checked[entries[e].security] = {};
+                console.log("ledger", entries[e].security, entries[e].investor);
+                if (!checked[entries[e].security][entries[e].investor])
+                {
+                    console.log("found");
+                    cells.push(cellFor(entries[e].investor, entries[e].security, true));
+                    checked[entries[e].security][entries[e].investor] = true;
+                }
+            }
+        }
+        return cells;
+    }
     function cellsForTran(tran) {
         var invs = [];
         var secs = [];
@@ -694,6 +715,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return;
             }
             var transaction = new_entries.splice(0, 1)[0].transaction;
+            console.log("new ledger", new_entries.length, new_entries);
             spliced = [];
             for (new_entry in new_entries)
             {
@@ -737,7 +759,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             if (update)
             {
-                var cells = cellsForTran(tran);
+                var cells = cellsForLedger(new_entries);
+                console.log(cells);
                 for (c in cells)
                 {
                     updateCell(cells[c]);
