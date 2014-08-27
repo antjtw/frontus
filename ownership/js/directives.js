@@ -286,6 +286,7 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable) {
 
                 $scope.loaddirective = function() {
+                    console.log($scope.sec);
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
                     $scope.displayAttr = captable.displayAttr;
@@ -473,7 +474,6 @@ own.directive('editableCellDetails', [function() {
                     $scope.convertTran = {};
                     angular.forEach($scope.cell.transactions, function(tran) {
                         if (tran.active) {
-                            console.log("activetran");
                             $scope.convertTran.tran = tran;
                         }
                     });
@@ -510,6 +510,7 @@ own.directive('editableCellDetails', [function() {
                         $scope.convertTran.toissue.ppshare = $scope.convertTran.toissue.attrs.ppshare;
                         $scope.convertTran.newtran = captable.newTransaction($scope.convertTran.tran.attrs.security, 'convert', $scope.convertTran.tran.attrs.investor);
                         $scope.convertTran.newtran.attrs.amount = calculate.debtinterest($scope.convertTran.tran);
+                        $scope.convertTran.newtran.attrs.to_security = $scope.convertTran.toissue.attrs.security;
                         $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
                     }
                 };

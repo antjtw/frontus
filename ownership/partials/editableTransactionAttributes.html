@@ -26,7 +26,8 @@
                id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
-               type="number"
+               type="text"
+               integer
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
         <input ng-if="useDatePicker(key)"

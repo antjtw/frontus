@@ -651,7 +651,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return -1;
         if (a.effective_date > b.effective_date)
             return 1;
-        if (a.effective_date = b.effective_date) {
+        if (a.effective_date == b.effective_date) {
             if (a.insertion_date < b.insertion_date)
                 return -1;
             if (a.insertion_date > b.insertion_date)
