@@ -121,12 +121,15 @@ own.directive('editableCaptableCell', [function() {
                 $scope.saveIt = function(key, value) {
                     if ($scope.data) {
                         if ($scope.data.transactions.length > 1) {
-                            $scope.openTranPicker(key, value);
+                            if ($scope.dirty)
+                            {
+                                $scope.openTranPicker(key, value);
+                            }
                         } else {
                             captable.saveTransaction(
-                                $scope.data.transactions[0],
-                                $scope.data);
+                                $scope.data.transactions[0], true);
                         }
+                        $scope.dirty = false;
                     }
                 };
                 function updateAttr(key, val) {
@@ -135,8 +138,7 @@ own.directive('editableCaptableCell', [function() {
                     } else if ($scope.destination_transaction) {
                         $scope.destination_transaction.attrs[key] = val;
                         captable.saveTransaction(
-                            $scope.destination_transaction,
-                            $scope.data);
+                            $scope.destination_transaction, true);
                     }
                     $scope.destination_transaction = null;
                 }
@@ -148,6 +150,7 @@ own.directive('editableCaptableCell', [function() {
                         }
                         $scope.data.u = num;
                         updateAttr('units', num);
+                        $scope.dirty = true;
 
                     } else {
                         return ($scope.data ? $scope.data.u : null);
@@ -161,6 +164,7 @@ own.directive('editableCaptableCell', [function() {
                         }
                         $scope.data.a = num;
                         updateAttr('amount', num);
+                        $scope.dirty = true;
                     } else {
                         return ($scope.data ? $scope.data.a : null);
                     }
