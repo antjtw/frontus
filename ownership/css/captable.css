@@ -30,6 +30,10 @@ div.last-saved {
     display: block;
 }
 
+.capGuide.padded-cap {
+    padding: 0 20px;
+}
+
 .capGuide.top10 {
    margin-top: 10px;
 }
@@ -458,7 +462,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     font-size: 14px;
     border-bottom: 1px solid #C6C6C6;
     height: 55px;
-    margin-right: 40px;
+    margin-right: 0;
 }
 
 .capright .in-brief div.belowTitle > img {
