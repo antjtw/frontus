@@ -194,8 +194,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             return promise.promise;
         },
         setTransaction: function(issue) {
-            this.issue = issue.issue;
-            this.issue_type = issue.type;
+            this.issue = issue.name;
+            this.issue_type = issue.attrs.security_type;
             var viable_actions = transaction_attributes[this.issue_type].actions;
             // documents can only create grants and purchases right now
             this.transaction_type = viable_actions.purchase ? "purchase" : "grant";
