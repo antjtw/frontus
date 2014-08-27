@@ -35,6 +35,32 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
         var type = $filter('issueUnitLabel')(security.attrs.security_type);
         return type;
     };
+    $scope.selectedCell = null;
+    $scope.selectedInvestor = null;
+    $scope.selectedSecurity = null;
+
+    function displayIntroSidebar() {
+        $scope.sideBar = "home";
+    }
+    function displayInvestorDetails() {
+        $scope.sideBar = 3;
+    }
+    function displaySecurityDetails() {
+        $scope.sideBar = 1;
+    }
+    function displayCellDetails() {
+        $scope.sideBar = 2;
+    }
+    function selectedThing() {
+        if ($scope.selectedCell) return 'selectedCell';
+        if ($scope.selectedInvestor) return 'selectedInvestor';
+        if ($scope.selectedSecurity) return 'selectedSecurity';
+        return null;
+    }
+    function cellIsSelected(inv, sec) {
+        return $scope.selectedCell.investor == inv
+            && $scope.selectedCell.security == sec;
+    }
     SWBrijj.procm('_ownership.my_visible_investors').then(function(x) {
         console.log(x);
     }).except(function(x) {
@@ -50,6 +76,45 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
         }
         console.log($scope.level);
     });
+    $scope.selectCell = function(inv, sec) {
+        $scope.selectedSecurity = $scope.selectedInvestor = null;
+        if ($scope.selectedCell && cellIsSelected(inv, sec)) {
+            $scope.selectedCell = null;
+            displayIntroSidebar();
+        } else {
+            $scope.selectedCell = captable.cellFor(inv, sec);
+            displayCellDetails();
+        }
+    };
+    $scope.selectSecurity = function(security_name) {
+        $scope.selectedCell = $scope.selectedInvestor = null;
+        if ($scope.selectedSecurity &&
+                $scope.selectedSecurity.name==security_name) {
+            displayIntroSidebar();
+            $scope.selectedSecurity = null;
+        } else {
+            $scope.selectedSecurity = null;
+            $scope.selectedSecurity = $scope.ct.securities
+                .filter(function(el) {
+                    return el.name == security_name;  
+                })[0];
+            displaySecurityDetails();
+        }
+    };
+    $scope.selectInvestor = function(investor_name) {
+        $scope.selectedCell = $scope.selectedSecurity = null;
+        if ($scope.selectedInvestor && 
+                $scope.selectedInvestor.name == investor_name) {
+            displayIntroSidebar();
+            $scope.selectedInvestor = null;
+        } else {
+            $scope.selectedInvestor = $scope.ct.investors
+                .filter(function(el) {
+                    return el.name == investor_name;
+                })[0];
+            displayInvestorDetails();
+        }
+    };
 
     /*
     SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
