@@ -3,7 +3,6 @@
            class="transaction-accordion"
            close-others="true">
 <accordion-group is-open="tran.active"
-                 is-disabled="cell.transactions.length==1"
                  ng-hide="windowToggle && !tran.active"
                  ng-repeat="tran in cell.transactions
                             | orderBy:'date' track by $index"
