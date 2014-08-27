@@ -703,13 +703,13 @@ ownership.service('calculate', function () {
             }
             if (!isNaN(parseFloat(convertTran.toissue.ppshare))) {
                 convertTran.newtran.attrs.ppshare = regularppshare;
-                convertTran.newtran.units = parseFloat(convertTran.newtran.attrs.amount) / convertTran.newtran.attrs.ppshare;
+                convertTran.newtran.attrs.units = parseFloat(convertTran.newtran.attrs.amount) / convertTran.newtran.attrs.ppshare;
             }
             return convertTran.newtran;
         }
         else if (convertTran.method == "Price Per Share") {
             convertTran.newtran.attrs.ppshare = convertTran.ppshare;
-            convertTran.newtran.units = parseFloat(convertTran.newtran.amount) / convertTran.ppshare;
+            convertTran.newtran.attrs.units = parseFloat(convertTran.newtran.amount) / convertTran.ppshare;
         }
         return convertTran.newtran;
     };

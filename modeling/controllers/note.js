@@ -146,7 +146,7 @@ app.controller('noteController',
                 if (percentdiscount < parseFloat($scope.fromtran.attrs.discount)) {
                     percentdiscount = parseFloat($scope.fromtran.attrs.discount);
                 }
-                var convalue = convertedpoint.units;
+                var convalue = convertedpoint.attrs.units;
                 var fixedpercentage = 0;
                 if (!isNaN(parseFloat($scope.fromtran.attrs.valcap))) {
                     fixedpercentage = (((1 - (parseFloat(graphpointtran.percentsold)/100)) * parseFloat($scope.fromtran.attrs.amount)) / parseFloat($scope.fromtran.attrs.valcap));
