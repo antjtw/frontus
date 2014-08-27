@@ -510,6 +510,7 @@ own.directive('editableCellDetails', [function() {
                         $scope.convertTran.toissue.ppshare = $scope.convertTran.toissue.attrs.ppshare;
                         $scope.convertTran.newtran = captable.newTransaction($scope.convertTran.tran.attrs.security, 'convert', $scope.convertTran.tran.attrs.investor);
                         $scope.convertTran.newtran.attrs.amount = calculate.debtinterest($scope.convertTran.tran);
+                        $scope.convertTran.newtran.attrs.to_security = $scope.convertTran.toissue.attrs.security;
                         $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
                     }
                 };
