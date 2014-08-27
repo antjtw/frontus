@@ -534,7 +534,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{shareSum(row) || 0 | number:3}}">
+                           value="{{shareSum(row) || 0 | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -613,7 +613,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::rowSum(row.name) | number:3}}">
+                           value="{{::rowSum(row.name) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -644,7 +644,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities) | number:3}}">
+                           value="{{captable.numUnissued(sec, ct.securities) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -682,12 +682,11 @@
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
             </tr>
-            <!-- Undiluted footer -->
             <tr class='tablefooter'>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits() | number:3}}">
+                           value="{{captable.totalOwnershipUnits() | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
