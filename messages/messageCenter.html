@@ -9,7 +9,7 @@
         <div class="row-fluid">
             <div class="subnav-controls">
                 <div>
-                    <div class="pull-left" ng-if="!compose">
+                    <div class="pull-left">
                         <span>Search</span>
                         <input type="text" ng-model="filterText" class="search-box">
                     </div>
@@ -48,7 +48,7 @@
                     </tbody>
                     <tbody >
                         <tr class="empty-row"></tr>
-                        <tr class="threadMembers" ng-repeat="myMessage in myMessages | orderBy:'time':true |filter: filterText">
+                        <tr class="threadMembers" ng-repeat="myMessage in myMessages | orderBy:'time':true | filter:filterText">
                             <td style="width:450px" class="shareholder-column docname-column">
 
                                 <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.members">{{showString(myMessage.members)}}</div></a>
