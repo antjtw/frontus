@@ -52,7 +52,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (navState) {
             return navState.role;
         } else {
-            return document.sessionState.role,
+            return document.sessionState.role;
         }
     }
     var attrs = attributes.getAttrs();
