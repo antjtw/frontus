@@ -661,6 +661,11 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     padding-bottom: 0;
   
 }
+
+.tabbable .tab-content div.palegray {
+    background-color: #F1F1F1;
+}
+
 .tabBorder .tabbable .tab-content {
     border-right: 1px solid #C6C6C6;
     
@@ -2413,6 +2418,11 @@ span.tour-icon.issue-cog + .tooltip {
     height: 40px;
     background-color: #E3E3E3;
     border-top: 2px solid #E3E3E3;
+}
+
+.faux-tabs > button > span > span:before {
+    vertical-align: -14%;
+    font-size: 20px;
 }
 
 .faux-tabs.triplet > button {

@@ -727,6 +727,7 @@
              heading="{{::tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')"
                      ng-style="viewportactivity"
+                     ng-class="{'palegray': sideBar != '1' && sideBar != '2' && sideBar != '4' && sideBar != '5'}"
                      ng-switch on="sideBar">
                     <span ng-switch-when="1">
                         <editable-security-details
