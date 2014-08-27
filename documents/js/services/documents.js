@@ -71,6 +71,21 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var f = fields[field];
                 tmp_array.push({name: f.name, display: f.display_name, required: f.required, typename: f.typname, labels: f.labels});
             }
+            if (tmp_array.length > 0) {
+                // only add effective date if we're definitely in a transaction
+                var display = "Effective Date";
+                if ((issue_type == "Equity Common"    && transaction_type == "grant") ||
+                    (issue_type == "Equity Preferred" && transaction_type == "grant") ||
+                    (issue_type == "Debt"             && transaction_type == "purchase") ||
+                    (issue_type == "Convertible Debt" && transaction_type == "purchase") ||
+                    (issue_type == "Safe"             && transaction_type == "grant")) {
+                    display = "investment date";
+                } else if ((issue_type == "Option"    && transaction_type == "grant") ||
+                           (issue_type == "Warrant"   && transaction_type == "grant")) {
+                    display = "grant date";
+                }
+                tmp_array.push({name: 'effective_date', display: display, required: true, typename: 'date'});
+            }
             // add new types onto the end (in one action, without changing the reference, for performance reasons)
             var args = [type_list.length, 0].concat(tmp_array);
             Array.prototype.splice.apply(type_list, args);
