@@ -2418,6 +2418,7 @@ span.tour-icon.issue-cog + .tooltip {
     height: 40px;
     background-color: #E3E3E3;
     border-top: 2px solid #E3E3E3;
+    font-size: 12px;
 }
 
 .faux-tabs > button > span > span:before {
