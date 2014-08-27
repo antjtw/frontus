@@ -259,9 +259,9 @@ mod.directive('sentMessages', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/messages/partials/sent.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter',
 
-        function($scope, $rootScope, SWBrijj, $route) {
+        function($scope, $rootScope, SWBrijj, $route, $filter) {
 
             $scope.showString = function(string){
                 if(string.length > 70){
