@@ -6,6 +6,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.page = null;
         $scope.myMessages = [];
         $scope.togglePage = function(button){
+            console.log("toggle me!")
             if($scope.page !== button){
                 $scope.page = button;
             }
@@ -27,6 +28,13 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
         };
 
+        $scope.getArrayfromPosgres = function(array){
+            var array1 = array.replace("{", "");
+            var array2 = array1.replace("}", "");
+            var array3 = array2.split(",");
+            return array3;
+        };
+
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 $scope.messageThreads = data;
@@ -37,9 +45,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                     };
                 });
                 angular.forEach($scope.myMessages, function(thread){
-                    var members = thread.members.replace("{", "");
-                    var members2 = members.replace("}", "");
-                    var array = members2.split(",");
+                    var array = $scope.getArrayfromPosgres(thread.members);
                     if(array.indexOf(navState.userid) > -1){
                         array[array.indexOf(navState.userid)] = "me"
                     }
