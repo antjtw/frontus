@@ -326,7 +326,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .filter(function(cell) {
                 return cell.investor == inv &&
                        cell.security == sec &&
-                       (cell.a || cell.u);
+                       (cell.a || cell.u || (cell.transactions.length > 1));
             });
         if (cells.length === 0) {
             if (create) {
