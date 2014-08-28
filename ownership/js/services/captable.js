@@ -51,11 +51,7 @@ ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
     function role() {
-        if (navState) {
-            return navState.role;
-        } else {
-            return document.sessionState.role;
-        }
+        return navState ? navState.role : document.sessionState.role;
     }
     var attrs = attributes.getAttrs();
     var captable = new CapTable();
@@ -107,6 +103,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         return false;
     }
+
+    /* Data Gathering Functions */
 
     function loadEvidence() {
         var promise = $q.defer();
@@ -191,7 +189,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }).except(logError);
         return promise.promise;
     }
-    /* Based on the type of each transaction,
+
+    /* Cap Table Constructor Functions
+     *
+     * Based on the type of each transaction,
      * generate the relevant data types.
      *
      * For example:
@@ -388,7 +389,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     break;
                 }
             }
-            return (inv || (invs.length == 0 && tran.kind != 'issue security')) && sec;
+            return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
     function transForCell(inv, sec) {
