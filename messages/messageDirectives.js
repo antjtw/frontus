@@ -236,14 +236,16 @@ mod.directive('messageFilter', function(){
                 ilength: "="},
         restrict: 'E',
         templateUrl: '/messages/partials/messageFilter.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'Message', 
 
-        function($scope, $rootScope, SWBrijj, $route) {
+        function($scope, $rootScope, SWBrijj, $route, Message) {
 
             $scope.whichPage = function(){
                 console.log($scope.page);
                 $scope.page="sent"
             };
+
+            $scope.allMessages = Message.getAllThreads()
 
 
         }]

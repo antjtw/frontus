@@ -1,12 +1,13 @@
 'use strict';
 
-app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'userRepository',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, userRepository) {
+app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message) {
 
         $scope.page = null;
         $scope.myMessages = [];
-        $scope.test = userRepository.getAllUsers();
-        console.log($scope.test);
+        $scope.allThreads = Message.getAllThreads();
+        console.log($scope.test)
+
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;
@@ -43,20 +44,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 promise.resolve($scope.myPeople);             
             });  
             return promise.promise;             
-        };
-
-
-        // this will give me all msgs and all sent msgs
-        $scope.allThreads = function(){
-            console.log("hello my threads")
-            SWBrijj.tblm('mail.my_threads', ['members', 'thread_id', 'subject']).then(function(data){
-                $scope.getPeople
-                console.log(data);
-                console.log(data.length)
-
-            })
-        }
-        $scope.allThreads();    
+        }; 
 
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
@@ -216,6 +204,20 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     
     }
 ]);
+
+app.factory('testThreads', ['SWBrijj', function(SWBrijj){
+    return {
+        getMsgs: function(){
+            // return 
+            SWBrijj.tblm('mail.my_threads', ['thread_id']).then(function(data){
+                console.log(data);
+                return data;
+            })
+
+        }
+    }
+    
+}])
 
 app.factory('userRepository', function() {
     return {

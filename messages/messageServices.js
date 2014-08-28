@@ -1,25 +1,26 @@
 'use strict';
 
-var service = angular.module('commonServices', ['brijj']);
+var service = angular.module('commonServices');
 
-// service.service('Message', ['SWBrijj', 'navState', function(SWBrijj, navState){
-//     // this.people = []
-//     // var my_investors = this;
-//     // SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
-//     //   for(var i =0; i < data.length; i ++){
-//     //     my_investors.push(data[i].email)
-//     //   }
-//     // return "hello you"
+service.service('Message', ['SWBrijj', 'navState', function(SWBrijj, navState){
 
-//     // })
-//   return {
-//     getAllPeople: function(){
-//       return [
-//       { firstName: "ariel"},
-//       { firstName: "elizabeth"}
-//       ];
-//     }
-//   };
+    var allUsers = []
+    SWBrijj.tblm('global.user_list').then(function(data){
+     angular.forEach(data, function(user){
+        allUsers.push(user);
+      }); 
+   }); 
 
-// }]);
+  var allThreads = []
+  SWBrijj.tblm('mail.my_threads', ['members', 'thread_id', 'subject', 'starts_like']).then(function(data){
+    angular.forEach(data, function(thr){
+      allThreads.push(thr);
+    });
+  });
+  
+  this.getAllThreads = function(){
+    return allThreads;
+  };
+
+}]);
 
