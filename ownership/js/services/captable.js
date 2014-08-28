@@ -284,8 +284,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
                 return prev;}, []);
     }
-    function numUnissued(sec, securities) {
-        var underlying = 0;
+    function numUnissued(sec, securities) {//TODO calculate from ledger entries
+        /*var underlying = 0;
         angular.forEach(securities, function(security) {
             if (security != sec && security.attrs.optundersecurity == sec.name && calculate.isNumber(security.attrs.totalauth)) {
                 underlying += parseFloat(security.attrs.totalauth);
@@ -295,7 +295,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return sec.attrs.totalauth - securityTotalUnits(sec) - underlying;
         } else {
             return 0 - securityTotalUnits(sec);
-        }
+        }*/
+        var unissued = 0;
+        angular.forEach(captable.ledger_entries, function(entry) {
+            if ((!entry.investor) && (entry.security == sec.name))
+            {
+                unissued += (Number(entry.credit) - Number(entry.debit));
+            }
+        });
+        return unissued;
     }
     function selectedCellHistory() {
         var watches = Object.keys(History.history);
@@ -342,10 +350,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             {
                 if (!checked[entries[e].security])
                     checked[entries[e].security] = {};
-                console.log("ledger", entries[e].security, entries[e].investor);
                 if (!checked[entries[e].security][entries[e].investor])
                 {
-                    console.log("found");
                     cells.push(cellFor(entries[e].investor, entries[e].security, true));
                     checked[entries[e].security][entries[e].investor] = true;
                 }
@@ -760,7 +766,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (update)
             {
                 var cells = cellsForLedger(new_entries);
-                console.log(cells);
                 for (c in cells)
                 {
                     updateCell(cells[c]);
