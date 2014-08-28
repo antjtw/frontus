@@ -34,10 +34,7 @@
 
   <!--   text in the window -->
 
-    <div ng-if="sentMsgs.length== 0" style="margin: 40px; text-align: center"> You haven't sent or received any messages yet!</div>
-    {{allThreads}}<br/><br/>
-    {{allEmails}}<br/><br/>
-    <div ng-repeat="allThread in allThreads">{{allThread.names}}</div>
+    <div ng-if="allThreads.length== 0" style="margin: 40px; text-align: center"> You haven't sent or received any messages yet!</div>
     <div class="row-fluid leftTabWindow" ng-if="sentMsgs.length !== 0">
         <compose-message ng-if="page == 'compose'"></compose-message>
      
@@ -55,14 +52,14 @@
                         <th></th>
                     </tr>
                     </tbody>
-                    <tbody ng-repeat="myMessage in myMessages | orderBy:'time':true |filter: filterText">
+                    <tbody ng-repeat="allThread in allThreads |filter: filterText">
                         <tr class="empty-row"></tr>
                         <tr class="threadMembers" >
                             <td style="width:450px" class="shareholder-column docname-column">
 
-                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="myMessage.nameStrings">{{showString(myMessage.nameStrings)}}</div></a>
+                                <a href="/app/company/messages/thread?thread={{myMessage.thread_id}}"position="bottom" ><div bs-tooltip="allThread.names">{{allThread.names}}</div></a>
                             </td>
-                            <td><div bs-tooltip="myMessage.subject"><span>{{myMessage.subject}}</span></div></td>
+                            <td><div bs-tooltip="allThread.subject"><span>{{allThread.subject}}</span></div></td>
                             <td style="width:10px;"></td>
                         </tr>
                     </tbody>

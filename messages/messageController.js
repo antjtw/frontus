@@ -8,7 +8,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.allThreads = Message.getAllThreads();
         $scope.myPeople = Message.getAllNames();
         $scope.allPeople = Message.getAllPeople();
-        $scope.testArray = Message.getTestArray();
         $scope.allEmails = Message.getAllEmails();
 
         $scope.togglePage = function(button){
