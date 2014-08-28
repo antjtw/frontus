@@ -57,6 +57,9 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                     });
                 }
             })
+            angular.forEach(allThreads, function(thr){
+                thr.nameString = thr.names.join(", ")
+            });
         });
 
     });
@@ -65,6 +68,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
       
     this.getAllThreads = function(){
+
         return allThreads;
     };
 
