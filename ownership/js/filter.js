@@ -216,7 +216,8 @@ ownership.filter('formatAmount', function() {
 ownership.filter('attrsForDisplay', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical",
-                          "security", "security_type"];
+                          "security", "security_type",
+                          "transaction_from"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1 &&
@@ -233,7 +234,8 @@ ownership.filter('attrsForDisplay', function() {
 ownership.filter('attrsForEdit', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical", "investor",
-                          "security", "security_type"];
+                          "security", "security_type",
+                          "transaction_from"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1)
