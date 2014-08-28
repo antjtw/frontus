@@ -23,6 +23,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
   var allPeople = [];
   var testArray = [];
+  var allEmails = [];
 
   SWBrijj.tblm('mail.my_threads', ['members', 'thread_id', 'subject', 'starts_like']).then(function(data){
     angular.forEach(data, function(thr){
@@ -33,14 +34,28 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(info){
         angular.forEach(info, function(inf){
            allPeople.push(inf);
+           if(allEmails.indexOf(inf.email)== -1){
+                allEmails.push(inf.email)
+           }
+           
         });
         angular.forEach(allThreads, function(thread){
         for(var i = 0; i < thread.membersArray.length; i ++){
             testArray.push(thread.membersArray[i]);
             angular.forEach(allPeople, function(person){
-                if(person.email == thread.membersArray[i] && person.name !== null){
+                if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid){
                     thread.names.push(person.name);
                 }
+                else if(thread.membersArray[i]== person.email && person.name == null && thread.membersArray[i]!== navState.userid){
+                    thread.names.push(person.email);
+                }
+                else if(thread.membersArray[i]== person.email && person.email == navState.userid && thread.names.indexOf("me")== -1){
+                    thread.names.push("me")
+                }
+                else if(allEmails.indexOf(thread.membersArray[i])== -1 && thread.names.indexOf(thread.membersArray[i])== -1){
+                    thread.names.push(thread.membersArray[i]);
+                }
+                
 
             })
         }
@@ -71,6 +86,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
   this.getTestArray = function(){
     return testArray;
+  }
+
+  this.getAllEmails = function(){
+    return allEmails;
   }
 
 }]);
