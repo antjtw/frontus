@@ -84,18 +84,20 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.selectCell = function(inv, sec) {
         $scope.currentTab = 'details';
         $scope.selectedSecurity = $scope.selectedInvestor = null;
-        if (!$scope.editMode && $scope.selectedCell && cellIsSelected(inv, sec)) {
-            $scope.selectedCell = null;
-            History.forget($scope, 'selectedCell');
-            displayIntroSidebar();
-        } else {
-            History.forget($scope, 'selectedCell');
-            $scope.selectedCell =
-                captable.cellFor(inv, sec, $scope.editMode);
-            History.watch('selectedCell', $scope);
-            displayCellDetails();
+        if (captable.cellFor(inv, sec) || $scope.editMode) {
+            if (!$scope.editMode && $scope.selectedCell && cellIsSelected(inv, sec)) {
+                $scope.selectedCell = null;
+                History.forget($scope, 'selectedCell');
+                displayIntroSidebar();
+            } else {
+                History.forget($scope, 'selectedCell');
+                $scope.selectedCell =
+                    captable.cellFor(inv, sec, $scope.editMode);
+                History.watch('selectedCell', $scope);
+                displayCellDetails();
+            }
+            $scope.$broadcast("newSelection");
         }
-        $scope.$broadcast("newSelection");
     };
     $scope.selectSecurity = function(security_name) {
         $scope.selectedCell = $scope.selectedInvestor = null;
