@@ -23,9 +23,16 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
   SWBrijj.tblm('mail.my_threads', ['members', 'thread_id', 'subject', 'starts_like']).then(function(data){
     angular.forEach(data, function(thr){
+        thr.names = [];
         thr.membersArray = getArrayFromPostgres(thr.members)
         allThreads.push(thr);
     });
+    SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(info){
+        var myPeople = info;
+    })
+
+
+
   });
 
   var myMsgs = []
