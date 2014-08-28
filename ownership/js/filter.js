@@ -362,9 +362,30 @@ ownership.filter('sortAttributeTypes', function() {
 });
 ownership.filter('describeTran', function() {
     return function(tran) {
+        var d = "";
+        switch (tran.kind) {
+            case "issue security":
+                break;
+            case "retire security":
+                break;
+            case "transfer":
+                break;
+            case "convert":
+                break;
+            case "split":
+                break;
+            case "grant":
+                break;
+            case "exercise":
+                break;
+            case "forfeit":
+                break;
+            default:
+                break;
+        }
+        return d;
         /* TODO replace 'Transaction' accordion headers with something
          * that actually describes the transaction
-         *
          */
     };
 });

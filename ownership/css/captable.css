@@ -108,6 +108,8 @@ div.last-saved {
 
 .tableView.captable td.viewName {
     padding: 0 0 0 20px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 
 .tableView th.longrow {
