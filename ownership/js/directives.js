@@ -268,6 +268,13 @@ own.directive('securityDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+
+                $scope.loaddirective = function() {
+                    if ($scope.sec && $scope.sec.transactions && $scope.sec.transactions.length == 1) {
+                        $scope.sec.transactions[0].active = true;
+                    }
+                };
+
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
@@ -275,6 +282,12 @@ own.directive('securityDetails', [function() {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
+
+                $scope.loaddirective();
+
+                $scope.$watch('sec', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
@@ -401,6 +414,13 @@ own.directive('cellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+
+                $scope.loaddirective = function() {
+                    if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
+                        $scope.cell.transactions[0].active = true;
+                    }
+                };
+
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
@@ -408,6 +428,11 @@ own.directive('cellDetails', [function() {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
+
+                $scope.loaddirective();
+                $scope.$watch('cell', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
