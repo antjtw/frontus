@@ -846,8 +846,8 @@ app.controller('CompanyCtrl',
             }
         }]);
 
-app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState', 'calculate',
-    function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate) {
+app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState', 'calculate', 'captable',
+    function($scope, $rootScope, $location, $route, $routeParams, SWBrijj, navState, calculate, captable) {
 
         if (navState.role == 'issuer') {
             $location.path('/app/home/company');
@@ -859,6 +859,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.$emit("notification:success", "You have successfully changed your password.");
             }
         }
+        $scope.cti=captable.getCapTable();
+        console.log($scope.cti);
 
         $scope.uselessbrowser = !Modernizr.csstransforms3d;
 
@@ -1058,7 +1060,31 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                     }
                                 });
                             });
-                            var totalavailable = 0;
+                            var investorName=$scope.cti.investors[0].name;
+                            $scope.vestedgraphdata = [];
+                            var transArray = [];
+                            var transIndex=-1;
+                            var transAttrs;
+                            console.log("here?");
+                            angular.forEach($scope.cti.transactions, function (tran) {
+                            	console.log("loop?");
+                            	transArray.push(tran.transaction);
+                            	console.log(transArray);
+                            });
+                            angular.forEach($scope.cti.ledger_entries, function (entry) {
+                            	transIndex=transArray.indexOf(entry.transaction);
+                            	if (transIndex!=-1) {
+                            		transAttrs=$scope.cti.transactions[transIndex].attrs;
+                            		console.log("transaction found");
+                            		if (transAttrs.terms&&transAttrs.vestcliff&&transAttrs.vestfreq&&transAttrs.vestingbegins){
+										if (entry.investor==investorName){
+											$scope.vestedgraphdata.push({'date':entry.effective_date, 'units':entry.credit, 'month':(entry.effective_date.getMonth()), 'vested':(Math.abs(Date()-entry.insertion_date))})
+										}
+									}
+                            	}
+                            });	
+                            
+                            /*var totalavailable = 0;
                             var totalvested = 0;
                             $scope.vestedgraphdata = [];
                             $scope.graphnumber= 0;
@@ -1066,7 +1092,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                                 totalavailable += value[1];
                                 totalvested += value[0];
                                 $scope.vestedgraphdata.push({'date':key, 'units':value[1].toFixed(0), 'month':(key.substring(0,4) + key.substring(6,8)), 'vested': (value[1]-value[0])});
-                            });
+                            });*/
                             $scope.vesteddonut = [{'name':"vested", 'units': (totalvested), 'roundedunits': calculate.abrAmount(totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
                         });
                     });
