@@ -358,6 +358,7 @@ own.directive('editableSecurityDetails', [function() {
                                 tmp.attrs['security'] = sec.transactions[0].attrs['security'];
                                 tmp.attrs['security_type'] = sec.transactions[0].attrs['security_type'];
                                 trans.push(tmp);
+                                sec.transactions.push(tmp);
                             }
                         });
                     }
