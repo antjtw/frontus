@@ -888,7 +888,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
         };
 
         $scope.getCompanyAccess = function() {
-            SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
+            SWBrijj.tblmm('ownership.all_company_access', ['email', 'level'], 'email', userId).then(function(access) {
                 if (access[0]) {
                     $scope.level = access[0].level;
                 } else {

@@ -287,18 +287,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
                 return prev;}, []);
     }
-    function numUnissued(sec, securities) {//TODO calculate from ledger entries
-        /*var underlying = 0;
-        angular.forEach(securities, function(security) {
-            if (security != sec && security.attrs.optundersecurity == sec.name && calculate.isNumber(security.attrs.totalauth)) {
-                underlying += parseFloat(security.attrs.totalauth);
-            }
-        });
-        if (calculate.isNumber(sec.attrs.totalauth)) {
-            return sec.attrs.totalauth - securityTotalUnits(sec) - underlying;
-        } else {
-            return 0 - securityTotalUnits(sec);
-        }*/
+    function numUnissued(sec, securities) {
         var unissued = 0;
         angular.forEach(captable.ledger_entries, function(entry) {
             if ((!entry.investor) && (entry.security == sec.name))
@@ -326,7 +315,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .filter(function(cell) {
                 return cell.investor == inv &&
                        cell.security == sec &&
-                       (cell.a || cell.u);
+                       (cell.a || cell.u || (cell.transactions.length > 1));
             });
         if (cells.length === 0) {
             if (create) {
@@ -724,7 +713,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return;
             }
             var transaction = new_entries.splice(0, 1)[0].transaction;
-            console.log("new ledger", new_entries.length, new_entries);
+            //console.log("new ledger", new_entries.length, new_entries, JSON.stringify(tran));
             var spliced = [];
             for (var new_entry in new_entries)
             {
@@ -788,38 +777,55 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.saveTransaction = saveTransaction;
 
     this.deleteTransaction = function(tran, cell) {
-        SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
-        .then(function(x) {
-            var res = x[0].delete_transaction;
-            if (res > 0) {
-                $rootScope.$emit("notification:success",
-                    "Transaction deleted");
-                splice_many(captable.transactions, [tran]);
-                splice_many_by(captable.ledger_entries, function(el) {
-                        return el.transaction == tran.transaction;
-                });
-                if (cell.transactions.length == 1)
-                {
-                    splice_many(captable.cells, [cell]);
-                    cell = null;
-                }
-                else
-                {
-                    var cells = cellsForTran(tran);
-                    for (var c in cells)
+        if (tran.transaction) {
+            SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
+            .then(function(x) {
+                var res = x[0].delete_transaction;
+                if (res > 0) {
+                    $rootScope.$emit("notification:success",
+                        "Transaction deleted");
+                    splice_many(captable.transactions, [tran]);
+                    splice_many_by(captable.ledger_entries, function(el) {
+                            return el.transaction == tran.transaction;
+                    });
+                    if (cell.transactions.length == 1)
                     {
-                        updateCell(cells[c]);
+                        splice_many(captable.cells, [cell]);
+                        cell = null;
                     }
+                    else
+                    {
+                        var cells = cellsForTran(tran);
+                        for (var c in cells)
+                        {
+                            updateCell(cells[c]);
+                        }
+                    }
+                } else {
+                    $rootScope.$emit("notification:fail",
+                        "Oops, something went wrong.");
                 }
-            } else {
+            }).except(function(err) {
+                console.log(err);
                 $rootScope.$emit("notification:fail",
                     "Oops, something went wrong.");
+            });
+        } else {
+            splice_many(captable.transactions, [tran]);
+            if (cell.transactions.length == 1)
+            {
+                splice_many(captable.cells, [cell]);
+                cell = null;
             }
-        }).except(function(err) {
-            console.log(err);
-            $rootScope.$emit("notification:fail",
-                "Oops, something went wrong.");
-        });
+            else
+            {
+                var cells = cellsForTran(tran);
+                for (var c in cells)
+                {
+                    updateCell(cells[c]);
+                }
+            }
+        }
     };
     this.deleteSecurityTransaction = function(tran, sec) {
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
@@ -1088,6 +1094,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return null;
         } else {
             var tran = newTransaction(sec, defaultKind(sec_obj.attrs.security_type), inv);
+            tran.active = true;
             c.transactions.push(tran);
             sec_obj.locked = true;
             captable.cells.push(c);

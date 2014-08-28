@@ -1601,6 +1601,7 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
+    background-color: #F1F1F1;
 
 }
 .activity-feed2 > div > li:first-child {
