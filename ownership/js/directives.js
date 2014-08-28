@@ -113,11 +113,15 @@ own.directive('editableCaptableCell', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
-                $scope.ct = captable.getCapTable()
+                $scope.ct = captable.getCapTable();
 
                 $scope.loaddirective = function() {
                     $scope.destination_transaction = null;
+                    if ($scope.data && $scope.data.transactions && $scope.data.transactions.length == 1) {
+                        $scope.data.transactions[0].active = true;
+                    }
                 };
+
                 $scope.saveIt = function(key, value) {
                     if ($scope.data) {
                         if ($scope.data.transactions.length > 1) {

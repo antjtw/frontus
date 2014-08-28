@@ -1077,6 +1077,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return null;
         } else {
             var tran = newTransaction(sec, defaultKind(sec_obj.attrs.security_type), inv);
+            tran.active = true;
             c.transactions.push(tran);
             sec_obj.locked = true;
             captable.cells.push(c);
