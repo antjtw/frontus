@@ -148,8 +148,8 @@ app.controller('roundController',
                         convertTran.toissue.premoney = $scope.premoney;
                         convertTran.toissue.ppshare = $scope.effectiveppshare;
                         converted = calculate.conversion(convertTran);
-                        round.units += converted.attrs.units;
-                        $scope.totals.units += converted.attrs.units;
+                        round.units += converted.attrs.amount / converted.attrs.effectivepps;
+                        $scope.totals.units += converted.attrs.amount / converted.attrs.effectivepps;
                     }
                 });
             }

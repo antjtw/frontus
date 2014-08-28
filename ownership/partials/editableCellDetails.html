@@ -1,9 +1,7 @@
 <div class="capGuide cap-overflow global cellDetails">
-<accordion ng-class="{'lessmargin': (cell.transactions.length == 1)}"
-           class="transaction-accordion"
+<accordion class="lessmargin transaction-accordion"
            close-others="true">
 <accordion-group is-open="tran.active"
-                 is-disabled="cell.transactions.length==1"
                  ng-hide="windowToggle && !tran.active"
                  ng-repeat="tran in cell.transactions
                             | orderBy:'date' track by $index"
@@ -108,9 +106,9 @@
         </div>
     </div>
     <div class="capTab" ng-switch-when="actions">
-        <div class="capGuide top10">
+        <div ng-class="{'actionpicker': !newTran}" class='rightTitle left-space'>
             <span>Action</span>
-            <ul>
+            <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
                         {{newTran.kind || "Select an action"}}
@@ -125,12 +123,12 @@
                     </ul>
                 </li>
             </ul>
-            <span>Random span<br>to make space<br>for the dropdown.</span>
-            <div ng-if="newTran">
-                <editable-transaction-attributes data="newTran" save="false">
-                </editable-transaction-attributes>
-            </div>
-            <div class="standard-button">
+        </div>
+        <div ng-if="newTran">
+            <editable-transaction-attributes data="newTran" save="false">
+            </editable-transaction-attributes>
+
+            <div class="action-button standard-button">
                 <button class="btn" ng-click="submitAction(newTran);">
                     Submit
                 </button>
@@ -230,8 +228,8 @@
             <ul>
                 <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
                 <li><span>{{convertTran.newtran.attrs.amount}}</span><span>Debt + Interest</span></li>
-                <li><span>{{convertTran.newtran.attrs.ppshare}}</span><span>Effective PPS</span></li>
-                <li><span>{{convertTran.newtran.attrs.units}}</span><span>Resulting Shares</span></li>
+                <li><span>{{convertTran.newtran.attrs.effectivepps}}</span><span>Effective PPS</span></li>
+                <li><span>{{convertTran.newtran.attrs.amount / convertTran.newtran.attrs.effectivepps}}</span><span>Resulting Shares</span></li>
             </ul>
         </div>
     </div>

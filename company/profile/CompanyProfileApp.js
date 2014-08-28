@@ -4,8 +4,9 @@ app.controller('CompContactCtrl',
         'payments', '$route', '$filter', '$location', '$http',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
                  payments, $route, $filter, $location, $http) {
-            if (navState.role === 'investor') {
-                document.location.href = "/app/home";
+            if (navState.role == 'investor') {
+                console.log("here", navState);
+                $location.url("/app/home");
                 return;
             }
             $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
@@ -397,7 +398,7 @@ app.controller('InvoiceCtrl',
                  $routeParams, $location, navState) {
 
             if (!$routeParams.id) $location.url('/app/company/profile');
-            if (navState.role == 'investor') $location.url('/home');
+            if (navState.role == 'investor') $location.url('/app/home');
 
             payments.my_data().then(function(x) {
                 payments.get_invoices(x[0].customer_id, 100).then(function(x) {
@@ -458,7 +459,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
         if (navState.role == 'investor') {
-            document.location.href = "/home";
+            console.log("here", navState);
+            $location.url("/app/home");
             return;
         }
         $scope.sidebarPage = null;
@@ -822,7 +824,8 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
     function($scope, $rootScope, $location, $routeParams, SWBrijj, navState) {
 
         if (navState.role == 'investor') {
-            document.location.href = "/home";
+            console.log("here", navState);
+            $location.url("/app/home");
             return;
         }
 
@@ -831,7 +834,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
 
         SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile if viewing yourself
             if (x[0].email == userId)
-                document.location.href = "/account/profile";
+                $location.url("/app/account/profile");
         });
 
         SWBrijj.tblm('global.user_list', 'email', userId).then(function(x) {
@@ -885,7 +888,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
         };
 
         $scope.getCompanyAccess = function() {
-            SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
+            SWBrijj.tblmm('ownership.all_company_access', ['email', 'level'], 'email', userId).then(function(access) {
                 if (access[0]) {
                     $scope.level = access[0].level;
                 } else {
@@ -928,10 +931,10 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
         };
         $scope.viewInvestorCopy = function(version) {
-            document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
+            $location.url("/app/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
         $scope.viewVersionStatus = function(version) {
-            document.location.href = "/documents/company-status?doc=" + version.original;
+            $location.url("/app/documents/company-status?doc=" + version.original);
         };
 
         $scope.activityOrder = function(card) {

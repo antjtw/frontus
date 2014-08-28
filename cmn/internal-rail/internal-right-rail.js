@@ -37,7 +37,9 @@ app.directive('internalRightRail', function() {
                 } else {
                     aboveBottomHeight = height;
                 }
-                document.querySelector("internal-right-rail .tab-content").style.bottom = aboveBottomHeight + "px";
+                if (document.querySelector("internal-right-rail .tab-content")) {
+                    document.querySelector("internal-right-rail .tab-content").style.bottom = aboveBottomHeight + "px";
+                }
             });
         }]
     };

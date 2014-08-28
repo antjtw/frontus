@@ -37,8 +37,9 @@ ownership.filter('grantSelect', function () {
 ownership.filter('shareList', function () {
     return function (rows) {
         var returnrows = [];
+        console.log(rows);
         angular.forEach(rows, function (row) {
-            if (row.emailkey == null && row.name != "" && row.editable == "yes") {
+            if (row.email == null) {
                 returnrows.push(row);
             }
         });
@@ -216,7 +217,8 @@ ownership.filter('formatAmount', function() {
 ownership.filter('attrsForDisplay', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical",
-                          "security", "security_type"];
+                          "security", "security_type",
+                          "transaction_from"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1 &&
@@ -233,7 +235,8 @@ ownership.filter('attrsForDisplay', function() {
 ownership.filter('attrsForEdit', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical", "investor",
-                          "security", "security_type"];
+                          "security", "security_type",
+                          "transaction_from"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1)
@@ -362,9 +365,30 @@ ownership.filter('sortAttributeTypes', function() {
 });
 ownership.filter('describeTran', function() {
     return function(tran) {
+        var d = "";
+        switch (tran.kind) {
+            case "issue security":
+                break;
+            case "retire security":
+                break;
+            case "transfer":
+                break;
+            case "convert":
+                break;
+            case "split":
+                break;
+            case "grant":
+                break;
+            case "exercise":
+                break;
+            case "forfeit":
+                break;
+            default:
+                break;
+        }
+        return d;
         /* TODO replace 'Transaction' accordion headers with something
          * that actually describes the transaction
-         *
          */
     };
 });

@@ -4,10 +4,8 @@
         <div>Investor</div>
         <p></p>
     </div>
-    <accordion ng-class="{'lessmargin': cell.transactions.length == 1}"
-               class="transaction-accordion" close-others="true">
+    <accordion class="lessmargin transaction-accordion" close-others="true">
     <accordion-group is-open="tran.active"
-                     is-disabled="cell.transactions.length == 1"
                      ng-repeat="tran in cell.transactions
                                 | orderBy:'date' track by $index"
                      ng-switch on="currentTab">
@@ -17,8 +15,7 @@
             </span>
         </accordion-heading>
         <div class="darkgray faux-tabs">
-            <button
-                    ng-click="switchCapTab('details');"
+            <button ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
                 <span>
                     <span data-icon="&#xe611;" aria-hidden="true"></span>

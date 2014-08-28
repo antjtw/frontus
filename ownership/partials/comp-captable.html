@@ -48,10 +48,12 @@
             </table>
         </div>
 
+        <!--
         <p>Share with contacts not listed in your cap table</p>
         <div class="sharepeople-input">
             <input ui-select2="select2Options" ng-model="extraPeople">
         </div>
+        -->
     </div>
     <div class="modal-footer">
         <div class="pull-left standard-button gray">
@@ -534,7 +536,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{shareSum(row) || 0 | number:3}}">
+                           value="{{shareSum(row) || 0 | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -613,7 +615,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::rowSum(row.name) | number:3}}">
+                           value="{{::rowSum(row.name) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -629,8 +631,7 @@
                 <td ng-click="selectCell(row.name, key.name)"
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
-                               hoverable: captable.cellFor(row.name, key.name).a
-                                          || captable.cellFor(row.name, key.name).u}"
+                               hoverable: captable.cellFor(row.name, key.name)}"
                     ng-repeat="key in ct.securities">
                     <captable-cell inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
@@ -644,7 +645,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities) | number:3}}">
+                           value="{{captable.numUnissued(sec, ct.securities) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -682,12 +683,11 @@
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
             </tr>
-            <!-- Undiluted footer -->
             <tr class='tablefooter'>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits() | number:3}}">
+                           value="{{captable.totalOwnershipUnits() | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -746,7 +746,7 @@
                         <cell-details cell="selectedCell"
                                       currenttab="currentTab"></cell-details>
                     </span>
-                    <span class="capGuide in-brief"
+                    <span class="padded-cap capGuide in-brief"
                           ng-switch-when="3">
                         <div class="headsection row-fluid
                                     tabbed company-info">
@@ -826,7 +826,7 @@
                             </div>
                         </div>
                     </span>
-                    <span class="capGuide" ng-switch-default>
+                    <span class="padded-cap capGuide" ng-switch-default>
                         <span ng-if="editMode;">
                             <div class="captour railpadding">
                                 <h1 class="right-bar-header">

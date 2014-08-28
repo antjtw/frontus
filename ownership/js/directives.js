@@ -113,11 +113,15 @@ own.directive('editableCaptableCell', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
-                $scope.ct = captable.getCapTable()
+                $scope.ct = captable.getCapTable();
 
                 $scope.loaddirective = function() {
                     $scope.destination_transaction = null;
+                    if ($scope.data && $scope.data.transactions && $scope.data.transactions.length == 1) {
+                        $scope.data.transactions[0].active = true;
+                    }
                 };
+
                 $scope.saveIt = function(key, value) {
                     if ($scope.data) {
                         if ($scope.data.transactions.length > 1) {
@@ -264,6 +268,13 @@ own.directive('securityDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+
+                $scope.loaddirective = function() {
+                    if ($scope.sec && $scope.sec.transactions && $scope.sec.transactions.length == 1) {
+                        $scope.sec.transactions[0].active = true;
+                    }
+                };
+
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
@@ -271,6 +282,12 @@ own.directive('securityDetails', [function() {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
+
+                $scope.loaddirective();
+
+                $scope.$watch('sec', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
@@ -286,6 +303,7 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable) {
 
                 $scope.loaddirective = function() {
+                    console.log($scope.sec);
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
                     $scope.displayAttr = captable.displayAttr;
@@ -347,7 +365,24 @@ own.directive('editableSecurityDetails', [function() {
                                          $scope.sec.name, kind, null);
                 };
                 $scope.submitAction = function(tran) {
-                    captable.saveTransaction(tran, true);
+                    var trans = [tran];
+                    if (tran.kind = 'split')
+                    {
+                        angular.forEach($scope.ct.securities, function (sec) {
+                            if (sec.transactions[0].attrs['optundersecurity'] == $scope.sec.name)
+                            {
+                                var tmp = angular.copy(tran);
+                                tmp.attrs['security'] = sec.transactions[0].attrs['security'];
+                                tmp.attrs['security_type'] = sec.transactions[0].attrs['security_type'];
+                                trans.push(tmp);
+                                sec.transactions.push(tmp);
+                            }
+                        });
+                    }
+                    for (t in trans)
+                    {
+                        captable.saveTransaction(trans[t], true);
+                    }
                     $scope.sec.transactions.push(tran);
                     $scope.newTran = null;
                 };
@@ -355,6 +390,7 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.newTran = null;
                 });
                 $scope.loaddirective();
+
                 $scope.$watch('sec', function(newval, oldval) {
                     $scope.loaddirective();
                 }, true);
@@ -378,6 +414,13 @@ own.directive('cellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+
+                $scope.loaddirective = function() {
+                    if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
+                        $scope.cell.transactions[0].active = true;
+                    }
+                };
+
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
@@ -385,6 +428,11 @@ own.directive('cellDetails', [function() {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
+
+                $scope.loaddirective();
+                $scope.$watch('cell', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
@@ -475,6 +523,17 @@ own.directive('editableCellDetails', [function() {
                             $scope.convertTran.tran = tran;
                         }
                     });
+                    if (!$scope.convertTran.tran)
+                    {
+                        if ($scope.cell.transactions.length == 1)
+                        {
+                            $scope.convertTran.tran = $scope.cell.transactions[0];
+                        }
+                        else
+                        {
+                            console.log("Error: no active transactions. Don't know what to do here.");
+                        }
+                    }
                     $scope.convertTran.newtran = {};
                     $scope.convertTran.step = '1';
                     $scope.convertTran.date = new Date.today();
@@ -495,10 +554,15 @@ own.directive('editableCellDetails', [function() {
                     $scope.convertTran.step = number;
                     if (number == '2') {
                         $scope.convertTran.toissue.ppshare = $scope.convertTran.toissue.attrs.ppshare;
-                        $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
-                        $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran.tran);
+                        $scope.convertTran.newtran = captable.newTransaction($scope.convertTran.tran.attrs.security, 'convert', $scope.convertTran.tran.attrs.investor);
+                        $scope.convertTran.newtran.attrs.amount = calculate.debtinterest($scope.convertTran.tran);
+                        $scope.convertTran.newtran.attrs.to_security = $scope.convertTran.toissue.attrs.security;
                         $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
                     }
+                };
+                
+                $scope.performConvert = function (convertTran) {
+                    captable.saveTransaction(convertTran.newtran, true);
                 };
 
                 $scope.convertopts = {

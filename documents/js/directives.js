@@ -262,7 +262,7 @@ app.directive('docTransactionDetails', function() {
             doc: "=",
         },
         templateUrl: "/documents/partials/doc-transaction-details.html",
-        controller: ["$scope", 'SWBrijj', function($scope, SWBrijj) {
+        controller: ["$scope", 'captable', function($scope, captable) {
             var defaultSelectObj = {id: 0, text: "Prepare"};
             $scope.selectedIssue = defaultSelectObj;
             $scope.select2Options = {
@@ -270,25 +270,21 @@ app.directive('docTransactionDetails', function() {
             };
 
             // Get the company's Issues
-            // TODO: issue / cap table service
-            SWBrijj.tblm('ownership.newtype_company_issue').then(function (data) {
-                $scope.issues = data;
-            });
+            $scope.issues = captable.getCapTable().securities;
 
-            $scope.$watch('issues', function(issues) {
+            $scope.$watchCollection('issues', function(issues) {
                 // set up the select box
                 if (issues) {
                     $scope.select2Options.data.splice(0);
                     $scope.select2Options.data.push(defaultSelectObj);
                     issues.forEach(function(issue) {
-			if (issue.type) {
-                            // TODO: filter to usable issue types
+                        if (issue.attrs.security_type) {
                             $scope.select2Options.data.push({
-				id: issue.issue,
-				text: 'Add to ' + issue.issue + '',
-				issue: issue
+                                id: issue.name,
+                                text: 'Add to ' + issue.name,
+                                issue: issue
                             });
-			}
+                        }
                     });
                     $scope.selectedIssue = defaultSelectObj;
                 }
