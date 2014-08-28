@@ -671,14 +671,15 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                         SWBrijj.proc('ownership.update_investor_captable', row.email.toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
+                            row.access_level = "Full View";
                         });
                     }
                     else {
                         $scope.lastsaved = Date.now();
                         $scope.$emit("notification:success", "Your table has been shared!");
+                        row.access_level = "Personal View";
                     }
                     row.send = false;
-                    row.emailkey = row.email;
                 }).except(function(err) {
                         if (err.message = "ERROR: Duplicate email for the row") {
                             $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
