@@ -840,7 +840,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if (!email) return;
         var link = (navState.userid == email) ?
                     '/app/account/profile' :
-                    '/app/company/profile/view?id='+email;
+                    '/app/company/profile/view?id='+encodeURIComponent(email);
         $location.url(link);
     };
 
