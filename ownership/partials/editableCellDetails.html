@@ -1,6 +1,5 @@
 <div class="capGuide cap-overflow global cellDetails">
-<accordion ng-class="{'lessmargin': (cell.transactions.length == 1)}"
-           class="transaction-accordion"
+<accordion class="lessmargin transaction-accordion"
            close-others="true">
 <accordion-group is-open="tran.active"
                  ng-hide="windowToggle && !tran.active"
@@ -107,9 +106,9 @@
         </div>
     </div>
     <div class="capTab" ng-switch-when="actions">
-        <div class="capGuide top10">
+        <div ng-class="{'actionpicker': !newTran}" class='rightTitle left-space'>
             <span>Action</span>
-            <ul>
+            <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle">
                         {{newTran.kind || "Select an action"}}
@@ -124,12 +123,12 @@
                     </ul>
                 </li>
             </ul>
-            <span>Random span<br>to make space<br>for the dropdown.</span>
-            <div ng-if="newTran">
-                <editable-transaction-attributes data="newTran" save="false">
-                </editable-transaction-attributes>
-            </div>
-            <div class="standard-button">
+        </div>
+        <div ng-if="newTran">
+            <editable-transaction-attributes data="newTran" save="false">
+            </editable-transaction-attributes>
+
+            <div class="action-button standard-button">
                 <button class="btn" ng-click="submitAction(newTran);">
                     Submit
                 </button>
