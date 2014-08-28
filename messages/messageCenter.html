@@ -35,7 +35,9 @@
   <!--   text in the window -->
 
     <div ng-if="sentMsgs.length== 0" style="margin: 40px; text-align: center"> You haven't sent or received any messages yet!</div>
-    {{allThreads}}
+    {{allThreads}}<br/><br/>
+    {{allPeople}}<br/><br/>
+    {{testArray}}<br/><br/>
     <div class="row-fluid leftTabWindow" ng-if="sentMsgs.length !== 0">
         <compose-message ng-if="page == 'compose'"></compose-message>
      

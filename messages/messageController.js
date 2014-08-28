@@ -7,6 +7,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.myMessages = [];
         $scope.allThreads = Message.getAllThreads();
         $scope.myPeople = Message.getAllNames();
+        $scope.allPeople = Message.getAllPeople();
+        $scope.testArray = Message.getTestArray();
 
         $scope.togglePage = function(button){
             if($scope.page !== button){
