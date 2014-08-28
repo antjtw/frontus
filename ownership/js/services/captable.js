@@ -723,7 +723,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return;
             }
             var transaction = new_entries.splice(0, 1)[0].transaction;
-            console.log("new ledger", new_entries.length, new_entries);
+            //console.log("new ledger", new_entries.length, new_entries, JSON.stringify(tran));
             var spliced = [];
             for (var new_entry in new_entries)
             {

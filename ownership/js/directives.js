@@ -348,7 +348,23 @@ own.directive('editableSecurityDetails', [function() {
                                          $scope.sec.name, kind, null);
                 };
                 $scope.submitAction = function(tran) {
-                    captable.saveTransaction(tran, true);
+                    var trans = [tran];
+                    if (tran.kind = 'split')
+                    {
+                        angular.forEach($scope.ct.securities, function (sec) {
+                            if (sec.transactions[0].attrs['optundersecurity'] == $scope.sec.name)
+                            {
+                                var tmp = angular.copy(tran);
+                                tmp.attrs['security'] = sec.transactions[0].attrs['security'];
+                                tmp.attrs['security_type'] = sec.transactions[0].attrs['security_type'];
+                                trans.push(tmp);
+                            }
+                        });
+                    }
+                    for (t in trans)
+                    {
+                        captable.saveTransaction(trans[t], true);
+                    }
                     $scope.sec.transactions.push(tran);
                     $scope.newTran = null;
                 };
