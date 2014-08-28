@@ -631,8 +631,7 @@
                 <td ng-click="selectCell(row.name, key.name)"
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
-                               hoverable: captable.cellFor(row.name, key.name).a
-                                          || captable.cellFor(row.name, key.name).u}"
+                               hoverable: captable.cellFor(row.name, key.name)}"
                     ng-repeat="key in ct.securities">
                     <captable-cell inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>

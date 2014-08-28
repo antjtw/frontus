@@ -287,18 +287,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
                 return prev;}, []);
     }
-    function numUnissued(sec, securities) {//TODO calculate from ledger entries
-        /*var underlying = 0;
-        angular.forEach(securities, function(security) {
-            if (security != sec && security.attrs.optundersecurity == sec.name && calculate.isNumber(security.attrs.totalauth)) {
-                underlying += parseFloat(security.attrs.totalauth);
-            }
-        });
-        if (calculate.isNumber(sec.attrs.totalauth)) {
-            return sec.attrs.totalauth - securityTotalUnits(sec) - underlying;
-        } else {
-            return 0 - securityTotalUnits(sec);
-        }*/
+    function numUnissued(sec, securities) {
         var unissued = 0;
         angular.forEach(captable.ledger_entries, function(entry) {
             if ((!entry.investor) && (entry.security == sec.name))
