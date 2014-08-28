@@ -34,8 +34,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         angular.forEach(info, function(inf){
            allPeople.push(inf);
         });
-    });
-    angular.forEach(allThreads, function(thread){
+        angular.forEach(allThreads, function(thread){
         for(var i = 0; i < thread.membersArray.length; i ++){
             testArray.push(thread.membersArray[i]);
             angular.forEach(allPeople, function(person){
@@ -46,6 +45,8 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
             })
         }
     })
+    });
+    
 
 
 
