@@ -286,6 +286,7 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable) {
 
                 $scope.loaddirective = function() {
+                    console.log($scope.sec);
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
                     $scope.displayAttr = captable.displayAttr;
@@ -473,7 +474,6 @@ own.directive('editableCellDetails', [function() {
                     $scope.convertTran = {};
                     angular.forEach($scope.cell.transactions, function(tran) {
                         if (tran.active) {
-                            console.log("activetran");
                             $scope.convertTran.tran = tran;
                         }
                     });
