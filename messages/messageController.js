@@ -1,10 +1,12 @@
 'use strict';
 
-app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q) {
+app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'userRepository',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, userRepository) {
 
         $scope.page = null;
         $scope.myMessages = [];
+        $scope.test = userRepository.getAllUsers();
+        console.log($scope.test);
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;
@@ -43,6 +45,19 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             return promise.promise;             
         };
 
+
+        // this will give me all msgs and all sent msgs
+        $scope.allThreads = function(){
+            console.log("hello my threads")
+            SWBrijj.tblm('mail.my_threads', ['members', 'thread_id', 'subject']).then(function(data){
+                $scope.getPeople
+                console.log(data);
+                console.log(data.length)
+
+            })
+        }
+        $scope.allThreads();    
+
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
                 $scope.getPeopleNames().then(function(){
@@ -75,7 +90,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                         };
 
                     });
-
 
                 });                
                
@@ -202,6 +216,17 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     
     }
 ]);
+
+app.factory('userRepository', function() {
+    return {
+        getAllUsers: function() {
+            return [
+                { firstName: 'Jane', lastName: 'Doe', age: 29 },
+                { firstName: 'John', lastName: 'Doe', age: 32 }
+            ];
+        }
+    };
+});
 
 
 
