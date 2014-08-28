@@ -777,38 +777,55 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.saveTransaction = saveTransaction;
 
     this.deleteTransaction = function(tran, cell) {
-        SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
-        .then(function(x) {
-            var res = x[0].delete_transaction;
-            if (res > 0) {
-                $rootScope.$emit("notification:success",
-                    "Transaction deleted");
-                splice_many(captable.transactions, [tran]);
-                splice_many_by(captable.ledger_entries, function(el) {
-                        return el.transaction == tran.transaction;
-                });
-                if (cell.transactions.length == 1)
-                {
-                    splice_many(captable.cells, [cell]);
-                    cell = null;
-                }
-                else
-                {
-                    var cells = cellsForTran(tran);
-                    for (var c in cells)
+        if (tran.transaction) {
+            SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
+            .then(function(x) {
+                var res = x[0].delete_transaction;
+                if (res > 0) {
+                    $rootScope.$emit("notification:success",
+                        "Transaction deleted");
+                    splice_many(captable.transactions, [tran]);
+                    splice_many_by(captable.ledger_entries, function(el) {
+                            return el.transaction == tran.transaction;
+                    });
+                    if (cell.transactions.length == 1)
                     {
-                        updateCell(cells[c]);
+                        splice_many(captable.cells, [cell]);
+                        cell = null;
                     }
+                    else
+                    {
+                        var cells = cellsForTran(tran);
+                        for (var c in cells)
+                        {
+                            updateCell(cells[c]);
+                        }
+                    }
+                } else {
+                    $rootScope.$emit("notification:fail",
+                        "Oops, something went wrong.");
                 }
-            } else {
+            }).except(function(err) {
+                console.log(err);
                 $rootScope.$emit("notification:fail",
                     "Oops, something went wrong.");
+            });
+        } else {
+            splice_many(captable.transactions, [tran]);
+            if (cell.transactions.length == 1)
+            {
+                splice_many(captable.cells, [cell]);
+                cell = null;
             }
-        }).except(function(err) {
-            console.log(err);
-            $rootScope.$emit("notification:fail",
-                "Oops, something went wrong.");
-        });
+            else
+            {
+                var cells = cellsForTran(tran);
+                for (var c in cells)
+                {
+                    updateCell(cells[c]);
+                }
+            }
+        }
     };
     this.deleteSecurityTransaction = function(tran, sec) {
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
