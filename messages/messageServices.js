@@ -38,9 +38,12 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     angular.forEach(allThreads, function(thread){
         for(var i = 0; i < thread.membersArray.length; i ++){
             testArray.push(thread.membersArray[i]);
-            // angular.forEach(allPeople, function(person){
-            //     if(person.email ==)
-            // })
+            angular.forEach(allPeople, function(person){
+                if(person.email == thread.membersArray[i] && person.name !== null){
+                    thread.names.push(person.name);
+                }
+
+            })
         }
     })
 

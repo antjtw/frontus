@@ -38,6 +38,7 @@
     {{allThreads}}<br/><br/>
     {{allPeople}}<br/><br/>
     {{testArray}}<br/><br/>
+    <div ng-repeat="allThread in allThreads">{{allThread.names}}</div>
     <div class="row-fluid leftTabWindow" ng-if="sentMsgs.length !== 0">
         <compose-message ng-if="page == 'compose'"></compose-message>
      
