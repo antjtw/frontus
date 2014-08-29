@@ -843,38 +843,50 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         $scope.activityView = "global.get_investor_activity";
 
+        $scope.createVestingGraphs = function() {
+            var investorName
+            angular.forEach($scope.cti.investors, function(investor) {
+                if (investor.email == $rootScope.navState.userid) {
+                    investorName = investor.name
+                }
+            });
+
+            $scope.vestedgraphdata = [];
+            var transArray = [];
+            var transIndex=-1;
+            var transAttrs;
+            var totalavailable = 0;
+            var totalvested = 0;
+            angular.forEach($scope.cti.transactions, function (tran) {
+                transArray.push(tran.transaction);
+            });
+            angular.forEach($scope.cti.ledger_entries, function (entry) {
+                transIndex=transArray.indexOf(entry.transaction);
+                if (transIndex!=-1) {
+                    transAttrs = $scope.cti.transactions[transIndex].attrs;
+                    if (transAttrs.terms&&transAttrs.vestcliff&&transAttrs.vestfreq&&transAttrs.vestingbegins){
+                        if (entry.investor==investorName){
+                            totalavailable += parseFloat(entry.credit);
+                            if ((new Date()-entry.effective_date) > 0) {
+                                totalvested += parseFloat(entry.credit);
+                            }
+                            $scope.vestedgraphdata.push({'date':entry.effective_date, 'units':parseFloat(entry.credit).toFixed(0), 'month':(entry.effective_date.toString('MMM yy')), 'vested':(new Date()-entry.effective_date)})
+                        }
+                    }
+                }
+            });
+            $scope.vesteddonut = [{'name':"vested", 'units': (totalvested), 'roundedunits': calculate.abrAmount(totalvested)}, {'name':"rest", 'units': (totalavailable-totalvested)}];
+        };
+
         $scope.getOwnershipInfo = function() {
             $scope.ownersummary = {};
             $scope.rows = [];
             $scope.uniquerows = [];
             //$scope.createInvestorTile();
             // this is where robbie is working DANGER ZONE
-
-            var investorName=$scope.cti.investors[0].name;
-            $scope.vestedgraphdata = [];
-            var transArray = [];
-            var transIndex=-1;
-            var transAttrs;
-            console.log("here?");
-            angular.forEach($scope.cti.transactions, function (tran) {
-                console.log("loop?");
-                transArray.push(tran.transaction);
-                console.log(transArray);
-            });
-            angular.forEach($scope.cti.ledger_entries, function (entry) {
-                transIndex=transArray.indexOf(entry.transaction);
-                if (transIndex!=-1) {
-                    transAttrs=$scope.cti.transactions[transIndex].attrs;
-                    console.log("transaction found");
-                    if (transAttrs.terms&&transAttrs.vestcliff&&transAttrs.vestfreq&&transAttrs.vestingbegins){
-                        if (entry.investor==investorName){
-                            $scope.vestedgraphdata.push({'date':entry.effective_date, 'units':entry.credit, 'month':(entry.effective_date.getMonth()), 'vested':(Math.abs(Date()-entry.insertion_date))})
-                        }
-                    }
-                }
-            });
-
+            $scope.createVestingGraphs();
         };
+
           // Total Shares | Paid for an issue column (type is either u or a)
     	var colTotal = memoize(calculate.colTotal);
     	$scope.colTotal = function(header, rows, type) {

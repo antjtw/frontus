@@ -908,3 +908,48 @@ m.directive('docMiniViewer', function() {
             }]
     };
 });
+
+m.directive('investorTile', function(){
+    return {
+        scope: false,
+        restrict: 'E',
+        templateUrl:'/cmn/partials/investorTile.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q', 'calculate', 'captable',
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q, calculate, captable){
+
+ 
+
+            $scope.investorNames = [];
+
+            $scope.cti=captable.getCapTable();
+            console.log($scope.cti);
+            $scope.$watch('cti', function(newval, oldval) {
+                if (newval.securities.length > 0) {
+                    $scope.cti = angular.copy($scope.cti);
+                    $scope.getTotalShares();
+                    // $scope.getShares();
+                }
+            }, true);
+
+            $scope.getTotalShares = function(){
+                var name = ""
+                angular.forEach($scope.cti.investors, function(cap){
+                    console.log(cap);
+                    // console.log(cap.name)
+                    name = cap.name;                    
+                });
+                // alert(name);
+                // alert(captable.rowSum(name));
+                return captable.rowSum(name)
+            };
+
+         
+           
+           
+
+            
+
+
+        }]
+    }
+})
