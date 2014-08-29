@@ -29,7 +29,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
     $scope.possibleActions = ['exercised', 'forfeited'];
 
     // False is edit mode, true is view mode
-    $scope.editMode = true;
+    $scope.viewMode = true;
     $scope.optionView = "Security";
 
     //$scope.newSchedule = false;
@@ -147,12 +147,12 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
                 if ($scope.issues.length == 1) {
                     $rootScope.$on('billingLoaded', function(x) {
                         if (!$rootScope.companyIsZombie()) {
-                            $scope.editMode = false;
+                            $scope.viewMode = false;
                         }
                     });
                     if ($rootScope.selectedPlan) {
                         if (!$rootScope.companyIsZombie()) {
-                            $scope.editMode = false;
+                            $scope.viewMode = false;
                         }
                     }
                 }
@@ -977,14 +977,14 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
     */
     //
     $scope.editViewToggle = function() {
-        $scope.editMode = !$scope.editMode;
-        if (!$scope.editMode) {
+        $scope.viewMode = !$scope.viewMode;
+        if (!$scope.viewMode) {
             $scope.optionView = "Security";
         }
     };
 
     $scope.togglename = function() {
-        return $scope.editMode ? "Edit" : "View";
+        return $scope.viewMode ? "Edit" : "View";
     };
 
     $scope.setView = function(field) {
