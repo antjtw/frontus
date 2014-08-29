@@ -175,7 +175,7 @@ ownership.value('displayCopy', {
             "The term of the warrant before expiration",
         common:
             "Indicates that a security is common stock",
-        paripassu:
+        pariwith:
             "Liquidation proceeds are distributed in proportion "
             + "to each series’ share of preference, instead of "
             + "by seniority",
