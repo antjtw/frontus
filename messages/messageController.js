@@ -1,10 +1,15 @@
 'use strict';
 
-app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q) {
+app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message) {
 
         $scope.page = null;
         $scope.myMessages = [];
+        $scope.allThreads = Message.getAllThreads();
+        $scope.myPeople = Message.getAllNames();
+        $scope.allPeople = Message.getAllPeople();
+        $scope.allEmails = Message.getAllEmails();
+
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;
@@ -41,7 +46,18 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 promise.resolve($scope.myPeople);             
             });  
             return promise.promise;             
+        }; 
+
+        // try using a promise with a service
+        $scope.getAllMessages = function(){
+            angular.forEach($scope.allMsgs, function(msg){
+                msg.names = [];
+                for(var i = 0; i < msg.membersArray.length; i ++){
+                    console.log(msg.membersArray[i]);
+                };
+            });
         };
+        $scope.getAllMessages();
 
         $scope.getMessageThreads = function(){
             SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
@@ -75,7 +91,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                         };
 
                     });
-
 
                 });                
                
@@ -202,6 +217,31 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     
     }
 ]);
+
+app.factory('testThreads', ['SWBrijj', function(SWBrijj){
+    return {
+        getMsgs: function(){
+            // return 
+            SWBrijj.tblm('mail.my_threads', ['thread_id']).then(function(data){
+                console.log(data);
+                return data;
+            })
+
+        }
+    }
+    
+}])
+
+app.factory('userRepository', function() {
+    return {
+        getAllUsers: function() {
+            return [
+                { firstName: 'Jane', lastName: 'Doe', age: 29 },
+                { firstName: 'John', lastName: 'Doe', age: 32 }
+            ];
+        }
+    };
+});
 
 
 
