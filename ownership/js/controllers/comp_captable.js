@@ -1,9 +1,9 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
          "SWBrijj", "calculate", "navState", "captable",
-         "displayCopy", "History",
+         "displayCopy", "History", "Investor",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, navState, captable, displayCopy, History)
+         calculate, navState, captable, displayCopy, History, Investor)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -623,7 +623,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
-        'tags': $scope.ct.vInvestors,
+        'tags': Investor.investors,
         'tokenSeparators': [",", " "],
         'placeholder': 'Enter email address & press enter'
     };
