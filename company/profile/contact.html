@@ -83,6 +83,18 @@
                         </ul>
                     </div>
                 </div>
+                <div class="row-fluid">
+                    <div class="pull-left span5">
+                        Export
+                    </div>
+                    <div class="pull-right pointer">
+                        <div class="standard-button green">
+                            <button class="btn" ng-click="downloadCsv()">
+                                Export Captable
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="row-fluid"
                      ng-if="billing.customer_id && billing.payment_token && billing.last_status!='cancel'">
                     <div class="pull-left span5">Plan Level</div>
