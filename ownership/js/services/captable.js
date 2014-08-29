@@ -343,7 +343,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.rowSum = function(inv) {
         return rowFor(inv)
             .reduce(function(prev, cur, idx, arr) {
-                return prev + (calculate.isNUmber(cur.u) ? cur.u : 0);
+                return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
             }, 0);
     };
     function cellsForLedger(entries) {
