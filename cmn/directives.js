@@ -941,13 +941,12 @@ m.directive('investorTile', function(){
                 return captable.rowSum(name)
             };
 
-           var myTransactions = [];
-
+           
             $scope.getTotalInvested = function(){
-                var transactions = []
+                var myTransactions = [];
                 angular.forEach($scope.cti.transactions, function(trans){
-                    console.log(trans);
-                   myTransactions.push(trans);
+                    console.log(trans.transaction);
+                    myTransactions.push(trans);
                 })
                 console.log(myTransactions)
                 return captable.sum_transactions(myTransactions);

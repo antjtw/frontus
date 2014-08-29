@@ -4948,3 +4948,8 @@ textarea.email-text {
 .lower-icon {
     vertical-align: -10%;
 }
+
+.body-box .cardColumn{
+    width: 49%;
+    display: inline-block;
+}
