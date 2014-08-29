@@ -557,14 +557,14 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .style("fill", function(d) {
                             return d.vested >= 0 ? "#1abc96" : "#E2E2E2"})
                         .on("mouseover", function(d) {
-                            var xPosition = parseFloat(d3.select(this).attr("x")) + 30;
+                            var xPosition = parseFloat(d3.select(this).attr("x")) + (x.rangeBand() / 2) + 15;
                             var yPosition = parseFloat(d3.select(this).attr("y")) - 30;
 
                             d3.select("#tooltip")
                                 .style("left", xPosition + "px")
                                 .style("top", yPosition + "px")
                                 .select("#date")
-                                .text(d.date);
+                                .text(d.date.toString('MMM yy'));
 
                             d3.select("#tooltip")
                                 .select("#value")

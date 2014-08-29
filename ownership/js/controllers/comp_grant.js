@@ -18,6 +18,8 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
 
     $scope.captabletips = displayCopy.captabletips;
 
+    $scope.sideToggle = true;
+
     $scope.rows = [];
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
@@ -30,7 +32,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
     $scope.editMode = true;
     $scope.optionView = "Security";
 
-    $scope.newSchedule = false;
+    //$scope.newSchedule = false;
 
     /*
     //Get the available range of frequency types

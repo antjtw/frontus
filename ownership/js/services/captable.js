@@ -79,7 +79,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
-            //What is this function supposed to do???
+            // What is this function supposed to do???
+            // [Brian] The designs at one point asked for a summary
+            // for securities, which would, for example, include the
+            // price per share as adjusted after splits.
             //generateSecuritySummaries();
 
             handleTransactions(captable.transactions);
@@ -93,16 +96,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         console.log(captable);
     }
     loadCapTable();
-
-    function secHasTran(name)
-    {
-        for (var t in captable.transactions)
-        {
-            if (captable.transactions[t].attrs.security == name && captable.transactions[t].kind != "issue security")
-                return true;
-        }
-        return false;
-    }
 
     /* Data Gathering Functions */
 
@@ -333,13 +326,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.cellFor = cellFor;
-    function rowFor(inv) {
-        return captable.cells
-            .filter(function(cell) {
-                return cell.investor == inv;
-            });
-    }
-    this.rowFor = rowFor;
     this.rowSum = function(inv) {
         return rowFor(inv)
             .reduce(function(prev, cur, idx, arr) {
@@ -449,6 +435,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return cell.investor == inv;
             });
     }
+    this.rowFor = rowFor;
     function colFor(sec) {
         return captable.cells
             .filter(function(cell) {
@@ -510,7 +497,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             investor.name = investor.new_name;
         }).except(function(x) {
             console.log(x);
-            $scope.undo();
         });
     };
     this.updateSecurityName = function(security) {
@@ -579,6 +565,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function sum_transactions(trans) {
         return trans.reduce(sumTransactionAmount, 0);
     }
+    this.sum_transactions = sum_transactions;
     function generateSecuritySummaries() {
         angular.forEach(captable.securities, function(sec) {
             if (sec.transactions.length > 1) {
@@ -907,10 +894,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 splice_many(captable.transactions, inv.transactions);
             } else {
                 $rootScope.$emit("notification:fail",
-                    "Oops, something went wrong.");
+                    "Sorry, We were unable to remove this investor.");
             }
         }).except(function(err) {
             console.log(err);
+            $rootScope.$emit("notification:fail",
+                "Oops, something went wrong.");
         });
     };
     function rowFromName(name) {
@@ -1142,6 +1131,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                                     "pariwith": null});
             }
         });
+    }
+
+    function secHasTran(name)
+    {
+        for (var t in captable.transactions)
+        {
+            if (captable.transactions[t].attrs.security == name &&
+                    captable.transactions[t].kind != "issue security")
+                return true;
+        }
+        return false;
     }
     /*
      * Sum all ledger entries associated with equity.

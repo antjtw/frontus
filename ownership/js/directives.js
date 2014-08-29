@@ -491,7 +491,7 @@ own.directive('editableCellDetails', [function() {
                 };
                 $scope.makeNewTran = function(kind) {
                     if (kind == "convert") {
-                        $scope.convertSharesUp()
+                        $scope.convertSharesUp();
                     } else {
                         $scope.newTran = captable.newTransaction(
                             $scope.cell.security,
@@ -505,11 +505,11 @@ own.directive('editableCellDetails', [function() {
                 $scope.nonactions = ["issue security", "grant", "purchase"];
 
                 $scope.addTransaction = function() {
-                    var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security, 
+                    var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
                                      captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
                 };
-                // TODO this has to do more. 
+                // TODO this has to do more.
                 // OR, whatever is watching the transaction object
                 // must notice the change and update tran.attrs
                 // appropriately.
@@ -589,7 +589,7 @@ own.directive('editableCellDetails', [function() {
                         $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
                     }
                 };
-                
+
                 $scope.performConvert = function (convertTran) {
                     captable.saveTransaction(convertTran.newtran, true);
                 };
@@ -700,7 +700,7 @@ own.directive('editableTransactionAttributes', [function() {
                             });
                     return sorted;
                 }
-                
+
                 $scope.getInvestors = function() {
                     var invs = [];
                     for (i in ct.investors)
@@ -858,7 +858,7 @@ own.directive('evidenceTable', [function() {
         controller: ["$scope", "captable",
             function($scope, captable) {
                 $scope.captable = captable;
-                $scope.eligible_evidence = 
+                $scope.eligible_evidence =
                     captable.getEligibleEvidence();
 
                 $scope.evidenceOrder = 'docname';
