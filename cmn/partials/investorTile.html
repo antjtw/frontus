@@ -8,8 +8,15 @@
     <h2>My Ownership</h2>
   </div>
   <div class="body-box">
-    This is where the body will  go
-    {{getTotalShares()}}
+   <!--  <div> -->
+      <div class="cardColumn">
+        <div class="cardHeadline">{{getTotalShares()}}</div>
+          Total Shares
+      </div>
+      <div class="cardColumn">
+        <div class="cardHeadline">{{getTotalInvested()|formatAmount:'amount'}}</div>
+          Total Invested
+      </div>
+    </div>
   </div>
-</div>
 </div>  

@@ -48,43 +48,10 @@
 							</div>
 						</div>
 		        <investor-tile></investor-tile>
-						<div >
-							<div class="front info-box">
-								<div class="head-box">
-									<h2>My Ownership</h2>
-								
-								</div>
-								<div class="body-box">
-									<div>
-										<div class="side-graph row-fluid">
-											<div class="span5">
-												<div>
-													<div>
-														<h2><span>{{myownership.shares}}</span>Total Shares</h2>
-													</div>
-													<div ng-show="myownership.amount">
-														<h2><span>{{myownership.amount}}</span>Total Invested</h2>
-													</div>
-												</div>
-											</div>
-											<div class="span7">
-												<d3myownership class="personal-ownership" data='graphdata'></d3myownership>
-												<div class="view-button" id="view-button2">
-													<div class="small-standard-button standard-button gray">
-														<button id='a_home_own_inv_front' class="btn" ng-click="gotopage('/app/ownership/investor-captable')">View</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 						<div ng-show="vestedgraphdata.length > 0">
 							<div class="front info-box">
 								<div class="head-box">
-									<h2>Grant Vesting</h2>
-								
+									<h2>Grant Vesting</h2>								
 								</div>
 								<div class="body-box">
 									<div>

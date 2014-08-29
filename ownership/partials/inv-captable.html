@@ -156,11 +156,11 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one) + captable.numUnissued(one, ct.securities) | formatAmount:settings:'units'}}
+                            {{captable.securityTotalUnits(one) + captable.numUnissued(one, ct.securities) | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one) | formatAmount:settings:'amount'}}
+                            {{captable.securityTotalAmount(one) | formatAmount:'amount'}}
                         </div>
                     </span>
                 </td>
