@@ -953,12 +953,33 @@ m.directive('documentsTile', function(){
         scope: false,
         restrict: 'E',
         templateUrl:'/cmn/partials/documentsTile.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable',
-        function($scope, $rootScope, SWBrijj, calculate, captable){
+        controller: ['$scope', '$rootScope', 'SWBrijj',
+        function($scope, $rootScope, SWBrijj){
         
             $scope.testing = function(){
                 alert("i am a directive");
-            };        
+            };  
+
+            $scope.getmyDocuments = function(){
+                SWBrijj.tblm("document.this_investor_library").then(function(data){
+                    $scope.myDocs = data;
+                    $scope.loadDocumentActivity();
+                });
+            };
+            $scope.getmyDocuments(); 
+
+            $scope.loadDocumentActivity = function() {
+            SWBrijj.tblm("document.investor_activity").then(function(data) {
+                angular.forEach($scope.myDocs, function(doc) {
+                    var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id;});
+                    doc.last_event = doc_activity.sort($scope.compareEvents)[0];
+                    if (doc.last_event.activity == 'finalized') {doc.last_event.activity = 'approved';}
+                    var doc_activities = doc_activity.filter(function(el) {return el.person === doc.investor && el.activity === "viewed";});
+                    doc.last_viewed = doc_activities.length > 0 ? doc_activities[0].event_time : null;
+                    $scope.setDocStatusRank(doc);
+                });
+            });
+        };     
             
            
             

@@ -665,7 +665,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .tabbable .tab-content {
     padding-bottom: 0;
-  
+
 }
 
 .tabbable .tab-content div.palegray {
@@ -674,7 +674,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .tabBorder .tabbable .tab-content {
     border-right: 1px solid #C6C6C6;
-    
+
 }
 .tabbable .info-box {
     margin-bottom: 0;
@@ -781,7 +781,7 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     text-transform: capitalize;
 }
 
-.rightTitle > input, .rightTitle > span:last-child {
+.rightTitle > input, .rightTitle > span:last-child, .rightTitle .locked-security {
     width:216px;
     height: 30px;
     -moz-border-radius: 3px;
@@ -796,11 +796,11 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     width: 146px;
 }
 
-.rightTitle.security-type > span.locked-security {
-    width: 216px;
-    padding-left: 10px;
-    margin-left: 2px;
-    border-radius: 3px;
+.rightTitle .locked-security .action {
+    cursor: pointer;
+    float: right;
+    line-height: 32px;
+    margin-right: 5px;
 }
 
 .rightTitle.security-type > span.common-toggle {
@@ -843,10 +843,14 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     margin-left: 5px;
 }
 
-.rightTitle > span.locked-security {
+div.rightTitle span.locked-security {
     line-height: 32px;
     background-color: #E3E3E3;
     display: inline-block;
+}
+
+div.rightTitle.double span.locked-security {
+    margin-bottom: 8px;
 }
 
 .rightTitle > span:last-child.delete-icon {

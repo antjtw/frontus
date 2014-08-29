@@ -1,9 +1,9 @@
 // Grants page controller
 app.controller('grantController',
     ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj',
-     'calculate', 'switchval', 'navState', 'captable', 'displayCopy',
+     'calculate', 'navState', 'captable', 'displayCopy',
 function($scope, $rootScope, $parse, $location, SWBrijj,
-         calculate, switchval, navState, captable, displayCopy) {
+         calculate, navState, captable, displayCopy) {
     $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');

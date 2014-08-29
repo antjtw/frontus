@@ -1,7 +1,7 @@
 app.controller('invCaptableController',
-    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$filter',
+    ['$scope', '$parse', 'SWBrijj', 'calculate', '$filter',
      '$routeParams', '$rootScope', '$location', 'navState', 'captable',
-function($scope, $parse, SWBrijj, calculate, switchval, $filter,
+function($scope, $parse, SWBrijj, calculate, $filter,
          $routeParams, $rootScope, $location, navState, captable)
 {
     if (navState.role == 'issuer') {
@@ -11,7 +11,7 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
 
     var company = navState.company;
     $scope.currentCompany = company;
-    
+
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
@@ -80,14 +80,14 @@ function($scope, $parse, SWBrijj, calculate, switchval, $filter,
             $scope.selectedSecurity = null;
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
-                    return el.name == security_name;  
+                    return el.name == security_name;
                 })[0];
             displaySecurityDetails();
         }
     };
     $scope.selectInvestor = function(investor_name) {
         $scope.selectedCell = $scope.selectedSecurity = null;
-        if ($scope.selectedInvestor && 
+        if ($scope.selectedInvestor &&
                 $scope.selectedInvestor.name == investor_name) {
             displayIntroSidebar();
             $scope.selectedInvestor = null;

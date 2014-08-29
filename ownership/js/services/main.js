@@ -1,33 +1,6 @@
+'use strict';
+
 var ownership = angular.module('ownerServices', ['decipher.history']);
-
-ownership.service('switchval', function () {
-
-    this.typeswitch = function (tran) {
-        if (tran.type = "Option") {
-            tran.atype = 1;
-        }
-        else if (tran.type = "Debt") {
-            tran.atype = 2;
-        }
-        else {
-            tran.atype = 0;
-        }
-        return tran;
-    };
-
-    this.typereverse = function (tran) {
-        if (tran == 1) {
-            tran = "Option";
-        }
-        else if (tran == 2) {
-            tran = "Debt";
-        }
-        else {
-            tran = "Equity";
-        }
-        return tran;
-    };
-});
 
 ownership.service('attributes',
 function(SWBrijj, $q, $filter, displayCopy) {
@@ -175,7 +148,7 @@ ownership.value('displayCopy', {
             "The term of the warrant before expiration",
         common:
             "Indicates that a security is common stock",
-        paripassu:
+        pariwith:
             "Liquidation proceeds are distributed in proportion "
             + "to each series’ share of preference, instead of "
             + "by seniority",
