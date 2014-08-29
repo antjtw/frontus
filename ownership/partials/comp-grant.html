@@ -113,17 +113,21 @@
                             <span>View by</span>
                             <ul class="dropdown-list drop-selector">
                                 <li class="dropdown standard">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <a class="dropdown-toggle"
+                                   data-toggle="dropdown"
+                                   href="#">
                                     {{ optionView }}
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a ng-click="setView('Security')" class="button">
+                                        <a ng-click="setView('Security')"
+                                           class="button">
                                             Security
                                         </a>
                                     </li>
                                     <li>
-                                        <a ng-click="setView('Person')" class="button">
+                                        <a ng-click="setView('Person')"
+                                           class="button">
                                             Person
                                         </a>
                                     </li>
@@ -133,15 +137,18 @@
                         </div>
                         <div ng-show="false" class="pull-right">
                             <div class="standard-button">
-                                <button ng-click="modalUp();" class="btn">Share</span>
-                            </button>
+                                <button ng-click="modalUp();" class="btn">
+                                    Share
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="box-button pull-right"
                          ng-show="issues.length!==0"
                          ng-class="{'disabledme': companyIsZombie()}"
                          ng-click="companyIsZombie() || editViewToggle();"
-                         data-placement="bottom" bs-tooltip="zombiemessage">
+                         data-placement="bottom"
+                         bs-tooltip="zombiemessage">
                         <ul>
                             <li>
                                 <span ng-show="togglename() == 'View'"
@@ -186,7 +193,8 @@
             <div class="row-fluid">
                 <table class="tableView bodyText grant-table"
                        ng-class="{'viewmode': editMode}"
-                       ng-show="issues.length!==0 && optionView == 'Security'">
+                       ng-show="issues.length!==0 &&
+                                optionView == 'Security'">
                     <tr class="column-label">
                         <th></th>
                         <th></th>
@@ -411,9 +419,10 @@
             </div>
         </div>
 
-
-        <div ng-style="viewportheight" class="span4 capright">
-            <div ng-switch on="sideBar">
+        <internal-right-rail toggle-side="sideToggle">
+            <div ng-switch on="sideBar"
+                 class="span4 capright"
+                 ng-style="viewportheight">
                 <span ng-switch-when="1">
                     <div class="capGuide global"
                          ng-show="mode == 1 && !editMode">
@@ -809,18 +818,21 @@
                         </p>
                     </div>
 
-                    <div class="capGuide grants" ng-show="mode == 2 && editMode">
-
+                    <div class="capGuide grants"
+                         ng-show="mode == 2 && editMode">
                         <h2>Forfeit Information</h2>
-
                         <ul class="grant-list-view">
                             <li>
-                            <span>Date</span>
-                            <span>Options</span>
+                                <span>Date</span>
+                                <span>Options</span>
                             </li>
-                            <li ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
-                            <span ng-bind="act.date | date:settings.shortdate"></span>
-                            <span ng-bind="act.unit"></span>
+                            <li ng-show="act.unit"
+                                ng-repeat="act in activeTran.activeAct
+                                           | grantSelect:'forfeited'">
+                                <span>{{act.date
+                                      | date:settings.shortdate}}
+                                </span>
+                                <span>{{act.unit}}</span>
                             </li>
                         </ul>
                     </div>
@@ -863,104 +875,163 @@
                 </span>
 
                 <span ng-switch-when="2">
-                    <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
+                    <p>
+                        Investor Email
+                        <input disabled ng-model="activeInvestorName">
+                    </p>
                 </span>
 
-                <span class="capGuide railpadding" ng-switch-default>
-                    <h1 class="right-bar-header">Saved Vesting Schedules</h1>
-
-                    <div ng-repeat="schedule in schedules" class="schedule-box">
+                <span ng-switch-default class="capGuide railpadding">
+                    <h1 class="right-bar-header">
+                        Saved Vesting Schedules
+                    </h1>
+                    <div ng-repeat="schedule in schedules"
+                         class="schedule-box">
                         <div>
-                            <span ng-hide="schedule.shown" data-icon="&#xe017;" aria-hidden="true"
-                                ng-click="showSchedule(schedule);"></span>
-                            <span ng-show="schedule.shown" data-icon="&#xe01c;" aria-hidden="true"
-                                ng-click="showSchedule(schedule);"></span>
+                            <span ng-hide="schedule.shown"
+                                  data-icon="&#xe017;" aria-hidden="true"
+                                  ng-click="showSchedule(schedule);">
+                            </span>
+                            <span ng-show="schedule.shown"
+                                  data-icon="&#xe01c;" aria-hidden="true"
+                                  ng-click="showSchedule(schedule);">
+                            </span>
                             <span>{{schedule.name}}</span>
-                            <span class="delete-icon" data-icon="&#xe00c;" ng-click="deleteSchedule(schedule);"
-                                aria-hidden="true"></span>
+                            <span class="delete-icon" data-icon="&#xe00c;"
+                                  ng-click="deleteSchedule(schedule);"
+                                  aria-hidden="true">
+                            </span>
                         </div>
                         <div ng-show="schedule.shown">
-                            <p ng-show="schedule.terms" class="belowTitle"><span ng-bind="schedule.terms"></span><span
-                                tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
+                            <p ng-show="schedule.terms"
+                               class="belowTitle">
+                                <span>{{schedule.terms}}</span>
+                                <span tooltip-placement="top"
+                                      tooltip="The total number of months until fully vested">
+                                    Vesting Term (Months)
+                                </span>
                             </p>
-
-                            <p ng-show="schedule.vestingbegins" class="belowTitle"><span
-                                ng-bind="schedule.vestingbegins"></span><span
-                                tooltip-placement="top" tooltip="The date the vesting cliff percentage becomes vested">Vesting Cliff (Months)</span>
+                            <p ng-show="schedule.vestingbegins"
+                               class="belowTitle">
+                                <span>{{schedule.vestingbegins}}</span>
+                                <span tooltip-placement="top"
+                                      tooltip="The date the vesting cliff percentage becomes vested">
+                                    Vesting Cliff (Months)
+                                </span>
                             </p>
-
-                            <p ng-show="schedule.vestcliff" class="belowTitle"><span ng-bind="schedule.vestcliff"></span><span
-                                tooltip-placement="top"
-                                tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
+                            <p ng-show="schedule.vestcliff"
+                               class="belowTitle">
+                                <span>{{schedule.vestcliff}}</span>
+                                <span tooltip-placement="top"
+                                      tooltip="The percentage of granted shares that are considered vested on the cliff date">
+                                    Vesting Cliff %
+                                </span>
                             </p>
-
-                            <p ng-show="schedule.vestfreq" class="belowTitle"><span ng-bind="schedule.vestfreq"></span><span
-                                tooltip-placement="top"
-                                tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
+                            <p ng-show="schedule.vestfreq"
+                               class="belowTitle">
+                                <span>{{schedule.vestfreq}}</span>
+                                <span tooltip-placement="top"
+                                      tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">
+                                     Post Cliff Frequency
+                                </span>
                             </p>
                         </div>
                     </div>
 
-                    <div class="capGuide grants new-schedule" ng-show="newSchedule">
+                    <div class="capGuide grants new-schedule"
+                         ng-show="newSchedule">
                         <div>
-                            <p class="rightTitle"><span>Schedule Name</span><input ng-model="newschedule.name"
-                            onkeydown="testForEnter();">
-
-                            <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                                bs-tooltip="captabletips.name"></span>
+                            <p class="rightTitle">
+                                <span>Schedule Name</span>
+                                <input ng-model="newschedule.name"
+                                       onkeydown="testForEnter();">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.name">
+                                </span>
+                            </p>
+                            <p class="rightTitle double">
+                                <span>Vesting Term (Months)</span>
+                                <input ng-model="newschedule.terms"
+                                       onkeydown="testForEnter();">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.terms">
+                                </span>
                             </p>
 
-                            <p class="rightTitle double"><span>Vesting Term (months)</span><input ng-model="newschedule.terms"
-                            onkeydown="testForEnter();">
-
-                            <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                                bs-tooltip="captabletips.terms"></span>
+                            <p class="rightTitle double">
+                                <span>Vesting Cliff (Months)</span>
+                                <input type="text"
+                                       ng-model="newschedule.vestingbegins">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestingbegins">
+                                </span>
                             </p>
-
-                            <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text"
-                            ng-model="newschedule.vestingbegins">
-                            <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                                bs-tooltip="captabletips.vestingbegins"></span>
+                            <p class="rightTitle">
+                                <span>Vesting Cliff %</span>
+                                <input ng-model="newschedule.vestcliff"
+                                       onkeydown="testForEnter();">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestcliff">
+                                </span>
                             </p>
-
-                            <p class="rightTitle"><span>Vesting Cliff %</span><input ng-model="newschedule.vestcliff"
-                            onkeydown="testForEnter();">
-                            <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                                bs-tooltip="captabletips.vestcliff"></span>
-                            </p>
-
-                            <div class="rightTitle double"><span>Post Cliff Frequency</span>
+                            <div class="rightTitle double">
+                                <span>Post Cliff Frequency</span>
                                 <ul class="dropdown-list drop-selector">
                                     <li class="dropdown standard">
-                                    <a class="dropdown-toggle">
-                                        {{newschedule.vestfreq}}<span class="invisible-drop">'</span>
-                                    </a>
-                                    <ul ng-hide="toggleView();" class="dropdown-menu">
-                                        <li ng-repeat="i in freqtypes">
-                                        <a ng-click="assignFreq(i, newschedule);">{{i}}</a>
-                                        </li>
-                                    </ul>
+                                        <a class="dropdown-toggle">
+                                            {{newschedule.vestfreq}}
+                                            <span class="invisible-drop">'</span>
+                                        </a>
+                                        <ul ng-hide="toggleView();"
+                                            class="dropdown-menu">
+                                            <li ng-repeat="i in freqtypes">
+                                                <a ng-click="assignFreq(i, newschedule);">
+                                                    {{i}}
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
                                 </ul>
-                                <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                                    bs-tooltip="captabletips.vestfreq"></span>
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestfreq">
+                                </span>
                             </div>
-
                             <div class="standard-button small-standard-button">
-                                <button class="btn ng-binding" ng-disabled="newschedule.name == null || newschedule.name == ''"
-                                    ng-click="createSchedule(newschedule);">Done
+                                <button class="btn ng-binding"
+                                        ng-disabled="newschedule.name == null
+                                                     || newschedule.name == ''"
+                                        ng-click="createSchedule(newschedule);">
+                                    Done
                                 </button>
                             </div>
-
                         </div>
                     </div>
-
-                    <div ng-hide="newSchedule || companyIsZombie()" class="standard-button">
-                        <button id='a_grant_template' class="btn ng-binding" ng-click="addSchedule();">New Template</button>
+                    <div ng-hide="newSchedule || companyIsZombie()"
+                         class="standard-button">
+                        <button id='a_grant_template'
+                                class="btn ng-binding"
+                                ng-click="addSchedule();">
+                            New Template
+                        </button>
                     </div>
                 </span>
             </div>
-        </div>
+        </internal-right-rail>
     </div>
 </div>
 </div>

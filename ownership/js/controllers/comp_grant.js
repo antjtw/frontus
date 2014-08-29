@@ -18,6 +18,8 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
 
     $scope.captabletips = displayCopy.captabletips;
 
+    $scope.sideToggle = true;
+
     $scope.rows = [];
     $scope.freqtypes = [];
     $scope.tf = ["yes", "no"];
