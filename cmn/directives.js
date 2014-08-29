@@ -913,7 +913,7 @@ m.directive('investorTile', function(){
     return {
         scope: false,
         restrict: 'E',
-        templateUrl:'/cmn/partials/peopleFilter.html',
+        templateUrl:'/cmn/partials/investorTile.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q', 'calculate', 'captable',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q, calculate, captable){
 
