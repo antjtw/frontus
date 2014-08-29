@@ -593,31 +593,6 @@ navm.controller('NavCtrl',
             return notifications;
         };
 
-        var idleTime = 0;
-
-        function timerIncrement() {
-            if ($rootScope.navState.userid) {
-                idleTime = idleTime + 1;
-            }
-            if (idleTime > 28) { // 1 minutes
-                sessionStorage.clear();
-                document.location.href = "/login/logout?timeout";
-            }
-        }
-
-        $(document).ready(function () {
-            //Increment the idle time counter every minute.
-            var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
-
-            //Zero the idle timer on mouse movement.
-            $(this).mousemove(function (e) {
-                idleTime = 0;
-            });
-            $(this).keypress(function (e) {
-                idleTime = 0;
-            });
-        });
-
         $scope.pricingregister = function(args) {
             document.location.href = "/register/company-onestep?" + args;
         };

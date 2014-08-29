@@ -384,6 +384,12 @@ app.controller('CompContactCtrl',
                 });
                 $scope.$emit("notification:success", "Starting Export . . .");
             };
+
+            $scope.downloadCsv = function() {
+                SWBrijj.procd($rootScope.navState.name + '_captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
+                    document.location.href = x;
+                });
+            };
             
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();
