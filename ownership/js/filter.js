@@ -265,6 +265,9 @@ ownership.filter('selectablesecurities', function() {
 
 ownership.filter('usedsecurities', function() {
     return function(securities, existing) {
+        if (existing === undefined || existing === null || existing === []) {
+            return securities;
+        }
         var filtered_secs = [];
         angular.forEach(securities, function(sec) {
             if (existing.indexOf(sec.name) === -1) {

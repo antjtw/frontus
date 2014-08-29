@@ -773,6 +773,9 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     if (inputType(k) == "array_text") {
+                        if (!tran.attrs[k]) {
+                            tran.attrs[k] = [];
+                        }
                         tran.attrs[k].push(v);
                     } else {
                         tran.attrs[k] = v;
@@ -787,6 +790,9 @@ own.directive('editableTransactionAttributes', [function() {
                         var ix = tran.attrs[k].indexOf(v);
                         if (ix >= 0) {
                             tran.attrs[k].splice(ix, 1);
+                        }
+                        if (tran.attrs[k].length === 0) {
+                            delete tran.attrs[k];
                         }
                     } else {
                         tran.attrs[k] = "";
@@ -865,6 +871,18 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.$watch('data', function(newval, oldval) {
                     $scope.loaddirective();
                 }, true);
+                var dropdowncalctime = Date.parse('1970');
+                var selectablesecurities;
+                $scope.getValidDropdownSecurities = function(data) {
+                    if (Date.now() - dropdowncalctime > 500) { // debounce
+                        dropdowncalctime = Date.now();
+                        selectablesecurities = $filter('selectablesecurities')($scope.securities, data);
+                    }
+                    return selectablesecurities;
+                };
+                $scope.getValidPariSecurities = function(data, key) {
+                    return $filter('usedsecurities')($scope.getValidDropdownSecurities(data), data.attrs[key]);
+                };
             }
         ],
     };
