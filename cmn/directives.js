@@ -948,48 +948,22 @@ m.directive('investorTile', function(){
     };
 });
 
-// m.directive('investorTile', function(){
-//     return {
-//         scope: false,
-//         restrict: 'E',
-//         templateUrl:'/cmn/partials/investorTile.html',
-//         controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable',
-//         function($scope, $rootScope, SWBrijj, calculate, captable){
-
-//             $scope.investorNames = [];
-
-//             $scope.cti=captable.getCapTable();
-//             console.log($scope.cti);
-//             $scope.$watch('cti', function(newval, oldval) {
-//                 if (newval.securities.length > 0) {
-//                     $scope.cti = angular.copy($scope.cti);
-//                     $scope.getTotalShares();
-//                     $scope.getTotalInvested();
-//                     // $scope.getShares();
-//                 }
-//             }, true);
-
-//             $scope.getTotalShares = function(){
-//                 var name = ""
-//                 angular.forEach($scope.cti.investors, function(cap){
-//                     // console.log(cap);
-//                     name = cap.name;                    
-//                 });
-//                 return captable.rowSum(name)
-//             };
-
+m.directive('documentsTile', function(){
+    return {
+        scope: false,
+        restrict: 'E',
+        templateUrl:'/cmn/partials/documentsTile.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable',
+        function($scope, $rootScope, SWBrijj, calculate, captable){
+        
+            $scope.testing = function(){
+                alert("i am a directive");
+            };        
+            
            
-//             $scope.getTotalInvested = function(){
-//                 var myTransactions = [];
-//                 angular.forEach($scope.cti.transactions, function(trans){
-//                     console.log(trans.transaction);
-//                     myTransactions.push(trans);
-//                 })
-//                 console.log(myTransactions)
-//                 return captable.sum_transactions(myTransactions);
-//             };
+            
 
-//         }];
-//     };
-// });
+        }]
+    };
+});
 
