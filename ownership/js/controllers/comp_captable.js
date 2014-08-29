@@ -238,6 +238,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
     */
+    /* moved to captable service
     $scope.rowFor = function(inv) {
         return $scope.ct.cells
             .filter(function(cell) {
@@ -250,6 +251,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
             }, 0);
     };
+    */
     $scope.canHover = function(cell) {
         return cell && (cell.u || cell.a);
     };
