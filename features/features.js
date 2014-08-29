@@ -30,8 +30,8 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
     }
 ]);
 
-app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState) {
+app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, navState) {
 
         if (window.innerWidth < 1024) {
             $scope.variablewidth = window.innerWidth;
@@ -75,9 +75,9 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
             $location.url("/features/" + link);
         };
 
-        $scope.fromtran = {"liquidpref":null,"issue":"Debt","terms":null,"investor":"Ellen Orford","dragalong":null,"totalauth":null,"interestratefreq":null,"type":"Debt","date":new Date(1401768000000),"amount":"500000","debtundersec":null,"vestingbegins":null,"ppshare":null,"converted":false,"valcap":"4000000","lastupdated":new Date(1401829600758),"partpref":null,"units":null,"optundersec":null,"discount":"20","postmoney":null,"vestfreq":null,"price":null,"term":null,"premoney":null,"email":null,"tagalong":null,"company":"be7daaf65fcf.sharewave.com","vestcliff":null,"tran_id":741185637,"interestrate":null};
+        $scope.fromtran = {"insertion_date":"2014-08-27T07:44:49.092Z","transaction":746788505,"inet":null,"attrs":{"amount":100000,"discount":20,"interestrate":null,"interestratefreq":null,"investor":"Peter","physical":false,"security":"Debt","security_type":"Convertible Debt","term":null,"units":null,"valcap":4000000},"entered_by":null,"evidence":null,"company":"2f5169a3e8b1.sharewave.com","effective_date":"2014-08-27T07:44:49.092Z","kind":"purchase","valid":true,"evidence_data":[],"active":true};
         $scope.convertTran = {"toissue": {}};
-        $scope.fields = {"fromtranamount": $scope.fromtran.amount, "fromtranvalcap": $scope.fromtran.valcap, "fromtrandiscount": $scope.fromtran.discount, "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25"};
+        $scope.fields = {"fromtranamount": $scope.fromtran.attrs.amount, "fromtranvalcap": $scope.fromtran.attrs.valcap, "fromtrandiscount": $scope.fromtran.attrs.discount, "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25", "convertdate": new Date.today()};
         $scope.intervals = 200;
         $scope.fiddled = false;
         $scope.debttab = "one";
@@ -92,20 +92,19 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 $scope.fiddled = "true"
             }
             //Clear out commas and assign to the correct transaction fields;
-            $scope.fromtran.amount = parseFloat(String($scope.fields.fromtranamount).replace(/[^0-9.]/g,''));
-            $scope.fromtran.valcap = parseFloat(String($scope.fields.fromtranvalcap).replace(/[^0-9.]/g,''));
-            $scope.fromtran.discount = parseFloat(String($scope.fields.fromtrandiscount).replace(/[^0-9.]/g,''));
+            $scope.fromtran.attrs.amount = parseFloat(String($scope.fields.fromtranamount).replace(/[^0-9.]/g,''));
+            $scope.fromtran.attrs.valcap = parseFloat(String($scope.fields.fromtranvalcap).replace(/[^0-9.]/g,''));
+            $scope.fromtran.attrs.discount = parseFloat(String($scope.fields.fromtrandiscount).replace(/[^0-9.]/g,''));
             $scope.convertTran.percentsold = parseFloat(String($scope.fields.convertTranpercentsold).replace(/[^0-9.]/g,''));
             $scope.convertTran.amountsold = parseFloat(String($scope.fields.convertTranamountsold).replace(/[^0-9.]/g,''));
             $scope.premoney = parseFloat(String($scope.fields.premoney).replace(/[^0-9.]/g,''));
             $scope.postmoney = parseFloat(String($scope.fields.postmoney).replace(/[^0-9.]/g,''));
+            $scope.convertTran.effective_date = $scope.fields.convertdate;
 
             if (isNaN(parseFloat($scope.fromtran.discount))) {
                 $scope.fromtran.discount = 0;
             }
 
-            //Hard code the valuation type of conversion for now.
-            //TODO implement price per share conversion.
             $scope.convertTran.method = "Valuation";
             if ($scope.convertTran.method == "Valuation") {
                 //Empty Graph data
@@ -114,10 +113,10 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                 //Default ppshare to 1 we're not displaying this for now
                 $scope.convertTran.toissue.ppshare = 1;
 
-                //Default values before the loop (will allow for date changing
-                $scope.convertTran.date = new Date(1401768000000);
+                //Default values before the loop
                 $scope.convertTran.tran = $scope.fromtran;
                 $scope.convertTran.newtran = angular.copy($scope.fromtran);
+                $scope.convertTran.newtran.attrs.amount = calculate.debtinterest($scope.convertTran.tran);
 
                 //Bottom limit for the range calculation
                 $scope.convertTran.bottomamount = parseFloat($scope.convertTran.amountsold) - ($scope.convertTran.amountsold *0.5);
@@ -173,15 +172,15 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
                     if (isNaN(percentdiscount)) {
                         percentdiscount = 0;
                     }
-                    if (percentdiscount < parseFloat($scope.fromtran.discount)) {
-                        percentdiscount = parseFloat($scope.fromtran.discount);
+                    if (percentdiscount < parseFloat($scope.fromtran.attrs.discount)) {
+                        percentdiscount = parseFloat($scope.fromtran.attrs.discount);
                     }
-                    var convalue = convertedpoint.units;
+                    var convalue = convertedpoint.attrs.units;
                     var fixedpercentage = 0;
-                    if (!isNaN(parseFloat($scope.fromtran.valcap))) {
-                        fixedpercentage = (((1 - (parseFloat(graphpointtran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
+                    if (!isNaN(parseFloat($scope.fromtran.attrs.valcap))) {
+                        fixedpercentage = (((1 - (parseFloat(graphpointtran.percentsold)/100)) * parseFloat($scope.fromtran.attrs.amount)) / parseFloat($scope.fromtran.attrs.valcap));
                     }
-                    var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ graphpointtran.toissue.postmoney);
+                    var shiftpercentage = ((parseFloat($scope.fromtran.attrs.amount)/ (1- (parseFloat($scope.fromtran.attrs.discount) /100)))/ graphpointtran.toissue.postmoney);
                     valcaphit = (fixedpercentage > shiftpercentage) && !oncehit ? true : false;
                     if (valcaphit && !oncehit) {
                         oncehit = true;
@@ -195,11 +194,11 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
 
 
 
-                $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
+                $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran.tran);
                 $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
-                var convalue = $scope.convertTran.newtran.units;
-                var fixedpercentage = (((1 - (parseFloat($scope.convertTran.percentsold)/100)) * parseFloat($scope.fromtran.amount)) / parseFloat($scope.fromtran.valcap));
-                var shiftpercentage = ((parseFloat($scope.fromtran.amount)/ (1- (parseFloat($scope.fromtran.discount) /100)))/ $scope.convertTran.toissue.postmoney);
+                var convalue = $scope.convertTran.newtran.attrs.units;
+                var fixedpercentage = (((1 - (parseFloat($scope.convertTran.percentsold)/100)) * parseFloat($scope.fromtran.attrs.amount)) / parseFloat($scope.fromtran.attrs.valcap));
+                var shiftpercentage = ((parseFloat($scope.fromtran.attrs.amount)/ (1- (parseFloat($scope.fromtran.attrs.discount) /100)))/ $scope.convertTran.toissue.postmoney);
                 $scope.convertTran.ownership = (fixedpercentage > shiftpercentage ? fixedpercentage : shiftpercentage) * 100;
             }
         };
@@ -208,8 +207,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
     }
 ]);
 
-app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'sorting', 'navState',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, sorting, navState) {
+app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, navState) {
 
         $scope.gotopage = function (link) {
             $location.url("/features/" + link);
@@ -1516,6 +1515,23 @@ function testForEnter()
         event.cancelBubble = true;
         event.returnValue = false;
     }
+}
+
+function memoize( fn ) {
+    return function () {
+        var args = Array.prototype.slice.call(arguments),
+            hash = "",
+            i = args.length;
+        var currentArg = null;
+        while (i--) {
+            currentArg = args[i];
+            hash += (currentArg === Object(currentArg)) ?
+                JSON.stringify(currentArg) : currentArg;
+            fn.memoize || (fn.memoize = {});
+        }
+        return (hash in fn.memoize) ? fn.memoize[hash] :
+            fn.memoize[hash] = fn.apply(this, args);
+    };
 }
 
 function isArray(obj) {
