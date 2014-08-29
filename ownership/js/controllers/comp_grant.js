@@ -1,7 +1,9 @@
 // Grants page controller
 app.controller('grantController',
-    ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj', 'calculate', 'switchval', 'navState',
-        function($scope, $rootScope, $parse, $location, SWBrijj, calculate, switchval, navState) {
+    ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj',
+     'calculate', 'switchval', 'navState', 'captable', 'displayCopy',
+function($scope, $rootScope, $parse, $location, SWBrijj,
+         calculate, switchval, navState, captable, displayCopy) {
     $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
@@ -11,17 +13,10 @@ app.controller('grantController',
     var company = navState.company;
     $scope.company = company;
 
-    $scope.captabletips = {};
-    $scope.captabletips.name = "The name of this vesting schedule";
-    $scope.captabletips.totalauth = "The sum total of shares authorized to be issued";
-    $scope.captabletips.optundersec = "The security each granted share will convert to upon exercise";
-    $scope.captabletips.totalgranted = "The sum total of shares granted";
-    $scope.captabletips.price = "The price each granted share can be purchased at when vested";
-    $scope.captabletips.terms = "The total number of months until fully vested";
-    $scope.captabletips.vestingbegins = "Months until the vesting cliff % is vested";
-    $scope.captabletips.vestcliff = "The percentage of granted shares that are considered vested on the cliff date";
-    $scope.captabletips.vestfreq = "The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends";
+    $scope.ct = captable.getCapTable();
+    $scope.captable = captable;
 
+    $scope.captabletips = displayCopy.captabletips;
 
     $scope.rows = [];
     $scope.freqtypes = [];
@@ -37,6 +32,7 @@ app.controller('grantController',
 
     $scope.newSchedule = false;
 
+    /*
     //Get the available range of frequency types
     SWBrijj.procm('ownership.get_freqtypes').then(function (results) {
         angular.forEach(results, function (result) {
@@ -66,6 +62,7 @@ app.controller('grantController',
             }
         });
     });
+    */
 
     //Get the company issues
     SWBrijj.tblm('ownership.company_issue').then(function (issues) {
