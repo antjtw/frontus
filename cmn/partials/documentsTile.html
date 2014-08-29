@@ -3,14 +3,25 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/company.css">
 
 <div>
-<div class="front info-box">
-  <div class="head-box">
-    <h2>Documents</h2>
-  </div>
-  <div class="body-box">
+  <div class="front info-box">
+    <div class="head-box">
+      <h2>Documents</h2>
+    </div>
+    <div class="body-box">
+      <div style="display: inline-block; width: 35%">Graph will go here</div>
+      <div style="display: inline-block">
+        <div ng-repeat="myDoc in myDocs">
+          <div style="display: inline-block">
+            Document Name</br>
+            {{myDoc.docname}}
+          </div>
+          <!-- <div> Document Name</div>
+          <div>{{myDoc.docname}}</div> -->
 
-    
+      </div>
       
-    
+    </div>
+
+      
   </div>
 </div> 
