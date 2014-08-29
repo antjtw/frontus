@@ -2,7 +2,7 @@ var ownership = angular.module('ownerFilters', []);
 
 ownership.filter('noUnissue', function () {
     return function (row) {
-        return (row[0].editable != 0 || row[0].name == "") ? row : [];
+        return (row[0].editable !== 0 || row[0].name === "") ? row : [];
     };
 });
 
@@ -11,7 +11,7 @@ ownership.filter('otherinvestors', function () {
     return function (rows, investor) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != "" && row.name != investor && row.editable == "yes") {
+            if (row.name !== "" && row.name != investor && row.editable == "yes") {
                 returnrows.push(row);
             }
         });
@@ -24,7 +24,7 @@ ownership.filter('grantSelect', function () {
     return function (acts, type) {
         var returnacts = [];
         angular.forEach(acts, function (act) {
-            if (act.action == null || act.action == type) {
+            if (act.action === null || act.action == type) {
                 returnacts.push(act);
             }
         });
@@ -39,7 +39,7 @@ ownership.filter('shareList', function () {
         var returnrows = [];
         console.log(rows);
         angular.forEach(rows, function (row) {
-            if (row.email == null) {
+            if (row.email === null) {
                 returnrows.push(row);
             }
         });
@@ -52,7 +52,7 @@ ownership.filter('rowviewList', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != "" && row.editable == "yes") {
+            if (row.name !== "" && row.editable == "yes") {
                 returnrows.push(row);
             }
         });
@@ -391,5 +391,17 @@ ownership.filter('describeTran', function() {
         /* TODO replace 'Transaction' accordion headers with something
          * that actually describes the transaction
          */
+    };
+});
+// Returns only the real transactions (not the empty ones)
+ownership.filter('noempty', function () {
+    return function (trans) {
+        var returntrans = [];
+        angular.forEach(trans, function (tran) {
+            if (tran.investor != null) {
+                returntrans.push(tran);
+            }
+        });
+        return returntrans;
     };
 });
