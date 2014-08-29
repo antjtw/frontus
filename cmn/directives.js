@@ -908,3 +908,22 @@ m.directive('docMiniViewer', function() {
             }]
     };
 });
+
+m.directive('investorTile', function(){
+    return {
+        scope: false,
+        restrict: 'E',
+        templateUrl:'/cmn/partials/peopleFilter.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q', 'calculate', 'captable',
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q, calculate, captable){
+
+            $scope.test = function(){
+                console.log("hi ariel you are awesome")
+            }
+
+            
+
+
+        }]
+    }
+})

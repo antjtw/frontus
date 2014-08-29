@@ -929,7 +929,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.ownersummary = {};
             $scope.rows = [];
             $scope.uniquerows = [];
-            $scope.createInvestorTile();
+            // $scope.createInvestorTile();
             // this is where robbie is working DANGER ZONE
             SWBrijj.tblm('ownership.this_company_transactions').then(function (trans) {
                 $scope.trans = trans;
