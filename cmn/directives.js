@@ -914,10 +914,8 @@ m.directive('investorTile', function(){
         scope: false,
         restrict: 'E',
         templateUrl:'/cmn/partials/investorTile.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q', 'calculate', 'captable',
-        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q, calculate, captable){
-
- 
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable',
+        function($scope, $rootScope, SWBrijj, calculate, captable){
 
             $scope.investorNames = [];
 
@@ -951,13 +949,6 @@ m.directive('investorTile', function(){
                 console.log(myTransactions)
                 return captable.sum_transactions(myTransactions);
             }
-
-         
-           
-           
-
-            
-
 
         }]
     }
