@@ -953,12 +953,19 @@ m.directive('documentsTile', function(){
         scope: false,
         restrict: 'E',
         templateUrl:'/cmn/partials/documentsTile.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable',
-        function($scope, $rootScope, SWBrijj, calculate, captable){
+        controller: ['$scope', '$rootScope', 'SWBrijj',
+        function($scope, $rootScope, SWBrijj){
         
             $scope.testing = function(){
                 alert("i am a directive");
-            };        
+            };  
+
+            $scope.getmyDocuments = function(){
+                SWBrijj.tblm("document.this_investor_library").then(function(data){
+                    $scope.myDocs = data;
+                });
+            };
+            $scope.getmyDocuments();      
             
            
             
