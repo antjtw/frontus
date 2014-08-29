@@ -10,18 +10,31 @@
     <div class="body-box">
       <div style="display: inline-block; width: 35%">Graph will go here</div>
       <div style="display: inline-block">
-        <div ng-repeat="myDoc in myDocs">
-          <div style="display: inline-block">
+        <table>
+          <thead>
+            <tr>
+              <th>Document Name</th>
+              <th>Document Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="myDoc in myDocs">
+              <th>{{myDoc.docname}}</th>
+              <th>{{myDoc.signature_status}}</th>
+            </tr>
+
+        </table>
+        <!-- <div ng-repeat="myDoc in myDocs">
+          <div style="display: inline-block;">
             Document Name</br>
             {{myDoc.docname}}
           </div>
-          <!-- <div> Document Name</div>
-          <div>{{myDoc.docname}}</div> -->
-
-      </div>
-      
+          <div style="display: inline-block">
+            Document Status</br>
+            {{myDoc.signature_status}}
+          </div>
+        </div> -->
+      </div>      
     </div>
-
-      
   </div>
 </div> 
