@@ -66,6 +66,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
     });
     */
 
+    /*
     //Get the company issues
     SWBrijj.tblm('ownership.company_issue').then(function (issues) {
         // Initialisation. Get the transactions and the grants
@@ -160,8 +161,9 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
             });
         });
     });
+    */
 
-
+    /*
     //Get the active row for the sidebar
     $scope.getActiveTransaction = function (currenttran, mode, view) {
         if (currenttran == $scope.activeTran && view == "view" && mode == $scope.stringmode) {
@@ -373,8 +375,9 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
             }
         }
     };
+    */
 
-    /* Save Issue Function. Takes the issue and the item being changed so that the sub transactions can also be updated in just that field */
+    /*
     $scope.saveIssue = function (issue, item) {
         if ((issue['issue'] == null || issue['issue'] == "") && issue['key'] == null) {
             return
@@ -636,8 +639,10 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
             });
         }
     };
+    */
 
     var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
+    /*
     $scope.saveTranDate = function (transaction, field, evt) {
         if (evt) { // User is typing
             if (evt != 'blur')
@@ -775,6 +780,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
             });
         }
     };
+    */
 
     $scope.opendetails = function(name, type) {
         if (type == "issue") {
@@ -888,6 +894,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
         });
     };
 
+    /*
     //modal for updating issue fields that have different underlying values
 
     $scope.imodalUp = function (issue, field) {
@@ -967,7 +974,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
             }
         });
     };
-
+    */
     //
     $scope.editViewToggle = function() {
         $scope.editMode = !$scope.editMode;
@@ -1004,6 +1011,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
         }
     };
 
+    /*
     $scope.assignFreq = function(value, schedule) {
         schedule.vestfreq = value;
     };
@@ -1052,6 +1060,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
             activeTran.vestfreq = "monthly";
         }
     };
+    */
 
     $scope.strToBool = function (string) {
         return calculate.strToBool(string);
@@ -1077,6 +1086,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
         return total;
     };
 
+    /*
     $scope.resetSideBar = function() {
         $scope.sideBar = 'x';
         angular.forEach($scope.issues, function(issue) {
@@ -1116,19 +1126,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
     };
 
     // add tooltip info to fix issue
+    // */
 
 
 }]);
-
-// Returns only the real transactions (not the empty ones)
-app.filter('noempty', function () {
-    return function (trans) {
-        var returntrans = [];
-        angular.forEach(trans, function (tran) {
-            if (tran.investor != null) {
-                returntrans.push(tran);
-            }
-        });
-        return returntrans;
-    };
-});
