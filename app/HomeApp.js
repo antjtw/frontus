@@ -864,6 +864,13 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         $scope.uselessbrowser = !Modernizr.csstransforms3d;
 
+        $scope.$watch('cti', function(newval, oldval) {
+                if (newval.securities.length > 0) {
+                    $scope.cti = angular.copy($scope.cti);
+                    $scope.getOwnershipInfo();
+                }
+            }, true);
+
         //initialisation functions called
         $scope.company = navState.name;
 
@@ -922,6 +929,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.ownersummary = {};
             $scope.rows = [];
             $scope.uniquerows = [];
+            $scope.createInvestorTile();
+            // this is where robbie is working DANGER ZONE
             SWBrijj.tblm('ownership.this_company_transactions').then(function (trans) {
                 $scope.trans = trans;
                 SWBrijj.tblm('ownership.this_company_issues').then(function (data) {
