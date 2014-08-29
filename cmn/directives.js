@@ -917,9 +917,28 @@ m.directive('investorTile', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', '$q', 'calculate', 'captable',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, $q, calculate, captable){
 
-            $scope.test = function(){
-                console.log("hi ariel you are awesome")
-            }
+ 
+
+            $scope.investorNames = [];
+
+            $scope.cti=captable.getCapTable();
+            console.log($scope.cti);
+            $scope.$watch('cti', function(newval, oldval) {
+                if (newval.securities.length > 0) {
+                    $scope.cti = angular.copy($scope.cti);
+                    $scope.getInvestorNames();
+                }
+            }, true);
+
+            $scope.getInvestorNames = function(){
+                angular.forEach($scope.cti.investors, function(cap){
+                    console.log(cap);
+                    console.log(cap.name)
+                    return cap.name
+                });
+            };
+           
+           
 
             
 
