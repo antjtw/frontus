@@ -184,7 +184,7 @@ ownership.filter('formatAmount', function() {
     return function(amount, settings, key) {
         var nums = ["units", "forfeited"];
         var moneys = ["ppshare", "price", "effectivepps",
-                      "valcap", "amount"]; 
+                      "valcap", "amount"];
         if (!amount || (typeof(amount)!="string" && isNaN(amount))) {
             amount = null;
         } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
@@ -271,7 +271,7 @@ ownership.filter('validActions', ['attributes', function(attributes) {
         {
             if (nonActions.indexOf(a) == -1)
             {
-                if ((action_type == 'transaction') == //not xor 
+                if ((action_type == 'transaction') == //not xor
                         (attrs[sec_type][a].hasOwnProperty('investor') ||
                         attrs[sec_type][a].hasOwnProperty('investor_to') ||
                         attrs[sec_type][a].hasOwnProperty('investor_from')))
@@ -331,7 +331,7 @@ ownership.filter('attributeDbTypes', function() {
             case "date":
                 return "date";
             default:
-                return null;
+                return tp;
         }
     };
 });

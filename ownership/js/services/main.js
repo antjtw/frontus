@@ -41,8 +41,8 @@ function(SWBrijj, $q, $filter, displayCopy) {
     this.getSpecialAttrs = function() { return special; };
     function init() { loadAttributes().then(handleAttrs); }
     function handleAttrs(data) {
-        special['investor'] = [];
-        special['security'] = [];
+        special.investor = [];
+        special.security = [];
         angular.forEach(data, function(el) {
             if (!attrs[el.type])
             {
@@ -58,16 +58,16 @@ function(SWBrijj, $q, $filter, displayCopy) {
                     {required: el.required,
                      display_name: el.display_name,
                      description: el.name in tips ? tips[el.name] : null,
-                     type: 
+                     type:
                         $filter('attributeDbTypes')(el.typname, el.labels),
                      labels: JSON.parse(el.labels)};
-                 if (el.name.indexOf('investor') != -1 && special['investor'].indexOf(el.name) == -1)
+                 if (el.name.indexOf('investor') != -1 && special.investor.indexOf(el.name) == -1)
                  {
-                    special['investor'].push(el.name);
+                    special.investor.push(el.name);
                  }
-                 if (el.name.indexOf('security') != -1 && el.name.indexOf('type') == -1 && special['security'].indexOf(el.name) == -1)
+                 if (el.name.indexOf('security') != -1 && el.name.indexOf('type') == -1 && special.security.indexOf(el.name) == -1)
                  {
-                    special['security'].push(el.name);
+                    special.security.push(el.name);
                  }
             }
         });
