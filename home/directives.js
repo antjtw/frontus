@@ -514,6 +514,12 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
             scope.render = function(data){
 
+                data.sort(function(a, b){
+                    if(a.date < b.date) return -1;
+                    if(a.date > b.date) return 1;
+                    return 0;
+                });
+
                 if (data && data.length > 0) {
                     x.domain(data.map(function(d) { return d.month; }));
                     var max = d3.max(data, function(d) { return parseFloat(d.units); });
@@ -549,7 +555,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .attr("y", function(d) { return y(d.units); })
                         .attr("height", function(d) { return height - y(d.units); })
                         .style("fill", function(d) {
-                            return d.vested == 0 ? "#1abc96" : "#E2E2E2"})
+                            return d.vested >= 0 ? "#1abc96" : "#E2E2E2"})
                         .on("mouseover", function(d) {
                             var xPosition = parseFloat(d3.select(this).attr("x")) + 30;
                             var yPosition = parseFloat(d3.select(this).attr("y")) - 30;
