@@ -539,7 +539,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
+                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
                 </td>
                 <td>
                     <span ng-class="{'box-highlight':tourstate==1}">
@@ -618,7 +618,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
+                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
@@ -648,7 +648,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:3}}%">
+                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:2}}%">
                 </td>
                 <td class="viewName">
                     {{::sec.name}} (Unissued)
@@ -659,7 +659,7 @@
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities) | number:3}}
+                                {{captable.numUnissued(key, ct.securities) | number:2}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -685,7 +685,8 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits() | number:0}}">
+                           value="{{captable.totalOwnershipUnits()
+                                  | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -699,11 +700,14 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one) + captable.numUnissued(one, ct.securities) | formatAmount:'units'}}
+                            {{captable.securityTotalUnits(one)
+                            + captable.numUnissued(one, ct.securities)
+                            | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one) | formatAmount:'amount'}}
+                            {{captable.securityTotalAmount(one)
+                            | formatAmount:'amount'}}
                         </div>
                     </span>
                 </td>
@@ -854,7 +858,7 @@
                                     <img src="/img/activity/invested.png">
                                     <div>
                                         <span>
-                                            {{totalPaid(ct.investors) | number:3}}
+                                            {{totalPaid(ct.investors) | number:2}}
                                         </span>
                                         <span>Total Invested</span>
                                     </div>
@@ -864,7 +868,7 @@
                                     <img src="/img/activity/sharews.png">
                                     <div>
                                         <span>
-                                            {{captable.totalOwnershipUnits() | number:3}}
+                                            {{captable.totalOwnershipUnits() | number:2}}
                                         </span>
                                         <span>
                                             Fully Diluted Units
