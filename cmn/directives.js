@@ -926,17 +926,24 @@ m.directive('investorTile', function(){
             $scope.$watch('cti', function(newval, oldval) {
                 if (newval.securities.length > 0) {
                     $scope.cti = angular.copy($scope.cti);
-                    $scope.getInvestorNames();
+                    $scope.getTotalShares();
+                    // $scope.getShares();
                 }
             }, true);
 
-            $scope.getInvestorNames = function(){
+            $scope.getTotalShares = function(){
+                var name = ""
                 angular.forEach($scope.cti.investors, function(cap){
                     console.log(cap);
-                    console.log(cap.name)
-                    return cap.name
+                    // console.log(cap.name)
+                    name = cap.name;                    
                 });
+                // alert(name);
+                // alert(captable.rowSum(name));
+                return captable.rowSum(name)
             };
+
+         
            
            
 
