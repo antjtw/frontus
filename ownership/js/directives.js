@@ -254,6 +254,35 @@ own.directive('editableCaptableCell', [function() {
         ],
     };
 }]);
+own.directive('grantCell', [function() {
+    return {
+        restrict: 'E',
+        scope: {inv: '=',
+                sec: '=',
+                kind: '=',
+                data: '='},
+        templateUrl: '/ownership/partials/grantCell.html',
+        controller: ["$scope", "$rootScope", "captable",
+            function($scope, $rootScope, captable) {
+                $scope.settings = $rootScope.settings;
+            }
+        ],
+    };
+}]);
+own.directive('editableGrantCell', [function() {
+    return {
+        restrict: 'E',
+        scope: {inv: '=',
+                sec: '=',
+                kind: '=',
+                data: '='},
+        templateUrl: '/ownership/partials/editableGrantCell.html',
+        controller: ["$scope", "$rootScope", "captable",
+            function($scope, $rootScope, captable) {
+            }
+        ],
+    };
+}]);
 own.directive('securityDetails', [function() {
     return {
         restrict: 'EA',

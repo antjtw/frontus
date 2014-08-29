@@ -333,6 +333,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.cellFor = cellFor;
+    function rowFor(inv) {
+        return captable.cells
+            .filter(function(cell) {
+                return cell.investor == inv;
+            });
+    }
+    this.rowFor = rowFor;
+    this.rowSum = function(inv) {
+        return rowFor(inv)
+            .reduce(function(prev, cur, idx, arr) {
+                return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
+            }, 0);
+    };
     function cellsForLedger(entries) {
         var checked = {};
         var cells = [];
