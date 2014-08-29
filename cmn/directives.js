@@ -968,18 +968,79 @@ m.directive('documentsTile', function(){
             };
             $scope.getmyDocuments(); 
 
-            $scope.loadDocumentActivity = function() {
-            SWBrijj.tblm("document.investor_activity").then(function(data) {
-                angular.forEach($scope.myDocs, function(doc) {
-                    var doc_activity = data.filter(function(el) {return el.doc_id === doc.doc_id;});
-                    doc.last_event = doc_activity.sort($scope.compareEvents)[0];
-                    if (doc.last_event.activity == 'finalized') {doc.last_event.activity = 'approved';}
-                    var doc_activities = doc_activity.filter(function(el) {return el.person === doc.investor && el.activity === "viewed";});
-                    doc.last_viewed = doc_activities.length > 0 ? doc_activities[0].event_time : null;
-                    $scope.setDocStatusRank(doc);
-                });
-            });
-        };     
+            
+        $scope.shortStatus = function(version) {
+            if (!version) return "";
+            if ($scope.isvoided(version)) {
+                return "Voided"
+            }
+            else if ($scope.isPendingVoid(version)) {
+                return "Void requested by company"
+            } else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
+                return "Rejected by you";
+            } else if ($scope.wasJustRejected(version) &&
+                !$scope.lastEventByInvestor(version)) {
+                return "Rejected by company";
+            } else if ($scope.isPendingSignature(version)){
+                return "Review and Sign";
+            } else if ($scope.isPendingCountersignature(version)){
+                return "Signed and Sent for Review";
+            } else if ($scope.isPendingFinalization(version)) {
+                return "Awaiting Your Approval";
+            } else if ($scope.isCompleteSigned(version)){
+                return "Completed";
+            } else if ($scope.isPendingView(version)){
+                return "Unviewed";
+            } else if ($scope.isCompleteViewed(version)){
+                return "Viewed";
+            } else {
+                return "Sent";
+            }
+        };
+
+        $scope.lastEventByInvestor = function(doc) {
+            return doc.last_event.person == navState.userid;
+        };
+
+        $scope.wasJustRejected = function(doc) {
+            return doc.last_event && doc.last_event.activity == 'rejected';
+        };
+
+        $scope.isPendingFinalization = function(doc) {
+            return (doc.signature_flow===2 && doc.when_countersigned && !doc.when_finalized);
+        };
+
+        $scope.isPendingCountersignature = function(doc) {
+            return (doc.when_signed && !doc.when_countersigned && doc.signature_flow===2)
+                    || (doc.when_signed && !doc.when_finalized && doc.signature_flow===1);
+        };
+
+        $scope.isPendingSignature = function(doc) {
+            return doc.signature_flow>0 && !doc.when_signed;
+        };
+
+        $scope.isPendingView = function(doc) {
+            return doc.signature_flow===0 && !doc.last_viewed;
+        };
+        $scope.isCompleteSigned = function(version) {
+            return basics.isCompleteSigned(version);
+        };
+        $scope.isCompleteViewed = function(version) {
+            return basics.isCompleteViewed(version);
+        };
+
+        $scope.docIsComplete = function(doc) {
+            return  $scope.isCompleteSigned(doc) || $scope.isCompleteViewed(doc);
+        };
+
+        $scope.isPendingVoid = function(version) {
+            return version.signature_flow > 0 && !version.when_void_accepted && version.when_void_requested;
+        };
+
+        $scope.isvoided = function(version) {
+            return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
+        };
+     
             
            
             
