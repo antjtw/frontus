@@ -4948,3 +4948,21 @@ textarea.email-text {
 .lower-icon {
     vertical-align: -10%;
 }
+
+.body-box .cardColumn{
+    width: 49%;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    top: 30%;
+}
+
+.cardHeadline {
+    color: #15A085;
+    font-weight: bold;
+    font-size: 46px;
+    padding-bottom: 20px;
+
+}
+
+
