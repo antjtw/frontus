@@ -1,6 +1,6 @@
 app.controller('invGrantController',
-    ['$scope', '$parse', 'SWBrijj', 'calculate', 'switchval', '$routeParams', '$rootScope', '$location', 'navState',
-        function($scope, $parse, SWBrijj, calculate, switchval, $rootScope, navState) {
+    ['$scope', '$parse', 'SWBrijj', 'calculate', '$routeParams', '$rootScope', '$location', 'navState',
+        function($scope, $parse, SWBrijj, calculate, $rootScope, navState) {
 
     if (navState.role == 'issuer') {
         $location.path('/company-grants');

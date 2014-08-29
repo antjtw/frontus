@@ -695,20 +695,20 @@ own.directive('editableTransactionAttributes', [function() {
                     var filtered = $filter('attrsForEdit')(attrs);
                     var sorted = Object.keys(filtered)
                             .sort(function(x1, x2) {
-                                return $filter('sortAttributeTypes')(x1)
-                                     - $filter('sortAttributeTypes')(x2);
+                                return $filter('sortAttributeTypes')(x1) -
+                                       $filter('sortAttributeTypes')(x2);
                             });
                     return sorted;
                 }
 
                 $scope.getInvestors = function() {
                     var invs = [];
-                    for (i in ct.investors)
+                    for (var i in ct.investors)
                     {
                         invs.push(ct.investors[i].name);
                     }
                     return invs;
-                }
+                };
 
                 function key_display_info(key) {
                     //console.log("bug for some values, use below to debug");
@@ -733,9 +733,11 @@ own.directive('editableTransactionAttributes', [function() {
                             return key_display_info(key).labels;
                         case "number":
                             return "number";
+                        case "array_text":
+                            return "array_text";
                         default:
                             return "text_field";
-                    };
+                    }
                 }
                 this.inputType = inputType;
                 $scope.displayName = function(key) {
@@ -743,9 +745,6 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.description = function(key) {
                     return key_display_info(key).description;
-                };
-                $scope.hasDescription = function(key) {
-                    return $scope.description(key)!==null;
                 };
                 $scope.useTextField = function(key) {
                     return inputType(key) == "text_field";
@@ -761,7 +760,7 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 var datefields = [];
                 $scope.useDatePicker = function(key) {
-                    return datefields.indexOf(key) >= 0
+                    return datefields.indexOf(key) >= 0;
                 };
                 $scope.isRequired = function(key) {
                     return $filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key);
@@ -769,8 +768,29 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.pickIssue = function(key) {
                     return inputType(key) == "security";
                 };
+                $scope.pickMulti = function(key) {
+                    return inputType(key) == "array_text";
+                };
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
-                    tran.attrs[k] = v;
+                    if (inputType(k) == "array_text") {
+                        tran.attrs[k].push(v);
+                    } else {
+                        tran.attrs[k] = v;
+                    }
+                    if ($scope.save)
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
+                };
+                $scope.removeIt = function(tran, cell, errorFunc, k, v) {
+                    if (inputType(k) == "array_text") {
+                        var ix = tran.attrs[k].indexOf(v);
+                        if (ix >= 0) {
+                            tran.attrs[k].splice(ix, 1);
+                        }
+                    } else {
+                        tran.attrs[k] = "";
+                    }
                     if ($scope.save)
                     {
                         captable.saveTransaction(tran, cell, errorFunc);

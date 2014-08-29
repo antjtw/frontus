@@ -300,7 +300,7 @@ app.directive('docTransactionList', function() {
             trans: "="
         },
         templateUrl: "/documents/partials/doc-transaction-list.html",
-        controller: ["$scope", 'calculate', 'switchval', '$location', function($scope, calculate, switchval, $location) {
+        controller: ["$scope", 'calculate', '$location', function($scope, calculate, $location) {
 
             $scope.trans[0].active = true;
 
@@ -309,7 +309,7 @@ app.directive('docTransactionList', function() {
             };
 
             $scope.gotoCaptable = function() {
-                $location.url('/app/ownership/company-captable')
+                $location.url('/app/ownership/company-captable');
             };
 
             $scope.formatAmount = function (amount) {
@@ -331,10 +331,6 @@ app.directive('docTransactionList', function() {
                 else {
                     return "shares";
                 }
-            };
-
-            $scope.trantype = function (type, activetype) {
-                return switchval.trantype(type, activetype);
             };
 
         }]
