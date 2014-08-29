@@ -1,9 +1,9 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
-         "SWBrijj", "calculate", "switchval", "navState", "captable",
+         "SWBrijj", "calculate", "navState", "captable",
          "displayCopy", "History",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, switchval, navState, captable, displayCopy, History)
+         calculate, navState, captable, displayCopy, History)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -11,7 +11,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     }
     var company = navState.company;
     $scope.currentCompany = company;
-    
+
     captable.reloadCapTable();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
@@ -112,7 +112,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.selectedSecurity = null;
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
-                    return el.name == security_name;  
+                    return el.name == security_name;
                 })[0];
             History.watch('selectedSecurity', $scope);
             displaySecurityDetails();
@@ -879,11 +879,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         SWBrijj.procd($rootScope.navState.name + '_captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
             document.location.href = x;
         });
-    };
-
-    //switches the sidebar based on the type of the issue
-    $scope.trantype = function (type, activetype) {
-        return switchval.trantype(type, activetype);
     };
 
     // Number of shareholders
