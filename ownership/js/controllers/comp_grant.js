@@ -784,16 +784,16 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
 
     $scope.opendetails = function(name, type) {
         if (type == "issue") {
-            $scope.issues.forEach(function(issue) {
-                if (name == issue.issue) {
-                    issue.shown = issue.shown !== true;
+            $scope.ct.securities.forEach(function(sec) {
+                if (name == sec.name) {
+                    sec.shown = sec.shown !== true;
                 } else {
-                    issue.shown = false;
+                    sec.shown = false;
                 }
             });
         }
         else if (type == "investor") {
-            $scope.investorLed.forEach(function(investor) {
+            $scope.ct.investors.forEach(function(investor) {
                 if (name == investor.name) {
                     investor.shown = investor.shown !== true;
                 } else {
@@ -803,16 +803,21 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
         }
     };
 
-    $scope.issueGranted = function(issue) {
+    // TODO refactor to use captable service
+    $scope.issueGranted = function(sec) {
+        return captable.securityUnitsFrom(sec, 'grant');
+        /*
         var units = 0;
         angular.forEach(issue.trans, function (tran) {
             if (parseFloat(tran.units) > 0) {
                 units += parseFloat(tran.units);
             }
         });
-        return units
+        return units;
+        */
     };
 
+    // TODO refactor to use captable service
     $scope.issueActions = function(issue, type) {
         var units = 0;
         angular.forEach(issue.trans, function (tran) {
@@ -820,9 +825,10 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
                 units += parseFloat(tran[type]);
             }
         });
-        return units
+        return units;
     };
 
+    // TODO refactor to use captable service
     $scope.issueVested = function(issue) {
         var units = 0;
         angular.forEach(issue.trans, function (tran) {
@@ -830,7 +836,7 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
                 units += grant.units;
             });
         });
-        return units != 0 ? units : null;
+        return units !== 0 ? units : null;
     };
 
     $scope.transactionVested = function(vested) {

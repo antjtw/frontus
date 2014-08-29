@@ -197,7 +197,6 @@
                 <table class="tableView bodyText grant-table"
                        ng-class="{'viewmode': viewMode}"
                        ng-show="ct.securities.length!==0">
-                    <!-- same -->
                     <tr class="column-label">
                         <th></th>
                         <th></th>
@@ -206,7 +205,7 @@
                         <th>Forfeited</th>
                         <th>Exercised</th>
                     </tr>
-                    <tbody ng-hide="((!sec.transactions || sec.transactions.length==1) && viewMode)"
+                    <tbody ng-hide="captable.securityTotalUnits(sec) <= 0 && viewMode"
                            ng-repeat="sec in ct.securities">
                     <!-- SECURITY SUMMARY ROWS -->
                     <tr class="status-row">
@@ -231,10 +230,22 @@
                                 {{sec.name}}
                             </span>
                         </td>
-                        <td>{{formatAmount(issueGranted(sec))}}</td>
-                        <td>{{formatAmount(issueVested(sec))}}</td>
-                        <td>{{formatAmount(issueActions(sec, 'forfeited'))}}</td>
-                        <td>{{formatAmount(issueActions(sec, 'exercised'))}}</td>
+                        <td>
+                            {{captable.securityUnitsFrom(sec, 'grant')
+                            | formatAmount:'units'}}
+                        </td>
+                        <td>
+                            {{captable.securityCurrentUnits(sec)
+                            | formatAmount:'units'}}
+                        </td>
+                        <td>
+                            {{captable.securityUnitsFrom(sec,'forfeit')
+                            | formatAmount:'units'}}
+                        </td>
+                        <td>
+                            {{captable.securityUnitsFrom(sec,'exercise')
+                            | formatAmount:'units'}}
+                        </td>
                     </tr>
                     <!-- EDITABLE INVESTOR ROWS -->
                     <tr class="transaction-rows"

@@ -47,6 +47,22 @@ var Cell = function() {
     this.valid = true;
 };
 
+/* The captable service is currently a generic ownership data service
+ * AS WELL AS, a service performing all necessary data construction
+ * and manipulation for the captables.
+ *
+ * TODO split this service into 2 parts: ownership and captable.
+ * Then additional services should be created for the following:
+ * -  grants
+ * -  round modeling
+ * -  debt conversion calculator
+ *
+ * Generally, whenever additional data structures beyond what is
+ * modeled in the database (transactions and ledger entries) must be
+ * created and maintained, there should be an additional service.
+ *
+ *
+ */
 ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
 
@@ -264,21 +280,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return captable.cells
             .filter(function(el) {
                 return true;})
-            .reduce(function(prev, cur, idx, arr) {
-                if (prev.indexOf(cur.investor) == -1) {
-                    prev.push(cur.investor);
-                }
-                return prev;}, []);
+            .reduce(accumulateProperty('investor'), []);
     }
     function visibleSecurities() {
         return captable.cells
             .filter(function(el) {
                 return el.security !== "";})
-            .reduce(function(prev, cur, idx, arr) {
-                if (prev.indexOf(cur.security) == -1) {
-                    prev.push(cur.security);
-                }
-                return prev;}, []);
+            .reduce(accumulateProperty('security'), []);
     }
     function numUnissued(sec, securities) {
         var unissued = 0;
@@ -386,6 +394,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
+    // FIXME must get 'exercise' transactions for the underlier's column
     function transForCell(inv, sec) {
         var invs = $filter('getInvestorAttributes')();
         var secs = $filter('getSecurityAttributes')();
@@ -1205,6 +1214,47 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .reduce(sumCellUnits, 0);
     }
     this.securityTotalUnits = securityTotalUnits;
+    function securityUnitsFrom(sec, kind) {
+        if (!(sec && kind)) return 0;
+
+        var trans = captable.transactions.filter(function(tran) {
+            // FIXME not working
+            if (tran.kind == kind && kind!='grant' && tran.attrs.security == sec.name) {
+                console.log(tran);
+            }
+            return tran.attrs.security == sec.name &&
+                tran.kind == kind;
+        }).reduce(accumulateProperty('transaction'), []);
+
+        var entries = captable.ledger_entries.filter(function(ent) {
+            return trans.indexOf(ent.transaction) != -1;
+        });
+        return sum_ledger(entries);
+    }
+    function accumulateProperty(prop) {
+        return function(prev, cur, idx, arr) {
+            if (prev.indexOf(cur[prop]) == -1) {
+                prev.push(cur[prop]);
+            }
+            return prev;
+        };
+    }
+    this.securityUnitsFrom = securityUnitsFrom;
+    function securityCurrentUnits(sec) {
+        if (!sec) return 0;
+
+        var trans = captable.transactions.filter(function(tran) {
+            return tran.attrs.security == sec.name;
+        }).reduce(accumulateProperty('transaction'), []);
+
+        var entries = captable.ledger_entries.filter(function(ent) {
+            return trans.indexOf(ent.transaction) != -1 &&
+                ent.investor &&
+                ent.effective_date <= Date.now();
+        });
+        return sum_ledger(entries);
+    }
+    this.securityCurrentUnits = securityCurrentUnits;
     this.securityTotalAmount = function(sec) {
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
