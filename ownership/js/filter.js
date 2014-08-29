@@ -180,8 +180,9 @@ ownership.filter('securityUnitLabel', function() {
     };
 });
 
-ownership.filter('formatAmount', function() {
-    return function(amount, settings, key) {
+ownership.filter('formatAmount', function($rootScope) {
+    return function(amount, key) {
+        var settings = $rootScope.settings;
         var nums = ["units", "forfeited"];
         var moneys = ["ppshare", "price", "effectivepps",
                       "valcap", "amount"]; 
