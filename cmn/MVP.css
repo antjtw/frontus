@@ -4952,4 +4952,16 @@ textarea.email-text {
 .body-box .cardColumn{
     width: 49%;
     display: inline-block;
+    text-align: center;
+    margin-top: 90px;
 }
+
+.cardHeadline {
+    color: #15A085;
+    font-weight: bold;
+    font-size: 36px;
+    padding-bottom: 20px;
+
+}
+
+
