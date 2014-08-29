@@ -263,6 +263,18 @@ ownership.filter('selectablesecurities', function() {
     };
 });
 
+ownership.filter('usedsecurities', function() {
+    return function(securities, existing) {
+        var filtered_secs = [];
+        angular.forEach(securities, function(sec) {
+            if (existing.indexOf(sec.name) === -1) {
+                filtered_secs.push(sec);
+            }
+        });
+        return filtered_secs;
+    };
+});
+
 ownership.filter('validActions', ['attributes', function(attributes) {
     return function(sec_type, action_type) {
         var attrs = attributes.getAttrs();

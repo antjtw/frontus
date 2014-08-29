@@ -95,7 +95,7 @@
                     <span class="invisible-drop">'</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li ng-repeat="i in securities | selectablesecurities:data">
+                    <li ng-repeat="i in securities | selectablesecurities:data | usedsecurities:data.attrs[key]">
                         <a ng-click="setIt(data, true, undo, key, i.name)">
                             {{i.name}}
                         </a>
