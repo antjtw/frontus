@@ -309,10 +309,13 @@ app.controller('CompanyCtrl',
 
             $scope.generateSecurityGraph = function() {
                 $scope.graphdata = [];
+                var maxPercent = 0;
+                var percent;
                 console.log($scope.ct);
                 angular.forEach($scope.ct.securities, function(security) {
-                    console.log(captable.securityTotalUnits(security) + captable.numUnissued(security, $scope.ct.securities));
-                    $scope.graphdata.push([{'name':security.name, 'percent':10}, {'name':'whatever', 'percent':100-10}, {'name':'zero', 'percent': 0}]);
+                    percent = (((captable.securityTotalUnits(security) + captable.numUnissued(security, $scope.ct.securities)) /  captable.totalOwnershipUnits()) * 100);
+                    $scope.graphdata.push([{'name': security.name, 'issued': captable.securityTotalUnits(security), 'amount': captable.securityTotalAmount(security)}, [{'name':security.name, 'percent':percent}, {'name':'whatever', 'percent':maxPercent}, {'name':'zero', 'percent': 0}]]);
+                    maxPercent += percent;
                 });
             };
 
