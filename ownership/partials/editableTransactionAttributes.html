@@ -84,6 +84,24 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+        </ul>
+        <span class="locked-security" ng-repeat="sec in data.attrs[key]" ng-if="pickMulti(key)">
+            {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)"></a>
+        </span>
+        <ul class="dropdown-list drop-selector" ng-if="pickMulti(key)">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle">
+                    <span class="invisible-drop">'</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="i in securities | selectablesecurities:data">
+                        <a ng-click="setIt(data, true, undo, key, i.name)">
+                            {{i.name}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
         <span ng-if="description(key)"
               class="tooltip-icon"
