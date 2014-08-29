@@ -30,8 +30,8 @@ app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
     }
 ]);
 
-app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'navState',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, navState) {
+app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, navState) {
 
         if (window.innerWidth < 1024) {
             $scope.variablewidth = window.innerWidth;
@@ -207,8 +207,8 @@ app.controller('FeaturesDebtCtrl', ['$rootScope', '$scope', 'SWBrijj', '$locatio
     }
 ]);
 
-app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'switchval', 'navState',
-    function($rootScope, $scope, SWBrijj, $location, calculate, switchval, navState) {
+app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location', 'calculate', 'navState',
+    function($rootScope, $scope, SWBrijj, $location, calculate, navState) {
 
         $scope.gotopage = function (link) {
             $location.url("/features/" + link);
@@ -953,11 +953,6 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
             if (done) {
                 return true
             }
-        };
-
-        //switches the sidebar based on the type of the issue
-        $scope.trantype = function (type, activetype) {
-            return switchval.trantype(type, activetype);
         };
 
         var sharePercentage = calculate.sharePercentage;
