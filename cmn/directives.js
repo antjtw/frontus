@@ -927,6 +927,7 @@ m.directive('investorTile', function(){
                 if (newval.securities.length > 0) {
                     $scope.cti = angular.copy($scope.cti);
                     $scope.getTotalShares();
+                    $scope.getTotalInvested();
                     // $scope.getShares();
                 }
             }, true);
@@ -934,14 +935,23 @@ m.directive('investorTile', function(){
             $scope.getTotalShares = function(){
                 var name = ""
                 angular.forEach($scope.cti.investors, function(cap){
-                    console.log(cap);
-                    // console.log(cap.name)
+                    // console.log(cap);
                     name = cap.name;                    
                 });
-                // alert(name);
-                // alert(captable.rowSum(name));
                 return captable.rowSum(name)
             };
+
+           var myTransactions = [];
+
+            $scope.getTotalInvested = function(){
+                var transactions = []
+                angular.forEach($scope.cti.transactions, function(trans){
+                    console.log(trans);
+                   myTransactions.push(trans);
+                })
+                console.log(myTransactions)
+                return captable.sum_transactions(myTransactions);
+            }
 
          
            
