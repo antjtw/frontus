@@ -326,13 +326,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.cellFor = cellFor;
-    function rowFor(inv) {
-        return captable.cells
-            .filter(function(cell) {
-                return cell.investor == inv;
-            });
-    }
-    this.rowFor = rowFor;
     this.rowSum = function(inv) {
         return rowFor(inv)
             .reduce(function(prev, cur, idx, arr) {
@@ -442,6 +435,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return cell.investor == inv;
             });
     }
+    this.rowFor = rowFor;
     function colFor(sec) {
         return captable.cells
             .filter(function(cell) {
@@ -572,6 +566,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function sum_transactions(trans) {
         return trans.reduce(sumTransactionAmount, 0);
     }
+    this.sum_transactions = sum_transactions;
     function generateSecuritySummaries() {
         angular.forEach(captable.securities, function(sec) {
             if (sec.transactions.length > 1) {
