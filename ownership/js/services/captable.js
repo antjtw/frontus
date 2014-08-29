@@ -443,12 +443,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.securityUnissuedPercentage = function(sec, securities) {
         return 100 * (numUnissued(sec, securities) / totalOwnershipUnits());
     };
-    function rowFor(inv) {
-        return captable.cells
-            .filter(function(cell) {
-                return cell.investor == inv;
-            });
-    }
     function colFor(sec) {
         return captable.cells
             .filter(function(cell) {
@@ -510,7 +504,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             investor.name = investor.new_name;
         }).except(function(x) {
             console.log(x);
-            $scope.undo();
         });
     };
     this.updateSecurityName = function(security) {
@@ -907,10 +900,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 splice_many(captable.transactions, inv.transactions);
             } else {
                 $rootScope.$emit("notification:fail",
-                    "Oops, something went wrong.");
+                    "Sorry, We were unable to remove this investor.");
             }
         }).except(function(err) {
             console.log(err);
+            $rootScope.$emit("notification:fail",
+                "Oops, something went wrong.");
         });
     };
     function rowFromName(name) {
