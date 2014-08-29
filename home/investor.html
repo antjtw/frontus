@@ -11,7 +11,7 @@
         </div>
 
   <!--   text in the window -->
-    <documents-tile></documents-tile>
+    
   		<div class="row-fluid leftTabWindow">
         	<div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
 				<div ng-style="viewportheight" class="span12">
@@ -21,12 +21,12 @@
 						<div ng-show="(docsummary.num > 0)">
 							<div class="front info-box">
 								<div ng-show="docsummary.num > 0" class="head-box">
-									<h2>Document Management</h2>
+									<h2>Document Management for me</h2>
 								
 								</div>
-								<div ng-hide="docsummary.num > 0" class="head-box">
-									<h2>Document Management</h2>
-								</div>
+								<!-- <div ng-hide="docsummary.num > 0" class="head-box">
+									<h2>Document Management for you</h2>
+								</div> -->
 								<div class="body-box">
 									<div>
 										<div class="detail-row row-fluid">
@@ -50,6 +50,7 @@
 								</div>
 							</div>
 						</div>
+            <documents-tile></documents-tile>
 		        <investor-tile></investor-tile>
 						<div ng-show="vestedgraphdata.length > 0">
 							<div class="front info-box">
