@@ -38,8 +38,8 @@ window.analytics.page()
 <script src="/lib/angular/ui-bootstrap-tpls-0.4.0.js"></script>
 <script src="/lib/angular/ui-utils/event.js"></script>
 <script src="/lib/angular/ng-infinite-scroll.js"></script>
-<!-- <script src="/lib/angular-scroll.min.js"></script> -->
-<!-- <script src="/lib/bootstrap/bootstrap-tagsinput.min.js"></script> -->
+<script src="/lib/angular-scroll.min.js"></script>
+<script src="/lib/bootstrap/bootstrap-tagsinput.min.js"></script>
 <script src="/lib/bootstrap/bootstrap-tagsinput-angular.js"></script>
 <script src="/lib/modernizr/modernizr.js"></script>
 <script src="/lib/placeholders.min.js"></script>
