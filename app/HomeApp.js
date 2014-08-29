@@ -855,20 +855,16 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             var transArray = [];
             var transIndex=-1;
             var transAttrs;
-            console.log("here?");
             angular.forEach($scope.cti.transactions, function (tran) {
-                console.log("loop?");
                 transArray.push(tran.transaction);
-                console.log(transArray);
             });
             angular.forEach($scope.cti.ledger_entries, function (entry) {
                 transIndex=transArray.indexOf(entry.transaction);
                 if (transIndex!=-1) {
-                    transAttrs=$scope.cti.transactions[transIndex].attrs;
-                    console.log("transaction found");
+                    transAttrs = $scope.cti.transactions[transIndex].attrs;
                     if (transAttrs.terms&&transAttrs.vestcliff&&transAttrs.vestfreq&&transAttrs.vestingbegins){
                         if (entry.investor==investorName){
-                            $scope.vestedgraphdata.push({'date':entry.effective_date, 'units':entry.credit, 'month':(entry.effective_date.getMonth()), 'vested':(Math.abs(Date()-entry.insertion_date))})
+                            $scope.vestedgraphdata.push({'date':entry.effective_date, 'units':entry.credit, 'month':(entry.effective_date.toString('MMM yy')), 'vested':(new Date()-entry.effective_date)})
                         }
                     }
                 }
