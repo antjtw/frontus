@@ -41,25 +41,25 @@
 						</div>
 						<div ng-show="totalIssued != 0">
 							<div class="detail-row row-fluid">
-								<div ng-show="graphdata3[0].percent == -1" class="spacing"></div>
-								<div ng-show="graphdata2[0].percent == -1" class="spacing"></div>
+								<div ng-show="graphdata[2].percent == -1" class="spacing"></div>
+								<div ng-show="graphdata[1].percent == -1" class="spacing"></div>
 								<div class="span6" ng-show="graphdata[0].percent != -1">
-									<d3expdonut class="exploded-donut" data='graphdata'></d3expdonut>
+									<d3expdonut class="exploded-donut" data='graphdata[0]'></d3expdonut>
 									<h2>{{graphdata[0].name}}</h2>
 									<h2>{{biggestIssue}} Issued</h2>
 									<h2 ng-show="biggestMoney != 0">${{biggestMoney}} Invested</h2>
 						
 									
 								</div>
-								<div class="span6" ng-show="graphdata2[0].percent != -1">
-									<d3expdonut class="exploded-donut" data='graphdata2'></d3expdonut>
-									<h2>{{graphdata2[0].name}}</h2>	
+								<div class="span6" ng-show="graphdata[1].percent != -1">
+									<d3expdonut class="exploded-donut" data='graphdata[1]'></d3expdonut>
+									<h2>{{graphdata[1].name}}</h2>
 									<h2>{{biggerIssue}} Issued</h2>
 									<h2 ng-show="biggerMoney != 0">${{biggerMoney}} Invested</h2>				
 								</div>
-								<div class="span6" ng-show="graphdata3[0].percent != -1">
-									<d3expdonut class="exploded-donut" data='graphdata3'></d3expdonut>
-									<h2>{{graphdata3[0].name}}</h2>
+								<div class="span6" ng-show="graphdata[2].percent != -1">
+									<d3expdonut class="exploded-donut" data='graphdata[2]'></d3expdonut>
+									<h2>{{graphdata[2].name}}</h2>
 									<h2>{{bigIssue}} Issued</h2>
 									<h2 ng-show="bigMoney != 0">${{bigMoney}} Invested</h2>
 								</div>
