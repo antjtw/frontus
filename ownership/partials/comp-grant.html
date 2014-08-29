@@ -163,21 +163,30 @@
             </div>
         </div>
 
-        <div ng-style="viewportheight" class="span8 docLibrary leftBlock" style="overflow-x: auto">
-            <table class="tableView bodyText grant-table" ng-show="issues.length===0 && done">
+        <div ng-style="viewportheight"
+             class="span8 docLibrary leftBlock"
+             style="overflow-x: auto">
+            <table class="tableView bodyText grant-table"
+                   ng-show="issues.length===0 && done">
                 <tbody class="empty-table">
                 <tr>
                     <td>
-                        <div>Welcome! <a href="/app/ownership/company-captable" class="link">Create an options security</a> on your
-                            capitalization table to manage your grants
+                        <div>
+                            Welcome!
+                            <a href="/app/ownership/company-captable"
+                               class="link">
+                                Create an options security
+                            </a> on your capitalization table to manage
+                            your grants
                         </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <div class="row-fluid">
-                <table class="tableView bodyText grant-table" ng-class="{'viewmode': editMode}"
-                    ng-show="issues.length!==0 && optionView == 'Security'">
+                <table class="tableView bodyText grant-table"
+                       ng-class="{'viewmode': editMode}"
+                       ng-show="issues.length!==0 && optionView == 'Security'">
                     <tr class="column-label">
                         <th></th>
                         <th></th>
@@ -186,7 +195,8 @@
                         <th>Forfeited</th>
                         <th>Exercised</th>
                     </tr>
-                    <tbody ng-hide="((!issue.trans || issue.trans.length==1) && editMode)" ng-repeat="issue in issues">
+                    <tbody ng-hide="((!issue.trans || issue.trans.length==1) && editMode)"
+                           ng-repeat="issue in issues">
                     <tr class="status-row">
                         <td class="status-toggle pointer"
                             ng-class="{'status-toggle-on': issue.shown}"
@@ -195,8 +205,7 @@
                                   data-icon="&#xe017;" aria-hidden="true">
                             </span>
                             <span ng-show="issue.shown && issue.trans"
-                                  data-icon="&#xe01c;"
-                                  aria-hidden="true">
+                                  data-icon="&#xe01c;" aria-hidden="true">
                             </span>
                         </td>
                         <td ng-class="{'selectablerow': editMode}"
@@ -215,47 +224,76 @@
                         <td>{{formatAmount(issueActions(issue, 'forfeited'))}}</td>
                         <td>{{formatAmount(issueActions(issue, 'exercised'))}}</td>
                     </tr>
-                    <tr class="transaction-rows" ng-show="issue.shown && !editMode" ng-repeat="tran in issue.trans">
+                    <tr class="transaction-rows"
+                        ng-show="issue.shown && !editMode"
+                        ng-repeat="tran in issue.trans">
                         <td></td>
-                        <td><input bs-typeahead="rownames"
-                            placeholder="Add new investor"
-                            ng-model="tran.investor"
-                            ng-change="fauxupdating(tran)"
-                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'updateName(tran)'}">
+                        <td>
+                            <input bs-typeahead="rownames"
+                                   placeholder="Add new investor"
+                                   ng-model="tran.investor"
+                                   ng-change="fauxupdating(tran)"
+                                   ui-event="{focus: 'getActiveTransaction(tran)',
+                                              blur: 'updateName(tran)'}">
                         </td>
-                        <td><input maxlength="16" placeholder="options"
-                            ng-disabled="!tran.investor"
-                            ui-event="{focus : 'getActiveTransaction(tran)', blur : 'saveTran(activeTran)'}"
-                            ng-model="tran.units">
+                        <td>
+                            <input maxlength="16" placeholder="options"
+                                   ng-disabled="!tran.investor"
+                                   ui-event="{focus: 'getActiveTransaction(tran)',
+                                              blur: 'saveTran(activeTran)'}"
+                                   ng-model="tran.units">
                         </td>
-                        <td ng-click="getActiveTransaction(tran, 'vested')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                        <td ng-click="getActiveTransaction(tran, 'vested')">
+                            <span>
+                                {{formatAmount(transactionVested(tran.vested))}}
+                            </span>
                         </td>
-                        <td><input maxlength="16" placeholder="options"
-                            ng-disabled="!tran.investor || !tran.units"
-                            ui-event="{focus : 'getActiveTransaction(tran, \'forfeited\')', blur : 'grantUpdateLR(tran, \'forfeited\')'}"
-                            ng-model="tran.forfeited">
+                        <td>
+                            <input maxlength="16" placeholder="options"
+                                   ng-disabled="!tran.investor || !tran.units"
+                                   ui-event="{focus: 'getActiveTransaction(tran, \'forfeited\')',
+                                              blur: 'grantUpdateLR(tran, \'forfeited\')'}"
+                                   ng-model="tran.forfeited">
                         </td>
-                        <td><input maxlength="16" placeholder="options"
-                            ng-disabled="!tran.investor || !tran.units"
-                            ui-event="{focus : 'getActiveTransaction(tran, \'exercised\')', blur : 'grantUpdateLR(tran, \'exercised\')'}"
-                            ng-model="tran.exercised">
+                        <td>
+                            <input maxlength="16" placeholder="options"
+                                   ng-disabled="!tran.investor || !tran.units"
+                                   ui-event="{focus: 'getActiveTransaction(tran, \'exercised\')',
+                                              blur: 'grantUpdateLR(tran, \'exercised\')'}"
+                                   ng-model="tran.exercised">
                         </td>
                     </tr>
-                    <tr class="transaction-rows" ng-show="issue.shown && editMode" ng-repeat="tran in issue.trans | noempty">
+                    <tr class="transaction-rows"
+                        ng-show="issue.shown && editMode"
+                        ng-repeat="tran in issue.trans | noempty">
                         <td class="viewField"></td>
-                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
-                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
-                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
-                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                        <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
-                            ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                        <td ng-class="{fieldSelected: tran.fields[0],
+                                       hoverable: tran.investor}"
+                            ng-click="getActiveTransaction(tran, '', 'view')">
+                            <span>{{tran.investor}}</span>
                         </td>
-                        <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
+                        <td ng-class="{fieldSelected: tran.fields[0],
+                                       hoverable: tran.units}"
+                            ng-click="getActiveTransaction(tran, '', 'view')">
+                            <span>{{formatAmount(tran.units)}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[1],
+                                       hoverable: (tran.vested.length > 0)}"
+                            ng-click="getActiveTransaction(tran, 'vested', 'view')">
+                            <span>
+                                {{formatAmount(transactionVested(tran.vested))}}
+                            </span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[2],
+                                       hoverable: tran.forfeited}"
                             ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                            <span>{{formatAmount(tran.forfeited)}}</span></td>
-                        <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
+                            <span>{{formatAmount(tran.forfeited)}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[3],
+                                       hoverable: tran.exercised}"
                             ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                            <span>{{formatAmount(tran.exercised)}}</span></td>
+                            <span>{{formatAmount(tran.exercised)}}</span>
+                        </td>
                     </tr>
                     </tbody>
                     <tr class="total-row">
@@ -265,14 +303,27 @@
                     <tr class='tablefooter'>
                         <td></td>
                         <td></td>
-                        <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
-                        <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
-                        <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
-                        <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('units', issues), 'zero')}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('vested', issues), 'zero')}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('exercised', issues), 'zero')}}">
+                        </td>
                     </tr>
                 </table>
 
-                <table class="tableView bodyText grant-table viewmode" ng-show="issues.length!==0 && optionView == 'Person'">
+                <table class="tableView bodyText grant-table viewmode"
+                       ng-show="issues.length!==0 && optionView == 'Person'">
                     <tr class="column-label">
                         <th></th>
                         <th></th>
@@ -283,10 +334,15 @@
                     </tr>
                     <tbody ng-repeat="investor in investorLed">
                     <tr class="status-row">
-                        <td class="status-toggle pointer" ng-class="{'status-toggle-on': investor.shown}"
+                        <td class="status-toggle pointer"
+                            ng-class="{'status-toggle-on': investor.shown}"
                             ng-click="opendetails(investor.name, 'investor')">
-                            <span ng-hide="investor.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                            <span ng-show="investor.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                            <span ng-hide="investor.shown"
+                                  data-icon="&#xe017;" aria-hidden="true">
+                            </span>
+                            <span ng-show="investor.shown"
+                                  data-icon="&#xe01c;" aria-hidden="true">
+                            </span>
                         </td>
                         <td>
                             <input disabled ng-model="investor.name">
@@ -296,23 +352,35 @@
                         <td>{{formatAmount(issueActions(investor, 'forfeited'))}}</td>
                         <td>{{formatAmount(issueActions(investor, 'exercised'))}}</td>
                     </tr>
-                    <tr class="transaction-rows" ng-show="investor.shown && editMode"
+                    <tr class="transaction-rows"
+                        ng-show="investor.shown && editMode"
                         ng-repeat="tran in investor.trans | noempty">
                         <td class="viewField"></td>
-
-                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
-                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
-                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
-                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                        <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
-                            ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                        <td ng-class="{fieldSelected: tran.fields[0],
+                                       hoverable: tran.investor}"
+                            ng-click="getActiveTransaction(tran, '', 'view')">
+                            <span>{{tran.issue}}</span>
                         </td>
-                        <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
+                        <td ng-class="{fieldSelected: tran.fields[0],
+                                       hoverable: tran.units}"
+                            ng-click="getActiveTransaction(tran, '', 'view')">
+                            <span>{{formatAmount(tran.units)}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[1],
+                                       hoverable: (tran.vested.length > 0)}"
+                            ng-click="getActiveTransaction(tran, 'vested', 'view')">
+                            <span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[2],
+                                       hoverable: tran.forfeited}"
                             ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                            <span>{{formatAmount(tran.forfeited)}}</span></td>
-                        <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
+                            <span>{{formatAmount(tran.forfeited)}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[3],
+                                       hoverable: tran.exercised}"
                             ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                            <span>{{formatAmount(tran.exercised)}}</span></td>
+                            <span>{{formatAmount(tran.exercised)}}</span>
+                        </td>
                     </tr>
                     </tbody>
                     <tr class="total-row">
@@ -322,10 +390,22 @@
                     <tr class='tablefooter'>
                         <td></td>
                         <td></td>
-                        <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
-                        <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
-                        <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
-                        <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('units', issues), 'zero')}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('vested', issues), 'zero')}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{formatAmount(footerAction('exercised', issues), 'zero')}}">
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -335,124 +415,180 @@
         <div ng-style="viewportheight" class="span4 capright">
             <div ng-switch on="sideBar">
                 <span ng-switch-when="1">
-
-                    <div class="capGuide global" ng-show="mode == 1 && !editMode">
-
+                    <div class="capGuide global"
+                         ng-show="mode == 1 && !editMode">
                         <div class="rightTitle security-type">
                             <span>Investor</span>
-                            <input disabled ng-model="activeTran.investor">
+                            <input disabled
+                                   ng-model="activeTran.investor">
                         </div>
-
-                        <p class="rightTitle"><span>Date</span><input ng-show="mode == 1 && !editMode"
-                        ng-disabled="toggleView();"
-                        id="date{{activeTran.$$hashKey}}"
-                        ui-event="{keydown:'saveTranDate(activeTran, \'date\', $event)', blur:'saveTranDate(activeTran, \'date\', \'blur\')'}"
-                        ng-change="saveTranDate(activeTran, 'date')"
-                        type="text" ng-model="activeTran.date"
-                        data-date-format={{settings.lowercasedate}}
-                        bs-datepicker>
-
+                        <p class="rightTitle">
+                            <span>Date</span>
+                            <input ng-show="mode == 1 && !editMode"
+                                   ng-disabled="toggleView();"
+                                   id="date{{activeTran.$$hashKey}}"
+                                   ui-event="{keydown: 'saveTranDate(activeTran, \'date\', $event)',
+                                              blur: 'saveTranDate(activeTran, \'date\', \'blur\')'}"
+                                   ng-change="saveTranDate(activeTran, 'date')"
+                                   type="text"
+                                   ng-model="activeTran.date"
+                                   data-date-format={{settings.lowercasedate}}
+                                   bs-datepicker>
                         </p>
-
-                        <p class="rightTitle"><span>Options</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                        ng-model="activeTran.units"></p>
-
-                        <p class="rightTitle"><span>Strike Price</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                        ng-model="activeTran.price"></p>
-
-                        <div ng-show="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                            class="rightTitle"><span>Vesting Schedule</span>
-                            <ul class="dropdown-list  drop-selector">
+                        <p class="rightTitle">
+                            <span>Options</span>
+                            <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                   ng-model="activeTran.units">
+                        </p>
+                        <p class="rightTitle">
+                            <span>Strike Price</span>
+                            <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                   ng-model="activeTran.price">
+                        </p>
+                        <div ng-show="activeTran.terms == null &&
+                                      activeTran.vestingbegins == null &&
+                                      activeTran.vestcliff == null &&
+                                      activeTran.vestfreq == null"
+                             class="rightTitle">
+                            <span>Vesting Schedule</span>
+                            <ul class="dropdown-list drop-selector">
                                 <li class="dropdown standard">
-                                <a class="dropdown-toggle">
-                                    <span class="invisible-drop">'</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li ng-repeat="i in schedules">
-                                    <a ng-click="pickSchedule(i, activeTran)">{{i.name}}</a>
-                                    </li>
-                                    <li><a ng-click="pickSchedule('!!', activeTran)">Custom Schedule</a></li>
-                                </ul>
+                                    <a class="dropdown-toggle">
+                                        <span class="invisible-drop">'</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="i in schedules">
+                                            <a ng-click="pickSchedule(i, activeTran)">
+                                                {{i.name}}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="pickSchedule('!!', activeTran)">
+                                                Custom Schedule
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
-
-                        <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                        class="rightTitle double"><span>Vesting Term (months)</span><input
-                        ui-event="{blur : 'saveTran(activeTran)'}"
-                        ng-model="activeTran.terms">
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                            bs-tooltip="captabletips.terms"></span>
+                        <p ng-hide="activeTran.terms == null &&
+                                    activeTran.vestingbegins == null &&
+                                    activeTran.vestcliff == null &&
+                                    activeTran.vestfreq == null"
+                           class="rightTitle double">
+                            <span>Vesting Term (months)</span>
+                            <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                   ng-model="activeTran.terms">
+                            <span class="tooltip-icon"
+                                  data-icon="&#xe044;"
+                                  aria-hidden="true"
+                                  data-placement="top"
+                                  bs-tooltip="captabletips.terms">
+                            </span>
                         </p>
-
-                        <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                        class="rightTitle double"><span>Vesting Cliff (Months)</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                        ng-model="activeTran.vestingbeginsdisplay">
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                            bs-tooltip="captabletips.vestingbegins"></span>
-
+                        <p ng-hide="activeTran.terms == null &&
+                                    activeTran.vestingbegins == null &&
+                                    activeTran.vestcliff == null &&
+                                    activeTran.vestfreq == null"
+                           class="rightTitle double">
+                            <span>Vesting Cliff (Months)</span>
+                            <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                   ng-model="activeTran.vestingbeginsdisplay">
+                            <span class="tooltip-icon"
+                                  data-icon="&#xe044;"
+                                  aria-hidden="true"
+                                  data-placement="top"
+                                  bs-tooltip="captabletips.vestingbegins">
+                            </span>
                         </p>
-
-                        <p ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                        class="rightTitle"><span>Vesting Cliff %</span><input ui-event="{blur : 'saveTran(activeTran)'}"
-                        ng-model="activeTran.vestcliff">
-                        <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                            bs-tooltip="captabletips.vestcliff"></span>
+                        <p ng-hide="activeTran.terms == null &&
+                                    activeTran.vestingbegins == null &&
+                                    activeTran.vestcliff == null &&
+                                    activeTran.vestfreq == null"
+                           class="rightTitle">
+                            <span>Vesting Cliff %</span>
+                            <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                   ng-model="activeTran.vestcliff">
+                            <span class="tooltip-icon"
+                                  data-icon="&#xe044;"
+                                  aria-hidden="true"
+                                  data-placement="top"
+                                  bs-tooltip="captabletips.vestcliff">
+                            </span>
                         </p>
-
-
-                        <div ng-hide="activeTran.terms == null && activeTran.vestingbegins == null && activeTran.vestcliff == null && activeTran.vestfreq == null"
-                            class="rightTitle double"><span>Post Cliff Frequency</span>
-                            <ul class="dropdown-list  drop-selector">
+                        <div ng-hide="activeTran.terms == null &&
+                                      activeTran.vestingbegins == null &&
+                                      activeTran.vestcliff == null &&
+                                      activeTran.vestfreq == null"
+                             class="rightTitle double">
+                            <span>Post Cliff Frequency</span>
+                            <ul class="dropdown-list drop-selector">
                                 <li class="dropdown standard">
-                                <a class="dropdown-toggle">
-                                    {{activeTran.vestfreq}}<span class="invisible-drop">'</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li ng-repeat="i in freqtypes">
-                                    <a ng-click="saveTranAssign(activeTran, 'vestfreq', i)">{{i}}</a>
-                                    </li>
-                                </ul>
+                                    <a class="dropdown-toggle">
+                                        {{activeTran.vestfreq}}
+                                        <span class="invisible-drop">'</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="i in freqtypes">
+                                            <a ng-click="saveTranAssign(activeTran, 'vestfreq', i)">
+                                                {{i}}
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
-
-                            <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top"
-                                bs-tooltip="captabletips.vestfreq"></span>
+                            <span class="tooltip-icon"
+                                  data-icon="&#xe044;"
+                                  aria-hidden="true"
+                                  data-placement="top"
+                                  bs-tooltip="captabletips.vestfreq">
+                            </span>
                         </div>
-
-                        <span class="blue-link delete-link grant-link" ng-click="tranDeleteUp(activeTran);">Delete transaction</span>
+                        <span class="blue-link delete-link grant-link"
+                              ng-click="tranDeleteUp(activeTran);">
+                            Delete Transaction
+                        </span>
                     </div>
-
-                    <div class="capGuide grants" ng-show="mode == 2 && !editMode">
-
+                    <div class="capGuide grants"
+                         ng-show="mode == 2 && !editMode">
                         <h2>Forfeit Information</h2>
-
                         <ul>
-                            <li class="grant-list-edit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
-                            <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act, 'forfeited')"
-                            ng-model="act.date"
-                            data-date-format={{settings.lowercasedate}}
-                            bs-datepicker></p>
-
-                            <p class="rightTitle"><span>Shares</span><input
-                            ui-event="{blur : 'saveGrant(act, \'forfeited\')'}" ng-model="act.unit">
+                            <li class="grant-list-edit"
+                                ng-repeat="act in activeTran.activeAct
+                                           | grantSelect:'forfeited'">
+                                <p class="rightTitle">
+                                    <span>Date</span>
+                                    <input ng-change="saveGrant(act, 'forfeited')"
+                                           ng-model="act.date"
+                                           data-date-format={{settings.lowercasedate}}
+                                           bs-datepicker>
+                                </p>
+                                <p class="rightTitle">
+                                    <span>Shares</span>
+                                    <input ui-event="{blur: 'saveGrant(act, \'forfeited\')'}"
+                                           ng-model="act.unit">
                             </li>
                         </ul>
                     </div>
-
-                    <div class="capGuide grants" ng-show="mode == 3 && !editMode">
-
+                    <div class="capGuide grants"
+                         ng-show="mode == 3 && !editMode">
                         <h2>Exercise Information</h2>
-
                         <ul>
-                            <li class="grant-list-edit" ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
-                            <p class="rightTitle"><span>Date</span><input ng-change="saveGrant(act, 'exercised')"
-                            ng-model="act.date"
-                            data-date-format={{settings.lowercasedate}}
-                            bs-datepicker></p>
-
-                            <p class="rightTitle"><span>Shares</span><input
-                            ui-event="{blur : 'saveGrant(act, \'exercised\')'}" ng-model="act.unit">
+                            <li class="grant-list-edit"
+                                ng-repeat="act in activeTran.activeAct
+                                           | grantSelect:'exercised'">
+                                <p class="rightTitle">
+                                    <span>Date</span>
+                                    <input ng-change="saveGrant(act, 'exercised')"
+                                           ng-model="act.date"
+                                           data-date-format={{settings.lowercasedate}}
+                                           bs-datepicker>
+                                </p>
+                                <p class="rightTitle">
+                                    <span>Shares</span>
+                                    <input ui-event="{blur: 'saveGrant(act, \'exercised\')'}"
+                                       n   ng-model="act.unit">
+                                </p>
                             </li>
                         </ul>
                     </div>

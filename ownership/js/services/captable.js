@@ -79,7 +79,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
-            //What is this function supposed to do???
+            // What is this function supposed to do???
+            // [Brian] The designs at one point asked for a summary
+            // for securities, which would, for example, include the
+            // price per share as adjusted after splits.
             //generateSecuritySummaries();
 
             handleTransactions(captable.transactions);
@@ -93,16 +96,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         console.log(captable);
     }
     loadCapTable();
-
-    function secHasTran(name)
-    {
-        for (var t in captable.transactions)
-        {
-            if (captable.transactions[t].attrs.security == name && captable.transactions[t].kind != "issue security")
-                return true;
-        }
-        return false;
-    }
 
     /* Data Gathering Functions */
 
@@ -1142,6 +1135,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                                     "pariwith": null});
             }
         });
+    }
+
+    function secHasTran(name)
+    {
+        for (var t in captable.transactions)
+        {
+            if (captable.transactions[t].attrs.security == name &&
+                    captable.transactions[t].kind != "issue security")
+                return true;
+        }
+        return false;
     }
     /*
      * Sum all ledger entries associated with equity.
