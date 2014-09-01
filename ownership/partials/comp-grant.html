@@ -211,7 +211,7 @@
                     <tr class="status-row">
                         <td class="status-toggle pointer"
                             ng-class="{'status-toggle-on': sec.shown}"
-                            ng-click="opendetails(sec.name, 'issue')">
+                            ng-click="opendetails(sec.name, 'security')">
                             <span ng-hide="sec.shown || !sec.transactions"
                                   data-icon="&#xe017;" aria-hidden="true">
                             </span>
@@ -220,10 +220,10 @@
                             </span>
                         </td>
                         <td ng-class="{'selectablerow': viewMode}"
-                            ng-click="!viewMode || getActiveIssue(sec, '', 'view')">
+                            ng-click="!viewMode || selectSecurity(sec)">
                             <input ng-show="!viewMode"
                                    placeholder="Add new security"
-                                   ui-event="{focus: 'getActiveIssue(sec)',
+                                   ui-event="{focus: 'selectSecurity(sec)',
                                               blur: 'saveIssue(sec, \'issue\')'}"
                                    ng-model="sec.name">
                             <span ng-show="viewMode">
@@ -250,76 +250,88 @@
                     <!-- EDITABLE INVESTOR ROWS -->
                     <!-- TODO dispaly row for each investor with ledger entries for the security -->
                     <tr class="transaction-rows"
-                        ng-show="sec.shown && !viewMode"
-                        ng-repeat="tran in sec.transactions">
+                        ng-if="sec.shown && !viewMode"
+                        ng-repeat="inv in captable.investorsIn(sec)">
                         <td></td>
                         <td>
                             <input bs-typeahead="rownames"
                                    placeholder="Add new investor"
-                                   ng-model="tran.investor"
-                                   ng-change="fauxupdating(tran)"
-                                   ui-event="{focus: 'getActiveTransaction(tran)',
+                                   ng-model="inv.name"
+                                   ng-change="fauxupdating(inv)"
+                                   ui-event="{focus: 'selectInvestor(inv)',
                                               blur: 'updateName(tran)'}">
                         </td>
                         <td>
-                            <input maxlength="16" placeholder="options"
-                                   ng-disabled="!tran.investor"
+                            <input maxlength="16"
+                                   placeholder="options"
+                                   ng-disabled="!inv.name"
                                    ui-event="{focus: 'getActiveTransaction(tran)',
                                               blur: 'saveTran(activeTran)'}"
-                                   ng-model="tran.units">
+                                   ng-model="captable.securityUnitsFrom(sec, 'grant', inv)">
                         </td>
                         <td ng-click="getActiveTransaction(tran, 'vested')">
-                            <span>
-                                {{formatAmount(transactionVested(tran.vested))}}
-                            </span>
+                            <input disabled
+                                   ng-model="captable.securityCurrentUnits(sec, inv)">
                         </td>
                         <td>
-                            <input maxlength="16" placeholder="options"
+                            <input maxlength="16"
+                                   placeholder="options"
                                    ng-disabled="!tran.investor || !tran.units"
                                    ui-event="{focus: 'getActiveTransaction(tran, \'forfeited\')',
                                               blur: 'grantUpdateLR(tran, \'forfeited\')'}"
-                                   ng-model="tran.forfeited">
+                                   ng-model="captable.securityUnitsFrom(sec, 'forfeit', inv)">
                         </td>
                         <td>
-                            <input maxlength="16" placeholder="options"
+                            <input maxlength="16"
+                                   placeholder="options"
                                    ng-disabled="!tran.investor || !tran.units"
                                    ui-event="{focus: 'getActiveTransaction(tran, \'exercised\')',
                                               blur: 'grantUpdateLR(tran, \'exercised\')'}"
-                                   ng-model="tran.exercised">
+                                   ng-model="captable.securityUnitsFrom(sec, 'exercise', inv)">
                         </td>
                     </tr>
                     <!-- VIEW ONLY INVESTOR ROWS -->
                     <!-- TODO dispaly row for each investor with ledger entries for the security -->
                     <tr class="transaction-rows"
-                        ng-show="sec.shown && viewMode"
-                        ng-repeat="tran in sec.transactions | noempty">
+                        ng-if="sec.shown && viewMode"
+                        ng-repeat="inv in captable.investorsIn(sec)">
                         <td class="viewField"></td>
                         <td ng-class="{fieldSelected: tran.fields[0],
                                        hoverable: tran.investor}"
                             ng-click="getActiveTransaction(tran, '', 'view')">
-                            <span>{{tran.investor}}</span>
+                            <span>{{inv.name}}</span>
                         </td>
                         <td ng-class="{fieldSelected: tran.fields[0],
                                        hoverable: tran.units}"
                             ng-click="getActiveTransaction(tran, '', 'view')">
-                            <span>{{formatAmount(tran.units)}}</span>
+                            <span>
+                                {{captable.securityUnitsFrom(sec, 'grant', inv)
+                                | formatAmount:'units'}}
+                            </span>
                         </td>
                         <td ng-class="{fieldSelected: tran.fields[1],
                                        hoverable: (tran.vested.length > 0)}"
                             ng-click="getActiveTransaction(tran, 'vested', 'view')">
                             <span>
-                                {{formatAmount(transactionVested(tran.vested))}}
+                                {{captable.securityCurrentUnits(sec, inv)
+                                | formatAmount:'units'}}
                             </span>
                         </td>
                         <td ng-class="{fieldSelected: tran.fields[2],
                                        hoverable: tran.forfeited}"
                             ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                            <span>{{formatAmount(tran.forfeited)}}</span>
+                            <span>
+                                {{captable.securityUnitsFrom(sec, 'forfeit', inv)
+                                | formatAmount:'units'}}
+                            </span>
                         </td>
                         <td ng-class="{fieldSelected: tran.fields[3],
                                        hoverable: tran.exercised}"
                             ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                            <span>{{formatAmount(tran.exercised)}}</span>
+                            <span>
+                                {{captable.securityUnitsFrom(sec, 'exercise', inv)
+                                | formatAmount:'units'}}
+                            </span>
                         </td>
                     </tr>
                     </tbody>
@@ -971,150 +983,7 @@
                     <h1 class="right-bar-header">
                         Saved Vesting Schedules
                     </h1>
-                    <div ng-repeat="schedule in schedules"
-                         class="schedule-box">
-                        <div>
-                            <span ng-hide="schedule.shown"
-                                  data-icon="&#xe017;" aria-hidden="true"
-                                  ng-click="showSchedule(schedule);">
-                            </span>
-                            <span ng-show="schedule.shown"
-                                  data-icon="&#xe01c;" aria-hidden="true"
-                                  ng-click="showSchedule(schedule);">
-                            </span>
-                            <span>{{schedule.name}}</span>
-                            <span class="delete-icon" data-icon="&#xe00c;"
-                                  ng-click="deleteSchedule(schedule);"
-                                  aria-hidden="true">
-                            </span>
-                        </div>
-                        <div ng-show="schedule.shown">
-                            <p ng-show="schedule.terms"
-                               class="belowTitle">
-                                <span>{{schedule.terms}}</span>
-                                <span tooltip-placement="top"
-                                      tooltip="The total number of months until fully vested">
-                                    Vesting Term (Months)
-                                </span>
-                            </p>
-                            <p ng-show="schedule.vestingbegins"
-                               class="belowTitle">
-                                <span>{{schedule.vestingbegins}}</span>
-                                <span tooltip-placement="top"
-                                      tooltip="The date the vesting cliff percentage becomes vested">
-                                    Vesting Cliff (Months)
-                                </span>
-                            </p>
-                            <p ng-show="schedule.vestcliff"
-                               class="belowTitle">
-                                <span>{{schedule.vestcliff}}</span>
-                                <span tooltip-placement="top"
-                                      tooltip="The percentage of granted shares that are considered vested on the cliff date">
-                                    Vesting Cliff %
-                                </span>
-                            </p>
-                            <p ng-show="schedule.vestfreq"
-                               class="belowTitle">
-                                <span>{{schedule.vestfreq}}</span>
-                                <span tooltip-placement="top"
-                                      tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">
-                                     Post Cliff Frequency
-                                </span>
-                            </p>
-                        </div>
-                    </div>
 
-                    <div class="capGuide grants new-schedule"
-                         ng-show="newSchedule">
-                        <div>
-                            <p class="rightTitle">
-                                <span>Schedule Name</span>
-                                <input ng-model="newschedule.name"
-                                       onkeydown="testForEnter();">
-                                <span class="tooltip-icon"
-                                      data-icon="&#xe044;"
-                                      aria-hidden="true"
-                                      data-placement="top"
-                                      bs-tooltip="captabletips.name">
-                                </span>
-                            </p>
-                            <p class="rightTitle double">
-                                <span>Vesting Term (Months)</span>
-                                <input ng-model="newschedule.terms"
-                                       onkeydown="testForEnter();">
-                                <span class="tooltip-icon"
-                                      data-icon="&#xe044;"
-                                      aria-hidden="true"
-                                      data-placement="top"
-                                      bs-tooltip="captabletips.terms">
-                                </span>
-                            </p>
-
-                            <p class="rightTitle double">
-                                <span>Vesting Cliff (Months)</span>
-                                <input type="text"
-                                       ng-model="newschedule.vestingbegins">
-                                <span class="tooltip-icon"
-                                      data-icon="&#xe044;"
-                                      aria-hidden="true"
-                                      data-placement="top"
-                                      bs-tooltip="captabletips.vestingbegins">
-                                </span>
-                            </p>
-                            <p class="rightTitle">
-                                <span>Vesting Cliff %</span>
-                                <input ng-model="newschedule.vestcliff"
-                                       onkeydown="testForEnter();">
-                                <span class="tooltip-icon"
-                                      data-icon="&#xe044;"
-                                      aria-hidden="true"
-                                      data-placement="top"
-                                      bs-tooltip="captabletips.vestcliff">
-                                </span>
-                            </p>
-                            <div class="rightTitle double">
-                                <span>Post Cliff Frequency</span>
-                                <ul class="dropdown-list drop-selector">
-                                    <li class="dropdown standard">
-                                        <a class="dropdown-toggle">
-                                            {{newschedule.vestfreq}}
-                                            <span class="invisible-drop">'</span>
-                                        </a>
-                                        <ul ng-hide="toggleView();"
-                                            class="dropdown-menu">
-                                            <li ng-repeat="i in freqtypes">
-                                                <a ng-click="assignFreq(i, newschedule);">
-                                                    {{i}}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <span class="tooltip-icon"
-                                      data-icon="&#xe044;"
-                                      aria-hidden="true"
-                                      data-placement="top"
-                                      bs-tooltip="captabletips.vestfreq">
-                                </span>
-                            </div>
-                            <div class="standard-button small-standard-button">
-                                <button class="btn ng-binding"
-                                        ng-disabled="newschedule.name == null
-                                                     || newschedule.name == ''"
-                                        ng-click="createSchedule(newschedule);">
-                                    Done
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div ng-hide="newSchedule || companyIsZombie()"
-                         class="standard-button">
-                        <button id='a_grant_template'
-                                class="btn ng-binding"
-                                ng-click="addSchedule();">
-                            New Template
-                        </button>
-                    </div>
                 </span>
             </div>
         </internal-right-rail>

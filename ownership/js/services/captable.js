@@ -298,6 +298,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
         return unissued;
     }
+    this.numUnissued = numUnissued;
     function selectedCellHistory() {
         var watches = Object.keys(History.history);
         var obj = History.history[watches[0]];
@@ -305,7 +306,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return hist;
     }
     this.selectedCellHistory = selectedCellHistory;
-    this.numUnissued = numUnissued;
     function securityFor(obj) {
         return captable.securities.filter(function(el) {
             return el.name == obj.attrs.security;
@@ -339,6 +339,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .reduce(function(prev, cur, idx, arr) {
                 return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
             }, 0);
+    };
+    this.investorsIn = function(sec) {
+        var names = captable.ledger_entries.filter(function(ent) {
+            return ent.security == sec.name;
+        }).reduce(accumulateProperty('investor'), []);
+        var res = captable.investors.filter(function(inv) {
+            return names.indexOf(inv.name) != -1;
+        });
+        return res;
     };
     function cellsForLedger(entries) {
         var checked = {};
@@ -1214,7 +1223,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .reduce(sumCellUnits, 0);
     }
     this.securityTotalUnits = securityTotalUnits;
-    function securityUnitsFrom(sec, kind) {
+    function securityUnitsFrom(sec, kind, inv) {
         if (!(sec && kind)) return 0;
 
         var trans = captable.transactions.filter(function(tran) {
@@ -1229,7 +1238,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }).reduce(accumulateProperty('transaction'), []);
 
         var entries = captable.ledger_entries.filter(function(ent) {
-            return trans.indexOf(ent.transaction) != -1;
+            return trans.indexOf(ent.transaction) != -1 &&
+                (!inv || ent.investor == inv.name);
         });
         return sum_ledger(entries);
     }
@@ -1253,7 +1263,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return prev;
         };
     }
-    function securityCurrentUnits(sec) {
+    function securityCurrentUnits(sec, inv) {
         if (!sec) return 0;
 
         var trans = captable.transactions.filter(function(tran) {
@@ -1263,6 +1273,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
                 ent.investor &&
+                (!inv || ent.investor == inv.name) &&
                 ent.effective_date <= Date.now();
         });
         return sum_ledger(entries);

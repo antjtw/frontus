@@ -1,8 +1,8 @@
 // Grants page controller
 app.controller('grantController',
-    ['$scope', '$rootScope', '$parse', '$location', 'SWBrijj',
+    ['$scope', '$location', 'SWBrijj',
      'calculate', 'navState', 'captable', 'displayCopy',
-function($scope, $rootScope, $parse, $location, SWBrijj,
+function($scope, $location, SWBrijj,
          calculate, navState, captable, displayCopy) {
     $scope.done = false;
     if (navState.role == 'investor') {
@@ -32,10 +32,26 @@ function($scope, $rootScope, $parse, $location, SWBrijj,
     $scope.viewMode = true;
     $scope.optionView = "Security";
 
+    $scope.selectedCell = null;
+    $scope.selectedInvestor = null;
+    $scope.selectedSecurity = null;
+
     var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
 
+    $scope.selectSecurity = function(sec) {
+        $scope.selectedInvestor = $scope.selectedCell = null;
+        $scope.selectedSecurity = sec;
+        // TODO more
+
+    };
+    $scope.selectInvestor = function(inv) {
+        $scope.selectedSecurity = $scope.selectedCell = null;
+        $scope.selectedInvestor = inv;
+        // TODO more
+    };
+
     $scope.opendetails = function(name, type) {
-        if (type == "issue") {
+        if (type == "security") {
             $scope.ct.securities.forEach(function(sec) {
                 if (name == sec.name) {
                     sec.shown = sec.shown !== true;
