@@ -248,6 +248,7 @@
                         </td>
                     </tr>
                     <!-- EDITABLE INVESTOR ROWS -->
+                    <!-- TODO dispaly row for each investor with ledger entries for the security -->
                     <tr class="transaction-rows"
                         ng-show="sec.shown && !viewMode"
                         ng-repeat="tran in sec.transactions">
@@ -288,6 +289,7 @@
                         </td>
                     </tr>
                     <!-- VIEW ONLY INVESTOR ROWS -->
+                    <!-- TODO dispaly row for each investor with ledger entries for the security -->
                     <tr class="transaction-rows"
                         ng-show="sec.shown && viewMode"
                         ng-repeat="tran in sec.transactions | noempty">
@@ -330,19 +332,23 @@
                         <td></td>
                         <td>
                             <input disabled
-                                   value="{{formatAmount(footerAction('units', ct.securities), 'zero')}}">
+                                   value="{{captable.unitsFrom('grant')
+                                          | formatAmount:'units'}}">
                         </td>
                         <td>
                             <input disabled
-                                   value="{{formatAmount(footerAction('vested', ct.securities), 'zero')}}">
+                                   value="{{captable.currentUnits()
+                                          | formatAmount:'units'}}">
                         </td>
                         <td>
                             <input disabled
-                                   value="{{formatAmount(footerAction('forfeited', ct.securities), 'zero')}}">
+                                   value="{{captable.unitsFrom('forfeit')
+                                          | formatAmount:'units'}}">
                         </td>
                         <td>
                             <input disabled
-                                   value="{{formatAmount(footerAction('exercised', ct.securities), 'zero')}}">
+                                   value="{{captable.unitsFrom('exercise')
+                                          | formatAmount:'units'}}">
                         </td>
                     </tr>
                 </table>

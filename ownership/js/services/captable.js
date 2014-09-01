@@ -1219,9 +1219,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
         var trans = captable.transactions.filter(function(tran) {
             // FIXME not working
+            /*
             if (tran.kind == kind && kind!='grant' && tran.attrs.security == sec.name) {
                 console.log(tran);
             }
+            */
             return tran.attrs.security == sec.name &&
                 tran.kind == kind;
         }).reduce(accumulateProperty('transaction'), []);
@@ -1231,6 +1233,18 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
         return sum_ledger(entries);
     }
+    this.securityUnitsFrom = securityUnitsFrom;
+    function unitsFrom(kind) {
+        if (!kind) return 0;
+        var trans = captable.transactions.filter(function(tran) {
+            return tran.kind == kind;
+        }).reduce(accumulateProperty('transaction'), []);
+        var entries = captable.ledger_entries.filter(function(ent) {
+            return trans.indexOf(ent.transaction) != -1;
+        });
+        return sum_ledger(entries);
+    }
+    this.unitsFrom = unitsFrom;
     function accumulateProperty(prop) {
         return function(prev, cur, idx, arr) {
             if (prev.indexOf(cur[prop]) == -1) {
@@ -1239,7 +1253,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return prev;
         };
     }
-    this.securityUnitsFrom = securityUnitsFrom;
     function securityCurrentUnits(sec) {
         if (!sec) return 0;
 
@@ -1255,6 +1268,16 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return sum_ledger(entries);
     }
     this.securityCurrentUnits = securityCurrentUnits;
+    function currentUnits() {
+        var trans = captable.transactions.reduce(
+                accumulateProperty('transaction'), []);
+        var entries = captable.ledger_entries.filter(function(ent) {
+            return trans.indexOf(ent.transaction) != -1 &&
+                ent.effective_date <= Date.now();
+        });
+        return sum_ledger(entries);
+    }
+    this.currentUnits = currentUnits;
     this.securityTotalAmount = function(sec) {
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
