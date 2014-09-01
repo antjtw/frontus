@@ -25,14 +25,16 @@
             </tr>
 
         </table> -->
-        <div ng-repeat="myDoc in myDocs" style="display: inline-block">
-          <div style="display: inline-block;  padding-right: 40px">
+        <div ng-repeat="myDoc in myDocs" style="display: inline-block; min-width: 400px; border-bottom: 1px solid black">
+          <div style="display: inline-block;  padding-right: 40px;">
             <div style="padding-bottom: 20px">Document Name</div>
             {{myDoc.docname}}
           </div>
-          <div style="display: inline-block;">
+          <div style="display: inline-block; float: right;">
             <div style="padding-bottom: 20px">Document Status</div>
-            {{myDoc.signature_status}}
+           
+            {{shortStatus(myDoc)}}
+
           </div>
         </div>
       </div>      
