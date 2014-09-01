@@ -8,7 +8,10 @@ function(SWBrijj, $q, $filter, displayCopy) {
     //   How do I display a fact about a transaction attribute?
     var tips = displayCopy.captabletips;
     var attrs = {};
-    var special = {};
+    /* Special identifies attributes used to tie data
+     * to investors and securities.
+     */
+    var special = {investor: [], security: []};
     init();
     this.getAttrs = function() { return attrs; };
     this.getSpecialAttrs = function() { return special; };
@@ -34,11 +37,14 @@ function(SWBrijj, $q, $filter, displayCopy) {
                      type:
                         $filter('attributeDbTypes')(el.typname, el.labels),
                      labels: JSON.parse(el.labels)};
-                 if (el.name.indexOf('investor') != -1 && special.investor.indexOf(el.name) == -1)
+                 if (el.name.indexOf('investor') != -1 &&
+                     special.investor.indexOf(el.name) == -1)
                  {
                     special.investor.push(el.name);
                  }
-                 if (el.name.indexOf('security') != -1 && el.name.indexOf('type') == -1 && special.security.indexOf(el.name) == -1)
+                 if (el.name.indexOf('security') != -1 &&
+                     el.name.indexOf('type') == -1 &&
+                     special.security.indexOf(el.name) == -1)
                  {
                     special.security.push(el.name);
                  }
