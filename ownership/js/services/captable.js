@@ -52,6 +52,9 @@ var Cell = function() {
  * and manipulation for the captables.
  *
  * TODO split this service into 2 parts: ownership and captable.
+ * -  ownership should return an object via a promise
+ * -  the object would contain transactions, ledger entries and investors
+ *
  * Then additional services should be created for the following:
  * -  grants
  * -  round modeling
@@ -60,6 +63,10 @@ var Cell = function() {
  * Generally, whenever additional data structures beyond what is
  * modeled in the database (transactions and ledger entries) must be
  * created and maintained, there should be an additional service.
+ *
+ * How to keep everything in sync:
+ * -  bind directly to the ownership object as much as possible
+ * -  use emit/broadcast/on to notify downstream services of changes
  *
  *
  */

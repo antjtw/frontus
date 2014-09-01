@@ -1,6 +1,6 @@
 app.controller('invGrantController',
-    ['$scope', 'SWBrijj', '$location', 'navState',
-function($scope, SWBrijj, $location, navState) {
+    ['$scope', 'SWBrijj', '$location', 'navState', 'captable', '$filter',
+function($scope, SWBrijj, $location, navState, captable, $filter) {
 
     if (navState.role == 'issuer') {
         $location.path('/company-grants');
@@ -9,36 +9,21 @@ function($scope, SWBrijj, $location, navState) {
 
     var company = navState.company;
     $scope.currentCompany = company;
-
-    $scope.rows = [];
-    $scope.uniquerows = [];
-    $scope.freqtypes = [];
-    $scope.issues = [];
-    $scope.security_names = [];
+    
+    $scope.ct = captable.getCapTable();
+    $scope.captable = captable;
 
     $scope.optionView = "Security";
 
-    $scope.opendetails = function(name, type) {
-        if (type == "issue") {
-            $scope.issues.forEach(function(issue) {
-                if (name == issue.issue) {
-                    issue.shown = issue.shown !== true;
-                } else {
-                    issue.shown = false;
-                }
-            });
-        }
-        else if (type == "investor") {
-            $scope.investorLed.forEach(function(investor) {
-                if (name == investor.name) {
-                    investor.shown = investor.shown !== true;
-                } else {
-                    investor.shown = false;
-                }
-            });
+    $scope.shown = null;
+    $scope.opendetails = function(obj) {
+        if ($scope.shown == obj) {
+            $scope.shown = null;
+        } else {
+            $scope.shown = obj;
         }
     };
-
+    
     $scope.issueGranted = function(issue) {
         var units = 0;
         angular.forEach(issue.trans, function (tran) {

@@ -1,9 +1,7 @@
 // Grants page controller
 app.controller('grantController',
-    ['$scope', '$location', 'SWBrijj',
-     'calculate', 'navState', 'captable', 'displayCopy',
-function($scope, $location, SWBrijj,
-         calculate, navState, captable, displayCopy) {
+    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy',
+function($scope, $location, SWBrijj, navState, captable, displayCopy) {
     $scope.done = false;
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
@@ -50,27 +48,14 @@ function($scope, $location, SWBrijj,
         // TODO more
     };
 
-    $scope.opendetails = function(name, type) {
-        if (type == "security") {
-            $scope.ct.securities.forEach(function(sec) {
-                if (name == sec.name) {
-                    sec.shown = sec.shown !== true;
-                } else {
-                    sec.shown = false;
-                }
-            });
-        }
-        else if (type == "investor") {
-            $scope.ct.investors.forEach(function(investor) {
-                if (name == investor.name) {
-                    investor.shown = investor.shown !== true;
-                } else {
-                    investor.shown = false;
-                }
-            });
+    $scope.shown = null;
+    $scope.opendetails = function(obj) {
+        if ($scope.shown == obj) {
+            $scope.shown = null;
+        } else {
+            $scope.shown = obj;
         }
     };
-
     // TODO refactor to use captable service
     $scope.issueGranted = function(sec) {
         return captable.securityUnitsFrom(sec, 'grant');
@@ -123,17 +108,6 @@ function($scope, $location, SWBrijj,
             });
         });
         return units != 0 ? units : null;
-    };
-
-    //switches the sidebar based on the type of the issue
-    $scope.formatAmount = function (amount, allowzero) {
-        var unit = calculate.funcformatAmount(amount);
-        return (allowzero == "zero" && unit == null) ? 0 : unit;
-    };
-
-    $scope.formatDollarAmount = function(amount) {
-        var output = calculate.formatMoneyAmount($scope.formatAmount(amount), $scope.settings);
-        return output;
     };
 
     // Captable Sharing Modal
@@ -283,10 +257,6 @@ function($scope, $location, SWBrijj,
                 });
             });
         }
-    };
-
-    $scope.strToBool = function (string) {
-        return calculate.strToBool(string);
     };
 
     //Calculates total granted to and forfeited in grant table

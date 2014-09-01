@@ -7,34 +7,46 @@
         <div class="row-fluid" ng-click="sideBar = 'x'">
             <div class="captable-controls subnav-controls">
                 <div>
+                    <!--
                     <div class="pull-left">
                         <span>View By</span>
                         <ul class="dropdown-list drop-selector">
                             <li class="dropdown standard">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ optionView }}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                <a ng-click="setView('Security')" class="button">Security</a>
-                                </li>
-                                <li>
-                                <a ng-click="setView('Person')" class="button">Person</a>
-                                </li>
-                            </ul>
+                                <a class="dropdown-toggle"
+                                   data-toggle="dropdown"
+                                   href="#">
+                                    {{ optionView }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a ng-click="setView('Security')"
+                                           class="button">
+                                            Security
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="setView('Person')"
+                                           class="button">
+                                            Person
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
+                    -->
                 </div>
                 <div class="DivHelper"></div>
             </div>
         </div>
 
         <div class="row-fluid">
-            <div ng-style="viewportheight" class="span8 docLibrary leftBlock" style="overflow-x: auto">
-
+            <div ng-style="viewportheight"
+                 class="span8 docLibrary leftBlock"
+                 style="overflow-x: auto">
                 <div class="row-fluid">
-                    <table class="tableView bodyText grant-table viewmode" ng-show="optionView == 'Security'">
+                    <table class="tableView bodyText grant-table viewmode"
+                           ng-show="optionView == 'Security'">
                         <tr class="column-label">
                             <th></th>
                             <th></th>
@@ -43,36 +55,84 @@
                             <th>Forfeited</th>
                             <th>Exercised</th>
                         </tr>
-                        <tbody ng-repeat="issue in issues">
+                        <tbody ng-repeat="sec in ct.securities">
                         <tr class="status-row">
-                            <td class="status-toggle pointer" ng-class="{'status-toggle-on': issue.shown}"
+                            <td class="status-toggle pointer"
+                                ng-class="{'status-toggle-on': sec == shown}"
                                 ng-click="opendetails(issue.issue, 'issue')">
-                                <span ng-hide="issue.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                                <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                                <span ng-hide="sec==shown"
+                                      data-icon="&#xe017;"
+                                      aria-hidden="true">
+                                </span>
+                                <span ng-show="sec==shown"
+                                      data-icon="&#xe01c;"
+                                      aria-hidden="true">
+                                </span>
+                            </td>
+                            <td ng-class="{'selectablerow': viewMode}"
+                                ng-click="selectSecurity(sec)">
+                                <span>
+                                    {{sec.name}}
+                                </span>
                             </td>
                             <td>
-                                <input disabled ng-model="issue.issue">
+                                {{captable.securityUnitsFrom(sec, 'grant')
+                                | formatAmount:'units'}}
                             </td>
-                            <td>{{formatAmount(issueGranted(issue))}}</td>
-                            <td>{{formatAmount(issueVested(issue))}}</td>
-                            <td>{{formatAmount(issueActions(issue, 'forfeited'))}}</td>
-                            <td>{{formatAmount(issueActions(issue, 'exercised'))}}</td>
+                            <td>
+                                {{captable.securityCurrentUnits(sec)
+                                | formatAmount:'units'}}
+                            </td>
+                            <td>
+                                {{captable.securityUnitsFrom(sec,'forfeit')
+                                | formatAmount:'units'}}
+                            </td>
+                            <td>
+                                {{captable.securityUnitsFrom(sec,'exercise')
+                                | formatAmount:'units'}}
+                            </td>
                         </tr>
-                        <tr class="transaction-rows" ng-show="issue.shown" ng-repeat="tran in issue.trans | noempty">
+                        <tr class="transaction-rows"
+                            ng-if="sec==shown"
+                            ng-repeat="inv in captable.investorsIn(sec)">
                             <td class="viewField"></td>
-                            <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
-                                ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
-                            <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
-                                ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                            <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
-                                ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                            <td ng-class="{fieldSelected: tran.fields[0],
+                                           hoverable: tran.investor}"
+                                ng-click="getActiveTransaction(tran, '', 'view')">
+                                <span>{{inv.name}}</span>
                             </td>
-                            <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
+                            <td ng-class="{fieldSelected: tran.fields[0],
+                                           hoverable: tran.units}"
+                                ng-click="getActiveTransaction(tran, '', 'view')">
+                                <span>
+                                    {{captable.securityUnitsFrom(sec, 'grant', inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
+                            <td ng-class="{fieldSelected: tran.fields[1],
+                                           hoverable: tran.vested.length > 0}"
+                                ng-click="getActiveTransaction(tran, 'vested', 'view')">
+                                <span>
+                                    {{captable.securityCurrentUnits(sec, inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
+                            <td ng-class="{fieldSelected: tran.fields[2],
+                                           hoverable: tran.forfeited}"
                                 ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                                <span>{{formatAmount(tran.forfeited)}}</span></td>
-                            <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
+                                <span>
+                                    {{captable.securityUnitsFrom(sec, 'forfeit', inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
+                            <td ng-class="{fieldSelected: tran.fields[3],
+                                           hoverable: tran.exercised}"
                                 ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                                <span>{{formatAmount(tran.exercised)}}</span></td>
+                                <span>
+                                    {{captable.securityUnitsFrom(sec, 'exercise', inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
                         </tr>
                         </tbody>
                         <tr class="total-row">
@@ -82,14 +142,31 @@
                         <tr class='tablefooter'>
                             <td></td>
                             <td></td>
-                            <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
-                            <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
-                            <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
-                            <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.unitsFrom('grant')
+                                              | formatAmount:'units'}}">
+                            </td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.currentUnits()
+                                              | formatAmount:'units'}}">
+                            </td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.unitsFrom('forfeit')
+                                              | formatAmount:'units'}}">
+                            </td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.unitsFrom('exercise')
+                                              | formatAmount:'units'}}">
+                            </td>
                         </tr>
                     </table>
-
-                    <table class="tableView bodyText grant-table viewmode" ng-show="optionView == 'Person'">
+                    <!--
+                    <table class="tableView bodyText grant-table viewmode"
+                           ng-show="optionView == 'Person'">
                         <tr class="column-label">
                             <th></th>
                             <th></th>
@@ -145,6 +222,7 @@
                             <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
                         </tr>
                     </table>
+                    -->
                 </div>
             </div>
 
