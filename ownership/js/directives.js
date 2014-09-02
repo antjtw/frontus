@@ -328,8 +328,8 @@ own.directive('editableSecurityDetails', [function() {
             sec: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
-        controller: ["$scope", "displayCopy", "captable",
-            function($scope, displayCopy, captable) {
+        controller: ["$scope", "displayCopy", "captable", "$filter",
+            function($scope, displayCopy, captable, $filter) {
 
                 $scope.loaddirective = function() {
                     console.log($scope.sec);
@@ -355,12 +355,15 @@ own.directive('editableSecurityDetails', [function() {
                         $scope.viewme = ['issuer', ev.original];
                     }
                 };
+                $scope.toggleTransaction = function() {
+                    $scope.switchCapTab('details');
+                    $scope.editEvidence();
+                    $scope.newTran = null;
+                };
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
-                    if (!$scope.windowToggle)
-                        $scope.newTran = null;
                 };
                 $scope.addSecurity = function() {
                     $scope.$emit('addSecurity');
@@ -388,6 +391,11 @@ own.directive('editableSecurityDetails', [function() {
                 $scope.editSecName = function(tran) {
                     $scope.sec.name = $scope.sec.attrs.security = tran.attrs.security;
                     captable.saveTransaction(tran);
+                };
+                
+                $scope.hasActions = function(tran) {
+                    var actions = $filter('validActions')(tran.attrs.security_type, 'security', tran.kind);
+                    return actions.length > 0;
                 };
                 $scope.makeNewTran = function(kind) {
                     $scope.newTran = captable.newTransaction(
