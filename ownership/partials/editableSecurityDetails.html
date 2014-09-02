@@ -82,13 +82,20 @@
                         <li>
                             <span ng-click="viewEvidence(doc)">
                                 {{doc.docname}}
+
                             </span>
                         </li>
+
                         <li ng-if="doc.name||doc.investor">
                             <span>
+
                                 {{doc.name || doc.investor}}'s version
                             </span>
                         </li>
+                        <li ng-if="doc.original && !doc.name && !doc.investor">
+                            <span>original version</span>
+                        </li>
+
                     </ul>
                     <span class="pull-right" data-icon="&#xe00f;"
                           ng-click="removeEvidence(doc, tran)">
