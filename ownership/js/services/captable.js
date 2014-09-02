@@ -1487,6 +1487,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return false;
         }
     }
+    this.isEvidence = isEvidence;
     function validateTransaction(transaction) {
         var correct = true;
         //console.log("validateTransaction");
