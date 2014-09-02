@@ -363,34 +363,36 @@ ownership.filter('attributeDbTypes', function() {
         }
     };
 });
-ownership.filter('sortAttributeTypes', function() {
+ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
     var orderedAttributes = ["security",
                              "effective_date",
                              "security_type",
                              "units",
                              "amount",
                              "ppshare",
-                             "liquidpref",
-                             "partpref",
-                             "dragalong",
-                             "tagalong",
                              "price",
                              "terms",
                              "vestingbegins",
+                            "interestratefreq",
                              "vestcliff",
                              "vestfreq",
-                             "interestratefreq",
                              "valcap",
                              "discount",
                              "term",
                              "valcapsafe",
                              "discount",
-                             "term"];
-    return function(tp) {
+                             "term",
+                            "liquidpref",
+                            "partpref",
+                            "dragalong",
+                            "tagalong"];
+    var attrs = attributes.getAttrs();
+    return function(tp, sec_type, kind) {
         var res = orderedAttributes.indexOf(tp);
-        return res === -1 ? orderedAttributes.length+1 : res;
+        var req = attrs[sec_type][kind][tp]['required'] ? 0 : 1;
+        return res === -1 ? (req + 1)*orderedAttributes.length + 1 : res + req*orderedAttributes.length;
     };
-});
+}]);
 ownership.filter('describeTran', function() {
     return function(tran) {
         var d = "";

@@ -1,3 +1,5 @@
+'use strict';
+
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
          "SWBrijj", "calculate", "navState", "captable",
@@ -12,7 +14,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     var company = navState.company;
     $scope.currentCompany = company;
 
-    captable.reloadCapTable();
+    captable.forceRefresh();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
@@ -187,31 +189,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.new_inv = "";
     };
 
-    $scope.addIssuePari = function(items) {
-        items.push({"company": items[0].company,
-                    "issue": items[0].issue,
-                    "pariwith": null});
-    };
-
-    $scope.availableKeys = function(securities, paripassu) {
-        var list = [];
-        var used = [];
-        list.push("");
-        angular.forEach(paripassu, function(pari) {
-            used.push(pari.pariwith);
-        });
-        angular.forEach(securities, function(issue) {
-            if (used.indexOf(issue) == -1) {
-                list.push(issue);
-            }
-        });
-        return list;
-    };
-
-    $scope.showPari = function(list) {
-        return list.length > 0;
-    };
-
     // Preformatting on the date to factor in the local timezone offset
     var keyPressed = false;
     // Needed because selecting a date in the calendar is considered a blur,
@@ -278,15 +255,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
 
-    $scope.tabnumber = function() {
-        var total = 0;
-        angular.forEach($scope.tabs, function(tab) {
-            if ($scope.tabvisible(tab)) {
-                total += 1;
-            }
-        });
-        return total;
-    };
     function editableDetailsVisible() {
         return $scope.sideBar == 2 || $scope.sideBar == 1;
     }
@@ -412,7 +380,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             if (tran.issue == issue.issue) {
                 total += tran.units;
                 if (tran.forfeited) {
-                    total -= tran.forfeited
+                    total -= tran.forfeited;
                 }
             }
         });
@@ -438,35 +406,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
 
-    // Captable Transfer Modal
-    /* don't think we're using this anymore
-    $scope.ct.transferSharesUp = function(activetran) {
-        $scope.ct.transferModal = true;
-        $scope.ct.transfer = {};
-        $scope.ct.transfer.trans = angular.copy(activetran);
-        $scope.ct.transfer.date = new Date.today();
-        for (var i=0; i < $scope.ct.transfer.trans.length; i++) {
-            $scope.ct.transfer.trans[i].transferunits = 0;
-
-            // This watch caps the amount you can transfer to the units available
-            // This seems depressingly long winded, definitely worth looking into further
-            $scope.$watch('transfer.trans['+i+']', function(newval, oldval) {
-                if (parseFloat(newval.transferunits) > parseFloat(oldval.units) || newval.transferunits == "-" || parseFloat(newval.transferunits) < 0) {
-                    for (var x=0; x < $scope.ct.transfer.trans.length; x++) {
-                        if ($scope.ct.transfer.trans[x].tran_id == newval.tran_id) {
-                            $scope.ct.transfer.trans[x].transferunits = oldval.transferunits;
-                        }
-                    }
-                }
-            }, true);
-        }
-    };
-
-    $scope.ct.transferSharesClose = function() {
-        $scope.ct.transferModal = false;
-    };*/
-
-    $scope.ct.transferopts = {
+    $scope.shareModalOpts = {
         backdropFade: true,
         dialogFade: true,
         dialogClass: 'transferModal modal'
@@ -479,7 +419,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             if (evt != 'blur')
                 keyPressed = true;
             var dateString = angular.element('transferdate').val();
-            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                 var date = Date.parse(dateString);
                 if (date) {
@@ -505,12 +445,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         angular.forEach($scope.ct.securities, function(issue) {
             if (key == issue.issue &&
                     (issue.type=="Debt" || issue.type=="Safe")) {
-                done = false
-                return false
+                done = false;
+                return false;
             }
         });
         if (done) {
-            return true
+            return true;
         }
     };
 
@@ -640,11 +580,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if (row.email.length > 0) {
             row.send = $scope.autoCheck(row.email);
             if (!row.permission) {
-                row.permission = "Personal"
+                row.permission = "Personal";
             }
         } else {
             row.send = false;
-            row.permission = null
+            row.permission = null;
         }
     };
 
@@ -672,7 +612,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                     }
                     row.send = false;
                 }).except(function(err) {
-                        if (err.message = "ERROR: Duplicate email for the row") {
+                        if (err.message == "ERROR: Duplicate email for the row") {
                             $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
                         }
                         else {
@@ -741,18 +681,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 checksome = true;
             }
         });
-        return !(checksome && checkcontent)
-    };
-
-    // Hides transaction fields for common stock
-    $scope.commonstock = function(tran) {
-        var common = false;
-        angular.forEach($scope.ct.securities, function(issue) {
-            if (issue.issue == tran.issue) {
-                common = issue.common ? true : false
-            }
-        });
-        return common
+        return !(checksome && checkcontent);
     };
 
     $scope.tourfunc = function() {
@@ -806,7 +735,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.selectVisibility = function (value, person) {
-        $scope.selectedI.level = value
+        $scope.selectedI.level = value;
     };
 
     $scope.changeVisibility = function (person) {
@@ -814,7 +743,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             void(data);
             angular.forEach($scope.userstatuses, function(peep) {
                 if (peep.email == person.email) {
-                    peep.level = person.level
+                    peep.level = person.level;
                 }
             });
             $scope.$emit("notification:success", "Successfully changed permissions");
@@ -887,18 +816,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return $scope.formatAmount(shareSum(row));
     };
 
-    // Total Shares | Paid for an issue column (type is either u or a)
-    var colTotalIssued = memoize(calculate.colTotalIssued);
-    $scope.colTotalIssued = function(header, investors, type) {
-        return colTotalIssued(header, investors, type);
-    };
-
-    // Total Shares | Paid for an issue column (type is either u or a)
-    var colTotal = memoize(calculate.colTotal);
-    $scope.colTotal = function(header, investors, type) {
-        return colTotal(header, investors, type);
-    };
-
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {
         return $scope.formatDollarAmount(calculate.pricePerShare($scope.ct.securities, $scope.finishedsorting));
@@ -913,13 +830,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.lastPostMoney = function() {
         return $scope.formatDollarAmount(calculate.lastPostMoney($scope.ct.securities, $scope.finishedsorting));
     };
-
-    //Watches constraining various values
-
-    // This should really be in a directive (or more properly get some clever css set-up to do it for me...
-    $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
-        $scope.stretchheight = {height: String(newValue + 59) + "px"}
-    });
 
     $scope.namePaste = function(ev, row) {
         var pastednames = ev.originalEvent.clipboardData.getData('text/plain');

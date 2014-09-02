@@ -12,7 +12,7 @@
                 {{tran.effective_date | date:settings.shortdate}} Transaction
             </span>
         </accordion-heading>
-        <div class="darkgray faux-tabs triplet">
+        <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
             <button
                     ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
