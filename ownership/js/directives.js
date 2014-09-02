@@ -818,7 +818,7 @@ own.directive('editableTransactionAttributes', [function() {
                             if (evt != 'blur')
                                 keyPressed = true;
                             var dateString = angular.element(field + '#' + tran.$$hashKey).val();
-                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                            var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                                 var date = Date.parse(dateString);
                                 if (date) {
