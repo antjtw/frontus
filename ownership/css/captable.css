@@ -211,7 +211,7 @@ div.last-saved {
     padding-left: 20px;
 }
 
-.tableView.captable input:focus {
+.tableView.captable input:focus, .tableView.captable input.tranViewSelected {
     background-color: #E3E3E3;
 }
 
@@ -616,7 +616,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-left: 20px;
     display: inline-block;
     font-family: "FS Elliot Web Light", sans-serif;
-    width: 100%;
 }
 
 .invalidTran {

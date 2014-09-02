@@ -60,7 +60,7 @@
                     </ul>
                 </div>
             </div>
-            <editable-transaction-attributes ng-if="tran" data="tran" save="true">
+            <editable-transaction-attributes ng-if="tran && !sec.creating" data="tran" save="true">
             </editable-transaction-attributes>
             <span class="delete-link"
                   ng-if="tran.kind != 'issue security'"

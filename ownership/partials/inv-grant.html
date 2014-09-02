@@ -226,99 +226,22 @@
                     <span ng-switch-when="1">
                         <div class="headsection tabbed row-fluid">
                             <h1>{{activeInvestor}}</h1>
-
-                            <p>Terms from the ownership table</p>
                         </div>
 
                         <div class="capGuide grants" ng-show="mode == 1">
-
                             <h2>Transaction Information</h2>
-
-                            <p ng-show="activeTran.date" class="belowTitle"><span
-                                ng-bind="activeTran.date | date:settings.shortdate"></span><span>Date</span></p>
-
-                            <p ng-show="activeTran.units" class="belowTitle"><span
-                                ng-bind="formatAmount(activeTran.units)"></span><span>Options</span></p>
-
-                            <p ng-show="activeTran.optundersec" class="belowTitle"><span
-                                ng-bind="activeTran.optundersec"></span><span tooltip-placement="top"
-                                tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
-                            </p>
-
-                            <p ng-show="activeTran.price" class="belowTitle"><span
-                                ng-bind="formatDollarAmount(activeTran.price)"></span><span tooltip-placement="top"
-                                tooltip="The price each granted share can be purchased at when vested">Strike Price</span>
-                            </p>
-
-                            <p ng-show="activeTran.terms" class="belowTitle"><span ng-bind="activeTran.terms"></span><span
-                                tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
-                            </p>
-
-                            <p ng-show="activeTran.vestingbeginsdisplay" class="belowTitle"><span
-                                ng-bind="activeTran.vestingbeginsdisplay"></span><span
-                                tooltip-placement="top" tooltip="Months until the vesting cliff % is vested">Vesting Cliff (Months)</span>
-                            </p>
-
-                            <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span
-                                tooltip-placement="top"
-                                tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
-                            </p>
-
-                            <p ng-show="activeTran.vestfreq" class="belowTitle"><span ng-bind="activeTran.vestfreq"></span><span
-                                tooltip-placement="top"
-                                tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
-                            </p>
                         </div>
 
                         <div class="capGuide grants" ng-show="mode == 2">
-
                             <h2>Forfeit Information</h2>
-
-                            <ul class="grant-list-view">
-                                <li>
-                                <span>Date</span>
-                                <span>Options</span>
-                                </li>
-                                <li ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
-                                <span ng-bind="act.date | date:settings.shortdate"></span>
-                                <span ng-bind="act.unit"></span>
-                                </li>
-                            </ul>
                         </div>
 
                         <div class="capGuide grants" ng-show="mode == 3">
-
                             <h2>Exercised Information</h2>
-
-                            <ul class="grant-list-view">
-                                <li>
-                                <span>Date</span>
-                                <span>Options</span>
-                                </li>
-                                <li ng-show="act.unit"
-                                ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
-                                <span ng-bind="act.date | date:settings.shortdate"></span>
-                                <span ng-bind="formatAmount(act.unit)"></span>
-                                </li>
-                            </ul>
                         </div>
 
                         <div class="capGuide grants" ng-show="mode == 4">
-
                             <h2>Vested Information</h2>
-
-                            <p>Auto-calculated from vesting schedule</p>
-
-                            <ul class="grant-list-view">
-                                <li>
-                                <span>Date</span>
-                                <span>Options</span>
-                                </li>
-                                <li ng-repeat="grant in activeTran.vested">
-                                <span ng-bind="grant.date | date:settings.shortdate"></span>
-                                <span ng-bind="formatAmount(grant.units)"></span>
-                                </li>
-                            </ul>
                         </div>
                     </span>
 

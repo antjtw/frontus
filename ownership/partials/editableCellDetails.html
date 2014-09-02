@@ -141,7 +141,7 @@
       ng-click="addTransaction()"
       ng-if="currentTab!='documents'">
   <span data-icon="&#xe053;" aria-hidden="true"></span>
-  <span>Add Transaction</span>
+  <span>Add {{captable.defaultKind(cell.transactions[0].attrs.security_type)}}</span>
 </span>
 <doc-mini-viewer docid="viewme"></doc-mini-viewer>
 </div>
