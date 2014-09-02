@@ -1,14 +1,14 @@
 <div class="capGuide cap-overflow global">
-    <p ng-repeat="(key, val) in data.attrs | attrsForDisplay"
+    <p ng-repeat="key in keys"
        class="belowTitle">
         <span ng-if="key!='interestrate' && key != 'pariwith'">
-            {{val | formatAmount:key}}
+            {{data.attrs[key] | formatAmount:key}}
         </span>
         <span ng-if="key=='interestrate'">
             {{data.attrs.interestrate}}% {{data.attrs.interestratefreq}}
         </span>
         <span ng-if="key == 'pariwith'">
-            {{val.join(", ")}}
+            {{data.attrs[key].join(", ")}}
         </span>
         <span ng-if="hasTip(key)"
               class="forTooltip"

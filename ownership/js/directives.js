@@ -684,13 +684,23 @@ own.directive('transactionAttributes', [function() {
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
         // TODO refactor to use attributes service
-        controller: ["$scope", "$rootScope", "captable", "displayCopy",
-            function($scope, $rootScope, captable, displayCopy) {
+        controller: ["$scope", "$rootScope", "captable", "displayCopy", "$filter",
+            function($scope, $rootScope, captable, displayCopy, $filter) {
                 $scope.displayAttr = captable.displayAttr;
                 $scope.tips = displayCopy.captabletips;
                 $scope.hasTip = function(key) {
                     return key in $scope.tips;
                 };
+                $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
+                function filterSortKeys(attrs, sec_type, kind) {
+                    var filtered = $filter('attrsForDisplay')(attrs);
+                    var sorted = Object.keys(filtered)
+                            .sort(function(x1, x2) {
+                                return $filter('sortAttributeTypes')(x1, sec_type, kind) -
+                                       $filter('sortAttributeTypes')(x2, sec_type, kind);
+                            });
+                    return sorted;
+                }
             }
         ],
     };
