@@ -1,3 +1,5 @@
+'use strict';
+
 var ownership = angular.module('ownerFilters', []);
 
 ownership.filter('noUnissue', function () {
@@ -219,7 +221,7 @@ ownership.filter('attrsForDisplay', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical",
                           "security", "security_type",
-                          "transaction_from"];
+                          "transaction_from", "interestratefreq"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1 &&
@@ -286,7 +288,7 @@ ownership.filter('validActions', ['attributes', function(attributes) {
         var alwaysAllow = ['transfer'];
         var isAction = (kind) && (nonActions.indexOf(kind) == -1);
         var ret = [];
-        for (a in attrs[sec_type])
+        for (var a in attrs[sec_type])
         {
             if (nonActions.indexOf(a) == -1)
             {
@@ -311,19 +313,19 @@ ownership.filter('validActions', ['attributes', function(attributes) {
 ownership.filter('isRequired', ['attributes', function(attributes) {
     return function(sec_type, action, key) {
         var attrs = attributes.getAttrs();
-        return attrs[sec_type][action][key]['required'];
+        return attrs[sec_type][action][key].required;
     };
 }]);
 
 ownership.filter('getInvestorAttributes', ['attributes', function(attributes) {
     return function() {
-        return attributes.getSpecialAttrs()['investor'];
+        return attributes.getSpecialAttrs().investor;
     };
 }]);
 
 ownership.filter('getSecurityAttributes', ['attributes', function(attributes) {
     return function() {
-        return attributes.getSpecialAttrs()['security'];
+        return attributes.getSpecialAttrs().security;
     };
 }]);
 

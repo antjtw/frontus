@@ -662,7 +662,7 @@ own.directive('transactionAttributes', [function() {
         replace: true,
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-    // TODO refactor to use attributes service
+        // TODO refactor to use attributes service
         controller: ["$scope", "$rootScope", "captable", "displayCopy",
             function($scope, $rootScope, captable, displayCopy) {
                 $scope.displayAttr = captable.displayAttr;
@@ -784,7 +784,11 @@ own.directive('editableTransactionAttributes', [function() {
                         }
                         tran.attrs[k].push(v);
                     } else {
-                        tran.attrs[k] = v;
+                        if (v === "") {
+                            delete tran.attrs[k];
+                        } else {
+                            tran.attrs[k] = v;
+                        }
                     }
                     if ($scope.save)
                     {
@@ -801,7 +805,7 @@ own.directive('editableTransactionAttributes', [function() {
                             delete tran.attrs[k];
                         }
                     } else {
-                        tran.attrs[k] = "";
+                        delete tran.attrs[k];
                     }
                     if ($scope.save)
                     {
@@ -814,7 +818,7 @@ own.directive('editableTransactionAttributes', [function() {
                             if (evt != 'blur')
                                 keyPressed = true;
                             var dateString = angular.element(field + '#' + tran.$$hashKey).val();
-                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                            var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                                 var date = Date.parse(dateString);
                                 if (date) {

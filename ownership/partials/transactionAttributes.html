@@ -1,11 +1,11 @@
 <div class="capGuide cap-overflow global">
     <p ng-repeat="(key, val) in data.attrs | attrsForDisplay"
        class="belowTitle">
-        <span ng-if="key!='interestrate' && key!='interestratefreq' && key != 'pariwith'">
+        <span ng-if="key!='interestrate' && key != 'pariwith'">
             {{val | formatAmount:key}}
         </span>
         <span ng-if="key=='interestrate'">
-            {{data.interestrate}}% {{data.interestratefreq}}
+            {{data.attrs.interestrate}}% {{data.attrs.interestratefreq}}
         </span>
         <span ng-if="key == 'pariwith'">
             {{val.join(", ")}}

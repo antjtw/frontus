@@ -17,14 +17,12 @@
             {{displayName(key)}}
         </span>
         <input ng-if="useTextField(key) && !useDatePicker(key)"
-               id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
         <input ng-if="useNumberField(key) && !useDatePicker(key)"
-               id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
@@ -87,8 +85,10 @@
                 </ul>
             </li>
         </ul>
-        <span class="locked-security" ng-repeat="sec in data.attrs[key]" ng-if="pickMulti(key)">
-            {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+        <span ng-if="pickMulti(key)">
+            <span class="locked-security" ng-repeat="sec in data.attrs[key]">
+                {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+            </span>
         </span>
         <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
             <li class="dropdown standard">
