@@ -715,15 +715,15 @@ own.directive('editableTransactionAttributes', [function() {
                     $scope.tran_attrs =
                         attrs[$scope.data.attrs.security_type]
                             [$scope.data.kind];
-                    $scope.keys = filterSortKeys($scope.tran_attrs);
+                    $scope.keys = filterSortKeys($scope.tran_attrs, $scope.data.attrs.security_type, $scope.data.kind);
                 };
 
-                function filterSortKeys(attrs) {
+                function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForEdit')(attrs);
                     var sorted = Object.keys(filtered)
                             .sort(function(x1, x2) {
-                                return $filter('sortAttributeTypes')(x1) -
-                                       $filter('sortAttributeTypes')(x2);
+                                return $filter('sortAttributeTypes')(x1, sec_type, kind) -
+                                       $filter('sortAttributeTypes')(x2, sec_type, kind);
                             });
                     return sorted;
                 }
