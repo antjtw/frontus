@@ -12,7 +12,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     var company = navState.company;
     $scope.currentCompany = company;
 
-    captable.reloadCapTable();
+    captable.forceRefresh();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
@@ -463,7 +463,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.ct.transferModal = false;
     };*/
 
-    $scope.ct.transferopts = {
+    $scope.shareModalOpts = {
         backdropFade: true,
         dialogFade: true,
         dialogClass: 'transferModal modal'
