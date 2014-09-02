@@ -489,14 +489,18 @@ own.directive('editableCellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
-                $scope.makeNewTran = function(kind) {
+                $scope.makeNewTran = function(kind, tran) {
                     if (kind == "convert") {
-                        $scope.convertSharesUp();
+                        $scope.convertSharesUp(tran);
                     } else {
                         $scope.newTran = captable.newTransaction(
                             $scope.cell.security,
                             kind,
                             $scope.cell.investor);
+                        if ($scope.newTran.attrs.hasOwnProperty('transaction_from'))
+                        {
+                            $scope.newTran.attrs.transaction_from = tran.transaction;
+                        }
                     }
                 };
                 $scope.$on('newSelection', function(evt) {
@@ -545,9 +549,9 @@ own.directive('editableCellDetails', [function() {
                 }, true);
 
                 // Captable Conversion Modal
-                $scope.convertSharesUp = function() {
+                $scope.convertSharesUp = function(to_convert) {
                     $scope.convertTran = {};
-                    angular.forEach($scope.cell.transactions, function(tran) {
+                    /*angular.forEach($scope.cell.transactions, function(tran) {
                         if (tran.active) {
                             $scope.convertTran.tran = tran;
                         }
@@ -562,7 +566,8 @@ own.directive('editableCellDetails', [function() {
                         {
                             console.log("Error: no active transactions. Don't know what to do here.");
                         }
-                    }
+                    }*/
+                    $scope.convertTran.tran = to_convert;
                     $scope.convertTran.newtran = {};
                     $scope.convertTran.step = '1';
                     $scope.convertTran.date = new Date.today();
@@ -586,6 +591,7 @@ own.directive('editableCellDetails', [function() {
                         $scope.convertTran.newtran = captable.newTransaction($scope.convertTran.tran.attrs.security, 'convert', $scope.convertTran.tran.attrs.investor);
                         $scope.convertTran.newtran.attrs.amount = calculate.debtinterest($scope.convertTran.tran);
                         $scope.convertTran.newtran.attrs.to_security = $scope.convertTran.toissue.attrs.security;
+                        $scope.convertTran.newtran.attrs.transaction_from = $scope.convertTran.tran.transaction;
                         $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
                     }
                 };
@@ -773,6 +779,9 @@ own.directive('editableTransactionAttributes', [function() {
                 };
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     if (inputType(k) == "array_text") {
+                        if (!tran.attrs[k]) {
+                            tran.attrs[k] = [];
+                        }
                         tran.attrs[k].push(v);
                     } else {
                         tran.attrs[k] = v;
@@ -787,6 +796,9 @@ own.directive('editableTransactionAttributes', [function() {
                         var ix = tran.attrs[k].indexOf(v);
                         if (ix >= 0) {
                             tran.attrs[k].splice(ix, 1);
+                        }
+                        if (tran.attrs[k].length === 0) {
+                            delete tran.attrs[k];
                         }
                     } else {
                         tran.attrs[k] = "";
@@ -865,6 +877,18 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.$watch('data', function(newval, oldval) {
                     $scope.loaddirective();
                 }, true);
+                var dropdowncalctime = Date.parse('1970');
+                var selectablesecurities;
+                $scope.getValidDropdownSecurities = function(data) {
+                    if (Date.now() - dropdowncalctime > 500) { // debounce
+                        dropdowncalctime = Date.now();
+                        selectablesecurities = $filter('selectablesecurities')($scope.securities, data);
+                    }
+                    return selectablesecurities;
+                };
+                $scope.getValidPariSecurities = function(data, key) {
+                    return $filter('usedsecurities')($scope.getValidDropdownSecurities(data), data.attrs[key]);
+                };
             }
         ],
     };

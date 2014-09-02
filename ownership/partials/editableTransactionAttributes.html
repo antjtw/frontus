@@ -12,7 +12,8 @@
     <div ng-repeat="key in keys"
          class="rightTitle"
          ng-class="{double: inputType(key)!='text_field'}">
-        <span ng-class="{'locked-security': key=='security_type'}">
+        <span ng-class="{'locked-security': key=='security_type'}"
+            ng-if="(!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))">
             {{displayName(key)}}
         </span>
         <input ng-if="useTextField(key) && !useDatePicker(key)"
@@ -89,13 +90,13 @@
         <span class="locked-security" ng-repeat="sec in data.attrs[key]" ng-if="pickMulti(key)">
             {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
         </span>
-        <ul class="dropdown-list drop-selector" ng-if="pickMulti(key)">
+        <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
             <li class="dropdown standard">
                 <a class="dropdown-toggle">
                     <span class="invisible-drop">'</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li ng-repeat="i in securities | selectablesecurities:data">
+                    <li ng-repeat="i in getValidPariSecurities(data, key)">
                         <a ng-click="setIt(data, true, undo, key, i.name)">
                             {{i.name}}
                         </a>
@@ -103,12 +104,13 @@
                 </ul>
             </li>
         </ul>
-        <span ng-if="description(key)"
+        <span ng-if="description(key) &&
+              (!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))"
               class="tooltip-icon"
               data-icon="&#xe044;"
               aria-hidden="true"
-              data-placement="top"
-              bs-tooltip="description(key)">
+              tooltip-placement="top"
+              tooltip="{{description(key)}}">
         </span>
     </div>
 </div>

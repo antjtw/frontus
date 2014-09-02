@@ -40,8 +40,10 @@
             <div class="capGuide global">
                 <div class="rightTitle">
                     <span>Security Type</span>
-                    <span class="locked-security" ng-if="sec.locked">{{tran.attrs.security_type}}</span>
-                    <ul class="dropdown-list drop-selector" ng-if="!sec.locked">
+                    <span class="locked-security" ng-if="captable.secLocked(sec)">
+                        {{tran.attrs.security_type}}
+                    </span>
+                    <ul class="dropdown-list drop-selector" ng-if="!captable.secLocked(sec)">
                         <li class="dropdown standard">
                         <a class="dropdown-toggle">
                             {{tran.attrs.security_type}}

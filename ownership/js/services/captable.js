@@ -49,18 +49,30 @@ var Cell = function() {
 
 /* The captable service is currently a generic ownership data service
  * AS WELL AS, a service performing all necessary data construction
- * and manipulation for the captables.
+ * and manipulation for the company and investor captables.
  *
  * TODO split this service into 2 parts: ownership and captable.
- * Then additional services should be created for the following:
+ * -  ownership should return an object via a promise
+ * -  the object would contain transactions,
+ *                             ledger entries,
+ *                             investors,
+ *                             securities
+ *
+ * Additional services should be created for the following:
  * -  grants
  * -  round modeling
  * -  debt conversion calculator
  *
  * Generally, whenever additional data structures beyond what is
- * modeled in the database (transactions and ledger entries) must be
+ * modeled in the database (transactions and ledger entries) or
+ * the primary nouns users expect (investors and securities) must be
  * created and maintained, there should be an additional service.
  *
+ * How to keep everything in sync:
+ * -  bind directly to the ownership object
+ * -  implement a deepwatch in each service on the ownership object
+ * -  AND / OR use emit/broadcast/on to notify downstream services of changes
+ *    so derivative data structures can be updated as necessary
  *
  */
 ownership.service('captable',
@@ -89,16 +101,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         .then(function(results) {
             captable.ledger_entries = results[0];
             captable.transactions = results[1].map(parseTransaction);
-            for (var s in captable.securities)
-            {
-                captable.securities[s].locked = secHasTran(captable.securities[s].name);
-            }
             captable.investors = results[2].map(rowFromName);
             captable.attributes = results[3];
             // What is this function supposed to do???
             // [Brian] The designs at one point asked for a summary
             // for securities, which would, for example, include the
             // price per share as adjusted after splits.
+            // This would be displayed above the transaction accordion
+            // in the right rail upon selecting a security.
             //generateSecuritySummaries();
 
             handleTransactions(captable.transactions);
@@ -298,6 +308,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
         return unissued;
     }
+    this.numUnissued = numUnissued;
     function selectedCellHistory() {
         var watches = Object.keys(History.history);
         var obj = History.history[watches[0]];
@@ -305,7 +316,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return hist;
     }
     this.selectedCellHistory = selectedCellHistory;
-    this.numUnissued = numUnissued;
     function securityFor(obj) {
         return captable.securities.filter(function(el) {
             return el.name == obj.attrs.security;
@@ -329,6 +339,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return cells[0];
         } else if (cells.length > 1) {
             // FIXME error, do cleanup?
+            // There should never be 2 cells with the same inv and sec.
         } else {
             return null;
         }
@@ -339,6 +350,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .reduce(function(prev, cur, idx, arr) {
                 return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
             }, 0);
+    };
+    this.investorsIn = function(sec) {
+        var names = captable.ledger_entries.filter(function(ent) {
+            return ent.security == sec.name;
+        }).reduce(accumulateProperty('investor'), []);
+        var res = captable.investors.filter(function(inv) {
+            return names.indexOf(inv.name) != -1;
+        });
+        return res;
     };
     function cellsForLedger(entries) {
         var checked = {};
@@ -351,7 +371,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     checked[entries[e].security] = {};
                 if (!checked[entries[e].security][entries[e].investor])
                 {
-                    cells.push(cellFor(entries[e].investor, entries[e].security, true));
+                    cells.push(cellFor(entries[e].investor,
+                                       entries[e].security,
+                                       true));
                     checked[entries[e].security][entries[e].investor] = true;
                 }
             }
@@ -394,36 +416,49 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
-    // FIXME must get 'exercise' transactions for the underlier's column
     function transForCell(inv, sec) {
+        // Investor identifying attributes
         var invs = $filter('getInvestorAttributes')();
+        // Security identifying attributes
         var secs = $filter('getSecurityAttributes')();
+
         var trans = captable.transactions.filter(
             function(tran) {
-                var i = false;
-                var s = false;
-                var hasInv = false;
+                // Some transactions do not carry underlier data,
+                // so we must get it from the security object,
+                var security = securityFor(tran);
+                var investor_matches = false;
+                var security_matches = false;
+                var has_investor_attribute = false;
+
                 for (var a in invs)
                 {
                     if (tran.attrs[invs[a]])
                     {
-                        hasInv = true;
+                        has_investor_attribute = true;
                     }
                     if (tran.attrs[invs[a]] == inv)
                     {
-                        i = true;
+                        investor_matches = true;
                         break;
                     }
                 }
                 for (a in secs)
                 {
-                    if (tran.attrs[secs[a]] == sec)
+                    if (tran.attrs[secs[a]] == sec ||
+                        (tran.kind == 'exercise' &&
+                         security.attrs[secs[a]] == sec))
                     {
-                        s = true;
+                        security_matches = true;
                         break;
                     }
+
                 }
-                return (i || (!hasInv && tran.kind != 'issue security')) && s;
+                return (investor_matches ||
+                        (!has_investor_attribute &&
+                         tran.kind != 'issue security')
+                        ) &&
+                       security_matches;
             });
         return trans;
     }
@@ -1075,9 +1110,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var tran = newTransaction(sec, kind, inv);
         captable.transactions.push(tran);
         updateCell(this.cellFor(inv, sec, true));
-        var security = captable.securities
-            .filter(function(el) { return el.name==sec; })[0];
-        security.locked = true;
         return tran;
     };
     function defaultKind(sec) {
@@ -1107,7 +1139,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var tran = newTransaction(sec, defaultKind(sec_obj.attrs.security_type), inv);
             tran.active = true;
             c.transactions.push(tran);
-            sec_obj.locked = true;
             captable.cells.push(c);
             return c;
         }
@@ -1152,6 +1183,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         return false;
     }
+    this.secLocked = function(sec) {
+        return secHasTran(sec.name);
+    };
     /*
      * Sum all ledger entries associated with equity.
      *
@@ -1214,23 +1248,38 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .reduce(sumCellUnits, 0);
     }
     this.securityTotalUnits = securityTotalUnits;
-    function securityUnitsFrom(sec, kind) {
+    function securityUnitsFrom(sec, kind, inv) {
         if (!(sec && kind)) return 0;
 
         var trans = captable.transactions.filter(function(tran) {
             // FIXME not working
+            /*
             if (tran.kind == kind && kind!='grant' && tran.attrs.security == sec.name) {
                 console.log(tran);
             }
+            */
             return tran.attrs.security == sec.name &&
                 tran.kind == kind;
         }).reduce(accumulateProperty('transaction'), []);
 
         var entries = captable.ledger_entries.filter(function(ent) {
+            return trans.indexOf(ent.transaction) != -1 &&
+                (!inv || ent.investor == inv.name);
+        });
+        return sum_ledger(entries);
+    }
+    this.securityUnitsFrom = securityUnitsFrom;
+    function unitsFrom(kind) {
+        if (!kind) return 0;
+        var trans = captable.transactions.filter(function(tran) {
+            return tran.kind == kind;
+        }).reduce(accumulateProperty('transaction'), []);
+        var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1;
         });
         return sum_ledger(entries);
     }
+    this.unitsFrom = unitsFrom;
     function accumulateProperty(prop) {
         return function(prev, cur, idx, arr) {
             if (prev.indexOf(cur[prop]) == -1) {
@@ -1239,8 +1288,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return prev;
         };
     }
-    this.securityUnitsFrom = securityUnitsFrom;
-    function securityCurrentUnits(sec) {
+    function securityCurrentUnits(sec, inv) {
         if (!sec) return 0;
 
         var trans = captable.transactions.filter(function(tran) {
@@ -1250,11 +1298,22 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
                 ent.investor &&
+                (!inv || ent.investor == inv.name) &&
                 ent.effective_date <= Date.now();
         });
         return sum_ledger(entries);
     }
     this.securityCurrentUnits = securityCurrentUnits;
+    function currentUnits() {
+        var trans = captable.transactions.reduce(
+                accumulateProperty('transaction'), []);
+        var entries = captable.ledger_entries.filter(function(ent) {
+            return trans.indexOf(ent.transaction) != -1 &&
+                ent.effective_date <= Date.now();
+        });
+        return sum_ledger(entries);
+    }
+    this.currentUnits = currentUnits;
     this.securityTotalAmount = function(sec) {
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })

@@ -2,266 +2,338 @@
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <link href="/lib/introjs/introjs.css" rel="stylesheet">
 <div class="maincontent">
-<div class="container dynamic-page">
-
-<div class="row-fluid" ng-click="sideBar = 'x'">
-    <div class="captable-controls subnav-controls">
-        <div>
+    <div class="container dynamic-page">
+        <subnav>
+            <!--
             <div class="pull-left">
                 <span>View By</span>
                 <ul class="dropdown-list drop-selector">
                     <li class="dropdown standard">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <a class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           href="#">
                             {{ optionView }}
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a ng-click="setView('Security')" class="button">Security</a>
+                                <a ng-click="setView('Security')"
+                                   class="button">
+                                    Security
+                                </a>
                             </li>
                             <li>
-                                <a ng-click="setView('Person')" class="button">Person</a>
+                                <a ng-click="setView('Person')"
+                                   class="button">
+                                    Person
+                                </a>
                             </li>
                         </ul>
                     </li>
                 </ul>
             </div>
-        </div>
-        <div class="DivHelper"></div>
-    </div>
-</div>
+            -->
+        </subnav>
+        <div class="row-fluid leftTabWindow">
+            <div ng-style="viewportheight"
+                 class="span8 docLibrary leftBlock"
+                 ng-class="{leftFullTableBlock: sideToggle,
+                            widthtransition25: oldSafari()}">
+                <table class="tableView bodyText grant-table viewmode"
+                       ng-show="optionView == 'Security'">
+                    <tr class="column-label">
+                        <th></th>
+                        <th></th>
+                        <th>Granted</th>
+                        <th>Vested</th>
+                        <th>Forfeited</th>
+                        <th>Exercised</th>
+                    </tr>
+                    <tbody ng-repeat="sec in ct.securities">
+                    <tr class="status-row">
+                        <td class="status-toggle pointer"
+                            ng-class="{'status-toggle-on': sec == shown}"
+                            ng-click="opendetails(sec)">
+                            <span ng-hide="sec==shown"
+                                  data-icon="&#xe017;"
+                                  aria-hidden="true">
+                            </span>
+                            <span ng-show="sec==shown"
+                                  data-icon="&#xe01c;"
+                                  aria-hidden="true">
+                            </span>
+                        </td>
+                        <td ng-class="{'selectablerow': viewMode}"
+                            ng-click="selectSecurity(sec)">
+                            <span>
+                                {{sec.name}}
+                            </span>
+                        </td>
+                        <td>
+                            {{captable.securityUnitsFrom(sec, 'grant')
+                            | formatAmount:'units'}}
+                        </td>
+                        <td>
+                            {{captable.securityCurrentUnits(sec)
+                            | formatAmount:'units'}}
+                        </td>
+                        <td>
+                            {{captable.securityUnitsFrom(sec,'forfeit')
+                            | formatAmount:'units'}}
+                        </td>
+                        <td>
+                            {{captable.securityUnitsFrom(sec,'exercise')
+                            | formatAmount:'units'}}
+                        </td>
+                    </tr>
+                    <tr class="transaction-rows"
+                        ng-if="sec==shown"
+                        ng-repeat="inv in captable.investorsIn(sec)">
+                        <td class="viewField"></td>
+                        <td ng-class="{fieldSelected: tran.fields[0],
+                                       hoverable: tran.investor}"
+                            ng-click="getActiveTransaction(tran, '', 'view')">
+                            <span>{{inv.name}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[0],
+                                       hoverable: tran.units}"
+                            ng-click="getActiveTransaction(tran, '', 'view')">
+                            <span>
+                                {{captable.securityUnitsFrom(sec, 'grant', inv)
+                                | formatAmount:'units'}}
+                            </span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[1],
+                                       hoverable: tran.vested.length > 0}"
+                            ng-click="getActiveTransaction(tran, 'vested', 'view')">
+                            <span>
+                                {{captable.securityCurrentUnits(sec, inv)
+                                | formatAmount:'units'}}
+                            </span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[2],
+                                       hoverable: tran.forfeited}"
+                            ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+                            <span>
+                                {{captable.securityUnitsFrom(sec, 'forfeit', inv)
+                                | formatAmount:'units'}}
+                            </span>
+                        </td>
+                        <td ng-class="{fieldSelected: tran.fields[3],
+                                       hoverable: tran.exercised}"
+                            ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                            <span>
+                                {{captable.securityUnitsFrom(sec, 'exercise', inv)
+                                | formatAmount:'units'}}
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr class='tablefooter'>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <input disabled
+                                   value="{{captable.unitsFrom('grant')
+                                          | formatAmount:'units'}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{captable.currentUnits()
+                                          | formatAmount:'units'}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{captable.unitsFrom('forfeit')
+                                          | formatAmount:'units'}}">
+                        </td>
+                        <td>
+                            <input disabled
+                                   value="{{captable.unitsFrom('exercise')
+                                          | formatAmount:'units'}}">
+                        </td>
+                    </tr>
+                </table>
+                <!--
+                <table class="tableView bodyText grant-table viewmode"
+                       ng-show="optionView == 'Person'">
+                    <tr class="column-label">
+                        <th></th>
+                        <th></th>
+                        <th>Granted</th>
+                        <th>Vested</th>
+                        <th>Forfeited</th>
+                        <th>Exercised</th>
+                    </tr>
+                    <tbody ng-repeat="investor in investorLed">
+                    <tr class="status-row">
+                        <td class="status-toggle pointer" ng-class="{'status-toggle-on': investor.shown}"
+                            ng-click="opendetails(investor.name, 'investor')">
+                            <span ng-hide="investor.shown" data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="investor.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                        </td>
+                        <td>
+                            <input disabled ng-model="investor.name">
+                        </td>
+                        <td>{{formatAmount(issueGranted(investor))}}</td>
+                        <td>{{formatAmount(issueVested(investor))}}</td>
+                        <td>{{formatAmount(issueActions(investor, 'forfeited'))}}</td>
+                        <td>{{formatAmount(issueActions(investor, 'exercised'))}}</td>
+                    </tr>
+                    <tr class="transaction-rows" ng-show="investor.shown"
+                        ng-repeat="tran in investor.trans | noempty">
+                        <td class="viewField"></td>
 
-<div class="row-fluid">
-    <div ng-style="viewportheight" class="span8 docLibrary leftBlock" style="overflow-x: auto">
-
-        <div class="row-fluid">
-            <table class="tableView bodyText grant-table viewmode" ng-show="optionView == 'Security'">
-                <tr class="column-label">
-                    <th></th>
-                    <th></th>
-                    <th>Granted</th>
-                    <th>Vested</th>
-                    <th>Forfeited</th>
-                    <th>Exercised</th>
-                </tr>
-                <tbody ng-repeat="issue in issues">
-                <tr class="status-row">
-                    <td class="status-toggle pointer" ng-class="{'status-toggle-on': issue.shown}"
-                        ng-click="opendetails(issue.issue, 'issue')">
-                        <span ng-hide="issue.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                        <span ng-show="issue.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
-                    </td>
-                    <td>
-                        <input disabled ng-model="issue.issue">
-                    </td>
-                    <td>{{formatAmount(issueGranted(issue))}}</td>
-                    <td>{{formatAmount(issueVested(issue))}}</td>
-                    <td>{{formatAmount(issueActions(issue, 'forfeited'))}}</td>
-                    <td>{{formatAmount(issueActions(issue, 'exercised'))}}</td>
-                </tr>
-                <tr class="transaction-rows" ng-show="issue.shown" ng-repeat="tran in issue.trans | noempty">
-                    <td class="viewField"></td>
-                    <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
-                        ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.investor}}</span></td>
-                    <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
-                        ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                    <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
-                        ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
-                    </td>
-                    <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
-                        ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                        <span>{{formatAmount(tran.forfeited)}}</span></td>
-                    <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
-                        ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                        <span>{{formatAmount(tran.exercised)}}</span></td>
-                </tr>
-                </tbody>
-                <tr class="total-row">
-                    <td>Total</td>
-                    <td colspan="5"></td>
-                </tr>
-                <tr class='tablefooter'>
-                    <td></td>
-                    <td></td>
-                    <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
-                    <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
-                    <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
-                    <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
-                </tr>
-            </table>
-
-            <table class="tableView bodyText grant-table viewmode" ng-show="optionView == 'Person'">
-                <tr class="column-label">
-                    <th></th>
-                    <th></th>
-                    <th>Granted</th>
-                    <th>Vested</th>
-                    <th>Forfeited</th>
-                    <th>Exercised</th>
-                </tr>
-                <tbody ng-repeat="investor in investorLed">
-                <tr class="status-row">
-                    <td class="status-toggle pointer" ng-class="{'status-toggle-on': investor.shown}"
-                        ng-click="opendetails(investor.name, 'investor')">
-                        <span ng-hide="investor.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                        <span ng-show="investor.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
-                    </td>
-                    <td>
-                        <input disabled ng-model="investor.name">
-                    </td>
-                    <td>{{formatAmount(issueGranted(investor))}}</td>
-                    <td>{{formatAmount(issueVested(investor))}}</td>
-                    <td>{{formatAmount(issueActions(investor, 'forfeited'))}}</td>
-                    <td>{{formatAmount(issueActions(investor, 'exercised'))}}</td>
-                </tr>
-                <tr class="transaction-rows" ng-show="investor.shown"
-                    ng-repeat="tran in investor.trans | noempty">
-                    <td class="viewField"></td>
-
-                    <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
-                        ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
-                    <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
-                        ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
-                    <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
-                        ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
-                    </td>
-                    <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
-                        ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                        <span>{{formatAmount(tran.forfeited)}}</span></td>
-                    <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
-                        ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                        <span>{{formatAmount(tran.exercised)}}</span></td>
-                </tr>
-                </tbody>
-                <tr class="total-row">
-                    <td>Total</td>
-                    <td colspan="5"></td>
-                </tr>
-                <tr class='tablefooter'>
-                    <td></td>
-                    <td></td>
-                    <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
-                    <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
-                    <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
-                    <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-
-    <div ng-style="viewportheight" class="span4 capright">
-        <div ng-switch on="sideBar">
-        <span ng-switch-when="1">
-          <div class="headsection tabbed row-fluid">
-              <h1>{{activeInvestor}}</h1>
-
-              <p>Terms from the ownership table</p>
-          </div>
-
-              <div class="capGuide grants" ng-show="mode == 1">
-
-                  <h2>Transaction Information</h2>
-
-                  <p ng-show="activeTran.date" class="belowTitle"><span
-                          ng-bind="activeTran.date | date:settings.shortdate"></span><span>Date</span></p>
-
-                  <p ng-show="activeTran.units" class="belowTitle"><span
-                          ng-bind="formatAmount(activeTran.units)"></span><span>Options</span></p>
-
-                  <p ng-show="activeTran.optundersec" class="belowTitle"><span
-                          ng-bind="activeTran.optundersec"></span><span tooltip-placement="top"
-                                                                        tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
-                  </p>
-
-                  <p ng-show="activeTran.price" class="belowTitle"><span
-                          ng-bind="formatDollarAmount(activeTran.price)"></span><span tooltip-placement="top"
-                                                                                      tooltip="The price each granted share can be purchased at when vested">Strike Price</span>
-                  </p>
-
-                  <p ng-show="activeTran.terms" class="belowTitle"><span ng-bind="activeTran.terms"></span><span
-                          tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
-                  </p>
-
-                  <p ng-show="activeTran.vestingbeginsdisplay" class="belowTitle"><span
-                          ng-bind="activeTran.vestingbeginsdisplay"></span><span
-                          tooltip-placement="top" tooltip="Months until the vesting cliff % is vested">Vesting Cliff (Months)</span>
-                  </p>
-
-                  <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span
-                          tooltip-placement="top"
-                          tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
-                  </p>
-
-                  <p ng-show="activeTran.vestfreq" class="belowTitle"><span ng-bind="activeTran.vestfreq"></span><span
-                          tooltip-placement="top"
-                          tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
-                  </p>
-              </div>
-
-              <div class="capGuide grants" ng-show="mode == 2">
-
-                  <h2>Forfeit Information</h2>
-
-                  <ul class="grant-list-view">
-                      <li>
-                          <span>Date</span>
-                          <span>Options</span>
-                      </li>
-                      <li ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
-                          <span ng-bind="act.date | date:settings.shortdate"></span>
-                          <span ng-bind="act.unit"></span>
-                      </li>
-                  </ul>
-              </div>
-
-            <div class="capGuide grants" ng-show="mode == 3">
-
-                <h2>Exercised Information</h2>
-
-                <ul class="grant-list-view">
-                    <li>
-                        <span>Date</span>
-                        <span>Options</span>
-                    </li>
-                    <li ng-show="act.unit"
-                        ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
-                        <span ng-bind="act.date | date:settings.shortdate"></span>
-                        <span ng-bind="formatAmount(act.unit)"></span>
-                    </li>
-                </ul>
+                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
+                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
+                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
+                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
+                        <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
+                            ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
+                            ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+                            <span>{{formatAmount(tran.forfeited)}}</span></td>
+                        <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
+                            ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                            <span>{{formatAmount(tran.exercised)}}</span></td>
+                    </tr>
+                    </tbody>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr class='tablefooter'>
+                        <td></td>
+                        <td></td>
+                        <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
+                    </tr>
+                </table>
+                -->
             </div>
 
-            <div class="capGuide grants" ng-show="mode == 4">
 
-                <h2>Vested Information</h2>
+            <internal-right-rail toggle-side="sideToggle">
+                <div ng-switch on="sideBar"
+                     class="span4 capright"
+                     ng-style="viewportheight">
+                    <span ng-switch-when="1">
+                        <div class="headsection tabbed row-fluid">
+                            <h1>{{activeInvestor}}</h1>
 
-                <p>Auto-calculated from vesting schedule</p>
+                            <p>Terms from the ownership table</p>
+                        </div>
 
-                <ul class="grant-list-view">
-                    <li>
-                        <span>Date</span>
-                        <span>Options</span>
-                    </li>
-                    <li ng-repeat="grant in activeTran.vested">
-                        <span ng-bind="grant.date | date:settings.shortdate"></span>
-                        <span ng-bind="formatAmount(grant.units)"></span>
-                    </li>
-                </ul>
-            </div>
-        </span>
+                        <div class="capGuide grants" ng-show="mode == 1">
 
-        <span ng-switch-when="2">
-          <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
-        </span>
-        <span class="capGuide railpadding" ng-switch-default>
-                <h1 class="right-bar-header">View your Grants</h1>
+                            <h2>Transaction Information</h2>
 
-                <p>The information to the left contains the sum total of your company grants, including
-                    vesting progress and any actions taken. Expand the row to reveal additional detail.</p>
-              </span>
+                            <p ng-show="activeTran.date" class="belowTitle"><span
+                                ng-bind="activeTran.date | date:settings.shortdate"></span><span>Date</span></p>
+
+                            <p ng-show="activeTran.units" class="belowTitle"><span
+                                ng-bind="formatAmount(activeTran.units)"></span><span>Options</span></p>
+
+                            <p ng-show="activeTran.optundersec" class="belowTitle"><span
+                                ng-bind="activeTran.optundersec"></span><span tooltip-placement="top"
+                                tooltip="The security each granted share will convert to upon exercise">Underlying Security</span>
+                            </p>
+
+                            <p ng-show="activeTran.price" class="belowTitle"><span
+                                ng-bind="formatDollarAmount(activeTran.price)"></span><span tooltip-placement="top"
+                                tooltip="The price each granted share can be purchased at when vested">Strike Price</span>
+                            </p>
+
+                            <p ng-show="activeTran.terms" class="belowTitle"><span ng-bind="activeTran.terms"></span><span
+                                tooltip-placement="top" tooltip="The total number of months until fully vested">Vesting Term (months)</span>
+                            </p>
+
+                            <p ng-show="activeTran.vestingbeginsdisplay" class="belowTitle"><span
+                                ng-bind="activeTran.vestingbeginsdisplay"></span><span
+                                tooltip-placement="top" tooltip="Months until the vesting cliff % is vested">Vesting Cliff (Months)</span>
+                            </p>
+
+                            <p ng-show="activeTran.vestcliff" class="belowTitle"><span ng-bind="activeTran.vestcliff"></span><span
+                                tooltip-placement="top"
+                                tooltip="The percentage of granted shares that are considered vested on the cliff date">Vesting Cliff %</span>
+                            </p>
+
+                            <p ng-show="activeTran.vestfreq" class="belowTitle"><span ng-bind="activeTran.vestfreq"></span><span
+                                tooltip-placement="top"
+                                tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">Post Cliff Frequency</span>
+                            </p>
+                        </div>
+
+                        <div class="capGuide grants" ng-show="mode == 2">
+
+                            <h2>Forfeit Information</h2>
+
+                            <ul class="grant-list-view">
+                                <li>
+                                <span>Date</span>
+                                <span>Options</span>
+                                </li>
+                                <li ng-show="act.unit" ng-repeat="act in activeTran.activeAct | grantSelect:'forfeited'">
+                                <span ng-bind="act.date | date:settings.shortdate"></span>
+                                <span ng-bind="act.unit"></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="capGuide grants" ng-show="mode == 3">
+
+                            <h2>Exercised Information</h2>
+
+                            <ul class="grant-list-view">
+                                <li>
+                                <span>Date</span>
+                                <span>Options</span>
+                                </li>
+                                <li ng-show="act.unit"
+                                ng-repeat="act in activeTran.activeAct | grantSelect:'exercised'">
+                                <span ng-bind="act.date | date:settings.shortdate"></span>
+                                <span ng-bind="formatAmount(act.unit)"></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="capGuide grants" ng-show="mode == 4">
+
+                            <h2>Vested Information</h2>
+
+                            <p>Auto-calculated from vesting schedule</p>
+
+                            <ul class="grant-list-view">
+                                <li>
+                                <span>Date</span>
+                                <span>Options</span>
+                                </li>
+                                <li ng-repeat="grant in activeTran.vested">
+                                <span ng-bind="grant.date | date:settings.shortdate"></span>
+                                <span ng-bind="formatAmount(grant.units)"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </span>
+
+                    <span ng-switch-when="2">
+                        <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
+                    </span>
+                    <span class="capGuide railpadding" ng-switch-default>
+                        <h1 class="right-bar-header">View your Grants</h1>
+
+                        <p>The information to the left contains the sum total of your company grants, including
+                        vesting progress and any actions taken. Expand the row to reveal additional detail.</p>
+                    </span>
+                </div>
+            </internal-right-rail>
         </div>
     </div>
-</div>
-</div>
 
 </div>

@@ -115,8 +115,8 @@
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="x in tran.attrs.security_type | validActions: 'transaction'">
-                            <a ng-click="makeNewTran(x)">
+                        <li ng-repeat="x in tran.attrs.security_type | validActions: 'transaction':tran.kind">
+                            <a ng-click="makeNewTran(x, tran)">
                                 {{x}}
                             </a>
                         </li>
@@ -152,9 +152,6 @@
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="convertSharesClose()"></span>
     </div>
     <div ng-show="convertTran.step == '1'" class="modalText convert-step-one">
-        <div>
-            <span>Transaction {{convertTran.tran.effective_date}}</span>
-        </div>
         <div class="pull-right">
             <span>Convert To</span>
             <ul class="dropdown-list drop-selector">
@@ -170,13 +167,8 @@
                 </li>
             </ul>
         </div>
-        <div ng-show="convertTran.toissue.name">
-            <span>Date</span>
-            <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
-                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
-                   onkeydown="testForEnter(event);">
-        </div>
-        <div ng-show="convertTran.toissue.name" class="pull-right">
+
+        <div ng-show="convertTran.toissue.name" class="pull-left">
             <span>Method</span>
             <ul class="dropdown-list drop-selector">
                 <li class="dropdown standard">
@@ -192,6 +184,14 @@
                 </li>
             </ul>
         </div>
+
+        <div ng-show="convertTran.toissue.name">
+            <span>Conversion Date</span>
+            <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
+                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                   onkeydown="testForEnter(event);">
+        </div>
+
         <div ng-show="convertTran.method == 'Price Per Share'" class="pull-right">
             <span class="double">Conversion PPS</span>
             <input type="text" ng-model="convertTran.ppshare" onkeydown="testForEnter(event);">
