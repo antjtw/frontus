@@ -8,6 +8,7 @@ var CapTable = function() {
     this.transactions = [];
     this.ledger_entries = [];
     this.cells = [];
+    this.attributes = [];
 };
 var Transaction = function() {
     this.attrs = {};
@@ -84,13 +85,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     var attrs = attributes.getAttrs();
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
-    this.reloadCapTable = function() {
-        //captable = new CapTable();
-        /*
-        loadCapTable();
-        */
-    };
+    var loadInProgress = false;
     function loadCapTable() {
+        loadInProgress = true;
         $q.all([loadLedger(),
                 loadTransactionLog(),
                 loadRowNames(),
@@ -99,29 +96,45 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 loadActivity(),
                 loadLogins()])
         .then(function(results) {
-            captable.ledger_entries = results[0];
-            captable.transactions = results[1].map(parseTransaction);
-            captable.investors = results[2].map(rowFromName);
-            captable.attributes = results[3];
-            // What is this function supposed to do???
-            // [Brian] The designs at one point asked for a summary
-            // for securities, which would, for example, include the
-            // price per share as adjusted after splits.
-            // This would be displayed above the transaction accordion
-            // in the right rail upon selecting a security.
-            //generateSecuritySummaries();
+            // reset the existing cap table
+            captable.investors.splice(0);
+            captable.securities.splice(0);
+            captable.transactions.splice(0);
+            captable.ledger_entries.splice(0);
+            captable.cells.splice(0);
+            captable.attributes.splice(0);
 
-            handleTransactions(captable.transactions);
+            results[0].forEach(function(ledger_entry) {
+                captable.ledger_entries.push(ledger_entry);
+            });
+            results[1].forEach(function(raw_transaction) {
+                captable.transactions.push(parseTransaction(raw_transaction));
+            });
+            results[2].forEach(function(raw_name) {
+                captable.investors.push(rowFromName(raw_name));
+            });
+            results[3].forEach(function(attr) {
+                captable.attributes.push(attr);
+            });
+
+            fireTourModal(captable.transactions);
             attachEvidence(results[4]);
             generateCells();
 
             linkUsers(captable.investors, results[5], results[6]);
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
-        }, logError);
+        }, logError).finally(function() {
+            loadInProgress = false;
+        });
         console.log(captable);
     }
     loadCapTable();
+    this.forceRefresh = function() {
+        if (!loadInProgress) {
+            loadCapTable();
+        }
+    };
 
     /* Data Gathering Functions */
 
@@ -147,7 +160,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }).except(logError);
         return promise.promise;
     }
-    function handleTransactions(trans) {
+    function fireTourModal(trans) {
         if (Object.keys(trans).length === 0 &&
             Modernizr.testProp('pointerEvents'))
         {
@@ -232,7 +245,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         tran.attrs = JSON.parse(tran.attrs);
         for (var a in tran.attrs)
         {//TODO this loop is to get rid of bad data. Hopefully it should only be temporary and unneccessary for the final/deployed version
-            if (tran.attrs[a] && attrs[tran.attrs.security_type] && attrs[tran.attrs.security_type][tran.kind] && attrs[tran.attrs.security_type][tran.kind][a] && attrs[tran.attrs.security_type][tran.kind][a].type == "number")
+            if (tran.attrs[a] && attrs[tran.attrs.security_type] &&
+                attrs[tran.attrs.security_type][tran.kind] &&
+                attrs[tran.attrs.security_type][tran.kind][a] &&
+                attrs[tran.attrs.security_type][tran.kind][a].type == "number")
             {
                 tran.attrs[a] = Number(tran.attrs[a]);
             }
@@ -550,8 +566,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             cells[c].security = security.new_name;
         }
         var trans = transForSec(security.name);
-        console.log("updateSecurity");
-        console.log(trans);
         for (var t in trans)
         {
             for (var a in trans[t].attrs)
@@ -592,11 +606,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
         } else {
-            var trans = cell.transactions
+            var plus_trans = cell.transactions
                 .filter(function(el) {
                     return el.attrs.investor == cell.investor ||
                            el.attrs.investor_to == cell.investor;});
-            cell.a = sum_transactions(trans);
+            var minus_trans = cell.transactions
+                .filter(function(el) {
+                    return el.attrs.investor_from == cell.investor;
+                });
+            cell.a = sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
     }
     this.setCellAmount = setCellAmount;
@@ -610,17 +628,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return trans.reduce(sumTransactionAmount, 0);
     }
     this.sum_transactions = sum_transactions;
-    function generateSecuritySummaries() {
-        angular.forEach(captable.securities, function(sec) {
-            if (sec.transactions.length > 1) {
-                // recalc various attributes
-            }
-            // totalauth should equal sum credits - sum debits
-            // from ledger entries
-            //
-            // other attrs should remain the same?
-        });
-    }
+
     function updateCell(cell) {
         cell.ledger_entries = cell.transactions = null;
         cell.a = cell.u = null;
@@ -1487,6 +1495,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return false;
         }
     }
+    this.isEvidence = isEvidence;
     function validateTransaction(transaction) {
         var correct = true;
         //console.log("validateTransaction");
