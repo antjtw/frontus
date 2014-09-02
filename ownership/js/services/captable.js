@@ -1484,7 +1484,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             updateEvidenceInDB(captable.evidence_object, action);
         }
     };
-    this.toggleForEvidence = toggleForEvidence
+    
+
 
     function isEvidence(ev) {
         if (captable.evidence_object &&
