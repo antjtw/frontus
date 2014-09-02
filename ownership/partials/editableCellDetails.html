@@ -69,9 +69,11 @@
     <div class="capTab" ng-switch-when="documents">
         <div ng-if="tran.evidence_data.length==0"
              class="linkedDocuments">
-            Connect documents that support this transaction by clicking the link below.
+            <div class="noGropus status-toggle">
+                 Connect documents that support this transaction by clicking the link below.
+            
         </div>
-        <div ng-if="tran.evidence_data.length>0"
+        <div ng-if="tran.evidence_data.length > 0"
              class="linkedDocuments">
             <div ng-repeat="doc in tran.evidence_data"
                  class="row-fluid">
