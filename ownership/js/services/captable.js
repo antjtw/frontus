@@ -617,13 +617,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
         } else {
+            var transactionkeys = [];
+            angular.forEach(cell.transactions, function(tran) {
+                transactionkeys.push(tran.transaction)
+            });
             var plus_trans = cell.transactions
                 .filter(function(el) {
-                    return el.attrs.investor == cell.investor ||
+                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1)) ||
                            el.attrs.investor_to == cell.investor;});
             var minus_trans = cell.transactions
                 .filter(function(el) {
-                    return el.attrs.investor_from == cell.investor;
+                    return el.attrs.investor_from == cell.investor ;
                 });
             cell.a = sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
