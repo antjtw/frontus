@@ -491,7 +491,7 @@ own.directive('editableCellDetails', [function() {
                 };
                 $scope.makeNewTran = function(kind, tran) {
                     if (kind == "convert") {
-                        $scope.convertSharesUp();
+                        $scope.convertSharesUp(tran);
                     } else {
                         $scope.newTran = captable.newTransaction(
                             $scope.cell.security,
@@ -549,9 +549,9 @@ own.directive('editableCellDetails', [function() {
                 }, true);
 
                 // Captable Conversion Modal
-                $scope.convertSharesUp = function() {
+                $scope.convertSharesUp = function(to_convert) {
                     $scope.convertTran = {};
-                    angular.forEach($scope.cell.transactions, function(tran) {
+                    /*angular.forEach($scope.cell.transactions, function(tran) {
                         if (tran.active) {
                             $scope.convertTran.tran = tran;
                         }
@@ -566,7 +566,8 @@ own.directive('editableCellDetails', [function() {
                         {
                             console.log("Error: no active transactions. Don't know what to do here.");
                         }
-                    }
+                    }*/
+                    $scope.convertTran.tran = to_convert;
                     $scope.convertTran.newtran = {};
                     $scope.convertTran.step = '1';
                     $scope.convertTran.date = new Date.today();
@@ -590,6 +591,7 @@ own.directive('editableCellDetails', [function() {
                         $scope.convertTran.newtran = captable.newTransaction($scope.convertTran.tran.attrs.security, 'convert', $scope.convertTran.tran.attrs.investor);
                         $scope.convertTran.newtran.attrs.amount = calculate.debtinterest($scope.convertTran.tran);
                         $scope.convertTran.newtran.attrs.to_security = $scope.convertTran.toissue.attrs.security;
+                        $scope.convertTran.newtran.attrs.transaction_from = $scope.convertTran.tran.transaction;
                         $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
                     }
                 };
