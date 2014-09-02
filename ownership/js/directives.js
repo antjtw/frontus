@@ -693,21 +693,29 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 var attrs = attributes.getAttrs();
+
                 $scope.attr_info = function(key) {
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};
                 };
 
-                $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
-                function filterSortKeys(attrs, sec_type, kind) {
+                $scope.loaddirective = function () {
+                    $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
+                    function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);
                     var sorted = Object.keys(filtered)
                             .sort(function(x1, x2) {
                                 return $filter('sortAttributeTypes')(x1, sec_type, kind) -
-                                       $filter('sortAttributeTypes')(x2, sec_type, kind);
+                                    $filter('sortAttributeTypes')(x2, sec_type, kind);
                             });
-                    return sorted;
-                }
+                        return sorted;
+                    }
+                };
+
+                $scope.loaddirective();
+                $scope.$watch('data', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
