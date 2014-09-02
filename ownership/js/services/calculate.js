@@ -1,3 +1,5 @@
+'use strict';
+
 var ownership = angular.module('ownerServices');
 
 // Captable functions for basic mathematics.
@@ -17,34 +19,6 @@ ownership.service('calculate', function () {
                 return "amount";
         }
         return null;
-    };
-
-    this.whenVestingBegins = function(obj) {
-        if (isNumber(obj.vestingbeginsdisplay, 10)) {
-            return angular.copy(obj.date).addMonths(
-                parseInt(obj.vestingbeginsdisplay, 10));
-        } else {
-            return obj.vestingbegins;
-        }
-    };
-    this.complement = function(a, b) {
-        return a.filter(function(el) {return b.indexOf(el)==-1;});
-    };
-    this.toFloat = function(value) {
-        return isNaN(parseFloat(value)) ? null : parseFloat(value);
-    };
-
-    // The remainder calculated for outstanding units investors.
-    this.whatsleft = function (total, issue, investors) {
-        var leftover = total;
-        angular.forEach(investors, function (row) {
-            if (issue.issue in row.cells &&
-                    row.nameeditable !== 0 &&
-                    isNumber(row.cells[issue.issue].u)) {
-                leftover -= row.cells[issue.issue].u;
-            }
-        });
-        return leftover;
     };
 
     // Simple summation checking that the added value is a number.
@@ -156,301 +130,12 @@ ownership.service('calculate', function () {
         return investors;
     };
 
-    // Calculates vested on each transaction returning dictionary of date:amount vested
-    // TODO move to captable service
-    this.tranvested = function (tran) {
-        var tranvested = [];
-        var vestbegin = angular.copy(tran.vestingbegins);
-        var maxunits = parseFloat(tran.units);
-        if (!isNaN(parseFloat(tran.forfeited))) {
-            maxunits -= parseFloat(tran.forfeited);
-        }
-
-        var vestedunits = 0;
-        if (isNumber(tran.vestcliff) &&
-                isNumber(tran.terms) &&
-                tran.vestfreq !== null &&
-                tran.date !== null &&
-                vestbegin !== null)
-        {
-            var cycleDate = angular.copy(tran.date).add(1).days();
-            if (Date.compare(Date.today(), vestbegin) > -1) {
-                tranvested.push({"date" : angular.copy(vestbegin),
-                                 "units" : tran.units *
-                                           (tran.vestcliff / 100)});
-                vestedunits += (tran.units * (tran.vestcliff / 100));
-            }
-            if (vestedunits > maxunits) {
-                var diff = vestedunits - maxunits;
-                tranvested[tranvested.length-1].units -= diff;
-            }
-            var remainingterm = angular.copy(tran.terms);
-            while (Date.compare(vestbegin, cycleDate) > -1) {
-                remainingterm = remainingterm - 1;
-                cycleDate.addMonths(1);
-            }
-            cycleDate.add(-1).days();
-            var finalDate = vestbegin.addMonths(remainingterm);
-            var monthlyperc = (100 - tran.vestcliff) / remainingterm;
-            var x = 1;
-            if (tran.vestfreq == "monthly") {
-                x = 1;
-            } else if (tran.vestfreq == "weekly") {
-                x = 0.25;
-            } else if (tran.vestfreq == "bi-weekly") {
-                x = 0.5;
-            } else if (tran.vestfreq == "quarterly") {
-                x = 3;
-            } else if (tran.vestfreq == "yearly") {
-                x = 12;
-            }
-            finalDate.add(-1).days();
-            if (vestedunits < maxunits) {
-                while (Date.compare(finalDate, cycleDate) > -1) {
-                    if (x < 1) {
-                        cycleDate.addWeeks(x * 4);
-                    }
-                    else {
-                        cycleDate.addMonths(x);
-                    }
-                    if (Date.compare(Date.today(), cycleDate) > -1) {
-                        tranvested.push({"date" : angular.copy(cycleDate), "units" : (x * ((monthlyperc / 100) * tran.units))});
-                        vestedunits += (x * ((monthlyperc / 100) * tran.units));
-                        if (vestedunits > maxunits) {
-                            var diff = vestedunits - maxunits;
-                            tranvested[tranvested.length-1].units -= diff;
-                            return tranvested;
-                        }
-                    }
-                }
-            }
-        }
-        return tranvested;
-    };
-
-    // Calculates the vested amounts for the
-    // TODO move to captable service
-    this.detailedvested = function (investors, trans) {
-        var vesting = {};
-        angular.forEach(trans, function (tran) {
-            var vestbegin = angular.copy(tran.vestingbegins)
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
-                if (Date.compare(Date.today(), vestbegin) > -1) {
-                    if (!vesting[tran.investor]) {
-                        vesting[tran.investor] = {};
-                    }
-                    if (!isNaN(parseFloat(vesting[tran.investor][tran.issue]))) {
-                        vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (tran.units * (tran.vestcliff / 100));
-                    }
-                    else {
-                        vesting[tran.investor][tran.issue] = (tran.units * (tran.vestcliff / 100));
-                    }
-                    var cycleDate = angular.copy(tran.date);
-                    var remainingterm = angular.copy(tran.terms);
-                    while (Date.compare(vestbegin, cycleDate) > -1) {
-                        remainingterm = remainingterm - 1;
-                        cycleDate.addMonths(1);
-                    }
-                    remainingterm = remainingterm;
-                    var finalDate = vestbegin.addMonths(remainingterm);
-                    var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
-                    var x = 1;
-                    if (tran.vestfreq == "monthly") {
-                        x = 1
-                    }
-                    else if (tran.vestfreq == "weekly") {
-                        x = 0.25
-                    }
-                    else if (tran.vestfreq == "bi-weekly") {
-                        x = 0.5
-                    }
-                    else if (tran.vestfreq == "quarterly") {
-                        x = 3;
-                    }
-                    else if (tran.vestfreq == "yearly") {
-                        x = 12;
-                    }
-                    if (x < 1) {
-                        cycleDate.addWeeks(x * 4);
-                    }
-                    else {
-                        cycleDate.addMonths(x);
-                    }
-                    while (Date.compare(Date.today(), cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
-                        vesting[tran.investor][tran.issue] = vesting[tran.investor][tran.issue] + (x * ((monthlyperc / 100) * tran.units));
-                        if (x < 1) {
-                            cycleDate.addWeeks(x * 4);
-                        }
-                        else {
-                            cycleDate.addMonths(x);
-                        }
-                    }
-                }
-            }
-        });
-        angular.forEach(investors, function (row) {
-            if (vesting[row.name]) {
-                row.vested = {}
-                for (var issue in vesting[row.name]) {
-                    if (!isNaN(vesting[row.name][issue])) {
-                        var result = Math.round(vesting[row.name][issue]*1000)/1000
-                        row.vested[issue] = result;
-                    }
-                }
-            }
-        });
-        return investors
-    };
-
-    this.myvested = function (trans) {
-        var myvested = {};
-        var tranvested = {};
-        var firstcolumn = new Date(5000000000000);
-        var lastcolumn = new Date(01-12-1000);
-        angular.forEach(trans, function(tran) {
-            tranvested[tran.date] = 0;
-            var vestbegin = angular.copy(tran.vestingbegins);
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
-                firstcolumn = Date.compare(vestbegin, firstcolumn) > -1 ? firstcolumn : vestbegin;
-            }
-            var remainingterm = angular.copy(tran.terms);
-            var startdate = angular.copy(tran.date);
-            while (remainingterm > 0) {
-                startdate.addMonths(1);
-                remainingterm -= 1;
-            }
-            lastcolumn = Date.compare(startdate, lastcolumn) > -1 ? startdate : lastcolumn;
-        });
-        while (Date.compare(lastcolumn, firstcolumn) > -1) {
-            myvested[firstcolumn.toString("MMM yyyy")] = [0,0];
-            firstcolumn.addMonths(1);
-        }
-        angular.forEach(trans, function (tran) {
-            var vestbegin = angular.copy(tran.vestingbegins);
-            if (!isNaN(parseFloat(tran.vestcliff)) && !isNaN(parseFloat(tran.terms)) && tran.vestfreq != null && tran.date != null && vestbegin != null) {
-                var cycleDate = angular.copy(tran.date).add(1).days();
-                // Create dictionary of all vesting events, [number vested by today's date, number that will be vested in total]
-                if (myvested[vestbegin.toString("MMM yyyy")]) {
-                    myvested[vestbegin.toString("MMM yyyy")][1] += (tran.units * (tran.vestcliff / 100));
-                }
-                else {
-                    myvested[vestbegin.toString("MMM yyyy")] = [0,(tran.units * (tran.vestcliff / 100))];
-                }
-                if (Date.compare(Date.today(), vestbegin) > -1) {
-                    myvested[vestbegin.toString("MMM yyyy")][0] += (tran.units * (tran.vestcliff / 100));
-                    tranvested[tran.date] += (tran.units * (tran.vestcliff / 100));
-                }
-                var remainingterm = angular.copy(tran.terms);
-                while (Date.compare(vestbegin, cycleDate) > -1) {
-                    remainingterm = remainingterm - 1;
-                    cycleDate.addMonths(1);
-                }
-                cycleDate.add(-1).days();
-                var finalDate = vestbegin.addMonths(remainingterm);
-                var monthlyperc = (100 - tran.vestcliff) / (remainingterm);
-                var x = 1;
-                if (tran.vestfreq == "monthly") {
-                    x = 1
-                }
-                else if (tran.vestfreq == "weekly") {
-                    x = 0.25
-                }
-                else if (tran.vestfreq == "bi-weekly") {
-                    x = 0.5
-                }
-                else if (tran.vestfreq == "quarterly") {
-                    x = 3;
-                }
-                else if (tran.vestfreq == "yearly") {
-                    x = 12;
-                }
-                finalDate.add(-1).days();
-                while (Date.compare(finalDate, cycleDate) > -1) {
-                    if (x < 1) {
-                        cycleDate.addWeeks(x * 4);
-                    }
-                    else {
-                        cycleDate.addMonths(x);
-                    }
-                    if (myvested[cycleDate.toString("MMM yyyy")]) {
-                        myvested[cycleDate.toString("MMM yyyy")][1] += (x * ((monthlyperc / 100) * tran.units));
-                    }
-                    else {
-                        myvested[cycleDate.toString("MMM yyyy")] = [0,(x * ((monthlyperc / 100) * tran.units))];
-                    }
-                    if (Date.compare(Date.today(), cycleDate) > -1) {
-                        myvested[cycleDate.toString("MMM yyyy")][0] += (x * ((monthlyperc / 100) * tran.units));
-                        tranvested[tran.date] += (x * ((monthlyperc / 100) * tran.units));
-                    }
-                }
-            }
-        });
-        return [myvested, tranvested];
-    };
-
-    // Generates the diluted investors
-    this.dilution = function (investors, securities) {
-        var dilutedRows = [];
-        angular.forEach(investors, function (row) {
-            if (row.name !== undefined) {
-                var something = null;
-                var temprow = {"name": row.name, "email": row.email, cells: []};
-                angular.forEach(securities, function (issue) {
-                    if (issue.issue) {
-                        temprow.cells[issue.issue] = {};
-                        if (row.editable == "yes" && (issue.type == "Equity" || issue.type == null) && row.cells[issue.issue]['u'] > 0) {
-                            temprow.cells[issue.issue] = row.cells[issue.issue];
-                            something = true;
-                        }
-                        if (row.cells[issue.issue]['exercised'] && row.vested && row.cells[issue.issue]['exercised'] > row.vested[issue.issue]) {
-                            if (row.cells[issue.issue]['u'] < row.cells[issue.issue]['exercised']) {
-                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
-                            }
-                            else {
-                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['exercised'];
-                            }
-                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
-                            something = true;
-                        }
-                        else if (row.cells[issue.issue]['exercised'] && !row.vested) {
-                            if (row.cells[issue.issue]['u'] < row.cells[issue.issue]['exercised']) {
-                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
-                            }
-                            else {
-                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['exercised'];
-                            }
-                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
-                            something = true;
-                        }
-                        else if (row.vested && issue.type == "Option" && row.vested[issue.issue] > 0) {
-                            if (row.cells[issue.issue]['u'] < row.vested[issue.issue]) {
-                                temprow.cells[issue.issue]['u'] = row.cells[issue.issue]['u'];
-                            }
-                            else {
-                                temprow.cells[issue.issue]['u'] = row.vested[issue.issue];
-                            }
-                            temprow.cells[issue.issue]['a'] = row.cells[issue.issue]['a'];
-                            something = true;
-                        }
-                    }
-                });
-                if (something) {
-                    dilutedRows.push(temprow);
-                }
-            }
-        });
-        return dilutedRows;
-    };
-
-
-
-
     // Returns the number of shareholders (investors -1 for the empty row)
     this.numShareholders = function (investors) {
-        var number = 0
+        var number = 0;
         angular.forEach(investors, function(row) {
             if (row.editable == "yes") {
-                number += 1
+                number += 1;
             }
         });
         return number;
@@ -462,8 +147,8 @@ ownership.service('calculate', function () {
         for (var key in row.cells) {
             if (row.cells.hasOwnProperty(key)) {
                 if (row.cells[key] != null) {
-                    if (!isNaN(parseFloat(row.cells[key]['u'])) && String(key) != "$$hashKey") {
-                        total = total + parseFloat(row.cells[key]['u']);
+                    if (!isNaN(parseFloat(row.cells[key].u)) && String(key) != "$$hashKey") {
+                        total = total + parseFloat(row.cells[key].u);
                     }
                 }
             }
@@ -489,8 +174,8 @@ ownership.service('calculate', function () {
         var total = 0;
         angular.forEach(investors, function (row) {
             for (var key in row.cells) {
-                if (row.cells[key] != null && !isNaN(parseFloat(row.cells[key]['a'])) && String(key) != "$$hashKey") {
-                    total = total + parseFloat(row.cells[key]['a']);
+                if (row.cells[key] != null && !isNaN(parseFloat(row.cells[key].a)) && String(key) != "$$hashKey") {
+                    total = total + parseFloat(row.cells[key].a);
                 }
             }
         });
@@ -529,7 +214,7 @@ ownership.service('calculate', function () {
             }
             // Takes a .x and makes it .x0
             else if (n[1] && n[1].length == 1) {
-                n[1] = n[1] + "0"
+                n[1] = n[1] + "0";
             }
             //Combines the two sections
             amount = n.join(".");
@@ -562,17 +247,17 @@ ownership.service('calculate', function () {
                 if (parseInt(small) % 10 == 0) {
                     small = small.substring(0, 1);
                     if (parseInt(small) == 0) {
-                        small = ""
+                        small = "";
                     }
                 }
-                small = small != "" ? "." + small : "";
+                small = (small != "") ? "." + small : "";
                 amount = big + small + sizes[sizefactor];
             }
         }
         else {
             amount = 0;
         }
-        return amount
+        return amount;
     };
 
     this.cleanZeros = function(amount) {
@@ -583,7 +268,7 @@ ownership.service('calculate', function () {
                 if (parseInt(small) % 10 == 0) {
                     small = small.substring(0, 1);
                     if (parseInt(small) == 0) {
-                        small = ""
+                        small = "";
                     }
                 }
                 small = small != "" ? "." + small : "";
@@ -595,12 +280,8 @@ ownership.service('calculate', function () {
 
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
 
-    this.currencysymbol = function(settings) {
-        return settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
-    };
-
     this.formatMoneyAmount = function (amount, settings) {
-        var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
+        var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$';
         if (amount) {
             return symbol + amount;
         }
@@ -634,7 +315,7 @@ ownership.service('calculate', function () {
             var cycleDate = angular.copy(tran.effective_date);
             var length = 500;
             if (tran.attrs.term) {
-               length = parseInt(tran.attrs.term)
+               length = parseInt(tran.attrs.term);
             }
             if (x < 1) {
                 cycleDate.addWeeks(x * 4);
@@ -694,7 +375,7 @@ ownership.service('calculate', function () {
         if (potentialnumber) {
             var finalnumber = String(potentialnumber).replace(/\,/g,'');
             finalnumber = String(finalnumber).replace(/\$/g , '');
-            return finalnumber
+            return finalnumber;
         }
     };
     function isNumber(val) {
@@ -729,7 +410,7 @@ ownership.service('calculate', function () {
         else if (String(object[field]) == "false") {
             object[field] = options[1];
         }
-        return object[field]
+        return object[field];
     };
 
     this.timezoneOffset = function (date) {
@@ -740,6 +421,6 @@ ownership.service('calculate', function () {
         var diffYears = d1.getFullYear()-d2.getFullYear();
         var diffMonths = d1.getMonth()-d2.getMonth();
         return (diffYears*12 + diffMonths);
-    }
+    };
 
 });
