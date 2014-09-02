@@ -12,9 +12,11 @@ function(SWBrijj, $q, $filter, displayCopy) {
      * to investors and securities.
      */
     var special = {investor: [], security: []};
+    var loaded = false;
     init();
     this.getAttrs = function() { return attrs; };
     this.getSpecialAttrs = function() { return special; };
+    this.isLoaded = function() { return loaded; };
     function init() { loadAttributes().then(handleAttrs); }
     function handleAttrs(data) {
         special.investor = [];
@@ -50,6 +52,7 @@ function(SWBrijj, $q, $filter, displayCopy) {
                  }
             }
         });
+        loaded = true;
         console.log(attrs);
     }
     function loadAttributes() {
