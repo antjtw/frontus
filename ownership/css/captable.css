@@ -600,6 +600,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 .transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
     vertical-align: -10%;
     color: #1E2D3D;
+    width: 100%;
 }
 
 .transaction-accordion.lessmargin .capGuide,
@@ -619,6 +620,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-left: 20px;
     display: inline-block;
     font-family: "FS Elliot Web Light", sans-serif;
+    width: 100%;
 }
 
 .invalidTran {
@@ -2442,6 +2444,10 @@ span.tour-icon.issue-cog + .tooltip {
 
 .faux-tabs.triplet > button {
     width: 33.3333333333%;
+}
+
+.faux-tabs.pair > button {
+    width: 50%;
 }
 
 .faux-tabs > button.on {

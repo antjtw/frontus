@@ -7,11 +7,11 @@
                             | orderBy:'date' track by $index"
                 ng-switch on="currentTab">
     <accordion-heading>
-        <span ng-click="editEvidence()" ng-class="{invalidTran: !tran.valid}">
+        <span ng-click="toggleTransaction()" ng-class="{invalidTran: !tran.valid}">
             {{tran.effective_date | date:settings.shortdate}} Transaction
         </span>
     </accordion-heading>
-    <div class="darkgray faux-tabs triplet">
+    <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
         <button
                 ng-click="switchCapTab('details');"
                 ng-class="{on: currentTab=='details'}">
@@ -28,7 +28,8 @@
             </span>
         </button><button
                 ng-click="switchCapTab('actions');"
-                ng-class="{on: currentTab=='actions'}">
+                ng-class="{on: currentTab=='actions'}"
+                ng-if="hasActions(tran)">
             <span>
                 <span data-icon="&#xe613;" aria-hidden="true"></span>
                 Actions
