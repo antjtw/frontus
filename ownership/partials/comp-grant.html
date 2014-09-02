@@ -105,888 +105,885 @@
         </div>
         -->
 
-        <div class="row-fluid">
-            <div class="row-fluid" ng-click="resetSideBar();">
-                <div class="captable-controls subnav-controls">
-                    <div>
-                        <!--
-                        <div class="pull-left" ng-show="viewMode && issues.length!==0">
-                            <span>View by</span>
-                            <ul class="dropdown-list drop-selector">
-                                <li class="dropdown standard">
-                                <a class="dropdown-toggle"
-                                   data-toggle="dropdown"
-                                   href="#">
-                                    {{ optionView }}
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a ng-click="setView('Security')"
-                                           class="button">
-                                            Security
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a ng-click="setView('Person')"
-                                           class="button">
-                                            Person
-                                        </a>
-                                    </li>
-                                </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        -->
-                        <div ng-show="false" class="pull-right">
-                            <div class="standard-button">
-                                <button ng-click="modalUp();" class="btn">
-                                    Share
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-button pull-right"
-                         ng-show="ct.securities.length!==0"
-                         ng-class="{'disabledme': companyIsZombie()}"
-                         ng-click="companyIsZombie() || editViewToggle();"
-                         data-placement="bottom"
-                         bs-tooltip="zombiemessage">
-                        <ul>
+        <subnav>
+            <!--
+            <div class="box-button pull-left">
+                <div class="pull-left" ng-show="viewMode && issues.length!==0">
+                    <span>View by</span>
+                    <ul class="dropdown-list drop-selector">
+                        <li class="dropdown standard">
+                        <a class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           href="#">
+                            {{ optionView }}
+                        </a>
+                        <ul class="dropdown-menu">
                             <li>
-                                <span ng-show="togglename() == 'View'"
-                                      data-icon="&#xe001;"
-                                      aria-hidden="true">
-                                </span>
-                                <span ng-show="togglename() == 'Edit'"
-                                      data-icon="&#xe00e;"
-                                      aria-hidden="true">
-                                </span>
+                                <a ng-click="setView('Security')"
+                                   class="button">
+                                    Security
+                                </a>
                             </li>
                             <li>
-                                <span>{{togglename()}}</span>
+                                <a ng-click="setView('Person')"
+                                   class="button">
+                                    Person
+                                </a>
                             </li>
                         </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div ng-show="false" class="pull-right">
+                    <div class="standard-button">
+                        <button ng-click="modalUp();" class="btn">
+                            Share
+                        </button>
                     </div>
                 </div>
-                <div class="DivHelper"></div>
             </div>
-        </div>
+            -->
+            <div class="box-button pull-right"
+                 ng-show="ct.securities.length !== 0"
+                 ng-class="{'disabledme': companyIsZombie()}"
+                 ng-click="companyIsZombie() || editViewToggle();"
+                 data-placement="bottom"
+                 bs-tooltip="zombiemessage">
+                <ul>
+                    <li>
+                        <span ng-show="togglename() == 'View'"
+                              data-icon="&#xe001;"
+                              aria-hidden="true">
+                        </span>
+                        <span ng-show="togglename() == 'Edit'"
+                              data-icon="&#xe00e;"
+                              aria-hidden="true">
+                        </span>
+                    </li>
+                    <li>
+                        <span>{{togglename()}}</span>
+                    </li>
+                </ul>
+            </div>
+        </subnav>
 
-        <div ng-style="viewportheight"
-             class="span8 docLibrary leftBlock"
-             style="overflow-x: auto">
-            <table class="tableView bodyText grant-table"
-                   ng-show="ct.securities.length===0 && done">
-                <tbody class="empty-table">
-                <tr>
-                    <td>
-                        <div>
-                            Welcome!
-                            <a href="/app/ownership/company-captable"
-                               class="link">
-                                Create an options security
-                            </a> on your capitalization table to manage
-                            your grants
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="row-fluid">
-                <!-- TABLE VIEW BY:: SECURITY -->
+        <div class="row-fluid leftTabWindow">
+            <div ng-style="viewportheight"
+                 class="span8 docLibrary leftBlock"
+                 ng-class="{leftFullTableBlock: sideToggle,
+                            widthtransition25: oldSafari()}">
                 <table class="tableView bodyText grant-table"
-                       ng-class="{'viewmode': viewMode}"
-                       ng-show="ct.securities.length!==0">
-                    <tr class="column-label">
-                        <th></th>
-                        <th></th>
-                        <th>Granted</th>
-                        <th>Vested</th>
-                        <th>Forfeited</th>
-                        <th>Exercised</th>
-                    </tr>
-                    <tbody ng-hide="captable.securityTotalUnits(sec) <= 0 && viewMode"
-                           ng-repeat="sec in ct.securities">
-                    <!-- SECURITY SUMMARY ROWS -->
-                    <tr class="status-row">
-                        <td class="status-toggle pointer"
-                            ng-class="{'status-toggle-on': sec==shown}"
-                            ng-click="opendetails(sec)">
-                            <span ng-hide="sec==shown || !sec.transactions"
-                                  data-icon="&#xe017;" aria-hidden="true">
-                            </span>
-                            <span ng-show="sec==shown && sec.transactions"
-                                  data-icon="&#xe01c;" aria-hidden="true">
-                            </span>
-                        </td>
-                        <td ng-class="{'selectablerow': viewMode}"
-                            ng-click="!viewMode || selectSecurity(sec)">
-                            <input ng-show="!viewMode"
-                                   placeholder="Add new security"
-                                   ui-event="{focus: 'selectSecurity(sec)',
-                                              blur: 'saveIssue(sec, \'issue\')'}"
-                                   ng-model="sec.name">
-                            <span ng-show="viewMode">
-                                {{sec.name}}
-                            </span>
-                        </td>
+                       ng-show="ct.securities.length===0 && done">
+                    <tbody class="empty-table">
+                    <tr>
                         <td>
-                            {{captable.securityUnitsFrom(sec, 'grant')
-                            | formatAmount:'units'}}
-                        </td>
-                        <td>
-                            {{captable.securityCurrentUnits(sec)
-                            | formatAmount:'units'}}
-                        </td>
-                        <td>
-                            {{captable.securityUnitsFrom(sec,'forfeit')
-                            | formatAmount:'units'}}
-                        </td>
-                        <td>
-                            {{captable.securityUnitsFrom(sec,'exercise')
-                            | formatAmount:'units'}}
-                        </td>
-                    </tr>
-                    <!-- EDITABLE INVESTOR ROWS -->
-                    <!-- TODO dispaly row for each investor with ledger entries for the security -->
-                    <tr class="transaction-rows"
-                        ng-if="sec==shown && !viewMode"
-                        ng-repeat="inv in captable.investorsIn(sec)">
-                        <td></td>
-                        <td>
-                            <input bs-typeahead="rownames"
-                                   placeholder="Add new investor"
-                                   ng-model="inv.name"
-                                   ng-change="fauxupdating(inv)"
-                                   ui-event="{focus: 'selectInvestor(inv)',
-                                              blur: 'updateName(tran)'}">
-                        </td>
-                        <td>
-                            <input maxlength="16"
-                                   placeholder="options"
-                                   ng-disabled="!inv.name"
-                                   ui-event="{focus: 'getActiveTransaction(tran)',
-                                              blur: 'saveTran(activeTran)'}"
-                                   ng-model="captable.securityUnitsFrom(sec, 'grant', inv)">
-                        </td>
-                        <td ng-click="getActiveTransaction(tran, 'vested')">
-                            <input disabled
-                                   ng-model="captable.securityCurrentUnits(sec, inv)">
-                        </td>
-                        <td>
-                            <input maxlength="16"
-                                   placeholder="options"
-                                   ng-disabled="!tran.investor || !tran.units"
-                                   ui-event="{focus: 'getActiveTransaction(tran, \'forfeited\')',
-                                              blur: 'grantUpdateLR(tran, \'forfeited\')'}"
-                                   ng-model="captable.securityUnitsFrom(sec, 'forfeit', inv)">
-                        </td>
-                        <td>
-                            <input maxlength="16"
-                                   placeholder="options"
-                                   ng-disabled="!tran.investor || !tran.units"
-                                   ui-event="{focus: 'getActiveTransaction(tran, \'exercised\')',
-                                              blur: 'grantUpdateLR(tran, \'exercised\')'}"
-                                   ng-model="captable.securityUnitsFrom(sec, 'exercise', inv)">
-                        </td>
-                    </tr>
-                    <!-- VIEW ONLY INVESTOR ROWS -->
-                    <!-- TODO dispaly row for each investor with ledger entries for the security -->
-                    <tr class="transaction-rows"
-                        ng-if="sec==shown && viewMode"
-                        ng-repeat="inv in captable.investorsIn(sec)">
-                        <td class="viewField"></td>
-                        <td ng-class="{fieldSelected: tran.fields[0],
-                                       hoverable: tran.investor}"
-                            ng-click="getActiveTransaction(tran, '', 'view')">
-                            <span>{{inv.name}}</span>
-                        </td>
-                        <td ng-class="{fieldSelected: tran.fields[0],
-                                       hoverable: tran.units}"
-                            ng-click="getActiveTransaction(tran, '', 'view')">
-                            <span>
-                                {{captable.securityUnitsFrom(sec, 'grant', inv)
-                                | formatAmount:'units'}}
-                            </span>
-                        </td>
-                        <td ng-class="{fieldSelected: tran.fields[1],
-                                       hoverable: (tran.vested.length > 0)}"
-                            ng-click="getActiveTransaction(tran, 'vested', 'view')">
-                            <span>
-                                {{captable.securityCurrentUnits(sec, inv)
-                                | formatAmount:'units'}}
-                            </span>
-                        </td>
-                        <td ng-class="{fieldSelected: tran.fields[2],
-                                       hoverable: tran.forfeited}"
-                            ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                            <span>
-                                {{captable.securityUnitsFrom(sec, 'forfeit', inv)
-                                | formatAmount:'units'}}
-                            </span>
-                        </td>
-                        <td ng-class="{fieldSelected: tran.fields[3],
-                                       hoverable: tran.exercised}"
-                            ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                            <span>
-                                {{captable.securityUnitsFrom(sec, 'exercise', inv)
-                                | formatAmount:'units'}}
-                            </span>
+                            <div>
+                                Welcome!
+                                <a href="/app/ownership/company-captable"
+                                   class="link">
+                                    Create an options security
+                                </a> on your capitalization table to manage
+                                your grants
+                            </div>
                         </td>
                     </tr>
                     </tbody>
-                    <tr class="total-row">
-                        <td>Total</td>
-                        <td colspan="5"></td>
-                    </tr>
-                    <tr class='tablefooter'>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <input disabled
-                                   value="{{captable.unitsFrom('grant')
-                                          | formatAmount:'units'}}">
-                        </td>
-                        <td>
-                            <input disabled
-                                   value="{{captable.currentUnits()
-                                          | formatAmount:'units'}}">
-                        </td>
-                        <td>
-                            <input disabled
-                                   value="{{captable.unitsFrom('forfeit')
-                                          | formatAmount:'units'}}">
-                        </td>
-                        <td>
-                            <input disabled
-                                   value="{{captable.unitsFrom('exercise')
-                                          | formatAmount:'units'}}">
-                        </td>
-                    </tr>
                 </table>
+                <div class="row-fluid">
+                    <!-- TABLE VIEW BY:: SECURITY -->
+                    <table class="tableView bodyText grant-table"
+                           ng-class="{'viewmode': viewMode}"
+                           ng-show="ct.securities.length!==0">
+                        <tr class="column-label">
+                            <th></th>
+                            <th></th>
+                            <th>Granted</th>
+                            <th>Vested</th>
+                            <th>Forfeited</th>
+                            <th>Exercised</th>
+                        </tr>
+                        <tbody ng-hide="captable.securityTotalUnits(sec) <= 0 && viewMode"
+                               ng-repeat="sec in ct.securities">
+                        <!-- SECURITY SUMMARY ROWS -->
+                        <tr class="status-row">
+                            <td class="status-toggle pointer"
+                                ng-class="{'status-toggle-on': sec==shown}"
+                                ng-click="opendetails(sec)">
+                                <span ng-hide="sec==shown || !sec.transactions"
+                                      data-icon="&#xe017;" aria-hidden="true">
+                                </span>
+                                <span ng-show="sec==shown && sec.transactions"
+                                      data-icon="&#xe01c;" aria-hidden="true">
+                                </span>
+                            </td>
+                            <td ng-class="{'selectablerow': viewMode}"
+                                ng-click="!viewMode || selectSecurity(sec)">
+                                <input ng-show="!viewMode"
+                                       placeholder="Add new security"
+                                       ui-event="{focus: 'selectSecurity(sec)',
+                                                  blur: 'saveIssue(sec, \'issue\')'}"
+                                       ng-model="sec.name">
+                                <span ng-show="viewMode">
+                                    {{sec.name}}
+                                </span>
+                            </td>
+                            <td>
+                                {{captable.securityUnitsFrom(sec, 'grant')
+                                | formatAmount:'units'}}
+                            </td>
+                            <td>
+                                {{captable.securityCurrentUnits(sec)
+                                | formatAmount:'units'}}
+                            </td>
+                            <td>
+                                {{captable.securityUnitsFrom(sec,'forfeit')
+                                | formatAmount:'units'}}
+                            </td>
+                            <td>
+                                {{captable.securityUnitsFrom(sec,'exercise')
+                                | formatAmount:'units'}}
+                            </td>
+                        </tr>
+                        <!-- EDITABLE INVESTOR ROWS -->
+                        <!-- TODO dispaly row for each investor with ledger entries for the security -->
+                        <tr class="transaction-rows"
+                            ng-if="sec==shown && !viewMode"
+                            ng-repeat="inv in captable.investorsIn(sec)">
+                            <td></td>
+                            <td>
+                                <input bs-typeahead="rownames"
+                                       placeholder="Add new investor"
+                                       ng-model="inv.name"
+                                       ng-change="fauxupdating(inv)"
+                                       ui-event="{focus: 'selectInvestor(inv)',
+                                                  blur: 'updateName(tran)'}">
+                            </td>
+                            <td>
+                                <input maxlength="16"
+                                       placeholder="options"
+                                       ng-disabled="!inv.name"
+                                       ui-event="{focus: 'getActiveTransaction(tran)',
+                                                  blur: 'saveTran(activeTran)'}"
+                                       ng-model="captable.securityUnitsFrom(sec, 'grant', inv)">
+                            </td>
+                            <td ng-click="getActiveTransaction(tran, 'vested')">
+                                <input disabled
+                                       ng-model="captable.securityCurrentUnits(sec, inv)">
+                            </td>
+                            <td>
+                                <input maxlength="16"
+                                       placeholder="options"
+                                       ng-disabled="!tran.investor || !tran.units"
+                                       ui-event="{focus: 'getActiveTransaction(tran, \'forfeited\')',
+                                                  blur: 'grantUpdateLR(tran, \'forfeited\')'}"
+                                       ng-model="captable.securityUnitsFrom(sec, 'forfeit', inv)">
+                            </td>
+                            <td>
+                                <input maxlength="16"
+                                       placeholder="options"
+                                       ng-disabled="!tran.investor || !tran.units"
+                                       ui-event="{focus: 'getActiveTransaction(tran, \'exercised\')',
+                                                  blur: 'grantUpdateLR(tran, \'exercised\')'}"
+                                       ng-model="captable.securityUnitsFrom(sec, 'exercise', inv)">
+                            </td>
+                        </tr>
+                        <!-- VIEW ONLY INVESTOR ROWS -->
+                        <!-- TODO dispaly row for each investor with ledger entries for the security -->
+                        <tr class="transaction-rows"
+                            ng-if="sec==shown && viewMode"
+                            ng-repeat="inv in captable.investorsIn(sec)">
+                            <td class="viewField"></td>
+                            <td ng-class="{fieldSelected: tran.fields[0],
+                                           hoverable: tran.investor}"
+                                ng-click="getActiveTransaction(tran, '', 'view')">
+                                <span>{{inv.name}}</span>
+                            </td>
+                            <td ng-class="{fieldSelected: tran.fields[0],
+                                           hoverable: tran.units}"
+                                ng-click="getActiveTransaction(tran, '', 'view')">
+                                <span>
+                                    {{captable.securityUnitsFrom(sec, 'grant', inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
+                            <td ng-class="{fieldSelected: tran.fields[1],
+                                           hoverable: (tran.vested.length > 0)}"
+                                ng-click="getActiveTransaction(tran, 'vested', 'view')">
+                                <span>
+                                    {{captable.securityCurrentUnits(sec, inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
+                            <td ng-class="{fieldSelected: tran.fields[2],
+                                           hoverable: tran.forfeited}"
+                                ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+                                <span>
+                                    {{captable.securityUnitsFrom(sec, 'forfeit', inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
+                            <td ng-class="{fieldSelected: tran.fields[3],
+                                           hoverable: tran.exercised}"
+                                ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                                <span>
+                                    {{captable.securityUnitsFrom(sec, 'exercise', inv)
+                                    | formatAmount:'units'}}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tr class="total-row">
+                            <td>Total</td>
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr class='tablefooter'>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.unitsFrom('grant')
+                                              | formatAmount:'units'}}">
+                            </td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.currentUnits()
+                                              | formatAmount:'units'}}">
+                            </td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.unitsFrom('forfeit')
+                                              | formatAmount:'units'}}">
+                            </td>
+                            <td>
+                                <input disabled
+                                       value="{{captable.unitsFrom('exercise')
+                                              | formatAmount:'units'}}">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
-
-        <internal-right-rail toggle-side="sideToggle">
-            <div ng-switch on="sideBar"
-                 class="span4 capright"
-                 ng-style="viewportheight">
-                <span ng-switch-when="1">
-                    <div class="capGuide global"
-                         ng-show="mode == 1 && !viewMode">
-                        <div class="rightTitle security-type">
-                            <span>Investor</span>
-                            <input disabled
-                                   ng-model="activeTran.investor">
-                        </div>
-                        <p class="rightTitle">
-                            <span>Date</span>
-                            <input ng-show="mode == 1 && !viewMode"
-                                   ng-disabled="toggleView();"
-                                   id="date{{activeTran.$$hashKey}}"
-                                   ui-event="{keydown: 'saveTranDate(activeTran, \'date\', $event)',
-                                              blur: 'saveTranDate(activeTran, \'date\', \'blur\')'}"
-                                   ng-change="saveTranDate(activeTran, 'date')"
-                                   type="text"
-                                   ng-model="activeTran.date"
-                                   data-date-format={{settings.lowercasedate}}
-                                   bs-datepicker>
-                        </p>
-                        <p class="rightTitle">
-                            <span>Options</span>
-                            <input ui-event="{blur: 'saveTran(activeTran)'}"
-                                   ng-model="activeTran.units">
-                        </p>
-                        <p class="rightTitle">
-                            <span>Strike Price</span>
-                            <input ui-event="{blur: 'saveTran(activeTran)'}"
-                                   ng-model="activeTran.price">
-                        </p>
-                        <div ng-show="activeTran.terms == null &&
-                                      activeTran.vestingbegins == null &&
-                                      activeTran.vestcliff == null &&
-                                      activeTran.vestfreq == null"
-                             class="rightTitle">
-                            <span>Vesting Schedule</span>
-                            <ul class="dropdown-list drop-selector">
-                                <li class="dropdown standard">
-                                    <a class="dropdown-toggle">
-                                        <span class="invisible-drop">'</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li ng-repeat="i in schedules">
-                                            <a ng-click="pickSchedule(i, activeTran)">
-                                                {{i.name}}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a ng-click="pickSchedule('!!', activeTran)">
-                                                Custom Schedule
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <p ng-hide="activeTran.terms == null &&
-                                    activeTran.vestingbegins == null &&
-                                    activeTran.vestcliff == null &&
-                                    activeTran.vestfreq == null"
-                           class="rightTitle double">
-                            <span>Vesting Term (months)</span>
-                            <input ui-event="{blur: 'saveTran(activeTran)'}"
-                                   ng-model="activeTran.terms">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.terms">
-                            </span>
-                        </p>
-                        <p ng-hide="activeTran.terms == null &&
-                                    activeTran.vestingbegins == null &&
-                                    activeTran.vestcliff == null &&
-                                    activeTran.vestfreq == null"
-                           class="rightTitle double">
-                            <span>Vesting Cliff (Months)</span>
-                            <input ui-event="{blur: 'saveTran(activeTran)'}"
-                                   ng-model="activeTran.vestingbeginsdisplay">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.vestingbegins">
-                            </span>
-                        </p>
-                        <p ng-hide="activeTran.terms == null &&
-                                    activeTran.vestingbegins == null &&
-                                    activeTran.vestcliff == null &&
-                                    activeTran.vestfreq == null"
-                           class="rightTitle">
-                            <span>Vesting Cliff %</span>
-                            <input ui-event="{blur: 'saveTran(activeTran)'}"
-                                   ng-model="activeTran.vestcliff">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.vestcliff">
-                            </span>
-                        </p>
-                        <div ng-hide="activeTran.terms == null &&
-                                      activeTran.vestingbegins == null &&
-                                      activeTran.vestcliff == null &&
-                                      activeTran.vestfreq == null"
-                             class="rightTitle double">
-                            <span>Post Cliff Frequency</span>
-                            <ul class="dropdown-list drop-selector">
-                                <li class="dropdown standard">
-                                    <a class="dropdown-toggle">
-                                        {{activeTran.vestfreq}}
-                                        <span class="invisible-drop">'</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li ng-repeat="i in freqtypes">
-                                            <a ng-click="saveTranAssign(activeTran, 'vestfreq', i)">
-                                                {{i}}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.vestfreq">
-                            </span>
-                        </div>
-                        <span class="blue-link delete-link grant-link"
-                              ng-click="tranDeleteUp(activeTran);">
-                            Delete Transaction
-                        </span>
-                    </div>
-                    <div class="capGuide grants"
-                         ng-show="mode == 2 && !viewMode">
-                        <h2>Forfeit Information</h2>
-                        <ul>
-                            <li class="grant-list-edit"
-                                ng-repeat="act in activeTran.activeAct
-                                           | grantSelect:'forfeited'">
-                                <p class="rightTitle">
-                                    <span>Date</span>
-                                    <input ng-change="saveGrant(act, 'forfeited')"
-                                           ng-model="act.date"
-                                           data-date-format={{settings.lowercasedate}}
-                                           bs-datepicker>
-                                </p>
-                                <p class="rightTitle">
-                                    <span>Shares</span>
-                                    <input ui-event="{blur: 'saveGrant(act, \'forfeited\')'}"
-                                           ng-model="act.unit">
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="capGuide grants"
-                         ng-show="mode == 3 && !viewMode">
-                        <h2>Exercise Information</h2>
-                        <ul>
-                            <li class="grant-list-edit"
-                                ng-repeat="act in activeTran.activeAct
-                                           | grantSelect:'exercised'">
-                                <p class="rightTitle">
-                                    <span>Date</span>
-                                    <input ng-change="saveGrant(act, 'exercised')"
-                                           ng-model="act.date"
-                                           data-date-format={{settings.lowercasedate}}
-                                           bs-datepicker>
-                                </p>
-                                <p class="rightTitle">
-                                    <span>Shares</span>
-                                    <input ui-event="{blur: 'saveGrant(act, \'exercised\')'}"
-                                       n   ng-model="act.unit">
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="capGuide grants" ng-show="mode == 4 && !viewMode">
-                        <h2>Vested Information</h2>
-                        <ul class="grant-list-view">
-                            <li>
+            <internal-right-rail toggle-side="sideToggle">
+                <div ng-switch on="sideBar"
+                     class="span4 capright"
+                     ng-style="viewportheight">
+                    <span ng-switch-when="1">
+                        <div class="capGuide global"
+                             ng-show="mode == 1 && !viewMode">
+                            <div class="rightTitle security-type">
+                                <span>Investor</span>
+                                <input disabled
+                                       ng-model="activeTran.investor">
+                            </div>
+                            <p class="rightTitle">
                                 <span>Date</span>
+                                <input ng-show="mode == 1 && !viewMode"
+                                       ng-disabled="toggleView();"
+                                       id="date{{activeTran.$$hashKey}}"
+                                       ui-event="{keydown: 'saveTranDate(activeTran, \'date\', $event)',
+                                                  blur: 'saveTranDate(activeTran, \'date\', \'blur\')'}"
+                                       ng-change="saveTranDate(activeTran, 'date')"
+                                       type="text"
+                                       ng-model="activeTran.date"
+                                       data-date-format={{settings.lowercasedate}}
+                                       bs-datepicker>
+                            </p>
+                            <p class="rightTitle">
+                                <span>Options</span>
+                                <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                       ng-model="activeTran.units">
+                            </p>
+                            <p class="rightTitle">
+                                <span>Strike Price</span>
+                                <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                       ng-model="activeTran.price">
+                            </p>
+                            <div ng-show="activeTran.terms == null &&
+                                          activeTran.vestingbegins == null &&
+                                          activeTran.vestcliff == null &&
+                                          activeTran.vestfreq == null"
+                                 class="rightTitle">
+                                <span>Vesting Schedule</span>
+                                <ul class="dropdown-list drop-selector">
+                                    <li class="dropdown standard">
+                                        <a class="dropdown-toggle">
+                                            <span class="invisible-drop">'</span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="i in schedules">
+                                                <a ng-click="pickSchedule(i, activeTran)">
+                                                    {{i.name}}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a ng-click="pickSchedule('!!', activeTran)">
+                                                    Custom Schedule
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p ng-hide="activeTran.terms == null &&
+                                        activeTran.vestingbegins == null &&
+                                        activeTran.vestcliff == null &&
+                                        activeTran.vestfreq == null"
+                               class="rightTitle double">
+                                <span>Vesting Term (months)</span>
+                                <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                       ng-model="activeTran.terms">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.terms">
+                                </span>
+                            </p>
+                            <p ng-hide="activeTran.terms == null &&
+                                        activeTran.vestingbegins == null &&
+                                        activeTran.vestcliff == null &&
+                                        activeTran.vestfreq == null"
+                               class="rightTitle double">
+                                <span>Vesting Cliff (Months)</span>
+                                <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                       ng-model="activeTran.vestingbeginsdisplay">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestingbegins">
+                                </span>
+                            </p>
+                            <p ng-hide="activeTran.terms == null &&
+                                        activeTran.vestingbegins == null &&
+                                        activeTran.vestcliff == null &&
+                                        activeTran.vestfreq == null"
+                               class="rightTitle">
+                                <span>Vesting Cliff %</span>
+                                <input ui-event="{blur: 'saveTran(activeTran)'}"
+                                       ng-model="activeTran.vestcliff">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestcliff">
+                                </span>
+                            </p>
+                            <div ng-hide="activeTran.terms == null &&
+                                          activeTran.vestingbegins == null &&
+                                          activeTran.vestcliff == null &&
+                                          activeTran.vestfreq == null"
+                                 class="rightTitle double">
+                                <span>Post Cliff Frequency</span>
+                                <ul class="dropdown-list drop-selector">
+                                    <li class="dropdown standard">
+                                        <a class="dropdown-toggle">
+                                            {{activeTran.vestfreq}}
+                                            <span class="invisible-drop">'</span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li ng-repeat="i in freqtypes">
+                                                <a ng-click="saveTranAssign(activeTran, 'vestfreq', i)">
+                                                    {{i}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestfreq">
+                                </span>
+                            </div>
+                            <span class="blue-link delete-link grant-link"
+                                  ng-click="tranDeleteUp(activeTran);">
+                                Delete Transaction
+                            </span>
+                        </div>
+                        <div class="capGuide grants"
+                             ng-show="mode == 2 && !viewMode">
+                            <h2>Forfeit Information</h2>
+                            <ul>
+                                <li class="grant-list-edit"
+                                    ng-repeat="act in activeTran.activeAct
+                                               | grantSelect:'forfeited'">
+                                    <p class="rightTitle">
+                                        <span>Date</span>
+                                        <input ng-change="saveGrant(act, 'forfeited')"
+                                               ng-model="act.date"
+                                               data-date-format={{settings.lowercasedate}}
+                                               bs-datepicker>
+                                    </p>
+                                    <p class="rightTitle">
+                                        <span>Shares</span>
+                                        <input ui-event="{blur: 'saveGrant(act, \'forfeited\')'}"
+                                               ng-model="act.unit">
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="capGuide grants"
+                             ng-show="mode == 3 && !viewMode">
+                            <h2>Exercise Information</h2>
+                            <ul>
+                                <li class="grant-list-edit"
+                                    ng-repeat="act in activeTran.activeAct
+                                               | grantSelect:'exercised'">
+                                    <p class="rightTitle">
+                                        <span>Date</span>
+                                        <input ng-change="saveGrant(act, 'exercised')"
+                                               ng-model="act.date"
+                                               data-date-format={{settings.lowercasedate}}
+                                               bs-datepicker>
+                                    </p>
+                                    <p class="rightTitle">
+                                        <span>Shares</span>
+                                        <input ui-event="{blur: 'saveGrant(act, \'exercised\')'}"
+                                           n   ng-model="act.unit">
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="capGuide grants" ng-show="mode == 4 && !viewMode">
+                            <h2>Vested Information</h2>
+                            <ul class="grant-list-view">
+                                <li>
+                                    <span>Date</span>
+                                    <span>Shares</span>
+                                </li>
+                                <li ng-repeat="grant in activeTran.vested">
+                                    <span>
+                                        {{grant.date | date:settings.shortdate}}
+                                    </span>
+                                    <span>
+                                        {{grant.units | formatAmount:'units'}}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </span>
+
+                    <span ng-switch-when="4">
+                        <div class="capGuide grants"
+                             ng-show="mode == 1 && !viewMode">
+                            <div class="rightTitle security-type">
+                                <span>Security name</span>
+                                <input ng-disabled="toggleView();"
+                                       ui-event="{blur: 'saveIssue(selectedSecurity, \'issue\')'}"
+                                       ng-model="selectedSecurity.issue"
+                                       onkeydown="testForEnter();">
+                            </div>
+                            <p class="rightTitle">
+                                <span>Issue Date</span>
+                                <input ng-disabled="toggleView();"
+                                       id="date{{selectedSecurity.$$hashKey}}"
+                                       ng-change="saveIssueCheckDate(selectedSecurity, 'date')"
+                                       ui-event="{keydown: 'saveIssueCheckDate(selectedSecurity, \'date\', $event)',
+                                                  blur: 'saveIssueCheckDate(selectedSecurity, \'date\', \'blur\')'}"
+                                       type="text"
+                                       ng-model="selectedSecurity.date"
+                                       data-date-format={{settings.lowercasedate}}
+                                       bs-datepicker
+                                       onkeydown="testForEnter();">
+                            </p>
+                            <div class="rightTitle double">
+                                <span>Underlying Security</span>
+                                <ul class="dropdown-list drop-selector">
+                                    <li class="dropdown standard">
+                                        <a class="dropdown-toggle">
+                                            {{selectedSecurity.optundersec | maxLength}}
+                                            <span class="invisible-drop">'</span>
+                                        </a>
+                                        <ul ng-hide="toggleView()"
+                                            class="dropdown-menu">
+                                            <li ng-repeat="i in equityissues">
+                                                <a ng-click="saveIssueAssign(selectedSecurity, 'optundersec', i)">
+                                                    {{i | maxLength}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.optundersec">
+                                </span>
+                            </div>
+                            <p class="rightTitle">
+                                <span>Total Authorized</span>
+                                <input ng-disabled="toggleView();"
+                                       ui-event="{blur: 'saveIssue(selectedSecurity, \'totalauth\')'}"
+                                       ng-model="selectedSecurity.totalauth"
+                                       onkeydown="testForEnter();">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.totalauth">
+                                </span>
+                            </p>
+                            <p class="rightTitle">
+                                <span>Total Granted</span>
+                                <input disabled
+                                       value="{{totalGranted(selectedSecurity.issue, trans);}}">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.totalgranted">
+                                </span>
+                            </p>
+                            <p class="rightTitle">
+                                <span>Strike Price</span>
+                                <input ng-disabled="toggleView();"
+                                       ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'price\')'}"
+                                       ng-model="selectedSecurity.price"
+                                       onkeydown="testForEnter();">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.price">
+                                </span>
+                            </p>
+                            <p class="rightTitle double">
+                                <span>Vesting Term (Months)</span>
+                                <input ng-disabled="toggleView();"
+                                       ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'terms\')'}"
+                                       ng-model="selectedSecurity.terms"
+                                       onkeydown="testForEnter();">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.terms">
+                                </span>
+                            </p>
+                            <p class="rightTitle double">
+                                <span>Vesting Cliff (Months)</span>
+                                <input type="text"
+                                       ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'vestingbegins\')'}"
+                                       ng-model="selectedSecurity.vestingbeginsdisplay">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestingbegins">
+                                </span>
+                            </p>
+                            <p class="rightTitle">
+                                <span>Vesting Cliff %</span>
+                                <input ng-disabled="toggleView();"
+                                       ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'vestcliff\')'}"
+                                       ng-model="selectedSecurity.vestcliff"
+                                       onkeydown="testForEnter();">
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestcliff">
+                                </span>
+                            </p>
+                            <div class="rightTitle double">
+                                <span>Post Cliff Frequency</span>
+                                <ul class="dropdown-list drop-selector">
+                                    <li class="dropdown standard">
+                                        <a class="dropdown-toggle">
+                                            {{selectedSecurity.vestfreq}}
+                                            <span class="invisible-drop">'</span>
+                                        </a>
+                                        <ul ng-hide="toggleView();"
+                                            class="dropdown-menu">
+                                            <li ng-repeat="i in freqtypes">
+                                                <a ng-click="saveIssueAssign(selectedSecurity, 'vestfreq', i)">
+                                                    {{i}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <span class="tooltip-icon"
+                                      data-icon="&#xe044;"
+                                      aria-hidden="true"
+                                      data-placement="top"
+                                      bs-tooltip="captabletips.vestfreq">
+                                </span>
+                            </div>
+                            <span class="blue-link delete-link grant-link"
+                                  ng-click="deleteIssueButton(selectedSecurity);">
+                                Delete Security
+                            </span>
+                        </div>
+                    </span>
+                    <span ng-switch-when="5">
+                        <div class="capGuide grants"
+                             ng-show="mode == 1 && viewMode">
+                            <p class="belowTitle">
+                                <span>
+                                    {{selectedSecurity.issue}}
+                                </span>
+                                <span>Security Name</span>
+                            </p>
+                            <p class="belowTitle">
+                                <span>
+                                    {{selectedSecurity.date | date:settings.shortdate}}
+                                </span>
+                                <span>Date</span>
+                            </p>
+                            <p ng-show="selectedSecurity.optundersec"
+                               class="belowTitle">
+                                <span>
+                                    {{selectedSecurity.optundersec}}
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The security each granted share will convert to upon exercise">
+                                    Underlying Security
+                                </span>
+                            </p>
+                            <p ng-show="selectedSecurity.totalauth"
+                               class="belowTitle">
+                                <span>
+                                    {{selectedSecurity.totalauth | formatAmount:'totalauth'}}
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The sum total of shares authorized to be issued">
+                                    Total Authorized
+                                </span>
+                            </p>
+                            <p ng-show="totalGranted(selectedSecurity.issue, trans)"
+                               class="belowTitle">
+                                <span>
+                                    {{formatAmount(totalGranted(selectedSecurity.issue, trans))}}
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The sum total of shares granted">
+                                    Total Granted
+                                </span>
+                            </p>
+                            <p ng-show="selectedSecurity.price"
+                               class="belowTitle">
+                                <span>
+                                    {{formatDollarAmount(selectedSecurity.price)}}
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The price each granted share can be purchased at when vested">
+                                    Strike Price
+                                </span>
+                            </p>
+                            <p ng-show="selectedSecurity.terms"
+                               class="belowTitle">
+                                <span>
+                                    {{selectedSecurity.terms}}
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The total number of months until fully vested">
+                                    Vesting Term (Months)
+                                </span>
+                            </p>
+                            <p ng-show="selectedSecurity.vestingbegins"
+                               class="belowTitle">
+                                <span>
+                                    {{selectedSecurity.vestingbeginsdisplay}}
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The date the vesting cliff percentage becomes vested">
+                                    Vesting Cliff (Months)
+                                </span>
+                            </p>
+                            <p ng-show="selectedSecurity.vestcliff"
+                               class="belowTitle">
+                                <span ng-bind="selectedSecurity.vestcliff">
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The percentage of granted shares that are considered vested on the cliff date">
+                                    Vesting Cliff %
+                                </span>
+                            </p>
+                            <p ng-show="selectedSecurity.vestfreq"
+                               class="belowTitle">
+                                <span>
+                                    {{selectedSecurity.vestfreq}}
+                                </span>
+                                <span tooltip-placement="top"
+                                      tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">
+                                    Post Cliff Frequency
+                                </span>
+                            </p>
+                        </div>
+                    </span>
+                    <span ng-switch-when="3">
+                        <div class="capGuide grants"
+                             ng-show="mode == 1 && viewMode">
+                            <p ng-show="activeTran.investor"
+                               class="belowTitle">
+                                <span>
+                                    {{activeTran.investor}}
+                                </span>
+                                <span>Investor</span>
+                            </p>
+                            <p ng-show="activeTran.date"
+                               class="belowTitle">
+                                <span>
+                                    {{activeTran.date | date:settings.shortdate}}
+                                </span>
+                                <span>Date</span>
+                            </p>
+                            <p ng-show="activeTran.units"
+                               class="belowTitle">
+                                <span>
+                                    {{formatAmount(activeTran.units)}}
+                                </span>
                                 <span>Shares</span>
-                            </li>
-                            <li ng-repeat="grant in activeTran.vested">
+                            </p>
+                            <p ng-show="activeTran.optundersec"
+                               class="belowTitle">
                                 <span>
-                                    {{grant.date | date:settings.shortdate}}
+                                    {{activeTran.optundersec}}
                                 </span>
+                                <span tooltip="The security each granted share will convert to upon exercise"
+                                      tooltip-placement="right"
+                                      class="forTooltip">
+                                    Underlying Security
+                                </span>
+                            </p>
+                            <p ng-show="activeTran.price"
+                               class="belowTitle">
                                 <span>
-                                    {{grant.units | formatAmount:'units'}}
+                                    {{formatDollarAmount(activeTran.price)}}
                                 </span>
-                            </li>
-                        </ul>
-                    </div>
-                </span>
-
-                <span ng-switch-when="4">
-                    <div class="capGuide grants"
-                         ng-show="mode == 1 && !viewMode">
-                        <div class="rightTitle security-type">
-                            <span>Security name</span>
-                            <input ng-disabled="toggleView();"
-                                   ui-event="{blur: 'saveIssue(selectedSecurity, \'issue\')'}"
-                                   ng-model="selectedSecurity.issue"
-                                   onkeydown="testForEnter();">
+                                <span tooltip-placement="right"
+                                      tooltip="The price each granted share can be purchased at when vested"
+                                      class="forTooltip">
+                                    Strike Price
+                                </span>
+                            </p>
+                            <p ng-show="activeTran.terms"
+                               class="belowTitle">
+                                <span>
+                                    {{activeTran.terms}}
+                                </span>
+                                <span tooltip-placement="right"
+                                      class="forTooltip"
+                                      tooltip="The total number of months until fully vested">
+                                    Vesting Term (Months)
+                                </span>
+                            </p>
+                            <p ng-show="activeTran.vestingbegins"
+                               class="belowTitle">
+                                <span>
+                                    {{activeTran.vestingbeginsdisplay}}
+                                </span>
+                                <span tooltip-placement="right"
+                                      class="forTooltip"
+                                      tooltip="The date the vesting cliff percentage becomes vested">
+                                    Vesting Cliff (Months)
+                                </span>
+                            </p>
+                            <p ng-show="activeTran.vestcliff"
+                               class="belowTitle">
+                                <span>
+                                    {{activeTran.vestcliff}}
+                                </span>
+                                <span tooltip-placement="right"
+                                      tooltip="The percentage of granted shares that are considered vested on the cliff date"
+                                      class="forTooltip">
+                                    Vesting Cliff %
+                                </span>
+                            </p>
+                            <p ng-show="activeTran.vestfreq"
+                               class="belowTitle">
+                                <span>
+                                    {{activeTran.vestfreq}}
+                                </span>
+                                <span tooltip-placement="right"
+                                      tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends"
+                                      class="forTooltip">
+                                    Post Cliff Frequency
+                                </span>
+                            </p>
                         </div>
-                        <p class="rightTitle">
-                            <span>Issue Date</span>
-                            <input ng-disabled="toggleView();"
-                                   id="date{{selectedSecurity.$$hashKey}}"
-                                   ng-change="saveIssueCheckDate(selectedSecurity, 'date')"
-                                   ui-event="{keydown: 'saveIssueCheckDate(selectedSecurity, \'date\', $event)',
-                                              blur: 'saveIssueCheckDate(selectedSecurity, \'date\', \'blur\')'}"
-                                   type="text"
-                                   ng-model="selectedSecurity.date"
-                                   data-date-format={{settings.lowercasedate}}
-                                   bs-datepicker
-                                   onkeydown="testForEnter();">
-                        </p>
-                        <div class="rightTitle double">
-                            <span>Underlying Security</span>
-                            <ul class="dropdown-list drop-selector">
-                                <li class="dropdown standard">
-                                    <a class="dropdown-toggle">
-                                        {{selectedSecurity.optundersec | maxLength}}
-                                        <span class="invisible-drop">'</span>
-                                    </a>
-                                    <ul ng-hide="toggleView()"
-                                        class="dropdown-menu">
-                                        <li ng-repeat="i in equityissues">
-                                            <a ng-click="saveIssueAssign(selectedSecurity, 'optundersec', i)">
-                                                {{i | maxLength}}
-                                            </a>
-                                        </li>
-                                    </ul>
+                        <div class="capGuide grants"
+                             ng-show="mode == 2 && viewMode">
+                            <h2>Forfeit Information</h2>
+                            <ul class="grant-list-view">
+                                <li>
+                                    <span>Date</span>
+                                    <span>Options</span>
+                                </li>
+                                <li ng-show="act.unit"
+                                    ng-repeat="act in activeTran.activeAct
+                                               | grantSelect:'forfeited'">
+                                    <span>{{act.date
+                                          | date:settings.shortdate}}
+                                    </span>
+                                    <span>{{act.unit}}</span>
                                 </li>
                             </ul>
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.optundersec">
-                            </span>
                         </div>
-                        <p class="rightTitle">
-                            <span>Total Authorized</span>
-                            <input ng-disabled="toggleView();"
-                                   ui-event="{blur: 'saveIssue(selectedSecurity, \'totalauth\')'}"
-                                   ng-model="selectedSecurity.totalauth"
-                                   onkeydown="testForEnter();">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.totalauth">
-                            </span>
-                        </p>
-                        <p class="rightTitle">
-                            <span>Total Granted</span>
-                            <input disabled
-                                   value="{{totalGranted(selectedSecurity.issue, trans);}}">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.totalgranted">
-                            </span>
-                        </p>
-                        <p class="rightTitle">
-                            <span>Strike Price</span>
-                            <input ng-disabled="toggleView();"
-                                   ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'price\')'}"
-                                   ng-model="selectedSecurity.price"
-                                   onkeydown="testForEnter();">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.price">
-                            </span>
-                        </p>
-                        <p class="rightTitle double">
-                            <span>Vesting Term (Months)</span>
-                            <input ng-disabled="toggleView();"
-                                   ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'terms\')'}"
-                                   ng-model="selectedSecurity.terms"
-                                   onkeydown="testForEnter();">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.terms">
-                            </span>
-                        </p>
-                        <p class="rightTitle double">
-                            <span>Vesting Cliff (Months)</span>
-                            <input type="text"
-                                   ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'vestingbegins\')'}"
-                                   ng-model="selectedSecurity.vestingbeginsdisplay">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.vestingbegins">
-                            </span>
-                        </p>
-                        <p class="rightTitle">
-                            <span>Vesting Cliff %</span>
-                            <input ng-disabled="toggleView();"
-                                   ui-event="{blur: 'saveIssueCheck(selectedSecurity, \'vestcliff\')'}"
-                                   ng-model="selectedSecurity.vestcliff"
-                                   onkeydown="testForEnter();">
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.vestcliff">
-                            </span>
-                        </p>
-                        <div class="rightTitle double">
-                            <span>Post Cliff Frequency</span>
-                            <ul class="dropdown-list drop-selector">
-                                <li class="dropdown standard">
-                                    <a class="dropdown-toggle">
-                                        {{selectedSecurity.vestfreq}}
-                                        <span class="invisible-drop">'</span>
-                                    </a>
-                                    <ul ng-hide="toggleView();"
-                                        class="dropdown-menu">
-                                        <li ng-repeat="i in freqtypes">
-                                            <a ng-click="saveIssueAssign(selectedSecurity, 'vestfreq', i)">
-                                                {{i}}
-                                            </a>
-                                        </li>
-                                    </ul>
+                        <div class="capGuide grants"
+                             ng-show="mode == 3 && viewMode">
+                            <h2>Exercised Information</h2>
+                            <ul class="grant-list-view">
+                                <li>
+                                    <span>Date</span>
+                                    <span>Options</span>
+                                </li>
+                                <li ng-show="act.unit"
+                                    ng-repeat="act in activeTran.activeAct
+                                               | grantSelect:'exercised'">
+                                    <span>
+                                        {{act.date | date:settings.shortdate}}
+                                    </span>
+                                    <span>
+                                        {{formatAmount(act.unit)}}
+                                    </span>
                                 </li>
                             </ul>
-                            <span class="tooltip-icon"
-                                  data-icon="&#xe044;"
-                                  aria-hidden="true"
-                                  data-placement="top"
-                                  bs-tooltip="captabletips.vestfreq">
-                            </span>
                         </div>
-                        <span class="blue-link delete-link grant-link"
-                              ng-click="deleteIssueButton(selectedSecurity);">
-                            Delete Security
-                        </span>
-                    </div>
-                </span>
-                <span ng-switch-when="5">
-                    <div class="capGuide grants"
-                         ng-show="mode == 1 && viewMode">
-                        <p class="belowTitle">
-                            <span>
-                                {{selectedSecurity.issue}}
-                            </span>
-                            <span>Security Name</span>
-                        </p>
-                        <p class="belowTitle">
-                            <span>
-                                {{selectedSecurity.date | date:settings.shortdate}}
-                            </span>
-                            <span>Date</span>
-                        </p>
-                        <p ng-show="selectedSecurity.optundersec"
-                           class="belowTitle">
-                            <span>
-                                {{selectedSecurity.optundersec}}
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The security each granted share will convert to upon exercise">
-                                Underlying Security
-                            </span>
-                        </p>
-                        <p ng-show="selectedSecurity.totalauth"
-                           class="belowTitle">
-                            <span>
-                                {{selectedSecurity.totalauth | formatAmount:'totalauth'}}
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The sum total of shares authorized to be issued">
-                                Total Authorized
-                            </span>
-                        </p>
-                        <p ng-show="totalGranted(selectedSecurity.issue, trans)"
-                           class="belowTitle">
-                            <span>
-                                {{formatAmount(totalGranted(selectedSecurity.issue, trans))}}
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The sum total of shares granted">
-                                Total Granted
-                            </span>
-                        </p>
-                        <p ng-show="selectedSecurity.price"
-                           class="belowTitle">
-                            <span>
-                                {{formatDollarAmount(selectedSecurity.price)}}
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The price each granted share can be purchased at when vested">
-                                Strike Price
-                            </span>
-                        </p>
-                        <p ng-show="selectedSecurity.terms"
-                           class="belowTitle">
-                            <span>
-                                {{selectedSecurity.terms}}
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The total number of months until fully vested">
-                                Vesting Term (Months)
-                            </span>
-                        </p>
-                        <p ng-show="selectedSecurity.vestingbegins"
-                           class="belowTitle">
-                            <span>
-                                {{selectedSecurity.vestingbeginsdisplay}}
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The date the vesting cliff percentage becomes vested">
-                                Vesting Cliff (Months)
-                            </span>
-                        </p>
-                        <p ng-show="selectedSecurity.vestcliff"
-                           class="belowTitle">
-                            <span ng-bind="selectedSecurity.vestcliff">
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The percentage of granted shares that are considered vested on the cliff date">
-                                Vesting Cliff %
-                            </span>
-                        </p>
-                        <p ng-show="selectedSecurity.vestfreq"
-                           class="belowTitle">
-                            <span>
-                                {{selectedSecurity.vestfreq}}
-                            </span>
-                            <span tooltip-placement="top"
-                                  tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends">
-                                Post Cliff Frequency
-                            </span>
-                        </p>
-                    </div>
-                </span>
-                <span ng-switch-when="3">
-                    <div class="capGuide grants"
-                         ng-show="mode == 1 && viewMode">
-                        <p ng-show="activeTran.investor"
-                           class="belowTitle">
-                            <span>
-                                {{activeTran.investor}}
-                            </span>
-                            <span>Investor</span>
-                        </p>
-                        <p ng-show="activeTran.date"
-                           class="belowTitle">
-                            <span>
-                                {{activeTran.date | date:settings.shortdate}}
-                            </span>
-                            <span>Date</span>
-                        </p>
-                        <p ng-show="activeTran.units"
-                           class="belowTitle">
-                            <span>
-                                {{formatAmount(activeTran.units)}}
-                            </span>
-                            <span>Shares</span>
-                        </p>
-                        <p ng-show="activeTran.optundersec"
-                           class="belowTitle">
-                            <span>
-                                {{activeTran.optundersec}}
-                            </span>
-                            <span tooltip="The security each granted share will convert to upon exercise"
-                                  tooltip-placement="right"
-                                  class="forTooltip">
-                                Underlying Security
-                            </span>
-                        </p>
-                        <p ng-show="activeTran.price"
-                           class="belowTitle">
-                            <span>
-                                {{formatDollarAmount(activeTran.price)}}
-                            </span>
-                            <span tooltip-placement="right"
-                                  tooltip="The price each granted share can be purchased at when vested"
-                                  class="forTooltip">
-                                Strike Price
-                            </span>
-                        </p>
-                        <p ng-show="activeTran.terms"
-                           class="belowTitle">
-                            <span>
-                                {{activeTran.terms}}
-                            </span>
-                            <span tooltip-placement="right"
-                                  class="forTooltip"
-                                  tooltip="The total number of months until fully vested">
-                                Vesting Term (Months)
-                            </span>
-                        </p>
-                        <p ng-show="activeTran.vestingbegins"
-                           class="belowTitle">
-                            <span>
-                                {{activeTran.vestingbeginsdisplay}}
-                            </span>
-                            <span tooltip-placement="right"
-                                  class="forTooltip"
-                                  tooltip="The date the vesting cliff percentage becomes vested">
-                                Vesting Cliff (Months)
-                            </span>
-                        </p>
-                        <p ng-show="activeTran.vestcliff"
-                           class="belowTitle">
-                            <span>
-                                {{activeTran.vestcliff}}
-                            </span>
-                            <span tooltip-placement="right"
-                                  tooltip="The percentage of granted shares that are considered vested on the cliff date"
-                                  class="forTooltip">
-                                Vesting Cliff %
-                            </span>
-                        </p>
-                        <p ng-show="activeTran.vestfreq"
-                           class="belowTitle">
-                            <span>
-                                {{activeTran.vestfreq}}
-                            </span>
-                            <span tooltip-placement="right"
-                                  tooltip="The frequency that granted shares vest after the cliff date, distributed evenly by frequency until the vesting term ends"
-                                  class="forTooltip">
-                                Post Cliff Frequency
-                            </span>
-                        </p>
-                    </div>
-                    <div class="capGuide grants"
-                         ng-show="mode == 2 && viewMode">
-                        <h2>Forfeit Information</h2>
-                        <ul class="grant-list-view">
-                            <li>
-                                <span>Date</span>
-                                <span>Options</span>
-                            </li>
-                            <li ng-show="act.unit"
-                                ng-repeat="act in activeTran.activeAct
-                                           | grantSelect:'forfeited'">
-                                <span>{{act.date
-                                      | date:settings.shortdate}}
-                                </span>
-                                <span>{{act.unit}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="capGuide grants"
-                         ng-show="mode == 3 && viewMode">
-                        <h2>Exercised Information</h2>
-                        <ul class="grant-list-view">
-                            <li>
-                                <span>Date</span>
-                                <span>Options</span>
-                            </li>
-                            <li ng-show="act.unit"
-                                ng-repeat="act in activeTran.activeAct
-                                           | grantSelect:'exercised'">
-                                <span>
-                                    {{act.date | date:settings.shortdate}}
-                                </span>
-                                <span>
-                                    {{formatAmount(act.unit)}}
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="capGuide grants"
-                         ng-show="mode == 4 && viewMode">
-                        <h2 style="margin-bottom: 0px;">
-                            Vested Information
-                        </h2>
-                        <p style="margin-bottom: 15px;">
-                            Auto-calculated from vesting schedule
-                        </p>
-                        <ul class="grant-list-view">
-                            <li>
-                                <span>Date</span>
-                                <span>Options</span>
-                            </li>
-                            <li ng-repeat="grant in activeTran.vested">
-                                <span>
-                                    {{grant.date | date:settings.shortdate}}
-                                </span>
-                                <span>
-                                    {{formatAmount(grant.units)}}
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </span>
+                        <div class="capGuide grants"
+                             ng-show="mode == 4 && viewMode">
+                            <h2 style="margin-bottom: 0px;">
+                                Vested Information
+                            </h2>
+                            <p style="margin-bottom: 15px;">
+                                Auto-calculated from vesting schedule
+                            </p>
+                            <ul class="grant-list-view">
+                                <li>
+                                    <span>Date</span>
+                                    <span>Options</span>
+                                </li>
+                                <li ng-repeat="grant in activeTran.vested">
+                                    <span>
+                                        {{grant.date | date:settings.shortdate}}
+                                    </span>
+                                    <span>
+                                        {{formatAmount(grant.units)}}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </span>
 
-                <span ng-switch-when="2">
-                    <p>
-                        Investor Email
-                        <input disabled ng-model="activeInvestorName">
-                    </p>
-                </span>
+                    <span ng-switch-when="2">
+                        <p>
+                            Investor Email
+                            <input disabled ng-model="activeInvestorName">
+                        </p>
+                    </span>
 
-                <span ng-switch-default class="capGuide railpadding">
-                    <h1 class="right-bar-header">
-                        Saved Vesting Schedules
-                    </h1>
+                    <span ng-switch-default class="capGuide railpadding">
+                        <h1 class="right-bar-header">
+                            Saved Vesting Schedules
+                        </h1>
 
-                </span>
-            </div>
-        </internal-right-rail>
+                    </span>
+                </div>
+            </internal-right-rail>
+        </div>
     </div>
 </div>
 </div>
