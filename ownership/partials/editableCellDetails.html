@@ -8,7 +8,7 @@
                 ng-switch on="currentTab">
     <accordion-heading>
         <span ng-click="editEvidence()" ng-class="{invalidTran: !tran.valid}">
-            {{tran.effective_date | date:settings.shortdate}} Transaction
+            {{tran.effective_date | date:settings.shortdate}} {{tran.kind}}
         </span>
     </accordion-heading>
     <div class="darkgray faux-tabs triplet">
@@ -37,10 +37,6 @@
     </div>
     <div class="capTab" ng-switch-when="details">
         <div class="capGuide global">
-            <div class="rightTitle">
-                <span>Transaction Type</span>
-                <span class="locked-security">{{tran.kind}}</span>
-            </div>
             <div class="rightTitle security-type">
                 <span>Investor</span>
                 <span class="locked-security">{{tran.attrs.investor}}</span>
