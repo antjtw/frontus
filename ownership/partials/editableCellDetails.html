@@ -115,7 +115,7 @@
                         <span class="invisible-drop">'</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="x in tran.attrs.security_type | validActions: 'transaction'">
+                        <li ng-repeat="x in tran.attrs.security_type | validActions: 'transaction':tran.kind">
                             <a ng-click="makeNewTran(x, tran)">
                                 {{x}}
                             </a>

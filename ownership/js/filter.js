@@ -279,15 +279,25 @@ ownership.filter('usedsecurities', function() {
 });
 
 ownership.filter('validActions', ['attributes', function(attributes) {
-    return function(sec_type, action_type) {
+    return function(sec_type, action_type, kind) {
+        //TODO (probably after deploy): get sec_type differently, get from to_security if convert, so transfer can be included
         var attrs = attributes.getAttrs();
         var nonActions = ['issue security', 'grant', 'purchase'];
+        var alwaysAllow = ['transfer'];
+        var isAction = (kind) && (nonActions.indexOf(kind) == -1);
         var ret = [];
         for (a in attrs[sec_type])
         {
             if (nonActions.indexOf(a) == -1)
             {
-                if ((action_type == 'transaction') == //not xor
+                if (isAction)
+                {
+                    if (alwaysAllow.indexOf(a) != -1)
+                    {
+                        ret.push(a);
+                    }
+                }
+                else if ((action_type == 'transaction') == //not xor
                         (attrs[sec_type][a].hasOwnProperty('investor') ||
                         attrs[sec_type][a].hasOwnProperty('investor_to') ||
                         attrs[sec_type][a].hasOwnProperty('investor_from')))
