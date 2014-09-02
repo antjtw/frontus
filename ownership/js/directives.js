@@ -662,7 +662,7 @@ own.directive('transactionAttributes', [function() {
         replace: true,
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-    // TODO refactor to use attributes service
+        // TODO refactor to use attributes service
         controller: ["$scope", "$rootScope", "captable", "displayCopy",
             function($scope, $rootScope, captable, displayCopy) {
                 $scope.displayAttr = captable.displayAttr;

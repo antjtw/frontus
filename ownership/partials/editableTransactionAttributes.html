@@ -85,8 +85,10 @@
                 </ul>
             </li>
         </ul>
-        <span class="locked-security" ng-repeat="sec in data.attrs[key]" ng-if="pickMulti(key)">
-            {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+        <span ng-if="pickMulti(key)">
+            <span class="locked-security" ng-repeat="sec in data.attrs[key]">
+                {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+            </span>
         </span>
         <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
             <li class="dropdown standard">

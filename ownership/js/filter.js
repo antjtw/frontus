@@ -219,7 +219,7 @@ ownership.filter('attrsForDisplay', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical",
                           "security", "security_type",
-                          "transaction_from"];
+                          "transaction_from", "interestratefreq"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1 &&
