@@ -1,33 +1,6 @@
+'use strict';
+
 var ownership = angular.module('ownerServices', ['decipher.history']);
-
-ownership.service('switchval', function () {
-
-    this.typeswitch = function (tran) {
-        if (tran.type = "Option") {
-            tran.atype = 1;
-        }
-        else if (tran.type = "Debt") {
-            tran.atype = 2;
-        }
-        else {
-            tran.atype = 0;
-        }
-        return tran;
-    };
-
-    this.typereverse = function (tran) {
-        if (tran == 1) {
-            tran = "Option";
-        }
-        else if (tran == 2) {
-            tran = "Debt";
-        }
-        else {
-            tran = "Equity";
-        }
-        return tran;
-    };
-});
 
 ownership.service('attributes',
 function(SWBrijj, $q, $filter, displayCopy) {
@@ -35,14 +8,17 @@ function(SWBrijj, $q, $filter, displayCopy) {
     //   How do I display a fact about a transaction attribute?
     var tips = displayCopy.captabletips;
     var attrs = {};
-    var special = {};
+    /* Special identifies attributes used to tie data
+     * to investors and securities.
+     */
+    var special = {investor: [], security: []};
     init();
     this.getAttrs = function() { return attrs; };
     this.getSpecialAttrs = function() { return special; };
     function init() { loadAttributes().then(handleAttrs); }
     function handleAttrs(data) {
-        special['investor'] = [];
-        special['security'] = [];
+        special.investor = [];
+        special.security = [];
         angular.forEach(data, function(el) {
             if (!attrs[el.type])
             {
@@ -58,16 +34,19 @@ function(SWBrijj, $q, $filter, displayCopy) {
                     {required: el.required,
                      display_name: el.display_name,
                      description: el.name in tips ? tips[el.name] : null,
-                     type: 
+                     type:
                         $filter('attributeDbTypes')(el.typname, el.labels),
                      labels: JSON.parse(el.labels)};
-                 if (el.name.indexOf('investor') != -1 && special['investor'].indexOf(el.name) == -1)
+                 if (el.name.indexOf('investor') != -1 &&
+                     special.investor.indexOf(el.name) == -1)
                  {
-                    special['investor'].push(el.name);
+                    special.investor.push(el.name);
                  }
-                 if (el.name.indexOf('security') != -1 && el.name.indexOf('type') == -1 && special['security'].indexOf(el.name) == -1)
+                 if (el.name.indexOf('security') != -1 &&
+                     el.name.indexOf('type') == -1 &&
+                     special.security.indexOf(el.name) == -1)
                  {
-                    special['security'].push(el.name);
+                    special.security.push(el.name);
                  }
             }
         });
@@ -81,73 +60,6 @@ function(SWBrijj, $q, $filter, displayCopy) {
         });
         return promise.promise;
     }
-});
-
-app.run(function ($rootScope) {
-
-//Calculates total grants in each issue
-    $rootScope.totalGranted = function (issue, trans) {
-        var granted = 0;
-        angular.forEach(trans, function (tran) {
-            if (tran.issue == issue && tran.type == "Option" && !isNaN(parseFloat(tran.units))) {
-                granted = granted + parseFloat(tran.units);
-                if (tran.forfeited) {
-                    granted = granted - tran.forfeited;
-                }
-            }
-        });
-        return granted;
-    };
-
-//Calculates total grant actions in grant table
-    $rootScope.totalGrantAction = function (type, grants) {
-        var total = 0;
-        angular.forEach(grants, function (grant) {
-            if (grant.action == type && !isNaN(parseFloat(grant.unit))) {
-                total = total + parseFloat(grant.unit);
-            }
-        });
-        return total;
-    };
-
-//Calculates total granted to and forfeited in grant table
-    $rootScope.totalTranAction = function (type, trans) {
-        var total = 0;
-        angular.forEach(trans, function (tran) {
-            if (type == "granted") {
-                if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) > 0) {
-                    total = total + parseFloat(tran.units);
-                }
-            }
-            else if (type == "forfeited") {
-                if (!isNaN(parseFloat(tran.units)) && parseFloat(tran.units) < 0) {
-                    total = total + parseFloat(tran.units);
-                }
-            }
-        });
-        return total;
-    };
-
-//Calculates total vested in column
-    $rootScope.totalVestedAction = function (investors) {
-        var total = 0;
-        angular.forEach(investors, function (row) {
-            if (!isNaN(parseFloat(row.vested))) {
-                total = total + parseFloat(row.vested);
-            }
-        });
-        return total;
-    };
-
-    $rootScope.postIssues = function (keys, issue) {
-        console.log(keys);
-        console.log(issue);
-    };
-
-    $rootScope.myPercentage = function (everyone) {
-        return (100 - everyone);
-    };
-
 });
 
 function hidePopover() {
@@ -242,7 +154,7 @@ ownership.value('displayCopy', {
             "The term of the warrant before expiration",
         common:
             "Indicates that a security is common stock",
-        paripassu:
+        pariwith:
             "Liquidation proceeds are distributed in proportion "
             + "to each series’ share of preference, instead of "
             + "by seniority",

@@ -1,0 +1,41 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link type="text/css" rel="stylesheet" href="/documents/css/company.css">
+
+<div>
+  <div class="front info-box">
+    <div class="head-box">
+      <h2>Documents</h2>
+    </div>
+    <div class="body-box">
+      <div style="display: inline-block; width: 35%">Graph will go here</div>
+      <div style="display: inline-block">
+        
+            
+
+
+        <table class="table">
+          <thead>
+            <tr style="color: #1E2D3D">
+              <th style="padding-right: 60px" >Document Name</th>
+              <th>Document Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="myDoc in myDocs" class="table-border">
+              <td ng-click="gotoDoc(myDoc)">{{myDoc.docname}}</td>
+              <td>{{shortStatus(myDoc)}}</td>
+          </tbody>
+
+        </table>
+      </div>      
+    </div>
+    <div style="float: right; padding-right: 40px">
+      <a ng-href="/app/documents/investor-list">
+        <div class="standard-button blue">
+          <button class="btn" >View</button>
+        </div>
+      </a>
+    </div>
+  </div>
+</div> 

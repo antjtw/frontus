@@ -12,32 +12,23 @@
     <div ng-repeat="key in keys"
          class="rightTitle"
          ng-class="{double: inputType(key)!='text_field'}">
-        <span ng-class="{'locked-security': key=='security_type'}">
+        <span ng-class="{'locked-security': key=='security_type'}"
+            ng-if="(!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))">
             {{displayName(key)}}
         </span>
-        <input ng-if="useTextField(key) && !useDatePicker(key)"
-               id="date{{::data.attrs.$$hashKey}}"
+        <input ng-if="useTextField(key)"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
-        <input ng-if="useNumberField(key) && !useDatePicker(key)"
-               id="date{{::data.attrs.$$hashKey}}"
+        <input ng-if="useNumberField(key)"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
-               type="number"
+               type="text"
+               integer
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
-        <input ng-if="useDatePicker(key)"
-               id="{{key}}{{::data.$$hashKey}}"
-               ng-model="data.attrs[key]"
-               ui-event="{blur: 'saveItDate(data, true, undo, $event, key)'}"
-               ng-change="saveItDate(data, true, undo, $event, key)"
-               data-date-format={{settings.lowercasedate}}
-               type="text"
-               ng-required="isRequired(key)"
-               bs-datepicker>
         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
             <li class="dropdown standard">
             <a class="dropdown-toggle">
@@ -83,13 +74,34 @@
                         </a>
                     </li>
                 </ul>
+            </li>
         </ul>
-        <span ng-if="description(key)"
+        <span ng-if="pickMulti(key)">
+            <span class="locked-security" ng-repeat="sec in data.attrs[key]">
+                {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+            </span>
+        </span>
+        <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle">
+                    <span class="invisible-drop">'</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="i in getValidPariSecurities(data, key)">
+                        <a ng-click="setIt(data, true, undo, key, i.name)">
+                            {{i.name}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <span ng-if="description(key) &&
+              (!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))"
               class="tooltip-icon"
               data-icon="&#xe044;"
               aria-hidden="true"
-              data-placement="top"
-              bs-tooltip="description(key)">
+              tooltip-placement="top"
+              tooltip="{{description(key)}}">
         </span>
     </div>
 </div>

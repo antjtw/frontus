@@ -1601,6 +1601,7 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
+    background-color: #F1F1F1;
 
 }
 .activity-feed2 > div > li:first-child {
@@ -4991,6 +4992,27 @@ li.event.roles > div > ul {
 .go-to{
     color: #666;
     cursor: pointer;
+
+}
+
+.body-box .cardColumn{
+    width: 49%;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    top: 30%;
+}
+
+.cardHeadline {
+    color: #15A085;
+    font-weight: bold;
+    font-size: 46px;
+    padding-bottom: 20px;
+
+}
+
+.table-border{
+   border-bottom: 1px solid rgb(241, 241, 241);
 }
 
 

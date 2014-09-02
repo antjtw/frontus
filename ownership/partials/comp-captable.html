@@ -151,7 +151,7 @@
     </div>
 </div>
 
-<div modal="tranDelete" close="deleteclose();" options="opts">
+<!--div modal="tranDelete" close="deleteclose();" options="opts">
     <div class="modalHeader">
         <span>Delete?</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="deleteclose(); revertTran(deleteTran);"></span>
@@ -170,125 +170,7 @@
             <button class="btn" ng-click="deleteclose(); manualdeleteTran(deleteTran);">Yes</button>
         </div>
     </div>
-</div>
-
-<div modal="convertModal" close="convertSharesClose();" options="convertopts">
-    <div class="modalHeader">
-        <span>Convert Shares</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="convertSharesClose()"></span>
-    </div>
-    <div ng-show="convertTran.step == '1'" class="modalText convert-step-one">
-        <div>
-            <span>Transaction</span>
-            <ul class="dropdown-list drop-selector">
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
-                        {{convertTran.tran.date | date:settings.shortdate}}<span class="invisible-drop">'</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="i in convertTransOptions">
-                            <span ng-click="assignConvertFrom(i);">{{i.date | date:settings.shortdate}}</span>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="pull-right">
-            <span>Convert To</span>
-            <ul class="dropdown-list drop-selector">
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
-                        {{convertTran.toissue.issue | maxLength}}<span class="invisible-drop">'</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="i in justEquity(ct.securities, convertTransOptions[0])">
-                            <span ng-click="assignConvert('toissue', i);">{{i.issue | maxLength}}</span>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div ng-show="convertTran.toissue.issue">
-            <span>Date</span>
-            <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
-                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
-                   onkeydown="testForEnter(event);">
-        </div>
-        <div ng-show="convertTran.toissue.issue" class="pull-right">
-            <span>Method</span>
-            <ul class="dropdown-list drop-selector">
-                <li class="dropdown standard">
-                    <a class="dropdown-toggle">
-                        {{convertTran.method}}<span class="invisible-drop">'</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <span ng-show="convertTran.toissue.ppshare" ng-click="assignConvert('method', 'Valuation')">Valuation</span>
-                            <span ng-click="assignConvert('method', 'Price Per Share')">Price Per Share</span>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div ng-show="convertTran.method == 'Price Per Share'" class="pull-right">
-            <span class="double">Conversion PPS</span>
-            <input type="text" ng-model="convertTran.ppshare" onkeydown="testForEnter(event);">
-        </div>
-    </div>
-    <div ng-show="convertTran.step == '2'" class="modalText">
-        <div class="convert-listing">
-            <span>From</span>
-            <ul>
-                <li>{{convertTran.tran.issue}}</li>
-                <li>Security</li>
-                <li ng-show="convertTran.tran.discount && convertTran.method != 'Price Per Share'">
-                    <span ng-hide="convertTran.newtran.valcappercentage">{{convertTran.tran.discount}}%</span>
-                    <span ng-show="convertTran.newtran.valcappercentage">{{convertTran.newtran.valcappercentage}}% (w/ valuation cap)</span>
-                </li>
-                <li ng-show="convertTran.tran.discount && convertTran.method != 'Price Per Share'">Percent Discount</li>
-                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.valcap && convertTran.method != 'Price Per Share'">{{formatDollarAmount(convertTran.tran.valcap)}}</li>
-                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.valcap && convertTran.method != 'Price Per Share'">Valuation Cap</li>
-            </ul>
-        </div>
-        <div class="convert-listing">
-            <span>To</span>
-            <ul>
-                <li>{{convertTran.toissue.issue}}</li>
-                <li>Security</li>
-                <li ng-show="convertTran.toissue.premoney">{{formatDollarAmount(convertTran.toissue.premoney)}}</li>
-                <li ng-show="convertTran.toissue.premoney">Pre-Money Valuation</li>
-                <li ng-show="convertTran.toissue.ppshare">{{formatDollarAmount(convertTran.toissue.ppshare)}}</li>
-                <li ng-show="convertTran.toissue.ppshare">Security PPS</li>
-            </ul>
-        </div>
-        <div class="convert-summary">
-            <span>Summary</span>
-            <ul>
-                <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
-                <li><span>{{formatDollarAmount(convertTran.newtran.amount)}}</span><span>Debt + Interest</span></li>
-                <li><span>{{formatDollarAmount(convertTran.newtran.ppshare)}}</span><span>Effective PPS</span></li>
-                <li><span>{{formatAmount(convertTran.newtran.units)}}</span><span>Resulting Shares</span></li>
-            </ul>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div ng-show="convertTran.step == '1'" class="pull-left standard-button gray">
-            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
-        </div>
-        <div ng-show="convertTran.step == '1'" class="pull-right standard-button blue arrow-right">
-            <button class="btn" ng-disabled="!convertTran.tran.issue || !convertTran.toissue.issue || !convertTran.method || !convertTran.date" ng-click="convertgoto('2');">Review</button>
-        </div>
-        <div ng-show="convertTran.step == '2'" class="pull-left standard-button blue">
-            <button class="btn" ng-click="convertgoto('1');">Back</button>
-        </div>
-        <div ng-show="convertTran.step == '2'" class="pull-right standard-button">
-            <button class="btn" ng-click="performConvert(convertTran); convertSharesClose();">Submit</button>
-        </div>
-        <div ng-show="convertTran.step == '2'" class="pull-right standard-button small-standard-button gray cancel-convert">
-            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
-        </div>
-    </div>
-</div>
+</div-->
 
 <div modal="splitModal" close="splitSharesClose();" options="convertopts">
     <div class="modalHeader">
@@ -357,7 +239,7 @@
     </div>
 </div>
 
-<div modal="transferModal" close="transferSharesClose();" options="transferopts">
+<!--div modal="transferModal" close="transferSharesClose();" options="transferopts">
     <div class="modalHeader">
         <span>Transfer Shares</span>
         <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="transferSharesClose()"></span>
@@ -415,7 +297,7 @@
             <button class="btn" ng-click="transferSharesClose();">Cancel</button>
         </div>
     </div>
-</div>
+</div-->
 
 <div modal="capAccess" close="accessclose()" options="shareopts">
     <div class="modalHeader">
@@ -652,12 +534,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{shareSum(row) || 0}}">
+                           value="{{captable.rowSum(row) || 0 | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
+                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
                 </td>
                 <td>
                     <span ng-class="{'box-highlight':tourstate==1}">
@@ -731,12 +613,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::rowSum(row.name)}}">
+                           value="{{::captable.rowSum(row.name) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:3}}%">
+                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
@@ -747,8 +629,7 @@
                 <td ng-click="selectCell(row.name, key.name)"
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
-                               hoverable: captable.cellFor(row.name, key.name).a
-                                          || captable.cellFor(row.name, key.name).u}"
+                               hoverable: captable.cellFor(row.name, key.name)}"
                     ng-repeat="key in ct.securities">
                     <captable-cell inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
@@ -762,12 +643,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities)}}">
+                           value="{{captable.numUnissued(sec, ct.securities) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:3}}%">
+                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:2}}%">
                 </td>
                 <td class="viewName">
                     {{::sec.name}} (Unissued)
@@ -778,7 +659,7 @@
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities)}}
+                                {{captable.numUnissued(key, ct.securities) | number:2}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -800,12 +681,12 @@
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
             </tr>
-            <!-- Undiluted footer -->
             <tr class='tablefooter'>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits();}}">
+                           value="{{captable.totalOwnershipUnits()
+                                  | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -819,11 +700,14 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one) | formatAmount:settings:'units'}}
+                            {{captable.securityTotalUnits(one)
+                            + captable.numUnissued(one, ct.securities)
+                            | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one) | formatAmount:settings:'amount'}}
+                            {{captable.securityTotalAmount(one)
+                            | formatAmount:'amount'}}
                         </div>
                     </span>
                 </td>
@@ -845,6 +729,7 @@
              heading="{{::tab.title}}">
                 <div ng-show="chosenTab(tab, 'Information')"
                      ng-style="viewportactivity"
+                     ng-class="{'palegray': sideBar != '1' && sideBar != '2' && sideBar != '4' && sideBar != '5'}"
                      ng-switch on="sideBar">
                     <span ng-switch-when="1">
                         <editable-security-details
@@ -863,7 +748,7 @@
                         <cell-details cell="selectedCell"
                                       currenttab="currentTab"></cell-details>
                     </span>
-                    <span class="capGuide in-brief"
+                    <span class="padded-cap capGuide in-brief"
                           ng-switch-when="3">
                         <div class="headsection row-fluid
                                     tabbed company-info">
@@ -943,7 +828,7 @@
                             </div>
                         </div>
                     </span>
-                    <span class="capGuide" ng-switch-default>
+                    <span class="padded-cap capGuide" ng-switch-default>
                         <span ng-if="editMode;">
                             <div class="captour railpadding">
                                 <h1 class="right-bar-header">
@@ -972,7 +857,8 @@
                                      class="belowTitle">
                                     <img src="/img/activity/invested.png">
                                     <div>
-                                        <span ng-bind="totalPaid(ct.investors)">
+                                        <span>
+                                            {{totalPaid(ct.investors) | number:2}}
                                         </span>
                                         <span>Total Invested</span>
                                     </div>
@@ -981,7 +867,8 @@
                                      class="belowTitle">
                                     <img src="/img/activity/sharews.png">
                                     <div>
-                                        <span ng-bind="captable.totalOwnershipUnits()">
+                                        <span>
+                                            {{captable.totalOwnershipUnits() | number:2}}
                                         </span>
                                         <span>
                                             Fully Diluted Units

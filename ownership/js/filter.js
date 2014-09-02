@@ -1,8 +1,10 @@
+'use strict';
+
 var ownership = angular.module('ownerFilters', []);
 
 ownership.filter('noUnissue', function () {
     return function (row) {
-        return (row[0].editable != 0 || row[0].name == "") ? row : [];
+        return (row[0].editable !== 0 || row[0].name === "") ? row : [];
     };
 });
 
@@ -11,7 +13,7 @@ ownership.filter('otherinvestors', function () {
     return function (rows, investor) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != "" && row.name != investor && row.editable == "yes") {
+            if (row.name !== "" && row.name != investor && row.editable == "yes") {
                 returnrows.push(row);
             }
         });
@@ -24,7 +26,7 @@ ownership.filter('grantSelect', function () {
     return function (acts, type) {
         var returnacts = [];
         angular.forEach(acts, function (act) {
-            if (act.action == null || act.action == type) {
+            if (act.action === null || act.action == type) {
                 returnacts.push(act);
             }
         });
@@ -37,8 +39,9 @@ ownership.filter('grantSelect', function () {
 ownership.filter('shareList', function () {
     return function (rows) {
         var returnrows = [];
+        console.log(rows);
         angular.forEach(rows, function (row) {
-            if (row.emailkey == null && row.name != "" && row.editable == "yes") {
+            if (row.email === null) {
                 returnrows.push(row);
             }
         });
@@ -51,7 +54,7 @@ ownership.filter('rowviewList', function () {
     return function (rows) {
         var returnrows = [];
         angular.forEach(rows, function (row) {
-            if (row.name != "" && row.editable == "yes") {
+            if (row.name !== "" && row.editable == "yes") {
                 returnrows.push(row);
             }
         });
@@ -179,11 +182,12 @@ ownership.filter('securityUnitLabel', function() {
     };
 });
 
-ownership.filter('formatAmount', function() {
-    return function(amount, settings, key) {
+ownership.filter('formatAmount', function($rootScope) {
+    return function(amount, key) {
+        var settings = $rootScope.settings;
         var nums = ["units", "forfeited"];
         var moneys = ["ppshare", "price", "effectivepps",
-                      "valcap", "amount"]; 
+                      "valcap", "amount"];
         if (!amount || (typeof(amount)!="string" && isNaN(amount))) {
             amount = null;
         } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
@@ -216,7 +220,8 @@ ownership.filter('formatAmount', function() {
 ownership.filter('attrsForDisplay', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical",
-                          "security", "security_type"];
+                          "security", "security_type",
+                          "transaction_from", "interestratefreq"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1 &&
@@ -233,7 +238,8 @@ ownership.filter('attrsForDisplay', function() {
 ownership.filter('attrsForEdit', function() {
     return function(attr) {
         var hide_attrs = ["kind", "physical", "investor",
-                          "security", "security_type"];
+                          "security", "security_type",
+                          "transaction_from"];
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1)
@@ -259,16 +265,41 @@ ownership.filter('selectablesecurities', function() {
     };
 });
 
+ownership.filter('usedsecurities', function() {
+    return function(securities, existing) {
+        if (existing === undefined || existing === null || existing === []) {
+            return securities;
+        }
+        var filtered_secs = [];
+        angular.forEach(securities, function(sec) {
+            if (existing.indexOf(sec.name) === -1) {
+                filtered_secs.push(sec);
+            }
+        });
+        return filtered_secs;
+    };
+});
+
 ownership.filter('validActions', ['attributes', function(attributes) {
-    return function(sec_type, action_type) {
+    return function(sec_type, action_type, kind) {
+        //TODO (probably after deploy): get sec_type differently, get from to_security if convert, so transfer can be included
         var attrs = attributes.getAttrs();
         var nonActions = ['issue security', 'grant', 'purchase'];
+        var alwaysAllow = ['transfer'];
+        var isAction = (kind) && (nonActions.indexOf(kind) == -1);
         var ret = [];
-        for (a in attrs[sec_type])
+        for (var a in attrs[sec_type])
         {
             if (nonActions.indexOf(a) == -1)
             {
-                if ((action_type == 'transaction') == //not xor 
+                if (isAction)
+                {
+                    if (alwaysAllow.indexOf(a) != -1)
+                    {
+                        ret.push(a);
+                    }
+                }
+                else if ((action_type == 'transaction') == //not xor
                         (attrs[sec_type][a].hasOwnProperty('investor') ||
                         attrs[sec_type][a].hasOwnProperty('investor_to') ||
                         attrs[sec_type][a].hasOwnProperty('investor_from')))
@@ -282,19 +313,19 @@ ownership.filter('validActions', ['attributes', function(attributes) {
 ownership.filter('isRequired', ['attributes', function(attributes) {
     return function(sec_type, action, key) {
         var attrs = attributes.getAttrs();
-        return attrs[sec_type][action][key]['required'];
+        return attrs[sec_type][action][key].required;
     };
 }]);
 
 ownership.filter('getInvestorAttributes', ['attributes', function(attributes) {
     return function() {
-        return attributes.getSpecialAttrs()['investor'];
+        return attributes.getSpecialAttrs().investor;
     };
 }]);
 
 ownership.filter('getSecurityAttributes', ['attributes', function(attributes) {
     return function() {
-        return attributes.getSpecialAttrs()['security'];
+        return attributes.getSpecialAttrs().security;
     };
 }]);
 
@@ -328,7 +359,7 @@ ownership.filter('attributeDbTypes', function() {
             case "date":
                 return "date";
             default:
-                return null;
+                return tp;
         }
     };
 });
@@ -362,9 +393,42 @@ ownership.filter('sortAttributeTypes', function() {
 });
 ownership.filter('describeTran', function() {
     return function(tran) {
+        var d = "";
+        switch (tran.kind) {
+            case "issue security":
+                break;
+            case "retire security":
+                break;
+            case "transfer":
+                break;
+            case "convert":
+                break;
+            case "split":
+                break;
+            case "grant":
+                break;
+            case "exercise":
+                break;
+            case "forfeit":
+                break;
+            default:
+                break;
+        }
+        return d;
         /* TODO replace 'Transaction' accordion headers with something
          * that actually describes the transaction
-         *
          */
+    };
+});
+// Returns only the real transactions (not the empty ones)
+ownership.filter('noempty', function () {
+    return function (trans) {
+        var returntrans = [];
+        angular.forEach(trans, function (tran) {
+            if (tran.investor != null) {
+                returntrans.push(tran);
+            }
+        });
+        return returntrans;
     };
 });

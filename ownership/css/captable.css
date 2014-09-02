@@ -28,7 +28,10 @@ div.last-saved {
 
 .capGuide {
     display: block;
-    padding: 0 20px 0 20px;
+}
+
+.capGuide.padded-cap {
+    padding: 0 20px;
 }
 
 .capGuide.top10 {
@@ -36,8 +39,9 @@ div.last-saved {
 }
 
 .capGuide.global {
-    margin-top: 40px;
+    padding-top: 40px;
     position: relative;
+    background-color: #F1F1F1;
 }
 
 .capGuide.cap-overflow {
@@ -104,6 +108,8 @@ div.last-saved {
 
 .tableView.captable td.viewName {
     padding: 0 0 0 20px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 
 .tableView th.longrow {
@@ -458,7 +464,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     font-size: 14px;
     border-bottom: 1px solid #C6C6C6;
     height: 55px;
-    margin-right: 40px;
+    margin-right: 0;
 }
 
 .capright .in-brief div.belowTitle > img {
@@ -563,6 +569,16 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     font-size: 12px;
 }
 
+.transaction-accordion.lessmargin .delete-link {
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color:  #1d2c3c;
+    display: inline-block;
+    font-size: 12px;
+}
+
 .transaction-accordion.lessmargin .delete-link.blue-link {
     margin-left: 5px;
 }
@@ -572,11 +588,12 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading {
-    padding: 10px 0 0 0;
+    padding: 0 0 0 0;
 }
 
 .transaction-accordion .accordion-heading .accordion-toggle {
     padding: 0 0 0 0;
+    line-height: 40px;
 }
 
 .transaction-accordion .accordion-heading > a > span:not(:last-of-type),
@@ -588,7 +605,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 .transaction-accordion.lessmargin .capGuide,
 .transaction-accordion.lessmargin .linkedDocuments,
 .transaction-accordion.lessmargin .btn-group {
-    padding-left: 0;
+    padding-left: 20px;
 }
 .transaction-accordion .btn-group,
 .transaction-accordion .linkedDocuments {
@@ -596,9 +613,11 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
-    color: #1E2D3D;
-    font-size: 20px;
-    line-height: 32px;
+    color: #8D8D8D;
+    font-size: 14px;
+    line-height: 40px;
+    margin-left: 20px;
+    display: inline-block;
     font-family: "FS Elliot Web Light", sans-serif;
 }
 
@@ -607,7 +626,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-group {
-    border-bottom: none;
+    border-bottom: 1px solid #C6C6C6;
+    margin-bottom: 0;
 }
 
 .transaction-accordion .accordion-inner {
@@ -616,15 +636,19 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     overflow-x: hidden;
     padding-left: 0;
     padding-right: 0;
+    padding-top: 0;
+    background-color: #F1F1F1;
 }
 
 .transaction-accordion .capGuide.global {
-    margin-top: 0;
+    padding-top: 0;
 }
 
 .transaction-accordion .accordion {
-    border-top: 1px solid #C7C7C7;
+    border-top: 1px solid #C6C6C6;
     margin-top: 20px;
+    background-color: #E3E3E3;
+    margin-bottom: 0;
 }
 
 
@@ -641,11 +665,16 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .tabbable .tab-content {
     padding-bottom: 0;
-  
+
 }
+
+.tabbable .tab-content div.palegray {
+    background-color: #F1F1F1;
+}
+
 .tabBorder .tabbable .tab-content {
     border-right: 1px solid #C6C6C6;
-    
+
 }
 .tabbable .info-box {
     margin-bottom: 0;
@@ -725,11 +754,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-right: 0;
 }
 
-div.rightTitle {
-    margin: 0 0 10px 0;
-    position: relative;
-}
-
 div.rightTitle.double > span, div.rightTitle.double > span {
     line-height: 14px;
     margin-top: 2px;
@@ -757,7 +781,7 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     text-transform: capitalize;
 }
 
-.rightTitle > input, .rightTitle > span:last-child {
+.rightTitle > input, .rightTitle > span:last-child, .rightTitle .locked-security {
     width:216px;
     height: 30px;
     -moz-border-radius: 3px;
@@ -772,11 +796,11 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     width: 146px;
 }
 
-.rightTitle.security-type > span.locked-security {
-    width: 216px;
-    padding-left: 10px;
-    margin-left: 2px;
-    border-radius: 3px;
+.rightTitle .locked-security .action {
+    cursor: pointer;
+    float: right;
+    line-height: 32px;
+    margin-right: 5px;
 }
 
 .rightTitle.security-type > span.common-toggle {
@@ -819,10 +843,14 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     margin-left: 5px;
 }
 
-.rightTitle > span.locked-security {
+div.rightTitle span.locked-security {
     line-height: 32px;
     background-color: #E3E3E3;
     display: inline-block;
+}
+
+div.rightTitle.double span.locked-security {
+    margin-bottom: 8px;
 }
 
 .rightTitle > span:last-child.delete-icon {
@@ -860,6 +888,14 @@ div.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
 div.rightTitle {
     position: relative;
     margin: 0 0 5px;
+}
+
+div.rightTitle.left-space {
+    margin-left: 20px;
+}
+
+div.rightTitle.actionpicker {
+    margin-bottom: 60px;
 }
 
 div.rightTitle.common-toggle span.tooltip-icon + .tooltip {
@@ -920,13 +956,14 @@ div.rightTitle.interest-rate {
 
 .add-transaction-link {
     display: inline-block;
-    margin-left: 10px;
+    box-sizing: border-box;
     line-height: 32px;
     cursor: pointer;
     padding-left: 5px;
     padding-right: 5px;
-    border-radius: 3px;
-    margin-bottom: 30px;
+    width: 100%;
+    border-bottom: 1px solid #C6C6C6;
+    background-color: #E3E3E3;
 }
 
 .add-transaction-link:hover {
@@ -1089,6 +1126,7 @@ textarea {
     background-color: #F1F1F1;
     border-left: 1px solid #E3E3E3;
     border-right: 1px solid #E3E3E3;
+    border-top: 1px solid #E3E3E3;
 }
 
 .tableView.grant-table tr.status-row {
@@ -2366,6 +2404,7 @@ span.tour-icon.issue-cog + .tooltip {
 .detailsHeader {
     height: 100px;
     margin-bottom: 20px;
+    padding: 0 20px 0 20px;
 }
 .detailsHeader > div {
     font-family: "FS Elliot Web Light", sans-serif;
@@ -2380,4 +2419,37 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .detailsHeader > p {
     margin-top: 20px;
+}
+
+.span4.capright {
+    background-color: #E3E3E3;
+}
+
+.faux-tabs > button {
+    box-sizing: border-box;
+    width: 50%;
+    border: none;
+    height: 40px;
+    background-color: #E3E3E3;
+    border-top: 2px solid #E3E3E3;
+    font-size: 12px;
+}
+
+.faux-tabs > button > span > span:before {
+    vertical-align: -14%;
+    font-size: 20px;
+}
+
+.faux-tabs.triplet > button {
+    width: 33.3333333333%;
+}
+
+.faux-tabs > button.on {
+    background-color: #F1F1F1;
+    border-top: 2px solid #19bb95;
+    color: #19bb95;
+}
+
+.action-button.standard-button {
+    margin: 20px 0 0 20px;
 }

@@ -197,7 +197,7 @@
                                             <span class="locked-security" ng-hide="typeLocked(activeIssue);">
                                                 {{activeIssue.type}}
                                             </span>
-                                            <span ng-show="trantype(activeIssue.type, 'Equity');" class="common-toggle">
+                                            <span ng-show="activeIssue.type == 'Equity'" class="common-toggle">
                                                 <button ng-class="{'selected':activeIssue.common}"
                                                         ng-click="toggleCommon(activeIssue)"
                                                         ng-model="activeIssue.common" class="check-box-button"><span
@@ -206,7 +206,7 @@
                                     </div>
                                 </div>
                                 <!-- Equity Tab -->
-                                <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Equity');">
+                                <div class="capGuide top10" ng-show="activeIssue.type == 'Equity'">
 
                                     <p class="rightTitle double"><span>Pre-Money Valuation</span><input
                                             ng-disabled="toggleView();"
@@ -346,7 +346,7 @@
 
                                 </div>
                                   <!-- Options Tab -->
-                                  <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Option');">
+                                  <div class="capGuide top10" ng-show="activeIssue.type == 'Option'">
                                       <div class="rightTitle double"><span>Underlying Security</span>
                                           <ul class="dropdown-list drop-selector">
                                               <li class="dropdown standard">
@@ -435,7 +435,7 @@
                                   </div>
 
                                   <!-- Debt tab -->
-                                  <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Debt');">
+                                  <div class="capGuide top10" ng-show="activeIssue.type == 'Debt'">
 
                                       <p class="rightTitle double"><span>Pre-Money Valuation</span><input
                                               ng-disabled="toggleView();"
@@ -508,7 +508,7 @@
                                   </div>
 
                                 <!-- Safe tab -->
-                                  <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Safe');">
+                                  <div class="capGuide top10" ng-show="activeIssue.type == 'Safe'">
 
                                       <p style="display: inline-block" class="rightTitle">
                                           <span>Valuation Cap</span><input ng-disabled="toggleView();"
@@ -530,7 +530,7 @@
                                   </div>
 
                                 <!-- Warrant tab -->
-                                  <div class="capGuide top10" ng-show="trantype(activeIssue.type, 'Warrant');">
+                                  <div class="capGuide top10" ng-show="activeIssue.type == 'Warrant'">
 
                                       <div class="rightTitle double"><span>Underlying Security</span>
                                           <ul class="dropdown-list drop-selector">
@@ -631,7 +631,7 @@
                                 </div>
 
                                 <!-- Equity Tab -->
-                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Equity');">
+                                <div class="capGuide top10" ng-show="tran.type == 'Equity'">
 
                                     <p class="rightTitle"><span>Share Price</span><input ng-disabled="toggleView();"
                                                                                          onkeydown="testForEnter();"
@@ -710,7 +710,7 @@
 
                                 </div>
                                 <!-- Option Tab -->
-                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Option');">
+                                <div class="capGuide top10" ng-show="tran.type == 'Option'">
 
                                     <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
                                                                                           onkeydown="testForEnter();"
@@ -765,7 +765,7 @@
 
                                 </div>
                                 <!-- Debt Tab -->
-                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Debt');">
+                                <div class="capGuide top10" ng-show="tran.type == 'Debt'">
 
                                     <div class="rightTitle interest-rate">
                                         <span>Interest Rate</span>
@@ -818,7 +818,7 @@
                                 </div>
 
                                 <!-- Safe Tab -->
-                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Safe');">
+                                <div class="capGuide top10" ng-show="tran.type == 'Safe'">
 
                                     <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input
                                             ng-disabled="toggleView();"
@@ -841,7 +841,7 @@
                                 </div>
 
                                 <!-- Warrant Tab -->
-                                <div class="capGuide top10" ng-show="trantype(tran.type, 'Warrant');">
+                                <div class="capGuide top10" ng-show="tran.type == 'Warrant'">
 
                                     <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
                                                                                            onkeydown="testForEnter();"

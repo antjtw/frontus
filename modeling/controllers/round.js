@@ -93,13 +93,21 @@ app.controller('roundController',
                         var actualdiscount;
                         tran.convert_date = $scope.rounddate;
                         tran.interestamount = calculate.debtinterest(tran);
-                        if (!isNaN(parseFloat(tran.attrs.valcap))) {
+                        if (!isNaN(parseFloat(tran.attrs.valcap)) && tran.attrs.discount) {
                             actualdiscount = Math.max(tran.attrs.discount, (1 - (tran.attrs.valcap / $scope.premoney)) *100);
-                        } else {
+                        } else if (tran.attrs.discount) {
                             actualdiscount = tran.attrs.discount;
+                        } else {
+                            actualdiscount = 0;
                         }
-                        $scope.effectivepremoney -= (tran.interestamount / (1 - (actualdiscount/100)));
-                        $scope.totaldebtcost += (tran.interestamount / (1 - (actualdiscount/100)));
+                        if (actualdiscount > 0) {
+                            $scope.effectivepremoney -= (tran.interestamount / (1 - (actualdiscount/100)));
+                            $scope.totaldebtcost += (tran.interestamount / (1 - (actualdiscount/100)));
+                        } else {
+                            $scope.effectivepremoney -= tran.interestamount;
+                            $scope.totaldebtcost += tran.interestamount;
+                        }
+
                     }
                 });
             }
@@ -148,8 +156,8 @@ app.controller('roundController',
                         convertTran.toissue.premoney = $scope.premoney;
                         convertTran.toissue.ppshare = $scope.effectiveppshare;
                         converted = calculate.conversion(convertTran);
-                        round.units += converted.units;
-                        $scope.totals.units += converted.units;
+                        round.units += converted.attrs.amount / converted.attrs.effectivepps;
+                        $scope.totals.units += converted.attrs.amount / converted.attrs.effectivepps;
                     }
                 });
             }

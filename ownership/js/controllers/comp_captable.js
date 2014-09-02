@@ -1,9 +1,9 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
-         "SWBrijj", "calculate", "switchval", "navState", "captable",
-         "displayCopy", "History",
+         "SWBrijj", "calculate", "navState", "captable",
+         "displayCopy", "History", "Investor",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, switchval, navState, captable, displayCopy, History)
+         calculate, navState, captable, displayCopy, History, Investor)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -11,7 +11,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     }
     var company = navState.company;
     $scope.currentCompany = company;
-    
+
     captable.reloadCapTable();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
@@ -81,25 +81,27 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return $scope.selectedCell.investor == inv
             && $scope.selectedCell.security == sec;
     }
-    $scope.selectCell = function(inv, sec) {
+    $scope.selectCell = function(inv, sec, reselect) {
         $scope.currentTab = 'details';
         $scope.selectedSecurity = $scope.selectedInvestor = null;
-        if (!$scope.editMode && $scope.selectedCell && cellIsSelected(inv, sec)) {
-            $scope.selectedCell = null;
-            History.forget($scope, 'selectedCell');
-            displayIntroSidebar();
-        } else {
-            History.forget($scope, 'selectedCell');
-            $scope.selectedCell =
-                captable.cellFor(inv, sec, $scope.editMode);
-            History.watch('selectedCell', $scope);
-            displayCellDetails();
+        if (captable.cellFor(inv, sec) || $scope.editMode) {
+            if (!$scope.editMode && ($scope.selectedCell && !reselect) && cellIsSelected(inv, sec)) {
+                $scope.selectedCell = null;
+                History.forget($scope, 'selectedCell');
+                displayIntroSidebar();
+            } else {
+                History.forget($scope, 'selectedCell');
+                $scope.selectedCell =
+                    captable.cellFor(inv, sec, $scope.editMode);
+                History.watch('selectedCell', $scope);
+                displayCellDetails();
+            }
+            $scope.$broadcast("newSelection");
         }
-        $scope.$broadcast("newSelection");
     };
-    $scope.selectSecurity = function(security_name) {
+    $scope.selectSecurity = function(security_name, reselect) {
         $scope.selectedCell = $scope.selectedInvestor = null;
-        if (!$scope.editMode && $scope.selectedSecurity &&
+        if (!$scope.editMode && ($scope.selectedSecurity && !reselect) &&
             $scope.selectedSecurity.name == security_name)
         {
             displayIntroSidebar();
@@ -110,17 +112,17 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.selectedSecurity = null;
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
-                    return el.name == security_name;  
+                    return el.name == security_name;
                 })[0];
             History.watch('selectedSecurity', $scope);
             displaySecurityDetails();
         }
         $scope.$broadcast("newSelection");
     };
-    $scope.selectInvestor = function(investor_name) {
+    $scope.selectInvestor = function(investor_name, reselect) {
         $scope.selectedCell = $scope.selectedSecurity = null;
         //deselectAllCells();
-        if (!$scope.editMode && $scope.selectedInvestor &&
+        if (!$scope.editMode && ($scope.selectedInvestor && !reselect) &&
                 $scope.selectedInvestor.name == investor_name) {
             displayIntroSidebar();
             $scope.selectedInvestor = null;
@@ -236,18 +238,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
     */
-    $scope.rowFor = function(inv) {
-        return $scope.ct.cells
-            .filter(function(cell) {
-                return cell.investor == inv;
-            });
-    };
-    $scope.rowSum = function(inv) {
-        return $scope.rowFor(inv)
-            .reduce(function(prev, cur, idx, arr) {
-                return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
-            }, 0);
-    };
     $scope.canHover = function(cell) {
         return cell && (cell.u || cell.a);
     };
@@ -256,13 +246,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         switch (selectedThing()) {
             case "selectedCell":
                 $scope.selectCell($scope.selectedCell.investor,
-                                  $scope.selectedCell.security);
+                                  $scope.selectedCell.security, true);
                 break;
             case "selectedInvestor":
-                $scope.selectInvestor($scope.selectedInvestor.name);
+                $scope.selectInvestor($scope.selectedInvestor.name, true);
                 break;
             case "selectedSecurity":
-                $scope.selectSecurity($scope.selectedSecurity.name);
+                $scope.selectSecurity($scope.selectedSecurity.name, true);
                 break;
         }
     }
@@ -377,88 +367,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
         return $scope.windowToggle;
     };
-    // Captable Conversion Modal
-    $scope.convertSharesUp = function(trans) {
-        $scope.convertTran = {};
-        $scope.convertTran.tran = trans[0];
-        $scope.convertTran.newtran = {}
-        $scope.convertTran.step = '1';
-        $scope.convertTran.date = new Date.today();
-        $scope.convertTransOptions = trans;
-        $scope.convertModal = true;
-
-        $scope.$watch('convertTran.ppshare', function(newval, oldval) {
-            if (!calculate.isNumber(newval)) {
-                $scope.convertTran.ppshare = oldval;
-            }
-        }, true);
-    };
-
-    $scope.convertSharesClose = function() {
-        $scope.convertModal = false;
-    };
-
-    $scope.convertgoto = function(number) {
-        $scope.convertTran.step = number;
-        if (number == '2') {
-            $scope.convertTran.newtran = angular.copy($scope.convertTran.tran);
-            $scope.convertTran.newtran = captable.inheritAllDataFromIssue($scope.convertTran.newtran, $scope.convertTran.toissue);
-            $scope.convertTran.newtran.amount = calculate.debtinterest($scope.convertTran);
-            $scope.convertTran.newtran = calculate.conversion($scope.convertTran);
-        }
-    };
-
-    $scope.convertopts = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'convertModal modal'
-    };
-
-    // Filters the dropdown to only equity securities
-    $scope.justEquity = function(securities, tran) {
-        var list = [];
-        angular.forEach(securities, function(issue) {
-            if (issue.type == "Equity" && issue.issue != tran.issue) {
-                list.push(issue);
-            }
-        });
-        return list;
-    };
-
-    $scope.assignConvert = function(tran) {
-        $scope.convertTran.tran = tran;
-    }
-
-    // Performs the assignment for the dropdown selectors
-    $scope.assignConvert = function(field, value) {
-        $scope.convertTran[field] = value;
-        if (field == "toissue") {
-            $scope.convertTran.method = null;
-        }
-    };
-
-    // Date grabber
-    $scope.dateConvert = function (evt) {
-        //Fix the dates to take into account timezone differences
-        if (evt) { // User is typing
-            if (evt != 'blur')
-                keyPressed = true;
-            var dateString = angular.element('converttrandate').val();
-            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
-            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                var date = Date.parse(dateString);
-                if (date) {
-                    $scope.convertTran.date = calculate.timezoneOffset(date);
-                    keyPressed = false;
-                }
-            }
-        } else { // User is using calendar
-            if ($scope.convertTran.date instanceof Date) {
-                $scope.convertTran.date = calculate.timezoneOffset($scope.convertTran.date);
-                keyPressed = false;
-            }
-        }
-    };
 
     $scope.splitSharesUp = function(issue) {
         $scope.splitIssue = angular.copy(issue);
@@ -528,7 +436,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     // Captable Transfer Modal
-
+    /* don't think we're using this anymore
     $scope.ct.transferSharesUp = function(activetran) {
         $scope.ct.transferModal = true;
         $scope.ct.transfer = {};
@@ -553,7 +461,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     $scope.ct.transferSharesClose = function() {
         $scope.ct.transferModal = false;
-    };
+    };*/
 
     $scope.ct.transferopts = {
         backdropFade: true,
@@ -639,7 +547,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     // Captable transaction delete modal
-    $scope.tranDeleteUp = function (transaction) {
+    /*$scope.tranDeleteUp = function (transaction) {
         $scope.deleteTran = transaction;
         $scope.tranDelete = true;
     };
@@ -647,7 +555,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.deleteclose = function () {
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.tranDelete = false;
-    };
+    };*/
 
     //modal for updating issue fields that have different underlying values
 
@@ -693,28 +601,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.capEditEmail = false;
     };
 
-    /*
-    $scope.alterEmail = function() {
-        if ($scope.newEmail != "") {
-            SWBrijj.proc('ownership.update_row_share',
-                         $scope.newEmail,
-                         $scope.oldEmail,
-                         $scope.activeInvestorName)
-            .then(function(data) {
-                $scope.lastsaved = Date.now();
-                angular.forEach($scope.ct.investors, function (row) {
-                    if (row.name == $scope.activeInvestorName) {
-                        $scope.$emit("notification:success",
-                                     "Email address updated");
-                        row.emailkey = row.email = $scope.newEmail;
-                        $scope.activeInvestorEmail = $scope.newEmail;
-                    }
-                });
-            });
-        }
-    };
-    */
-
     $scope.opts = {
         backdropFade: true,
         dialogFade: true
@@ -723,7 +609,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.select2Options = {
         'multiple': true,
         'simple_tags': true,
-        'tags': $scope.ct.vInvestors,
+        'tags': Investor.investors,
         'tokenSeparators': [",", " "],
         'placeholder': 'Enter email address & press enter'
     };
@@ -773,14 +659,15 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                         SWBrijj.proc('ownership.update_investor_captable', row.email.toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
+                            row.access_level = "Full View";
                         });
                     }
                     else {
                         $scope.lastsaved = Date.now();
                         $scope.$emit("notification:success", "Your table has been shared!");
+                        row.access_level = "Personal View";
                     }
                     row.send = false;
-                    row.emailkey = row.email;
                 }).except(function(err) {
                         if (err.message = "ERROR: Duplicate email for the row") {
                             $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
@@ -944,7 +831,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if (!email) return;
         var link = (navState.userid == email) ?
                     '/app/account/profile' :
-                    '/app/company/profile/view?id='+email;
+                    '/app/company/profile/view?id='+encodeURIComponent(email);
         $location.url(link);
     };
 
@@ -968,15 +855,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return (output);
     };
 
-    /*$scope.typeLocked = function(issue) {
-        if (issue.liquidpref || issue.interestrate || issue.valcap || issue.discount || issue.optundersecurity || issue.vestcliff || issue.vestingbegins || issue.vestfreq) {
-            return false
-        }
-        else {
-            return true
-        }
-    };*/
-
     $scope.chosenTab = function(tab, type) {
         return (tab.title == type);
     };
@@ -989,22 +867,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         });
     };
 
-    //switches the sidebar based on the type of the issue
-    $scope.trantype = function (type, activetype) {
-        return switchval.trantype(type, activetype);
-    };
-
     // Number of shareholders
     $scope.numShareholders = function() {
         return calculate.numShareholders($scope.ct.investors);
     };
-
-    /*
-    var totalShares = memoize(calculate.totalShares)
-    $scope.totalShares = function(investors) {
-        return $scope.formatAmount(totalShares(investors));
-    };
-    */
 
     // Total Shares | Paid for an issue column (type is either u or a)
     var totalPaid = memoize(calculate.totalPaid);
@@ -1030,13 +896,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return colTotal(header, investors, type);
     };
 
-    /*
-    var sharePercentage = memoize(calculate.sharePercentage);
-    $scope.sharePercentage = function(row, investors) {
-        return sharePercentage(shareSum(row), totalShares(investors));
-    };
-    */
-
     // Total percentage ownership for each shareholder row
     $scope.pricePerShare = function() {
         return $scope.formatDollarAmount(calculate.pricePerShare($scope.ct.securities, $scope.finishedsorting));
@@ -1058,47 +917,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.$watch(function() {return $(".leftBlock").height(); }, function(newValue, oldValue) {
         $scope.stretchheight = {height: String(newValue + 59) + "px"}
     });
-
-    /*
-    function generic_watch(newval, oldval, obj) {
-        if (!newval || !oldval) {return;}
-        if (parseFloat(newval.interestrate) > 100 ||
-            parseFloat(newval.interestrate) < 0)
-        {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].interestrate = oldval.interestrate;
-                }
-            }
-        }
-        if (parseFloat(newval.discount) > 100 ||
-            parseFloat(newval.discount) < 0)
-        {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].discount = oldval.discount;
-                }
-            }
-        }
-        if (parseFloat(newval.vestcliff) > 100 ||
-            parseFloat(newval.vestcliff) < 0)
-        {
-            for (var x=0; x < obj.length; x++) {
-                if (obj[x] && obj[x].tran_id == newval.tran_id) {
-                    obj[x].vestcliff = oldval.vestcliff;
-                }
-            }
-        }
-    }
-
-    $scope.ct.transaction_watch = function(newval, oldval) {
-        generic_watch(newval, oldval, $scope.ct.trans);
-    };
-
-    $scope.issue_watch = function(newval, oldval) {
-        generic_watch(newval, oldval, $scope.ct.securities);
-    };
-    */
 
     $scope.namePaste = function(ev, row) {
         var pastednames = ev.originalEvent.clipboardData.getData('text/plain');
