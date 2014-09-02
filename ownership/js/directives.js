@@ -782,7 +782,11 @@ own.directive('editableTransactionAttributes', [function() {
                         }
                         tran.attrs[k].push(v);
                     } else {
-                        tran.attrs[k] = v;
+                        if (v === "") {
+                            delete tran.attrs[k];
+                        } else {
+                            tran.attrs[k] = v;
+                        }
                     }
                     if ($scope.save)
                     {
@@ -799,7 +803,7 @@ own.directive('editableTransactionAttributes', [function() {
                             delete tran.attrs[k];
                         }
                     } else {
-                        tran.attrs[k] = "";
+                        delete tran.attrs[k];
                     }
                     if ($scope.save)
                     {
