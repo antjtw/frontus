@@ -225,7 +225,8 @@ ownership.filter('attrsForDisplay', function() {
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1 &&
-                val &&
+                val !== undefined &&
+                val !== null &&
                 toString(val).length>0)
             {
                 res[key] = val;

@@ -1,7 +1,10 @@
 <div class="capGuide cap-overflow global">
     <p ng-repeat="key in keys"
        class="belowTitle">
-        <span ng-if="key!='interestrate' && key != 'pariwith'">
+        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type === 'boolean'">
+            {{data.attrs[key] ? "Yes" : "No"}}
+        </span>
+        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type !== 'boolean'">
             {{data.attrs[key] | formatAmount:key}}
         </span>
         <span ng-if="key=='interestrate'">
