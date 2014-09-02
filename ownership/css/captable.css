@@ -1126,6 +1126,7 @@ textarea {
     background-color: #F1F1F1;
     border-left: 1px solid #E3E3E3;
     border-right: 1px solid #E3E3E3;
+    border-top: 1px solid #E3E3E3;
 }
 
 .tableView.grant-table tr.status-row {

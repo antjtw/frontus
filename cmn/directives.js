@@ -1,3 +1,5 @@
+'use strict';
+
 var m = angular.module('commonDirectives', ['ui.select2', 'brijj', 'ui.filters']);
 
 m.directive('groupPeople', function(){
@@ -5,11 +7,11 @@ m.directive('groupPeople', function(){
         scope: {people: "=people"},
         restrict: 'E',
         templateUrl:'/cmn/partials/groupPeople.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location',
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location){
 
             $scope.unChecked = [];
-   
+
             var newGroup = [];
             $scope.groupName = "";
             $scope.manyGroup = [];
@@ -17,7 +19,7 @@ m.directive('groupPeople', function(){
             var newGroups = [];
             $scope.groupData = [];
             var arrayRemove = [];
-    
+
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
                    console.log("success!");
@@ -25,21 +27,21 @@ m.directive('groupPeople', function(){
                     console.log("failed to add group");
                 });
             };
-  
-            function indGroup(group){
-                this.group = group;
-            };
 
-            $scope.parseGroups = function(){        
+            function IndGroup(group){
+                this.group = group;
+            }
+
+            $scope.parseGroups = function(){
               SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
                     $scope.myUserGroups = data;
                     angular.forEach($scope.myUserGroups, function(info){
                         var a = info.json_array_elements;
                         var b = JSON.parse(a);
                         if(b !== ""){
-                            $scope.groupData.push(new indGroup(b));
+                            $scope.groupData.push(new IndGroup(b));
                         }
-                        
+
                     });
                 });
             };
@@ -53,12 +55,12 @@ m.directive('groupPeople', function(){
                         for(var i = 0; i < a.length; i++){
                             if(allGroups.indexOf(a[i])== -1){
                                 allGroups.push(a[i]);
-                            };
-                        };
-                    };
-       
+                            }
+                        }
+                    }
+
                 });
-                return allGroups;              
+                return allGroups;
             };
             $scope.fromFront($scope.people);
 
@@ -73,35 +75,35 @@ m.directive('groupPeople', function(){
                             if(elemGroup.indexOf(gr)==-1){
                                 deleteArray.push(gr);
                             }
-                        });  
+                        });
                     }
                     else if(elem.groups == null){
-                        deleteArray = allGroups
+                        deleteArray = allGroups;
                     }
 
-                    
-                           
-                });       
+
+
+                });
                 return deleteArray;
             };
             // run this when you already have groups that are checked
             $scope.toUncheck = function(person){
-                var uncheckGroup = []
-                var allGroups = $scope.fromFront(person)
+                var uncheckGroup = [];
+                var allGroups = $scope.fromFront(person);
                 angular.forEach(person, function(ind){
                     if(ind.groups != null && ind.groups != undefined){
-                        var indArray = ind.groups.split(", ")
+                        var indArray = ind.groups.split(", ");
                         angular.forEach($scope.selectedGroup, function(group){
                             if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
                                 uncheckGroup.push($scope.selectedGroup.indexOf(group));
-                            };
+                            }
                         });
-                    };
-                    
-                });
-            return uncheckGroup;
+                    }
 
-            }
+                });
+                return uncheckGroup;
+
+            };
             // $scope.doNotCheck($scope.people);
 
             $scope.checkBox = function(person){
@@ -110,19 +112,19 @@ m.directive('groupPeople', function(){
                 var allGroups = $scope.fromFront(person);
                 angular.forEach(allGroups, function(group){
                     if(removeGroups.indexOf(group) === -1 && $scope.selectedGroup.indexOf(group)== -1){
-                    $scope.selectedGroup.push(group);
-                    };
+                        $scope.selectedGroup.push(group);
+                    }
                 });
                 if(unCheck.length > 0){
                     for(var i = unCheck.length - 1; i >=0; i--){
-                        $scope.selectedGroup.splice(unCheck[i], 1)
+                        $scope.selectedGroup.splice(unCheck[i], 1);
                     }
                 }
-                return($scope.selectedGroup)
-            }
-           
+                return($scope.selectedGroup);
+            };
+
             $scope.$watch('people', function(){
-                    // this is working and letting me know whenever groups change  
+                    // this is working and letting me know whenever groups change
                 if($scope.people.length > 0){
                     angular.forEach($scope.people, function(ind){
                         if(ind.groups == undefined){
@@ -131,31 +133,26 @@ m.directive('groupPeople', function(){
                         else{
                             $scope.checkBox($scope.people);
                         }
-                    })
-                      
+                    });
+
                 }
                 else{
                     $scope.selectedGroup = [];
-                }                    
-                   
+                }
+
             }, true);
-            
+
 
 
             $scope.groupIs = function(group){
                 return $scope.selectedGroup.indexOf(group) != -1;
-                console.log($scope.selectedGroup);
             };
 
             $scope.clearPeople = function(array){
                 while(array.length > 0){
                     array.pop();
                 }
-            }
-
-         
-
-           
+            };
 
             $scope.selectGroup = function(group){
                 if($scope.selectedGroup.indexOf(group)=== -1){
@@ -166,47 +163,47 @@ m.directive('groupPeople', function(){
                     $scope.selectedGroup.splice(toDelete, 1);
                     if($scope.unChecked.indexOf(group)==-1){
                         $scope.unChecked.push(group);
-                        console.log($scope.unChecked)
-                    };
-                    
-                };
+                        console.log($scope.unChecked);
+                    }
+
+                }
                 return $scope.selectedGroup;
             };
 
-      
+
             $scope.createGroups = function(person){
                 // if($scope.selectedGroup.length > 0 || $scope.unChecked.length > 0 || $scope.selectedGroup.length > 0){
                     angular.forEach(person, function(info){
                         var bigGroup = [];
-                        var newGroupsArray = []; 
-                        var myOldGroups = "" 
-                        var deleteInx = []; 
+                        var newGroupsArray = [];
+                        var myOldGroups = "";
+                        var deleteInx = [];
                         SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
                             var myInfo = data;
                             if(myInfo.length == 0){
-                                bigGroup.push([info.email, 'investor'])
+                                bigGroup.push([info.email, 'investor']);
                                 newGroupsArray = [];
                             }
                             else{
                                 angular.forEach(myInfo, function(thing){
-                                    bigGroup.push([thing.email, thing.role])
+                                    bigGroup.push([thing.email, thing.role]);
                                     if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == []){
-                                        newGroupsArray = []
-                                        console.log("I don't have groups")
+                                        newGroupsArray = [];
+                                        console.log("I don't have groups");
                                     }
                                     else{
                                         newGroupsArray = JSON.parse(thing.groups);
                                     }
-                                    
-                                })
-                            };                        
+
+                                });
+                            }
                             if($scope.selectedGroup.length > 0){
                                 angular.forEach($scope.selectedGroup, function(selected){
                                     if(newGroupsArray.indexOf(selected)==-1){
                                         newGroupsArray.push(selected);
                                     }
-                                    
-                                })
+
+                                });
                             }
                             if($scope.unChecked.length > 0){
                                 angular.forEach($scope.unChecked, function(unChecked){
@@ -214,11 +211,11 @@ m.directive('groupPeople', function(){
                                          var toDelete = newGroupsArray.indexOf(unChecked);
                                          deleteInx.push(toDelete);
                                          newGroupsArray.splice(toDelete, 1);
-                                    };
+                                    }
                                 });
                             }
                             if($scope.groupName.length > 0){
-                                var checkNew = []
+                                var checkNew = [];
                                 angular.forEach($scope.groupData, function(data){
                                         checkNew.push(data.group);
                                     });
@@ -228,21 +225,21 @@ m.directive('groupPeople', function(){
                                 else{
                                     console.log("already in group");
                                 }
-                                
+
                             }
-                            console.log(newGroupsArray)
+                            console.log(newGroupsArray);
                             // remove empty entries, and cannot add an empty group
                         if(newGroupsArray.indexOf("") > -1){
                            console.log(newGroupsArray.indexOf(""));
-                           var toDelete= newGroupsArray.indexOf("")
-                           newGroupsArray.splice(toDelete, 1)
+                           var toDelete= newGroupsArray.indexOf("");
+                           newGroupsArray.splice(toDelete, 1);
                         }
                         $scope.updateGroup(JSON.stringify(bigGroup), JSON.stringify(newGroupsArray));
-                        
-                    })
+
+                    });
                 });
-               
-            }
+
+            };
 
 
 
@@ -252,10 +249,10 @@ m.directive('groupPeople', function(){
                 });
             };
 
-            
+
         }]
-    }
-})
+    };
+});
 m.directive('peopleFilter', function(){
     return {
         scope: {people: '=people',
@@ -275,38 +272,38 @@ m.directive('peopleFilter', function(){
                 else if($scope.filterParam.param == assignMe){
                     $scope.filterParam.param = undefined;
                 }
-            }
+            };
 
-           
-          
+
+
             $scope.getContacts = function(){
                 var promise = $q.defer();
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                     $scope.myContacts = data;
                     promise.resolve($scope.myContacts);
                 });
-                return promise.promise
+                return promise.promise;
             };
             // thing is scope.mycontacts because that is what the promise resolves
             $scope.getUserRoles = function(){
                 SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
                     $scope.getContacts().then(function(){
                         $scope.myRoles = data;
-                        $scope.myAdmins = $scope.myRoles.length 
-                        $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins
+                        $scope.myAdmins = $scope.myRoles.length;
+                        $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins;
 
                     });
-                   
+
                 });
             };
-            $scope.getUserRoles()
+            $scope.getUserRoles();
 
 
             $scope.getFilterCount = function(){
                 SWBrijj.tblm('account.ind_user_group', ['ind_group', 'count']).then(function(data){
                     $scope.myGroups = data;
                     angular.forEach($scope.myGroups, function(info){
-                        info.ind_group = info.ind_group.replace(/"/g, "")
+                        info.ind_group = info.ind_group.replace(/"/g, "");
                     });
                 });
             };
@@ -321,15 +318,15 @@ m.directive('peopleFilter', function(){
                     $scope.getFilterCount();
                     $scope.getUserRoles();
                 }
-                
+
                 // $scope.getUserRoles();
             }, true);
 
 
 
         }]
-    }
-})
+    };
+});
 
 m.directive('messageSide', function(){
     return {
@@ -339,29 +336,29 @@ m.directive('messageSide', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
 
         function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout) {
-            
+
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
-                    $scope.people = data
+                    $scope.people = data;
                     var array = [];
                     var obj = {};
                     angular.forEach($scope.people, function(info){
-                        array.push(obj[info.email] = info.name)
+                        array.push(obj[info.email] = info.name);
                         if(info.name == ""){
-                            array.push(obj[info.email]= null)
+                            array.push(obj[info.email]= null);
                         }
-                    }) 
-                    $scope.peopleDict = obj  
+                    });
+                    $scope.peopleDict = obj;
                     $scope.getFeed();
-              
-                });               
+
+                });
             };
             $scope.getPeople();
 
             $scope.$watch('peopleDict', function(newdata, olddata){
                 if(newdata){
                     $scope.getLogs();
-                }        
+                }
             });
 
            $scope.poll = 0;
@@ -370,25 +367,25 @@ m.directive('messageSide', function(){
             SWBrijj.tblm('mail.msgstatus', ['our_id', 'event']).then(function(data){
                 $scope.messageCount = data;
                 // $scope.getFeed();
-                var incrementer = 0
+                var incrementer = 0;
                 if($scope.msgstatus.length == $scope.messageCount.length && $scope.poll < 5){
-                    $timeout($scope.newMessages, 2000)
-                    $scope.poll += 1
+                    $timeout($scope.newMessages, 2000);
+                    $scope.poll += 1;
                 }
                 else {
                     $scope.getFeed();
                 }
 
             }).except(function(data){
-                console.log('error')
-            })
-           }
+                console.log('error');
+            });
+           };
 
             $rootScope.$on('new:message', function(x){
                 $scope.newMessages();
 
                 // setTimeout($scope.newMessages, 5500);
-            })
+            });
 
 
             $scope.gotoPerson = function(person) {
@@ -403,7 +400,7 @@ m.directive('messageSide', function(){
             $scope.getLogins = function(){
                 SWBrijj.tblm('global.user_tracker').then(function(data){
                     $scope.logins = data;
-                })
+                });
             };
             $scope.getLogins();
 
@@ -418,60 +415,60 @@ m.directive('messageSide', function(){
                 }).except(function(data){
                     console.log("error");
                 });
-            }
- 
+            };
+
 
             $scope.getLogs = function(){
                 // $scope.getLogins();
                 function Message(time, event, tox, to_names, our_id, foo){
-                    this.time = time
-                    this.event = []
-                    this.tox = []
-                    this.to_names = []
-                    this.our_id = []
-                    this.foo = []
+                    this.time = time;
+                    this.event = [];
+                    this.tox = [];
+                    this.to_names = [];
+                    this.our_id = [];
+                    this.foo = [];
                 }
 
-                function indEvent(our_id, email, event, array, event_time){
-                    this.our_id = our_id
-                    this.email = email
-                    this.event = event
-                    this.array = []
-                    this.event_time = []
+                function IndEvent(our_id, email, event, array, event_time){
+                    this.our_id = our_id;
+                    this.email = email;
+                    this.event = event;
+                    this.array = [];
+                    this.event_time = [];
                 }
 
-                var msgdata = []
+                var msgdata = [];
                 angular.forEach($scope.msgstatus, function(value){
                     if (!msgdata.some(function(timestamp, idx, arr){
                          return timestamp.equals(value.when_requested);
                     })) {
                         msgdata.push(value.when_requested);
                     }
-                     
+
                 });
-                var myEvents = []
+                var myEvents = [];
                 for (var i = 0; i < msgdata.length; i++){
-                   myEvents.push(new Message(msgdata[i]))
-                }           
+                   myEvents.push(new Message(msgdata[i]));
+                }
                 angular.forEach($scope.msgstatus, function(value){
                     for (var i = 0; i < myEvents.length; i++){
                         if(value.when_requested.equals(myEvents[i].time)) {
                             myEvents[i].category = value.category;
-                            var idxtox = myEvents[i].tox.indexOf(value.tox)
+                            var idxtox = myEvents[i].tox.indexOf(value.tox);
                             if(idxtox == -1){
                                 myEvents[i].tox.push(value.tox);
-                            } 
-                            myEvents[i].event.push(value.event)
+                            }
+                            myEvents[i].event.push(value.event);
                             if($scope.peopleDict[value.tox]==null){
-                                myEvents[i].to_names.push(value.tox)
+                                myEvents[i].to_names.push(value.tox);
                             }
                             else {
-                                myEvents[i].to_names.push($scope.peopleDict[value.tox])
+                                myEvents[i].to_names.push($scope.peopleDict[value.tox]);
                             }
-                            var idx = myEvents[i].our_id.indexOf(value.our_id)
+                            var idx = myEvents[i].our_id.indexOf(value.our_id);
                                 if(idx == -1){
-                                    myEvents[i].our_id.push(value.our_id)
-                                    myEvents[i].foo.push(new indEvent(value.our_id, value.tox));
+                                    myEvents[i].our_id.push(value.our_id);
+                                    myEvents[i].foo.push(new IndEvent(value.our_id, value.tox));
                                 }
                                 angular.forEach(myEvents[i].foo, function(myThings){
                                     myThings[value.event_time] = value.event;
@@ -479,58 +476,58 @@ m.directive('messageSide', function(){
                                         myThings.array.push({
                                             time: value.event_time,
                                             event: value.event,
-                                        })
-                                        myThings.event_time.push(value.event_time)
-                                        var newEvent = myThings.event_time.sort()
+                                        });
+                                        myThings.event_time.push(value.event_time);
+                                        var newEvent = myThings.event_time.sort();
                                         var lastEvent = newEvent[newEvent.length -1];
                                         myThings.timestamp = lastEvent;
                                         myThings.event = myThings[lastEvent];
                                         if(myThings.event == 'open'){
-                                            myThings.event = 'opened'
+                                            myThings.event = 'opened';
                                         }
                                         if(myThings.event == 'dropped'){
-                                            myThings.event = 'failed'
+                                            myThings.event = 'failed';
                                         }
                                         if(myThings.event == 'bounce'){
-                                            myThings.event = 'bounced'
+                                            myThings.event = 'bounced';
                                         }
                                         if($scope.peopleDict[myThings.email]==null){
                                             myThings.personName = myThings.email;
                                         }
                                         else {
-                                            myThings.personName = $scope.peopleDict[myThings.email]
+                                            myThings.personName = $scope.peopleDict[myThings.email];
                                         }
                                     }
-                                })
+                                });
                                 angular.forEach($scope.logins, function(login){
                                     if(login.email == value.tox){
                                         myEvents[i].foo.forEach(function(elem){
                                             elem.login = login.logintime;
-                                        })
+                                        });
                                     }
-                                })
+                                });
 
 
                             }
                         }
-                    $scope.message_data = myEvents;      
+                    $scope.message_data = myEvents;
                 });
-               
+
             };
 
 
             $scope.gotoPerson = function(person) {
                 if(person.login == undefined){
                     $scope.hasLink = false;
-                  
+
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + encodeURIComponent(person.email);
                     $location.url(link);
                 }
-                      
-            };    
-            
+
+            };
+
         }]
     };
 });
@@ -541,7 +538,7 @@ m.directive('addPerson', function(){
         // transclude: false,
         restrict: 'E',
         templateUrl: '/cmn/partials/addPerson.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route',
 
         function($scope, $rootScope, SWBrijj, $route) {
 
@@ -551,7 +548,7 @@ m.directive('addPerson', function(){
                         void(x);
                         $rootScope.billing.usage.admins_total += 1;
                         $rootScope.$emit("notification:success", "Admin Added");
-                       
+
                         $route.reload();
                     }).except(function(x) {
                         void(x);
@@ -559,7 +556,7 @@ m.directive('addPerson', function(){
                     });
                 } else {
                     SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
-                        void(x);        
+                        void(x);
                         $rootScope.$emit("notification:success", "Person Added");
                         $route.reload();
                     }).except(function(x) {
@@ -576,10 +573,10 @@ m.directive('addPerson', function(){
                 $scope.newRole = false;
             };
 
-            
+
             $scope.toggleRole = function() {
                 $scope.newRole = !$scope.newRole;
-                
+
             };
 
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -601,34 +598,34 @@ m.directive('composeMessage', function() {
         templateUrl: '/cmn/partials/composeMessage.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', 'navState',
 
-        
+
 
         function($scope, $rootScope, SWBrijj, navState) {
 
             $scope.zombiemessage = function(){
                 if(navState.role == "issuer" && ($rootScope.billing.currentPlan == "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
-                    return "Please update your payment information to use this feature."
+                    return "Please update your payment information to use this feature.";
                 }
                 else{
-                    return null
+                    return null;
                 }
-            }
+            };
             // this returns everyone you have ever emailed. yay
             $scope.getPeople = function(){
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-                    $scope.emailLists = data;          
+                    $scope.emailLists = data;
                 });
-                
+
 
             };
-            $scope.getPeople()
+            $scope.getPeople();
 
             // create the object for selct2
-           $scope.myContacts = []
+           $scope.myContacts = [];
             $scope.groupsAndPeople = function(){
                 function Contact(namex, details){
                     this.namex = namex;
-                    this.details = []
+                    this.details = [];
                 }
 
                 SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
@@ -637,9 +634,9 @@ m.directive('composeMessage', function() {
                         $scope.myContacts.push(new Contact(email.email));
                         angular.forEach($scope.myContacts, function(ct){
                             if(ct.details.indexOf(ct.namex)== -1){
-                                ct.details.push(ct.namex)
+                                ct.details.push(ct.namex);
                             }
-                            
+
                         });
                     });
                 });
@@ -656,14 +653,14 @@ m.directive('composeMessage', function() {
                                     if(JSON.parse(group.json_array_elements) == contact.namex){
                                         if(contact.details.indexOf(group.email)== -1){
                                             contact.details.push(group.email);
-                                        };
-                                    };
+                                        }
+                                    }
                                 });
                             });
                         });
-                    });                
+                    });
                 });
-                
+
             };
             $scope.groupsAndPeople();
 
@@ -680,10 +677,10 @@ m.directive('composeMessage', function() {
                 dialogFade: true
             };
 
-            
+
 
             $scope.triggerUpgradeMessages = $rootScope.triggerUpgradeMessages;
-            
+
             $scope.howMany = function(){
                 if(location.host == 'share.wave'){
                     console.log($scope.message.recipients + "i'm at sharewave!");
@@ -691,7 +688,7 @@ m.directive('composeMessage', function() {
             };
 
             $scope.createRecipients = function(){
-                var recipients = []
+                var recipients = [];
                 angular.forEach($scope.message.recipients, function(recip){
                     angular.forEach($scope.myContacts, function(contact){
                         if(recip === contact.namex){
@@ -699,14 +696,14 @@ m.directive('composeMessage', function() {
                                 // cannot send message to the same person more than once, ie if person is in group and listed, they will only get the email one time.
                                 if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
-                                };
-                                
-                            };
-                        };
-                    })
-                })
-                return recipients
-            }
+                                }
+
+                            }
+                        }
+                    });
+                });
+                return recipients;
+            };
 
 
 
@@ -725,7 +722,7 @@ m.directive('composeMessage', function() {
                 ).then(function(x) {
                     void(x);
                     $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-              
+
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     //this works but i don't know why for the root scope
@@ -741,7 +738,7 @@ m.directive('composeMessage', function() {
             };
 
 
-            
+
             $scope.readyToSend = function(msg) {
                 if ($scope.message.recipients.length===0
                     || msg.subject===""
@@ -754,27 +751,27 @@ m.directive('composeMessage', function() {
             };
 
             $scope.readyToPreview = function(msg){
-                var text = msg.text
+                var text = msg.text;
                 if(text ===""){
                     return false;
                 }
                 else{
                     return true;
                 }
-            }
+            };
 
-          
+
 
             $scope.previewModalOpen = function(msg) {
                 $scope.previewModal = true;
                 $scope.subject = msg.subject;
-                $scope.messagetext=msg.text
+                $scope.messagetext=msg.text;
                 $scope.sendername = $rootScope.person.name;
                 $scope.company = $rootScope.navState.name;
             };
 
             $scope.previewModalClose = function(){
-                $scope.previewModal = false
+                $scope.previewModal = false;
             };
 
         }]
@@ -869,7 +866,7 @@ m.directive('docMiniViewer', function() {
                         } else {
                             $scope.pages.push("/photo/docpg?id=" + $scope.docid[1] + "&investor=false&counterparty=false&page=" + ($scope.lastpage) + "");
                         }
-                        $scope.lastpage += 1
+                        $scope.lastpage += 1;
                     }
                 };
 
@@ -877,7 +874,7 @@ m.directive('docMiniViewer', function() {
                     $scope.currentblock = $scope.lastpage + 3;
                     if (!$scope.document.pages) {
                         SWBrijj.tblm('document.my_company_library', 'doc_id', $scope.document.original).then(function(data) {
-                            $scope.document.pages = data.pages
+                            $scope.document.pages = data.pages;
                             $scope.getPages();
                         });
                     } else {
@@ -928,19 +925,19 @@ m.directive('investorTile', function(){
             }, true);
 
             $scope.getTotalShares = function(){
-                var name = ""
+                var name = "";
                 angular.forEach($scope.cti.investors, function(cap){
-                    name = cap.name;                    
+                    name = cap.name;
                 });
-                return captable.rowSum(name)
+                return captable.rowSum(name);
             };
 
-           
+
             $scope.getTotalInvested = function(){
                 var myTransactions = [];
                 angular.forEach($scope.cti.transactions, function(trans){
                     myTransactions.push(trans);
-                })
+                });
                 return captable.sum_transactions(myTransactions);
             };
 
@@ -955,10 +952,10 @@ m.directive('documentsTile', function(){
         templateUrl:'/cmn/partials/documentsTile.html',
         controller: ['$scope', '$rootScope', 'SWBrijj',
         function($scope, $rootScope, SWBrijj){
-        
+
             $scope.testing = function(){
                 alert("i am a directive");
-            };  
+            };
 
             $scope.getmyDocuments = function(){
                 SWBrijj.tblm("document.this_investor_library").then(function(data){
@@ -966,16 +963,16 @@ m.directive('documentsTile', function(){
                     $scope.loadDocumentActivity();
                 });
             };
-            $scope.getmyDocuments(); 
+            $scope.getmyDocuments();
 
-            
+
         $scope.shortStatus = function(version) {
             if (!version) return "";
             if ($scope.isvoided(version)) {
-                return "Voided"
+                return "Voided";
             }
             else if ($scope.isPendingVoid(version)) {
-                return "Void requested by company"
+                return "Void requested by company";
             } else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
                 return "Rejected by you";
             } else if ($scope.wasJustRejected(version) &&
@@ -1040,12 +1037,7 @@ m.directive('documentsTile', function(){
         $scope.isvoided = function(version) {
             return version.signature_flow > 0 && version.when_void_accepted && version.when_void_requested;
         };
-     
-            
-           
-            
 
         }]
     };
 });
-
