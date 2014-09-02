@@ -26,7 +26,7 @@
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
-               integer
+               float
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
