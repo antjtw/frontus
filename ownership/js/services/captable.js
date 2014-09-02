@@ -588,15 +588,20 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
+        console.log(cell);
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
         } else {
-            var trans = cell.transactions
+            var plus_trans = cell.transactions
                 .filter(function(el) {
                     return el.attrs.investor == cell.investor ||
                            el.attrs.investor_to == cell.investor;});
-            cell.a = sum_transactions(trans);
+            var minus_trans = cell.transactions
+                .filter(function(el) {
+                    return el.attrs.investor_from == cell.investor;
+                });
+            cell.a = sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
     }
     this.setCellAmount = setCellAmount;
