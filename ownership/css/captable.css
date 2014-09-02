@@ -211,7 +211,7 @@ div.last-saved {
     padding-left: 20px;
 }
 
-.tableView.captable input:focus {
+.tableView.captable input:focus, .tableView.captable input.tranViewSelected {
     background-color: #E3E3E3;
 }
 

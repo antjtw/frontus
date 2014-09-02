@@ -487,6 +487,7 @@
                         </span>
                     </span>
                     <input class="capEditHeaders"
+                           ng-class="{tranViewSelected: sec==selectedSecurity}"
                            ui-event="{blur:'updateSecurity(sec)'}"
                            ng-model="sec.new_name"
                            onkeydown="testForEnter(event);">
