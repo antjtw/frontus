@@ -4924,8 +4924,8 @@ li.event.roles > div > ul {
     padding-bottom: 10px;
     text-align: center;
     border: 1px dashed #C7C7C7;
-    width: 200px;
-    margin-left: 40px;
+/*    width: 200px;*/
+    margin-left: 30px;
 }
 
 .noGroups span{
