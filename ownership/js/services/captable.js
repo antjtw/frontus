@@ -1274,7 +1274,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return trans.indexOf(ent.transaction) != -1 &&
                 (!inv || ent.investor == inv.name);
         });
-        return sum_ledger(entries);
+        return sum_ledger(entries) || 0;
     }
     this.securityUnitsFrom = securityUnitsFrom;
     function unitsFrom(kind) {
@@ -1285,7 +1285,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1;
         });
-        return sum_ledger(entries);
+        return sum_ledger(entries) || 0;
     }
     this.unitsFrom = unitsFrom;
     function accumulateProperty(prop) {
