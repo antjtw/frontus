@@ -257,6 +257,7 @@ own.directive('editableCaptableCell', [function() {
         ],
     };
 }]);
+/*
 own.directive('grantCell', [function() {
     return {
         restrict: 'E',
@@ -286,6 +287,7 @@ own.directive('editableGrantCell', [function() {
         ],
     };
 }]);
+*/
 own.directive('securityDetails', [function() {
     return {
         restrict: 'EA',

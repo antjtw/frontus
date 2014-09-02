@@ -550,8 +550,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             cells[c].security = security.new_name;
         }
         var trans = transForSec(security.name);
-        console.log("updateSecurity");
-        console.log(trans);
         for (var t in trans)
         {
             for (var a in trans[t].attrs)
@@ -592,11 +590,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
         } else {
-            var trans = cell.transactions
+            var plus_trans = cell.transactions
                 .filter(function(el) {
                     return el.attrs.investor == cell.investor ||
                            el.attrs.investor_to == cell.investor;});
-            cell.a = sum_transactions(trans);
+            var minus_trans = cell.transactions
+                .filter(function(el) {
+                    return el.attrs.investor_from == cell.investor;
+                });
+            cell.a = sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
     }
     this.setCellAmount = setCellAmount;
@@ -1487,6 +1489,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return false;
         }
     }
+    this.isEvidence = isEvidence;
     function validateTransaction(transaction) {
         var correct = true;
         //console.log("validateTransaction");
