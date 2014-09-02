@@ -81,11 +81,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return $scope.selectedCell.investor == inv
             && $scope.selectedCell.security == sec;
     }
-    $scope.selectCell = function(inv, sec) {
+    $scope.selectCell = function(inv, sec, reselect) {
         $scope.currentTab = 'details';
         $scope.selectedSecurity = $scope.selectedInvestor = null;
         if (captable.cellFor(inv, sec) || $scope.editMode) {
-            if (!$scope.editMode && $scope.selectedCell && cellIsSelected(inv, sec)) {
+            if (!$scope.editMode && ($scope.selectedCell && !reselect) && cellIsSelected(inv, sec)) {
                 $scope.selectedCell = null;
                 History.forget($scope, 'selectedCell');
                 displayIntroSidebar();
@@ -99,9 +99,9 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.$broadcast("newSelection");
         }
     };
-    $scope.selectSecurity = function(security_name) {
+    $scope.selectSecurity = function(security_name, reselect) {
         $scope.selectedCell = $scope.selectedInvestor = null;
-        if (!$scope.editMode && $scope.selectedSecurity &&
+        if (!$scope.editMode && ($scope.selectedSecurity && !reselect) &&
             $scope.selectedSecurity.name == security_name)
         {
             displayIntroSidebar();
@@ -119,10 +119,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
         $scope.$broadcast("newSelection");
     };
-    $scope.selectInvestor = function(investor_name) {
+    $scope.selectInvestor = function(investor_name, reselect) {
         $scope.selectedCell = $scope.selectedSecurity = null;
         //deselectAllCells();
-        if (!$scope.editMode && $scope.selectedInvestor &&
+        if (!$scope.editMode && ($scope.selectedInvestor && !reselect) &&
                 $scope.selectedInvestor.name == investor_name) {
             displayIntroSidebar();
             $scope.selectedInvestor = null;
@@ -246,13 +246,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         switch (selectedThing()) {
             case "selectedCell":
                 $scope.selectCell($scope.selectedCell.investor,
-                                  $scope.selectedCell.security);
+                                  $scope.selectedCell.security, true);
                 break;
             case "selectedInvestor":
-                $scope.selectInvestor($scope.selectedInvestor.name);
+                $scope.selectInvestor($scope.selectedInvestor.name, true);
                 break;
             case "selectedSecurity":
-                $scope.selectSecurity($scope.selectedSecurity.name);
+                $scope.selectSecurity($scope.selectedSecurity.name, true);
                 break;
         }
     }
