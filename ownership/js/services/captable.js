@@ -1505,6 +1505,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         {
             console.log("wrong security type?");
             console.log(transaction.attrs.security_type);
+            console.log(attributes.isLoaded());
+            console.log(attrs);
+            if (!attributes.isLoaded())
+            {//the data could be correct, but the attributes aren't filled in yet
+                return true;
+            }
             return false;
         }
         for (var att in transaction.attrs)

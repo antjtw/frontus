@@ -7,11 +7,11 @@
                             | orderBy:'date' track by $index"
                 ng-switch on="currentTab">
     <accordion-heading>
-        <span ng-click="editEvidence()" ng-class="{invalidTran: !tran.valid}">
+        <span ng-click="toggleTransaction()" ng-class="{invalidTran: !tran.valid}">
             {{tran.effective_date | date:settings.shortdate}} Transaction
         </span>
     </accordion-heading>
-    <div class="darkgray faux-tabs triplet">
+    <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
         <button
                 ng-click="switchCapTab('details');"
                 ng-class="{on: currentTab=='details'}">
@@ -28,7 +28,8 @@
             </span>
         </button><button
                 ng-click="switchCapTab('actions');"
-                ng-class="{on: currentTab=='actions'}">
+                ng-class="{on: currentTab=='actions'}"
+                ng-if="hasActions(tran)">
             <span>
                 <span data-icon="&#xe613;" aria-hidden="true"></span>
                 Actions
@@ -69,9 +70,11 @@
     <div class="capTab" ng-switch-when="documents">
         <div ng-if="tran.evidence_data.length==0"
              class="linkedDocuments">
-            Connect documents that support this transaction by clicking the link below.
+            <div class="noGropus status-toggle">
+                 Connect documents that support this transaction by clicking the link below.
+            
         </div>
-        <div ng-if="tran.evidence_data.length>0"
+        <div ng-if="tran.evidence_data.length > 0"
              class="linkedDocuments">
             <div ng-repeat="doc in tran.evidence_data"
                  class="row-fluid">
