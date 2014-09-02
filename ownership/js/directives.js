@@ -489,7 +489,7 @@ own.directive('editableCellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
-                $scope.makeNewTran = function(kind) {
+                $scope.makeNewTran = function(kind, tran) {
                     if (kind == "convert") {
                         $scope.convertSharesUp();
                     } else {
@@ -497,6 +497,10 @@ own.directive('editableCellDetails', [function() {
                             $scope.cell.security,
                             kind,
                             $scope.cell.investor);
+                        if ($scope.newTran.attrs.hasOwnProperty('transaction_from'))
+                        {
+                            $scope.newTran.attrs.transaction_from = tran.transaction;
+                        }
                     }
                 };
                 $scope.$on('newSelection', function(evt) {

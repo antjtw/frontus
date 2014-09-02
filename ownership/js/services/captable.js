@@ -69,8 +69,9 @@ var Cell = function() {
  * created and maintained, there should be an additional service.
  *
  * How to keep everything in sync:
- * -  bind directly to the ownership object as much as possible
- * -  use emit/broadcast/on to notify downstream services of changes
+ * -  bind directly to the ownership object
+ * -  implement a deepwatch in each service on the ownership object
+ * -  AND / OR use emit/broadcast/on to notify downstream services of changes
  *    so derivative data structures can be updated as necessary
  *
  */
@@ -426,7 +427,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 // Some transactions do not carry underlier data,
                 // so we must get it from the security object,
                 var security = securityFor(tran);
-                if (security.name == 'Common') console.log(security);
                 var investor_matches = false;
                 var security_matches = false;
                 var has_investor_attribute = false;
@@ -446,7 +446,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 for (a in secs)
                 {
                     if (tran.attrs[secs[a]] == sec ||
-                        security.attrs[secs[a]] == sec)
+                        (tran.kind == 'exercise' &&
+                         security.attrs[secs[a]] == sec))
                     {
                         security_matches = true;
                         break;

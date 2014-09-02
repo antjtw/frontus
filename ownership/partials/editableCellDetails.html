@@ -116,7 +116,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li ng-repeat="x in tran.attrs.security_type | validActions: 'transaction'">
-                            <a ng-click="makeNewTran(x)">
+                            <a ng-click="makeNewTran(x, tran)">
                                 {{x}}
                             </a>
                         </li>
