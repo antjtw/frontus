@@ -11,7 +11,7 @@
                      ng-switch on="currentTab">
         <accordion-heading>
             <span>
-                {{tran.effective_date | date:settings.shortdate}} Transaction
+                {{tran.effective_date | date:settings.shortdate}} {{tran.kind}}
             </span>
         </accordion-heading>
         <div class="darkgray faux-tabs">
@@ -31,12 +31,6 @@
             </button>
         </div>
         <div class="capTab" ng-switch-when="details">
-            <div class="capGuide cap-overflow global">
-                <div class="belowTitle">
-                    <span>{{tran.kind}}</span>
-                    <span>Transaction Type</span>
-                </div>
-            </div>
             <transaction-attributes data="tran"></transaction-attributes>
         </div>
         <div class="capTab" ng-switch-when="documents">
