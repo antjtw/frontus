@@ -1201,6 +1201,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      *
      * Sum all ledger entries associated with warrants
      * and convertible debt.
+     *
+     * TODO incorporate effective date (now vs infinity)
      */
     function totalOwnershipUnits(dilution) {
         if (!dilution) dilution = 1;

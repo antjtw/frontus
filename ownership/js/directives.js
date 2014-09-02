@@ -337,7 +337,6 @@ own.directive('editableSecurityDetails', [function() {
             function($scope, displayCopy, captable, $filter) {
 
                 $scope.loaddirective = function() {
-                    console.log($scope.sec);
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
                     $scope.displayAttr = captable.displayAttr;
@@ -387,6 +386,7 @@ own.directive('editableSecurityDetails', [function() {
                     }
                     $scope.saveIt(tran);
                 };
+
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     if (!$scope.sec.creating)
                     {
@@ -837,7 +837,7 @@ own.directive('editableTransactionAttributes', [function() {
                             tran.attrs[k] = v;
                         }
                     }
-                    if ($scope.save)
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
                     {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
@@ -854,7 +854,7 @@ own.directive('editableTransactionAttributes', [function() {
                     } else {
                         delete tran.attrs[k];
                     }
-                    if ($scope.save)
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
                     {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
@@ -870,7 +870,7 @@ own.directive('editableTransactionAttributes', [function() {
                                 var date = Date.parse(dateString);
                                 if (date) {
                                     tran[field] = calculate.timezoneOffset(date);
-                                    if ($scope.save)
+                                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
                                     {
                                         captable.saveTransaction(tran, cell, errorFunc);
                                     }
@@ -880,7 +880,7 @@ own.directive('editableTransactionAttributes', [function() {
                         } else { // User is using calendar
                             if (tran[field] instanceof Date) {
                                 tran[field] = calculate.timezoneOffset(tran[field]);
-                                if ($scope.save)
+                                if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
                                 {
                                     captable.saveTransaction(tran, cell, errorFunc);
                                 }
@@ -897,7 +897,7 @@ own.directive('editableTransactionAttributes', [function() {
                                 var date = Date.parse(dateString);
                                 if (date) {
                                     tran.attrs[field] = moment(calculate.timezoneOffset(date)).format($rootScope.settings.lowercasedate.toUpperCase());
-                                    if ($scope.save)
+                                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
                                     {
                                         captable.saveTransaction(tran, cell, errorFunc);
                                     }
@@ -907,7 +907,7 @@ own.directive('editableTransactionAttributes', [function() {
                         } else { // User is using calendar
                             if (tran.attrs[field] instanceof Date) {
                                 tran.attrs[field] = moment(calculate.timezoneOffset(tran.attrs[field])).format($rootScope.settings.lowercasedate.toUpperCase());
-                                if ($scope.save)
+                                if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
                                 {
                                     captable.saveTransaction(tran, cell, errorFunc);
                                 }
@@ -918,7 +918,7 @@ own.directive('editableTransactionAttributes', [function() {
 
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
-                    if ($scope.save)
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
                     {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
