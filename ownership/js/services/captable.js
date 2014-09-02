@@ -550,8 +550,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             cells[c].security = security.new_name;
         }
         var trans = transForSec(security.name);
-        console.log("updateSecurity");
-        console.log(trans);
         for (var t in trans)
         {
             for (var a in trans[t].attrs)
@@ -588,7 +586,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
-        console.log(cell);
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
