@@ -127,6 +127,9 @@ own.directive('editableCaptableCell', [function() {
                         if ($scope.data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
+                            if ($scope.data.transactions[0]) {
+                                console.log($scope.data.transactions[0]);
+                            }
                             captable.saveTransaction(
                                 $scope.data.transactions[0], true);
                         }
@@ -254,6 +257,7 @@ own.directive('editableCaptableCell', [function() {
         ],
     };
 }]);
+/*
 own.directive('grantCell', [function() {
     return {
         restrict: 'E',
@@ -283,6 +287,7 @@ own.directive('editableGrantCell', [function() {
         ],
     };
 }]);
+*/
 own.directive('securityDetails', [function() {
     return {
         restrict: 'EA',
@@ -328,8 +333,8 @@ own.directive('editableSecurityDetails', [function() {
             sec: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
-        controller: ["$scope", "displayCopy", "captable",
-            function($scope, displayCopy, captable) {
+        controller: ["$scope", "displayCopy", "captable", "$filter",
+            function($scope, displayCopy, captable, $filter) {
 
                 $scope.loaddirective = function() {
                     console.log($scope.sec);
@@ -355,12 +360,15 @@ own.directive('editableSecurityDetails', [function() {
                         $scope.viewme = ['issuer', ev.original];
                     }
                 };
+                $scope.toggleTransaction = function() {
+                    $scope.switchCapTab('details');
+                    $scope.editEvidence();
+                    $scope.newTran = null;
+                };
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
-                    if (!$scope.windowToggle)
-                        $scope.newTran = null;
                 };
                 $scope.addSecurity = function() {
                     $scope.$emit('addSecurity');
@@ -388,6 +396,11 @@ own.directive('editableSecurityDetails', [function() {
                 $scope.editSecName = function(tran) {
                     $scope.sec.name = $scope.sec.attrs.security = tran.attrs.security;
                     captable.saveTransaction(tran);
+                };
+                
+                $scope.hasActions = function(tran) {
+                    var actions = $filter('validActions')(tran.attrs.security_type, 'security', tran.kind);
+                    return actions.length > 0;
                 };
                 $scope.makeNewTran = function(kind) {
                     $scope.newTran = captable.newTransaction(
@@ -473,8 +486,8 @@ own.directive('editableCellDetails', [function() {
                 currentTab: '=currenttab',
                 undo: '=undo'},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate",
-            function($scope, $rootScope, attributes, captable, calculate) {
+        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter",
+            function($scope, $rootScope, attributes, captable, calculate, $filter) {
 
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
@@ -507,6 +520,11 @@ own.directive('editableCellDetails', [function() {
                     $scope.newTran = null;
                 });
                 $scope.nonactions = ["issue security", "grant", "purchase"];
+                
+                $scope.hasActions = function(tran) {
+                    var actions = $filter('validActions')(tran.attrs.security_type, 'transaction', tran.kind);
+                    return actions.length > 0;
+                };
 
                 $scope.addTransaction = function() {
                     var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
@@ -531,12 +549,15 @@ own.directive('editableCellDetails', [function() {
                         $scope.viewme = ['issuer', ev.original];
                     }
                 };
+                $scope.toggleTransaction = function() {
+                    $scope.switchCapTab('details');
+                    $scope.editEvidence();
+                    $scope.newTran = null;
+                };
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
-                    if (!$scope.windowToggle)
-                        $scope.newTran = null;
                 };
                 $scope.submitAction = function(tran) {
                     captable.saveTransaction(tran, true);

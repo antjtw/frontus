@@ -142,7 +142,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.$broadcast("newSelection");
     };
     $scope.updateInvestor = function(investor) {
-        captable.updateInvestorName(investor);
+        if (!investor.new_name || investor.new_name == "")
+            $scope.removeInvestor(investor);
+        else
+            captable.updateInvestorName(investor);
     };
     $scope.removeInvestor = function(investor) {
         captable.removeInvestor(investor);
