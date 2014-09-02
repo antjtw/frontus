@@ -10,8 +10,11 @@
     <div class="body-box">
       <div style="display: inline-block; width: 35%">Graph will go here</div>
       <div style="display: inline-block">
+        
+            
 
-        <!-- <table>
+
+        <table class="table">
           <thead>
             <tr>
               <th>Document Name</th>
@@ -19,24 +22,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="myDoc in myDocs" style="width:350px">
-              <th>{{myDoc.docname}}</th>
-              <th>{{myDoc.signature_status}}</th>
-            </tr>
+            <tr ng-repeat="myDoc in myDocs">
+              <td>col1</td>
+              <td>{{shortStatus(myDoc)}}</td>
+          </tbody>
 
-        </table> -->
-        <div ng-repeat="myDoc in myDocs" style="display: inline-block; min-width: 400px; border-bottom: 1px solid black">
-          <div style="display: inline-block;  padding-right: 40px;">
-            <div style="padding-bottom: 20px">Document Name</div>
-            {{myDoc.docname}}
-          </div>
-          <div style="display: inline-block; float: right;">
-            <div style="padding-bottom: 20px">Document Status</div>
-           
-            {{shortStatus(myDoc)}}
-
-          </div>
-        </div>
+        </table>
+       
       </div>      
     </div>
   </div>

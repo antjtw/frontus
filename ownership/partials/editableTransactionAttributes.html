@@ -17,14 +17,12 @@
             {{displayName(key)}}
         </span>
         <input ng-if="useTextField(key) && !useDatePicker(key)"
-               id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
         <input ng-if="useNumberField(key) && !useDatePicker(key)"
-               id="date{{::data.attrs.$$hashKey}}"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
