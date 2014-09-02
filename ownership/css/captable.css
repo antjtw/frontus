@@ -2455,3 +2455,7 @@ span.tour-icon.issue-cog + .tooltip {
 .action-button.standard-button {
     margin: 20px 0 0 20px;
 }
+
+.linkedDocuments .noGroups{
+    padding-right: 40px;
+}
