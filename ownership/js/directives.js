@@ -670,7 +670,7 @@ own.directive('transactionAttributes', [function() {
         replace: true,
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-    // TODO refactor to use attributes service
+        // TODO refactor to use attributes service
         controller: ["$scope", "$rootScope", "captable", "displayCopy",
             function($scope, $rootScope, captable, displayCopy) {
                 $scope.displayAttr = captable.displayAttr;
@@ -772,10 +772,6 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
-                var datefields = [];
-                $scope.useDatePicker = function(key) {
-                    return datefields.indexOf(key) >= 0;
-                };
                 $scope.isRequired = function(key) {
                     return $filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key);
                 };
@@ -826,7 +822,7 @@ own.directive('editableTransactionAttributes', [function() {
                             if (evt != 'blur')
                                 keyPressed = true;
                             var dateString = angular.element(field + '#' + tran.$$hashKey).val();
-                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                            var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                             if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                                 var date = Date.parse(dateString);
                                 if (date) {

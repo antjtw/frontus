@@ -16,20 +16,26 @@
 
         <table class="table">
           <thead>
-            <tr>
-              <th>Document Name</th>
+            <tr style="color: #1E2D3D">
+              <th style="padding-right: 80px" >Document Name</th>
               <th>Document Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="myDoc in myDocs">
-              <td>col1</td>
+            <tr ng-repeat="myDoc in myDocs" class="table-border">
+              <td ng-click="gotoDoc(myDoc)">{{myDoc.docname}}</td>
               <td>{{shortStatus(myDoc)}}</td>
           </tbody>
 
         </table>
-       
       </div>      
+    </div>
+    <div style="float: right; padding-right: 40px">
+      <a ng-href="/app/documents/investor-list">
+        <div class="standard-button blue">
+          <button class="btn" >View</button>
+        </div>
+      </a>
     </div>
   </div>
 </div> 

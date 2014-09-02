@@ -4965,4 +4965,8 @@ textarea.email-text {
 
 }
 
+.table-border{
+   border-bottom: 1px solid rgb(241, 241, 241); 
+}
+
 

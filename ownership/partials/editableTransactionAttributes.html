@@ -16,28 +16,19 @@
             ng-if="(!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))">
             {{displayName(key)}}
         </span>
-        <input ng-if="useTextField(key) && !useDatePicker(key)"
+        <input ng-if="useTextField(key)"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
-        <input ng-if="useNumberField(key) && !useDatePicker(key)"
+        <input ng-if="useNumberField(key)"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                integer
                ng-model="data.attrs[key]"
                ng-required="isRequired(key)">
-        <input ng-if="useDatePicker(key)"
-               id="{{key}}{{::data.$$hashKey}}"
-               ng-model="data.attrs[key]"
-               ui-event="{blur: 'saveItDate(data, true, undo, $event, key)'}"
-               ng-change="saveItDate(data, true, undo, $event, key)"
-               data-date-format={{settings.lowercasedate}}
-               type="text"
-               ng-required="isRequired(key)"
-               bs-datepicker>
         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
             <li class="dropdown standard">
             <a class="dropdown-toggle">
@@ -85,8 +76,10 @@
                 </ul>
             </li>
         </ul>
-        <span class="locked-security" ng-repeat="sec in data.attrs[key]" ng-if="pickMulti(key)">
-            {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+        <span ng-if="pickMulti(key)">
+            <span class="locked-security" ng-repeat="sec in data.attrs[key]">
+                {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+            </span>
         </span>
         <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
             <li class="dropdown standard">
