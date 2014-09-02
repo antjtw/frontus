@@ -446,7 +446,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 for (a in secs)
                 {
                     if (tran.attrs[secs[a]] == sec ||
-                        security.attrs[secs[a]] == sec)
+                        (tran.kind == 'exercise' &&
+                         security.attrs[secs[a]] == sec))
                     {
                         security_matches = true;
                         break;
