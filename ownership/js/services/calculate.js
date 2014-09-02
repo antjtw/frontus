@@ -99,7 +99,7 @@ ownership.service('calculate', function () {
                         vesting[tran.investor] +=
                             tran.units * (tran.vestcliff / 100);
                     } else {
-                        vesting[tran.investor] = 
+                        vesting[tran.investor] =
                             tran.units * (tran.vestcliff / 100);
                     }
                     var cycleDate = angular.copy(tran.date);
@@ -483,38 +483,6 @@ ownership.service('calculate', function () {
         }, 0);
     }
     this.totalShares = totalShares;
-
-    //Calculates the total for a column, will do either shares or money depending
-    //// TODO this won't work
-    this.colTotal = function (header, investors, type) {
-        var total = 0;
-        for (var i = 0, a = investors.length; i < a; i++) {
-            if (investors[i].cells[header]) {
-                var possfloat = parseFloat(investors[i].cells[header][type]);
-                if (!isNaN(possfloat) && String(header) != "$$hashKey") {
-                    total += possfloat;
-                }
-            }
-        }
-        return total;
-    };
-
-    //Calculates the total for a column, without unissued shares
-    this.colTotalIssued = function (header, investors, type) {
-        var total = 0;
-        angular.forEach(investors, function (row) {
-            if (row.editable == "yes") {
-                for (var key in row.cells) {
-                    if (key == header) {
-                        if (!isNaN(parseFloat(row.cells[key][type])) && String(key) != "$$hashKey") {
-                            total = total + parseFloat(row.cells[key][type]);
-                        }
-                    }
-                }
-            }
-        });
-        return total;
-    };
 
     //Calculates the total money for all securities and transactions
     this.totalPaid = function (investors) {
