@@ -225,7 +225,8 @@ ownership.filter('attrsForDisplay', function() {
         var res = {};
         angular.forEach(attr, function(val, key) {
             if (hide_attrs.indexOf(key) === -1 &&
-                val &&
+                val !== undefined &&
+                val !== null &&
                 toString(val).length>0)
             {
                 res[key] = val;
@@ -370,22 +371,22 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                              "units",
                              "amount",
                              "ppshare",
-                             "liquidpref",
-                             "partpref",
-                             "dragalong",
-                             "tagalong",
                              "price",
                              "terms",
                              "vestingbegins",
+                            "interestratefreq",
                              "vestcliff",
                              "vestfreq",
-                             "interestratefreq",
                              "valcap",
                              "discount",
                              "term",
                              "valcapsafe",
                              "discount",
-                             "term"];
+                             "term",
+                            "liquidpref",
+                            "partpref",
+                            "dragalong",
+                            "tagalong"];
     var attrs = attributes.getAttrs();
     return function(tp, sec_type, kind) {
         var res = orderedAttributes.indexOf(tp);

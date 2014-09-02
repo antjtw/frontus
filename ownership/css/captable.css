@@ -309,10 +309,6 @@ td:hover .hoverable {
     cursor: pointer;
 }
 
-.tableView.captable .unissued-rows td.viewName:hover, .tableView.captable .unissued-rows td.tableFields:hover {
-    background-color: #FFFFFF;
-}
-
 .tableView.captable .tranSelected input {
     padding: 7px 0 7px 4px;
 }
@@ -620,7 +616,6 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-left: 20px;
     display: inline-block;
     font-family: "FS Elliot Web Light", sans-serif;
-    width: 100%;
 }
 
 .invalidTran {
