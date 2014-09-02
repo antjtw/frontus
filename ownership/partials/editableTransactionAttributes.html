@@ -43,6 +43,26 @@
                 </li>
             </ul>
         </ul>
+        <ul class="dropdown-list drop-selector" ng-if="useBool(key)">
+            <li class="dropdown standard">
+            <a class="dropdown-toggle">
+                <span ng-if="data.attrs[key] == true">Yes</span>
+                <span ng-if="data.attrs[key] == false">No</span>
+                <span class="invisible-drop">'</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click="setIt(data, true, undo, key, true)">
+                        Yes
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="setIt(data, true, undo, key, false)">
+                        No
+                    </a>
+                </li>
+            </ul>
+        </ul>
         <ul class="dropdown-list drop-selector" ng-if="pickInvestor(key)">
             <li class="dropdown standard">
             <a class="dropdown-toggle">
