@@ -370,10 +370,6 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                              "units",
                              "amount",
                              "ppshare",
-                             "liquidpref",
-                             "partpref",
-                             "dragalong",
-                             "tagalong",
                              "price",
                              "terms",
                              "vestingbegins",
@@ -385,7 +381,11 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                              "term",
                              "valcapsafe",
                              "discount",
-                             "term"];
+                             "term",
+                            "liquidpref",
+                            "partpref",
+                            "dragalong",
+                            "tagalong"];
     var attrs = attributes.getAttrs();
     return function(tp, sec_type, kind) {
         var res = orderedAttributes.indexOf(tp);
