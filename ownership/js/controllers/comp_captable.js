@@ -238,20 +238,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
     */
-    /* moved to captable service
-    $scope.rowFor = function(inv) {
-        return $scope.ct.cells
-            .filter(function(cell) {
-                return cell.investor == inv;
-            });
-    };
-    $scope.rowSum = function(inv) {
-        return $scope.rowFor(inv)
-            .reduce(function(prev, cur, idx, arr) {
-                return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
-            }, 0);
-    };
-    */
     $scope.canHover = function(cell) {
         return cell && (cell.u || cell.a);
     };
@@ -450,7 +436,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     // Captable Transfer Modal
-
+    /* don't think we're using this anymore
     $scope.ct.transferSharesUp = function(activetran) {
         $scope.ct.transferModal = true;
         $scope.ct.transfer = {};
@@ -475,7 +461,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     $scope.ct.transferSharesClose = function() {
         $scope.ct.transferModal = false;
-    };
+    };*/
 
     $scope.ct.transferopts = {
         backdropFade: true,
@@ -561,7 +547,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     // Captable transaction delete modal
-    $scope.tranDeleteUp = function (transaction) {
+    /*$scope.tranDeleteUp = function (transaction) {
         $scope.deleteTran = transaction;
         $scope.tranDelete = true;
     };
@@ -569,7 +555,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.deleteclose = function () {
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.tranDelete = false;
-    };
+    };*/
 
     //modal for updating issue fields that have different underlying values
 
