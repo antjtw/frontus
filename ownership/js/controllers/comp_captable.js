@@ -242,6 +242,19 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         reselectCurrentSelection();
     };
 
+    $scope.tabvisible = function(tab) {
+        if (tab.title == "Activity") {
+            if (tab.active === true &&
+                    !(!$scope.editMode && $scope.fieldActive())) {
+                tab.active = false;
+                $scope.tabs[0].active = true;
+            }
+            return !$scope.editMode;
+        } else {
+            return true;
+        }
+    };
+
     function editableDetailsVisible() {
         return $scope.sideBar == 2 || $scope.sideBar == 1;
     }
