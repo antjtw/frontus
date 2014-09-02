@@ -1476,6 +1476,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             updateEvidenceInDB(captable.evidence_object, action);
         }
     };
+    this.toggleForEvidence = toggleForEvidence
+
     function isEvidence(ev) {
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
@@ -1487,6 +1489,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return false;
         }
     }
+    this.isEvidence = isEvidence;
+
     function validateTransaction(transaction) {
         var correct = true;
         //console.log("validateTransaction");
