@@ -876,3 +876,22 @@ m.directive('integer', function() {
         }
     };
 });
+
+m.directive('float', function() {
+    // add number formatting to an input
+    // useful when <input type="number"> can't be styled correctly
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, elem, attr, ctrl) {
+            // ctrl is ngModel controller
+            ctrl.$parsers.unshift(function(val) {
+                var ret = parseFloat(val);
+                if (isNaN(ret)) {
+                    ret = undefined;
+                }
+                return ret;
+            });
+        }
+    };
+});
