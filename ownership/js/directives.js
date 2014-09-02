@@ -764,10 +764,6 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.useDropdown = function(key) {
                     return isArray(inputType(key));
                 };
-                var datefields = [];
-                $scope.useDatePicker = function(key) {
-                    return datefields.indexOf(key) >= 0;
-                };
                 $scope.isRequired = function(key) {
                     return $filter('isRequired')($scope.data.attrs.security_type, $scope.data.kind, key);
                 };
