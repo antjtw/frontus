@@ -185,9 +185,9 @@ ownership.filter('securityUnitLabel', function() {
 ownership.filter('formatAmount', function($rootScope) {
     return function(amount, key) {
         var settings = $rootScope.settings;
-        var nums = ["units", "forfeited"];
+        var nums = ["units", "forfeited", "totalauth"];
         var moneys = ["ppshare", "price", "effectivepps",
-                      "valcap", "amount"];
+                      "valcap", "amount", "premoney", "postmoney"];
         if (!amount || (typeof(amount)!="string" && isNaN(amount))) {
             if (amount != 0) {
                 amount = null;
