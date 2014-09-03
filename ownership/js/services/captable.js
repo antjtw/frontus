@@ -621,6 +621,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     };
     this.updateSecurityName = function(security) {
+        if (captable.securities.some(function(sec) {
+            return (sec.name === security.new_name);
+        })) {
+            // duplicated security name
+            security.new_name = security.new_name + " (1)";
+            return this.updateSecurityName(security);
+        }
         var cells = colFor(security.name);
         for (var c in cells)
         {
@@ -659,6 +666,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
             cell.u = sum_ledger(cell.ledger_entries);
+            console.log(cell.u);
         }
     }
     this.setCellUnits = setCellUnits;
@@ -669,7 +677,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         } else {
             var transactionkeys = [];
             angular.forEach(cell.transactions, function(tran) {
-                transactionkeys.push(tran.transaction)
+                transactionkeys.push(tran.transaction);
             });
             var plus_trans = cell.transactions
                 .filter(function(el) {
@@ -693,13 +701,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return trans.reduce(sumTransactionAmount, 0);
     }
     this.sum_transactions = sum_transactions;
-    
+
     function cleanCell(cell) {
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==cell.security && el.attrs.security_type;
             })[0];
-        var defaultTran = newTransaction(cell.security, defaultKind(sec_obj.attrs['security_type']), cell.investor);
+        var defaultTran = newTransaction(cell.security, defaultKind(sec_obj.attrs.security_type), cell.investor);
         for (var t in cell.transactions)
         {
             var del = true;
@@ -717,7 +725,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 deleteTransaction(cell.transactions[t], cell, true);
             }
         }
-    };
+    }
 
     function updateCell(cell) {
         cell.ledger_entries = cell.transactions = null;
@@ -877,7 +885,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // use ng-change instead of ui-event?
         //
         // or maybe add a save button for now
+        // TODO: return a promise instead of having errorFunc
         console.log("saveTransaction");
+        for (var key in tran.attrs) {
+            if (tran.attrs[key] === null) {
+                delete tran.attrs[key];
+            }
+        }
         console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
@@ -1010,7 +1024,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
             }
         }
-    };
+    }
     this.deleteTransaction = deleteTransaction;
     this.deleteSecurityTransaction = function(tran, sec) {
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
@@ -1201,7 +1215,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         security.effective_date = new Date(Date.now());
         security.insertion_date = new Date(Date.now());
         initAttrs(security, 'Option', 'issue security');
-        security.attrs.security = name;
+        security.attrs.security = security.name;
         security.attrs.security_type = 'Option';
         security.creating = true;
 
@@ -1220,9 +1234,16 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // NOTE assume Option for now, user can change,
         //var tran = newTransaction("Option", "issue security");
         //tran.kind = "issue_security";
-        console.log("addSecurity");
-
         var tran = security.transactions[0]; //the transaction that was edited
+
+        if (captable.securities.some(function(sec) {
+            return (sec.name === tran.attrs.security);
+        })) {
+            // duplicated security name
+            tran.attrs.security = tran.attrs.security + " (1)";
+            return this.addSecurity(security);
+        }
+        console.log("addSecurity");
 
         security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
@@ -1638,7 +1659,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             updateEvidenceInDB(captable.evidence_object, action);
         }
     };
-    
+
 
 
     function isEvidence(ev) {
