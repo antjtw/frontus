@@ -5,6 +5,6 @@
         <div ng-transclude></div>
     </div>
 </div>
-<button class="right-rail-button" ng-click="complexSideToggleButton()" ng-class="{showRightTab:windowToggle}">
+<button class="right-rail-button" ng-click="complexSideToggleButton(); toggleWindow()" ng-class="{showRightTab:windowToggle}">
     <span ng-class="{'arrow-flip': sideToggle}" data-icon="{{!windowToggle?'&#xe033;':'&#xe00f;'}}" aria-hidden="true"></span>
 </button>
