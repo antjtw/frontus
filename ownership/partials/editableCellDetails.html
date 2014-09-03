@@ -109,6 +109,11 @@
                 Finished!
             </button>
         </div>
+        <span class="delete-link"
+              data-icon="&#xe00c;"
+              ng-click="captable.deleteTransaction(tran, cell);">
+            Delete transaction
+        </span>
     </div>
     <div class="capTab" ng-switch-when="actions">
         <div ng-class="{'actionpicker': !newTran}" class='rightTitle left-space'>
@@ -139,6 +144,11 @@
                 </button>
             </div>
         </div>
+        <span class="delete-link"
+              data-icon="&#xe00c;"
+              ng-click="captable.deleteTransaction(tran, cell);">
+            Delete transaction
+        </span>
     </div>
     </accordion-group>
 </accordion>
