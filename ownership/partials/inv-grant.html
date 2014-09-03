@@ -195,34 +195,32 @@
                 -->
             </div>
 
-
             <internal-right-rail toggle-side="sideToggle">
-                <div ng-switch on="sideBar"
+                <div ng-switch on="selectedThing()"
                      class="span4 capright"
                      ng-style="viewportheight">
-                    <span ng-switch-when="1">
-                        <div class="headsection tabbed row-fluid">
-                            <h1>{{activeInvestor}}</h1>
+                    <span ng-switch-when="selectedCell"
+                          ng-switch on="selectedCell.kind">
+                        <div ng-switch-when="granted">
+                             <cell-details cell="selectedCell"
+                                           currentTab="currentTab">
+                             </cell-details>
                         </div>
-
-                        <div class="capGuide grants" ng-show="mode == 1">
-                            <h2>Transaction Information</h2>
+                        <div ng-switch-when="vested">
+                             <cell-summary cell="selectedCell">
+                             </cell-summary>
                         </div>
-
-                        <div class="capGuide grants" ng-show="mode == 2">
-                            <h2>Forfeit Information</h2>
+                        <div ng-switch-when="exercised">
+                             <cell-summary cell="selectedCell">
+                             </cell-summary>
                         </div>
-
-                        <div class="capGuide grants" ng-show="mode == 3">
-                            <h2>Exercised Information</h2>
-                        </div>
-
-                        <div class="capGuide grants" ng-show="mode == 4">
-                            <h2>Vested Information</h2>
+                        <div ng-switch-when="forfeited">
+                             <cell-summary cell="selectedCell">
+                             </cell-summary>
                         </div>
                     </span>
 
-                    <span ng-switch-when="2">
+                    <span ng-switch-when="selectedInvestor">
                         <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
                     </span>
                     <span class="capGuide railpadding" ng-switch-default>
