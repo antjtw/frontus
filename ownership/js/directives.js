@@ -111,9 +111,9 @@ own.directive('editableCaptableCell', [function() {
                 selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
-        controller: ["$scope", "$rootScope",
+        controller: ["$scope", "$rootScope", "$filter",
                      "calculate", "captable", "History",
-            function($scope, $rootScope, calculate, captable, history) {
+            function($scope, $rootScope, $filter, calculate, captable, history) {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
@@ -136,9 +136,6 @@ own.directive('editableCaptableCell', [function() {
                         if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
-                            if (data.transactions[0]) {
-                                console.log("saving", data.transactions[0]);
-                            }
                             captable.saveTransaction(
                                 data.transactions[0], true);
                         }
@@ -158,11 +155,10 @@ own.directive('editableCaptableCell', [function() {
                     //console.log(newval, typeof(newval));
                     if (angular.isDefined(newval)) {
                         var num = 0;
-                        if (newval != null)
+                        if (newval !== null)
                         {
                             num = parseFloat(newval);
                         }
-                        console.log("newval", newval, num);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
                         }
@@ -170,13 +166,13 @@ own.directive('editableCaptableCell', [function() {
                         updateAttr('units', num);
 
                     } else {
-                        return ($scope.data ? $scope.data.u.toString() : null);
+                        return ($scope.data ? $filter('formatAmount')($scope.data.u, 'units') : null);
                     }
                 };
                 $scope.amount = function(newval) {
                     if (angular.isDefined(newval)) {
                         var num = 0;
-                        if (newval != null)
+                        if (newval !== null)
                         {
                             num = parseFloat(newval);
                         }
@@ -186,7 +182,7 @@ own.directive('editableCaptableCell', [function() {
                         $scope.data.a = num;
                         updateAttr('amount', num);
                     } else {
-                        return ($scope.data ? $scope.data.a : null);
+                        return ($scope.data ? $filter('formatAmount')($scope.data.a, 'amount') : null);
                     }
                 };
                 $scope.opts = {
@@ -597,11 +593,11 @@ own.directive('cellDetails', [function() {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
-                
+
                 $scope.hasDocuments = function(tran) {
                     return tran.evidence_data && (tran.evidence_data.length > 0);
                 };
-                
+
                 $scope.toggleTransaction = function() {
                     $scope.switchCapTab('details');
                 };
@@ -707,7 +703,7 @@ own.directive('editableCellDetails', [function() {
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     // $scope.ct.evidence_object.evidence_data = [];
-                    
+
                     $scope.windowToggle = (obj ? true : false);
                     // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
