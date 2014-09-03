@@ -519,8 +519,8 @@ own.directive('editableSecurityDetails', [function() {
                     }
                 };
 
-                $scope.performConvert = function (splittran) {
-                    splittran.attrs.ratio = parseFloat(splittran.ratioa) / parseFloat(splittran.ratiob)
+                $scope.performSplit = function (splittran) {
+                    splittran.attrs.ratio =  parseFloat(splittran.ratiob) / parseFloat(splittran.ratioa);
                     captable.saveTransaction(splittran, true);
                 };
 
