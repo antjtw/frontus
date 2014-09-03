@@ -7,7 +7,7 @@
                             | orderBy:'date' track by $index"
                 ng-switch on="currentTab">
     <accordion-heading>
-        <span ng-click="toggleTransaction()" ng-class="{invalidTran: !tran.valid}">
+        <span ng-click="toggleTransaction()">
             {{tran.effective_date | date:settings.shortdate}} {{tran.kind}}
         </span>
     </accordion-heading>
@@ -64,7 +64,7 @@
         </span>
     </div>
     <div class="capTab" ng-switch-when="documents">
-        <div ng-if="tran.evidence_data.length==0 || tran.evidence_data==null" class="linkedDocuments">
+        <div ng-if="tran.evidence_data.length==0 && !windowToggle|| tran.evidence_data==null && !windowToggle"  class="linkedDocuments">
              <div class="noGroups" ng-click="editEvidence(tran)">
                 Connect documents that support this transaction by clicking the link below.
                 <span>Add Documents</span>
@@ -97,11 +97,11 @@
                 </span>
             </div>
         </div>
-        <span ng-hide="windowToggle || tran.evidence_data == null"
+        <span ng-show ="!windowToggle && tran.evidence_data.length > 0"
               class="blue-link delete-link linkedDocuments"
               ng-click="editEvidence(tran);"
               data-icon="&#xe008;">
-            Add Documents please
+            Add Documents
         </span>
         <div ng-show="windowToggle"
              class="standard-button linkedDocuments">
@@ -153,8 +153,7 @@
     </accordion-group>
 </accordion>
 <span class="add-transaction-link"
-      ng-click="addTransaction()"
-      ng-if="currentTab!='documents'">
+      ng-click="addTransaction()">
   <span data-icon="&#xe053;" aria-hidden="true"></span>
   <span>Add {{captable.defaultKind(cell.transactions[0].attrs.security_type)}}</span>
 </span>
