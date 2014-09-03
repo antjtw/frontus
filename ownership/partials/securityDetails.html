@@ -15,7 +15,7 @@
         <accordion-heading>
             <span>{{tran.effective_date | date:settings.shortdate}}</span>
         </accordion-heading>
-        <div class="darkgray faux-tabs">
+        <div class="darkgray faux-tabs" ng-class="{single: !hasDocuments(tran)}">
             <button
                     ng-click="switchCapTab('details');"
                     ng-class="{on: currentTab=='details'}">
@@ -25,6 +25,7 @@
                 </span>
             </button><button
                     ng-click="switchCapTab('documents');"
+                    ng-if="hasDocuments(tran)"
                     ng-class="{on: currentTab=='documents'}">
                 <span>
                     <span data-icon="&#xe009;" aria-hidden="true"></span>
