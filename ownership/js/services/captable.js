@@ -885,7 +885,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // use ng-change instead of ui-event?
         //
         // or maybe add a save button for now
+        // TODO: return a promise instead of having errorFunc
         console.log("saveTransaction");
+        for (var key in tran.attrs) {
+            if (tran.attrs[key] === null) {
+                delete tran.attrs[key];
+            }
+        }
         console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
