@@ -63,19 +63,20 @@
         </span>
     </div>
     <div class="capTab" ng-switch-when="documents">
-        <div ng-if="tran.evidence_data.length==0 || tran.evidence_data==null"
-             class="linkedDocuments">
-            Connect documents that support this transaction by clicking the link below.
+        <div ng-if="tran.evidence_data.length==0 || tran.evidence_data==null" class="linkedDocuments">
+             <div class="noGroups" ng-click="editEvidence(tran)">
+                Connect documents that support this transaction by clicking the link below.
+                <span>Add Documents</span>
+                <span data-icon="&#xe016;" aria-hidden="true"></span>
+            </div>
         </div>
         <div ng-if="tran.evidence_data.length > 0"
              class="linkedDocuments">
-             {{tran.evidence_data}}
             <div ng-repeat="doc in tran.evidence_data"
                  class="row-fluid">
                 <ul class="pull-left">
                     <li>
                         <span ng-click="viewEvidence(doc)">
-
                             {{doc.docname}}
                         </span>
                     </li>
@@ -84,13 +85,18 @@
                             {{doc.name || doc.investor}}'s version
                         </span>
                     </li>
+                    <li ng-if="!doc.name && !doc.investor">
+                        <span>
+                        Orignal version
+                        </span>
+                    </li>
                 </ul>
                 <span class="pull-right" data-icon="&#xe00f;"
-                      ng-click="removeEvidence(doc, tran)">
+                      ng-click="captable.removeEvidence(doc, tran)">
                 </span>
             </div>
         </div>
-        <span ng-hide="windowToggle"
+        <span ng-hide="windowToggle || tran.evidence_data == null"
               class="blue-link delete-link linkedDocuments"
               ng-click="editEvidence(tran);"
               data-icon="&#xe008;">
