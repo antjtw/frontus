@@ -41,15 +41,13 @@
 						</div>
 						<div ng-show="totalIssued != 0">
                             <div class="detail-row row-fluid">
-                                <div ng-show="graphdata[1][1][0].percent == 0 || graphdata[1][1][0].percent == 0 || graphdata[2][1][0].percent == 0" class="spacing"></div>
-                                <div ng-show="(graphdata[1][1][0].percent == 0 && graphdata[1][1][0].percent == 0) || (graphdata[2][1][0].percent == 0 && graphdata[1][1][0].percent == 0) || (graphdata[0][1][0].percent == 0 || graphdata[2][1][0].percent == 0)" class="spacing"></div>
+                                <div ng-show="graphdata[0][1][0].percent == 0 || graphdata[1][1][0].percent == 0 || graphdata[2][1][0].percent == 0" class="spacing"></div>
+                                <div ng-show="(graphdata[0][1][0].percent == 0 && graphdata[1][1][0].percent == 0) || (graphdata[2][1][0].percent == 0 && graphdata[1][1][0].percent == 0) || (graphdata[0][1][0].percent == 0 && graphdata[2][1][0].percent == 0)" class="spacing"></div>
                                 <div ng-show="graphdata[0][1][0].percent != 0" class="span6">
                                     <d3expdonut class="exploded-donut" data='graphdata[0][1]'></d3expdonut>
                                     <h2>{{graphdata[0][0].name}}</h2>
                                     <h2>{{graphdata[0][0].issued}} Issued</h2>
                                     <h2>${{graphdata[0][0].amount}} Invested</h2>
-
-
                                 </div>
                                 <div ng-show="graphdata[1][1][0].percent != 0" class="span6">
                                     <d3expdonut class="exploded-donut" data='graphdata[1][1]'></d3expdonut>
