@@ -695,7 +695,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.sum_transactions = sum_transactions;
     
     function cleanCell(cell) {
-        console.log("clean cell", cell.transactions.length);
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==cell.security && el.attrs.security_type;
