@@ -557,8 +557,8 @@ own.directive('cellSummary', [function() {
         restrict: 'E',
         scope: {cell: '='},
         templateUrl: '/ownership/partials/cellSummary.html',
-        controller: ["$scope", "captable",
-            function($scope, captable) {
+        controller: ["$scope", "$rootScope", "captable",
+            function($scope, $rootScope, captable) {
 
             }],
     };
