@@ -7,7 +7,7 @@
                             | orderBy:'date' track by $index"
                 ng-switch on="currentTab">
     <accordion-heading>
-        <span ng-click="toggleTransaction()" ng-class="{invalidTran: !tran.valid}">
+        <span ng-click="toggleTransaction()">
             {{tran.effective_date | date:settings.shortdate}} {{tran.kind}}
         </span>
     </accordion-heading>
