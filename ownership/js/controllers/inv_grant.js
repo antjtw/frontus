@@ -13,6 +13,7 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
 
+    $scope.sideToggle = false;
     $scope.optionView = "Security";
 
     $scope.shown = null;
@@ -49,6 +50,30 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
             $scope.selectedCell = captable.grantCellFor(inv, sec, kind);
         }
     };
+    $scope.selectSecurity = function(sec) {
+        $scope.selectedCell = $scope.selectedInvestor = null;
+        if ($scope.selectedSecurity &&
+                $scope.selectedSecurity.security == sec)
+        {
+            $scope.selectedSecurity = null;
+        } else {
+            $scope.selectedSecurity = $scope.ct.securities
+                .filter(function(el) {
+                    return el.name == sec;
+                })[0];
+        }
+    };
     $scope.selectInvestor = function(inv) {
+        $scope.selectedCell = $scope.selectedSecurity = null;
+        if ($scope.selectedInvestor &&
+                $scope.selectedInvestor.investor == inv)
+        {
+            $scope.selectedInvestor = null;
+        } else {
+            $scope.selectedInvestor = $scope.ct.investors
+                .filter(function(el) {
+                    return el.name == inv;
+                })[0];
+        }
     };
 }]);

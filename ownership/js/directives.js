@@ -13,6 +13,8 @@ own.directive('currency', function() {
             });
             ctrl.$parsers.push(function(viewValue) {
                 var re = new RegExp(",", "g");
+                if (viewValue == '')
+                    return null;
                 var res = parseFloat(viewValue.replace(re, ''));
                 return isNaN(res) ? undefined : res;
             });
@@ -125,16 +127,20 @@ own.directive('editableCaptableCell', [function() {
                 };
 
                 $scope.saveIt = function(key, value) {
-                    if ($scope.data) {
-                        console.log($scope.data);
-                        if ($scope.data.transactions.length > 1) {
+                    var data = $scope.data;
+                    if (!data) {
+                        data = $scope.selectedCell;
+                    }
+                    if (data) {
+                        console.log(data);
+                        if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
-                            if ($scope.data.transactions[0]) {
-                                console.log($scope.data.transactions[0]);
+                            if (data.transactions[0]) {
+                                console.log("saving", data.transactions[0]);
                             }
                             captable.saveTransaction(
-                                $scope.data.transactions[0], true);
+                                data.transactions[0], true);
                         }
                     }
                 };
@@ -149,8 +155,13 @@ own.directive('editableCaptableCell', [function() {
                     $scope.destination_transaction = null;
                 }
                 $scope.units = function(newval) {
+                    //console.log(newval, typeof(newval));
                     if (angular.isDefined(newval)) {
-                        var num = parseFloat(newval);
+                        var num = 0;
+                        if (newval != null)
+                        {
+                            num = parseFloat(newval);
+                        }
                         console.log("newval", newval, num);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
@@ -159,12 +170,16 @@ own.directive('editableCaptableCell', [function() {
                         updateAttr('units', num);
 
                     } else {
-                        return ($scope.data ? $scope.data.u : null);
+                        return ($scope.data ? $scope.data.u.toString() : null);
                     }
                 };
                 $scope.amount = function(newval) {
                     if (angular.isDefined(newval)) {
-                        var num = parseFloat(newval);
+                        var num = 0;
+                        if (newval != null)
+                        {
+                            num = parseFloat(newval);
+                        }
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
                         }
@@ -574,6 +589,14 @@ own.directive('cellDetails', [function() {
                     } else if (ev.original !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
+                };
+                
+                $scope.hasDocuments = function(tran) {
+                    return tran.evidence_data && (tran.evidence_data.length > 0);
+                };
+                
+                $scope.toggleTransaction = function() {
+                    $scope.switchCapTab('details');
                 };
 
                 $scope.loaddirective();

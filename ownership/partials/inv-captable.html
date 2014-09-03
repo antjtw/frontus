@@ -89,19 +89,6 @@
                     </captable-cell>
                 </td>
             </tr>
-            <!-- Extra row containing all the others -->
-            <!--
-            <tr ng-hide="fullview">
-                <td><input disabled></td>
-                <td class="capsums-col">
-                    <input class="input-right" disabled
-                           value="{{everyone.percentage | number:3}}%">
-                </td>
-                <td class="viewName">Other Investors</td>
-                <td ng-repeat="key in ct.securities">
-                </td>
-            </tr>
-            -->
             <tr class="unissued-rows"
                 ng-repeat="sec in
                            captable.securitiesWithUnissuedUnits()">
