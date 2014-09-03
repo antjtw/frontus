@@ -406,6 +406,19 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.newTran = captable.newTransaction(
                                          $scope.sec.name, kind, null);
                 };
+
+                $scope.checkNewTran = function(tran) {
+                    var invalid = false;
+                    for (var attribute in tran.attrs) {
+                        if (tran.attrs.hasOwnProperty(attribute)) {
+                            if ($filter('isRequired')(tran.attrs.security_type, tran.kind, attribute) && (tran.attrs[attribute] == null  || tran.attrs[attribute].toString().length == 0)) {
+                                invalid = true;
+                            }
+                        }
+                    }
+                    return invalid;
+                };
+
                 $scope.submitAction = function(tran) {
                     var trans = [tran];
                     if (tran.kind = 'split')
@@ -559,6 +572,19 @@ own.directive('editableCellDetails', [function() {
                     $scope.windowToggle = (obj ? true : false);
                     $scope.$emit('windowToggle', $scope.windowToggle);
                 };
+
+                $scope.checkNewTran = function(tran) {
+                    var invalid = false;
+                    for (var attribute in tran.attrs) {
+                        if (tran.attrs.hasOwnProperty(attribute)) {
+                            if ($filter('isRequired')(tran.attrs.security_type, tran.kind, attribute) && (tran.attrs[attribute] == null  || tran.attrs[attribute].toString().length == 0)) {
+                                invalid = true;
+                            }
+                        }
+                    }
+                    return invalid;
+                };
+
                 $scope.submitAction = function(tran) {
                     captable.saveTransaction(tran, true);
                     $scope.newTran = null;

@@ -145,7 +145,7 @@
                 </editable-transaction-attributes>
 
                 <div class="action-button standard-button">
-                    <button class="btn" ng-click="submitAction(newTran);">
+                    <button class="btn" ng-disabled="checkNewTran(newTran)" ng-click="submitAction(newTran);">
                         Submit
                     </button>
                 </div>
