@@ -314,8 +314,8 @@ own.directive('securityDetails', [function() {
 
         },
         templateUrl: '/ownership/partials/securityDetails.html',
-        controller: ["$scope", "displayCopy",
-            function($scope, displayCopy) {
+        controller: ["$scope", "displayCopy", '$location',
+            function($scope, displayCopy, $location) {
                 $scope.tips = displayCopy.captabletips;
                 $scope.currentTab = 'details';
                 $scope.switchCapTab = function(tab) {
