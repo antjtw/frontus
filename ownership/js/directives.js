@@ -351,10 +351,12 @@ own.directive('editableSecurityDetails', [function() {
         scope: {
             sec: '=',
             currentTab: '=currenttab',
+            windowToggle: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
             function($scope, displayCopy, captable, $filter, calculate) {
+                console.log($scope.windowToggle)
 
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
@@ -617,7 +619,8 @@ own.directive('editableCellDetails', [function() {
         restrict: 'EA',
         scope: {cell: '=',
                 currentTab: '=currenttab',
-                undo: '=undo'},
+                undo: '=undo',
+                windowToggle: '='},
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter",
             function($scope, $rootScope, attributes, captable, calculate, $filter) {

@@ -70,6 +70,7 @@
             </span>
         </div>
         <div class="capTab" ng-switch-when="documents">
+            {{windowToggle}}
             <div ng-if="tran.evidence_data.length==0"
                  class="linkedDocuments">
                     <div class="noGroups"  ng-click="editEvidence(tran)">
@@ -114,7 +115,7 @@
                   data-icon="&#xe008;">
                 Add Documents
             </span>
-            <div ng-show="windowToggle"
+            <div ng-if="windowToggle == true"
                  class="standard-button linkedDocuments">
                 <button class="btn" ng-click="editEvidence();">
                     Finished!
