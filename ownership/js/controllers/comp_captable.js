@@ -154,7 +154,9 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         History.forget($scope, 'selectedInvestor');
     };
     $scope.updateSecurity = function(security) {
-        captable.updateSecurityName(security);
+        if (security.new_name !== security.name) {
+            captable.updateSecurityName(security);
+        }
     };
     $scope.createNewSec = function() {
         $scope.new_sec = captable.newSecurity();
