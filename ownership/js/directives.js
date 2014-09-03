@@ -483,6 +483,7 @@ own.directive('editableSecurityDetails', [function() {
                 };
 
                 // Date grabber
+                var keyPressed;
                 $scope.dateSplit = function (evt) {
                     //Fix the dates to take into account timezone differences
                     if (evt) { // User is typing
@@ -493,13 +494,13 @@ own.directive('editableSecurityDetails', [function() {
                         if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                             var date = Date.parse(dateString);
                             if (date) {
-                                $scope.splitIssue.date = calculate.timezoneOffset(date);
+                                $scope.splitIssue.effective_date = calculate.timezoneOffset(date);
                                 keyPressed = false;
                             }
                         }
                     } else { // User is using calendar
-                        if ($scope.splitIssue.date instanceof Date) {
-                            $scope.splitIssue.date = calculate.timezoneOffset($scope.splitIssue.date);
+                        if ($scope.splitIssue.effective_date instanceof Date) {
+                            $scope.splitIssue.effective_date = calculate.timezoneOffset($scope.splitIssue.date);
                             keyPressed = false;
                         }
                     }
