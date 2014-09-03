@@ -456,6 +456,17 @@ own.directive('editableSecurityDetails', [function() {
         ],
     };
 }]);
+own.directive('cellSummary', [function() {
+    return {
+        restrict: 'E',
+        scope: {cell: '='},
+        templateUrl: '/ownership/partials/cellSummary.html',
+        controller: ["$scope", "captable",
+            function($scope, captable) {
+
+            }],
+    };
+}]);
 own.directive('cellDetails', [function() {
     return {
         restrict: 'EA',

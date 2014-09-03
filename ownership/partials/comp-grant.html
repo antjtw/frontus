@@ -95,10 +95,9 @@
                         <tr class="column-label">
                             <th></th>
                             <th></th>
-                            <th>Granted</th>
-                            <th>Vested</th>
-                            <th>Forfeited</th>
-                            <th>Exercised</th>
+                            <th ng-repeat="col in captable.grantColumns">
+                                {{col.name}}
+                            </th>
                         </tr>
                         <tbody ng-hide="captable.securityTotalUnits(sec) <= 0 && viewMode"
                                ng-repeat="sec in ct.securities">
@@ -198,37 +197,15 @@
                                 ng-click="getActiveTransaction(tran, '', 'view')">
                                 <span>{{inv.name}}</span>
                             </td>
-                            <td ng-class="{fieldSelected: tran.fields[0],
-                                           hoverable: tran.units}"
-                                ng-click="getActiveTransaction(tran, '', 'view')">
-                                <span>
-                                    {{captable.securityUnitsFrom(sec, 'grant', inv)
-                                    | formatAmount:'units'}}
-                                </span>
-                            </td>
-                            <td ng-class="{fieldSelected: tran.fields[1],
-                                           hoverable: (tran.vested.length > 0)}"
-                                ng-click="getActiveTransaction(tran, 'vested', 'view')">
-                                <span>
-                                    {{captable.securityCurrentUnits(sec, inv)
-                                    | formatAmount:'units'}}
-                                </span>
-                            </td>
-                            <td ng-class="{fieldSelected: tran.fields[2],
-                                           hoverable: tran.forfeited}"
-                                ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
-                                <span>
-                                    {{captable.securityUnitsFrom(sec, 'forfeit', inv)
-                                    | formatAmount:'units'}}
-                                </span>
-                            </td>
-                            <td ng-class="{fieldSelected: tran.fields[3],
-                                           hoverable: tran.exercised}"
-                                ng-click="getActiveTransaction(tran, 'exercised', 'view')">
-                                <span>
-                                    {{captable.securityUnitsFrom(sec, 'exercise', inv)
-                                    | formatAmount:'units'}}
-                                </span>
+                            <td ng-repeat="col in captable.grantColumns"
+                                ng-class="{fieldSelected: selectedCell.investor == inv.name &&
+                                                          selectedCell.security == sec.name &&
+                                                          selectedCell.kind == col.name,
+                                           hoverable: captable.grantCellFor(inv.name, sec.name, col.name).u}"
+                                ng-click="selectCell(inv.name, sec.name, col.name)">
+                                <captable-cell inv="inv.name" sec="sec.name"
+                                data="captable.grantCellFor(inv.name, sec.name, col.name)">
+                                </captable-cell>
                             </td>
                         </tr>
                         </tbody>
