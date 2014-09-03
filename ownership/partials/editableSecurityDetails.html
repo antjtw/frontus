@@ -160,3 +160,71 @@
         Delete Security
     </span>
 </div>
+
+<div modal="splitModal" close="splitSharesClose();" options="convertopts">
+    <div class="modalHeader">
+        <span>Split Shares</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="splitSharesClose()"></span>
+    </div>
+    <div class="modalText splitting">
+        <div class="convert-listing">
+            <span>From</span>
+            <ul>
+                <li>{{splitIssue.issue}}</li>
+                <li>Security</li>
+            </ul>
+        </div>
+        <div class="split-input">
+            <div>
+                <span>Date</span>
+                <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
+                       ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                       onkeydown="testForEnter(event);">
+            </div>
+            <div class="ratio-input">
+                <span>Ratio</span>
+                <input type="text" ng-model="splitIssue.ratioa" onkeydown="testForEnter(event);">
+                <span>:</span>
+                <input type="text" ng-model="splitIssue.ratiob" onkeydown="testForEnter(event);">
+            </div>
+        </div>
+        <div class="convert-summary three">
+            <span>Summary</span>
+            <ul>
+                <li>
+                    <span>
+                        <span ng-show="captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) > 0">{{captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) | formatAmount:'units'}}</span>
+                        <span ng-hide="captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) > 0">No Shares</span>
+                    </span>
+                    <span>Pre-split shares</span>
+                </li>
+                <li>
+                    <span>
+                        <span ng-show="splitvalue(splitIssue)">{{splitvalue(splitIssue)}}</span>
+                        <span ng-hide="splitvalue(splitIssue)">Invalid Ratio</span>
+                    </span>
+                    <span>Post-split shares</span>
+                </li>
+                <li>
+                    <span>
+                        <span ng-show="splitppshare(splitIssue, ppshare)">{{splitppshare(splitIssue, ppshare)}}</span>
+                        <span ng-hide="splitppshare(splitIssue, ppshare)">
+                            <span ng-show="splitvalue(splitIssue, ppshare)">Share Price Not Set</span>
+                            <span ng-hide="splitvalue(splitIssue, ppshare)">Invalid Ratio</span>
+                        </span>
+                    </span>
+                    <span>new price per share</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button">
+            <button ng-disabled="!splitvalue(splitIssue) || splitvalue(splitIssue) == 'Infinity'" class="btn" ng-click="performSplit(splitIssue); splitSharesClose();">Submit</button>
+        </div>
+        <div class="pull-left standard-button small-standard-button gray">
+            <button class="btn" ng-click="splitSharesClose();">Cancel</button>
+        </div>
+    </div>
+</div>
+
