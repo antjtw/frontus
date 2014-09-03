@@ -106,6 +106,10 @@ div.last-saved {
     cursor: default !important;
 }
 
+.tableView td.unissuedName {
+    background: transparent;
+}
+
 .tableView.captable td.viewName {
     padding: 0 0 0 20px;
     text-overflow: ellipsis;
@@ -307,6 +311,11 @@ p.captablepair {
 td:hover .hoverable {
     background-color: rgba(26, 188, 150, 0.1);
     cursor: pointer;
+}
+
+.tableView.captable td.viewName.unissuedName:hover {
+    background-color: transparent;
+    cursor: default;
 }
 
 .tableView.captable .tranSelected input {
