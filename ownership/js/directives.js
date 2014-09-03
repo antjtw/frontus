@@ -660,6 +660,7 @@ own.directive('editableCellDetails', [function() {
                 };
 
                 $scope.addTransaction = function() {
+                    console.log("here");
                     var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
                                      captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
