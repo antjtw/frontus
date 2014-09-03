@@ -93,6 +93,8 @@ own.directive('captableCell', [function() {
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
                 $scope.settings = $rootScope.settings;
+                $scope.t = ($scope.data && $scope.data.kind) ? "grant"
+                                                             : "cap";
             }
         ],
     };
