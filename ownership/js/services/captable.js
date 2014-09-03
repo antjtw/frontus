@@ -1616,10 +1616,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.removeEvidence = removeEvidence;
     this.toggleForEvidence = function(ev) {
-        if (!ev || !captable.evidence_object) {return;}
-        if (!captable.evidence_object.evidence_data) {
-            captable.evidence_object.evidence_data = [];
-        } else {
+        console.log(ev)
+        // if (!ev || !captable.evidence_object) {return;
+        //     cosnole.log("hey")}
+        // if (!captable.evidence_object.evidence_data) {
+        //     captable.evidence_object.evidence_data = [];
+        //     console.log(ev);
+        //     console.log(captable);
+        //     console.log("whyyyyyy")
+        // } else {
             var action = "";
             if (isEvidence(ev)) {
                 removeEvidence(ev);
@@ -1627,9 +1632,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             } else {
                 addEvidence(ev);
                 action = "added";
+                console.log("added!")
             }
             updateEvidenceInDB(captable.evidence_object, action);
-        }
+        // }
     };
     
 

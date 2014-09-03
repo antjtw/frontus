@@ -370,8 +370,11 @@ own.directive('editableSecurityDetails', [function() {
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
+                    // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
+                    console.log(obj)
                 };
+
                 $scope.addSecurity = function() {
                     $scope.$emit('addSecurity');
                 };
@@ -670,7 +673,10 @@ own.directive('editableCellDetails', [function() {
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
+                    if($scope.windowToggle == true){}
                     $scope.$emit('windowToggle', $scope.windowToggle);
+                    console.log(obj)
+
                 };
 
                 $scope.checkNewTran = function(tran) {

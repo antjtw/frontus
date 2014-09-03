@@ -64,6 +64,7 @@
         </span>
     </div>
     <div class="capTab" ng-switch-when="documents">
+        {{windowToggle}}
         <div ng-if="tran.evidence_data.length==0 || tran.evidence_data==null" class="linkedDocuments">
              <div class="noGroups" ng-click="editEvidence(tran)">
                 Connect documents that support this transaction by clicking the link below.
