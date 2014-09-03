@@ -387,7 +387,6 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.windowToggle = (obj ? true : false);
                     // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
-                    console.log(obj)
                 };
 
                 $scope.addSecurity = function() {
@@ -623,9 +622,12 @@ own.directive('editableCellDetails', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
                 $scope.ct = captable.getCapTable();
+                $scope.captable = captable;
 
                 $scope.loaddirective = function() {
-                    $scope.captable = captable;
+                    if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
+                        $scope.cell.transactions[0].active = true;
+                    }
                     // captable.evidence_object = null;
                     // $scope.windowToggle = false;
                 };

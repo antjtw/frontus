@@ -1570,6 +1570,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     };
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
+            console.log('ready to update')
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
                           parseInt(obj.transaction, 10),
                           JSON.stringify(obj.evidence_data)
@@ -1596,7 +1597,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data.push(ev);
-            console.log( captable.evidence_object.evidence_data)
+            console.log(captable.evidence_object.evidence_data)
         }
     }
     this.addEvidence = addEvidence;
@@ -1624,7 +1625,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.evidence_object.evidence_data = [];
             console.log(ev);
             console.log(captable);
-            console.log("whyyyyyy")
         } else {
             var action = "";
             if (isEvidence(ev)) {
@@ -1642,7 +1642,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
 
     function isEvidence(ev) {
-        if(captable.evidence_object)
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             return captable.evidence_object.evidence_data
@@ -1651,6 +1650,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }).length>0;
         } else {
             return false;
+            console.log("not added")
         }
     }
     this.isEvidence = isEvidence;
