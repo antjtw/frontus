@@ -336,8 +336,8 @@ own.directive('editableSecurityDetails', [function() {
             sec: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
-        controller: ["$scope", "displayCopy", "captable", "$filter",
-            function($scope, displayCopy, captable, $filter) {
+        controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
+            function($scope, displayCopy, captable, $filter, calculate) {
 
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
@@ -406,8 +406,11 @@ own.directive('editableSecurityDetails', [function() {
                     return actions.length > 0;
                 };
                 $scope.makeNewTran = function(kind) {
-                    $scope.newTran = captable.newTransaction(
-                                         $scope.sec.name, kind, null);
+                    if (kind == "split") {
+                        $scope.splitSharesUp(captable.newTransaction($scope.sec.name, kind, null));
+                    } else {
+                        $scope.newTran = captable.newTransaction($scope.sec.name, kind, null);
+                    }
                 };
 
                 $scope.checkNewTran = function(tran) {
@@ -447,6 +450,81 @@ own.directive('editableSecurityDetails', [function() {
                 $scope.$on('newSelection', function(evt) {
                     $scope.newTran = null;
                 });
+
+                $scope.convertopts = {
+                    backdropFade: true,
+                    dialogFade: true,
+                    dialogClass: 'convertModal modal'
+                };
+
+                // Captable Conversion Modal
+                $scope.splitSharesUp = function(to_convert) {
+                    $scope.splitIssue = angular.copy(to_convert);
+                    $scope.splitIssue.name = $scope.splitIssue.attrs.security;
+                    angular.forEach($scope.ct.securities, function(sec) {
+                        console.log(sec);
+                        if (sec.name == $scope.splitIssue.name) {
+                            if (calculate.isNumber(sec.attrs.ppshare)) {
+                                $scope.ppshare = sec.attrs.ppshare;
+                            } else if (calculate.isNumber(sec.attrs.price)) {
+                                $scope.ppshare = sec.attrs.price;
+                            }
+
+                        }
+                    });
+                    $scope.splitIssue.ratioa = 1;
+                    $scope.splitIssue.ratiob = 1;
+                    $scope.splitIssue.date = new Date.today();
+                    $scope.splitModal = true;
+                };
+
+                $scope.splitSharesClose = function() {
+                    $scope.splitModal = false;
+                };
+
+                // Date grabber
+                var keyPressed;
+                $scope.dateSplit = function (evt) {
+                    //Fix the dates to take into account timezone differences
+                    if (evt) { // User is typing
+                        if (evt != 'blur')
+                            keyPressed = true;
+                        var dateString = angular.element('splitissuedate').val();
+                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                            var date = Date.parse(dateString);
+                            if (date) {
+                                $scope.splitIssue.effective_date = calculate.timezoneOffset(date);
+                                keyPressed = false;
+                            }
+                        }
+                    } else { // User is using calendar
+                        if ($scope.splitIssue.effective_date instanceof Date) {
+                            $scope.splitIssue.effective_date = calculate.timezoneOffset($scope.splitIssue.date);
+                            keyPressed = false;
+                        }
+                    }
+                };
+
+                $scope.splitvalue = function(issue) {
+                    var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
+                    if (isFinite(($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue, $scope.ct.securities)) / ratio)) {
+                        return (($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue, $scope.ct.securities)) / ratio);
+                    }
+                };
+
+                $scope.splitppshare = function(issue, ppshare) {
+                    var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
+                    if (isFinite(ratio)) {
+                        return (ppshare * ratio);
+                    }
+                };
+
+                $scope.performSplit = function (splittran) {
+                    splittran.attrs.ratio =  parseFloat(splittran.ratiob) / parseFloat(splittran.ratioa);
+                    captable.saveTransaction(splittran, true);
+                };
+
                 $scope.loaddirective();
 
                 $scope.$watch('sec', function(newval, oldval) {
@@ -612,22 +690,6 @@ own.directive('editableCellDetails', [function() {
                 // Captable Conversion Modal
                 $scope.convertSharesUp = function(to_convert) {
                     $scope.convertTran = {};
-                    /*angular.forEach($scope.cell.transactions, function(tran) {
-                        if (tran.active) {
-                            $scope.convertTran.tran = tran;
-                        }
-                    });
-                    if (!$scope.convertTran.tran)
-                    {
-                        if ($scope.cell.transactions.length == 1)
-                        {
-                            $scope.convertTran.tran = $scope.cell.transactions[0];
-                        }
-                        else
-                        {
-                            console.log("Error: no active transactions. Don't know what to do here.");
-                        }
-                    }*/
                     $scope.convertTran.tran = to_convert;
                     $scope.convertTran.newtran = {};
                     $scope.convertTran.step = '1';
