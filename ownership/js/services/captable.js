@@ -693,6 +693,31 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return trans.reduce(sumTransactionAmount, 0);
     }
     this.sum_transactions = sum_transactions;
+    
+    function cleanCell(cell) {
+        var sec_obj = captable.securities
+            .filter(function(el) {
+                return el.name==cell.security && el.attrs.security_type;
+            })[0];
+        var defaultTran = newTransaction(cell.security, defaultKind(sec_obj.attrs['security_type']), cell.investor);
+        for (var t in cell.transactions)
+        {
+            var del = true;
+            for (var a in cell.transactions[t].attrs)
+            {
+                if (cell.transactions[t].attrs[a] && (cell.transactions[t].attrs[a] != defaultTran.attrs[a]))
+                {
+                    del = false;
+                    break;
+                }
+            }
+            if (del)
+            {
+                console.log("deleting tran", cell.transactions[t].transaction, cell.investor, cell.security);
+                deleteTransaction(cell.transactions[t], cell, true);
+            }
+        }
+    };
 
     function updateCell(cell) {
         cell.ledger_entries = cell.transactions = null;
@@ -707,6 +732,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         setCellUnits(cell);
         setCellAmount(cell);
         cell.valid = validateCell(cell);
+        cleanCell(cell);
     }
     this.updateCell = updateCell;
     function generateCells() {
@@ -925,14 +951,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.saveTransaction = saveTransaction;
 
-    this.deleteTransaction = function(tran, cell) {
+    function deleteTransaction(tran, cell, hide) {
         if (tran.transaction) {
             SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
             .then(function(x) {
                 var res = x[0].delete_transaction;
                 if (res > 0) {
-                    $rootScope.$emit("notification:success",
-                        "Transaction deleted");
+                    if (!hide)
+                    {
+                        $rootScope.$emit("notification:success",
+                            "Transaction deleted");
+                    }
                     splice_many(captable.transactions, [tran]);
                     splice_many_by(captable.ledger_entries, function(el) {
                             return el.transaction == tran.transaction;
@@ -951,13 +980,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         }
                     }
                 } else {
-                    $rootScope.$emit("notification:fail",
-                        "Oops, something went wrong.");
+                    if (!hide)
+                    {
+                        $rootScope.$emit("notification:fail",
+                            "Oops, something went wrong.");
+                    }
                 }
             }).except(function(err) {
                 console.log(err);
-                $rootScope.$emit("notification:fail",
-                    "Oops, something went wrong.");
+                if (!hide)
+                {
+                    $rootScope.$emit("notification:fail",
+                        "Oops, something went wrong.");
+                }
             });
         } else {
             splice_many(captable.transactions, [tran]);
@@ -976,6 +1011,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
         }
     };
+    this.deleteTransaction = deleteTransaction;
     this.deleteSecurityTransaction = function(tran, sec) {
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
         .then(function(x) {

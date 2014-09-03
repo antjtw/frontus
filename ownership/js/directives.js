@@ -126,6 +126,7 @@ own.directive('editableCaptableCell', [function() {
 
                 $scope.saveIt = function(key, value) {
                     if ($scope.data) {
+                        console.log($scope.data);
                         if ($scope.data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
@@ -453,6 +454,17 @@ own.directive('editableSecurityDetails', [function() {
                 }, true);
             }
         ],
+    };
+}]);
+own.directive('cellSummary', [function() {
+    return {
+        restrict: 'E',
+        scope: {cell: '='},
+        templateUrl: '/ownership/partials/cellSummary.html',
+        controller: ["$scope", "captable",
+            function($scope, captable) {
+
+            }],
     };
 }]);
 own.directive('cellDetails', [function() {

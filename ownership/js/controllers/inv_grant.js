@@ -30,6 +30,12 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
     $scope.selectedCell = null;
     $scope.selectedInvestor = null;
     $scope.selectedSecurity = null;
+    $scope.selectedThing = function() {
+        if ($scope.selectedCell) return 'selectedCell';
+        if ($scope.selectedInvestor) return 'selectedInvestor';
+        if ($scope.selectedSecurity) return 'selectedSecurity';
+        return null;
+    };
 
     $scope.selectCell = function(inv, sec, kind) {
         $scope.selectedInvestor = $scope.selectedSecurity = null;
