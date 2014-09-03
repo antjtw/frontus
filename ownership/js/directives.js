@@ -127,13 +127,16 @@ own.directive('editableCaptableCell', [function() {
                 };
 
                 $scope.saveIt = function(key, value) {
+                    if (!$scope.data) {
+                        $scope.data = $scope.selectedCell;
+                    }
                     if ($scope.data) {
                         console.log($scope.data);
                         if ($scope.data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
                             if ($scope.data.transactions[0]) {
-                                console.log($scope.data.transactions[0]);
+                                console.log("saving", $scope.data.transactions[0]);
                             }
                             captable.saveTransaction(
                                 $scope.data.transactions[0], true);
