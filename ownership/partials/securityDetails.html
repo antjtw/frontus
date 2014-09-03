@@ -1,7 +1,7 @@
 <div class="capGuide cap-overflow global">
     <div class="detailsHeader">
-        <div>{{::sec.name}}</div>
-        <div>{{::sec.effective_date | date:settings.shortdate}}</div>
+        <div>{{sec.name}}</div>
+        <div>{{sec.effective_date | date:settings.shortdate}}</div>
         <p ng-show="sec.attrs.security_type" class="belowTitle">
             <span ng-bind="sec.attrs.security_type"></span>
             <span>Security Type</span>
