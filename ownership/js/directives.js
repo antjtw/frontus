@@ -311,6 +311,7 @@ own.directive('securityDetails', [function() {
         restrict: 'EA',
         scope: {
             sec: '=',
+
         },
         templateUrl: '/ownership/partials/securityDetails.html',
         controller: ["$scope", "displayCopy",
@@ -348,22 +349,26 @@ own.directive('editableSecurityDetails', [function() {
     return {
         restrict: 'E',
         scope: {
-            sec: '='
+            sec: '=',
+            currentTab: '=currenttab',
+            windowToggle: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
             function($scope, displayCopy, captable, $filter, calculate) {
+                console.log($scope.windowToggle)
 
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
                     $scope.displayAttr = captable.displayAttr;
-                    $scope.currentTab = 'details';
+                    // $scope.currentTab = 'details';
                     $scope.actions = ["split", "grant", "exercise"];
-                    $scope.switchCapTab = function(tab) {
-                        $scope.currentTab = tab;
-                    };
                     $scope.ct = captable.getCapTable();
+                };
+
+                $scope.switchCapTab = function(tab) {
+                        $scope.currentTab = tab;
                 };
 
                 $scope.addTransaction = function() {
@@ -556,8 +561,8 @@ own.directive('cellSummary', [function() {
         restrict: 'E',
         scope: {cell: '='},
         templateUrl: '/ownership/partials/cellSummary.html',
-        controller: ["$scope", "$rootScope", "captable",
-            function($scope, $rootScope, captable) {
+        controller: ["$scope", "captable",
+            function($scope, captable) {
 
             }],
     };
@@ -614,7 +619,8 @@ own.directive('editableCellDetails', [function() {
         restrict: 'EA',
         scope: {cell: '=',
                 currentTab: '=currenttab',
-                undo: '=undo'},
+                undo: '=undo',
+                windowToggle: '='},
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter",
             function($scope, $rootScope, attributes, captable, calculate, $filter) {

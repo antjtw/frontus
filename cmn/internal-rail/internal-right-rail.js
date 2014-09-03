@@ -15,12 +15,17 @@ app.directive('internalRightRail', function() {
         controller: ['$scope', function($scope) {
             // Toggles sidebar back and forth
             $scope.complexSideToggleButton = function() {
+                console.log($scope.windowToggle);
                 if (!$scope.windowToggle) {
                     $scope.sideToggle = !$scope.sideToggle;
                 } else {
                     $scope.windowCallback();
+
                 }
+                // if($sco)
             };
+
+    
 
             var aboveBottomHeight = 0;
 

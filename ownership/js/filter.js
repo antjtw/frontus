@@ -183,45 +183,40 @@ ownership.filter('securityUnitLabel', function() {
 });
 
 ownership.filter('formatAmount', function($rootScope) {
-    return function(amount, key) {
+    return function(amount, key, decimals) {
         var settings = $rootScope.settings;
-        var nums = ["units", "forfeited", "totalauth"];
+        var nums = ["units", "forfeited"];
         var moneys = ["ppshare", "price", "effectivepps",
-                      "valcap", "amount", "premoney", "postmoney"];
-        if (!amount || (typeof(amount)!="string" && isNaN(amount))) {
-            if (amount != 0) {
-                amount = null;
+                      "valcap", "amount"];
+        var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
+        var symbol = (settings &&
+            currencydictionary[settings.currency]) ?
+             currencydictionary[settings.currency] : '$';
+        if (amount === undefined || amount === null || (typeof(amount)!="string" && isNaN(amount))) {
+            amount = null;
+        } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
+            var n;
+            if (moneys.indexOf(key) !== -1) {
+                n = amount.toFixed(2).split(".");
             } else {
-                if (settings && moneys.indexOf(key) !== -1) {
-                    var currencydictionary =
-                    {'EUR': '€', 'GBP': '£', 'USD': '$'};
-                    var symbol = settings &&
-                        currencydictionary[settings.currency] ?
-                        currencydictionary[settings.currency] : '$';
-                    amount = symbol + amount;
-                }
+                n = amount.toFixed(3).split(".");
             }
 
-        } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
-            var n = amount.toString().split(".");
             //Comma-fies the first part
             n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            // Caps decimals to 3 places
-            if (n[1] && n[1].length > 4) {
-                n[1] = n[1].substring(0,3);
-            } // Takes a .x and makes it .x0
-            else if (n[1] && n[1].length == 1) {
-                n[1] = n[1] + "0";
+            // remove extraneous 0's if not money
+            if (!key || moneys.indexOf(key) === -1) {
+                while (n[1][n[1].length-1] === "0") { // if last character is "0"
+                    n[1] = n[1].substr(0, n[1].length-1);
+                }
+                if (n[1] === "") {
+                    n.pop(); // remove n[1]
+                }
             }
             //Combines the two sections
             amount = n.join(".");
 
             if (settings && moneys.indexOf(key) !== -1) {
-                var currencydictionary =
-                    {'EUR': '€', 'GBP': '£', 'USD': '$'};
-                var symbol = settings &&
-                    currencydictionary[settings.currency] ?
-                        currencydictionary[settings.currency] : '$';
                 amount = symbol + amount;
             }
         }
@@ -386,7 +381,8 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                              "price",
                              "terms",
                              "vestingbegins",
-                            "interestratefreq",
+                             "interestrate",
+                             "interestratefreq",
                              "vestcliff",
                              "vestfreq",
                              "valcap",
