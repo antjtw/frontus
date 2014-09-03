@@ -911,8 +911,8 @@ m.directive('investorTile', function(){
         scope: false,
         restrict: 'E',
         templateUrl:'/cmn/partials/investorTile.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable',
-        function($scope, $rootScope, SWBrijj, calculate, captable){
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable', 'navState',
+        function($scope, $rootScope, SWBrijj, calculate, captable, navState){
 
             $scope.investorNames = [];
             $scope.cti=captable.getCapTable();
@@ -924,12 +924,22 @@ m.directive('investorTile', function(){
                 }
             }, true);
 
+            $scope.myNamedTransactions = [];
+
             $scope.getTotalShares = function(){
                 var name = "";
                 angular.forEach($scope.cti.investors, function(cap){
-                    name = cap.name;
+                    // name = cap.name;
+                    if(navState.userid == cap.email){
+
+                        name = cap.name;
+                        console.log(cap.name);
+                        // $scope.myNamedTransactions.push(cap);
+                    }
+
                 });
                 return captable.rowSum(name);
+                // console.log($scope.myNamedTransactions)
             };
 
 
