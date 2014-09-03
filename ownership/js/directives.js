@@ -13,6 +13,8 @@ own.directive('currency', function() {
             });
             ctrl.$parsers.push(function(viewValue) {
                 var re = new RegExp(",", "g");
+                if (viewValue == '')
+                    return null;
                 var res = parseFloat(viewValue.replace(re, ''));
                 return isNaN(res) ? undefined : res;
             });
@@ -149,8 +151,13 @@ own.directive('editableCaptableCell', [function() {
                     $scope.destination_transaction = null;
                 }
                 $scope.units = function(newval) {
+                    //console.log(newval, typeof(newval));
                     if (angular.isDefined(newval)) {
-                        var num = parseFloat(newval);
+                        var num = 0;
+                        if (newval != null)
+                        {
+                            num = parseFloat(newval);
+                        }
                         console.log("newval", newval, num);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
@@ -159,12 +166,16 @@ own.directive('editableCaptableCell', [function() {
                         updateAttr('units', num);
 
                     } else {
-                        return ($scope.data ? $scope.data.u : null);
+                        return ($scope.data ? $scope.data.u.toString() : null);
                     }
                 };
                 $scope.amount = function(newval) {
                     if (angular.isDefined(newval)) {
-                        var num = parseFloat(newval);
+                        var num = 0;
+                        if (newval != null)
+                        {
+                            num = parseFloat(newval);
+                        }
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
                         }
