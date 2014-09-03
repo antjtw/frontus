@@ -193,21 +193,21 @@
             <ul>
                 <li>
                     <span>
-                        <span ng-show="captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) > 0">{{captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) | formatAmount:'units'}}</span>
+                        <span ng-show="captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) > 0">{{(captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities)) | formatAmount:'units'}}</span>
                         <span ng-hide="captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) > 0">No Shares</span>
                     </span>
                     <span>Pre-split shares</span>
                 </li>
                 <li>
                     <span>
-                        <span ng-show="splitvalue(splitIssue)">{{splitvalue(splitIssue)}}</span>
+                        <span ng-show="splitvalue(splitIssue)">{{splitvalue(splitIssue) | formatAmount:'units'}}</span>
                         <span ng-hide="splitvalue(splitIssue)">Invalid Ratio</span>
                     </span>
                     <span>Post-split shares</span>
                 </li>
                 <li>
                     <span>
-                        <span ng-show="splitppshare(splitIssue, ppshare)">{{splitppshare(splitIssue, ppshare)}}</span>
+                        <span ng-show="splitppshare(splitIssue, ppshare)">{{splitppshare(splitIssue, ppshare) | formatAmount:'amount'}}</span>
                         <span ng-hide="splitppshare(splitIssue, ppshare)">
                             <span ng-show="splitvalue(splitIssue, ppshare)">Share Price Not Set</span>
                             <span ng-hide="splitvalue(splitIssue, ppshare)">Invalid Ratio</span>
