@@ -7,12 +7,12 @@
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
-                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Investment amount</span>
-                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
