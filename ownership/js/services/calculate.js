@@ -280,6 +280,10 @@ ownership.service('calculate', function () {
 
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
 
+    this.currencysymbol = function(settings) {
+        return settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
+    };
+
     this.formatMoneyAmount = function (amount, settings) {
         var symbol = settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$';
         if (amount) {
@@ -288,7 +292,7 @@ ownership.service('calculate', function () {
     };
 
     this.debtinterest = function(tran) {
-        var amount = tran.attrs.amount;
+        var amount = tran.attrs.amount * 100;
         if (tran.effective_date && tran.attrs.interestrate && tran.attrs.interestratefreq && tran.attrs.amount) {
             // TODO move to filter
             var x =1;
@@ -336,7 +340,7 @@ ownership.service('calculate', function () {
                 }
             }
         }
-        return amount;
+        return (Math.round(amount)/100);
     };
 
 
