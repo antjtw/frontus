@@ -200,11 +200,11 @@
                 <li>{{convertTran.tran.attrs.security}}</li>
                 <li>Security</li>
                 <li ng-show="convertTran.tran.attrs.discount && convertTran.method != 'Price Per Share'">
-                    <span ng-hide="convertTran.newtran.valcappercentage">{{convertTran.tran.attrs.discount}}%</span>
-                    <span ng-show="convertTran.newtran.valcappercentage">{{convertTran.newtran.valcappercentage}}% (w/ valuation cap)</span>
+                    <span ng-hide="convertTran.newtran.valcappercentage">{{convertTran.tran.attrs.discount  | formatAmount:'units'}}%</span>
+                    <span ng-show="convertTran.newtran.valcappercentage">{{convertTran.newtran.valcappercentage  | formatAmount:'units'}}% (w/ valuation cap)</span>
                 </li>
                 <li ng-show="convertTran.tran.attrs.discount && convertTran.method != 'Price Per Share'">Percent Discount</li>
-                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.attrs.valcap && convertTran.method != 'Price Per Share'">{{convertTran.tran.attrs.valcap}}</li>
+                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.attrs.valcap && convertTran.method != 'Price Per Share'">{{convertTran.tran.attrs.valcap | formatAmount:'units'}}</li>
                 <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.attrs.valcap && convertTran.method != 'Price Per Share'">Valuation Cap</li>
             </ul>
         </div>
@@ -213,9 +213,9 @@
             <ul>
                 <li>{{convertTran.toissue.name}}</li>
                 <li>Security</li>
-                <li ng-show="convertTran.toissue.attrs.premoney">{{convertTran.toissue.attrs.premoney}}</li>
+                <li ng-show="convertTran.toissue.attrs.premoney">{{convertTran.toissue.attrs.premoney  | formatAmount:'amount'}}</li>
                 <li ng-show="convertTran.toissue.attrs.premoney">Pre-Money Valuation</li>
-                <li ng-show="convertTran.toissue.attrs.ppshare">{{convertTran.toissue.ppshare}}</li>
+                <li ng-show="convertTran.toissue.attrs.ppshare">{{convertTran.toissue.ppshare  | formatAmount:'amount'}}</li>
                 <li ng-show="convertTran.toissue.attrs.ppshare">Security PPS</li>
             </ul>
         </div>
@@ -223,9 +223,9 @@
             <span>Summary</span>
             <ul>
                 <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
-                <li><span>{{convertTran.newtran.attrs.amount}}</span><span>Debt + Interest</span></li>
-                <li><span>{{convertTran.newtran.attrs.effectivepps}}</span><span>Effective PPS</span></li>
-                <li><span>{{convertTran.newtran.attrs.amount / convertTran.newtran.attrs.effectivepps}}</span><span>Resulting Shares</span></li>
+                <li><span>{{convertTran.newtran.attrs.amount  | formatAmount:'amount'}}</span><span>Debt + Interest</span></li>
+                <li><span>{{convertTran.newtran.attrs.effectivepps  | formatAmount:'amount'}}</span><span>Effective PPS</span></li>
+                <li><span>{{convertTran.newtran.attrs.amount / convertTran.newtran.attrs.effectivepps | formatAmount:'units'}}</span><span>Resulting Shares</span></li>
             </ul>
         </div>
     </div>
