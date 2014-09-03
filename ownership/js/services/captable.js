@@ -659,6 +659,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
             cell.u = sum_ledger(cell.ledger_entries);
+            console.log(cell.u);
         }
     }
     this.setCellUnits = setCellUnits;

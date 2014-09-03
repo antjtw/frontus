@@ -189,7 +189,19 @@ ownership.filter('formatAmount', function($rootScope) {
         var moneys = ["ppshare", "price", "effectivepps",
                       "valcap", "amount"];
         if (!amount || (typeof(amount)!="string" && isNaN(amount))) {
-            amount = null;
+            if (amount != 0) {
+                amount = null;
+            } else {
+                if (settings && moneys.indexOf(key) !== -1) {
+                    var currencydictionary =
+                    {'EUR': '€', 'GBP': '£', 'USD': '$'};
+                    var symbol = settings &&
+                        currencydictionary[settings.currency] ?
+                        currencydictionary[settings.currency] : '$';
+                    amount = symbol + amount;
+                }
+            }
+
         } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
             var n = amount.toString().split(".");
             //Comma-fies the first part
