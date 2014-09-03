@@ -621,6 +621,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     };
     this.updateSecurityName = function(security) {
+        if (captable.securities.some(function(sec) {
+            return (sec.name === security.new_name);
+        })) {
+            // duplicated security name
+            security.new_name = security.new_name + " (1)";
+            return this.updateSecurityName(security);
+        }
         var cells = colFor(security.name);
         for (var c in cells)
         {
@@ -693,7 +700,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return trans.reduce(sumTransactionAmount, 0);
     }
     this.sum_transactions = sum_transactions;
-    
+
     function cleanCell(cell) {
         var sec_obj = captable.securities
             .filter(function(el) {
@@ -1631,7 +1638,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             updateEvidenceInDB(captable.evidence_object, action);
         }
     };
-    
+
 
 
     function isEvidence(ev) {
