@@ -575,6 +575,14 @@ own.directive('cellDetails', [function() {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
+                
+                $scope.hasDocuments = function(tran) {
+                    return tran.evidence_data && (tran.evidence_data.length > 0);
+                };
+                
+                $scope.toggleTransaction = function() {
+                    $scope.switchCapTab('details');
+                };
 
                 $scope.loaddirective();
                 $scope.$watch('cell', function(newval, oldval) {

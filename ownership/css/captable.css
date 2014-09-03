@@ -2451,6 +2451,10 @@ span.tour-icon.issue-cog + .tooltip {
     width: 50%;
 }
 
+.faux-tabs.single > button {
+    width: 100%;
+}
+
 .faux-tabs > button.on {
     background-color: #F1F1F1;
     border-top: 2px solid #19bb95;
