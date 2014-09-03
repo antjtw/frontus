@@ -42,7 +42,7 @@ app.controller('roundController',
                 });
                 if (!isNaN(round.attrs.totalauth)) {
                     if (round.attrs.totalauth > round.units) {
-                        var unauth = (round.attrs.totalauth - round.units);
+                        var unauth = (captable.numUnissued(round, $scope.ct.securities) - round.units);
                         existingoptions += unauth;
                         totals.units += unauth;
                     }
