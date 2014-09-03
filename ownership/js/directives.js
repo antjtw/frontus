@@ -117,6 +117,7 @@ own.directive('editableCaptableCell', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
+                $scope.isOption = captable.isOption;
                 $scope.ct = captable.getCapTable();
 
                 $scope.loaddirective = function() {

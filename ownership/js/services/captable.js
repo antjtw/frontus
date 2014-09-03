@@ -673,6 +673,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
+        } else if (cellSecurityType(cell) == "Option") {
+            return;
         } else {
             var transactionkeys = [];
             angular.forEach(cell.transactions, function(tran) {
@@ -1582,13 +1584,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return captable.attributes.filter(
                 function(el) { return el.name==key; })[0].display_name;
     };
+    // TODO: move to the security object
     this.isDebt = function(security) {
         if (!security) return;
         return security.attrs.security_type == "Debt" || security.attrs.security_type == "Safe" || security.attrs.security_type == "Convertible Debt";
     };
+    this.isOption = function(security) {
+        if (!security) return;
+        return security.attrs.security_type == "Option";
+    };
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
-            console.log('ready to update')
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
                           parseInt(obj.transaction, 10),
                           JSON.stringify(obj.evidence_data)
