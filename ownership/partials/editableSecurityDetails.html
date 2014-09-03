@@ -60,7 +60,7 @@
                     </ul>
                 </div>
             </div>
-            <editable-transaction-attributes ng-if="tran" data="tran" save="true">
+            <editable-transaction-attributes ng-if="tran && !sec.creating" data="tran" save="true">
             </editable-transaction-attributes>
             <span class="delete-link"
                   ng-if="tran.kind != 'issue security'"
@@ -72,7 +72,13 @@
         <div class="capTab" ng-switch-when="documents">
             <div ng-if="tran.evidence_data.length==0"
                  class="linkedDocuments">
-                    Connect blah documents that support this transaction by clicking the link below.
+                    <div class="noGroups"  ng-click="editEvidence(tran)">
+                    Connect documents that support this transaction by clicking the link below.
+                    <span>Add Documents</span>
+                    <span data-icon="&#xe016;" aria-hidden="true"></span>
+
+                </div>
+
             </div>
             <div ng-if="tran.evidence_data.length>0"
                  class="linkedDocuments">
@@ -82,20 +88,27 @@
                         <li>
                             <span ng-click="viewEvidence(doc)">
                                 {{doc.docname}}
+
                             </span>
                         </li>
+
                         <li ng-if="doc.name||doc.investor">
                             <span>
+
                                 {{doc.name || doc.investor}}'s version
                             </span>
                         </li>
+                        <li ng-if="doc.original && !doc.name && !doc.investor">
+                            <span>original version</span>
+                        </li>
+
                     </ul>
                     <span class="pull-right" data-icon="&#xe00f;"
-                          ng-click="removeEvidence(doc, tran)">
+                          ng-click="captable.removeEvidence(doc, tran)">
                     </span>
                 </div>
             </div>
-            <span ng-hide="windowToggle"
+            <span ng-hide="windowToggle || tran.evidence_data.length == 0"
                   class="blue-link delete-link linkedDocuments"
                   ng-click="editEvidence(tran);"
                   data-icon="&#xe008;">
@@ -132,7 +145,7 @@
                 </editable-transaction-attributes>
 
                 <div class="action-button standard-button">
-                    <button class="btn" ng-click="submitAction(newTran);">
+                    <button class="btn" ng-disabled="checkNewTran(newTran)" ng-click="submitAction(newTran);">
                         Submit
                     </button>
                 </div>

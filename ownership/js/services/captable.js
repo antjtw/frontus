@@ -349,7 +349,18 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function numUnissued(sec, securities) {
         var unissued = 0;
-        angular.forEach(captable.ledger_entries, function(entry) {
+        var auth_securities = [];
+        angular.forEach(captable.securities, function(sec) {
+            if (sec && sec.attrs && calculate.primaryMeasure(
+                sec.attrs.security_type) == "units" && sec.attrs.totalauth && sec.attrs.totalauth.toString().length > 0)
+            {
+                auth_securities.push(sec.name);
+            }
+        });
+        var entry_filter = function(el) {
+            return el && (el.investor || auth_securities.indexOf(el.security) !== -1);
+        };
+        angular.forEach(captable.ledger_entries.filter(entry_filter), function(entry) {
             if ((!entry.investor) && (entry.security == sec.name))
             {
                 unissued += (Number(entry.credit) - Number(entry.debit));
@@ -656,13 +667,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
         } else {
+            var transactionkeys = [];
+            angular.forEach(cell.transactions, function(tran) {
+                transactionkeys.push(tran.transaction)
+            });
             var plus_trans = cell.transactions
                 .filter(function(el) {
-                    return el.attrs.investor == cell.investor ||
+                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1)) ||
                            el.attrs.investor_to == cell.investor;});
             var minus_trans = cell.transactions
                 .filter(function(el) {
-                    return el.attrs.investor_from == cell.investor;
+                    return el.attrs.investor_from == cell.investor ;
                 });
             cell.a = sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
@@ -1293,6 +1308,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!dilution) dilution = 1;
         var entry_filter;
         var ok_securities = [];
+        var auth_securities = [];
         if (dilution <= 0) {
             var ok_types = ["Equity Common",
                             "Equity Preferred",
@@ -1309,6 +1325,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             };
         } else if (dilution == 1) {
             ok_securities = [];
+            auth_securities = [];
             angular.forEach(captable.securities, function(sec) {
                 if (sec && sec.attrs && calculate.primaryMeasure(
                                sec.attrs.security_type) == "units")
@@ -1316,8 +1333,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     ok_securities.push(sec.name);
                 }
             });
+            angular.forEach(captable.securities, function(sec) {
+                if (sec && sec.attrs && calculate.primaryMeasure(
+                    sec.attrs.security_type) == "units" && sec.attrs.totalauth && sec.attrs.totalauth.toString().length > 0)
+                {
+                    auth_securities.push(sec.name);
+                }
+            });
             entry_filter = function(el) {
-                return el && ok_securities.indexOf(el.security) !== -1;
+                return el && ok_securities.indexOf(el.security) !== -1 && (el.investor || auth_securities.indexOf(el.security) !== -1);
             };
         } else if (dilution >= 2) {
             console.log("TODO",
