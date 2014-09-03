@@ -1087,12 +1087,13 @@ textarea {
 
 .tableView.grant-table td:not(:nth-child(1)) {
     padding: 0;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 
 .tableView.grant-table tr.status-row td, .tableView.grant-table td > span {
     padding: 0 0 0 4px;
 }
-
 .tableView.grant-table tr.status-row td:nth-child(1), .tableView.grant-table tr.status-row td:nth-child(2) {
     padding: 0;
 }

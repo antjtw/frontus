@@ -49,13 +49,13 @@
                                     <h2>{{graphdata[0][0].issued}} Issued</h2>
                                     <h2>${{graphdata[0][0].amount}} Invested</h2>
                                 </div>
-                                <div ng-show="graphdata[1][1][0].percent != 0" class="span6">
+                                <div ng-show="graphdata[1][1][0].percent != 0 && graphdata[1][1][0].percent" class="span6">
                                     <d3expdonut class="exploded-donut" data='graphdata[1][1]'></d3expdonut>
                                     <h2>{{graphdata[1][0].name}}</h2>
                                     <h2>{{graphdata[1][0].issued}} Issued</h2>
                                     <h2>${{graphdata[1][0].amount}} Invested</h2>
                                 </div>
-                                <div ng-show="graphdata[2][1][0].percent != 0" class="span6">
+                                <div ng-show="graphdata[2][1][0].percent != 0 && graphdata[2][1][0].percent" class="span6">
                                     <d3expdonut class="exploded-donut" data='graphdata[2][1]'></d3expdonut>
                                     <h2>{{graphdata[2][0].name}}</h2>
                                     <h2>{{graphdata[2][0].issued}} Issued</h2>

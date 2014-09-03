@@ -241,70 +241,40 @@
                 </div>
             </div>
             <internal-right-rail toggle-side="sideToggle">
-                <div ng-switch on="sideBar"
+                <div ng-switch on="selectedThing()"
                      class="span4 capright"
                      ng-style="viewportheight">
-                    <span ng-switch-when="1">
-                        <!-- TODO grantCell -->
-                        <!--
-                        <div class="capGuide global"
-                             ng-show="mode == 1 && !viewMode">
+                    <span ng-switch-when="selectedCell"
+                          ng-switch on="selectedCell.kind">
+                        <div ng-switch-when="granted">
                         </div>
-                        <div class="capGuide grants"
-                             ng-show="mode == 3 && !viewMode">
-                            <h2>Exercise Information</h2>
+                        <div ng-switch-when="vested">
+                            <cell-summary cell="selectedCell">
+                            </cell-summary>
                         </div>
-                        <div class="capGuide grants" ng-show="mode == 4 && !viewMode">
-                            <h2>Vested Information</h2>
+                        <div ng-switch-when="forfeited">
+                            <cell-summary ng-if="viewMode" cell="selectedCell">
+                            </cell-summary>
+                            <editable-cell-summary ng-if="!viewMode" cell="selectedCell">
+                            </editable-cell-summary>
                         </div>
-                        -->
+                        <div ng-switch-when="exercised">
+                            <cell-summary ng-if="viewMode" cell="selectedCell">
+                            </cell-summary>
+                            <editable-cell-summary ng-if="!viewMode" cell="selectedCell">
+                            </editable-cell-summary>
+                        </div>
                     </span>
-
-                    <span ng-switch-when="4">
-                        <!--
-                        <div class="capGuide grants"
-                             ng-show="mode == 1 && !viewMode">
-                        </div>
-                        -->
+                    <span ng-switch-when="selectedInvestor">
                     </span>
-                    <span ng-switch-when="5">
-                        <!--
-                        <div class="capGuide grants"
-                             ng-show="mode == 1 && viewMode">
-                        </div>
-                        -->
+                    <span ng-switch-when="selectedSecurity">
+                        <security-details ng-if="viewMode"
+                                          sec="selectedSecurity">
+                        </security-details>
+                        <editable-security-details ng-if="!viewMode"
+                                                   sec="selectedSecurity">
+                        </editable-security-details>
                     </span>
-                    <span ng-switch-when="3">
-                        <!--
-                        <div class="capGuide grants"
-                             ng-show="mode == 1 && viewMode">
-                        </div>
-                        <div class="capGuide grants"
-                             ng-show="mode == 2 && viewMode">
-                            <h2>Forfeit Information</h2>
-                        </div>
-                        <div class="capGuide grants"
-                             ng-show="mode == 3 && viewMode">
-                            <h2>Exercised Information</h2>
-                        </div>
-                        <div class="capGuide grants"
-                             ng-show="mode == 4 && viewMode">
-                            <h2 style="margin-bottom: 0px;">
-                                Vested Information
-                            </h2>
-                        </div>
-                        -->
-                    </span>
-
-                    <span ng-switch-when="2">
-                        <!--
-                        <p>
-                            Investor Email
-                            <input disabled ng-model="activeInvestorName">
-                        </p>
-                        -->
-                    </span>
-
                     <span ng-switch-default class="capGuide railpadding">
                         <h1 class="right-bar-header">
                             Saved Vesting Schedules

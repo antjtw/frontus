@@ -14,36 +14,57 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
 
     $scope.captabletips = displayCopy.captabletips;
 
-    $scope.sideToggle = true;
-
-    $scope.rows = [];
-    $scope.freqtypes = [];
-    $scope.tf = ["yes", "no"];
-    $scope.issues = [];
-    $scope.security_names = [];
-    $scope.equityissues = [];
-    $scope.possibleActions = ['exercised', 'forfeited'];
-
-    // False is edit mode, true is view mode
+    $scope.sideToggle = false;
     $scope.viewMode = true;
     $scope.optionView = "Security";
 
     $scope.selectedCell = null;
     $scope.selectedInvestor = null;
     $scope.selectedSecurity = null;
+    $scope.selectedThing = function() {
+        if ($scope.selectedCell) return 'selectedCell';
+        if ($scope.selectedInvestor) return 'selectedInvestor';
+        if ($scope.selectedSecurity) return 'selectedSecurity';
+        return null;
+    };
 
-    var keyPressed = false; // Needed because selecting a date in the calendar is considered a blur, so only save on blur if user has typed a key
-
+    $scope.selectCell = function(inv, sec, kind) {
+        $scope.selectedInvestor = $scope.selectedSecurity = null;
+        if ($scope.selectedCell &&
+                $scope.selectedCell.investor == inv &&
+                $scope.selectedCell.security == sec &&
+                $scope.selectedCell.kind == kind)
+        {
+            $scope.selectedCell = null;
+        } else {
+            $scope.selectedCell = captable.grantCellFor(inv, sec, kind);
+        }
+    };
     $scope.selectSecurity = function(sec) {
-        $scope.selectedInvestor = $scope.selectedCell = null;
-        $scope.selectedSecurity = sec;
-        // TODO more
-
+        $scope.selectedCell = $scope.selectedInvestor = null;
+        if ($scope.selectedSecurity &&
+                $scope.selectedSecurity.security == sec)
+        {
+            $scope.selectedSecurity = null;
+        } else {
+            $scope.selectedSecurity = $scope.ct.securities
+                .filter(function(el) {
+                    return el.name == sec;
+                })[0];
+        }
     };
     $scope.selectInvestor = function(inv) {
-        $scope.selectedSecurity = $scope.selectedCell = null;
-        $scope.selectedInvestor = inv;
-        // TODO more
+        $scope.selectedCell = $scope.selectedSecurity = null;
+        if ($scope.selectedInvestor &&
+                $scope.selectedInvestor.investor == inv)
+        {
+            $scope.selectedInvestor = null;
+        } else {
+            $scope.selectedInvestor = $scope.ct.investors
+                .filter(function(el) {
+                    return el.name == inv;
+                })[0];
+        }
     };
 
     $scope.shown = null;

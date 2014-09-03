@@ -62,7 +62,7 @@
                             </span>
                         </td>
                         <td ng-class="{'selectablerow': viewMode}"
-                            ng-click="selectSecurity(sec)">
+                            ng-click="selectSecurity(sec.name)">
                             <span>
                                 {{sec.name}}
                             </span>
@@ -90,7 +90,7 @@
                         <td class="viewField"></td>
                         <td ng-class="{fieldSelected: selectedInvestor==inv,
                                        hoverable: inv.name}"
-                            ng-click="getActiveTransaction(tran, '', 'view')">
+                            ng-click="selectInvestor(inv.name)">
                             <span>{{inv.name}}</span>
                         </td>
                         <td ng-repeat="col in captable.grantColumns"
@@ -219,10 +219,18 @@
                              </cell-summary>
                         </div>
                     </span>
-
                     <span ng-switch-when="selectedInvestor">
-                        <p>Investor Email <input disabled ng-model="activeInvestorName"></p>
+                        <div class="headsection row-fluid">
+                            <h1>{{selectedInvestor.name}}</h1>
+                        </div>
+                        <span class="capGuide">
+                            <p>{{selectedInvestor.email}}</p>
+                        </span>
                     </span>
+                    <span ng-switch-when="selectedSecurity">
+                        <security-details sec="selectedSecurity">
+                    </span>
+
                     <span class="capGuide railpadding" ng-switch-default>
                         <h1 class="right-bar-header">View your Grants</h1>
 
@@ -233,5 +241,4 @@
             </internal-right-rail>
         </div>
     </div>
-
 </div>
