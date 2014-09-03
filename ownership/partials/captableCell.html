@@ -2,7 +2,8 @@
     <div class="output clickable">
         {{data.u | formatAmount:'units'}}
     </div>
-    <div class="output second clickable">
+    <div ng-if="t=='cap'"
+         class="output second clickable">
         {{data.a | formatAmount:'amount'}}
     </div>
 </span>

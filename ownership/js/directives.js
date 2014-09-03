@@ -93,6 +93,8 @@ own.directive('captableCell', [function() {
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
                 $scope.settings = $rootScope.settings;
+                $scope.t = ($scope.data && $scope.data.kind) ? "grant"
+                                                             : "cap";
             }
         ],
     };
@@ -124,6 +126,7 @@ own.directive('editableCaptableCell', [function() {
 
                 $scope.saveIt = function(key, value) {
                     if ($scope.data) {
+                        console.log($scope.data);
                         if ($scope.data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {

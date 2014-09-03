@@ -7,8 +7,10 @@ var CapTable = function() {
     this.securities = [];
     this.transactions = [];
     this.ledger_entries = [];
-    this.cells = [];
     this.attributes = [];
+
+    this.cells = [];
+    this.grantCells = [];
 };
 var Transaction = function() {
     this.attrs = {};
@@ -45,7 +47,16 @@ var Cell = function() {
     this.x = null; // percentage
     this.transactions = [];
     this.security = null;
+    this.investor = null;
     this.valid = true;
+};
+
+var GrantCell = function() {
+    this.u = null;
+    this.transactions = [];
+    this.security = null;
+    this.investor = null;
+    this.kind = null;
 };
 
 /* The captable service is currently a generic ownership data service
@@ -82,6 +93,26 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function role() {
         return navState ? navState.role : document.sessionState.role;
     }
+    var grantColumns = [{name: "granted",
+                         tranFilter: function(t) {return t.kind=="grant";},
+                         ledgerFilter: function(x) {return true;}
+                        },
+                        {name: "vested",
+                         tranFilter: function(t) {return true;},
+                         ledgerFilter: function(x) {
+                             return x.effective_date <= Date.now();
+                         }
+                        },
+                        {name: "forfeited",
+                         tranFilter: function(t) {return t.kind=="forfeit";},
+                         ledgerFilter: function(x) {return true;}
+                        },
+                        {name: "exercised",
+                         tranFilter: function(t) {return t.kind=="exercise";},
+                         ledgerFilter: function(x) {return true;}
+                        }];
+    this.grantColumns = grantColumns;
+
     var attrs = attributes.getAttrs();
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
@@ -119,7 +150,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
             fireTourModal(captable.transactions);
             attachEvidence(results[4]);
+
             generateCells();
+            generateGrantCells();
 
             linkUsers(captable.investors, results[5], results[6]);
             sortSecurities(captable.securities);
@@ -355,23 +388,40 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                        cell.security == sec &&
                        (cell.a || cell.u || (cell.transactions.length > 1));
             });
-        if (cells.length === 0) {
-            if (create) {
-                var c = createCell(inv, sec);
-                return c;
-            } else {
-                return null;
-            }
+        if (cells.length === 0 && create) {
+            return createCell(inv, sec);
         } else if (cells.length == 1) {
             return cells[0];
         } else if (cells.length > 1) {
             // FIXME error, do cleanup?
             // There should never be 2 cells with the same inv and sec.
+            return null;
         } else {
             return null;
         }
     }
     this.cellFor = cellFor;
+    function grantCellFor(inv, sec, kind, create) {
+        var cells = captable.grantCells
+            .filter(function(c) {
+                return c.investor == inv &&
+                       c.security == sec &&
+                       c.kind == kind &&
+                       (c.u || c.transactions.length > 1);
+            });
+        if (cells.length === 0 && create) {
+            return createGrantCell(inv, sec, kind);
+        } else if (cells.length == 1) {
+            return cells[0];
+        } else if (cells.length > 1) {
+            // FIXME error, do cleanup?
+            // There should never be 2 cells with the same inv and sec.
+            return null;
+        } else {
+            return null;
+        }
+    }
+    this.grantCellFor = grantCellFor;
     this.rowSum = function(inv) {
         return rowFor(inv)
             .reduce(function(prev, cur, idx, arr) {
@@ -643,6 +693,32 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return trans.reduce(sumTransactionAmount, 0);
     }
     this.sum_transactions = sum_transactions;
+    
+    function cleanCell(cell) {
+        console.log("clean cell", cell.transactions.length);
+        var sec_obj = captable.securities
+            .filter(function(el) {
+                return el.name==cell.security && el.attrs.security_type;
+            })[0];
+        var defaultTran = newTransaction(cell.security, defaultKind(sec_obj.attrs['security_type']), cell.investor);
+        for (var t in cell.transactions)
+        {
+            var del = true;
+            for (var a in cell.transactions[t].attrs)
+            {
+                if (cell.transactions[t].attrs[a] && (cell.transactions[t].attrs[a] != defaultTran.attrs[a]))
+                {
+                    del = false;
+                    break;
+                }
+            }
+            if (del)
+            {
+                console.log("deleting tran", cell.transactions[t].transaction, cell.investor, cell.security);
+                deleteTransaction(cell.transactions[t], cell, true);
+            }
+        }
+    };
 
     function updateCell(cell) {
         cell.ledger_entries = cell.transactions = null;
@@ -657,6 +733,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         setCellUnits(cell);
         setCellAmount(cell);
         cell.valid = validateCell(cell);
+        cleanCell(cell);
     }
     this.updateCell = updateCell;
     function generateCells() {
@@ -683,6 +760,38 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             inv.percentage = function() {
                 return investorSorting(inv.name);
             };
+        });
+    }
+    function generateGrantCells() {
+        angular.forEach(captable.investors, function(inv) {
+            angular.forEach(captable.securities, function(sec) {
+                angular.forEach(grantColumns, function(col) {
+                    var transactions = transForCell(inv.name, sec.name);
+                    transactions = transactions.filter(col.tranFilter);
+                    if (col.name == 'vested') console.log(transactions);
+                    if (transactions.length > 0) {
+                        var cell = nullGrantCell();
+                        cell.kind = col.name;
+                        cell.security = sec.name;
+                        cell.investor = inv.name;
+
+                        cell.transactions = transactions;
+
+                        var tranids = transactions
+                            .reduce(accumulateProperty('transaction'), []);
+                        cell.ledger_entries = captable.ledger_entries
+                            .filter(function(ent) {
+                                return tranids.indexOf(ent.transaction) != -1
+                                    && ent.investor == inv.name
+                                    && ent.security == sec.name;
+                            })
+                            .filter(col.ledgerFilter);
+
+                        setCellUnits(cell);
+                        captable.grantCells.push(cell);
+                    }
+                });
+            });
         });
     }
 
@@ -843,14 +952,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.saveTransaction = saveTransaction;
 
-    this.deleteTransaction = function(tran, cell) {
+    function deleteTransaction(tran, cell, hide) {
         if (tran.transaction) {
             SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
             .then(function(x) {
                 var res = x[0].delete_transaction;
                 if (res > 0) {
-                    $rootScope.$emit("notification:success",
-                        "Transaction deleted");
+                    if (!hide)
+                    {
+                        $rootScope.$emit("notification:success",
+                            "Transaction deleted");
+                    }
                     splice_many(captable.transactions, [tran]);
                     splice_many_by(captable.ledger_entries, function(el) {
                             return el.transaction == tran.transaction;
@@ -869,13 +981,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         }
                     }
                 } else {
-                    $rootScope.$emit("notification:fail",
-                        "Oops, something went wrong.");
+                    if (!hide)
+                    {
+                        $rootScope.$emit("notification:fail",
+                            "Oops, something went wrong.");
+                    }
                 }
             }).except(function(err) {
                 console.log(err);
-                $rootScope.$emit("notification:fail",
-                    "Oops, something went wrong.");
+                if (!hide)
+                {
+                    $rootScope.$emit("notification:fail",
+                        "Oops, something went wrong.");
+                }
             });
         } else {
             splice_many(captable.transactions, [tran]);
@@ -894,6 +1012,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
         }
     };
+    this.deleteTransaction = deleteTransaction;
     this.deleteSecurityTransaction = function(tran, sec) {
         SWBrijj.procm('_ownership.delete_transaction', tran.transaction)
         .then(function(x) {
@@ -1015,6 +1134,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return new Cell();
     }
     this.nullCell = nullCell;
+    function nullGrantCell() {
+        return new GrantCell();
+    }
     function newCell(issue) {
         var cell = new Cell();
         cell.issue_type = issue.type;
@@ -1167,19 +1289,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.createCell = createCell;
-    /*
-    function massageTransactionValues(tran) {
-        tran.units = calculate.cleannumber(tran.units);
-        tran.amount = calculate.cleannumber(tran.amount);
-
-        tran.units = calculate.undoIf(calculate.numberIsInvalid,
-                                      tran.units, tran.unitskey);
-        tran.amount = calculate.undoIf(calculate.numberIsInvalid,
-                                       tran.amount, tran.paidkey);
-        if (tran.tran_id === undefined) { tran.tran_id = ''; }
+    function createGrantCell(inv, sec, kind) {
+        var c = new GrantCell();
+        c.investor = inv;
+        c.security = sec;
+        var sec_obj = captable.securities
+            .filter(function(el) { return el.name == sec;})[0];
+        if (!sec_obj.attrs || !sec_obj.attrs.security_Type) {
+            return null;
+        } else {
+            // TODO
+        }
     }
-    this.massageTransactionValues = massageTransactionValues;
-    */
+    this.createGrantCell = createGrantCell;
     function attachPariPassu(securities, links) {
         angular.forEach(securities, function(iss) {
             iss.paripassu = [];

@@ -1457,6 +1457,10 @@ ul.last-edited > li:last-child {
     padding-left: 10px;
 }
 
+table.grant-table tr.column-label > th {
+    text-transform: capitalize;
+}
+
 /* Specialized Modals */
 
 .capaccess-drop {
