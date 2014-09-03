@@ -360,6 +360,7 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.displayAttr = captable.displayAttr;
                     $scope.currentTab = 'details';
                     $scope.actions = ["split", "grant", "exercise"];
+                    
                     $scope.switchCapTab = function(tab) {
                         $scope.currentTab = tab;
                     };

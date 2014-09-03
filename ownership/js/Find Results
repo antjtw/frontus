@@ -1,0 +1,270 @@
+Searching 752 files for "toggleForEvidence(inv"
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/evidenceTable.html:
+   54              <td>
+   55                  <div class="padding-left-ten">
+   56:                     <button class="check-box-button" ng-class="{selected:captable.isEvidence(invdoc)}" ng-click="captable.toggleForEvidence(invdoc);">
+   57                          <span data-icon="&#xe023;" aria-hidden="true"></span>
+   58                      </button>
+
+1 match in 1 file
+
+
+Searching 752 files for "evidence_data"
+
+/Users/arielisaacs/Documents/Sharewave/frontus/features/features.js:
+   76          };
+   77  
+   78:         $scope.fromtran = {"insertion_date":"2014-08-27T07:44:49.092Z","transaction":746788505,"inet":null,"attrs":{"amount":100000,"discount":20,"interestrate":null,"interestratefreq":null,"investor":"Peter","physical":false,"security":"Debt","security_type":"Convertible Debt","term":null,"units":null,"valcap":4000000},"entered_by":null,"evidence":null,"company":"2f5169a3e8b1.sharewave.com","effective_date":"2014-08-27T07:44:49.092Z","kind":"purchase","valid":true,"evidence_data":[],"active":true};
+   79          $scope.convertTran = {"toissue": {}};
+   80          $scope.fields = {"fromtranamount": $scope.fromtran.attrs.amount, "fromtranvalcap": $scope.fromtran.attrs.valcap, "fromtrandiscount": $scope.fromtran.attrs.discount, "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25", "convertdate": new Date.today()};
+
+/Users/arielisaacs/Documents/Sharewave/frontus/modeling/controllers/note.js:
+   45      }, true);
+   46  
+   47:     $scope.fromtran = {"insertion_date":"2014-08-27T07:44:49.092Z","transaction":746788505,"inet":null,"attrs":{"amount":100000,"discount":20,"interestrate":null,"interestratefreq":null,"investor":"Peter","physical":false,"security":"Debt","security_type":"Convertible Debt","term":null,"units":null,"valcap":4000000},"entered_by":null,"evidence":null,"company":"2f5169a3e8b1.sharewave.com","effective_date":"2014-08-27T07:44:49.092Z","kind":"purchase","valid":true,"evidence_data":[],"active":true};
+   48      $scope.convertTran = {"toissue": {}};
+   49      $scope.fields = {"fromtranamount": $scope.fromtran.attrs.amount, "fromtranvalcap": $scope.fromtran.attrs.valcap, "fromtrandiscount": $scope.fromtran.attrs.discount, "convertTranamountsold" : "2000000", "premoney" : "6000000", "postmoney" : "8000000", "convertTranpercentsold": "25", "convertdate": new Date.today()};
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/js/directives.js:
+  581                  
+  582                  $scope.hasDocuments = function(tran) {
+  583:                     return tran.evidence_data && (tran.evidence_data.length > 0);
+  584                  };
+  585                  
+  ...
+  677                  //     $scope.$emit('windowToggle', $scope.windowToggle);
+  678                  //     console.log(obj)
+  679:                 //     obj.evidence_data = [];
+  680  
+  681                  // };
+  ...
+  683                  $scope.editEvidence = function(obj) {
+  684                      $scope.ct.evidence_object = obj;
+  685:                     $scope.ct.evidence_object.evidence_data = [];
+  686                      $scope.windowToggle = (obj ? true : false);
+  687                      // toggle the window
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/js/services/captable.js:
+   20      this.ip = null;
+   21      this.evidence = null;
+   22:     this.evidence_data = null;
+   23      this.insertion_date = null;
+   24      this.transaction = null;
+   ..
+ 1105      function attachEvidence(data) {
+ 1106          angular.forEach(captable.transactions, function(tran) {
+ 1107:             tran.evidence_data = data.filter(function(el) {
+ 1108                  return el.evidence==tran.evidence;
+ 1109              });
+ 1110:             if (tran.evidence_data.length > 0) {
+ 1111                  console.log("evidence!", tran);
+ 1112              }
+ ....
+ 1570      };
+ 1571      function updateEvidenceInDB(obj, action) {
+ 1572:         if (obj.transaction && obj.evidence_data) {
+ 1573              SWBrijj.procm('_ownership.upsert_transaction_evidence',
+ 1574                            parseInt(obj.transaction, 10),
+ 1575:                           JSON.stringify(obj.evidence_data)
+ 1576              ).then(function(r) {
+ 1577                  void(r);
+ ....
+ 1595      function addEvidence(ev) {
+ 1596          if (captable.evidence_object &&
+ 1597:                 captable.evidence_object.evidence_data) {
+ 1598:             captable.evidence_object.evidence_data.push(ev);
+ 1599:             console.log( captable.evidence_object.evidence_data)
+ 1600          }
+ 1601      }
+ ....
+ 1603      function removeEvidence(ev, obj) {
+ 1604          if (!obj) {
+ 1605:             captable.evidence_object.evidence_data =
+ 1606:                 captable.evidence_object.evidence_data
+ 1607                      .filter(function(x) {
+ 1608                          return !evidenceEquals(ev, x);});
+ 1609              updateEvidenceInDB(captable.evidence_object, 'removed');
+ 1610          } else {
+ 1611:             obj.evidence_data = obj.evidence_data
+ 1612                  .filter(function(x) {
+ 1613                      return !evidenceEquals(ev, x);
+ ....
+ 1619      this.toggleForEvidence = function(ev) {
+ 1620          console.log(ev)
+ 1621:         console.log(captable.evidence_object.evidence_data)
+ 1622          // if (!ev || !captable.evidence_object) {return;
+ 1623          //     cosnole.log("hey")}
+ 1624:         // if (!captable.evidence_object.evidence_data) {
+ 1625:         //     captable.evidence_object.evidence_data = [];
+ 1626          //     console.log(ev);
+ 1627          //     console.log(captable);
+ ....
+ 1646          if(captable.evidence_object)
+ 1647          if (captable.evidence_object &&
+ 1648:                 captable.evidence_object.evidence_data) {
+ 1649:             return captable.evidence_object.evidence_data
+ 1650                  .filter(function(x) {
+ 1651                      return evidenceEquals(ev, x);
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/cellDetails.html:
+   36          </div>
+   37          <div class="capTab" ng-switch-when="documents">
+   38:             <div ng-if="tran.evidence_data.length==0"
+   39                   class="linkedDocuments viewOnly">
+   40                  Connect documents that support this transaction by clicking Edit above.
+   41              </div>
+   42:             <div ng-if="tran.evidence_data.length>0"
+   43                   class="linkedDocuments viewOnly">
+   44:                 <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
+   45                      <ul class="pull-left">
+   46                          <li>
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableCellDetails.html:
+   66      <div class="capTab" ng-switch-when="documents">
+   67          {{windowToggle}}
+   68:         <div ng-if="tran.evidence_data.length==0 || tran.evidence_data==null" class="linkedDocuments">
+   69               <div class="noGroups" ng-click="editEvidence(tran)">
+   70                  Connect documents that support this transaction by clicking the link below.
+   ..
+   73              </div>
+   74          </div>
+   75:         <div ng-if="tran.evidence_data.length > 0"
+   76               class="linkedDocuments">
+   77:             <div ng-repeat="doc in tran.evidence_data"
+   78                   class="row-fluid">
+   79                  <ul class="pull-left">
+   ..
+   99              </div>
+  100          </div>
+  101:         <span ng-hide="windowToggle || tran.evidence_data == null"
+  102                class="blue-link delete-link linkedDocuments"
+  103                ng-click="editEvidence(tran);"
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableSecurityDetails.html:
+   71          </div>
+   72          <div class="capTab" ng-switch-when="documents">
+   73:             <div ng-if="tran.evidence_data.length==0"
+   74                   class="linkedDocuments">
+   75                      <div class="noGroups"  ng-click="editEvidence(tran)">
+   ..
+   81  
+   82              </div>
+   83:             <div ng-if="tran.evidence_data.length>0"
+   84                   class="linkedDocuments">
+   85:                 <div ng-repeat="doc in tran.evidence_data"
+   86                       class="row-fluid">
+   87                      <ul class="pull-left">
+   ..
+  109                  </div>
+  110              </div>
+  111:             <span ng-hide="windowToggle || tran.evidence_data.length == 0"
+  112                    class="blue-link delete-link linkedDocuments"
+  113                    ng-click="editEvidence(tran);"
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/securityDetails.html:
+   43          </div>
+   44          <div class="capTab" ng-switch-when="documents">
+   45:             <div ng-if="tran.evidence_data.length==0"
+   46                   class="linkedDocuments viewOnly">
+   47                  Connect documents that support this transaction by clicking Edit above.
+   48              </div>
+   49:             <div ng-if="tran.evidence_data.length>0"
+   50                   class="linkedDocuments viewOnly">
+   51:                 <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
+   52                      <ul class="pull-left">
+   53                          <li>
+
+38 matches across 8 files
+
+
+Searching 752 files for "editable-trans"
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableCellDetails.html:
+   56              </div>
+   57          </div>
+   58:         <editable-transaction-attributes data="tran" undo="undo" save="true">
+   59:         </editable-transaction-attributes>
+   60          <span class="delete-link"
+   61                data-icon="&#xe00c;"
+   ..
+  137          </div>
+  138          <div ng-if="newTran">
+  139:             <editable-transaction-attributes data="newTran" save="false">
+  140:             </editable-transaction-attributes>
+  141  
+  142              <div class="action-button standard-button">
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableSecurityDetails.html:
+   61                  </div>
+   62              </div>
+   63:             <editable-transaction-attributes ng-if="tran && !sec.creating" data="tran" save="true">
+   64:             </editable-transaction-attributes>
+   65              <span class="delete-link"
+   66                    ng-if="tran.kind != 'issue security'"
+   ..
+  142              </div>
+  143              <div ng-if="newTran">
+  144:                 <editable-transaction-attributes data="newTran" save="false">
+  145:                 </editable-transaction-attributes>
+  146  
+  147                  <div class="action-button standard-button">
+
+8 matches across 2 files
+
+
+Searching 752 files for "captable.removeE"
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableCellDetails.html:
+   94                  </ul>
+   95                  <span class="pull-right" data-icon="&#xe00f;"
+   96:                       ng-click="captable.removeEvidence(doc, tran)">
+   97                  </span>
+   98              </div>
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableSecurityDetails.html:
+  106                      </ul>
+  107                      <span class="pull-right" data-icon="&#xe00f;"
+  108:                           ng-click="captable.removeEvidence(doc, tran)">
+  109                      </span>
+  110                  </div>
+
+2 matches across 2 files
+
+
+Searching 752 files for "removeEvidence"
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/js/services/captable.js:
+ 1623      }
+ 1624      this.addEvidence = addEvidence;
+ 1625:     function removeEvidence(ev, obj) {
+ 1626          if (!obj) {
+ 1627              captable.evidence_object.evidence_data =
+ ....
+ 1638          }
+ 1639      }
+ 1640:     this.removeEvidence = removeEvidence;
+ 1641      this.toggleForEvidence = function(ev) {
+ 1642          console.log(ev)
+ ....
+ 1650              var action = "";
+ 1651              if (isEvidence(ev)) {
+ 1652:                 removeEvidence(ev);
+ 1653                  action = "removed";
+ 1654              } else {
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableCellDetails.html:
+   94                  </ul>
+   95                  <span class="pull-right" data-icon="&#xe00f;"
+   96:                       ng-click="captable.removeEvidence(doc, tran)">
+   97                  </span>
+   98              </div>
+
+/Users/arielisaacs/Documents/Sharewave/frontus/ownership/partials/editableSecurityDetails.html:
+  106                      </ul>
+  107                      <span class="pull-right" data-icon="&#xe00f;"
+  108:                           ng-click="captable.removeEvidence(doc, tran)">
+  109                      </span>
+  110                  </div>
+
+6 matches across 3 files
