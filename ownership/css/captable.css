@@ -617,6 +617,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     display: inline-block;
     font-family: "FS Elliot Web Light", sans-serif;
     text-transform: capitalize;
+    width: 100%;
 }
 
 .invalidTran {
