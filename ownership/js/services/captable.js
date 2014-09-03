@@ -666,7 +666,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
             cell.u = sum_ledger(cell.ledger_entries);
-            console.log(cell.u);
         }
     }
     this.setCellUnits = setCellUnits;
@@ -681,7 +680,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
             var plus_trans = cell.transactions
                 .filter(function(el) {
-                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1)) ||
+                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1) &&
+                            el.kind != 'repurchase') ||
                            el.attrs.investor_to == cell.investor;});
             var minus_trans = cell.transactions
                 .filter(function(el) {
@@ -775,7 +775,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 angular.forEach(grantColumns, function(col) {
                     var transactions = transForCell(inv.name, sec.name);
                     transactions = transactions.filter(col.tranFilter);
-                    if (col.name == 'vested') console.log(transactions);
                     if (transactions.length > 0) {
                         var cell = nullGrantCell();
                         cell.kind = col.name;
@@ -886,13 +885,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         //
         // or maybe add a save button for now
         // TODO: return a promise instead of having errorFunc
-        console.log("saveTransaction");
         for (var key in tran.attrs) {
             if (tran.attrs[key] === null) {
                 delete tran.attrs[key];
             }
         }
-        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
@@ -956,7 +953,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
             console.log("error");
-            console.log(e);
+            console.error(e);
             if (errorFunc)
             {
                 errorFunc();
@@ -1001,7 +998,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     }
                 }
             }).except(function(err) {
-                console.log(err);
+                console.error(err);
                 if (!hide)
                 {
                     $rootScope.$emit("notification:fail",
