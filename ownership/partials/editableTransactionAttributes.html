@@ -20,15 +20,13 @@
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
-               ng-model="data.attrs[key]"
-               ng-required="isRequired(key)">
+               ng-model="data.attrs[key]">
         <input ng-if="useNumberField(key)"
                ui-event="{keyup: 'saveIt(data, true, undo)',
                           blur: 'saveIt(data, true, undo)'}"
                type="text"
                float
-               ng-model="data.attrs[key]"
-               ng-required="isRequired(key)">
+               ng-model="data.attrs[key]">
         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
             <li class="dropdown standard">
             <a class="dropdown-toggle">
