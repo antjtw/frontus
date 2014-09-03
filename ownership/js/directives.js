@@ -611,8 +611,8 @@ own.directive('editableCellDetails', [function() {
 
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
-                    captable.evidence_object = null;
-                    $scope.windowToggle = false;
+                    // captable.evidence_object = null;
+                    // $scope.windowToggle = false;
                 };
 
                 $scope.switchCapTab = function(tab) {
@@ -670,13 +670,24 @@ own.directive('editableCellDetails', [function() {
                     $scope.editEvidence();
                     $scope.newTran = null;
                 };
+                // $scope.editEvidence = function(obj) {
+                //     $scope.ct.evidence_object = obj;
+                //     // $scope.windowToggle = (obj ? false : false);
+                //     if($scope.windowToggle == true){}
+                //     $scope.$emit('windowToggle', $scope.windowToggle);
+                //     console.log(obj)
+                //     obj.evidence_data = [];
+
+                // };
+
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
+                    // $scope.ct.evidence_object.evidence_data = [];
+                    
                     $scope.windowToggle = (obj ? true : false);
-                    if($scope.windowToggle == true){}
+                    // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
                     console.log(obj)
-
                 };
 
                 $scope.checkNewTran = function(tran) {

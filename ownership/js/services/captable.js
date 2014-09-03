@@ -1596,6 +1596,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data.push(ev);
+            console.log( captable.evidence_object.evidence_data)
         }
     }
     this.addEvidence = addEvidence;
@@ -1617,14 +1618,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.removeEvidence = removeEvidence;
     this.toggleForEvidence = function(ev) {
         console.log(ev)
-        // if (!ev || !captable.evidence_object) {return;
-        //     cosnole.log("hey")}
-        // if (!captable.evidence_object.evidence_data) {
-        //     captable.evidence_object.evidence_data = [];
-        //     console.log(ev);
-        //     console.log(captable);
-        //     console.log("whyyyyyy")
-        // } else {
+        console.log(captable.evidence_object.evidence_data)
+        if (!ev || !captable.evidence_object) {return;}
+        if (!captable.evidence_object.evidence_data) {
+            captable.evidence_object.evidence_data = [];
+            console.log(ev);
+            console.log(captable);
+            console.log("whyyyyyy")
+        } else {
             var action = "";
             if (isEvidence(ev)) {
                 removeEvidence(ev);
@@ -1635,12 +1636,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 console.log("added!")
             }
             updateEvidenceInDB(captable.evidence_object, action);
-        // }
+        }
     };
     
 
 
     function isEvidence(ev) {
+        if(captable.evidence_object)
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             return captable.evidence_object.evidence_data
