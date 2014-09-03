@@ -385,8 +385,10 @@ own.directive('editableSecurityDetails', [function() {
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     $scope.windowToggle = (obj ? true : false);
+                    // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
                 };
+
                 $scope.addSecurity = function() {
                     $scope.$emit('addSecurity');
                 };
@@ -620,11 +622,14 @@ own.directive('editableCellDetails', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
                 $scope.ct = captable.getCapTable();
+                $scope.captable = captable;
 
                 $scope.loaddirective = function() {
-                    $scope.captable = captable;
-                    captable.evidence_object = null;
-                    $scope.windowToggle = false;
+                    if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
+                        $scope.cell.transactions[0].active = true;
+                    }
+                    // captable.evidence_object = null;
+                    // $scope.windowToggle = false;
                 };
 
                 $scope.switchCapTab = function(tab) {
@@ -682,10 +687,24 @@ own.directive('editableCellDetails', [function() {
                     $scope.editEvidence();
                     $scope.newTran = null;
                 };
+                // $scope.editEvidence = function(obj) {
+                //     $scope.ct.evidence_object = obj;
+                //     // $scope.windowToggle = (obj ? false : false);
+                //     if($scope.windowToggle == true){}
+                //     $scope.$emit('windowToggle', $scope.windowToggle);
+                //     console.log(obj)
+                //     obj.evidence_data = [];
+
+                // };
+
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
+                    // $scope.ct.evidence_object.evidence_data = [];
+                    
                     $scope.windowToggle = (obj ? true : false);
+                    // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
+                    console.log(obj)
                 };
 
                 $scope.checkNewTran = function(tran) {
