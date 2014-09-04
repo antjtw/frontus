@@ -121,7 +121,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         {name: "vested",
                          tranFilter: function(ids) {
                              return function(t) {
-                                 return ids.indexOf(t.transaction) != -1;
+                                 return ids.indexOf(t.transaction) != -1 ||
+                                        (t.kind=="forfeit" &&
+                                            t.attrs.transaction_from &&
+                                            ids.indexOf(t.attrs.transaction_from) != -1);
                              };
                          },
                          ledgerFilter: function(ids, inv, sec) {
@@ -139,7 +142,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                              return function(t) {
                                  return t.kind=="forfeit" &&
                                      t.attrs.transaction_from &&
-                                     t.attrs.transaction_from == ids[0];
+                                     ids.indexOf(t.attrs.transaction_from) != -1;
                              };
                          },
                          ledgerFilter: function(ids, inv, sec) {
@@ -156,7 +159,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                              return function(t) {
                                  return t.kind=="exercise" &&
                                      t.attrs.transaction_from &&
-                                     t.attrs.transaction_from == ids[0];
+                                     ids.indexOf(t.attrs.transaction_from) != -1;
                              };
                          },
                          ledgerFilter: function(ids, inv, sec) {
@@ -1091,7 +1094,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             "Transaction deleted");
                     }
                     var trans = captable.transactions.filter(function(t) {
-                        return t.transaction == tran.transaction || 
+                        return t.transaction == tran.transaction ||
                             (t.attrs['transaction_from'] && t.attrs.transaction_from == tran.transaction);
                     });
                     var ids = trans.reduce(

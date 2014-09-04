@@ -17,9 +17,14 @@
                 <th>Date</th>
                 <th>Units</th>
             </tr>
-            <tr ng-repeat="e in cell.ledger_entries">
+            <tr ng-repeat="e in cell.ledger_entries" ng-if="cell.kind != 'forfeited'">
                 <td>{{e.effective_date | date:settings.shortdate}}</td>
-                <td>{{e.credit - e.debit | abs | formatAmount:'units'}}</td>
+                <td ng-if="cell.kind != 'exercised'">{{e.credit - e.debit | formatAmount:'units'}}</td>
+                <td ng-if="cell.kind == 'exercised'">{{e.debit - e.credit | formatAmount:'units'}}</td>
+            </tr>
+            <tr ng-repeat="e in cell.transactions" ng-if="cell.kind == 'forfeited'">
+                <td>{{e.effective_date | date:settings.shortdate}}</td>
+                <td>{{e.attrs.units  | formatAmount:'units'}}</td>
             </tr>
         </table>
     </div>
