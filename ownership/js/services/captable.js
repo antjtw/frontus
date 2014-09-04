@@ -712,7 +712,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
             cell.u = sum_ledger(cell.ledger_entries);
-            console.log(cell.u);
         }
     }
     this.setCellUnits = setCellUnits;
@@ -720,6 +719,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
+        } else if (cellSecurityType(cell) == "Option") {
+            return;
         } else {
             var transactionkeys = [];
             angular.forEach(cell.transactions, function(tran) {
@@ -727,7 +728,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
             var plus_trans = cell.transactions
                 .filter(function(el) {
-                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1)) ||
+                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1) &&
+                            el.kind != 'repurchase') ||
                            el.attrs.investor_to == cell.investor;});
             var minus_trans = cell.transactions
                 .filter(function(el) {
@@ -816,6 +818,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     function generateGrantCells() {
+<<<<<<< HEAD
         /* Each grant cell has a list of root transactions.
          * 
          * From those transactions and the cell kind we get
@@ -930,13 +933,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         //
         // or maybe add a save button for now
         // TODO: return a promise instead of having errorFunc
-        console.log("saveTransaction");
         for (var key in tran.attrs) {
             if (tran.attrs[key] === null) {
                 delete tran.attrs[key];
             }
         }
-        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
@@ -1000,7 +1001,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
             console.log("error");
-            console.log(e);
+            console.error(e);
             if (errorFunc)
             {
                 errorFunc();
@@ -1045,7 +1046,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     }
                 }
             }).except(function(err) {
-                console.log(err);
+                console.error(err);
                 if (!hide)
                 {
                     $rootScope.$emit("notification:fail",
@@ -1637,13 +1638,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return captable.attributes.filter(
                 function(el) { return el.name==key; })[0].display_name;
     };
+    // TODO: move to the security object
     this.isDebt = function(security) {
         if (!security) return;
         return security.attrs.security_type == "Debt" || security.attrs.security_type == "Safe" || security.attrs.security_type == "Convertible Debt";
     };
+    this.isOption = function(security) {
+        if (!security) return;
+        return security.attrs.security_type == "Option";
+    };
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
-            console.log('ready to update')
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
                           parseInt(obj.transaction, 10),
                           JSON.stringify(obj.evidence_data)

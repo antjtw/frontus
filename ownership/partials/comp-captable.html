@@ -503,7 +503,7 @@
                            disabled
                            value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:2}}%">
                 </td>
-                <td class="viewName">
+                <td class="viewName unissuedName">
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
@@ -586,13 +586,15 @@
                      ng-switch on="sideBar">
                     <span ng-switch-when="1">
                         <editable-security-details
-                            sec="selectedSecurity"></editable-security-details>
+                            sec="selectedSecurity"
+                            currenttab ="currentTab" window-toggle="windowToggle"></editable-security-details>
                     </span>
                     <span ng-switch-when="2">
                         <editable-cell-details
                                    cell="selectedCell"
                                    currenttab="currentTab"
-                                   undo="undo"></editable-cell-details>
+                                   undo="undo"
+                                   window-toggle="windowToggle"></editable-cell-details>
                     </span>
                     <span ng-switch-when="5">
                         <security-details sec="selectedSecurity"></security-details>

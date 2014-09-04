@@ -3,36 +3,34 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/company.css">
 
 <div>
-  <div class="front info-box">
-    <div class="head-box">
-      <h2>Documents</h2>
-    </div>
-    <div class="body-box">
-      <div style="display: inline-block; width: 35%">Graph will go here</div>
-      <div style="display: inline-block">
-        
-        <table class="table">
-          <thead>
-            <tr style="color: #1E2D3D">
-              <th style="padding-right: 80px" >Document Name</th>
-              <th>Document Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="myDoc in myDocs" class="table-border">
-              <td ng-click="gotoDoc(myDoc)">{{myDoc.docname}}</td>
-              <td>{{shortStatus(myDoc)}}</td>
-          </tbody>
+    <div class="front info-box">
+        <div ng-show="docsummary.num > 0" class="head-box">
+            <h2>Document Management</h2>
 
-        </table>
-      </div>      
-    </div>
-    <div style="float: right; padding-right: 40px">
-      <a ng-href="/app/documents/investor-list">
-        <div class="standard-button blue">
-          <button class="btn" >View</button>
         </div>
-      </a>
+        <div ng-hide="docsummary.num > 0" class="head-box">
+            <h2>Document Management</h2>
+        </div>
+        <div class="body-box">
+            <div>
+                <div class="detail-row row-fluid">
+                    <div class="span15">
+                        <div>
+                            <img src='/img/onboardingicons/dayone/doc-upload.png'>
+                            <h2><span>{{docsummary.num}}</span> Documents</h2>
+                        </div>
+                        <div>
+                            <img src='/img/onboardingicons/dayone/doc-sign.png'>
+                            <h2><span>{{docsummary.sig}}</span> Waiting for Action</h2>
+                        </div>
+                    </div>
+                    <div ng-show="docsummary.num > 0" class="view-button" id="view-button1">
+                        <div class="small-standard-button standard-button gray">
+                            <button id='a_home_doc_inv_front' class="btn" ng-click="gotopage('/app/documents/investor-list')">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div> 

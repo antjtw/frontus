@@ -111,12 +111,13 @@ own.directive('editableCaptableCell', [function() {
                 selectCell: '=selectCell',
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
-        controller: ["$scope", "$rootScope",
+        controller: ["$scope", "$rootScope", "$filter",
                      "calculate", "captable", "History",
-            function($scope, $rootScope, calculate, captable, history) {
+            function($scope, $rootScope, $filter, calculate, captable, history) {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
+                $scope.isOption = captable.isOption;
                 $scope.ct = captable.getCapTable();
 
                 $scope.loaddirective = function() {
@@ -136,9 +137,6 @@ own.directive('editableCaptableCell', [function() {
                         if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
-                            if (data.transactions[0]) {
-                                console.log("saving", data.transactions[0]);
-                            }
                             captable.saveTransaction(
                                 data.transactions[0], true);
                         }
@@ -158,11 +156,10 @@ own.directive('editableCaptableCell', [function() {
                     //console.log(newval, typeof(newval));
                     if (angular.isDefined(newval)) {
                         var num = 0;
-                        if (newval != null)
+                        if (newval !== null)
                         {
                             num = parseFloat(newval);
                         }
-                        console.log("newval", newval, num);
                         if (!$scope.data) {
                             $scope.data = $scope.selectedCell;
                         }
@@ -170,13 +167,13 @@ own.directive('editableCaptableCell', [function() {
                         updateAttr('units', num);
 
                     } else {
-                        return ($scope.data ? $scope.data.u.toString() : null);
+                        return ($scope.data ? $filter('formatAmount')($scope.data.u, 'units') : null);
                     }
                 };
                 $scope.amount = function(newval) {
                     if (angular.isDefined(newval)) {
                         var num = 0;
-                        if (newval != null)
+                        if (newval !== null)
                         {
                             num = parseFloat(newval);
                         }
@@ -186,7 +183,7 @@ own.directive('editableCaptableCell', [function() {
                         $scope.data.a = num;
                         updateAttr('amount', num);
                     } else {
-                        return ($scope.data ? $scope.data.a : null);
+                        return ($scope.data ? $filter('formatAmount')($scope.data.a, 'amount') : null);
                     }
                 };
                 $scope.opts = {
@@ -311,10 +308,11 @@ own.directive('securityDetails', [function() {
         restrict: 'EA',
         scope: {
             sec: '=',
+
         },
         templateUrl: '/ownership/partials/securityDetails.html',
-        controller: ["$scope", "displayCopy",
-            function($scope, displayCopy) {
+        controller: ["$scope", "displayCopy", '$location',
+            function($scope, displayCopy, $location) {
                 $scope.tips = displayCopy.captabletips;
                 $scope.currentTab = 'details';
                 $scope.switchCapTab = function(tab) {
@@ -348,22 +346,26 @@ own.directive('editableSecurityDetails', [function() {
     return {
         restrict: 'E',
         scope: {
-            sec: '='
+            sec: '=',
+            currentTab: '=currenttab',
+            windowToggle: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
             function($scope, displayCopy, captable, $filter, calculate) {
+                console.log($scope.windowToggle)
 
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
                     $scope.displayAttr = captable.displayAttr;
-                    $scope.currentTab = 'details';
+                    // $scope.currentTab = 'details';
                     $scope.actions = ["split", "grant", "exercise"];
-                    $scope.switchCapTab = function(tab) {
-                        $scope.currentTab = tab;
-                    };
                     $scope.ct = captable.getCapTable();
+                };
+
+                $scope.switchCapTab = function(tab) {
+                        $scope.currentTab = tab;
                 };
 
                 $scope.addTransaction = function() {
@@ -556,8 +558,8 @@ own.directive('cellSummary', [function() {
         restrict: 'E',
         scope: {cell: '='},
         templateUrl: '/ownership/partials/cellSummary.html',
-        controller: ["$scope", "$rootScope", "captable",
-            function($scope, $rootScope, captable) {
+        controller: ["$scope", "captable",
+            function($scope, captable) {
 
             }],
     };
@@ -592,11 +594,11 @@ own.directive('cellDetails', [function() {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
-                
+
                 $scope.hasDocuments = function(tran) {
                     return tran.evidence_data && (tran.evidence_data.length > 0);
                 };
-                
+
                 $scope.toggleTransaction = function() {
                     $scope.switchCapTab('details');
                 };
@@ -614,7 +616,8 @@ own.directive('editableCellDetails', [function() {
         restrict: 'EA',
         scope: {cell: '=',
                 currentTab: '=currenttab',
-                undo: '=undo'},
+                undo: '=undo',
+                windowToggle: '='},
         templateUrl: '/ownership/partials/editableCellDetails.html',
         controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter",
             function($scope, $rootScope, attributes, captable, calculate, $filter) {
@@ -660,6 +663,7 @@ own.directive('editableCellDetails', [function() {
                 };
 
                 $scope.addTransaction = function() {
+                    console.log("here");
                     var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
                                      captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
@@ -700,7 +704,7 @@ own.directive('editableCellDetails', [function() {
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
                     // $scope.ct.evidence_object.evidence_data = [];
-                    
+
                     $scope.windowToggle = (obj ? true : false);
                     // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
