@@ -194,6 +194,12 @@ ownership.filter('formatAmount', function($rootScope) {
              currencydictionary[settings.currency] : '$';
         if (amount === undefined || amount === null || (typeof(amount)!="string" && isNaN(amount))) {
             amount = null;
+        } else if (typeof(amount)=="boolean") {
+            if (amount) {
+                amount = "Yes";
+            } else {
+                amount = "No";
+            }
         } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
             var n;
             if (moneys.indexOf(key) !== -1) {
@@ -445,10 +451,5 @@ ownership.filter('noempty', function () {
             }
         });
         return returntrans;
-    };
-});
-ownership.filter('abs', function() {
-    return function(num) {
-        return Math.abs(num);
     };
 });

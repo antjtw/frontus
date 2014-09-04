@@ -121,7 +121,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         {name: "vested",
                          tranFilter: function(ids) {
                              return function(t) {
-                                 return ids.indexOf(t.transaction) != -1;
+                                 return ids.indexOf(t.transaction) != -1 ||
+                                        (t.kind=="forfeit" &&
+                                            t.attrs.transaction_from &&
+                                            ids.indexOf(t.attrs.transaction_from) != -1);
                              };
                          },
                          ledgerFilter: function(ids, inv, sec) {
@@ -139,7 +142,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                              return function(t) {
                                  return t.kind=="forfeit" &&
                                      t.attrs.transaction_from &&
-                                     t.attrs.transaction_from == ids[0];
+                                     ids.indexOf(t.attrs.transaction_from) != -1;
                              };
                          },
                          ledgerFilter: function(ids, inv, sec) {
@@ -156,7 +159,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                              return function(t) {
                                  return t.kind=="exercise" &&
                                      t.attrs.transaction_from &&
-                                     t.attrs.transaction_from == ids[0];
+                                     ids.indexOf(t.attrs.transaction_from) != -1;
                              };
                          },
                          ledgerFilter: function(ids, inv, sec) {
@@ -787,7 +790,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
-        } else if (cellSecurityType(cell) == "Option") {
+        } else if (["Option", "Warrant"].indexOf(cellSecurityType(cell)) != -1) {
             return;
         } else {
             var transactionkeys = [];
@@ -1091,7 +1094,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             "Transaction deleted");
                     }
                     var trans = captable.transactions.filter(function(t) {
-                        return t.transaction == tran.transaction || 
+                        return t.transaction == tran.transaction ||
                             (t.attrs['transaction_from'] && t.attrs.transaction_from == tran.transaction);
                     });
                     var ids = trans.reduce(
@@ -1239,9 +1242,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             tran.evidence_data = data.filter(function(el) {
                 return el.evidence==tran.evidence;
             });
-            if (tran.evidence_data.length > 0) {
-                console.log("evidence!", tran);
-            }
         });
     }
     function reformatDate(obj) {
@@ -1931,8 +1931,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     (String(transaction.attrs[att]).length > 0)))
                 {
                     correct = false;
-                    console.log("required not filled");
-                    console.log(att);
                     return correct;
                 }
             }
@@ -1941,10 +1939,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.validateTransaction = validateTransaction;
     function validateCell(cell) {
-        console.log("validateCell");
         if (!attrs)
         {
-            console.log("attrs not defined");
             return true;
         }
         var correct = true;
