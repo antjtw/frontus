@@ -9,6 +9,7 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate)
     var company = navState.company;
     $scope.company = company;
 
+    captable.forceRefresh();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
     $scope.calculate = calculate;
