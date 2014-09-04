@@ -129,51 +129,6 @@
                                 | formatAmount:'units'}}
                             </td>
                         </tr>
-                        <!-- EDITABLE INVESTOR ROWS -->
-                        <!-- TODO dispaly row for each investor with ledger entries for the security -->
-                        <!--
-                        <tr class="transaction-rows"
-                            ng-if="sec==shown && !viewMode"
-                            ng-repeat="inv in captable.investorsIn(sec)">
-                            <td></td>
-                            <td>
-                                <input bs-typeahead="rownames"
-                                       placeholder="Add new investor"
-                                       ng-model="inv.name"
-                                       ng-change="fauxupdating(inv)"
-                                       ui-event="{focus: 'selectInvestor(inv)',
-                                                  blur: 'updateName(tran)'}">
-                            </td>
-                            <td>
-                                <input maxlength="16"
-                                       placeholder="options"
-                                       ng-disabled="!inv.name"
-                                       ui-event="{focus: 'getActiveTransaction(tran)',
-                                                  blur: 'saveTran(activeTran)'}"
-                                       ng-model="captable.securityUnitsFrom(sec, 'grant', inv)">
-                            </td>
-                            <td ng-click="getActiveTransaction(tran, 'vested')">
-                                <input disabled
-                                       ng-model="captable.securityCurrentUnits(sec, inv)">
-                            </td>
-                            <td>
-                                <input maxlength="16"
-                                       placeholder="options"
-                                       ng-disabled="!tran.investor || !tran.units"
-                                       ui-event="{focus: 'getActiveTransaction(tran, \'forfeited\')',
-                                                  blur: 'grantUpdateLR(tran, \'forfeited\')'}"
-                                       ng-model="captable.securityUnitsFrom(sec, 'forfeit', inv)">
-                            </td>
-                            <td>
-                                <input maxlength="16"
-                                       placeholder="options"
-                                       ng-disabled="!tran.investor || !tran.units"
-                                       ui-event="{focus: 'getActiveTransaction(tran, \'exercised\')',
-                                                  blur: 'grantUpdateLR(tran, \'exercised\')'}"
-                                       ng-model="captable.securityUnitsFrom(sec, 'exercise', inv)">
-                            </td>
-                        </tr>
-                        -->
                         <!-- VIEW ONLY INVESTOR ROWS -->
                         <!-- TODO dispaly row for each investor with ledger entries for the security -->
                         <tr class="transaction-rows"
@@ -182,8 +137,10 @@
                             <td class="viewField"></td>
                             <td ng-class="{fieldSelected: tran.fields[0],
                                            hoverable: tran.investor}"
-                                ng-click="getActiveTransaction(tran, '', 'view')">
-                                <span>{{row.attrs.investor}}</span>
+                                ng-click="getActiveTransaction(tran, '', 'view')"
+                                class="row-fluid">
+                                <span class="span6">{{row.attrs.investor}}</span>
+                                <span class="span6">{{row.effective_date | date:settings.shortdate}}</span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns"
                                 ng-class="{fieldSelected: selectedCell.investor == row.attrs.investor &&
