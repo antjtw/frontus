@@ -183,7 +183,7 @@ own.directive('editableCaptableCell', [function() {
                         $scope.data.a = num;
                         updateAttr('amount', num);
                     } else {
-                        return ($scope.data ? $filter('formatAmount')($scope.data.a, 'amount') : null);
+                        return ($scope.data ? $scope.data.a : null);
                     }
                 };
                 $scope.opts = {
