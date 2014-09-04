@@ -382,6 +382,7 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                              "amount",
                              "ppshare",
                              "price",
+                             "optundersecurity",
                              "terms",
                              "vestingbegins",
                              "interestrate",
