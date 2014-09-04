@@ -758,6 +758,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var defaultTran = newTransaction(cell.security, defaultKind(sec_obj.attrs.security_type), cell.investor);
         for (var t in cell.transactions)
         {
+            if (!cell.transactions[t].transaction)
+                break;
             var del = true;
             for (var a in cell.transactions[t].attrs)
             {
