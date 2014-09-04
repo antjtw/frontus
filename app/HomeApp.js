@@ -193,6 +193,7 @@ app.controller('CompanyCtrl',
             $scope.default = "100%";
 			$scope.ct = captable.getCapTable();
             $scope.totalIssued = 0;
+            console.log("navState", navState);
 			
             if (navState.role == 'investor') {
                 $location.path('/app/home/investor');
@@ -482,6 +483,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         //initialisation functions called
         $scope.company = navState.name;
+        console.log("navState", navState);
 
         SWBrijj.tblm('account.profile').then(function(x) {
             $scope.person = x[0];

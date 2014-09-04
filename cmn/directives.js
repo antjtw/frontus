@@ -737,7 +737,15 @@ m.directive('investorTile', function(){
                 }
             }, true);
 
-            $scope.allTransactions = []
+            $scope.allTransactions = [];
+
+            $scope.getKeys = function(obj){
+                return Object.keys(obj);
+            }
+
+            $scope.displayAttr = captable.displayAttr;
+
+
 
              function myTransactions(transid, amount, shares){
                 this.transid = transid;
@@ -747,36 +755,42 @@ m.directive('investorTile', function(){
 
             $scope.transObjs = [];
 
+      
+
             $scope.ledgerAmounts = function(){
                 $scope.getTransactions();
-                console.log($scope.cti);
-                var name = "";
                 angular.forEach($scope.cti.investors, function(cap){
                     angular.forEach(cap.transactions, function(trans){
-                        // console.log(trans)
                         angular.forEach($scope.allTransactions, function(id){
                             if(id.transid == trans.transaction){
-                                console.log(trans);
                                 id.amount = trans.attrs.amount;
                                 id.shares = trans.attrs.units;
                                 id.date = trans.effective_date;
                                 id.evidence = trans.evidence_data;
-
+                                id.attrs = trans.attrs;
 
                             }
                            
                         });
-                       
                     });
                 });
+                angular.forEach($scope.allTransactions, function(attr){
+                    delete attr.attrs['investor'];
+                    if(attr.attrs['amount'] !== undefined){
+                         console.log('Heyyyyyyy')
+                    }
+                   
+                    // delete attr.attrs['units'];
+                })
             };
 
-           
+            var myName = ""
             $scope.getTransactions = function(){
                 var name = "";
                 angular.forEach($scope.cti.investors, function(cap){
                     if(cap.email == navState.userid){
                         name = cap.name;
+                        myName = cap.name;
                     }
                     angular.forEach(cap.transactions, function(trans){
                         if(trans.attrs.investor == name && $scope.allTransactions.indexOf(trans.transaction)== -1){

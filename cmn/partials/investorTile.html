@@ -2,28 +2,76 @@
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <link type="text/css" rel="stylesheet" href="/home/company.css">
 
-<div ng-repeat="allTransaction in allTransactions">
-  <div ng-hide="allTransaction.amount == null">
-  <div class="front info-box">
-    <div class="head-box">
-      <h2>My Ownership</h2>
-    </div>
-    <div class="body-box">
-     <!--  <div> -->
-        <div class="cardColumn">
-          {{allTransactions}}
-          <div class="cardHeadline">{{allTransaction.shares}}</div>
-            Total Shares
 
-            
+
+<div ng-repeat="allTransaction in allTransactions">
+    <div ng-hide="allTransaction.amount == null">
+        <div class="front info-box">
+            <div class="head-box">
+                <h2>My Ownership</h2>
+            </div>
+
+            <div style="display: inline-block; width: 30%; height: 250px">
+                <div style="height: 40%; vertical-align: middle; margin-top: 40px; padding-left: 40px; margin-bottom: 30px;">
+                    <div class="cardHeadline">{{allTransaction.shares}}</div>
+                    <span>Total Shares</span>
+                </div>
+                <div style="height: 40%; vertical-align: middle; padding-left: 40px">
+                    <div class="cardHeadline">{{allTransaction.amount|formatAmount:'amount'}}</div>
+                    <span>Total Invested</span>
+                </div>
+
+            </div>
+            <div style="display: inline-block; width: 60%">
+                <div class="container-fluid">
+                    {{allTransaction.attrs}}
+                    <div class="row"  ng-repeat="(key, value) in allTransaction.attrs">
+                        <div style="display: inline-block; width: 40%" ng-if="key !== 'investor'">
+                            <span >{{key}}</span>
+                        </div>
+                        <div style="display: inline-block; width: 40%">
+                            <span ng-if="key !=='investor'">{{value}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
 
         </div>
-        <div class="cardColumn">
+    </div>
+</div>
+
+
+
+<!--     <div class="body-box">
+      <div>
+        <div>{{allTransaction.shares}}</div>
+          Total Shares
+        </div>
+        <div>
           <div class="cardHeadline">{{allTransaction.amount|formatAmount:'amount'}}</div>
             Total Invested
         </div>
-      </div>
     </div>
+
   </div>
 </div>
+</div> -->
+
+
+<!-- <div ng-repeat = "(key, value) in allTransaction.attrs">
+                {{displayAttr(key)}}
+          <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type === 'boolean'">
+            {{value ? "Yes" : "No"}}
+          </span>
+        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type !== 'boolean'">
+            {{value | formatAmount:key}}
+        </span>
+        <span ng-if="key=='interestrate'">
+            {{data.attrs.interestrate}}% {{data.attrs.interestratefreq}}
+        </span>
+        <span ng-if="key == 'pariwith'">
+            {{value.join(", ")}}
+        </span> -->
+  

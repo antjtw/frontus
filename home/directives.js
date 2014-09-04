@@ -376,6 +376,53 @@ app.directive('d3myvested', ['d3', function(d3) {
     };
 }]);
 
+
+
+app.directive('companyOwnershipTile', [function() {
+    return {
+        scope: {
+        },
+        templateUrl: '/home/companyOwnershipTile.html',
+        controller: ['navState', 'captable', '$scope', '$location',
+            function(navState, captable, $scope, $location) {
+                $scope.totalIssued = 0;
+                
+		        $scope.ct = captable.getCapTable();
+		
+		        $scope.graphdata = [];
+		
+		        $scope.$watch('ct', function(newval, oldval) {
+				        if (newval.securities.length > 0) {
+					        $scope.ct = angular.copy($scope.ct);
+					        $scope.generateSecurityGraph();
+                            $scope.totalIssued = captable.totalOwnershipUnits();
+                            $scope.currentRole = navState.role;
+				        }
+			        }, true);
+
+                $scope.gotopage = function (link){
+                    $location.url(link);
+                };
+		
+                $scope.generateSecurityGraph = function() {
+                    $scope.graphdata = [];
+                    var maxPercent = 0;
+                    var percent;
+                    console.log($scope.ct);
+                    
+                    angular.forEach($scope.ct.securities, function(security) {
+                        percent = (((captable.securityTotalUnits(security) + captable.numUnissued(security, $scope.ct.securities)) /  captable.totalOwnershipUnits()) * 100);
+                        $scope.graphdata.push([{'name': security.name, 'issued': captable.securityTotalUnits(security), 'amount': captable.securityTotalAmount(security)}, [{'name':security.name, 'percent':percent}, {'name':'whatever', 'percent':maxPercent}, {'name':'zero', 'percent': 0}]]);
+                        maxPercent += percent;
+                    });
+                };
+                
+                $scope.generateSecurityGraph();
+            }
+        ],
+    };
+}]);
+
 app.directive('d3vestedbar', ['d3', function(d3) {
     return {
         restrict: 'EA',
