@@ -11,7 +11,7 @@
     <div class="row-fluid capcontainer">
         <table class="captable tableView viewcaptable bodyText">
             <tr class="column-label">
-                <th colspan="2">Ownership</th>
+                <th colspan="2" ng-show="fullview">Ownership</th>
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
@@ -23,7 +23,7 @@
                 </th>
             </tr>
             <!-- Descriptive row viewable from all modes -->
-            <tr class="descriptionRow viewmode">
+            <tr class="descriptionRow viewmode" ng-show="fullview">
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
@@ -34,7 +34,7 @@
             </tr>
             <tr ng-repeat="row in ct.investors track by $index"
                 ng-if="([row] | noUnissue).length > 0">
-                <td class="capsums-col">
+                <td class="capsums-col" ng-show="fullview">
                     <input class="input-right"
                            disabled
                            value="{{shareSum(row)}}">
@@ -44,11 +44,12 @@
                     value="{{captable.investorOwnershipPercentage(
                                  row.name) || 0.000 | number:3}}%">
                 </td>
+                <!--
                 <td class="capsums-col" ng-hide="fullview">
                     <input class="input-right"
                            disabled
                            value="{{myPercentage(everyone.percentage) | number:3}}%">
-                </td>
+                </td>-->
                 <td ng-class="{tranViewSelected: selectedInvestor==row,
                                hoverable: row.name}"
                     class="viewName"
