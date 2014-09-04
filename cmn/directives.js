@@ -911,11 +911,12 @@ m.directive('investorTile', function(){
         scope: false,
         restrict: 'E',
         templateUrl:'/cmn/partials/investorTile.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable', 'navState',
-        function($scope, $rootScope, SWBrijj, calculate, captable, navState){
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable', 'navState', 'displayCopy',
+        function($scope, $rootScope, SWBrijj, calculate, captable, navState, displayCopy){
 
             $scope.investorNames = [];
             $scope.cti=captable.getCapTable();
+            $scope.tips = displayCopy.captabletips;
             console.log($scope.cti)
             $scope.$watch('cti', function(newval, oldval) {
                 if (newval.securities.length > 0) {
@@ -927,12 +928,11 @@ m.directive('investorTile', function(){
 
             $scope.allTransactions = [];
 
-            $scope.getKeys = function(obj){
-                return Object.keys(obj);
-            }
+           $scope.hasTip = function(key) {
+                return key in $scope.tips;
+            };
 
             $scope.displayAttr = captable.displayAttr;
-
 
 
              function myTransactions(transid, amount, shares){
@@ -943,7 +943,17 @@ m.directive('investorTile', function(){
 
             $scope.transObjs = [];
 
-      
+            $scope.formatBool = function(bool){
+                if(bool==true){
+                    return "Yes";
+                }
+                else if(bool == false){
+                    return "No";
+                }
+                else{
+                    return bool;
+                }
+            };
 
             $scope.ledgerAmounts = function(){
                 $scope.getTransactions();
@@ -955,21 +965,17 @@ m.directive('investorTile', function(){
                                 id.shares = trans.attrs.units;
                                 id.date = trans.effective_date;
                                 id.evidence = trans.evidence_data;
-                                id.attrs = trans.attrs;
-
+                                id.attrs = angular.copy(trans.attrs);
+                                delete id.attrs['amount'];
+                                delete id.attrs['units'];
+                                delete id.attrs['investor'];
+                                delete id.attrs['physical'];
+                                
                             }
                            
                         });
                     });
                 });
-                angular.forEach($scope.allTransactions, function(attr){
-                    delete attr.attrs['investor'];
-                    if(attr.attrs['amount'] !== undefined){
-                         console.log('Heyyyyyyy')
-                    }
-                   
-                    // delete attr.attrs['units'];
-                })
             };
 
             var myName = ""
