@@ -765,11 +765,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return calculate.primaryMeasure( cellSecurityType(cell) );
     }
     function cellSecurityType(cell) {
+        console.log(cell);
         if (cell && cell.security) {
-            return captable.securities
+            var secs = captable.securities
                 .filter(function(el) {
                     return el && el.name == cell.security && el.attrs;
-                })[0].attrs.security_type;
+                });
+            if (secs.length > 0) return secs[0].attrs.security_type;
         }
     }
     this.cellSecurityType = cellSecurityType;
