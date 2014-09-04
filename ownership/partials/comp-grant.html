@@ -124,20 +124,8 @@
                                     {{sec.name}}
                                 </span>
                             </td>
-                            <td>
-                                {{captable.securityUnitsFrom(sec, 'grant', false)
-                                | formatAmount:'units'}}
-                            </td>
-                            <td>
-                                {{captable.securityCurrentUnits(sec, false)
-                                | formatAmount:'units'}}
-                            </td>
-                            <td>
-                                {{captable.securityUnitsFrom(sec, 'forfeit', false)
-                                | formatAmount:'units'}}
-                            </td>
-                            <td>
-                                {{captable.securityUnitsFrom(sec, 'exercise', false)
+                            <td ng-repeat="col in captable.grantColumns">
+                                {{captable.grantSubtotal(col.name, sec.name)
                                 | formatAmount:'units'}}
                             </td>
                         </tr>
@@ -195,7 +183,7 @@
                             <td ng-class="{fieldSelected: tran.fields[0],
                                            hoverable: tran.investor}"
                                 ng-click="getActiveTransaction(tran, '', 'view')">
-                                <span>{{inv.name}}</span>
+                                <span>{{row.attrs.investor}}</span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns"
                                 ng-class="{fieldSelected: selectedCell.investor == row.attrs.investor &&
@@ -216,24 +204,9 @@
                         <tr class='tablefooter'>
                             <td></td>
                             <td></td>
-                            <td>
+                            <td ng-repeat="col in captable.grantColumns">
                                 <input disabled
-                                       value="{{captable.unitsFrom('grant')
-                                              | formatAmount:'units'}}">
-                            </td>
-                            <td>
-                                <input disabled
-                                       value="{{captable.currentUnits()
-                                              | formatAmount:'units'}}">
-                            </td>
-                            <td>
-                                <input disabled
-                                       value="{{captable.unitsFrom('forfeit')
-                                              | formatAmount:'units'}}">
-                            </td>
-                            <td>
-                                <input disabled
-                                       value="{{captable.unitsFrom('exercise')
+                                       value="{{captable.grantSubtotal(col.name)
                                               | formatAmount:'units'}}">
                             </td>
                         </tr>
