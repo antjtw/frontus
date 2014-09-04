@@ -334,6 +334,12 @@ navm.controller('NavCtrl',
                 navState.role = thiscmp.role;
                 navState.name = thiscmp.name;
                 navState.reasons = $scope.initReasons(thiscmp.reasons);
+                if (navState.reasons.own)
+                {
+                    SWBrijj.procm('ownership.return_status').then(function (x) {
+                        navState.level = x[0].return_status;
+                    });
+                }
                 // We should take this out I think but need to double check this
                 //$route.reload();
             } else {
