@@ -1712,7 +1712,7 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 }
 
 .share-modal-main  .check-box-button:disabled > span {
-    color: #c7c7c7;
+    color: #e3e3e3;
 }
 
 .tourModal {
