@@ -23,6 +23,7 @@ app.controller('roundController',
     $scope.getRounds = function() {
         var existingoptions = 0;
         var rounds = angular.copy($scope.ct.securities);
+        console.log($scope.ct.securities);
         totals = {'units': 0, 'amount': 0};
         angular.forEach(rounds, function(round) {
             round.units = 0;
@@ -36,25 +37,21 @@ app.controller('roundController',
             if (round.attrs.security_type == "Option") {
                 angular.forEach($scope.ct.transactions, function(tran) {
                     if (tran.kind == "grant" && tran.attrs.security == round.name) {
-                        round.units += tran.attrs.units;
-                        totals.units += tran.attrs.units;
+                        round.units += captable.securityTotalUnits(round);
+                        totals.units += captable.securityTotalUnits(round);
                     }
                 });
                 if (!isNaN(round.attrs.totalauth)) {
                     if (round.attrs.totalauth > round.units) {
-                        var unauth = (captable.numUnissued(round, $scope.ct.securities) - round.units);
+                        var unauth = (captable.numUnissued(round, $scope.ct.securities));
                         existingoptions += unauth;
                         totals.units += unauth;
                     }
                 }
             }
             else {
-                angular.forEach($scope.ct.ledger_entries, function(tran) {
-                    if (tran.security == round.name) {
-                        round[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
-                        totals[calculate.primaryMeasure(round.attrs.security_type)] += (tran.credit - tran.debit);
-                    }
-                });
+                round.units += captable.securityTotalUnits(round) + captable.numUnissued(round, $scope.ct.securities);
+                totals.units += captable.securityTotalUnits(round) + captable.numUnissued(round, $scope.ct.securities);
             }
         });
 
