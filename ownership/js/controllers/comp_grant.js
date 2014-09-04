@@ -108,4 +108,5 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate)
     $scope.setView = function(field) {
         $scope.optionView = field;
     };
+    
 }]);

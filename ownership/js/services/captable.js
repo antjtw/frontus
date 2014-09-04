@@ -403,6 +403,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return el.security !== "";})
             .reduce(accumulateProperty('security'), []);
     }
+    function grantSecurities() {
+        var ok_security_types = ["Option"];
+        return captable.securities.filter(function(el) {
+            return ok_security_types.indexOf(el.attrs.security_type) != -1;
+        });
+    }
+    this.grantSecurities = grantSecurities;
     function numUnissued(sec, securities) {
         var unissued = 0;
         var auth_securities = [];
@@ -882,7 +889,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function generateGrantCells() {
         var grants = captable.transactions
-            .filter(function(tran) { return tran.kind == 'grant'; });
+            .filter(function(tran) { return tran.kind == 'grant' && tran.attrs.security_type=='Option'; });
         angular.forEach(grants, function(g) {
             var root = g;
             angular.forEach(grantColumns, function(col) {
@@ -1743,6 +1750,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!security) return;
         return security.attrs.security_type == "Option";
     };
+    this.isWarrant = function(security) {
+        if (!security) return;
+        console.log(security.attrs.security_type);
+        return security.attrs.security_type == "Warrant";
+    };
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
@@ -1945,4 +1957,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return correct;
     }
     this.validateCell = validateCell;
+    this.numGrantholders = function() {
+        return captable.grantCells.reduce(
+                accumulateProperty('investor'), []).length;
+    };
 });

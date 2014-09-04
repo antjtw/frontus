@@ -50,7 +50,7 @@
                             {{col.name}}
                         </th>
                     </tr>
-                    <tbody ng-repeat="sec in ct.securities">
+                    <tbody ng-repeat="sec in captable.grantSecurities()">
                     <tr class="status-row">
                         <td class="status-toggle pointer"
                             ng-class="{'status-toggle-on': sec == shown}"
@@ -209,7 +209,7 @@
                         <security-details sec="selectedSecurity">
                     </span>
 
-                    <span class="capGuide railpadding" ng-switch-default>
+                    <span class="capGuide padded-cap" ng-switch-default>
                         <h1 class="right-bar-header">View your Grants</h1>
 
                         <p>The information to the left contains the sum total of your company grants, including

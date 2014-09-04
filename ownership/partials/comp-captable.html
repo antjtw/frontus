@@ -698,7 +698,7 @@
                                 </ul>
                             </div>
                         </span>
-                        <span class="in-brief" ng-show="!editMode;">
+                        <span class="in-brief" ng-if="!editMode;">
                             <div class="headsection row-fluid
                                         tabbed company-info">
                                 <h1><img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">{{navState.name}}</h1>

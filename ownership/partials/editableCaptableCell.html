@@ -13,7 +13,7 @@
     <input ng-if="isDebt(sec);"
            class="captablepair default-pointer first-box"
            disabled>
-    <input ng-if="!isOption(sec)"
+    <input ng-if="!(isOption(sec) || isWarrant(sec))"
            class="captablepair last-box"
            ui-event="{focus: 'selectCell(inv, sec.name)',
                        blur: 'saveIt(\'amount\', data.a)'}"
@@ -24,7 +24,7 @@
            placeholder="amount"
            ng-paste="numberPaste($event, inv, sec, 'amount');"
            onkeydown="testForEnter(event);">
-    <input ng-if="isOption(sec)"
+    <input ng-if="isOption(sec) || isWarrant(sec)"
            class="captablepair default-pointer last-box"
            disabled>
     <div modal="tranPicker"
