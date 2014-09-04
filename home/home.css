@@ -1,5 +1,38 @@
 .ownership-tile-details .graph-container {
     margin-left: auto;
     margin-right: auto;
-    min-width: 621px;
+    min-width: 621px; /* the narrowest the screen will go without scrolling */
+    margin-top: 20px;
+}
+
+.ownership-tile-details .graph-container .graph {
+    float: left;
+    width: 180px; /* actual d3 graph size, including padding */
+}
+.ownership-tile-details .graph-container .graph:first-child:nth-last-child(1) {
+    margin-left: calc(50% - 90px); /* half the allocated graph area - half the graph width */
+}
+
+.ownership-tile-details .graph-container .graph:first-child:nth-last-child(2),
+.ownership-tile-details .graph-container .graph:first-child:nth-last-child(2) ~ .graph {
+    margin-left: calc(25% - 90px);
+    margin-right: calc(25% - 90px);
+}
+
+.ownership-tile-details .graph-container .graph:first-child:nth-last-child(3),
+.ownership-tile-details .graph-container .graph:first-child:nth-last-child(3) ~ .graph {
+    margin-left: calc(16.7% - 90px);
+    margin-right: calc(16.6% - 90px);
+}
+
+.ownership-tile-details .graph-container .graph h2{
+    text-align: center;
+    line-height: 10px;
+}
+.ownership-tile-details .graph-container .graph h2:first-of-type{
+    font-size: 20px;
+    font-family: 'FS Elliot Web Light';
+    margin-top: 30px;
+    margin-bottom: 15px;
+    line-height: 20px;
 }
