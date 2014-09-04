@@ -1,6 +1,5 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
-<link type="text/css" rel="stylesheet" href="/documents/css/company.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
@@ -38,7 +37,7 @@
 							</div>
 						</div>
 						<div ng-show="totalIssued != 0">
-                            <div class="ownership-tile-details detail-row row-fluid">
+                            <div class="ownership-tile-details detail-row">
                                 <div class="graph-container cf">
                                     <div ng-repeat="gd in graphdata | limitTo: 3" ng-show="gd[1][0].percent != 0" class="span6">
                                         <d3expdonut class="exploded-donut" data='gd[1]'></d3expdonut>
