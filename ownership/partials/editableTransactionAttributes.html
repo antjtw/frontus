@@ -94,7 +94,7 @@
                 </ul>
             </li>
         </ul>
-        <span ng-if="pickMulti(key)">
+        <span ng-if="pickMulti(key)" ng-hide="(!data.attrs[key] || data.attrs[key].length == 0) && (getValidPariSecurities(data, key).length == 0)">
             <span class="locked-security" ng-repeat="sec in data.attrs[key]">
                 {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
             </span>
