@@ -53,7 +53,6 @@ function(SWBrijj, $q, $filter, displayCopy) {
             }
         });
         loaded = true;
-        console.log(attrs);
     }
     function loadAttributes() {
         var promise = $q.defer();

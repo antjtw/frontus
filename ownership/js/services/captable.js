@@ -1242,9 +1242,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             tran.evidence_data = data.filter(function(el) {
                 return el.evidence==tran.evidence;
             });
-            if (tran.evidence_data.length > 0) {
-                console.log("evidence!", tran);
-            }
         });
     }
     function reformatDate(obj) {
@@ -1934,8 +1931,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     (String(transaction.attrs[att]).length > 0)))
                 {
                     correct = false;
-                    console.log("required not filled");
-                    console.log(att);
                     return correct;
                 }
             }
@@ -1944,10 +1939,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.validateTransaction = validateTransaction;
     function validateCell(cell) {
-        console.log("validateCell");
         if (!attrs)
         {
-            console.log("attrs not defined");
             return true;
         }
         var correct = true;
