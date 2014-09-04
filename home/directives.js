@@ -384,8 +384,8 @@ app.directive('companyOwnershipTile', [function() {
         scope: {
         },
         templateUrl: '/home/companyOwnershipTile.html',
-        controller: ['navState', 'captable', '$scope',
-            function(navState, captable, $scope) {
+        controller: ['navState', 'captable', '$scope', '$location',
+            function(navState, captable, $scope, $location) {
                 $scope.totalIssued = 0;
                 
 		        $scope.ct = captable.getCapTable();
@@ -397,8 +397,13 @@ app.directive('companyOwnershipTile', [function() {
 					        $scope.ct = angular.copy($scope.ct);
 					        $scope.generateSecurityGraph();
                             $scope.totalIssued = captable.totalOwnershipUnits();
+                            $scope.currentRole = navState.role;
 				        }
 			        }, true);
+
+                $scope.gotopage = function (link){
+                    $location.url(link);
+                };
 		
                 $scope.generateSecurityGraph = function() {
                     $scope.graphdata = [];
