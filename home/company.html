@@ -5,9 +5,7 @@
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
     <section class="statusBlock">
-        <div class="row-fluid">
-            <div class="subnav-controls">
-            
+        <div class="subnav-controls">
         </div>
 
   <!--   text in the window -->
@@ -22,9 +20,9 @@
 						<div ng-show="totalIssued == 0">
 							<div class="new-box">
 								<div>
-									<h2>Setting up your cap table 
+									<h2>Setting up your cap table
 									with Sharewave is straightforward. Just add your securities, shareholders
-									and investments and we'll do the math for 
+									and investments and we'll do the math for
 									you.
 									</h2>
 									<div>
@@ -32,38 +30,27 @@
 										</button>
 									</div>
 								</div>
-						
+
 								<div>
 									<img src="/img/vid-pic.png" ng-click="fullScreen()" id="vid-pic">
 									<iframe width="100" height="165" src="//www.youtube.com/embed/kl0If2UmOdQ?autohide=1" id="vid" frameborder="0" allowfullscreen></iframe>
 								</div>
-							</div>	
+							</div>
 						</div>
 						<div ng-show="totalIssued != 0">
-                            <div class="detail-row row-fluid">
-                                <div ng-show="graphdata[0][1][0].percent == 0 || graphdata[1][1][0].percent == 0 || graphdata[2][1][0].percent == 0" class="spacing"></div>
-                                <div ng-show="(graphdata[0][1][0].percent == 0 && graphdata[1][1][0].percent == 0) || (graphdata[2][1][0].percent == 0 && graphdata[1][1][0].percent == 0) || (graphdata[0][1][0].percent == 0 && graphdata[2][1][0].percent == 0)" class="spacing"></div>
-                                <div ng-show="graphdata[0][1][0].percent != 0" class="span6">
-                                    <d3expdonut class="exploded-donut" data='graphdata[0][1]'></d3expdonut>
-                                    <h2>{{graphdata[0][0].name}}</h2>
-                                    <h2 ng-show="graphdata[0][0].issued">{{graphdata[0][0].issued | formatAmount:'units'}} Issued</h2>
-                                    <h2 ng-show="graphdata[0][0].amount">{{graphdata[0][0].amount | formatAmount:'amount'}} Invested</h2>
+                            <div class="ownership-tile-details detail-row row-fluid">
+                                <div class="graph-container cf">
+                                    <div ng-repeat="gd in graphdata | limitTo: 3" ng-show="gd[1][0].percent != 0" class="span6">
+                                        <d3expdonut class="exploded-donut" data='gd[1]'></d3expdonut>
+                                        <h2>{{gd[0].name}}</h2>
+                                        <h2 ng-show="gd[0].issued">{{gd[0].issued | formatAmount:'units'}} Issued</h2>
+                                        <h2 ng-show="gd[0].amount">{{gd[0].amount | formatAmount:'amount'}} Invested</h2>
+                                    </div>
                                 </div>
-                                <div ng-show="graphdata[1][1][0].percent != 0 && graphdata[1][1][0].percent" class="span6">
-                                    <d3expdonut class="exploded-donut" data='graphdata[1][1]'></d3expdonut>
-                                    <h2>{{graphdata[1][0].name}}</h2>
-                                    <h2 ng-show="graphdata[1][0].issued">{{graphdata[1][0].issued | formatAmount:'units'}} Issued</h2>
-                                    <h2 ng-show="graphdata[1][0].amount">{{graphdata[1][0].amount | formatAmount:'amount'}} Invested</h2>
-                                </div>
-                                <div ng-show="graphdata[2][1][0].percent != 0 && graphdata[2][1][0].percent" class="span6">
-                                    <d3expdonut class="exploded-donut" data='graphdata[2][1]'></d3expdonut>
-                                    <h2>{{graphdata[2][0].name}}</h2>
-                                    <h2 ng-show="graphdata[2][0].issued">{{graphdata[2][0].issued | formatAmount:'units'}} Issued</h2>
-                                    <h2 ng-show="graphdata[2][0].amount">{{graphdata[2][0].amount | formatAmount:'amount'}} Invested</h2>
-                                </div>
-                                <div id="button-space" ng-show="graphdata[1][1][0].percent != 0 || graphdata[1][1][0].percent != 0 || graphdata[2][1][0].percent != 0"></div>
-                                <div class="standard-button green" id="own-button">
-                                    <button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View<span data-icon="&#xe016;"></span></button>
+                                <div class="actions">
+                                    <div class="standard-button green" id="own-button">
+                                        <button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View<span data-icon="&#xe016;"></span></button>
+                                    </div>
                                 </div>
                             </div>
 						</div>
@@ -92,7 +79,7 @@
 								</div>
 							</div>
 							<div class="row-fluid">
-								
+
 								<div class="pull-right standard-button green">
 									<button class="btn start-now" ng-click="gotopage('/app/documents/company-list')">Start Now</button>
 								</div>
@@ -118,8 +105,6 @@
 									</div>
 								</div>
 								<div class="span6 no-graph">
-									
-									
 								</div>
 							</div>
 						</div>
@@ -172,10 +157,8 @@
                 </tab>
             </tabset>
         </internal-right-rail>
-    
 
     </div>
-
 
     </section>
 
