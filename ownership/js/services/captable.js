@@ -1091,22 +1091,26 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         $rootScope.$emit("notification:success",
                             "Transaction deleted");
                     }
-                    splice_many(captable.transactions, [tran]);
-                    splice_many_by(captable.ledger_entries, function(el) {
-                            return el.transaction == tran.transaction;
+                    var trans = captable.transactions.filter(function(t) {
+                        return t.transaction == tran.transaction || 
+                            (t.attrs['transaction_from'] && t.attrs.transaction_from == tran.transaction);
                     });
+                    var ids = trans.reduce(
+                            accumulateProperty('transaction'), []);
+                    var entries = captable.ledger_entries.filter(function(ent) {
+                        return ids.indexOf(ent.transaction) != -1;
+                    });
+                    splice_many(captable.transactions, trans);
+                    splice_many(captable.ledger_entries, entries);
                     if (cell.transactions.length == 1)
                     {
                         splice_many(captable.cells, [cell]);
                         cell = null;
                     }
-                    else
+                    var cells = cellsForLedger(entries);
+                    for (var c in cells)
                     {
-                        var cells = cellsForTran(tran);
-                        for (var c in cells)
-                        {
-                            updateCell(cells[c]);
-                        }
+                        updateCell(cells[c]);
                     }
                 } else {
                     if (!hide)
@@ -1805,8 +1809,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.removeEvidence = removeEvidence;
     this.toggleForEvidence = function(ev) {
-        console.log(ev)
-        console.log(captable.evidence_object.evidence_data)
         if (!ev || !captable.evidence_object) {return;}
         if (!captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data = [];
@@ -1820,7 +1822,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             } else {
                 addEvidence(ev);
                 action = "added";
-                console.log("added!")
             }
             updateEvidenceInDB(captable.evidence_object, action);
         }
