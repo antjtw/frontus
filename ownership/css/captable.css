@@ -1695,6 +1695,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: 100%;
 }
 
+.share-modal-main [disabled], .share-modal-main input[disabled] {
+    background-color: #c7c7c7;
+}
+
 .tourModal {
     margin-left: -250px;
     width:499px;
