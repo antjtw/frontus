@@ -41,6 +41,7 @@
                 </div>
             </div>
             -->
+            <!-- edit mode not currently supported
             <div class="box-button pull-right"
                  ng-show="ct.securities.length !== 0"
                  ng-class="{'disabledme': companyIsZombie()}"
@@ -63,6 +64,7 @@
                     </li>
                 </ul>
             </div>
+            -->
         </subnav>
 
         <div class="row-fluid leftTabWindow">
@@ -190,7 +192,7 @@
                                                           selectedCell.security == sec.name &&
                                                           selectedCell.kind == col.name,
                                            hoverable: captable.grantCellFor(row.transaction, col.name).u}"
-                                ng-click="selectCell(row.attrs.investor, sec.name, col.name)">
+                                ng-click="selectCell(row.transaction, col.name)">
                                 <captable-cell inv="row.attrs.investor" sec="sec.name"
                                 data="captable.grantCellFor(row.transaction, col.name)">
                                 </captable-cell>

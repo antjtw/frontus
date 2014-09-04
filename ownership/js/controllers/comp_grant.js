@@ -28,16 +28,15 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
         return null;
     };
 
-    $scope.selectCell = function(inv, sec, kind) {
+    $scope.selectCell = function(grant, kind) {
         $scope.selectedInvestor = $scope.selectedSecurity = null;
         if ($scope.selectedCell &&
-                $scope.selectedCell.investor == inv &&
-                $scope.selectedCell.security == sec &&
+                $scope.selectedCell.roots[0].transaction == grant &&
                 $scope.selectedCell.kind == kind)
         {
             $scope.selectedCell = null;
         } else {
-            $scope.selectedCell = captable.grantCellFor(inv, sec, kind);
+            $scope.selectedCell = captable.grantCellFor(grant, kind);
         }
     };
     $scope.selectSecurity = function(sec) {
