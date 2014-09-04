@@ -456,6 +456,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                        c.kind == kind &&
                        (c.u || c.transactions.length > 1);
             });
+        //console.log("cellFor", grant, kind, create, cells.length);
         if (cells.length === 0 && create) {
             return createGrantCell(grant, kind);
         } else if (cells.length == 1) {
@@ -469,6 +470,26 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.grantCellFor = grantCellFor;
+    function grantRowInfoFor(sec) {
+        var trans = captable.ledger_entries.filter(function(ent) {
+            return ent.security == sec;
+        }).reduce(accumulateProperty('transaction'), []);
+        var res = captable.transactions.filter(function(tran) {
+            return trans.indexOf(tran.transaction) != -1 && tran.kind == 'grant';
+        });
+        /*var grants = captable.grantCells.filter(function(c) {
+                return c.kind == 'granted' && c.root.attrs.security == sec;
+            });*/
+        /*var rows = [];
+        angular.forEach(res, function(tran) {
+            var row = {};
+            row.investor = tran.attrs.investor;
+            row.grant = tran.transaction;
+            rows.push(row);
+        });*/
+        return res;
+    }
+    this.grantRowInfoFor = grantRowInfoFor;
     this.rowSum = function(inv) {
         return rowFor(inv)
             .reduce(function(prev, cur, idx, arr) {
@@ -1398,6 +1419,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         c.ledger_entries = captable.ledger_entries
             .filter(col.ledgerFilter(tran_ids));
 
+        console.log("grant", grant, roots, roots.length);
         setCellUnits(c);
         var sec_obj = captable.securities
             .filter(function(el) {
