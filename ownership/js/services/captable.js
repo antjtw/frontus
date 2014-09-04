@@ -1563,6 +1563,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return sum_ledger(entries) || 0;
     }
     this.securityUnitsFrom = securityUnitsFrom;
+    function grantSubtotal(kind, sec) {
+        var cells = captable.grantCells.filter(function(c) {
+            return c.kind == kind && (!sec || c.security == sec);
+        });
+        return cells.reduce(sumCellUnits, 0);
+    }
+    this.grantSubtotal = grantSubtotal;
     function unitsFrom(kind) {
         if (!kind) return 0;
         var trans = captable.transactions.filter(function(tran) {
