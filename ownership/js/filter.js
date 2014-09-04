@@ -381,6 +381,7 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                              "units",
                              "amount",
                              "ppshare",
+                             "optundersecurity",
                              "price",
                              "terms",
                              "vestingbegins",
@@ -444,5 +445,10 @@ ownership.filter('noempty', function () {
             }
         });
         return returntrans;
+    };
+});
+ownership.filter('abs', function() {
+    return function(num) {
+        return Math.abs(num);
     };
 });

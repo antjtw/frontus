@@ -2403,3 +2403,55 @@ span.tour-icon.issue-cog + .tooltip {
     border-bottom: 1px solid #E3E3E3;
     line-height: 28px;
 }
+
+.add-security-button {
+    color: #3498DB;
+    background: none;
+    border: none;
+}
+
+.add-security-button:hover {
+    color: #2980B9;
+}
+
+.add-security-button > span:before {
+    vertical-align: -10%;
+}
+
+.modal.securitymodal .input-row p {
+    font-size: 12px;
+    margin: 5px 0 0 0;
+}
+
+.modal.securitymodal .input-row > input {
+    margin: 0 0 0 0;
+    width: 306px;
+    float: left;
+}
+
+.modal.securitymodal .input-row > div {
+    text-align: left;
+}
+
+.modal.securitymodal .input-row > div {
+    display: inline-block;
+    float: left;
+}
+
+.modal.securitymodal .input-row > div.short-first {
+    width: 187px;
+}
+
+.modal.securitymodal .input-row > div.short-second {
+    width: 130px;
+}
+
+.modal.securitymodal .input-row > div > input, .modal.securitymodal .input-row > div > ul {
+    margin: 0 0 0 0;
+}
+
+.modal.securitymodal .input-row > div.short-second > input {
+    width: 116px;
+    float: left;
+    height: 23px;
+}
