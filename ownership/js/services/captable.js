@@ -1952,4 +1952,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return correct;
     }
     this.validateCell = validateCell;
+    this.numGrantholders = function() {
+        return captable.grantCells.reduce(
+                accumulateProperty('investor'), []).length;
+    };
 });
