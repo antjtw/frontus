@@ -947,7 +947,7 @@ m.directive('investorTile', function(){
                                 console.log(trans);
                                 id.amount = trans.attrs.amount;
                                 id.shares = trans.attrs.units;
-                                id.date = trans.insertion_date;
+                                id.date = trans.effective_date;
                                 id.evidence = trans.evidence_data;
 
 
