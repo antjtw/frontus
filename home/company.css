@@ -1,3 +1,6 @@
+
+/* TODO: rework all of this so it can be applied site-wide */
+
 .summary-bar {
 	padding-left: 30px;
 	margin-top: 80px;
@@ -166,25 +169,6 @@ div.pull-right.standard-button.green {
 }
 .same-row .row-fluid .span7 {
 	width: 63% !important;
-}
-
-.row-fluid .span6 {
-	width: 25% !important;
-	margin-left: calc(13% - 49px) !important;
-	max-width: 259px;
-}
-.row-fluid .span6 h2{
-	width: 100% !important;
-	text-align: center;
-	left: calc(-49% + 88px);
-	line-height: 10px;
-	position: relative;
-}
-.row-fluid .span6 h2:first-of-type{
-	font-size: 20px;
-	font-family: 'FS Elliot Web Light' !important;
-	margin-top: 30px;
-	margin-bottom: 15px;
 }
 
 .span7 svg{

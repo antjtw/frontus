@@ -104,8 +104,7 @@
                                 {{col.name}}
                             </th>
                         </tr>
-                        <tbody ng-hide="captable.securityTotalUnits(sec) <= 0 && viewMode"
-                               ng-repeat="sec in captable.grantSecurities()">
+                        <tbody ng-repeat="sec in captable.grantSecurities()">
                         <!-- SECURITY SUMMARY ROWS -->
                         <tr class="status-row">
                             <td class="status-toggle pointer"
