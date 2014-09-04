@@ -189,6 +189,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.transactions.splice(0);
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
+            captable.grantCells.splice(0);
             captable.attributes.splice(0);
 
             results[0].forEach(function(ledger_entry) {
@@ -1090,22 +1091,26 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         $rootScope.$emit("notification:success",
                             "Transaction deleted");
                     }
-                    splice_many(captable.transactions, [tran]);
-                    splice_many_by(captable.ledger_entries, function(el) {
-                            return el.transaction == tran.transaction;
+                    var trans = captable.transactions.filter(function(t) {
+                        return t.transaction == tran.transaction || 
+                            (t.attrs['transaction_from'] && t.attrs.transaction_from == tran.transaction);
                     });
+                    var ids = trans.reduce(
+                            accumulateProperty('transaction'), []);
+                    var entries = captable.ledger_entries.filter(function(ent) {
+                        return ids.indexOf(ent.transaction) != -1;
+                    });
+                    splice_many(captable.transactions, trans);
+                    splice_many(captable.ledger_entries, entries);
                     if (cell.transactions.length == 1)
                     {
                         splice_many(captable.cells, [cell]);
                         cell = null;
                     }
-                    else
+                    var cells = cellsForLedger(entries);
+                    for (var c in cells)
                     {
-                        var cells = cellsForTran(tran);
-                        for (var c in cells)
-                        {
-                            updateCell(cells[c]);
-                        }
+                        updateCell(cells[c]);
                     }
                 } else {
                     if (!hide)
