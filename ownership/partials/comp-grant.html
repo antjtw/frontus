@@ -190,7 +190,7 @@
                         <!-- TODO dispaly row for each investor with ledger entries for the security -->
                         <tr class="transaction-rows"
                             ng-if="sec==shown && viewMode"
-                            ng-repeat="inv in captable.investorsIn(sec)">
+                            ng-repeat="row in captable.grantRowInfoFor(sec.name) | orderBy : row.attrs.investor">
                             <td class="viewField"></td>
                             <td ng-class="{fieldSelected: tran.fields[0],
                                            hoverable: tran.investor}"
@@ -198,13 +198,13 @@
                                 <span>{{inv.name}}</span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns"
-                                ng-class="{fieldSelected: selectedCell.investor == inv.name &&
+                                ng-class="{fieldSelected: selectedCell.investor == row.attrs.investor &&
                                                           selectedCell.security == sec.name &&
                                                           selectedCell.kind == col.name,
-                                           hoverable: captable.grantCellFor(inv.name, sec.name, col.name).u}"
-                                ng-click="selectCell(inv.name, sec.name, col.name)">
-                                <captable-cell inv="inv.name" sec="sec.name"
-                                data="captable.grantCellFor(inv.name, sec.name, col.name)">
+                                           hoverable: captable.grantCellFor(row.transaction, col.name).u}"
+                                ng-click="selectCell(row.attrs.investor, sec.name, col.name)">
+                                <captable-cell inv="row.attrs.investor" sec="sec.name"
+                                data="captable.grantCellFor(row.transaction, col.name)">
                                 </captable-cell>
                             </td>
                         </tr>
