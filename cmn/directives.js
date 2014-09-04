@@ -723,25 +723,69 @@ m.directive('investorTile', function(){
         scope: false,
         restrict: 'E',
         templateUrl:'/cmn/partials/investorTile.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable',
-        function($scope, $rootScope, SWBrijj, calculate, captable){
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'calculate', 'captable', 'navState',
+        function($scope, $rootScope, SWBrijj, calculate, captable, navState){
 
             $scope.investorNames = [];
             $scope.cti=captable.getCapTable();
+            console.log($scope.cti)
             $scope.$watch('cti', function(newval, oldval) {
                 if (newval.securities.length > 0) {
                     $scope.cti = angular.copy($scope.cti);
-                    $scope.getTotalShares();
+                    $scope.ledgerAmounts();
                     $scope.getTotalInvested();
                 }
             }, true);
 
-            $scope.getTotalShares = function(){
+            $scope.allTransactions = []
+
+             function myTransactions(transid, amount, shares){
+                this.transid = transid;
+                this.amount = amount;
+                this.shares = shares;
+            }
+
+            $scope.transObjs = [];
+
+            $scope.ledgerAmounts = function(){
+                $scope.getTransactions();
                 var name = "";
                 angular.forEach($scope.cti.investors, function(cap){
-                    name = cap.name;
+                    angular.forEach(cap.transactions, function(trans){
+                        // console.log(trans)
+                        angular.forEach($scope.allTransactions, function(id){
+                            if(id.transid == trans.transaction){
+                                console.log(trans);
+                                id.amount = trans.attrs.amount;
+                                id.shares = trans.attrs.units;
+                                id.date = trans.insertion_date;
+                                id.evidence = trans.evidence_data;
+
+
+                            }
+                           
+                        });
+                       
+                    });
                 });
-                return captable.rowSum(name);
+            };
+
+           
+            $scope.getTransactions = function(){
+                var name = "";
+                angular.forEach($scope.cti.investors, function(cap){
+                    if(cap.email == navState.userid){
+                        name = cap.name;
+                    }
+                    angular.forEach(cap.transactions, function(trans){
+                        if(trans.attrs.investor == name && $scope.allTransactions.indexOf(trans.transaction)== -1){
+                            $scope.allTransactions.push(new myTransactions(trans.transaction))
+                        }; 
+
+                    });
+
+                });
+                return($scope.allTransactions);
             };
 
 

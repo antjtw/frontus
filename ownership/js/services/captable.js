@@ -1750,6 +1750,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!security) return;
         return security.attrs.security_type == "Option";
     };
+    this.isWarrant = function(security) {
+        if (!security) return;
+        console.log(security.attrs.security_type);
+        return security.attrs.security_type == "Warrant";
+    };
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
@@ -1952,4 +1957,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return correct;
     }
     this.validateCell = validateCell;
+    this.numGrantholders = function() {
+        return captable.grantCells.reduce(
+                accumulateProperty('investor'), []).length;
+    };
 });
