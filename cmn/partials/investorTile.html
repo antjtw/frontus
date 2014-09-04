@@ -4,7 +4,7 @@
 
 
 
-<div ng-repeat="allTransaction in allTransactions">
+<div ng-repeat="allTransaction in allTransactions | orderBy:allTransaction.date">
     <div ng-hide="allTransaction.amount == null">
         <div class="front info-box">
             <div class="head-box">
@@ -12,9 +12,9 @@
             </div>
 
             <div style="display: inline-block; width: 40%; min-height: 250px; max-height: 400px;">
-                <div style="height: 40%; vertical-align: middle; margin-top: 40px; padding-left: 40px; margin-bottom: 30px;">
+                <div style="height: 40%; vertical-align: middle; margin-top: 40px; padding-left: 40px; margin-bottom: 30px; padding-bottom: 30px">
                     <div class="cardHeadline">{{allTransaction.shares | formatAmount:'units'}}</div>
-                    <span>Total Shares</span>
+                    <span ng-if="allTransaction.shares !== undefined">Total Shares</span>
                 </div>
                 <div style="height: 40%; vertical-align: middle; padding-left: 40px">
                     <div class="cardHeadline">{{allTransaction.amount|formatAmount:'amount'}}</div>
@@ -23,13 +23,18 @@
 `
             </div>
             <div style="display: inline-block; width: 50%; vertical-align: top; padding-top: 40px; text-align: center;">
-                <div ng-repeat="(key, value) in allTransaction.attrs">
-                    <div style="display: inline-block; width: 40%">
-                        <!-- <div style="color:red">{{value}}</div> -->
-                        <div ng-if "hasTip(key)" style="color:blue">{{value}}, {{displayAttr(key)}}</div>
-                    <div ng-if="key!='interestrate' && key != 'pariwith' && value === 'boolean'">
-                        {{data.attrs[key] ? "Yes" : "No"}}
+             
+                    <div style="display: inline-block; width: 40%; padding-bottom: 10px">
+                        <div>{{allTransaction.date | date: 'shortDate'}}</date>
+                        <div style="color: black; padding-bottom: 10px;">Date</date>
                     </div>
+                    <div ng-repeat="(key, value) in allTransaction.attrs" order>
+      
+                    <div ng-if="key!='interestrate' && key != 'pariwith' && value === 'boolean'" style="padding-bottom: 10px;">
+                        <div style="color: black">{{formatBool(value)}}</div>
+                        <div style="text-transform: capitalize">{{displayAttr(key)}}</div>
+                    </div>
+                        <div 
                         <div ng-if="!hasTip(key)" style="padding-bottom: 10px;">
                             <div style="color: black;">
                                 {{formatBool(value)}}

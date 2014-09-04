@@ -959,6 +959,7 @@ m.directive('investorTile', function(){
                 $scope.getTransactions();
                 angular.forEach($scope.cti.investors, function(cap){
                     angular.forEach(cap.transactions, function(trans){
+                        console.log(trans);
                         angular.forEach($scope.allTransactions, function(id){
                             if(id.transid == trans.transaction){
                                 id.amount = trans.attrs.amount;
