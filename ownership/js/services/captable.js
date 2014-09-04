@@ -46,6 +46,7 @@ var Cell = function() {
     this.a = null; // amount
     this.x = null; // percentage
     this.transactions = [];
+    this.ledger_entries = [];
     this.security = null;
     this.investor = null;
     this.valid = true;
@@ -53,11 +54,12 @@ var Cell = function() {
 
 var GrantCell = function() {
     this.u = null;
+    this.roots = [];
+    this.kind = null;
     this.transactions = [];
-    this.root_tran = null;
+    this.ledger_entries = [];
     this.security = null;
     this.investor = null;
-    this.kind = null;
 };
 
 /* The captable service is currently a generic ownership data service
@@ -95,60 +97,73 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return navState ? navState.role : document.sessionState.role;
     }
     /* tranFilter is run on captable.transactions
-     * ledgerFilter is run on an array of transaction ids corresponding
-     * to the results of the tranFilter
+     * and parametrized with the ids of the cell's root transactions
+     *
+     * ledgerFilter is run on captable.ledger_entries
+     * and parametrized with the ids of the transactions which made it
+     * through the tranFilter
      */
     var grantColumns = [{name: "granted",
-                         tranFilter: function(r) {
+                         tran_type: "grant",
+                         tranFilter: function(ids) {
                              return function(t) {
-                                 // TODO incorporate splits
-                                 return t.transaction == r.transaction;
+                                 return ids.indexOf(t.transaction) != -1;
                              };
                          },
-                         ledgerFilter: function(ids) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
-                                 return ids.indexOf(x.transaction) != -1;
+                                 return ids.indexOf(x.transaction) != -1 &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         },
                         {name: "vested",
-                         tranFilter: function(r) {
+                         tranFilter: function(ids) {
                              return function(t) {
-                                 return t.transaction == r.transaction;
+                                 return ids.indexOf(t.transaction) != -1;
                              };
                          },
-                         ledgerFilter: function(ids) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
                                  return ids.indexOf(x.transaction) != -1 &&
-                                     x.effective_date <= Date.now();
+                                     x.effective_date <= Date.now() &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         },
                         {name: "forfeited",
-                         tranFilter: function(r) {
+                         tran_type: "forfeit",
+                         tranFilter: function(ids) {
                              return function(t) {
                                  return t.kind=="forfeit" &&
                                      t.attrs.transaction_from &&
-                                     t.attrs.transaction_from == r.transaction;
+                                     t.attrs.transaction_from == ids[0];
                              };
                          },
-                         ledgerFilter: function(ids) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
-                                 return ids.indexOf(x.transaction) != -1;
+                                 return ids.indexOf(x.transaction) != -1 &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         },
                         {name: "exercised",
-                         tranFilter: function(r) {
+                         tran_type: "exercise",
+                         tranFilter: function(ids) {
                              return function(t) {
                                  return t.kind=="exercise" &&
                                      t.attrs.transaction_from &&
-                                     t.attrs.transaction_from == r.transaction;
+                                     t.attrs.transaction_from == ids[0];
                              };
                          },
-                         ledgerFilter: function(ids) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
-                                 return ids.indexOf(x.transaction) != -1;
+                                 return ids.indexOf(x.transaction) != -1 &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         }];
@@ -388,6 +403,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return el.security !== "";})
             .reduce(accumulateProperty('security'), []);
     }
+    function grantSecurities() {
+        var ok_security_types = ["Option"];
+        return captable.securities.filter(function(el) {
+            return ok_security_types.indexOf(el.attrs.security_type) != -1;
+        });
+    }
+    this.grantSecurities = grantSecurities;
     function numUnissued(sec, securities) {
         var unissued = 0;
         var auth_securities = [];
@@ -427,7 +449,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .filter(function(cell) {
                 return cell.investor == inv &&
                        cell.security == sec &&
-                       (cell.a || cell.u || (cell.transactions.length > 1));
+                       (cell.a || cell.u || (cell.transactions.length > 0));
             });
         if (cells.length === 0 && create) {
             return createCell(inv, sec);
@@ -445,10 +467,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function grantCellFor(grant, kind, create) {
         var cells = captable.grantCells
             .filter(function(c) {
-                return c.root.transaction == grant &&
+                return c.roots[0].transaction == grant &&
                        c.kind == kind &&
-                       (c.u || c.transactions.length > 1);
+                       (c.u || c.transactions.length > 0);
             });
+        //console.log("cellFor", grant, kind, create, cells.length, cells);
         if (cells.length === 0 && create) {
             return createGrantCell(grant, kind);
         } else if (cells.length == 1) {
@@ -462,6 +485,26 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.grantCellFor = grantCellFor;
+    function grantRowInfoFor(sec) {
+        var trans = captable.ledger_entries.filter(function(ent) {
+            return ent.security == sec;
+        }).reduce(accumulateProperty('transaction'), []);
+        var res = captable.transactions.filter(function(tran) {
+            return trans.indexOf(tran.transaction) != -1 && tran.kind == 'grant';
+        });
+        /*var grants = captable.grantCells.filter(function(c) {
+                return c.kind == 'granted' && c.root.attrs.security == sec;
+            });*/
+        /*var rows = [];
+        angular.forEach(res, function(tran) {
+            var row = {};
+            row.investor = tran.attrs.investor;
+            row.grant = tran.transaction;
+            rows.push(row);
+        });*/
+        return res;
+    }
+    this.grantRowInfoFor = grantRowInfoFor;
     this.rowSum = function(inv) {
         return rowFor(inv)
             .reduce(function(prev, cur, idx, arr) {
@@ -539,6 +582,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
+    function minDate(prev, cur, idx, arr) {
+        if (!prev || cur.effective_date < prev)
+            return cur.effective_date;
+        return prev;
+    }
     function transForCell(inv, sec) {
         // Investor identifying attributes
         var invs = $filter('getInvestorAttributes')();
@@ -583,7 +631,23 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         ) &&
                        security_matches;
             });
-        return trans;
+        var startingDate = trans.filter(function(tran) {
+                return tran.kind != 'split';
+            }).reduce(minDate, null);
+        var trans2;
+        if (startingDate)
+        {
+            trans2 = trans.filter(function(tran) {
+                    return tran.kind != 'split' || tran.effective_date > startingDate;
+                });
+        }
+        else
+        {
+            trans2 = trans.filter(function(tran) {
+                    return tran.kind != 'split';
+                });
+        }
+        return trans2;
     }
     function secHasUnissued(securities) {
         return function(sec) {
@@ -714,6 +778,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             cell.u = sum_ledger(cell.ledger_entries);
         }
     }
+    function setGrantCellUnits(cell) {
+        setCellUnits(cell);
+        cell.u = Math.abs(cell.u);
+    }
     this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
         if (!cell) return;
@@ -820,31 +888,31 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     function generateGrantCells() {
-        /* Each grant cell has a list of root transactions.
-         *
-         * From those transactions and the cell kind we get
-         * the list of ledger entries.
-         *
-         * The trick is to find the root transactions.
-         *
-         */
         var grants = captable.transactions
-            .filter(function(tran) { return tran.kind == 'grant'; });
+            .filter(function(tran) { return tran.kind == 'grant' && tran.attrs.security_type=='Option'; });
         angular.forEach(grants, function(g) {
             var root = g;
             angular.forEach(grantColumns, function(col) {
                 var cell = nullGrantCell();
-                cell.root = root;
+                cell.roots = [root];
+                cell.roots = cell.roots.concat(
+                    captable.transactions.filter(function(tran) {
+                        return tran.kind == 'split' &&
+                            tran.attrs.security == root.attrs.security;
+                    })
+                );
                 cell.kind = col.name;
                 cell.investor = root.attrs.investor;
                 cell.security = root.attrs.security;
+                var root_ids = cell.roots
+                    .reduce(accumulateProperty('transaction'), []);
                 cell.transactions = captable.transactions
-                    .filter(col.tranFilter(root));
+                    .filter(col.tranFilter(root_ids));
                 var tran_ids = cell.transactions
                     .reduce(accumulateProperty('transaction'), []);
                 cell.ledger_entries = captable.ledger_entries
-                    .filter(col.ledgerFilter(tran_ids));
-                setCellUnits(cell);
+                    .filter(col.ledgerFilter(tran_ids, cell.investor, cell.security));
+                setGrantCellUnits(cell);
                 captable.grantCells.push(cell);
             });
         });
@@ -1356,15 +1424,34 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.createCell = createCell;
     function createGrantCell(grant, kind) {
+        var col = grantColumns.filter(
+                function(g) {return g.name == kind;})[0];
+        if (!col) return null;
         var root = captable.transactions
             .filter(function(tran) {
                 return tran.transaction == grant;
             })[0];
-        var c = new GrantCell();
-        c.root = root;
+        var c = nullGrantCell();
+        c.roots = [root];
+        c.roots = c.roots.concat(
+            captable.transactions.filter(function(tran) {
+                return tran.kind == 'split' &&
+                    tran.attrs.security == root.attrs.security;
+            })
+        );
+        c.kind = kind;
         c.investor = root.attrs.investor;
         c.security = root.attrs.security;
-        c.kind = kind;
+        var root_ids = c.roots
+            .reduce(accumulateProperty('transaction'), []);
+        c.transactions = captable.transactions
+            .filter(col.tranFilter(root_ids));
+        var tran_ids = c.transactions
+            .reduce(accumulateProperty('transaction'), []);
+        c.ledger_entries = captable.ledger_entries
+            .filter(col.ledgerFilter(tran_ids, c.investor, c.security));
+
+        setGrantCellUnits(c);
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name == root.attrs.security;
@@ -1372,7 +1459,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!sec_obj.attrs || !sec_obj.attrs.security_Type) {
             return null;
         } else {
-            // TODO
+            if (col.tran_type) {
+                var tran = newTransaction(c.security,
+                                          col.tran_type,
+                                          c.investor);
+                tran.active = true;
+                c.transactions.push(tran);
+            }
+            captable.grantCells.push(c);
+            return c;
         }
     }
     this.createGrantCell = createGrantCell;
@@ -1499,6 +1594,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return sum_ledger(entries) || 0;
     }
     this.securityUnitsFrom = securityUnitsFrom;
+    function grantSubtotal(kind, sec) {
+        var cells = captable.grantCells.filter(function(c) {
+            return c.kind == kind && (!sec || c.security == sec);
+        });
+        return cells.reduce(sumCellUnits, 0);
+    }
+    this.grantSubtotal = grantSubtotal;
     function unitsFrom(kind) {
         if (!kind) return 0;
         var trans = captable.transactions.filter(function(tran) {

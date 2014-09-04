@@ -1,6 +1,6 @@
 app.controller('grantController',
-    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy',
-function($scope, $location, SWBrijj, navState, captable, displayCopy) {
+    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate',
+function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate) {
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
         return;
@@ -11,6 +11,7 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
 
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
+    $scope.calculate = calculate;
 
     $scope.captabletips = displayCopy.captabletips;
 
@@ -21,6 +22,7 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
     $scope.selectedCell = null;
     $scope.selectedInvestor = null;
     $scope.selectedSecurity = null;
+    $scope.currentTab = 'details';
     $scope.selectedThing = function() {
         if ($scope.selectedCell) return 'selectedCell';
         if ($scope.selectedInvestor) return 'selectedInvestor';
@@ -28,16 +30,16 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
         return null;
     };
 
-    $scope.selectCell = function(inv, sec, kind) {
+    $scope.selectCell = function(grant, kind) {
+        $scope.currentTab = 'details';
         $scope.selectedInvestor = $scope.selectedSecurity = null;
         if ($scope.selectedCell &&
-                $scope.selectedCell.investor == inv &&
-                $scope.selectedCell.security == sec &&
+                $scope.selectedCell.roots[0].transaction == grant &&
                 $scope.selectedCell.kind == kind)
         {
             $scope.selectedCell = null;
         } else {
-            $scope.selectedCell = captable.grantCellFor(inv, sec, kind);
+            $scope.selectedCell = captable.grantCellFor(grant, kind);
         }
     };
     $scope.selectSecurity = function(sec) {

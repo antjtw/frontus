@@ -1,6 +1,6 @@
 app.controller('invGrantController',
-    ['$scope', 'SWBrijj', '$location', 'navState', 'captable', '$filter',
-function($scope, SWBrijj, $location, navState, captable, $filter) {
+    ['$scope', '$rootScope', 'SWBrijj', '$location', 'navState', 'captable', '$filter', 'calculate',
+function($scope, $rootScope, SWBrijj, $location, navState, captable, $filter, calculate) {
 
     if (navState.role == 'issuer') {
         $location.path('/company-grants');
@@ -12,6 +12,7 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
     
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
+    $scope.calculate = calculate;
 
     $scope.sideToggle = false;
     $scope.optionView = "Security";

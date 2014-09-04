@@ -902,7 +902,7 @@ div.rightTitle.left-space {
 }
 
 div.rightTitle.actionpicker {
-    margin-bottom: 60px;
+    margin-bottom: 66px;
 }
 
 div.rightTitle.common-toggle span.tooltip-icon + .tooltip {
@@ -1094,15 +1094,22 @@ textarea {
 }
 
 .tableView.grant-table td:not(:nth-child(1)) {
-    padding: 0;
+    padding-left: 4px;
     text-overflow: ellipsis;
     overflow-x: hidden;
 }
+.tableView.grant-table td:not(:nth-child(1)) span.span6 {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    line-height: 40px;
+}
 
-.tableView.grant-table tr.status-row td, .tableView.grant-table td > span {
+.tableView.grant-table tr.status-row td,
+.tableView.grant-table tr.transaction-rows td
+.tableView.grant-table td > span {
     padding: 0 0 0 4px;
 }
-.tableView.grant-table tr.status-row td:nth-child(1), .tableView.grant-table tr.status-row td:nth-child(2) {
+.tableView.grant-table tr.status-row td:nth-child(1) {
     padding: 0;
 }
 
@@ -1147,7 +1154,8 @@ textarea {
     height: 40px;
 }
 
-.tableView.grant-table.viewmode tr.transaction-rows > td.hoverable:hover {
+.tableView.grant-table.viewmode tr.transaction-rows > td.hoverable:hover,
+.tableView.grant-table tr.status-row > td.hoverable:hover {
     background-color: #C7C7C7;
     cursor: pointer;
 }
@@ -1156,7 +1164,7 @@ textarea {
     background-color: #F1F1F1;
 }
 
-.tableView.grant-table tr.transaction-rows > td.fieldSelected {
+.tableView.grant-table tr > td.fieldSelected {
     background-color: #C7C7C7;
 }
 
@@ -1352,6 +1360,9 @@ ul.last-edited > li:last-child {
 
 .docLibrary .captable .column-label, .docLibrary .grant-table .column-label {
     border-top: 0;
+}
+.grant-table .column-label th:nth-child(2) {
+    width: 256px;
 }
 
 .status-columns.column-label > th {
@@ -1693,6 +1704,10 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .transferModal .share-modal-main .sharepeople-input .select2-container {
     width: 677px;
     height: 100%;
+}
+
+.share-modal-main [disabled], .share-modal-main input[disabled] {
+    background-color: #c7c7c7;
 }
 
 .tourModal {
@@ -2387,4 +2402,56 @@ span.tour-icon.issue-cog + .tooltip {
 .cellSummary > table tr {
     border-bottom: 1px solid #E3E3E3;
     line-height: 28px;
+}
+
+.add-security-button {
+    color: #3498DB;
+    background: none;
+    border: none;
+}
+
+.add-security-button:hover {
+    color: #2980B9;
+}
+
+.add-security-button > span:before {
+    vertical-align: -10%;
+}
+
+.modal.securitymodal .input-row p {
+    font-size: 12px;
+    margin: 5px 0 0 0;
+}
+
+.modal.securitymodal .input-row > input {
+    margin: 0 0 0 0;
+    width: 306px;
+    float: left;
+}
+
+.modal.securitymodal .input-row > div {
+    text-align: left;
+}
+
+.modal.securitymodal .input-row > div {
+    display: inline-block;
+    float: left;
+}
+
+.modal.securitymodal .input-row > div.short-first {
+    width: 187px;
+}
+
+.modal.securitymodal .input-row > div.short-second {
+    width: 130px;
+}
+
+.modal.securitymodal .input-row > div > input, .modal.securitymodal .input-row > div > ul {
+    margin: 0 0 0 0;
+}
+
+.modal.securitymodal .input-row > div.short-second > input {
+    width: 116px;
+    float: left;
+    height: 23px;
 }

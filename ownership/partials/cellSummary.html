@@ -1,11 +1,4 @@
 <div class="capGuide cap-overflow global cellDetails">
-    <!--
-    <div class="detailsHeader">
-        <div>{{cell.investor}}</div>
-        <div>Investor</div>
-        <p></p>
-    </div>
-    -->
     <div class="cellSummary">
         <div ng-switch on="cell.kind">
             <ul ng-switch-when="vested">
@@ -26,9 +19,8 @@
             </tr>
             <tr ng-repeat="e in cell.ledger_entries">
                 <td>{{e.effective_date | date:settings.shortdate}}</td>
-                <td>{{e.credit - e.debit | formatAmount:'units'}}</td>
+                <td>{{e.credit - e.debit | abs | formatAmount:'units'}}</td>
             </tr>
         </table>
     </div>
-    <!-- TODO https://s3.amazonaws.com/uploads.hipchat.com/74351/528043/q8WbBOekiFdPjtl/edits-2014.09.03A.png -->
 </div>

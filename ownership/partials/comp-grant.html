@@ -41,6 +41,7 @@
                 </div>
             </div>
             -->
+            <!-- edit mode not currently supported
             <div class="box-button pull-right"
                  ng-show="ct.securities.length !== 0"
                  ng-class="{'disabledme': companyIsZombie()}"
@@ -63,6 +64,7 @@
                     </li>
                 </ul>
             </div>
+            -->
         </subnav>
 
         <div class="row-fluid leftTabWindow">
@@ -94,13 +96,16 @@
                            ng-show="ct.securities.length!==0">
                         <tr class="column-label">
                             <th></th>
-                            <th></th>
+                            <th class="row-fluid">
+                                <span class="span6">Security</span>
+                                <span class="span6">Date</span>
+                            </th>
                             <th ng-repeat="col in captable.grantColumns">
                                 {{col.name}}
                             </th>
                         </tr>
                         <tbody ng-hide="captable.securityTotalUnits(sec) <= 0 && viewMode"
-                               ng-repeat="sec in ct.securities">
+                               ng-repeat="sec in captable.grantSecurities()">
                         <!-- SECURITY SUMMARY ROWS -->
                         <tr class="status-row">
                             <td class="status-toggle pointer"
@@ -113,98 +118,46 @@
                                       data-icon="&#xe01c;" aria-hidden="true">
                                 </span>
                             </td>
-                            <td ng-class="{'selectablerow': viewMode}"
-                                ng-click="!viewMode || selectSecurity(sec)">
+                            <td ng-class="{selectablerow: viewMode,
+                                           fieldSelected: selectedSecurity==sec}"
+                                ng-click="selectSecurity(sec.name)"
+                                class="hoverable row-fluid">
+                                <!--
                                 <input ng-show="!viewMode"
                                        placeholder="Add new security"
                                        ui-event="{focus: 'selectSecurity(sec)',
                                                   blur: 'saveIssue(sec, \'issue\')'}"
                                        ng-model="sec.name">
-                                <span ng-show="viewMode">
+                                -->
+                                <span ng-show="viewMode" class="span6">
                                     {{sec.name}}
                                 </span>
+                                <span ng-show="viewMode" class="span6">
+                                    {{sec.effective_date | date:settings.shortdate}}
+                                </span>
                             </td>
-                            <td>
-                                {{captable.securityUnitsFrom(sec, 'grant', false)
-                                | formatAmount:'units'}}
-                            </td>
-                            <td>
-                                {{captable.securityCurrentUnits(sec, false)
-                                | formatAmount:'units'}}
-                            </td>
-                            <td>
-                                {{captable.securityUnitsFrom(sec, 'forfeit', false)
-                                | formatAmount:'units'}}
-                            </td>
-                            <td>
-                                {{captable.securityUnitsFrom(sec, 'exercise', false)
+                            <td ng-repeat="col in captable.grantColumns">
+                                {{captable.grantSubtotal(col.name, sec.name)
                                 | formatAmount:'units'}}
                             </td>
                         </tr>
-                        <!-- EDITABLE INVESTOR ROWS -->
-                        <!-- TODO dispaly row for each investor with ledger entries for the security -->
-                        <!--
-                        <tr class="transaction-rows"
-                            ng-if="sec==shown && !viewMode"
-                            ng-repeat="inv in captable.investorsIn(sec)">
-                            <td></td>
-                            <td>
-                                <input bs-typeahead="rownames"
-                                       placeholder="Add new investor"
-                                       ng-model="inv.name"
-                                       ng-change="fauxupdating(inv)"
-                                       ui-event="{focus: 'selectInvestor(inv)',
-                                                  blur: 'updateName(tran)'}">
-                            </td>
-                            <td>
-                                <input maxlength="16"
-                                       placeholder="options"
-                                       ng-disabled="!inv.name"
-                                       ui-event="{focus: 'getActiveTransaction(tran)',
-                                                  blur: 'saveTran(activeTran)'}"
-                                       ng-model="captable.securityUnitsFrom(sec, 'grant', inv)">
-                            </td>
-                            <td ng-click="getActiveTransaction(tran, 'vested')">
-                                <input disabled
-                                       ng-model="captable.securityCurrentUnits(sec, inv)">
-                            </td>
-                            <td>
-                                <input maxlength="16"
-                                       placeholder="options"
-                                       ng-disabled="!tran.investor || !tran.units"
-                                       ui-event="{focus: 'getActiveTransaction(tran, \'forfeited\')',
-                                                  blur: 'grantUpdateLR(tran, \'forfeited\')'}"
-                                       ng-model="captable.securityUnitsFrom(sec, 'forfeit', inv)">
-                            </td>
-                            <td>
-                                <input maxlength="16"
-                                       placeholder="options"
-                                       ng-disabled="!tran.investor || !tran.units"
-                                       ui-event="{focus: 'getActiveTransaction(tran, \'exercised\')',
-                                                  blur: 'grantUpdateLR(tran, \'exercised\')'}"
-                                       ng-model="captable.securityUnitsFrom(sec, 'exercise', inv)">
-                            </td>
-                        </tr>
-                        -->
                         <!-- VIEW ONLY INVESTOR ROWS -->
                         <!-- TODO dispaly row for each investor with ledger entries for the security -->
                         <tr class="transaction-rows"
                             ng-if="sec==shown && viewMode"
-                            ng-repeat="inv in captable.investorsIn(sec)">
+                            ng-repeat="row in captable.grantRowInfoFor(sec.name) | orderBy : row.attrs.investor">
                             <td class="viewField"></td>
-                            <td ng-class="{fieldSelected: tran.fields[0],
-                                           hoverable: tran.investor}"
-                                ng-click="getActiveTransaction(tran, '', 'view')">
-                                <span>{{inv.name}}</span>
+                            <td class="row-fluid">
+                                <span class="span6">{{row.attrs.investor}}</span>
+                                <span class="span6">{{row.effective_date | date:settings.shortdate}}</span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns"
-                                ng-class="{fieldSelected: selectedCell.investor == inv.name &&
-                                                          selectedCell.security == sec.name &&
+                                ng-class="{fieldSelected: selectedCell.roots[0] == row &&
                                                           selectedCell.kind == col.name,
-                                           hoverable: captable.grantCellFor(inv.name, sec.name, col.name).u}"
-                                ng-click="selectCell(inv.name, sec.name, col.name)">
-                                <captable-cell inv="inv.name" sec="sec.name"
-                                data="captable.grantCellFor(inv.name, sec.name, col.name)">
+                                hoverable: calculate.isNumber(captable.grantCellFor(row.transaction, col.name).u)}"
+                                ng-click="selectCell(row.transaction, col.name)">
+                                <captable-cell inv="row.attrs.investor" sec="sec.name"
+                                data="captable.grantCellFor(row.transaction, col.name)">
                                 </captable-cell>
                             </td>
                         </tr>
@@ -216,24 +169,9 @@
                         <tr class='tablefooter'>
                             <td></td>
                             <td></td>
-                            <td>
+                            <td ng-repeat="col in captable.grantColumns">
                                 <input disabled
-                                       value="{{captable.unitsFrom('grant')
-                                              | formatAmount:'units'}}">
-                            </td>
-                            <td>
-                                <input disabled
-                                       value="{{captable.currentUnits()
-                                              | formatAmount:'units'}}">
-                            </td>
-                            <td>
-                                <input disabled
-                                       value="{{captable.unitsFrom('forfeit')
-                                              | formatAmount:'units'}}">
-                            </td>
-                            <td>
-                                <input disabled
-                                       value="{{captable.unitsFrom('exercise')
+                                       value="{{captable.grantSubtotal(col.name)
                                               | formatAmount:'units'}}">
                             </td>
                         </tr>
@@ -247,6 +185,8 @@
                     <span ng-switch-when="selectedCell"
                           ng-switch on="selectedCell.kind">
                         <div ng-switch-when="granted">
+                            <cell-details cell="selectedCell"
+                                      currenttab="currentTab"></cell-details>
                         </div>
                         <div ng-switch-when="vested">
                             <cell-summary cell="selectedCell">
@@ -276,9 +216,10 @@
                         </editable-security-details>
                     </span>
                     <span ng-switch-default class="capGuide railpadding">
-                        <h1 class="right-bar-header">
-                            Saved Vesting Schedules
-                        </h1>
+                        <h1 class="right-bar-header">View Grants</h1>
+
+                        <p>The information to the left contains the sum total of the company grants, including
+                        vesting progress and any actions taken. Expand the row to reveal additional detail.</p>
                     </span>
                 </div>
             </internal-right-rail>

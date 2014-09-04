@@ -162,13 +162,66 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
     $scope.createNewSec = function() {
-        $scope.new_sec = captable.newSecurity();
+        $scope.addSecurityModal = true;
+        $scope.newTranName = "";
+        $scope.newTranType = "";
+        $scope.newTranDate = new Date.today();
+        $scope.newthing = null;
         $scope.selectedCell = $scope.selectedInvestor = null;
         History.forget($scope, 'selectedSecurity');
-        $scope.selectedSecurity = $scope.new_sec;
+        History.watch('selectedSecurity', $scope);
+    };
+
+    $scope.addSecurityModalClose = function () {
+        $scope.addSecurityModal = false;
+    };
+
+    $scope.modalAddSecurity = function() {
+        $scope.newthing = captable.newSecurity();
+        $scope.newthing.transactions[0].attrs.security = $scope.newTranName;
+        $scope.newthing.transactions[0].attrs.security_type = $scope.newTranType;
+        $scope.newthing.transactions[0].effective_date = $scope.newTranDate;
+        captable.addSecurity($scope.newthing);
+        $scope.selectedCell = $scope.selectedInvestor = null;
+        History.forget($scope, 'selectedSecurity');
+        $scope.selectedSecurity = $scope.newthing;
         History.watch('selectedSecurity', $scope);
         displaySecurityDetails();
     };
+
+    $scope.setNewType = function(key) {
+        $scope.newTranType = key;
+    };
+
+    // Date grabber
+    $scope.dateSecurity = function (evt) {
+        //Fix the dates to take into account timezone differences
+        if (evt) { // User is typing
+            if (evt != 'blur')
+                keyPressed = true;
+            var dateString = angular.element('securitydate').val();
+            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                var date = Date.parse(dateString);
+                if (date) {
+                    $scope.newTranDate = calculate.timezoneOffset(date);
+                    keyPressed = false;
+                }
+            }
+        } else { // User is using calendar
+            if ($scope.newTranDate instanceof Date) {
+                $scope.newTranDate = calculate.timezoneOffset($scope.newTranDate);
+                keyPressed = false;
+            }
+        }
+    };
+
+    $scope.optsSec = {
+        backdropFade: true,
+        dialogFade: true,
+        dialogClass: 'modal securitymodal'
+    };
+
     $scope.addSecurity = function(new_sec) {
         if (new_sec.name == "" || new_sec == undefined || new_sec == null)
             return;
@@ -462,10 +515,22 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     // Captable Sharing Modal
     $scope.modalUp = function () {
+        $scope.ct.investors.forEach(function(inv) {
+            if (inv.email && inv.email.trim().length > 0 && !inv.send) {
+                inv.alreadyShared = true;
+            }
+        });
         $scope.capShare = true;
     };
 
     $scope.close = function () {
+        $scope.ct.investors.forEach(function(inv) {
+            if (!inv.alreadyshared && !inv.send) {
+                // if they didn't have an email to start with, and we aren't emailing them now, blank out their email
+                inv.email = "";
+                inv.permission = "";
+            }
+        });
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.capShare = false;
     };
@@ -550,13 +615,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                     }
                     row.send = false;
                 }).except(function(err) {
-                        if (err.message == "ERROR: Duplicate email for the row") {
-                            $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
-                        }
-                        else {
-                            $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
-                        }
-                    });
+                    if (err.message == "ERROR: Duplicate email for the row") {
+                        $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
+                    }
+                    else {
+                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                    }
+                });
             }
         });
 

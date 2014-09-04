@@ -1,3 +1,5 @@
+'use strict';
+
 var app = angular.module('homeDirectives', []);
 
 app.directive('d3expdonut', ['d3', function(d3) {
@@ -10,7 +12,7 @@ app.directive('d3expdonut', ['d3', function(d3) {
             nosort: "@"
         },
         link: function(scope, iElement, iAttrs) {
-			
+
             var width = 180,
                 height = 180,
                 radius = Math.min(width, height) / 2;
@@ -24,63 +26,63 @@ app.directive('d3expdonut', ['d3', function(d3) {
 
             if (data && data[0] && !isNaN(data[0].percent)) {
 
-			var vis = d3.select(iElement[0])
-				.append('svg')
-                .attr("width", width)
-                .attr("height", height)
-                .append("g")
-                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-			
-			var myScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
-			
-			
-			
-			var arc = d3.svg.arc()
-			.innerRadius(radius-10)
-			.outerRadius(radius-30)
-			.startAngle(myScale(data[1].percent))
-			.endAngle(myScale(data[0].percent+data[1].percent));
-			
-			var arc2 = d3.svg.arc()
-			.innerRadius(radius-10)
-			.outerRadius(radius-30)
-			.startAngle(0)
-			.endAngle(360);
-			
-			vis.append("path")
-			.attr("d", arc2)
-			.attr("transform", "translate(0,0)")
-			.style("fill", "#C7C7C7");
-			
-			vis.append("path")
-			.attr("d", arc)
-			.attr("transform", "translate(0,0)")
-			.style("fill", "#1ABC96");
-			
-  			vis.append("text")
-			.attr("transform", function() {
-				return "translate(0,10)";
-			})
-			.attr("dy", ".5em")
-			.style("text-anchor", "middle")
-			.attr("class", "mainlabel");
+                var vis = d3.select(iElement[0])
+                    .append('svg')
+                    .attr("width", width)
+                    .attr("height", height)
+                    .append("g")
+                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-		vis.append("text")
-			.attr("transform", function() {
-				return "translate(0,-15)";
-			})
-			.attr("dy", ".5em")
-			.style("text-anchor", "middle")
-			.style("font-size", "30px")
-			.attr("class", "percentlabel");
+                var myScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
 
-		vis.select(".mainlabel")
-			.text('Ownership');
-		vis.select(".percentlabel")
-			.text(data[0].percent.toFixed(1)+'%');
-			
-			
-		}}}
+
+
+                var arc = d3.svg.arc()
+                    .innerRadius(radius-10)
+                    .outerRadius(radius-30)
+                    .startAngle(myScale(data[1].percent))
+                    .endAngle(myScale(data[0].percent+data[1].percent));
+
+                var arc2 = d3.svg.arc()
+                    .innerRadius(radius-10)
+                    .outerRadius(radius-30)
+                    .startAngle(0)
+                    .endAngle(360);
+
+                vis.append("path")
+                    .attr("d", arc2)
+                    .attr("transform", "translate(0,0)")
+                    .style("fill", "#C7C7C7");
+
+                vis.append("path")
+                    .attr("d", arc)
+                    .attr("transform", "translate(0,0)")
+                    .style("fill", "#1ABC96");
+
+                vis.append("text")
+                    .attr("transform", function() {
+                        return "translate(0,10)";
+                    })
+                    .attr("dy", ".5em")
+                    .style("text-anchor", "middle")
+                    .attr("class", "mainlabel");
+
+                vis.append("text")
+                    .attr("transform", function() {
+                        return "translate(0,-15)";
+                    })
+                    .attr("dy", ".5em")
+                    .style("text-anchor", "middle")
+                    .style("font-size", "30px")
+                    .attr("class", "percentlabel");
+
+                vis.select(".mainlabel")
+                    .text('Ownership');
+                vis.select(".percentlabel")
+                    .text(data[0].percent.toFixed(1)+'%');
+                }
+            };
+        }
 	}
 }]);
 
@@ -102,10 +104,10 @@ app.directive('d3multidonut', ['d3', function(d3) {
             var colors = ["#1ABC96", "#3498DB", "F78D1E", "#34495E", "#FFBB00", "#2676AB"];
             var corecolor = function(i) {
                 if (i > 5) {
-                    return i % 5 == 0 ? colors[5] : colors[i % 5]
+                    return i % 5 == 0 ? colors[5] : colors[i % 5];
                 }
                 else {
-                    return colors[i]
+                    return colors[i];
                 }
             };
 
@@ -238,7 +240,6 @@ app.directive('d3myownership', ['d3', function(d3) {
 
             var arc = d3.svg.arc()
                 .outerRadius(radius)
-                
                 .innerRadius(radius - 15);
 
             var pie = d3.layout.pie()
@@ -289,7 +290,7 @@ app.directive('d3myownership', ['d3', function(d3) {
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d , i) {
-                            return i == 0 ? "#1abc96" : "#E2E2E2"})
+                            return i == 0 ? "#1abc96" : "#E2E2E2";})
                         .attr("class", "pie-slices");
 
                 }
@@ -366,7 +367,7 @@ app.directive('d3myvested', ['d3', function(d3) {
                         .attr("d", arc)
                         .attr("transform", function(d) { return "translate(0,0)"; })
                         .style("fill", function(d , i) {
-                            return i == 0 ? "#1abc96" : "#E2E2E2"})
+                            return i == 0 ? "#1abc96" : "#E2E2E2";})
                         .attr("class", "pie-slices");
 
                 }
@@ -391,7 +392,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                 height = 260 - margin.top - margin.bottom;
 
             var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .1);
+                .rangeRoundBands([0, width], 0.1);
 
             var y = d3.scale.linear()
                 .range([height, 0]);
@@ -437,14 +438,12 @@ app.directive('d3vestedbar', ['d3', function(d3) {
             }, true);
 
             scope.render = function(data){
-
-                data.sort(function(a, b){
-                    if(a.date < b.date) return -1;
-                    if(a.date > b.date) return 1;
-                    return 0;
-                });
-
                 if (data && data.length > 0) {
+                    data.sort(function(a, b){
+                        if(a.date < b.date) return -1;
+                        if(a.date > b.date) return 1;
+                        return 0;
+                    });
                     x.domain(data.map(function(d) { return d.month; }));
                     var max = d3.max(data, function(d) { return parseFloat(d.units); });
                     y.domain([0, max]);
@@ -458,7 +457,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                             .attr("dx", "-.8em")
                             .attr("dy", ".15em")
                             .attr("transform", function(d) {
-                                return "rotate(-65)"
+                                return "rotate(-65)";
                             });
 
                     svg.append("g")
@@ -479,7 +478,7 @@ app.directive('d3vestedbar', ['d3', function(d3) {
                         .attr("y", function(d) { return y(d.units); })
                         .attr("height", function(d) { return height - y(d.units); })
                         .style("fill", function(d) {
-                            return d.vested >= 0 ? "#1abc96" : "#E2E2E2"})
+                            return d.vested >= 0 ? "#1abc96" : "#E2E2E2";})
                         .on("mouseover", function(d) {
                             var xPosition = parseFloat(d3.select(this).attr("x")) + (x.rangeBand() / 2) + 15;
                             var yPosition = parseFloat(d3.select(this).attr("y")) - 30;
