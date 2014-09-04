@@ -447,3 +447,8 @@ ownership.filter('noempty', function () {
         return returntrans;
     };
 });
+ownership.filter('abs', function() {
+    return function(num) {
+        return Math.abs(num);
+    };
+});

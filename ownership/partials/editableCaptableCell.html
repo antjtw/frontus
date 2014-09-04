@@ -7,7 +7,7 @@
            ng-model='units'
            ng-model-options="{getterSetter: true}"
            onpaste="return false"
-           placeholder="units"
+           placeholder="shares"
            ng-paste="numberPaste($event, inv, sec, 'units');"
            onkeydown="testForEnter(event);">
     <input ng-if="isDebt(sec);"

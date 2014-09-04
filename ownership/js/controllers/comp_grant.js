@@ -1,6 +1,6 @@
 app.controller('grantController',
-    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy',
-function($scope, $location, SWBrijj, navState, captable, displayCopy) {
+    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate',
+function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate) {
     if (navState.role == 'investor') {
         $location.path('/investor-grants');
         return;
@@ -11,6 +11,7 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
 
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
+    $scope.calculate = calculate;
 
     $scope.captabletips = displayCopy.captabletips;
 
