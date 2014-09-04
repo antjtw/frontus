@@ -140,7 +140,7 @@
     </div>
     </accordion-group>
 </accordion>
-<span class="add-transaction-link"
+<span ng-if="!windowToggle" class="add-transaction-link"
       ng-click="addTransaction()">
   <span data-icon="&#xe053;" aria-hidden="true"></span>
   <span>Add {{captable.defaultKind(cell.transactions[0].attrs.security_type)}}</span>
