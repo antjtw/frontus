@@ -96,7 +96,10 @@
                            ng-show="ct.securities.length!==0">
                         <tr class="column-label">
                             <th></th>
-                            <th></th>
+                            <th class="row-fluid">
+                                <span class="span6">Security</span>
+                                <span class="span6">Date</span>
+                            </th>
                             <th ng-repeat="col in captable.grantColumns">
                                 {{col.name}}
                             </th>
@@ -116,14 +119,20 @@
                                 </span>
                             </td>
                             <td ng-class="{'selectablerow': viewMode}"
-                                ng-click="!viewMode || selectSecurity(sec)">
+                                ng-click="!viewMode || selectSecurity(sec)"
+                                class="row-fluid">
+                                <!--
                                 <input ng-show="!viewMode"
                                        placeholder="Add new security"
                                        ui-event="{focus: 'selectSecurity(sec)',
                                                   blur: 'saveIssue(sec, \'issue\')'}"
                                        ng-model="sec.name">
-                                <span ng-show="viewMode">
+                                -->
+                                <span ng-show="viewMode" class="span6">
                                     {{sec.name}}
+                                </span>
+                                <span ng-show="viewMode" class="span6">
+                                    {{sec.effective_date | date:settings.shortdate}}
                                 </span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns">

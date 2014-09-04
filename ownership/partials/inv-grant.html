@@ -42,7 +42,10 @@
                        ng-show="optionView == 'Security'">
                     <tr class="column-label">
                         <th></th>
-                        <th></th>
+                        <th class="row-fluid">
+                            <span class="span6">Security</span>
+                            <span class="span6">Date</span>
+                        </th>
                         <th ng-repeat="col in captable.grantColumns">
                             {{col.name}}
                         </th>
@@ -63,9 +66,13 @@
                         </td>
                         <td class="hoverable"
                             ng-class="{fieldSelected: selectedSecurity==sec}"
-                            ng-click="selectSecurity(sec.name)">
-                            <span>
+                            ng-click="selectSecurity(sec.name)"
+                            class="row-fluid">
+                            <span class="span6">
                                 {{sec.name}}
+                            </span>
+                            <span class="span6">
+                                {{sec.effective_date | date:settings.shortdate}}
                             </span>
                         </td>
                         <td ng-repeat="col in captable.grantColumns">
