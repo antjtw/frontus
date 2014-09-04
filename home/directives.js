@@ -439,14 +439,12 @@ app.directive('d3vestedbar', ['d3', function(d3) {
             }, true);
 
             scope.render = function(data){
-
-                data.sort(function(a, b){
-                    if(a.date < b.date) return -1;
-                    if(a.date > b.date) return 1;
-                    return 0;
-                });
-
                 if (data && data.length > 0) {
+                    data.sort(function(a, b){
+                        if(a.date < b.date) return -1;
+                        if(a.date > b.date) return 1;
+                        return 0;
+                    });
                     x.domain(data.map(function(d) { return d.month; }));
                     var max = d3.max(data, function(d) { return parseFloat(d.units); });
                     y.domain([0, max]);

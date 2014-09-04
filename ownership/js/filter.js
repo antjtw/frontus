@@ -293,25 +293,28 @@ ownership.filter('validActions', ['attributes', function(attributes) {
         //TODO (probably after deploy): get sec_type differently, get from to_security if convert, so transfer can be included
         var attrs = attributes.getAttrs();
         var nonActions = ['issue security', 'grant', 'purchase'];
-        var alwaysAllow = ['transfer'];
+        var actionsWithTransfers = ['transfer', 'exercise', 'convert'];
         var isAction = (kind) && (nonActions.indexOf(kind) == -1);
         var ret = [];
-        for (var a in attrs[sec_type])
+        if (isAction)
         {
-            if (nonActions.indexOf(a) == -1)
+            if (actionsWithTransfers.indexOf(kind) > -1)
             {
-                if (isAction)
+                ret.push('transfer');
+            }
+        }
+        else
+        {
+            for (var a in attrs[sec_type])
+            {
+                if (nonActions.indexOf(a) == -1)
                 {
-                    if (alwaysAllow.indexOf(a) != -1)
-                    {
+                    if ((action_type == 'transaction') == //not xor
+                            (attrs[sec_type][a].hasOwnProperty('investor') ||
+                            attrs[sec_type][a].hasOwnProperty('investor_to') ||
+                            attrs[sec_type][a].hasOwnProperty('investor_from')))
                         ret.push(a);
-                    }
                 }
-                else if ((action_type == 'transaction') == //not xor
-                        (attrs[sec_type][a].hasOwnProperty('investor') ||
-                        attrs[sec_type][a].hasOwnProperty('investor_to') ||
-                        attrs[sec_type][a].hasOwnProperty('investor_from')))
-                    ret.push(a);
             }
         }
         return ret;
@@ -378,6 +381,7 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                              "units",
                              "amount",
                              "ppshare",
+                             "optundersecurity",
                              "price",
                              "terms",
                              "vestingbegins",
