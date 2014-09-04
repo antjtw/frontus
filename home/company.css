@@ -1,7 +1,7 @@
 .summary-bar {
 	padding-left: 30px;
 	margin-top: 80px;
-	
+
 }
 .summary-bar > div > div:last-child {
 	padding-left: 35px;
@@ -40,7 +40,7 @@
 	position: relative;
 	top: 10px;
 	color: black;
-		
+
 }
 .tab-content > div > div > span > a {
 	color: black;
@@ -78,9 +78,6 @@
 	left: 20px;
 	top: 10px;
 }
-{
-	width: 100% !important;
-}
 .span6 > div > img {
 	margin-bottom: -15px;
 }
@@ -91,7 +88,7 @@
 .span6 > div > h2 {
 	margin-left: 50px;
 	margin-top: -20px;
-	
+
 }
 .span6 > div > h2 > span {
 	font-size: 20px;
@@ -245,7 +242,7 @@ div.pull-right.standard-button.green {
 	top: 2px;
 	margin-left: 14px;
 	padding-right: 3px;
-	
+
 }
 .share-ownership {
 	position: absolute;
@@ -308,7 +305,7 @@ div.pull-right.standard-button.green {
 	height: 167px;
 	border: 3px solid white;
 	width: 280px;
-	
+
 }
 iframe {
 	position: absolute;
@@ -323,8 +320,8 @@ iframe {
 
 .new-box:first-of-type > div:last-child > img:first-of-type:hover {
 	border: 3px solid rgb(26,188,150);
-	
-	
+
+
 }
 .new-box:first-of-type > div:last-child > img:first-of-type {
 	z-index:2
@@ -341,7 +338,7 @@ iframe {
 }
 .span12 > div:last-child > div:last-child > div > div > div > img {
 	margin-left: 5px;
-} 
+}
 .arrow1 {
 	position: absolute;
 	left: calc(25% + 37px);
@@ -377,7 +374,7 @@ d3vestedbar > svg {
 }
 d3expdonut {
 	position: relative;
-	
+
 }
 .span3 {
 	left: calc(50% + 115px);
