@@ -1157,7 +1157,7 @@ textarea {
 
 .tableView.grant-table.viewmode tr.transaction-rows > td.hoverable:hover,
 .tableView.grant-table tr.status-row > td.hoverable:hover {
-    background-color: #C7C7C7;
+    background-color: rgba(26, 188, 150, 0.1);
     cursor: pointer;
 }
 
