@@ -29,7 +29,6 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
         $scope.optionView = field;
     };
     $scope.selectedCell = null;
-    $scope.selectedInvestor = null;
     $scope.selectedSecurity = null;
     $scope.selectedThing = function() {
         if ($scope.selectedCell) return 'selectedCell';
@@ -39,7 +38,7 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
     };
 
     $scope.selectCell = function(inv, sec, kind) {
-        $scope.selectedInvestor = $scope.selectedSecurity = null;
+        $scope.selectedSecurity = null;
         if ($scope.selectedCell &&
                 $scope.selectedCell.investor == inv &&
                 $scope.selectedCell.security == sec &&
@@ -51,7 +50,7 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
         }
     };
     $scope.selectSecurity = function(sec) {
-        $scope.selectedCell = $scope.selectedInvestor = null;
+        $scope.selectedCell = null;
         if ($scope.selectedSecurity &&
                 $scope.selectedSecurity.security == sec)
         {
@@ -60,19 +59,6 @@ function($scope, SWBrijj, $location, navState, captable, $filter) {
             $scope.selectedSecurity = $scope.ct.securities
                 .filter(function(el) {
                     return el.name == sec;
-                })[0];
-        }
-    };
-    $scope.selectInvestor = function(inv) {
-        $scope.selectedCell = $scope.selectedSecurity = null;
-        if ($scope.selectedInvestor &&
-                $scope.selectedInvestor.investor == inv)
-        {
-            $scope.selectedInvestor = null;
-        } else {
-            $scope.selectedInvestor = $scope.ct.investors
-                .filter(function(el) {
-                    return el.name == inv;
                 })[0];
         }
     };
