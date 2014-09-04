@@ -217,7 +217,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }, logError).finally(function() {
             loadInProgress = false;
         });
-        console.log(captable);
     }
     loadCapTable();
     this.forceRefresh = function() {
@@ -472,7 +471,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                        c.kind == kind &&
                        (c.u || c.transactions.length > 0);
             });
-        //console.log("cellFor", grant, kind, create, cells.length, cells);
         if (cells.length === 0 && create) {
             return createGrantCell(grant, kind);
         } else if (cells.length == 1) {
@@ -765,7 +763,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return calculate.primaryMeasure( cellSecurityType(cell) );
     }
     function cellSecurityType(cell) {
-        console.log(cell);
         if (cell && cell.security) {
             var secs = captable.securities
                 .filter(function(el) {
@@ -1759,7 +1756,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     };
     this.isWarrant = function(security) {
         if (!security) return;
-        console.log(security.attrs.security_type);
         return security.attrs.security_type == "Warrant";
     };
     function updateEvidenceInDB(obj, action) {
