@@ -64,10 +64,9 @@
                                   aria-hidden="true">
                             </span>
                         </td>
-                        <td class="hoverable"
+                        <td class="hoverable row-fluid"
                             ng-class="{fieldSelected: selectedSecurity==sec}"
-                            ng-click="selectSecurity(sec.name)"
-                            class="row-fluid">
+                            ng-click="selectSecurity(sec.name)">
                             <span class="span6">
                                 {{sec.name}}
                             </span>
@@ -84,16 +83,15 @@
                         ng-if="sec==shown"
                         ng-repeat="g in captable.grantsOf(sec)">
                         <td class="viewField"></td>
-                        <td ng-click="selectCell(g.attrs.investor, sec.name, 'granted')"
-                            class="row-fluid">
+                        <td class="row-fluid">
                             <span class="span6">{{g.attrs.investor}}</span>
                             <span class="span6">{{g.effective_date | date:settings.shortdate}}</span>
                         </td>
                         <td ng-repeat="col in captable.grantColumns"
                             ng-class="{fieldSelected: selectedCell.roots[0] == g &&
                                                       selectedCell.kind == col.name,
-                                       hoverable: captable.grantCellFor(g.attrs.investor, sec.name, col.name).u}"
-                            ng-click="selectCell(g.attrs.investor, sec.name, col.name)">
+                                       hoverable: calculate.isNumber(captable.grantCellFor(g.transaction, col.name).u)}"
+                            ng-click="selectCell(g.transaction, col.name)">
                             <captable-cell inv="g.attrs.investor" sec="sec.name"
                             data="captable.grantCellFor(g.transaction, col.name)">
                             </captable-cell>

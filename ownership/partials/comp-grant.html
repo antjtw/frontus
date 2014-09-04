@@ -118,9 +118,10 @@
                                       data-icon="&#xe01c;" aria-hidden="true">
                                 </span>
                             </td>
-                            <td ng-class="{'selectablerow': viewMode}"
-                                ng-click="!viewMode || selectSecurity(sec)"
-                                class="row-fluid">
+                            <td ng-class="{selectablerow: viewMode,
+                                           fieldSelected: selectedSecurity==sec}"
+                                ng-click="selectSecurity(sec.name)"
+                                class="hoverable row-fluid">
                                 <!--
                                 <input ng-show="!viewMode"
                                        placeholder="Add new security"
@@ -146,18 +147,14 @@
                             ng-if="sec==shown && viewMode"
                             ng-repeat="row in captable.grantRowInfoFor(sec.name) | orderBy : row.attrs.investor">
                             <td class="viewField"></td>
-                            <td ng-class="{fieldSelected: tran.fields[0],
-                                           hoverable: tran.investor}"
-                                ng-click="getActiveTransaction(tran, '', 'view')"
-                                class="row-fluid">
+                            <td class="row-fluid">
                                 <span class="span6">{{row.attrs.investor}}</span>
                                 <span class="span6">{{row.effective_date | date:settings.shortdate}}</span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns"
-                                ng-class="{fieldSelected: selectedCell.investor == row.attrs.investor &&
-                                                          selectedCell.security == sec.name &&
+                                ng-class="{fieldSelected: selectedCell.roots[0] == row &&
                                                           selectedCell.kind == col.name,
-                                           hoverable: captable.grantCellFor(row.transaction, col.name).u}"
+                                hoverable: calculate.isNumber(captable.grantCellFor(row.transaction, col.name).u)}"
                                 ng-click="selectCell(row.transaction, col.name)">
                                 <captable-cell inv="row.attrs.investor" sec="sec.name"
                                 data="captable.grantCellFor(row.transaction, col.name)">
