@@ -345,12 +345,9 @@
                            onkeydown="testForEnter(event);">
                 </th>
                 <th>
-                    <input placeholder="Add Security"
-                           class="capEditHeaders"
-                           ng-click="createNewSec()"
-                           ui-event="{blur:'addSecurity(new_sec)',
-                                    keyup: 'updateSecName(new_sec)'}"
-                           ng-model="$parent.new_sec.transactions[0].attrs.security">
+                    <button class="add-security-button" ng-click="createNewSec()">
+                        Add Security <span data-icon="&#xe017;" aria-hidden="true"></span>
+                    </button>
                 </th>
             </tr>
             <!-- Uneditable headers -->
@@ -819,3 +816,50 @@
 </div>
 
 <doc-mini-viewer docid="viewme"></doc-mini-viewer>
+
+<div modal="addSecurityModal" close="addSecuritylModalClose()" options="optsSec">
+    <div class="modalHeader">
+        <span>Add a new security</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addSecurityModalClose()"></span>
+    </div>
+    <div class="modalText">
+        <div class="input-row">
+            <p>Security Name</p>
+            <input type="text" ng-model="newTranName">
+        </div>
+        <div class="input-row">
+            <div class="short-first">
+                <p>Security Type</p>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{newTranType}}
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="key in 'security_type' | attributeTypes">
+                                <a ng-click="setNewType(key)">
+                                    {{key}}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="short-second">
+                <p>Security Date</p>
+                <input id="securitydate" ng-change="dateSecurity()" ui-event="{keydown:'dateSecurity($event)', blur:'dateSecurity(\'blur\')'}" type="text"
+                       ng-model="newTranDate" data-date-format={{settings.lowercasedate}} bs-datepicker
+                       onkeydown="testForEnter(event);">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="addSecurityModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button ng-disabled="newTranType.length == 0 || newTranName == 0" class="btn" ng-click="addSecurityModalClose(); modalAddSecurity();">Create</button>
+        </div>
+    </div>
+</div>
