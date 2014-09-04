@@ -117,6 +117,7 @@ own.directive('editableCaptableCell', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
+                $scope.isOption = captable.isOption;
                 $scope.ct = captable.getCapTable();
 
                 $scope.loaddirective = function() {
@@ -182,7 +183,7 @@ own.directive('editableCaptableCell', [function() {
                         $scope.data.a = num;
                         updateAttr('amount', num);
                     } else {
-                        return ($scope.data ? $filter('formatAmount')($scope.data.a, 'amount') : null);
+                        return ($scope.data ? $scope.data.a : null);
                     }
                 };
                 $scope.opts = {

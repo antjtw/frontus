@@ -86,21 +86,20 @@
                     </tr>
                     <tr class="transaction-rows"
                         ng-if="sec==shown"
-                        ng-repeat="inv in captable.investorsIn(sec)">
+                        ng-repeat="g in captable.grantsOf(sec)">
                         <td class="viewField"></td>
                         <td ng-class="{fieldSelected: selectedInvestor==inv,
-                                       hoverable: inv.name}"
-                            ng-click="selectInvestor(inv.name)">
-                            <span>{{inv.name}}</span>
+                                       hoverable: g.attrs.investor}"
+                            ng-click="selectCell(g.attrs.investor, sec.name, 'granted')">
+                            <span>{{g.attrs.investor}}</span>
                         </td>
                         <td ng-repeat="col in captable.grantColumns"
-                            ng-class="{fieldSelected: selectedCell.investor == inv.name &&
-                                                      selectedCell.security == sec.name &&
+                            ng-class="{fieldSelected: selectedCell.root == g &&
                                                       selectedCell.kind == col.name,
-                                       hoverable: captable.grantCellFor(inv.name, sec.name, col.name).u}"
-                            ng-click="selectCell(inv.name, sec.name, col.name)">
-                            <captable-cell inv="inv.name" sec="sec.name"
-                            data="captable.grantCellFor(inv.name, sec.name, col.name)">
+                                       hoverable: captable.grantCellFor(g.attrs.investor, sec.name, col.name).u}"
+                            ng-click="selectCell(g.attrs.investor, sec.name, col.name)">
+                            <captable-cell inv="g.attrs.investor" sec="sec.name"
+                            data="captable.grantCellFor(g.transaction, col.name)">
                             </captable-cell>
                         </td>
                     </tr>

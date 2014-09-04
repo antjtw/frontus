@@ -54,6 +54,7 @@ var Cell = function() {
 var GrantCell = function() {
     this.u = null;
     this.transactions = [];
+    this.root_tran = null;
     this.security = null;
     this.investor = null;
     this.kind = null;
@@ -93,23 +94,63 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function role() {
         return navState ? navState.role : document.sessionState.role;
     }
+    /* tranFilter is run on captable.transactions
+     * ledgerFilter is run on an array of transaction ids corresponding
+     * to the results of the tranFilter
+     */
     var grantColumns = [{name: "granted",
-                         tranFilter: function(t) {return t.kind=="grant";},
-                         ledgerFilter: function(x) {return true;}
+                         tranFilter: function(r) {
+                             return function(t) {
+                                 // TODO incorporate splits
+                                 return t.transaction == r.transaction;
+                             };
+                         },
+                         ledgerFilter: function(ids) {
+                             return function(x) {
+                                 return ids.indexOf(x.transaction) != -1;
+                             };
+                         }
                         },
                         {name: "vested",
-                         tranFilter: function(t) {return true;},
-                         ledgerFilter: function(x) {
-                             return x.effective_date <= Date.now();
+                         tranFilter: function(r) {
+                             return function(t) {
+                                 return t.transaction == r.transaction;
+                             };
+                         },
+                         ledgerFilter: function(ids) {
+                             return function(x) {
+                                 return ids.indexOf(x.transaction) != -1 &&
+                                     x.effective_date <= Date.now();
+                             };
                          }
                         },
                         {name: "forfeited",
-                         tranFilter: function(t) {return t.kind=="forfeit";},
-                         ledgerFilter: function(x) {return true;}
+                         tranFilter: function(r) {
+                             return function(t) {
+                                 return t.kind=="forfeit" &&
+                                     t.attrs.transaction_from &&
+                                     t.attrs.transaction_from == r.transaction;
+                             };
+                         },
+                         ledgerFilter: function(ids) {
+                             return function(x) {
+                                 return ids.indexOf(x.transaction) != -1;
+                             };
+                         }
                         },
                         {name: "exercised",
-                         tranFilter: function(t) {return t.kind=="exercise";},
-                         ledgerFilter: function(x) {return true;}
+                         tranFilter: function(r) {
+                             return function(t) {
+                                 return t.kind=="exercise" &&
+                                     t.attrs.transaction_from &&
+                                     t.attrs.transaction_from == r.transaction;
+                             };
+                         },
+                         ledgerFilter: function(ids) {
+                             return function(x) {
+                                 return ids.indexOf(x.transaction) != -1;
+                             };
+                         }
                         }];
     this.grantColumns = grantColumns;
 
@@ -401,16 +442,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.cellFor = cellFor;
-    function grantCellFor(inv, sec, kind, create) {
+    function grantCellFor(grant, kind, create) {
         var cells = captable.grantCells
             .filter(function(c) {
-                return c.investor == inv &&
-                       c.security == sec &&
+                return c.root.transaction == grant &&
                        c.kind == kind &&
                        (c.u || c.transactions.length > 1);
             });
         if (cells.length === 0 && create) {
-            return createGrantCell(inv, sec, kind);
+            return createGrantCell(grant, kind);
         } else if (cells.length == 1) {
             return cells[0];
         } else if (cells.length > 1) {
@@ -436,6 +476,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return names.indexOf(inv.name) != -1;
         });
         return res;
+    };
+    this.grantsOf = function(sec) {
+        var trans = captable.transactions.filter(function(tran) {
+            return tran.kind == 'grant' && tran.attrs.security == sec.name;
+        });
+        return trans;
     };
     function cellsForLedger(entries) {
         var checked = {};
@@ -666,7 +712,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
             cell.u = sum_ledger(cell.ledger_entries);
-            console.log(cell.u);
         }
     }
     this.setCellUnits = setCellUnits;
@@ -674,6 +719,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
+        } else if (cellSecurityType(cell) == "Option") {
+            return;
         } else {
             var transactionkeys = [];
             angular.forEach(cell.transactions, function(tran) {
@@ -681,7 +728,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
             var plus_trans = cell.transactions
                 .filter(function(el) {
-                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1)) ||
+                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1) &&
+                            el.kind != 'repurchase') ||
                            el.attrs.investor_to == cell.investor;});
             var minus_trans = cell.transactions
                 .filter(function(el) {
@@ -770,34 +818,32 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     function generateGrantCells() {
-        angular.forEach(captable.investors, function(inv) {
-            angular.forEach(captable.securities, function(sec) {
-                angular.forEach(grantColumns, function(col) {
-                    var transactions = transForCell(inv.name, sec.name);
-                    transactions = transactions.filter(col.tranFilter);
-                    if (col.name == 'vested') console.log(transactions);
-                    if (transactions.length > 0) {
-                        var cell = nullGrantCell();
-                        cell.kind = col.name;
-                        cell.security = sec.name;
-                        cell.investor = inv.name;
-
-                        cell.transactions = transactions;
-
-                        var tranids = transactions
-                            .reduce(accumulateProperty('transaction'), []);
-                        cell.ledger_entries = captable.ledger_entries
-                            .filter(function(ent) {
-                                return tranids.indexOf(ent.transaction) != -1
-                                    && ent.investor == inv.name
-                                    && ent.security == sec.name;
-                            })
-                            .filter(col.ledgerFilter);
-
-                        setCellUnits(cell);
-                        captable.grantCells.push(cell);
-                    }
-                });
+        /* Each grant cell has a list of root transactions.
+         *
+         * From those transactions and the cell kind we get
+         * the list of ledger entries.
+         *
+         * The trick is to find the root transactions.
+         *
+         */
+        var grants = captable.transactions
+            .filter(function(tran) { return tran.kind == 'grant'; });
+        angular.forEach(grants, function(g) {
+            var root = g;
+            angular.forEach(grantColumns, function(col) {
+                var cell = nullGrantCell();
+                cell.root = root;
+                cell.kind = col.name;
+                cell.investor = root.attrs.investor;
+                cell.security = root.attrs.security;
+                cell.transactions = captable.transactions
+                    .filter(col.tranFilter(root));
+                var tran_ids = cell.transactions
+                    .reduce(accumulateProperty('transaction'), []);
+                cell.ledger_entries = captable.ledger_entries
+                    .filter(col.ledgerFilter(tran_ids));
+                setCellUnits(cell);
+                captable.grantCells.push(cell);
             });
         });
     }
@@ -886,13 +932,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         //
         // or maybe add a save button for now
         // TODO: return a promise instead of having errorFunc
-        console.log("saveTransaction");
         for (var key in tran.attrs) {
             if (tran.attrs[key] === null) {
                 delete tran.attrs[key];
             }
         }
-        console.log(JSON.stringify(tran));
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
@@ -956,7 +1000,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
             console.log("error");
-            console.log(e);
+            console.error(e);
             if (errorFunc)
             {
                 errorFunc();
@@ -1001,7 +1045,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     }
                 }
             }).except(function(err) {
-                console.log(err);
+                console.error(err);
                 if (!hide)
                 {
                     $rootScope.$emit("notification:fail",
@@ -1309,12 +1353,20 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.createCell = createCell;
-    function createGrantCell(inv, sec, kind) {
+    function createGrantCell(grant, kind) {
+        var root = captable.transactions
+            .filter(function(tran) {
+                return tran.transaction == grant;
+            })[0];
         var c = new GrantCell();
-        c.investor = inv;
-        c.security = sec;
+        c.root = root;
+        c.investor = root.attrs.investor;
+        c.security = root.attrs.security;
+        c.kind = kind;
         var sec_obj = captable.securities
-            .filter(function(el) { return el.name == sec;})[0];
+            .filter(function(el) {
+                return el.name == root.attrs.security;
+            })[0];
         if (!sec_obj.attrs || !sec_obj.attrs.security_Type) {
             return null;
         } else {
@@ -1585,13 +1637,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return captable.attributes.filter(
                 function(el) { return el.name==key; })[0].display_name;
     };
+    // TODO: move to the security object
     this.isDebt = function(security) {
         if (!security) return;
         return security.attrs.security_type == "Debt" || security.attrs.security_type == "Safe" || security.attrs.security_type == "Convertible Debt";
     };
+    this.isOption = function(security) {
+        if (!security) return;
+        return security.attrs.security_type == "Option";
+    };
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
-            console.log('ready to update')
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
                           parseInt(obj.transaction, 10),
                           JSON.stringify(obj.evidence_data)
