@@ -255,14 +255,14 @@
                         <div ng-switch-when="forfeited">
                             <cell-summary ng-if="viewMode" cell="selectedCell">
                             </cell-summary>
-                            <editable-cell-summary ng-if="!viewMode" cell="selectedCell">
-                            </editable-cell-summary>
+                            <editable-cell-details ng-if="!viewMode" cell="selectedCell">
+                            </editable-cell-details>
                         </div>
                         <div ng-switch-when="exercised">
                             <cell-summary ng-if="viewMode" cell="selectedCell">
                             </cell-summary>
-                            <editable-cell-summary ng-if="!viewMode" cell="selectedCell">
-                            </editable-cell-summary>
+                            <editable-cell-details ng-if="!viewMode" cell="selectedCell">
+                            </editable-cell-details>
                         </div>
                     </span>
                     <span ng-switch-when="selectedInvestor">
