@@ -189,6 +189,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.transactions.splice(0);
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
+            captable.grantCells.splice(0);
             captable.attributes.splice(0);
 
             results[0].forEach(function(ledger_entry) {
