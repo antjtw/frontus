@@ -188,6 +188,8 @@
                     <span ng-switch-when="selectedCell"
                           ng-switch on="selectedCell.kind">
                         <div ng-switch-when="granted">
+                            <cell-details cell="selectedCell"
+                                      currenttab="currentTab"></cell-details>
                         </div>
                         <div ng-switch-when="vested">
                             <cell-summary cell="selectedCell">

@@ -21,6 +21,7 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
     $scope.selectedCell = null;
     $scope.selectedInvestor = null;
     $scope.selectedSecurity = null;
+    $scope.currentTab = 'details';
     $scope.selectedThing = function() {
         if ($scope.selectedCell) return 'selectedCell';
         if ($scope.selectedInvestor) return 'selectedInvestor';
@@ -29,6 +30,7 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy) {
     };
 
     $scope.selectCell = function(grant, kind) {
+        $scope.currentTab = 'details';
         $scope.selectedInvestor = $scope.selectedSecurity = null;
         if ($scope.selectedCell &&
                 $scope.selectedCell.roots[0].transaction == grant &&
