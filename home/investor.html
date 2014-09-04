@@ -18,7 +18,7 @@
 					<div class="same-row">
             <documents-tile ng-if="docsummary.num > 0"></documents-tile>
 		        <investor-tile></investor-tile>
-						<div ng-show="vestedgraphdata.length > 0">
+						<div ng-if="navState.level!='Full View'" ng-show="vestedgraphdata.length > 0">
 							<div class="front info-box">
 								<div class="head-box">
 									<h2>Grant Vesting</h2>
@@ -47,6 +47,7 @@
 							</div>
 						</div>
 					</div>
+					<company-ownership-tile ng-if="navState.level=='Full View'"></company-ownership-tile>
 				</div>
 			</div>
 
