@@ -385,6 +385,7 @@ own.directive('editableSecurityDetails', [function() {
                     var tran = captable.addTransaction(null, $scope.sec.name, 'split');
                     tran.active = true;
                 };
+       
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $scope.viewme = ['investor', ev.doc_id];
