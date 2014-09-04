@@ -1706,8 +1706,12 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
     height: 100%;
 }
 
-.share-modal-main [disabled], .share-modal-main input[disabled] {
+.share-modal-main [disabled], .share-modal-main input[disabled], .share-modal-main .check-box-button:hover:disabled {
     background-color: #c7c7c7;
+}
+
+.share-modal-main  .check-box-button:disabled > span {
+    color: #c7c7c7;
 }
 
 .tourModal {
