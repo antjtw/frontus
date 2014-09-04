@@ -185,7 +185,7 @@ ownership.filter('securityUnitLabel', function() {
 ownership.filter('formatAmount', function($rootScope) {
     return function(amount, key) {
         var settings = $rootScope.settings;
-        var nums = ["units", "forfeited"];
+        var nums = ["units", "forfeited", "totalauth"];
         var moneys = ["ppshare", "price", "effectivepps",
                       "valcap", "amount"];
         var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
