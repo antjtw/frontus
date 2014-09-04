@@ -790,7 +790,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
-        } else if (cellSecurityType(cell) == "Option") {
+        } else if (["Option", "Warrant"].indexOf(cellSecurityType(cell)) != -1) {
             return;
         } else {
             var transactionkeys = [];
