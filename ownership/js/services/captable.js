@@ -403,6 +403,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return el.security !== "";})
             .reduce(accumulateProperty('security'), []);
     }
+    function grantSecurities() {
+        var ok_security_types = ["Option"];
+        return captable.securities.filter(function(el) {
+            return ok_security_types.indexOf(el.attrs.security_type) != -1;
+        });
+    }
+    this.grantSecurities = grantSecurities;
     function numUnissued(sec, securities) {
         var unissued = 0;
         var auth_securities = [];
@@ -861,7 +868,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function generateGrantCells() {
         var grants = captable.transactions
-            .filter(function(tran) { return tran.kind == 'grant'; });
+            .filter(function(tran) { return tran.kind == 'grant' && tran.attrs.security_type=='Option'; });
         angular.forEach(grants, function(g) {
             var root = g;
             angular.forEach(grantColumns, function(col) {
