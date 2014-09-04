@@ -19,21 +19,21 @@
                         <th>Name</th>
                         <th></th>
                         <th>Email</th>
-                        <th>Permissions <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" data-placement="top" bs-tooltip="captabletips.permissions"></span></th>
+                        <th>Permissions <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" tooltip-placement="top" tooltip="{{captabletips.permissions}}"></span></th>
                     </tr>
                 </tbody>
                 <tbody class="scrollable-body">
-                    <tr ng-repeat="row in ct.investors track by $index">
+                    <tr ng-repeat="row in ct.investors">
                         <td>
-                            <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                            <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button" ng-disabled="row.alreadyShared"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </td>
                         <td style="width: 225px;">{{row.name}}</td>
                         <td style="width: 210px;"><input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
-                                   ng-disabled="row.emailkey" ng-model="row.email" ng-change="updateSendRow(row);"></td>
+                                   ng-disabled="row.emailkey || row.alreadyShared" ng-model="row.email" ng-change="updateSendRow(row);"></td>
                         <td style="width: 210px;">
                             <ul class="dropdown-list drop-selector">
                                 <li class="dropdown standard">
-                                    <a class="dropdown-toggle">
+                                    <a class="dropdown-toggle" ng-hide="row.alreadyShared">
                                         {{row.permission}}<span class="invisible-drop">'</span>
                                     </a>
                                     <ul class="dropdown-menu">

@@ -462,10 +462,22 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     // Captable Sharing Modal
     $scope.modalUp = function () {
+        $scope.ct.investors.forEach(function(inv) {
+            if (inv.email && inv.email.trim().length > 0 && !inv.send) {
+                inv.alreadyShared = true;
+            }
+        });
         $scope.capShare = true;
     };
 
     $scope.close = function () {
+        $scope.ct.investors.forEach(function(inv) {
+            if (!inv.alreadyshared && !inv.send) {
+                // if they didn't have an email to start with, and we aren't emailing them now, blank out their email
+                inv.email = "";
+                inv.permission = "";
+            }
+        });
         $scope.closeMsg = 'I was closed at: ' + new Date();
         $scope.capShare = false;
     };
@@ -550,13 +562,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                     }
                     row.send = false;
                 }).except(function(err) {
-                        if (err.message == "ERROR: Duplicate email for the row") {
-                            $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
-                        }
-                        else {
-                            $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
-                        }
-                    });
+                    if (err.message == "ERROR: Duplicate email for the row") {
+                        $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
+                    }
+                    else {
+                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                    }
+                });
             }
         });
 
