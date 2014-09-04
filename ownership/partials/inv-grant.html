@@ -50,7 +50,7 @@
                             {{col.name}}
                         </th>
                     </tr>
-                    <tbody ng-repeat="sec in ct.securities">
+                    <tbody ng-repeat="sec in captable.grantSecurities()">
                     <tr class="status-row">
                         <td class="status-toggle pointer"
                             ng-class="{'status-toggle-on': sec == shown}"

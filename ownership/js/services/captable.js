@@ -403,6 +403,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return el.security !== "";})
             .reduce(accumulateProperty('security'), []);
     }
+    function grantSecurities() {
+        var ok_security_types = ["Option"];
+        return captable.securities.filter(function(el) {
+            return ok_security_types.indexOf(el.attrs.security_type) != -1;
+        });
+    }
+    this.grantSecurities = grantSecurities;
     function numUnissued(sec, securities) {
         var unissued = 0;
         var auth_securities = [];
@@ -442,7 +449,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             .filter(function(cell) {
                 return cell.investor == inv &&
                        cell.security == sec &&
-                       (cell.a || cell.u || (cell.transactions.length > 1));
+                       (cell.a || cell.u || (cell.transactions.length > 0));
             });
         if (cells.length === 0 && create) {
             return createCell(inv, sec);
@@ -575,6 +582,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
+    function minDate(prev, cur, idx, arr) {
+        if (!prev || cur.effective_date < prev)
+            return cur.effective_date;
+        return prev;
+    }
     function transForCell(inv, sec) {
         // Investor identifying attributes
         var invs = $filter('getInvestorAttributes')();
@@ -619,7 +631,23 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         ) &&
                        security_matches;
             });
-        return trans;
+        var startingDate = trans.filter(function(tran) {
+                return tran.kind != 'split';
+            }).reduce(minDate, null);
+        var trans2;
+        if (startingDate)
+        {
+            trans2 = trans.filter(function(tran) {
+                    return tran.kind != 'split' || tran.effective_date > startingDate;
+                });
+        }
+        else
+        {
+            trans2 = trans.filter(function(tran) {
+                    return tran.kind != 'split';
+                });
+        }
+        return trans2;
     }
     function secHasUnissued(securities) {
         return function(sec) {
@@ -861,7 +889,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function generateGrantCells() {
         var grants = captable.transactions
-            .filter(function(tran) { return tran.kind == 'grant'; });
+            .filter(function(tran) { return tran.kind == 'grant' && tran.attrs.security_type=='Option'; });
         angular.forEach(grants, function(g) {
             var root = g;
             angular.forEach(grantColumns, function(col) {
