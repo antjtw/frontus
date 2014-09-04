@@ -818,9 +818,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     function generateGrantCells() {
-<<<<<<< HEAD
         /* Each grant cell has a list of root transactions.
-         * 
+         *
          * From those transactions and the cell kind we get
          * the list of ledger entries.
          *
