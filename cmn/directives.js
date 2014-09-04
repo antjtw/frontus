@@ -969,6 +969,7 @@ m.directive('investorTile', function(){
                                 delete id.attrs['amount'];
                                 delete id.attrs['units'];
                                 delete id.attrs['investor'];
+                                delete id.attrs['physical'];
                                 
                             }
                            
