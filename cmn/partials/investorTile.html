@@ -1,24 +1,26 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 
-<div>
-<div class="front info-box">
-  <div class="head-box">
-    <h2>My Ownership</h2>
-  </div>
-  <div class="body-box">
-   <!--  <div> -->
-      <div class="cardColumn">
-        <div class="cardHeadline">{{getTotalShares()}}</div>
-          Total Shares
+<div ng-repeat="allTransaction in allTransactions">
+  <div ng-hide="allTransaction.amount == null">
+  <div class="front info-box">
+    <div class="head-box">
+      <h2>My Ownership</h2>
+    </div>
+    <div class="body-box">
+     <!--  <div> -->
+        <div class="cardColumn">
+          <div class="cardHeadline">{{allTransaction.shares}}</div>
+            Total Shares
 
-          {{allTransactions}}
+            
 
 
-      </div>
-      <div class="cardColumn">
-        <div class="cardHeadline">{{getTotalInvested()|formatAmount:'amount'}}</div>
-          Total Invested
+        </div>
+        <div class="cardColumn">
+          <div class="cardHeadline">{{allTransaction.amount|formatAmount:'amount'}}</div>
+            Total Invested
+        </div>
       </div>
     </div>
   </div>

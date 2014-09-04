@@ -937,6 +937,7 @@ m.directive('investorTile', function(){
 
             $scope.ledgerAmounts = function(){
                 $scope.getTransactions();
+                console.log($scope.cti);
                 var name = "";
                 angular.forEach($scope.cti.investors, function(cap){
                     angular.forEach(cap.transactions, function(trans){
