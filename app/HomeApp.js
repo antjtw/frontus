@@ -192,6 +192,7 @@ app.controller('CompanyCtrl',
             $scope.donutlabel = "100%";
             $scope.default = "100%";
 			$scope.ct = captable.getCapTable();
+            $scope.totalIssued = 0;
 			
             if (navState.role == 'investor') {
                 $location.path('/app/home/investor');
@@ -209,6 +210,7 @@ app.controller('CompanyCtrl',
 				if (newval.securities.length > 0) {
 					$scope.ct = angular.copy($scope.ct);
 					$scope.getOwnershipInfo();
+                    $scope.totalIssued = captable.totalOwnershipUnits();
 				}
 			}, true);
 
