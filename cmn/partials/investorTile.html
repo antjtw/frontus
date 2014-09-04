@@ -11,7 +11,7 @@
                 <h2>My Ownership</h2>
             </div>
 
-            <div style="display: inline-block; width: 30%; height: 250px">
+            <div style="display: inline-block; width: 40%; min-height: 250px; max-height: 400px;">
                 <div style="height: 40%; vertical-align: middle; margin-top: 40px; padding-left: 40px; margin-bottom: 30px;">
                     <div class="cardHeadline">{{allTransaction.shares}}</div>
                     <span>Total Shares</span>
@@ -20,22 +20,53 @@
                     <div class="cardHeadline">{{allTransaction.amount|formatAmount:'amount'}}</div>
                     <span>Total Invested</span>
                 </div>
-
+`
             </div>
-            <div style="display: inline-block; width: 60%">
-                <div class="container-fluid">
-                    {{allTransaction.attrs}}
-                    <div class="row"  ng-repeat="(key, value) in allTransaction.attrs">
-                        <div style="display: inline-block; width: 40%" ng-if="key !== 'investor'">
-                            <span >{{key}}</span>
-                        </div>
-                        <div style="display: inline-block; width: 40%">
-                            <span ng-if="key !=='investor'">{{value}}</span>
-                        </div>
+            <div style="display: inline-block; width: 50%; vertical-align: top; padding-top: 40px; text-align: center;">
+                <div ng-repeat="(key, value) in allTransaction.attrs">
+                    <div style="display: inline-block; width: 40%">
+                        <!-- <div style="color:red">{{value}}</div> -->
+                        <div ng-if "hasTip(key)" style="color:blue">{{value}}, {{displayAttr(key)}}</div>
+                    <div ng-if="key!='interestrate' && key != 'pariwith' && value === 'boolean'">
+                        {{data.attrs[key] ? "Yes" : "No"}}
+                    </div>
+                        <div ng-if="!hasTip(key)" style="padding-bottom: 10px;">
+                            <div style="color: black;">
+                                {{formatBool(value)}}
+                            </div>
+                            <div style="text-transform: capitalize">
+                                {{displayAttr(key)}}
+                            </div>
                     </div>
                 </div>
 
             </div>
+            <!-- <div class="capGuide cap-overflow global">
+    <p ng-repeat="key in keys"
+       class="belowTitle">
+        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type === 'boolean'">
+            {{data.attrs[key] ? "Yes" : "No"}}
+        </span>
+        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type !== 'boolean'">
+            {{data.attrs[key] | formatAmount:key}}
+        </span>
+        <span ng-if="key=='interestrate'">
+            {{data.attrs.interestrate}}% {{data.attrs.interestratefreq}}
+        </span>
+        <span ng-if="key == 'pariwith'">
+            {{data.attrs[key].join(", ")}}
+        </span>
+        <span ng-if="hasTip(key)"
+              class="forTooltip"
+              tooltip-placement="right"
+              tooltip="{{tips[key]}}">
+            {{displayAttr(key)}}
+        </span>
+        <span ng-if="!hasTip(key)">
+            {{displayAttr(key)}}
+        </span>
+    </p> -->
+</div>
 
 
         </div>
