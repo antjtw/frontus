@@ -445,24 +445,7 @@ own.directive('editableSecurityDetails', [function() {
                 };
 
                 $scope.submitAction = function(tran) {
-                    var trans = [tran];
-                    if (tran.kind = 'split')
-                    {
-                        angular.forEach($scope.ct.securities, function (sec) {
-                            if (sec.transactions[0].attrs['optundersecurity'] == $scope.sec.name)
-                            {
-                                var tmp = angular.copy(tran);
-                                tmp.attrs['security'] = sec.transactions[0].attrs['security'];
-                                tmp.attrs['security_type'] = sec.transactions[0].attrs['security_type'];
-                                trans.push(tmp);
-                                sec.transactions.push(tmp);
-                            }
-                        });
-                    }
-                    for (t in trans)
-                    {
-                        captable.saveTransaction(trans[t], true);
-                    }
+                    captable.saveTransaction(tran, true);
                     $scope.sec.transactions.push(tran);
                     $scope.newTran = null;
                 };
@@ -541,7 +524,23 @@ own.directive('editableSecurityDetails', [function() {
 
                 $scope.performSplit = function (splittran) {
                     splittran.attrs.ratio =  parseFloat(splittran.ratiob) / parseFloat(splittran.ratioa);
-                    captable.saveTransaction(splittran, true);
+                    var trans = [splittran];
+                    angular.forEach($scope.ct.securities, function (sec) {
+                        if (sec.transactions[0].attrs['optundersecurity'] == $scope.sec.name)
+                        {
+                            var tmp = angular.copy(splittran);
+                            tmp.attrs['security'] = sec.transactions[0].attrs['security'];
+                            tmp.attrs['security_type'] = sec.transactions[0].attrs['security_type'];
+                            trans.push(tmp);
+                            sec.transactions.push(tmp);
+                        }
+                    });
+                    for (t in trans)
+                    {
+                        captable.saveTransaction(trans[t], true);
+                    }
+                    
+                    $scope.sec.transactions.push(splittran);
                 };
 
                 $scope.loaddirective();

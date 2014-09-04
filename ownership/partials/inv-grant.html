@@ -42,7 +42,10 @@
                        ng-show="optionView == 'Security'">
                     <tr class="column-label">
                         <th></th>
-                        <th></th>
+                        <th class="row-fluid">
+                            <span class="span6">Security</span>
+                            <span class="span6">Date</span>
+                        </th>
                         <th ng-repeat="col in captable.grantColumns">
                             {{col.name}}
                         </th>
@@ -61,10 +64,15 @@
                                   aria-hidden="true">
                             </span>
                         </td>
-                        <td ng-class="{'selectablerow': viewMode}"
-                            ng-click="selectSecurity(sec.name)">
-                            <span>
+                        <td class="hoverable"
+                            ng-class="{fieldSelected: selectedSecurity==sec}"
+                            ng-click="selectSecurity(sec.name)"
+                            class="row-fluid">
+                            <span class="span6">
                                 {{sec.name}}
+                            </span>
+                            <span class="span6">
+                                {{sec.effective_date | date:settings.shortdate}}
                             </span>
                         </td>
                         <td ng-repeat="col in captable.grantColumns">
@@ -76,13 +84,13 @@
                         ng-if="sec==shown"
                         ng-repeat="g in captable.grantsOf(sec)">
                         <td class="viewField"></td>
-                        <td ng-class="{fieldSelected: selectedInvestor==inv,
-                                       hoverable: g.attrs.investor}"
-                            ng-click="selectCell(g.attrs.investor, sec.name, 'granted')">
-                            <span>{{g.attrs.investor}}</span>
+                        <td ng-click="selectCell(g.attrs.investor, sec.name, 'granted')"
+                            class="row-fluid">
+                            <span class="span6">{{g.attrs.investor}}</span>
+                            <span class="span6">{{g.effective_date | date:settings.shortdate}}</span>
                         </td>
                         <td ng-repeat="col in captable.grantColumns"
-                            ng-class="{fieldSelected: selectedCell.root == g &&
+                            ng-class="{fieldSelected: selectedCell.roots[0] == g &&
                                                       selectedCell.kind == col.name,
                                        hoverable: captable.grantCellFor(g.attrs.investor, sec.name, col.name).u}"
                             ng-click="selectCell(g.attrs.investor, sec.name, col.name)">
