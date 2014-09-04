@@ -9,7 +9,6 @@
 <link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
 <link type="text/css" rel="stylesheet" href="/cmn/MVP.css">
 <link type="text/css" rel="stylesheet" href="/home/home.css">
-<link type="text/css" rel="stylesheet" href="/home/company.css">
 
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/logo/style.css">
 <link type="text/css" rel="stylesheet" href="/cmn/fonts/icons/style.css">
