@@ -110,9 +110,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                                  return ids.indexOf(t.transaction) != -1;
                              };
                          },
-                         ledgerFilter: function(ids, inv) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
-                                 return ids.indexOf(x.transaction) != -1 && (x.investor == inv);
+                                 return ids.indexOf(x.transaction) != -1 &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         },
@@ -122,10 +124,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                                  return ids.indexOf(t.transaction) != -1;
                              };
                          },
-                         ledgerFilter: function(ids, inv) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
                                  return ids.indexOf(x.transaction) != -1 &&
-                                     x.effective_date <= Date.now() && (x.investor == inv);
+                                     x.effective_date <= Date.now() &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         },
@@ -138,9 +142,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                                      t.attrs.transaction_from == ids[0];
                              };
                          },
-                         ledgerFilter: function(ids, inv) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
-                                 return ids.indexOf(x.transaction) != -1 && (x.investor == inv);
+                                 return ids.indexOf(x.transaction) != -1 &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         },
@@ -153,9 +159,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                                      t.attrs.transaction_from == ids[0];
                              };
                          },
-                         ledgerFilter: function(ids, inv) {
+                         ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
-                                 return ids.indexOf(x.transaction) != -1 && (x.investor == inv);
+                                 return ids.indexOf(x.transaction) != -1 &&
+                                     x.investor == inv &&
+                                     x.security == sec;
                              };
                          }
                         }];
@@ -742,6 +750,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             cell.u = sum_ledger(cell.ledger_entries);
         }
     }
+    function setGrantCellUnits(cell) {
+        setCellUnits(cell);
+        cell.u = Math.abs(cell.u);
+    }
     this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
         if (!cell) return;
@@ -848,14 +860,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     function generateGrantCells() {
-        /* Each grant cell has a list of root transactions.
-         *
-         * From those transactions and the cell kind we get
-         * the list of ledger entries.
-         *
-         * The trick is to find the root transactions.
-         *
-         */
         var grants = captable.transactions
             .filter(function(tran) { return tran.kind == 'grant'; });
         angular.forEach(grants, function(g) {
@@ -879,8 +883,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 var tran_ids = cell.transactions
                     .reduce(accumulateProperty('transaction'), []);
                 cell.ledger_entries = captable.ledger_entries
-                    .filter(col.ledgerFilter(tran_ids, cell.investor));
-                setCellUnits(cell);
+                    .filter(col.ledgerFilter(tran_ids, cell.investor, cell.security));
+                setGrantCellUnits(cell);
                 captable.grantCells.push(cell);
             });
         });
@@ -1417,10 +1421,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var tran_ids = c.transactions
             .reduce(accumulateProperty('transaction'), []);
         c.ledger_entries = captable.ledger_entries
-            .filter(col.ledgerFilter(tran_ids, c.investor));
+            .filter(col.ledgerFilter(tran_ids, c.investor, c.security));
 
-        console.log("grant", grant, roots, roots.length);
-        setCellUnits(c);
+        setGrantCellUnits(c);
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name == root.attrs.security;
