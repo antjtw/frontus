@@ -2465,9 +2465,7 @@ span.tour-icon.issue-cog + .tooltip {
 
 
 
-#tran-headline > li {
-    height: 40px;
-}
+
 .tran-list > li {
     margin-bottom: 20px;
     border: 1px solid #C3C3C3;
@@ -2486,12 +2484,18 @@ span.tour-icon.issue-cog + .tooltip {
     overflow: auto;
 }
 
-.tran-list.scrollBody{
-    max-height: 600px; 
-    overflow-y: auto;
+#tran-headline > li:first-of-type > ul > li {
+    height: 30px;
+    line-height: 30px;
+    cursor: default;
+    color: black;
 }
 
-
+/*.tran-list > li:first-of-type > ul > li {
+    height: 30px;
+    line-height: 30px;
+    cursor: default;
+}*/
 .tran-list > li.activetran {
     border-color: black;
 }
