@@ -2526,3 +2526,10 @@ span.tour-icon.issue-cog + .tooltip {
     height: 58px;
     line-height: 58px;
 }
+
+.my-trans-docs{
+   padding-left: 20px; 
+}
+.my-trans-docs:first-of-type{
+    padding-top: 20px;
+}
