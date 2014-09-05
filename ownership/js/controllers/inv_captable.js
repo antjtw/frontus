@@ -45,11 +45,6 @@ function($scope, $parse, SWBrijj, calculate, $filter,
         return $scope.selectedCell.investor == inv
             && $scope.selectedCell.security == sec;
     }
-    SWBrijj.procm('_ownership.my_visible_investors').then(function(x) {
-        console.log(x);
-    }).except(function(x) {
-        console.log(x);
-    });
     SWBrijj.procm('ownership.return_status').then(function (x) {
         $scope.level = x[0].return_status;
         if ($scope.level != 'Full View' && $scope.level != 'Personal View') {
@@ -58,7 +53,6 @@ function($scope, $parse, SWBrijj, calculate, $filter,
         if ($scope.level == 'Full View') {
             $scope.fullview = true;
         }
-        console.log($scope.level);
     });
     $scope.selectCell = function(inv, sec) {
         $scope.selectedSecurity = $scope.selectedInvestor = null;

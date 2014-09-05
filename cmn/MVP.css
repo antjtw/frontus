@@ -3303,6 +3303,7 @@ button.icon-button:hover {
 }
 .standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     color: rgb(102, 102, 102);
+    text-transform: capitalize;
 }
 .standard .dropdown-menu > li > a:hover, .standard .dropdown-menu > li > span:hover {
     background: #C7C7C7;
@@ -4921,8 +4922,23 @@ textarea.email-text {
     padding-bottom: 10px;
     text-align: center;
     border: 1px dashed #C7C7C7;
-/*    width: 200px;*/
     margin-left: 30px;
+}
+
+.noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups{
+    padding-right: 20px;
+}
+
+.linkedDocuments .noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups.addMore:hover{
+    color: #2980B9 !important;
 }
 
 .noGroups span{
@@ -4933,7 +4949,6 @@ textarea.email-text {
 .select_role.all_people{
     color: #1E2D3D;
 }
-
 
 .noGroups span:last-of-type{
     position: relative;
@@ -4955,14 +4970,6 @@ textarea.email-text {
     text-align: center;
     position: relative;
     top: 30%;
-}
-
-.cardHeadline {
-    color: #15A085;
-    font-weight: bold;
-    font-size: 46px;
-    padding-bottom: 20px;
-
 }
 
 .table-border{

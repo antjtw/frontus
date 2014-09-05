@@ -12,50 +12,7 @@
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12 company-page">
-                <div class="front info-box">
-					<div class="head-box">
-						<h2>Understand Your Ownership</h2>
-					</div>
-					<div class="body-box">
-						<div ng-show="totalIssued == 0">
-							<div class="new-box">
-								<div>
-									<h2>Setting up your cap table
-									with Sharewave is straightforward. Just add your securities, shareholders
-									and investments and we'll do the math for
-									you.
-									</h2>
-									<div>
-										<button id='a_home_doc_pre'  class="btn" ng-click="gotopage('/app/ownership/company-captable')">Get Started <span data-icon="&#xe016;"></span>
-										</button>
-									</div>
-								</div>
-
-								<div>
-									<img src="/img/vid-pic.png" ng-click="fullScreen()" id="vid-pic">
-									<iframe width="100" height="165" src="//www.youtube.com/embed/kl0If2UmOdQ?autohide=1" id="vid" frameborder="0" allowfullscreen></iframe>
-								</div>
-							</div>
-						</div>
-						<div ng-show="totalIssued != 0">
-                            <div class="ownership-tile-details detail-row cf">
-                                <div class="graph-container cf">
-                                    <div ng-repeat="gd in graphdata | limitTo: 3" ng-if="gd[1][0].percent != 0" class="graph">
-                                        <d3expdonut class="exploded-donut" data='gd[1]'></d3expdonut>
-                                        <h2>{{gd[0].name}}</h2>
-                                        <h2 ng-show="gd[0].issued">{{gd[0].issued | formatAmount:'units'}} Issued</h2>
-                                        <h2 ng-show="gd[0].amount">{{gd[0].amount | formatAmount:'amount'}} Invested</h2>
-                                    </div>
-                                </div>
-                                <div class="actions">
-                                    <div class="standard-button green" id="own-button">
-                                        <button id='a_home_own_post' class="btn" ng-click="gotopage('/app/ownership/company-captable')">View<span data-icon="&#xe016;"></span></button>
-                                    </div>
-                                </div>
-                            </div>
-						</div>
-					</div>
-				</div>
+                <company-ownership-tile></company-ownership-tile>
 				<div class="front info-box">
 					<div class="head-box">
 						<h2>Document Management</h2>

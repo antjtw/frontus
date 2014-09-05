@@ -572,7 +572,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 12px;
-    color:  #1d2c3c;
+    color:  #3498DB;
 }
 
 .transaction-accordion.lessmargin .delete-link {
@@ -580,7 +580,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-top: 20px;
     margin-bottom: 20px;
     cursor: pointer;
-    color:  #1d2c3c;
+    color:  #3498DB;
     display: inline-block;
     font-size: 12px;
 }
@@ -2379,10 +2379,6 @@ span.tour-icon.issue-cog + .tooltip {
 
 .action-button.standard-button {
     margin: 20px 0 0 20px;
-}
-
-.linkedDocuments .noGroups{
-    padding-right: 40px;
 }
 
 .cellSummary {

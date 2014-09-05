@@ -30,6 +30,12 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate)
         if ($scope.selectedSecurity) return 'selectedSecurity';
         return null;
     };
+    
+    $scope.limitLength = function(str, len) {
+        if (str.length > len)
+            return str.substring(0, len - 3) + "...";
+        return str;
+    };
 
     $scope.selectCell = function(grant, kind) {
         $scope.currentTab = 'details';
