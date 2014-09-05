@@ -2460,11 +2460,13 @@ span.tour-icon.issue-cog + .tooltip {
 /* Transaction Log */
 
 .tran-list {
-    margin: 20px;
+   padding-right: 20px;
+   margin-left: 20px;
+   margin-top: 10px;
 }
 
 .tran-list > li {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 1px solid #C3C3C3;
 }
 
