@@ -1,6 +1,6 @@
 app.controller('tranController',
-    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate',
-        function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate) {
+    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate', '$filter',
+        function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate, $filter) {
 
             var company = navState.company;
             $scope.company = company;
@@ -30,7 +30,8 @@ app.controller('tranController',
                 return (text == "") ||
                     (tran.attrs.security && (tran.attrs.security.toLowerCase()).indexOf(text) != -1) ||
                     (tran.attrs.investor && (tran.attrs.investor.toLowerCase()).indexOf(text) != -1) ||
-                    (tran.kind.indexOf(text) != -1);
+                    (tran.kind.indexOf(text) != -1) ||
+                    ($filter('date')(tran.effective_date, $scope.settings.shortdate).indexOf(text) != -1);
             };
             
             $scope.limitLength = function(str, len) {
