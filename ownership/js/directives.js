@@ -537,7 +537,7 @@ own.directive('editableSecurityDetails', [function() {
                 };
 
                 $scope.performSplit = function (splittran) {
-                    splittran.attrs.ratio =  parseFloat(splittran.ratiob) / parseFloat(splittran.ratioa);
+                    splittran.attrs.ratio =  parseFloat(splittran.ratioa) / parseFloat(splittran.ratiob);
                     var trans = [splittran];
                     angular.forEach($scope.ct.securities, function (sec) {
                         if (sec.transactions[0].attrs['optundersecurity'] == $scope.sec.name)
