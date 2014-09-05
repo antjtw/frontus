@@ -1557,7 +1557,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var auth_securities = [];
         if (dilution <= 0) {
             var ok_types = ["Equity Common",
-                            "Equity Preferred",
+                            "Equity",
                             "Options"];
             angular.forEach(captable.securities, function(sec) {
                 if (sec && sec.attrs && ok_types.indexOf(

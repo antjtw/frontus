@@ -75,7 +75,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 // only add effective date if we're definitely in a transaction
                 var display = "Effective Date";
                 if ((issue_type == "Equity Common"    && transaction_type == "grant") ||
-                    (issue_type == "Equity Preferred" && transaction_type == "grant") ||
+                    (issue_type == "Equity"           && transaction_type == "grant") ||
                     (issue_type == "Debt"             && transaction_type == "purchase") ||
                     (issue_type == "Convertible Debt" && transaction_type == "purchase") ||
                     (issue_type == "Safe"             && transaction_type == "grant")) {
