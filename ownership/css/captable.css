@@ -2498,6 +2498,10 @@ span.tour-icon.issue-cog + .tooltip {
     border-color: black;
 }
 
+.tran-list.trans-info {
+    margin-bottom: 30px;
+}
+
 
 .tran-list > li > ul > li {
     width: 15%;
