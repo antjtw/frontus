@@ -91,7 +91,7 @@
             </div>
         </div>
 
-       <span ng-hide="windowToggle || tran.evidence_data.length == 0"
+       <span ng-if="windowToggle == false && tran.evidence_data.length > 0"
               class="delete-link linkedDocuments"
               ng-click="editEvidence(tran);">
             <div class="noGroups addMore">

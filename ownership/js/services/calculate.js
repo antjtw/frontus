@@ -9,7 +9,7 @@ ownership.service('calculate', function () {
     this.primaryMeasure = function(sec_type) {
         switch (sec_type) {
             case "Equity Common":
-            case "Equity Preferred":
+            case "Equity":
             case "Option":
             case "Warrant":
                 return "units";
