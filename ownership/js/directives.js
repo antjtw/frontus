@@ -385,7 +385,7 @@ own.directive('editableSecurityDetails', [function() {
                     var tran = captable.addTransaction(null, $scope.sec.name, 'split');
                     tran.active = true;
                 };
-       
+
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $scope.viewme = ['investor', ev.doc_id];
@@ -549,11 +549,11 @@ own.directive('editableSecurityDetails', [function() {
                             sec.transactions.push(tmp);
                         }
                     });
-                    for (t in trans)
+                    for (var t in trans)
                     {
                         captable.saveTransaction(trans[t], true);
                     }
-                    
+
                     $scope.sec.transactions.push(splittran);
                 };
 
@@ -573,8 +573,30 @@ own.directive('cellSummary', [function() {
         templateUrl: '/ownership/partials/cellSummary.html',
         controller: ["$scope", "captable",
             function($scope, captable) {
-
-            }],
+                $scope.grouped_entries = [];
+                $scope.$watchCollection('cell.ledger_entries', function(entries) {
+                    $scope.grouped_entries.splice(0);
+                    entries.forEach(function(orig_entry) {
+                        if (!$scope.grouped_entries.some(function(new_entry) {
+                            if (orig_entry.effective_date.getFullYear() == new_entry.effective_date.getFullYear() &&
+                                orig_entry.effective_date.getMonth() == new_entry.effective_date.getMonth() &&
+                                orig_entry.effective_date.getDate() == new_entry.effective_date.getDate()) {
+                                // sum the credits and debits (which is all we really care about)
+                                new_entry.credit = parseFloat(new_entry.credit) + parseFloat(orig_entry.credit);
+                                new_entry.debit = parseFloat(new_entry.debit) + parseFloat(orig_entry.debit);
+                                return true; // found it, don't add orig_entry to new_arr
+                            }
+                            return false;
+                        })) {
+                            $scope.grouped_entries.push(angular.copy(orig_entry)); // copy because we may modify data on later loops
+                        }
+                    });
+                    $scope.grouped_entries.sort(function(entryA, entryB) {
+                        return entryA.effective_date - entryB.effective_date;
+                    });
+                });
+            }
+        ],
     };
 }]);
 own.directive('cellDetails', [function() {

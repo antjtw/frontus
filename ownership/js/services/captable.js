@@ -790,7 +790,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
-        } else if (cellSecurityType(cell) == "Option") {
+        } else if (["Option", "Warrant"].indexOf(cellSecurityType(cell)) != -1) {
             return;
         } else {
             var transactionkeys = [];
@@ -881,6 +881,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     setCellUnits(cell);
                     setCellAmount(cell);
                     cell.valid = validateCell(cell);
+                    if (cell.investor=='Robert Walport') console.log(cell);
                     captable.cells.push(cell);
                 }
             });
@@ -892,7 +893,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function generateGrantCells() {
         var grants = captable.transactions
-            .filter(function(tran) { return tran.kind == 'grant' && tran.attrs.security_type=='Option'; });
+            .filter(function(tran) {
+                return tran.kind == 'grant' &&
+                       tran.attrs.security_type=='Option';
+            });
         angular.forEach(grants, function(g) {
             var root = g;
             angular.forEach(grantColumns, function(col) {
@@ -1242,9 +1246,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             tran.evidence_data = data.filter(function(el) {
                 return el.evidence==tran.evidence;
             });
-            if (tran.evidence_data.length > 0) {
-                console.log("evidence!", tran);
-            }
         });
     }
     function reformatDate(obj) {
@@ -1934,8 +1935,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     (String(transaction.attrs[att]).length > 0)))
                 {
                     correct = false;
-                    console.log("required not filled");
-                    console.log(att);
                     return correct;
                 }
             }
@@ -1944,10 +1943,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.validateTransaction = validateTransaction;
     function validateCell(cell) {
-        console.log("validateCell");
         if (!attrs)
         {
-            console.log("attrs not defined");
             return true;
         }
         var correct = true;

@@ -17,7 +17,7 @@
                 <th>Date</th>
                 <th>Units</th>
             </tr>
-            <tr ng-repeat="e in cell.ledger_entries" ng-if="cell.kind != 'forfeited'">
+            <tr ng-repeat="e in grouped_entries" ng-if="cell.kind != 'forfeited'">
                 <td>{{e.effective_date | date:settings.shortdate}}</td>
                 <td ng-if="cell.kind != 'exercised'">{{e.credit - e.debit | formatAmount:'units'}}</td>
                 <td ng-if="cell.kind == 'exercised'">{{e.debit - e.credit | formatAmount:'units'}}</td>
