@@ -201,6 +201,7 @@ ownership.filter('formatAmount', function($rootScope) {
                 amount = "No";
             }
         } else if ((key && nums.concat(moneys).indexOf(key) !== -1) || !key) {
+            if (-0.000000001 < amount && amount < 0.000000001) amount = 0;
             var n;
             if (moneys.indexOf(key) !== -1) {
                 n = amount.toFixed(2).split(".");
