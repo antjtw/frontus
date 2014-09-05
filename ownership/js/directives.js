@@ -814,7 +814,7 @@ own.directive('editableCellDetails', [function() {
                 $scope.justEquity = function(securities) {
                     var list = [];
                     angular.forEach(securities, function(issue) {
-                        if (issue.attrs.security_type == "Equity Common" || issue.attrs.security_type == "Equity Preferred") {
+                        if (issue.attrs.security_type == "Equity Common" || issue.attrs.security_type == "Equity") {
                             list.push(issue);
                         }
                     });
