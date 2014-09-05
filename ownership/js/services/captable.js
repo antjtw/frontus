@@ -916,7 +916,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 cell.roots = cell.roots.concat(
                     captable.transactions.filter(function(tran) {
                         return tran.kind == 'split' &&
-                            tran.attrs.security == root.attrs.security;
+                            tran.attrs.security == root.attrs.security && (tran.effective_date > root.effective_date);
                     })
                 );
                 cell.kind = col.name;
@@ -1459,7 +1459,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         c.roots = c.roots.concat(
             captable.transactions.filter(function(tran) {
                 return tran.kind == 'split' &&
-                    tran.attrs.security == root.attrs.security;
+                    tran.attrs.security == root.attrs.security && (tran.effective_date > root.effective_date);
             })
         );
         c.kind = kind;
