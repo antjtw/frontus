@@ -29,7 +29,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.state = {evidenceQuery: ""};
     $scope.tourshow = false;
     $scope.tourstate = 0;
-    $scope.tourUp = function () { $scope.tourModal = true; };
+    $scope.tourUp = function () { $scope.tourModal = false; };
     $scope.tourmessages = displayCopy.tourmessages;
     $scope.captabletips = displayCopy.captabletips;
     $scope.activityView = "ownership.company_activity_feed";
@@ -74,9 +74,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     function initUI() {
         if (!$rootScope.companyIsZombie()) {
             $scope.editMode = false;
-            $scope.tourshow = true;
             $scope.sideToggle = true;
-            $scope.tourUp();
         }
     }
     function cellIsSelected(inv, sec) {
