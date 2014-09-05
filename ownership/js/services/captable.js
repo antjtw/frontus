@@ -651,6 +651,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         return trans2;
     }
+    function netCreditFor(transaction, investor) {
+        var trans = captable.transactions.filter(function(t) {
+            return t.transaction == transaction || 
+                (t.attrs['transaction_from'] && t.attrs.transaction_from == transaction);
+        }).reduce(accumulateProperty('transaction'), []);
+        var ledger_entries = captable.ledger_entries.filter(function(e) {
+            return trans.indexOf(e.transaction) != -1 && e.investor == investor;
+        });
+        return sum_ledger(ledger_entries);
+    }
+    this.netCreditFor = netCreditFor;
     function secHasUnissued(securities) {
         return function(sec) {
             return numUnissued(sec, securities);
