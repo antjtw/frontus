@@ -871,6 +871,7 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 $scope.loaddirective = function () {
+                    console.log($scope.data);
                     $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);
@@ -1168,6 +1169,48 @@ own.directive('evidenceTable', [function() {
                         $scope.viewme = ['issuer', ev.original];
                     }
                 };
+            }
+        ],
+    };
+}]);
+
+own.directive('transactionLog', [function() {
+    return {
+        restrict: 'EA',
+        scope: {tran: '='},
+        templateUrl: '/ownership/partials/transaction-log-rail.html',
+        controller: ["$scope", "$rootScope", "$location",
+            "displayCopy", "captable",
+            function($scope, $rootScope, $location,
+                     displayCopy, captable) {
+                $scope.settings = $rootScope.settings;
+                $scope.tips = displayCopy.captabletips;
+
+                $scope.currentTab = 'details';
+                $scope.switchCapTab = function(tab) {
+                    $scope.currentTab = tab;
+                };
+
+                $scope.loaddirective = function() {
+                };
+
+                $scope.hasDocuments = function(tran) {
+                    return tran.evidence_data && (tran.evidence_data.length > 0);
+                    console.log(tran.evidence_data)
+                };
+
+                  $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                    } else if (ev.original !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
+                    }
+                };
+
+                $scope.loaddirective();
+                $scope.$watch('tran', function(newval, oldval) {
+                    $scope.loaddirective();
+                }, true);
             }
         ],
     };
