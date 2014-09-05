@@ -2462,8 +2462,12 @@ span.tour-icon.issue-cog + .tooltip {
 .tran-list {
     margin: 20px;
 }
-
-
+/*
+.tran-id.trans-info {
+    height: calc(100% - 80px);
+    overflow-y: auto;
+    
+}*/
 
 
 .tran-list > li {
@@ -2483,7 +2487,6 @@ span.tour-icon.issue-cog + .tooltip {
     margin: 0 20px;
     overflow: auto;
 }
-
 
 
 #tran-headline > li:first-of-type > ul > li {

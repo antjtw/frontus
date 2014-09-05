@@ -15,7 +15,7 @@
             <div ng-style="viewportheight"
                  class="span8 docLibrary leftBlock"
                  ng-class="{leftFullTableBlock: sideToggle,
-                            widthtransition25: oldSafari()}">
+                            widthtransition25: oldSafari()}" style="overflow: none">
                 <ul class="tran-list" id="tran-headline">
                     <li>
                         <ul>
@@ -29,14 +29,14 @@
                     </li>
                 </ul>
 
-                <ul class="tran-list bodyText">
+                <ul class="tran-list trans-info" >
                     <li ng-if="ct.transactions && ct.transactions.length == 0">
                         <ul class="notrans">
                             <span>You haven't entered any transactions yet. Go to the cap table to get started!</span>
                         </ul>
                     </li>
                 </ul>
-                <ul class="tran-list">
+                <ul class="tran-list trans-info" style="height: calc(100% - 60px); overflow-y: auto">
                     <li ng-click="makeActive(tran)" ng-class="{'activetran': activeTran==tran}" ng-repeat="tran in ct.transactions" ng-show="contains(search.text, tran)">
                         <ul>
                             <li>{{tran.effective_date | date:settings.shortdate}}</li>
