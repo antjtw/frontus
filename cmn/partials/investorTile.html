@@ -4,7 +4,7 @@
 
 
 
-<div ng-repeat="allTransaction in allTransactions | orderBy:allTransaction.date">
+<div ng-repeat="allTransaction in allTransactions | orderBy:'date': true">
     <div ng-hide="allTransaction.amount == null">
         <div class="front info-box">
             <div class="head-box">
@@ -22,8 +22,7 @@
                 </div>
 `
             </div>
-            <div style="display: inline-block; width: 50%; vertical-align: top; padding-top: 40px; text-align: center;">
-             
+            <div style="display: inline-block; width: 50%; vertical-align: top; padding-top: 40px; text-align: center;">             
                     <div style="display: inline-block; width: 40%; padding-bottom: 10px">
                         <div>{{allTransaction.date | date: 'shortDate'}}</date>
                         <div style="color: black; padding-bottom: 10px;">Date</date>
