@@ -4921,8 +4921,23 @@ textarea.email-text {
     padding-bottom: 10px;
     text-align: center;
     border: 1px dashed #C7C7C7;
-/*    width: 200px;*/
     margin-left: 30px;
+}
+
+.noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups{
+    padding-right: 20px;
+}
+
+.linkedDocuments .noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups.addMore:hover{
+    color: #2980B9 !important;
 }
 
 .noGroups span{

@@ -78,7 +78,7 @@
             </span>
         </div>
         <div class="capTab" ng-switch-when="documents">
-            <div ng-if="tran.evidence_data.length==0 && windowToggle == false"
+            <div ng-if="tran.evidence_data.length==0 && windowToggle == false || tran.evidence_data == null && windowToggle == false"
                  class="linkedDocuments">
                     <div class="noGroups"  ng-click="editEvidence(tran)">
                     Connect documents that support this transaction by clicking the link below.
@@ -117,10 +117,12 @@
                 </div>
             </div>
             <span ng-hide="windowToggle || tran.evidence_data.length == 0"
-                  class="blue-link delete-link linkedDocuments"
-                  ng-click="editEvidence(tran);"
-                  data-icon="&#xe008;">
-                Add Documents
+                  class="delete-link linkedDocuments"
+                  ng-click="editEvidence(tran);">
+                <div class="noGroups addMore">
+                    Add More Documents
+                    <span data-icon="&#xe016;" aria-hidden="true"></span>
+                 </div>
             </span>
             <div ng-if="windowToggle == true && tran.evidence_data.length==0" class="linkedDocuments">
                 <div class="noGroups">
