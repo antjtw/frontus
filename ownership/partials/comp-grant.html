@@ -143,11 +143,11 @@
                         <!-- VIEW ONLY INVESTOR ROWS -->
                         <!-- TODO dispaly row for each investor with ledger entries for the security -->
                         <tr class="transaction-rows"
-                            ng-if="sec==shown && viewMode"
+                            ng-if="sec==shown && viewMode && (captable.netCreditFor(row.transaction, row.attrs.investor) > 0)"
                             ng-repeat="row in captable.grantRowInfoFor(sec.name) | orderBy : row.attrs.investor">
                             <td class="viewField"></td>
                             <td class="row-fluid">
-                                <span class="span6">{{row.attrs.investor}}</span>
+                                <span class="span6">{{limitLength(row.attrs.investor, 25)}}</span>
                                 <span class="span6">{{row.effective_date | date:settings.shortdate}}</span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns"

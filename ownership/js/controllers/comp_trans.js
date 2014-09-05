@@ -9,6 +9,8 @@ app.controller('tranController',
             $scope.ct = captable.getCapTable();
             $scope.captable = captable;
             $scope.calculate = calculate;
+            $scope.search = {};
+            $scope.search.text = "";
 
             $scope.captabletips = displayCopy.captabletips;
 
@@ -22,6 +24,22 @@ app.controller('tranController',
                 } else {
                     $scope.activeTran = tran;
                 }
+            };
+            
+            $scope.contains = function(searchText, tran) {
+                var text = searchText.toLowerCase();
+                return (text == "") ||
+                    (tran.attrs.security && (tran.attrs.security.toLowerCase()).indexOf(text) != -1) ||
+                    (tran.attrs.investor && (tran.attrs.investor.toLowerCase()).indexOf(text) != -1) ||
+                    (tran.kind.indexOf(text) != -1);
+            };
+            
+            $scope.limitLength = function(str, len) {
+                if (!str)
+                    return "";
+                if (str.length > len)
+                    return str.substring(0, len - 3) + "...";
+                return str;
             };
 
             $scope.shown = null;
