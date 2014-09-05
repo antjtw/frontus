@@ -3,8 +3,7 @@
 <link type="text/css" rel="stylesheet" href="/home/company.css">
 
 
-
-<div ng-repeat="allTransaction in allTransactions">
+<div ng-repeat="allTransaction in allTransactions | orderBy:'date': true">
     <div>
         <div class="front info-box" style="overflow: auto">
             <div class="head-box">
