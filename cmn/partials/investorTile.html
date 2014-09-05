@@ -3,48 +3,36 @@
 <link type="text/css" rel="stylesheet" href="/home/company.css">
 
 
-
 <div ng-repeat="allTransaction in allTransactions | orderBy:'date': true">
-    <div ng-hide="allTransaction.amount == null">
-        <div class="front info-box">
+    <div>
+        <div class="front info-box" style="overflow: auto">
             <div class="head-box">
-                <h2>My Ownership</h2>
+                <h2>{{allTransaction.effective_date | date:shortdate}} Ownership</h2>
             </div>
 
-            <div style="display: inline-block; width: 40%; min-height: 250px; max-height: 400px;">
-                <div style="height: 40%; vertical-align: middle; margin-top: 40px; padding-left: 40px; margin-bottom: 30px; padding-bottom: 30px">
-                    <div class="cardHeadline">{{allTransaction.shares | formatAmount:'units'}}</div>
-                    <span ng-if="allTransaction.shares !== undefined">Total Shares</span>
+            <div class="cardHeadline">
+                <div ng-if="allTransaction.units > 0">
+                    <div>{{allTransaction.units | formatAmount:'units'}}</div>
+                    <span>Total Shares</span>
                 </div>
-                <div style="height: 40%; vertical-align: middle; padding-left: 40px">
-                    <div class="cardHeadline">{{allTransaction.amount|formatAmount:'amount'}}</div>
+                <div ng-if="allTransaction.amount > 0">
+                    <div>{{allTransaction.amount|formatAmount:'amount'}}</div>
                     <span>Total Invested</span>
                 </div>
-`
             </div>
-            <div style="display: inline-block; width: 50%; vertical-align: top; padding-top: 40px; text-align: center;">             
-                    <div style="display: inline-block; width: 40%; padding-bottom: 10px">
-                        <div>{{allTransaction.date | date: 'shortDate'}}</date>
-                        <div style="color: black; padding-bottom: 10px;">Date</date>
-                    </div>
-                    <div ng-repeat="(key, value) in allTransaction.attrs" order>
-      
-                    <div ng-if="key!='interestrate' && key != 'pariwith' && value === 'boolean'" style="padding-bottom: 10px;">
-                        <div style="color: black">{{formatBool(value)}}</div>
-                        <div style="text-transform: capitalize">{{displayAttr(key)}}</div>
-                    </div>
-                        <div 
-                        <div ng-if="!hasTip(key)" style="padding-bottom: 10px;">
-                            <div style="color: black;">
-                                {{formatBool(value)}}
+            <div class="investor-tile-own">
+                <ul>
+                    <li ng-repeat="(key, value) in allTransaction.attrs">
+                        <div>
+                            <div>
+                                {{value | formatAmount:key}}
                             </div>
-                            <div style="text-transform: capitalize">
+                            <div>
                                 {{displayAttr(key)}}
                             </div>
                         </div>
-                    </div>
-                </div>
-
+                    </li>
+                </ul>
             </div>
 
         </div>

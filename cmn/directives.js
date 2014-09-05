@@ -917,7 +917,8 @@ m.directive('investorTile', function(){
             $scope.investorNames = [];
             $scope.cti=captable.getCapTable();
             $scope.tips = displayCopy.captabletips;
-            console.log($scope.cti)
+            console.log($scope.cti);
+
             $scope.$watch('cti', function(newval, oldval) {
                 if (newval.securities.length > 0) {
                     $scope.cti = angular.copy($scope.cti);
@@ -935,7 +936,7 @@ m.directive('investorTile', function(){
             $scope.displayAttr = captable.displayAttr;
 
 
-             function myTransactions(transid, amount, shares){
+            function myTransactions(transid, amount, shares){
                 this.transid = transid;
                 this.amount = amount;
                 this.shares = shares;
@@ -957,30 +958,11 @@ m.directive('investorTile', function(){
 
             $scope.ledgerAmounts = function(){
                 $scope.getTransactions();
-                angular.forEach($scope.cti.investors, function(cap){
-                    angular.forEach(cap.transactions, function(trans){
-                        console.log(trans);
-                        angular.forEach($scope.allTransactions, function(id){
-                            if(id.transid == trans.transaction){
-                                id.amount = trans.attrs.amount;
-                                id.shares = trans.attrs.units;
-                                id.date = trans.effective_date;
-                                id.evidence = trans.evidence_data;
-                                id.attrs = angular.copy(trans.attrs);
-                                delete id.attrs['amount'];
-                                delete id.attrs['units'];
-                                delete id.attrs['investor'];
-                                delete id.attrs['physical'];
-                                
-                            }
-                           
-                        });
-                    });
-                });
             };
 
-            var myName = ""
+            var myName = "";
             $scope.getTransactions = function(){
+                $scope.allTransactions = [];
                 var name = "";
                 angular.forEach($scope.cti.investors, function(cap){
                     if(cap.email == navState.userid){
@@ -988,23 +970,39 @@ m.directive('investorTile', function(){
                         myName = cap.name;
                     }
                     angular.forEach(cap.transactions, function(trans){
-                        if(trans.attrs.investor == name && $scope.allTransactions.indexOf(trans.transaction)== -1){
-                            $scope.allTransactions.push(new myTransactions(trans.transaction))
-                        }; 
-
+                        if(trans.attrs.investor == name) {
+                            var newtran = angular.copy(trans);
+                            delete newtran.attrs["physical"];
+                            delete newtran.attrs["investor"];
+                            delete newtran.attrs["units"];
+                            $scope.allTransactions.push(newtran)
+                        }
                     });
 
                 });
+                console.log($scope.allTransactions);
                 return($scope.allTransactions);
             };
 
 
             $scope.getTotalInvested = function(){
-                var myTransactions = [];
-                angular.forEach($scope.cti.transactions, function(trans){
-                    myTransactions.push(trans);
-                });
-                return captable.sum_transactions(myTransactions);
+                angular.forEach($scope.allTransactions, function(tran) {
+                    tran[calculate.primaryMeasure(tran.attrs.security_type)] = 0;
+                    angular.forEach($scope.cti.ledger_entries, function(ledger) {
+                        if (tran.transaction == ledger.transaction) {
+                            if (calculate.isNumber(ledger.credit)) {
+                                tran[calculate.primaryMeasure(tran.attrs.security_type)] += parseFloat(ledger.credit);
+                            }
+                            if (calculate.isNumber(ledger.debit)) {
+                                tran[calculate.primaryMeasure(tran.attrs.security_type)] -= parseFloat(ledger.debit);
+                            }
+                        }
+                    });
+                    if (calculate.primaryMeasure(tran.attrs.security_type) == "units") {
+                        tran.amount = tran.attrs.amount;
+                    }
+                    delete tran.attrs["amount"];
+                })
             };
 
         }]
