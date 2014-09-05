@@ -385,7 +385,7 @@ own.directive('editableSecurityDetails', [function() {
                     var tran = captable.addTransaction(null, $scope.sec.name, 'split');
                     tran.active = true;
                 };
-       
+
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $scope.viewme = ['investor', ev.doc_id];
@@ -575,7 +575,7 @@ own.directive('cellSummary', [function() {
             function($scope, captable) {
                 $scope.grouped_entries = [];
                 $scope.$watchCollection('cell.ledger_entries', function(entries) {
-                    $scope.grouped_entries.splice();
+                    $scope.grouped_entries.splice(0);
                     entries.forEach(function(orig_entry) {
                         if (!$scope.grouped_entries.some(function(new_entry) {
                             if (orig_entry.effective_date.getFullYear() == new_entry.effective_date.getFullYear() &&
