@@ -422,3 +422,42 @@ font-size: 17px;
     display: none;
 }
 
+.investor-tile-own {
+    width: 60%;
+    float: right;
+}
+
+.investor-tile-own > ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+.investor-tile-own > ul > li {
+    display: inline-block;
+    float: left;
+    width: 50%;
+    margin-top: 10px;
+}
+
+.investor-tile-own > ul > li > div > div:first-of-type {
+    color: #1E2D3D;
+}
+
+
+.investor-tile-own > ul > li > div > div:last-of-type {
+    text-transform: capitalize;
+}
+
+.cardHeadline {
+    width: 40%;
+    display: inline-block;
+    text-align: center;
+}
+
+.cardHeadline > div > div {
+    color: #1ABC96;
+    font-size: 46px;
+    line-height: 46px;
+    margin-top: 30px;
+}

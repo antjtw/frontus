@@ -881,6 +881,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     setCellUnits(cell);
                     setCellAmount(cell);
                     cell.valid = validateCell(cell);
+                    if (cell.investor=='Robert Walport') console.log(cell);
                     captable.cells.push(cell);
                 }
             });
@@ -892,7 +893,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function generateGrantCells() {
         var grants = captable.transactions
-            .filter(function(tran) { return tran.kind == 'grant' && tran.attrs.security_type=='Option'; });
+            .filter(function(tran) {
+                return tran.kind == 'grant' &&
+                       tran.attrs.security_type=='Option';
+            });
         angular.forEach(grants, function(g) {
             var root = g;
             angular.forEach(grantColumns, function(col) {
