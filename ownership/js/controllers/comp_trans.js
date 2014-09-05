@@ -17,7 +17,7 @@ app.controller('tranController',
             $scope.sideToggle = true;
             $scope.viewMode = true;
 
-            $scope.viewheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
+            $scope.viewheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'hidden'};
 
             $scope.makeActive = function(tran) {
                 if ($scope.activeTran == tran) {
