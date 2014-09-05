@@ -1911,6 +1911,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 switch(attrs[transaction.attrs.security_type][transaction.kind][att].type)
                 {
                     case "number":
+                    case "fraction":
                         if (!calculate.isNumber(transaction.attrs[att]))
                         {
                             correct = false;
