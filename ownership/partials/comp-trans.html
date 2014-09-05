@@ -38,8 +38,8 @@
                             <li class="longli">{{tran.attrs.security}}</li>
                             <li class="longli">{{tran.attrs.investor}}</li>
                             <li>{{tran.kind}}</li>
-                            <li>{{tran.attrs.units}}</li>
-                            <li>{{tran.attrs.amount}}</li>
+                            <li>{{tran.attrs.units | formatAmount: 'units'}}</li>
+                            <li>{{tran.attrs.amount | formatAmount: 'amount'}}</li>
                         </ul>
                     </li>
                 </ul>
