@@ -3,44 +3,36 @@
 <link type="text/css" rel="stylesheet" href="/home/company.css">
 
 
-
-<div ng-repeat="allTransaction in allTransactions">
-    <div ng-hide="allTransaction.amount == null">
-        <div class="front info-box">
+<div ng-repeat="allTransaction in allTransactions | orderBy:'date': true">
+    <div>
+        <div class="front info-box" style="overflow: auto">
             <div class="head-box">
-                <h2>My Ownership</h2>
+                <h2>{{allTransaction.effective_date | date:shortdate}} Ownership</h2>
             </div>
 
-            <div style="display: inline-block; width: 40%; min-height: 250px; max-height: 400px;">
-                <div style="height: 40%; vertical-align: middle; margin-top: 40px; padding-left: 40px; margin-bottom: 30px;">
-                    <div class="cardHeadline">{{allTransaction.shares | formatAmount:'units'}}</div>
+            <div class="cardHeadline">
+                <div ng-if="allTransaction.units > 0">
+                    <div>{{allTransaction.units | formatAmount:'units'}}</div>
                     <span>Total Shares</span>
                 </div>
-                <div style="height: 40%; vertical-align: middle; padding-left: 40px">
-                    <div class="cardHeadline">{{allTransaction.amount|formatAmount:'amount'}}</div>
+                <div ng-if="allTransaction.amount > 0">
+                    <div>{{allTransaction.amount|formatAmount:'amount'}}</div>
                     <span>Total Invested</span>
                 </div>
-`
             </div>
-            <div style="display: inline-block; width: 50%; vertical-align: top; padding-top: 40px; text-align: center;">
-                <div ng-repeat="(key, value) in allTransaction.attrs">
-                    <div style="display: inline-block; width: 40%">
-                        <!-- <div style="color:red">{{value}}</div> -->
-                        <div ng-if "hasTip(key)" style="color:blue">{{value}}, {{displayAttr(key)}}</div>
-                    <div ng-if="key!='interestrate' && key != 'pariwith' && value === 'boolean'">
-                        {{data.attrs[key] ? "Yes" : "No"}}
-                    </div>
-                        <div ng-if="!hasTip(key)" style="padding-bottom: 10px;">
-                            <div style="color: black;">
-                                {{formatBool(value)}}
+            <div class="investor-tile-own">
+                <ul>
+                    <li ng-repeat="(key, value) in allTransaction.attrs">
+                        <div>
+                            <div>
+                                {{value | formatAmount:key}}
                             </div>
-                            <div style="text-transform: capitalize">
+                            <div>
                                 {{displayAttr(key)}}
                             </div>
                         </div>
-                    </div>
-                </div>
-
+                    </li>
+                </ul>
             </div>
 
         </div>
