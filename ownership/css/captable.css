@@ -2381,10 +2381,6 @@ span.tour-icon.issue-cog + .tooltip {
     margin: 20px 0 0 20px;
 }
 
-.linkedDocuments .noGroups{
-    padding-right: 40px;
-}
-
 .cellSummary {
     padding: 0 20px 0 20px;
     font-size: 14px;
