@@ -90,13 +90,22 @@ own.directive('captableCell', [function() {
         restrict: 'E',
         scope: {inv: '=',
                 sec: '=',
-                data: '='},
+                data: '=',
+                filter: '='},
         templateUrl: '/ownership/partials/captableCell.html',
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
                 $scope.settings = $rootScope.settings;
                 $scope.t = ($scope.data && $scope.data.kind) ? "grant"
                                                              : "cap";
+                $scope.units = function() {
+                    return captable.getCellUnits($scope.data,
+                                                 $scope.filter.date);
+                };
+                $scope.amount = function() {
+                    return captable.getCellAmount($scope.data,
+                                                  $scope.filter.date);
+                };
             }
         ],
     };

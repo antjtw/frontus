@@ -221,6 +221,14 @@
 
 <!-- Captable From Here Down -->
 <subnav>
+    <div class="box-button pull-left"
+        ng-if="!windowToggle"
+        ng-class="{'disabledme': companyIsZombie()}">
+        <div ui-slider
+             ng-model="ctFilter.date"
+             ng-model-options="{debounce: {'default': 500,
+                                           'blur': 0}}">
+    </div>
     <div class="box-button pull-right"
          ng-if="!windowToggle"
          ng-class="{'disabledme': companyIsZombie()}"
@@ -483,7 +491,7 @@
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
                                hoverable: captable.cellFor(row.name, key.name)}"
                     ng-repeat="key in ct.securities">
-                    <captable-cell inv='row.name' sec='key.name'
+                    <captable-cell filter='ctFilter' inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
                 </td>
             </tr>

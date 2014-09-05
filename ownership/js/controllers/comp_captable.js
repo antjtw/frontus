@@ -27,6 +27,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     });
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
+    $scope.ctFilter = {date: new Date(),
+                       security_type: null};
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourUp = function () { $scope.tourModal = false; };

@@ -785,23 +785,34 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (secs.length > 0) return secs[0].attrs.security_type;
         }
     }
-    this.cellSecurityType = cellSecurityType;
-    function setCellUnits(cell) {
+    function getCellUnits(cell, asof) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
-            cell.u = sum_ledger(cell.ledger_entries);
+            var entries = cell.ledger_entries;
+            if (asof) {
+                var d = new Date(asof);
+                entries = cell.ledger_entries
+                    .filter(function(ent) {
+                        return ent.effective_date <= d;});
+            }
+            return sum_ledger(entries);
         }
     }
+    this.getCellUnits = getCellUnits;
+    this.cellSecurityType = cellSecurityType;
+    function setCellUnits(cell) {
+        cell.u = getCellUnits(cell, false);
+    }
     function setGrantCellUnits(cell) {
-        setCellUnits(cell);
-        cell.u = Math.abs(cell.u);
+        cell.u = Math.abs(getCellUnits(cell, false));
     }
     this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
-        } else if (["Option", "Warrant"].indexOf(cellSecurityType(cell)) != -1) {
+        } else if (["Option", "Warrant"].indexOf(
+                        cellSecurityType(cell)) != -1) {
             return;
         } else {
             var transactionkeys = [];
@@ -821,6 +832,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.setCellAmount = setCellAmount;
+    this.getCellAmount = function(cell, asof) {
+
+    };
     function sum_ledger(entries) {
         return entries.reduce(
                 function(prev, cur, index, arr) {
