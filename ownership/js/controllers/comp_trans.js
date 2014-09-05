@@ -32,6 +32,14 @@ app.controller('tranController',
                     (tran.attrs.investor && (tran.attrs.investor.toLowerCase()).indexOf(text) != -1) ||
                     (tran.kind.indexOf(text) != -1);
             };
+            
+            $scope.limitLength = function(str, len) {
+                if (!str)
+                    return "";
+                if (str.length > len)
+                    return str.substring(0, len - 3) + "...";
+                return str;
+            };
 
             $scope.shown = null;
             $scope.opendetails = function(obj) {
