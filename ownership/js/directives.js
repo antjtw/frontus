@@ -1199,6 +1199,14 @@ own.directive('transactionLog', [function() {
                     console.log(tran.evidence_data)
                 };
 
+                  $scope.viewEvidence = function(ev) {
+                    if (ev.doc_id !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                    } else if (ev.original !== null) {
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
+                    }
+                };
+
                 $scope.loaddirective();
                 $scope.$watch('tran', function(newval, oldval) {
                     $scope.loaddirective();
