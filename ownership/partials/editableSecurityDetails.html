@@ -122,6 +122,11 @@
                   data-icon="&#xe008;">
                 Add Documents
             </span>
+            <div ng-if="windowToggle == true && tran.evidence_data.length==0" class="linkedDocuments">
+                <div class="noGroups">
+                    Select the documents on the right that you wish to link.
+                </div>
+            </div>
             <div ng-if="windowToggle == true"
                  class="standard-button linkedDocuments">
                 <button class="btn" ng-click="editEvidence();">
