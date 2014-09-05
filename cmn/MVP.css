@@ -3303,6 +3303,7 @@ button.icon-button:hover {
 }
 .standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     color: rgb(102, 102, 102);
+    text-transform: capitalize;
 }
 .standard .dropdown-menu > li > a:hover, .standard .dropdown-menu > li > span:hover {
     background: #C7C7C7;

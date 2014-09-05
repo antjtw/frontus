@@ -138,15 +138,16 @@ own.directive('editableCaptableCell', [function() {
                         if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
-                            var defaultTran = captable.newTransaction($scope.sec.name, captable.defaultKind($scope.sec.attrs.security_type), $scope.inv);
+                            var defaultTran = captable.newTransaction(
+                                    $scope.sec.name,
+                                    captable.defaultKind(
+                                       $scope.sec.attrs.security_type),
+                                    $scope.inv);
                             var del = true;
-                            for (var a in data.transactions[0].attrs)
-                            {
-                                if (data.transactions[0].attrs[a] && (data.transactions[0].attrs[a] != defaultTran.attrs[a]))
-                                {
-                                    del = false;
-                                    break;
-                                }
+                            if (captable.transactionsAreDifferent(
+                                        data.transactions[0],
+                                        defaultTran)) {
+                                del = false;
                             }
                             if (!del)
                             {
@@ -726,24 +727,11 @@ own.directive('editableCellDetails', [function() {
                     $scope.editEvidence();
                     $scope.newTran = null;
                 };
-                // $scope.editEvidence = function(obj) {
-                //     $scope.ct.evidence_object = obj;
-                //     // $scope.windowToggle = (obj ? false : false);
-                //     if($scope.windowToggle == true){}
-                //     $scope.$emit('windowToggle', $scope.windowToggle);
-                //     console.log(obj)
-                //     obj.evidence_data = [];
-
-                // };
 
                 $scope.editEvidence = function(obj) {
                     $scope.ct.evidence_object = obj;
-                    // $scope.ct.evidence_object.evidence_data = [];
-
                     $scope.windowToggle = (obj ? true : false);
-                    // toggle the window
                     $scope.$emit('windowToggle', $scope.windowToggle);
-                    console.log(obj)
                 };
 
                 $scope.checkNewTran = function(tran) {
