@@ -1,6 +1,6 @@
 app.controller('tranController',
-    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate', '$filter',
-        function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate, $filter) {
+    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate', '$filter', '$window',
+        function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate, $filter, $window) {
 
             var company = navState.company;
             $scope.company = company;
@@ -17,6 +17,7 @@ app.controller('tranController',
             $scope.sideToggle = true;
             $scope.viewMode = true;
 
+            $scope.viewheight = {'height': String($window.innerHeight - 100) + "px", 'overflow-y': 'auto'};
 
             $scope.makeActive = function(tran) {
                 if ($scope.activeTran == tran) {
