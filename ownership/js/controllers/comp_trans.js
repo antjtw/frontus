@@ -17,6 +17,7 @@ app.controller('tranController',
             $scope.sideToggle = false;
             $scope.viewMode = true;
 
+
             $scope.makeActive = function(tran) {
                 if ($scope.activeTran == tran) {
                     $scope.activeTran = null;
