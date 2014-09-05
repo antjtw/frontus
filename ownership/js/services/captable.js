@@ -920,6 +920,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 cell.ledger_entries = captable.ledger_entries
                     .filter(col.ledgerFilter(tran_ids, cell.investor, cell.security));
                 setGrantCellUnits(cell);
+                if (col.name == 'vested' && (cell.u == 0))
+                {
+                    cell.u = null;
+                }
                 captable.grantCells.push(cell);
             });
         });
