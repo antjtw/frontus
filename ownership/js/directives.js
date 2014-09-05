@@ -138,15 +138,16 @@ own.directive('editableCaptableCell', [function() {
                         if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
-                            var defaultTran = captable.newTransaction($scope.sec.name, captable.defaultKind($scope.sec.attrs.security_type), $scope.inv);
+                            var defaultTran = captable.newTransaction(
+                                    $scope.sec.name,
+                                    captable.defaultKind(
+                                       $scope.sec.attrs.security_type),
+                                    $scope.inv);
                             var del = true;
-                            for (var a in data.transactions[0].attrs)
-                            {
-                                if (data.transactions[0].attrs[a] && (data.transactions[0].attrs[a] != defaultTran.attrs[a]))
-                                {
-                                    del = false;
-                                    break;
-                                }
+                            if (captable.transactionsAreDifferent(
+                                        data.transactions[0],
+                                        defaultTran)) {
+                                del = false;
                             }
                             if (!del)
                             {

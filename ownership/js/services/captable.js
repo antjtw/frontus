@@ -832,24 +832,40 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.sum_transactions = sum_transactions;
 
+    function transactionsAreDifferent(t1, t2) {
+        // only look at year, month day or dates
+        var t1date = new Date(t1.effective_date);
+        var t2date = new Date(t2.effective_date);
+        if (t1date.getDay() != t2date.getDay() ||
+                t1date.getMonth() != t2date.getMonth() ||
+                t1date.getYear() != t2date.getYear() ||
+                t1.evidence != t2.evidence) {
+            return true;
+        }
+        for (var a in t1.attrs) {
+            if (t1.attrs[a] && t1.attrs[a] != t2.attrs[a]) return true;
+        }
+        return false;
+    }
+    this.transactionsAreDifferent = transactionsAreDifferent;
+
     function cleanCell(cell) {
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==cell.security && el.attrs.security_type;
             })[0];
-        var defaultTran = newTransaction(cell.security, defaultKind(sec_obj.attrs.security_type), cell.investor);
+        var defaultTran = newTransaction(
+                cell.security,
+                defaultKind(sec_obj.attrs.security_type),
+                cell.investor);
         for (var t in cell.transactions)
         {
             if (!cell.transactions[t].transaction)
                 break;
             var del = true;
-            for (var a in cell.transactions[t].attrs)
-            {
-                if (cell.transactions[t].attrs[a] && (cell.transactions[t].attrs[a] != defaultTran.attrs[a]))
-                {
-                    del = false;
-                    break;
-                }
+            if (transactionsAreDifferent(cell.transactions[t],
+                                         defaultTran)) {
+                del = false;
             }
             if (del)
             {
@@ -1343,6 +1359,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         {
             tran.attrs.investor_from = inv;
         }
+        console.log(tran);
         return tran;
     }
     this.newTransaction = newTransaction;
