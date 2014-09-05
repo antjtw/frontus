@@ -59,7 +59,7 @@
     <div class="capTab" ng-switch-when="documents">
         <div ng-if="tran.evidence_data.length==0 && !windowToggle|| tran.evidence_data==null && !windowToggle"  class="linkedDocuments">
              <div class="noGroups" ng-click="editEvidence(tran)">
-                Connect documents that support this transaction by clicking the link below.
+                Connect documents that support this transaction by clicking the link below.<br/>
                 <span>Add Documents</span>
                 <span data-icon="&#xe016;" aria-hidden="true"></span>
             </div>
@@ -90,12 +90,20 @@
                 </span>
             </div>
         </div>
-        <span ng-show ="!windowToggle && tran.evidence_data.length > 0"
-              class="blue-link delete-link linkedDocuments"
-              ng-click="editEvidence(tran);"
-              data-icon="&#xe008;">
-            Add Documents
+
+       <span ng-hide="windowToggle || tran.evidence_data.length == 0"
+              class="delete-link linkedDocuments"
+              ng-click="editEvidence(tran);">
+            <div class="noGroups addMore">
+                Add More Documents
+                <span data-icon="&#xe016;" aria-hidden="true"></span>
+             </div>
         </span>
+        <div ng-if="windowToggle == true && tran.evidence_data.length==0 || windowToggle == true && tran.evidence_data== null" class="linkedDocuments">
+            <div class="noGroups">
+                Select the documents on the right that you wish to link.
+            </div>
+        </div>
         <div ng-show="windowToggle"
              class="standard-button linkedDocuments">
             <button class="btn" ng-click="editEvidence();">

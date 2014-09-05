@@ -651,6 +651,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         return trans2;
     }
+    function netCreditFor(transaction, investor) {
+        var trans = captable.transactions.filter(function(t) {
+            return t.transaction == transaction || 
+                (t.attrs['transaction_from'] && t.attrs.transaction_from == transaction);
+        }).reduce(accumulateProperty('transaction'), []);
+        var ledger_entries = captable.ledger_entries.filter(function(e) {
+            return trans.indexOf(e.transaction) != -1 && e.investor == investor;
+        });
+        return sum_ledger(ledger_entries);
+    }
+    this.netCreditFor = netCreditFor;
     function secHasUnissued(securities) {
         return function(sec) {
             return numUnissued(sec, securities);
@@ -905,7 +916,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 cell.roots = cell.roots.concat(
                     captable.transactions.filter(function(tran) {
                         return tran.kind == 'split' &&
-                            tran.attrs.security == root.attrs.security;
+                            tran.attrs.security == root.attrs.security && (tran.effective_date > root.effective_date);
                     })
                 );
                 cell.kind = col.name;
@@ -920,6 +931,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 cell.ledger_entries = captable.ledger_entries
                     .filter(col.ledgerFilter(tran_ids, cell.investor, cell.security));
                 setGrantCellUnits(cell);
+                if (col.name == 'vested' && (cell.u == 0))
+                {
+                    cell.u = null;
+                }
                 captable.grantCells.push(cell);
             });
         });
@@ -1444,7 +1459,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         c.roots = c.roots.concat(
             captable.transactions.filter(function(tran) {
                 return tran.kind == 'split' &&
-                    tran.attrs.security == root.attrs.security;
+                    tran.attrs.security == root.attrs.security && (tran.effective_date > root.effective_date);
             })
         );
         c.kind = kind;
@@ -1896,6 +1911,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 switch(attrs[transaction.attrs.security_type][transaction.kind][att].type)
                 {
                     case "number":
+                    case "fraction":
                         if (!calculate.isNumber(transaction.attrs[att]))
                         {
                             correct = false;

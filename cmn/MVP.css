@@ -4924,8 +4924,23 @@ li.event.roles > div > ul {
     padding-bottom: 10px;
     text-align: center;
     border: 1px dashed #C7C7C7;
-/*    width: 200px;*/
     margin-left: 30px;
+}
+
+.noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups{
+    padding-right: 20px;
+}
+
+.linkedDocuments .noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups.addMore:hover{
+    color: #2980B9 !important;
 }
 
 .noGroups span{
@@ -4936,7 +4951,6 @@ li.event.roles > div > ul {
 .select_role.all_people{
     color: #1E2D3D;
 }
-
 
 .noGroups span:last-of-type{
     position: relative;

@@ -143,7 +143,7 @@
                         <!-- VIEW ONLY INVESTOR ROWS -->
                         <!-- TODO dispaly row for each investor with ledger entries for the security -->
                         <tr class="transaction-rows"
-                            ng-if="sec==shown && viewMode"
+                            ng-if="sec==shown && viewMode && (captable.netCreditFor(row.transaction, row.attrs.investor) > 0)"
                             ng-repeat="row in captable.grantRowInfoFor(sec.name) | orderBy : row.attrs.investor">
                             <td class="viewField"></td>
                             <td class="row-fluid">
