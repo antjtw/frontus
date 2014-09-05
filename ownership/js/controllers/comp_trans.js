@@ -14,15 +14,17 @@ app.controller('tranController',
 
             $scope.captabletips = displayCopy.captabletips;
 
-            $scope.sideToggle = false;
+            $scope.sideToggle = true;
             $scope.viewMode = true;
 
 
             $scope.makeActive = function(tran) {
                 if ($scope.activeTran == tran) {
                     $scope.activeTran = null;
+                    $scope.sideToggle = true;
                 } else {
                     $scope.activeTran = tran;
+                    $scope.sideToggle = false;
                 }
             };
             
