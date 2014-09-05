@@ -2460,3 +2460,63 @@ span.tour-icon.issue-cog + .tooltip {
     float: left;
     height: 23px;
 }
+
+/* Transaction Log */
+
+.tran-list {
+    margin: 20px;
+}
+
+.tran-list > li {
+    margin-bottom: 20px;
+    border: 1px solid #C3C3C3;
+}
+
+.tran-list > li:hover {
+    background-color: rgba(26, 188, 150, 0.1);;
+}
+
+.tran-list > li:first-of-type:hover {
+    background-color: #FFFFFF;
+}
+
+.tran-list > li > ul {
+    margin: 0 20px;
+    overflow: auto;
+}
+
+.tran-list > li.activetran {
+    border-color: black;
+}
+
+.tran-list > li:first-of-type > ul > li {
+    height: 30px;
+    line-height: 30px;
+    cursor: default;
+}
+
+.tran-list > li > ul > li {
+    width: 15%;
+    float: left;
+    height: 58px;
+    line-height: 58px;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.tran-list > li > ul > li.longli {
+    width: 20%;
+}
+
+.tranlogtabs .capGuide > p {
+    margin-left: 20px;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
+.notrans {
+    text-align: center;
+    height: 58px;
+    line-height: 58px;
+}
