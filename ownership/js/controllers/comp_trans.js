@@ -51,4 +51,10 @@ app.controller('tranController',
                 }
             };
 
+            $scope.selectedThing = function() {
+                if ($scope.selectedCell) return 'selectedCell';
+                if ($scope.selectedInvestor) return 'selectedInvestor';
+                if ($scope.selectedSecurity) return 'selectedSecurity';
+                return null;
+            };
         }]);

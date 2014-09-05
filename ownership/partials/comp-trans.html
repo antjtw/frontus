@@ -18,7 +18,7 @@
                             widthtransition25: oldSafari()}">
                 <ul class="tran-list">
                     <li>
-                        <ul class="fixedHeader">
+                        <ul>
                             <li>Date</li>
                             <li class="longli">Security</li>
                             <li class="longli">Shareholder</li>
@@ -27,11 +27,13 @@
                             <li>Amount</li>
                         </ul>
                     </li>
+                </ul>
                     <li ng-if="ct.transactions && ct.transactions.length == 0">
                         <ul class="notrans">
                             <span>You haven't entered any transactions yet. Go to the cap table to get started!</span>
                         </ul>
                     </li>
+                <ul class="tran-list">
                     <li ng-click="makeActive(tran)" ng-class="{'activetran': activeTran==tran}" ng-repeat="tran in ct.transactions" ng-show="contains(search.text, tran)">
                         <ul>
                             <li>{{tran.effective_date | date:settings.shortdate}}</li>
@@ -46,7 +48,7 @@
 
             </div>
             <internal-right-rail toggle-side="sideToggle">
-                <div ng-switch on="selectedThing()"
+                <div
                      class="span4 capright"
                      ng-style="viewportheight">
                      <transaction-log tran="activeTran"></transaction-log>
