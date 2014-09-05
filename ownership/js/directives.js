@@ -1194,6 +1194,11 @@ own.directive('transactionLog', [function() {
                 $scope.loaddirective = function() {
                 };
 
+                $scope.hasDocuments = function(tran) {
+                    return tran.evidence_data && (tran.evidence_data.length > 0);
+                    console.log(tran.evidence_data)
+                };
+
                 $scope.loaddirective();
                 $scope.$watch('tran', function(newval, oldval) {
                     $scope.loaddirective();
