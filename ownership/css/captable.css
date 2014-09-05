@@ -2474,9 +2474,6 @@ span.tour-icon.issue-cog + .tooltip {
     background-color: rgba(26, 188, 150, 0.1);;
 }
 
-.tran-list > li:first-of-type:hover {
-    background-color: #FFFFFF;
-}
 
 .tran-list > li > ul {
     margin: 0 20px;
