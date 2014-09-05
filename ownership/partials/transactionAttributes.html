@@ -4,7 +4,10 @@
         <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type === 'boolean'">
             {{data.attrs[key] ? "Yes" : "No"}}
         </span>
-        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type !== 'boolean'">
+        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type === 'fraction'">
+            {{toFraction(data.attrs[key])}}
+        </span>
+        <span ng-if="key!='interestrate' && key != 'pariwith' && attr_info(key).type !== 'boolean' && attr_info(key).type !== 'fraction'">
             {{data.attrs[key] | formatAmount:key}}
         </span>
         <span ng-if="key=='interestrate'">

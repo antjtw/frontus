@@ -895,6 +895,11 @@ own.directive('transactionAttributes', [function() {
                         return sorted;
                     }
                 };
+                
+                $scope.toFraction = function (num) {
+                    var f = new Fraction(num);
+                    return f.numerator + " : " + f.denominator;
+                };
 
                 $scope.loaddirective();
                 $scope.$watch('data', function(newval, oldval) {
@@ -969,6 +974,7 @@ own.directive('editableTransactionAttributes', [function() {
                             return key_display_info(key).labels;
                         case "boolean":
                             return "boolean";
+                        case "fraction":
                         case "number":
                             return "number";
                         case "array_text":
