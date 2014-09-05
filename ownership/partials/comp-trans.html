@@ -6,7 +6,7 @@
             <div>
                 <div class="pull-left">
                     <span>Search</span>
-                    <input type="text" class="search-box" ng-model="searchText">
+                    <input type="text" class="search-box" ng-model="search.text">
                 </div>
             </div>
         </subnav>
@@ -32,7 +32,7 @@
                             <span>You haven't entered any transactions yet. Go to the cap table to get started!</span>
                         </ul>
                     </li>
-                    <li ng-click="makeActive(tran)" ng-class="{'activetran': activeTran==tran}" ng-repeat="tran in ct.transactions">
+                    <li ng-click="makeActive(tran)" ng-class="{'activetran': activeTran==tran}" ng-repeat="tran in ct.transactions" ng-show="contains(search.text, tran)">
                         <ul>
                             <li>{{tran.effective_date | date:settings.shortdate}}</li>
                             <li class="longli">{{tran.attrs.security}}</li>
