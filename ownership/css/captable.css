@@ -2484,6 +2484,8 @@ span.tour-icon.issue-cog + .tooltip {
     overflow: auto;
 }
 
+
+
 #tran-headline > li:first-of-type > ul > li {
     height: 30px;
     line-height: 30px;
