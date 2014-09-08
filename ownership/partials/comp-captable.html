@@ -222,11 +222,23 @@
 <!-- Captable From Here Down -->
 <subnav>
     <div class="pull-left">
-        <div ng-if="!windowToggle"
+        <div ng-if="!windowToggle && !editMode"
             ng-class="{'disabledme': companyIsZombie()}">
-            <div><input type="range" value="0" min="0" max="{{ct.totalDays}}" step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
-                <span>{{ctFilter.date | date:settings.shortdate}}</span>
-            </div>
+            <ul class="dropdown-list drop-selector big">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle"
+                       data-toggle="dropdown" href="#"
+                       title="{{ctFilter.security_types | displayList }}">
+                        View History
+                    </a>
+                    <ul class="dropdown-menu" ng-click="$event.stopPropagation()">
+                        <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
+                        <span ng-click="setToday();">set to today</span>
+                        <input class="range" type="range" value="0" min="0" max="{{ct.totalDays}}" 
+                                step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="pull-left" ng-animate="{show: fadeShow, hide: fadeHide}">

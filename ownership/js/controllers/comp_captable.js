@@ -89,6 +89,48 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.updateDateSlider = function() {
         var d = captable.startDate().getTime();
         $scope.ctFilter.date = new Date(d + $scope.daterange.offset*86400000);
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+    };
+    
+    $scope.updateDateInput = function() {
+        //TODO: only works for mm/dd/yy
+        var nums = $scope.daterange.fakeDate.split('/');
+        if (nums.length != 3)
+            return;
+        if (!(nums[2].length == 2 || nums[2].length == 4))
+            return;
+        var year = Number(nums[2]);
+        if (isNaN(year))
+            return;
+        if (year < 1000)
+            year += 2000;
+        if (nums[0].length < 1 || nums[0].length > 2)
+            return;
+        var month = Number(nums[0]);
+        if (isNaN(month))
+            return;
+        if (month < 1 || month > 12)
+            return;
+        if (nums[1].length < 1 || nums[1].length > 2)
+            return;
+        var day = Number(nums[1]);
+        if (isNaN(day))
+            return;
+        if (day < 1 || day > 31)
+            return;
+        var d = new Date(year, month - 1, day);
+        //var d = Date.parse($scope.daterange.fakeDate);
+        if (!d)
+            return;
+        $scope.ctFilter.date = d;
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+    };
+    
+    $scope.setToday = function() {
+        $scope.ctFilter.date = new Date();
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
     };
 
     // Initialize a few visible variables

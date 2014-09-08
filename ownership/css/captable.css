@@ -771,6 +771,19 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     vertical-align: top;
 }
 
+.dropdown-menu > input {
+    padding: 5px;
+    margin: 5px;
+}
+
+.dropdown-menu > input.range {
+    width: 90%;
+}
+
+.dropdown-menu > input.text {
+    width: 40%;
+}
+
 .rightTitle .standard .dropdown-toggle {
     width:  230px;
 }
