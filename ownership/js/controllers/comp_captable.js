@@ -482,16 +482,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.rowDelete = false;
     };
 
-    // Captable transaction delete modal
-    /*$scope.tranDeleteUp = function (transaction) {
-        $scope.deleteTran = transaction;
-        $scope.tranDelete = true;
-    };
-
-    $scope.deleteclose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.tranDelete = false;
-    };*/
 
     //modal for updating issue fields that have different underlying values
 

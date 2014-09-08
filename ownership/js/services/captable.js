@@ -869,7 +869,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             if (del)
             {
-                console.log("deleting tran", cell.transactions[t].transaction, cell.investor, cell.security);
                 deleteTransaction(cell.transactions[t], cell, true);
             }
         }
@@ -908,7 +907,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     setCellUnits(cell);
                     setCellAmount(cell);
                     cell.valid = validateCell(cell);
-                    if (cell.investor=='Robert Walport') console.log(cell);
                     captable.cells.push(cell);
                 }
             });
@@ -1054,7 +1052,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return;
             }
             var transaction = new_entries.splice(0, 1)[0].transaction;
-            //console.log("new ledger", new_entries.length, new_entries, JSON.stringify(tran));
             var spliced = [];
             for (var new_entry in new_entries)
             {
@@ -1105,7 +1102,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
             }
             //captable.ledger_entries.push.apply(captable., new_entries);
-            //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
             console.log("error");
             console.error(e);
@@ -1130,12 +1126,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     }
                     var trans = captable.transactions.filter(function(t) {
                         return t.transaction == tran.transaction ||
-                            (t.attrs['transaction_from'] && t.attrs.transaction_from == tran.transaction);
+                            (t.attrs.transaction_from &&
+                             t.attrs.transaction_from == tran.transaction);
                     });
                     var ids = trans.reduce(
                             accumulateProperty('transaction'), []);
                     var entries = captable.ledger_entries.filter(function(ent) {
-                        return ids.indexOf(ent.transaction) != -1;
+                        return ids.indexOf(ent.transaction) != -1 ||
+                            ids.indexOf(ent.modifying_transactions) != -1;
                     });
                     splice_many(captable.transactions, trans);
                     splice_many(captable.ledger_entries, entries);
@@ -1359,7 +1357,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         {
             tran.attrs.investor_from = inv;
         }
-        console.log(tran);
         return tran;
     }
     this.newTransaction = newTransaction;
@@ -1397,13 +1394,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             tran.attrs.security = tran.attrs.security + " (1)";
             return this.addSecurity(security);
         }
-        console.log("addSecurity");
 
         security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
         security.insertion_date = tran.insertion_date;
         security.attrs = tran.attrs;
-        console.log(security.attrs);
 
         // FIXME should we be using AddTran
         // which takes care of the ledger entries?
@@ -1617,12 +1612,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!(sec && kind)) return 0;
 
         var trans = captable.transactions.filter(function(tran) {
-            // FIXME not working
-            /*
-            if (tran.kind == kind && kind!='grant' && tran.attrs.security == sec.name) {
-                console.log(tran);
-            }
-            */
             return tran.attrs.security == sec.name &&
                 tran.kind == kind;
         }).reduce(accumulateProperty('transaction'), []);
@@ -1822,7 +1811,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data.push(ev);
-            console.log(captable.evidence_object.evidence_data)
         }
     }
     this.addEvidence = addEvidence;
@@ -1846,8 +1834,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!ev || !captable.evidence_object) {return;}
         if (!captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data = [];
-            console.log(ev);
-            console.log(captable);
         } else {
             var action = "";
             if (isEvidence(ev)) {
@@ -1879,7 +1865,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
     function validateTransaction(transaction) {
         var correct = true;
-        //console.log("validateTransaction");
         if (!attrs)
         {
             console.log("attrs not defined yet");
