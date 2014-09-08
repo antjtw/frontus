@@ -224,14 +224,16 @@
     <div class="pull-left">
         <div ng-if="!windowToggle"
             ng-class="{'disabledme': companyIsZombie()}">
-            <div><input type="range" value="0" min="0" max="daysSinceBeginning()" step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/></div>
+            <div><input type="range" value="0" min="0" max="{{ct.totalDays}}" step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
+                <span>{{ctFilter.date | date:settings.shortdate}}</span>
+            </div>
         </div>
-        <div><span>{{ctFilter.date | date:settings.shortdate}}</span></div>
     </div>
     <div class="pull-left checkboxitem"
          ng-animate="{show: fadeShow, hide: fadeHide}">
          <span>Vesting</span>
          <button class="check-box-button"
+                 ng-click="ctFilter.vesting = !ctFilter.vesting"
                  ng-class="{selected: ctFilter.vesting}">
          </button>
     </div>
@@ -643,6 +645,7 @@
                     </span>
                     <span ng-switch-when="4">
                         <cell-details cell="selectedCell"
+                                      filter='ctFilter'
                                       currenttab="currentTab"></cell-details>
                     </span>
                     <span class="padded-cap capGuide in-brief"
