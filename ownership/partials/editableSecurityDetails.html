@@ -12,8 +12,7 @@
     <accordion-group is-open="tran.active"
                      is-disabled="sec.transactions.length==1"
                      ng-hide="windowToggle && !tran.active"
-                     ng-repeat="tran in sec.transactions
-                                | orderBy:'date' track by $index"
+                     ng-repeat="tran in sec.transactions track by $index"
                     ng-switch on="currentTab">
         <accordion-heading>
             <span ng-click="editEvidence()">
