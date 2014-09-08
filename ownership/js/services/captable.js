@@ -1049,9 +1049,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      *
      */
     function saveTransaction(tran, update, errorFunc) {
-        // TODO this is getting called too often.
-        // use ng-change instead of ui-event?
-        //
         // or maybe add a save button for now
         // TODO: return a promise instead of having errorFunc
         for (var key in tran.attrs) {
@@ -1062,6 +1059,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
+            console.log(new_entries);
             if (new_entries.length < 1)
             {
                 console.log("Error: no ledger entries");
@@ -1373,7 +1371,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         {
             tran.attrs.investor_from = inv;
         }
-        console.log(tran);
         return tran;
     }
     this.newTransaction = newTransaction;
