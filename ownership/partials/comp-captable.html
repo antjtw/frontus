@@ -229,16 +229,8 @@
             </div>
         </div>
     </div>
-    <div class="pull-left checkboxitem"
-         ng-animate="{show: fadeShow, hide: fadeHide}">
-         <span>Vesting</span>
-         <button class="check-box-button"
-                 ng-click="ctFilter.vesting = !ctFilter.vesting"
-                 ng-class="{selected: ctFilter.vesting}">
-         </button>
-    </div>
     <div class="pull-left" ng-animate="{show: fadeShow, hide: fadeHide}">
-        <span>Security Types</span>
+        <span>Filters</span>
         <ul class="dropdown-list drop-selector big">
             <li class="dropdown standard">
                 <a class="dropdown-toggle"
@@ -247,6 +239,19 @@
                     {{ ctFilter.security_types | displayList }}
                 </a>
                 <ul class="dropdown-menu">
+                    <li ng-click="ctFilter.vesting = !ctFilter.vesting"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: ctFilter.vesting}">
+                                <span data-icon="&#xe023;" aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>Vesting</span>
+                        </div>
+                    </li>
                     <li ng-repeat="t in securityTypeDropdown()"
                         ng-click="toggleSecurityType(t)"
                         class="row-fluid">
