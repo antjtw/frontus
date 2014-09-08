@@ -409,7 +409,8 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                             "tagalong",
                             "redemption",
                             "information",
-                            "registration"];
+                            "registration",
+                            "voting"];
     var attrs = attributes.getAttrs();
     return function(tp, sec_type, kind) {
         var res = orderedAttributes.indexOf(tp);
