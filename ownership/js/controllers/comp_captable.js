@@ -18,7 +18,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     captable.forceRefresh();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
-    console.log($scope.ct);
     var attrs = attributes.getAttrs();
 
     // Set the view toggles to their defaults
@@ -31,6 +30,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
     $scope.ctFilter = {date: new Date(),
+                       vesting: true,
                        security_types: ['Show All']};
     $scope.tourshow = false;
     $scope.tourstate = 0;
@@ -880,11 +880,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.securityTypeDropdown = function() {
-        return ['Show All'].concat(Object.keys(attrs));
+        //return ['Show All'].concat(Object.keys(attrs));
+        return Object.keys(attrs).sort();
     };
     $scope.showSecurityType = function(t) {
         if (!t || !$scope.ctFilter || !$scope.ctFilter.security_types) {
             return null;
+        } else if ($scope.ctFilter.security_types.indexOf('Show All') !== -1) {
+            return true;
         } else {
             return $scope.ctFilter.security_types.indexOf(t) !== -1;
         }
@@ -893,12 +896,16 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if (!t) return null;
         var idx = $scope.ctFilter.security_types.indexOf(t);
         if (idx == -1) {
-            if (t=='Show All') {
-                $scope.ctFilter.security_types = [t];
+            if ($scope.showSecurityType('Show All')) {
+                $scope.ctFilter.security_types = $scope.securityTypeDropdown()
+                    .filter(function(el) {
+                        return el != t;
+                    });
             } else {
                 $scope.ctFilter.security_types.push(t);
-                if ($scope.showSecurityType('Show All')) {
-                    $scope.toggleSecurityType('Show All');
+                if ($scope.ctFilter.security_types.length ==
+                        $scope.securityTypeDropdown().length) {
+                    $scope.ctFilter.security_types = ['Show All'];
                 }
             }
         } else {
