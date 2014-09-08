@@ -2456,3 +2456,80 @@ span.tour-icon.issue-cog + .tooltip {
     float: left;
     height: 23px;
 }
+
+/* Transaction Log */
+
+.tran-list {
+   padding-right: 20px;
+   margin-left: 20px;
+   margin-top: 10px;
+}
+
+.tran-list > li {
+    margin-bottom: 10px;
+    border: 1px solid #E3E3E3;
+}
+
+.tran-list.trans-info > li:hover {
+    background-color: rgba(26, 188, 150, 0.1);;
+}
+
+
+.tran-list > li > ul {
+    margin: 0 20px;
+    overflow: auto;
+}
+
+
+#tran-headline > li:first-of-type > ul > li {
+    height: 30px;
+    line-height: 30px;
+    cursor: default;
+    color: black;
+}
+
+/*.tran-list > li:first-of-type > ul > li {
+    height: 30px;
+    line-height: 30px;
+    cursor: default;
+}*/
+.tran-list > li.activetran {
+    border-color: black;
+}
+
+.tran-list.trans-info > li:last-of-type{
+    margin-bottom: 40px;
+}
+
+.tran-list > li > ul > li {
+    width: 15%;
+    float: left;
+    height: 58px;
+    line-height: 58px;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.tran-list > li > ul > li.longli {
+    width: 20%;
+}
+
+.tranlogtabs .capGuide > p {
+    margin-left: 20px;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
+.notrans {
+    text-align: center;
+    height: 58px;
+    line-height: 58px;
+}
+
+.my-trans-docs{
+   padding-left: 20px; 
+}
+.my-trans-docs:first-of-type{
+    padding-top: 20px;
+}

@@ -5,8 +5,7 @@ var app = angular.module('HomeApp',
         'ownerDirectives', 'ownerServices', 'commonServices', 'd3',
         'homeDirectives', 'activityDirective', 'commonDirectives',
         'ui.select2','documents', 'docServices', 'angularPayments',
-        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular',
-        'ui.slider']);
+        'bootstrap-tagsinput', 'infinite-scroll', 'ui.jq', 'textAngular']);
 
 /** @name $routeParams#msg
  *  @type {string}
@@ -63,6 +62,10 @@ app.config(function($routeProvider, $locationProvider){
         when('/app/ownership/company-grants', {
             controller: 'grantController',
             templateUrl: '/ownership/partials/comp-grant.html'
+        }).
+        when('/app/ownership/company-trans', {
+            controller: 'tranController',
+            templateUrl: '/ownership/partials/comp-trans.html'
         }).
         when('/app/ownership/investor-captable', {
             controller: 'invCaptableController',

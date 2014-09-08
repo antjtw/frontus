@@ -221,15 +221,13 @@
 
 <!-- Captable From Here Down -->
 <subnav>
-    <div ng-if="!windowToggle"
-        ng-class="{'disabledme': companyIsZombie()}">
-        <div><input type="range" value="0" min="0" max="{{ct.totalDays}}" step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
-            <span>{{ctFilter.date | date:settings.shortdate}}</span>
+    <div class="pull-left">
+        <div ng-if="!windowToggle"
+            ng-class="{'disabledme': companyIsZombie()}">
+            <div><input type="range" value="0" min="0" max="{{ct.totalDays}}" step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
+                <span>{{ctFilter.date | date:settings.shortdate}}</span>
+            </div>
         </div>
-        <!--<div ui-slider
-             ng-model="ctFilter.date"
-             ng-model-options="{debounce: {'default': 500,
-                                           'blur': 0}}">-->
     </div>
     <div class="pull-left checkboxitem"
          ng-animate="{show: fadeShow, hide: fadeHide}">
@@ -237,6 +235,35 @@
          <button class="check-box-button"
                  ng-click="ctFilter.vesting = !ctFilter.vesting"
                  ng-class="{selected: ctFilter.vesting}">
+         </button>
+    </div>
+    <div class="pull-left" ng-animate="{show: fadeShow, hide: fadeHide}">
+        <span>Security Types</span>
+        <ul class="dropdown-list drop-selector big">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle"
+                   data-toggle="dropdown" href="#"
+                   title="{{ctFilter.security_types | displayList }}">
+                    {{ ctFilter.security_types | displayList }}
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="t in securityTypeDropdown()"
+                        ng-click="toggleSecurityType(t)"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: showSecurityType(t)}">
+                                <span data-icon="&#xe023;" aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>{{t}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
     <div class="box-button pull-right"
          ng-if="!windowToggle"
@@ -349,7 +376,7 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="sec in ct.securities"
+                <th ng-repeat="sec in ct.securities | filter:securityFilter"
                     ng-click="selectSecurity(sec.name)">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
@@ -375,7 +402,7 @@
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
-                    ng-repeat="sec in ct.securities"
+                    ng-repeat="sec in ct.securities | filter:securityFilter"
                     ng-click="selectSecurity(sec.name)">
                     <span>{{::sec.name}}</span>
                     <span class="next-button"
@@ -389,7 +416,7 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in ct.securities">
+                <td ng-repeat="one in ct.securities | filter:securityFilter">
                     <span>{{securityUnitLabel(one)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -435,7 +462,7 @@
                                ng-model="row.name">
                     </span>
                 </td>
-                <td ng-repeat="key in ct.securities"
+                <td ng-repeat="key in ct.securities | filter:securityFilter"
                     ng-class="{tranSelected: selectedCell
                         && selectedCell.investor == row.name
                         && selectedCell.security == key.name}">
@@ -469,7 +496,8 @@
                            ng-paste="namePaste($event, row);"
                            ng-model="$parent.new_inv">
                 </td>
-                <td ng-repeat="key in ct.securities" class="capsums-col">
+                <td ng-repeat="key in ct.securities | filter:securityFilter"
+                    class="capsums-col">
                 </td>
                 <!-- for new security column -->
                 <td ng-if="editMode;"></td>
@@ -499,7 +527,7 @@
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
                                hoverable: captable.cellFor(row.name, key.name)}"
-                    ng-repeat="key in ct.securities">
+                    ng-repeat="key in ct.securities | filter:securityFilter">
                     <captable-cell filter='ctFilter' inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
                 </td>
@@ -523,7 +551,7 @@
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.securities">
+                    ng-repeat="key in ct.securities | filter:securityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
@@ -545,7 +573,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities">
+                    ng-repeat="one in ct.securities | filter:securityFilter">
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -565,7 +593,7 @@
                 <td class="tableFields">
                 </td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities">
+                    ng-repeat="one in ct.securities | filter:securityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">

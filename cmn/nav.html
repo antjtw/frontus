@@ -139,6 +139,9 @@
             <li ng-class="{activecompany: navState.path.indexOf('/ownership/company-grants') != -1}">
                 <span ng-click="gotoPage('/app/ownership/company-grants'); navhover=false">Grants Table</span>
             </li>
+            <li ng-class="{activecompany: navState.path.indexOf('/ownership/company-trans') != -1}">
+                <span ng-click="gotoPage('/app/ownership/company-trans'); navhover=false">Transaction Log</span>
+            </li>
         </ul>
     </span>
 </div>

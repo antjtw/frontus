@@ -3,9 +3,10 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
          "SWBrijj", "calculate", "navState", "captable",
-         "displayCopy", "History", "Investor",
+         "displayCopy", "History", "Investor", "attributes",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, navState, captable, displayCopy, History, Investor)
+         calculate, navState, captable, displayCopy, History, Investor,
+         attributes)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -17,6 +18,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     captable.forceRefresh();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
+    console.log($scope.ct);
+    var attrs = attributes.getAttrs();
 
     // Set the view toggles to their defaults
     $scope.editMode = false;
@@ -28,7 +31,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
     $scope.ctFilter = {date: new Date(),
-                       security_type: null};
+                       security_types: ['Show All']};
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourUp = function () { $scope.tourModal = false; };
@@ -97,7 +100,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     function initUI() {
         if (!$rootScope.companyIsZombie()) {
             $scope.editMode = false;
-            $scope.sideToggle = true;
+            $scope.sideToggle = false;
+        } else {
+            if (captable.totalOwnershipUnits() == 0) {
+                $scope.editMode = true;
+            }
         }
     }
     function cellIsSelected(inv, sec) {
@@ -864,6 +871,41 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             captable.addInvestor(name);
         }
         return false;
+    };
+
+    $scope.securityTypeDropdown = function() {
+        return ['Show All'].concat(Object.keys(attrs));
+    };
+    $scope.showSecurityType = function(t) {
+        if (!t || !$scope.ctFilter || !$scope.ctFilter.security_types) {
+            return null;
+        } else {
+            return $scope.ctFilter.security_types.indexOf(t) !== -1;
+        }
+    };
+    $scope.toggleSecurityType = function(t) {
+        if (!t) return null;
+        var idx = $scope.ctFilter.security_types.indexOf(t);
+        if (idx == -1) {
+            if (t=='Show All') {
+                $scope.ctFilter.security_types = [t];
+            } else {
+                $scope.ctFilter.security_types.push(t);
+                if ($scope.showSecurityType('Show All')) {
+                    $scope.toggleSecurityType('Show All');
+                }
+            }
+        } else {
+            $scope.ctFilter.security_types.splice(idx, 1);
+            if ($scope.ctFilter.security_types.length === 0) {
+                $scope.toggleSecurityType('Show All');
+            }
+        }
+    };
+    $scope.securityFilter = function(sec) {
+        return $scope.editMode ||
+            $scope.showSecurityType('Show All') ||
+            $scope.showSecurityType(sec.attrs.security_type);
     };
 
 }]);
