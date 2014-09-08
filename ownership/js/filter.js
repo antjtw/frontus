@@ -474,7 +474,7 @@ ownership.filter('displayList', function() {
                     if (idx + 1 < list.length) {
                         res += el + (idx + 2 == list.length ? " " : ", ");
                     } else {
-                        res += " and " + el;
+                        res += "and " + el;
                     }
                 });
                 return res;

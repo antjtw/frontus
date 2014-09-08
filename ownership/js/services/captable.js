@@ -624,6 +624,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var t2 = Math.floor(ended.getTime() / 86400000);
         return t2 - t1;
     };
+    this.daysBetween = daysBetween;
     function startDate() {
         return captable.transactions.reduce(minDate, null);
     };
