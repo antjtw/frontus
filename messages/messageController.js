@@ -27,7 +27,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             if(string == null){
                 return ""
             }
-
             else if(string.length > 50){
                 return string.slice(0, 50) + "...";
             }

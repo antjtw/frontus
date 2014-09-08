@@ -286,8 +286,11 @@ mod.directive('receivedMsgs', function(){
             $scope.receivedMsgs = Message.getReceivedMsgs();
 
             $scope.$watch('receivedMsgs', function(){
+
             }, true)
 
+
+            // $scope.getThreadCount();
 
 
             $scope.showString = function(string){
