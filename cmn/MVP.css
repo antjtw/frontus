@@ -996,6 +996,19 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls .dropdown-list {
     line-height: 32px;
 }
+.subnav-controls .dropdown-list.big {
+
+}
+.subnav-controls .dropdown-list.big .dropdown-menu li > div {
+    padding-top: 5px;
+}
+.subnav-controls .dropdown-list.big .dropdown-menu li > div:last-child {
+    text-align: left;
+}
+.subnav-controls .dropdown-list.big .dropdown-toggle,
+.subnav-controls .dropdown-list.big .dropdown-menu {
+    width: 194px;
+}
 .subnav-controls > div:first-child {
     display: inline-block;
     vertical-align: middle;
