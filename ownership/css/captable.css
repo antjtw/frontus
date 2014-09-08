@@ -774,6 +774,7 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
 .dropdown-menu > input {
     padding: 5px;
     margin: 5px;
+    background: #FFFFFF;
 }
 
 .dropdown-menu > input.range {
@@ -782,6 +783,8 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
 
 .dropdown-menu > input.text {
     width: 40%;
+    border: 1px solid #F1F1F1;
+    border-radius: 2px;
 }
 
 .rightTitle .standard .dropdown-toggle {
