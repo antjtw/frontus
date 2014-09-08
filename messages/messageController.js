@@ -39,65 +39,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             return array3;
         };
 
-        $scope.getPeopleNames = function(){
-            var promise = $q.defer();
-            SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
-                $scope.myPeople = data;
-                promise.resolve($scope.myPeople);             
-            });  
-            return promise.promise;             
-        }; 
-
-        // try using a promise with a service
-        $scope.getAllMessages = function(){
-            angular.forEach($scope.allMsgs, function(msg){
-                msg.names = [];
-                for(var i = 0; i < msg.membersArray.length; i ++){
-                    console.log(msg.membersArray[i]);
-                };
-            });
-        };
-        $scope.getAllMessages();
-
-        $scope.getMessageThreads = function(){
-            SWBrijj.tblm('mail.my_messages', ['sender', 'message', 'time', 'subject', 'members', 'thread_id']).then(function(data){
-                $scope.getPeopleNames().then(function(){
-                    $scope.messageThreads = data;
-                    $scope.sentMsgs = data;
-                    var allContactEmails = [];
-                    angular.forEach($scope.messageThreads, function(thr){
-                        if(thr.sender !== navState.userid){
-                            $scope.myMessages.push(thr);
-                        }
-                    });
-                    angular.forEach($scope.sentMsgs, function(thread){
-                        var array = $scope.getArrayfromPosgres(thread.members);
-                        thread.members = array;
-                        thread.names = [];
-                        for(var i = 0; i < array.length; i ++){
-                            angular.forEach($scope.myPeople, function(ind){
-                                allContactEmails.push(ind.email);
-                                if(array[i] == navState.userid && thread.names.indexOf("me")== -1){
-                                    thread.names.push("me")
-                                }
-                                else if(array[i]== ind.email && array[i] !== navState.userid && thread.names.indexOf(ind.email)== -1){
-                                    thread.names.push(ind.name)
-                                }
-                                else if(allContactEmails.indexOf(array[i])== -1 && array[i] !== navState.userid && thread.names.indexOf(array[i])== -1){
-                                    thread.names.push(array[i])
-                                }
-                            });
-                            thread.nameStrings = thread.names.join(", ")
-                        };
-
-                    });
-
-                });                
-               
-            });
-        };
-        $scope.getMessageThreads();
-
 
 
         $scope.getThread = function(elem){  

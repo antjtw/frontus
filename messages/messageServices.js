@@ -58,7 +58,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                 }
             })
             angular.forEach(allThreads, function(thr){
-                thr.nameString = thr.names.join(", ")
+                thr.nameString = thr.names.join(", ");
             });
         });
 

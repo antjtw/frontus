@@ -55,7 +55,7 @@
                         <tr class="threadMembers" >
                             <td style="width:450px" class="shareholder-column docname-column">
 
-                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}"position="bottom" ><div bs-tooltip="allThread.names">{{allThread.nameString}}</div></a>
+                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}"position="bottom" ><div bs-tooltip="allThread.nameString">{{allThread.nameString}}</div></a>
                             </td>
                             <td><div bs-tooltip="allThread.subject"><span>{{allThread.subject}}</span></div></td>
                             <td style="width:10px;"></td>
@@ -71,7 +71,7 @@
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filters">
                     <div style="clear: both;">
-                        <message-filter sent="sentMsgs" inbox="myMessages" page="page" ilength ="inboxLength"></message-filter>
+                        <message-filter sent="sentMsgs" page="page" ilength ="inboxLength"></message-filter>
                     </div>
                 </tab>
                 <tab heading = "Message Activity">
