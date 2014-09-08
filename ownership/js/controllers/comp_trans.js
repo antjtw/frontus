@@ -63,7 +63,8 @@ app.controller('tranController',
             };
 
             $scope.downloadCsv = function() {
-                SWBrijj.procd($rootScope.navState.name + '_transactions.csv', 'text/csv', 'ownership.export_transactions').then(function(x) {
+                var companyName = $rootScope.navState.name.replace(/,/g , "");
+                SWBrijj.procd(companyName + '_transactions.csv', 'text/csv', 'ownership.export_transactions').then(function(x) {
                     document.location.href = x;
                 });
             };
