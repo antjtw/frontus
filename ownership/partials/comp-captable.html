@@ -515,12 +515,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.rowSum(row.name) | number:0}}">
+                           value="{{rowSum(row) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
+                           value="{{investorOwnershipPercentage(row) || 0.000 | number:2}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
@@ -541,16 +541,16 @@
             <!-- Unissued Rows -->
             <tr class="unissued-rows"
                 ng-repeat="sec in
-                           captable.securitiesWithUnissuedUnits()">
+                           captable.securitiesWithUnissuedUnits() | filter:dateSecurityFilter">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities) | number:0}}">
+                           value="{{captable.numUnissued(sec, ct.securities, ctFilter.date, ctFilter.vesting) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:2}}%">
+                           value="{{captable.securityUnissuedPercentage(sec, ct.securities, ctFilter.date, ctFilter.vesting) || 0.00 | number:2}}%">
                 </td>
                 <td class="viewName unissuedName">
                     {{::sec.name}} (Unissued)
@@ -561,7 +561,7 @@
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities) | number:2}}
+                                {{captable.numUnissued(key, ct.securities, ctFilter.date, ctFilter.vesting) | number:2}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -587,7 +587,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits()
+                           value="{{captable.totalOwnershipUnits(1, ctFilter.date, ctFilter.vesting)
                                   | number:0}}">
                 </td>
                 <td class="capsums-col">
@@ -602,13 +602,13 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one)
-                            + captable.numUnissued(one, ct.securities)
+                            {{captable.securityTotalUnits(one, ctFilter.date, ctFilter.vesting)
+                            + captable.numUnissued(one, ct.securities, ctFilter.date, ctFiler.vesting)
                             | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one)
+                            {{captable.securityTotalAmount(one, ctFilter.date, ctFilter.vesting)
                             | formatAmount:'amount'}}
                         </div>
                     </span>
