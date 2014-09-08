@@ -584,6 +584,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
+    function startDate() {
+        return captable.transactions.reduce(minDate, null);
+    };
+    this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
         if (!prev || cur.effective_date < prev)
             return cur.effective_date;

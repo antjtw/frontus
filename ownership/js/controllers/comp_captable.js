@@ -66,6 +66,26 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.issueSort = 'date';
     $scope.rowSort = '-name';
     $scope.activeTran = [];
+    
+    $scope.daysBetween = function(start, ended) {
+        var t1 = Math.floor(start.getTime() / 86400000);
+        var t2 = Math.floor(start.getTime() / 86400000);
+        return t2 - t1;
+    };
+    
+    $scope.daterange = {};
+    $scope.daterange.offset = 0;
+    $scope.daterange.selected = captable.startDate();
+    
+    $scope.daysSinceBeginning = function() {
+        return $scope.daysSince(captable.startDate(), new Date());
+    };
+    
+    $scope.updateDateSlider = function() {
+        var d = captable.startDate().getTime();
+        $scope.ctFilter.date = new Date(d + $scope.daterange.offset*86400000);
+        console.log($scope.daterange.selected.toString(), d, $scope.daterange.offset, captable.startDate(), captable.startDate().toString());
+    };
 
     // Initialize a few visible variables
     $scope.investorOrder = "name";
