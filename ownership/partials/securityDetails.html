@@ -13,7 +13,7 @@
                      is-open="tran.active"
                      ng-switch on="currentTab">
         <accordion-heading>
-            <span>{{tran.effective_date | date:'M/d/yyyy'}}</span>
+            <span>{{tran.effective_date | date:'M/d/yyyy'}} {{tran.kind}}</span>
         </accordion-heading>
         <div class="darkgray faux-tabs" ng-class="{single: !hasDocuments(tran)}">
             <button

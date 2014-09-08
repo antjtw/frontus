@@ -972,6 +972,7 @@ div.rightTitle.interest-rate {
     width: 100%;
     border-bottom: 1px solid #C6C6C6;
     background-color: #E3E3E3;
+    font-family: "FS Elliot Web Light", sans-serif;
 }
 
 .add-transaction-link:hover {
