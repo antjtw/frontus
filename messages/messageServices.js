@@ -13,9 +13,9 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
     SWBrijj.tblm('mail.my_messages').then(function(msg){
         angular.forEach(msg, function(ms){
+            ms.names = [];
             if(ms.sender == navState.userid){
                 ms.membersArray = getArrayFromPostgres(ms.members);
-                ms.nameString = ms.membersArray.join(", ");
                 allSentThreads.push(ms);
             };
         });
@@ -23,16 +23,13 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
     SWBrijj.tblm('mail.my_messages').then(function(msg){
         angular.forEach(msg, function(ms){
+            ms.names = [];
             if(ms.sender !== navState.userid){
                 ms.membersArray = getArrayFromPostgres(ms.members);
-                ms.nameString = ms.membersArray.join(", ");
                 allReceivedMsgs.push(ms);
             };
         });
     });
-
-     
-
     SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
         angular.forEach(data, function(user){
             allUsers.push(user);
@@ -91,11 +88,50 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     });
 
 
-    this.getReceivedMsgs = function(){
+    this.getReceivedMsgs = function(){        
+        console.log(allReceivedMsgs);
+        angular.forEach(allReceivedMsgs, function(thread){
+            for(var i = 0; i < thread.membersArray.length; i ++){
+                angular.forEach(allPeople, function(person){
+                    if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid){
+                        thread.names.push(person.name);
+                    }
+                    else if(thread.membersArray[i]== person.email && person.name == null && thread.membersArray[i]!== navState.userid){
+                        thread.names.push(person.email);
+                    }
+                    else if(thread.membersArray[i]== person.email && person.email == navState.userid && thread.names.indexOf("me")== -1){
+                        thread.names.push("me");
+                    }
+                    else if(allEmails.indexOf(thread.membersArray[i])== -1 && thread.names.indexOf(thread.membersArray[i])== -1){
+                        thread.names.push(thread.membersArray[i]);
+                    }
+                });
+            };
+            thread.nameString = thread.names.join(", ");
+        }); 
         return allReceivedMsgs;
     };
 
     this.getSentMsgs = function(){
+        angular.forEach(allSentThreads, function(thread){
+            for(var i = 0; i < thread.membersArray.length; i ++){
+                angular.forEach(allPeople, function(person){
+                    if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid){
+                        thread.names.push(person.name);
+                    }
+                    else if(thread.membersArray[i]== person.email && person.name == null && thread.membersArray[i]!== navState.userid){
+                        thread.names.push(person.email);
+                    }
+                    else if(thread.membersArray[i]== person.email && person.email == navState.userid && thread.names.indexOf("me")== -1){
+                        thread.names.push("me");
+                    }
+                    else if(allEmails.indexOf(thread.membersArray[i])== -1 && thread.names.indexOf(thread.membersArray[i])== -1){
+                        thread.names.push(thread.membersArray[i]);
+                    }
+                });
+            };
+            thread.nameString = thread.names.join(", ");
+        }); 
         return allSentThreads;
     };
 
