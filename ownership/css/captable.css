@@ -855,6 +855,7 @@ div.rightTitle span.locked-security {
     line-height: 32px;
     background-color: #E3E3E3;
     display: inline-block;
+    text-transform: capitalize;
 }
 
 div.rightTitle.double span.locked-security {
@@ -2532,4 +2533,8 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .my-trans-docs:first-of-type{
     padding-top: 20px;
+}
+
+.drop-selector .standard .dropdown-toggle {
+    text-transform: capitalize;
 }
