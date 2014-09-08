@@ -79,6 +79,20 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
     };
     
+    /*$scope.updateBarColor = function() {
+        var p = Math.min((Math.max($scope.daterange.offset, 0)/$scope.ct.totalDays)*100, 100);
+        console.log("colorBar", p);
+        $scope.daterange.coloredbar = {'-webkit-appearance': 'none',
+            '-moz-apperance': 'none',
+            'background': '#C7C7C7',
+            'background': "-moz-linear-gradient(left,  #C7C7C7 0%, #C7C7C7 " + p + "%, #1ABC96 " + p + "%, #1ABC96 100%)",
+            'background': "-webkit-gradient(linear, left top, right top, color-stop(0%,#C7C7C7), color-stop(" + p + "%,#C7C7C7), color-stop(" + p + "%,#1ABC96), color-stop(100%,#1ABC96))",
+            'background': "-webkit-linear-gradient(left,  #C7C7C7 0%,#C7C7C7 " + p + "%,#1ABC96 " + p + "%,#1ABC96 100%)",
+            'background': "-o-linear-gradient(left,  #C7C7C7 0%,#C7C7C7 " + p + "%,#1ABC96 " + p + "%,#1ABC96 100%)",
+            'background': "-ms-linear-gradient(left,  #C7C7C7 0%,#C7C7C7 " + p + "%,#1ABC96 " + p + "%,#1ABC96 100%)",
+            'background': "linear-gradient(to right,  #C7C7C7 0%,#C7C7C7 " + p + "%,#1ABC96 " + p + "%,#1ABC96 100%)"};
+    };*/
+    
     $scope.checkDateRange = function() {
         if ($scope.editMode)
         {
@@ -91,6 +105,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
         $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        //$scope.updateBarColor();
     };
     
     $scope.updateDateInput = function() {
@@ -126,12 +141,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.ctFilter.date = d;
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
         $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        //$scope.updateBarColor();
     };
     
     $scope.setToday = function() {
         $scope.ctFilter.date = new Date();
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
         $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        //$scope.updateBarColor();
     };
 
     // Initialize a few visible variables

@@ -233,7 +233,7 @@
                     </a>
                     <ul class="dropdown-menu" ng-click="$event.stopPropagation()">
                         <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
-                        <span ng-click="setToday();">set to today</span>
+                        <span ng-click="setToday();" class="blue-link">set to today</span>
                         <input class="range" type="range" value="0" min="0" max="{{ct.totalDays}}" 
                                 step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
                     </ul>
