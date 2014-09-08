@@ -98,15 +98,30 @@ own.directive('captableCell', [function() {
                 $scope.settings = $rootScope.settings;
                 $scope.t = ($scope.data && $scope.data.kind) ? "grant"
                                                              : "cap";
-                $scope.units = function() {
-                    return captable.getCellUnits($scope.data,
-                                                 $scope.filter.date, 
-                                                 $scope.filter.vesting);
-                };
-                $scope.amount = function() {
-                    return captable.getCellAmount($scope.data,
-                                                  $scope.filter.date);
-                };
+                if ($scope.filter)
+                {
+                    $scope.units = function() {
+                        return captable.getCellUnits($scope.data,
+                                                     $scope.filter.date, 
+                                                     $scope.filter.vesting);
+                    };
+                    $scope.amount = function() {
+                        return captable.getCellAmount($scope.data,
+                                                      $scope.filter.date, 
+                                                      $scope.filter.vesting);
+                    };
+                }
+                else
+                {
+                    $scope.units = function() { 
+                        if ($scope.data) return $scope.data.u;
+                        return null;
+                    };
+                    $scope.amount = function() { 
+                        if ($scope.data) return $scope.data.a;
+                        return null;
+                    };
+                }
             }
         ],
     };
