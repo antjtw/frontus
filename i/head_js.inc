@@ -39,6 +39,7 @@ window.analytics.page()
 <script src="/lib/angular/ui-utils/event.js"></script>
 <script src="/lib/angular/ng-infinite-scroll.js"></script>
 <script src="/lib/angular-scroll.min.js"></script>
+<script src="/lib/angular-history/history.js"></script>
 <script src="/lib/bootstrap/bootstrap-tagsinput.min.js"></script>
 <script src="/lib/bootstrap/bootstrap-tagsinput-angular.js"></script>
 <script src="/lib/modernizr/modernizr.js"></script>
@@ -47,6 +48,11 @@ window.analytics.page()
 <script src="/lib/moment.min.js"></script>
 <script src="/cmn/nav.js"></script>
 <script src="/cmn/services.js"></script>
+<script src="/ownership/js/filter.js"></script>
+<script src="/ownership/js/services/main.js"></script>
+<script src="/ownership/js/services/calculate.js"></script>
+<script src="/ownership/js/services/captable.js"></script>
+<script src="/ownership/js/directives.js"></script>
 <script src="/lib/stripe.js"></script>
 <script type="text/javascript"
         src="/lib/angular-payments/angular-payments.min.js"></script>

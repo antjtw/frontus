@@ -191,7 +191,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
         SWBrijj.tbl('account.profile').then(function(x) {
             initPage($scope, x);
             $scope.photoURL = '/photo/user?id=' + $scope.email;
-            $scope.signatureURL = '/photo/user?id=signature:';
+            var randnum = Math.random();
+            $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + randnum;
             $scope.namekey = $scope.name;
             $scope.getInvestorInformation();
         }).except(initFail);
@@ -245,7 +246,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
         };
 
         $scope.uploadSuccess = function() {
-            $scope.signatureURL = '/photo/user?id=signature:';
+            var randnum = Math.random();
+            $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + randnum;
             $scope.signatureprocessing = false;
             $scope.progressVisible = false;
             $scope.signaturepresent = true;
@@ -268,7 +270,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             void(x);
             $scope.progressVisible = false;
             $scope.signatureprocessing = false;
-            $scope.signatureURL = '/photo/user?id=signature:';
+            var randnum = Math.random();
+            $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + randnum;
             $scope.$emit("notification:fail", "Oops, something went wrong.");
             // console.log(x);
         };

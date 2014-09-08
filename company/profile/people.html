@@ -19,7 +19,7 @@
                     <div class="pull-left" ng-show="groupPeople.length > 0">
                         <ul class="dropdown-list drop-selector">
                             <li class="dropdown standard">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">More</a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" ng-click="addOrRemoveAdmin(groupPeople)">Actions</a>
                                 <ul class="dropdown-menu">
                                     <li ng-if="addOrRemove=='investor'">
                                         <a class="button"  ng-click="companyIsZombie()|| addAdminModalOpen(groupPeople)" href="#">Make Admin</a>
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-  <!--   text in the window -->
+    <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12">
@@ -129,6 +129,7 @@
 
             </tabset>
         </internal-right-rail>
+
         <div ng-style="viewportheight" class="side-content" ng-switch on="sidebarPage" ng-class="{slidingcss25:oldSafari(), 'secondbar': !sidebarPage}">
             <add-person ng-switch-when="people"></add-person>
             <group-people ng-switch-when="group" people="groupPeople"></group-people>

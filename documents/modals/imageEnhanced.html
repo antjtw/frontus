@@ -19,8 +19,11 @@
         <div class="span5">
             <div class="modalText">
                 <div class="textBlock">
-                    <span class="subtitle">We fixed it!</span>
-                    <span>We've straightened up your document to make it look better!</span>
+                    <span ng-if="adjustedSelected" class="subtitle">We fixed it!</span>
+                    <span ng-if="adjustedSelected">We've straightened up your document to make it look better!</span>
+
+                    <span ng-if="!adjustedSelected" class="subtitle">Ignore and continue</span>
+                    <span ng-if="!adjustedSelected">We've made the document more legible, are you sure you'd like to continue with the original document?</span>
                 </div>
                 <div class='blue-link' ng-if="adjustedSelected"><span ng-click="processedClose(false)">Continue with enhancements</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>
                 <div class='blue-link' ng-if="!adjustedSelected"><span ng-click="processedClose(true)">Continue with original</span>&nbsp;<span class="dataIcon" data-icon="&#xe016;" aria-hidden="true"></span></div>

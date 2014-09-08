@@ -1,0 +1,222 @@
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
+<div class="maincontent">
+    <div class="container dynamic-page">
+        <subnav>
+            <!--
+            <div class="pull-left">
+                <span>View By</span>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           href="#">
+                            {{ optionView }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a ng-click="setView('Security')"
+                                   class="button">
+                                    Security
+                                </a>
+                            </li>
+                            <li>
+                                <a ng-click="setView('Person')"
+                                   class="button">
+                                    Person
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            -->
+        </subnav>
+        <div class="row-fluid leftTabWindow">
+            <div ng-style="viewportheight"
+                 class="span8 docLibrary leftBlock"
+                 ng-class="{leftFullTableBlock: sideToggle,
+                            widthtransition25: oldSafari()}">
+                <table class="tableView bodyText grant-table viewmode"
+                       ng-show="optionView == 'Security'">
+                    <tr class="column-label">
+                        <th></th>
+                        <th class="row-fluid">
+                            <span class="span6">Security</span>
+                            <span class="span6">Date</span>
+                        </th>
+                        <th ng-repeat="col in captable.grantColumns">
+                            {{col.name}}
+                        </th>
+                    </tr>
+                    <tbody ng-repeat="sec in captable.grantSecurities()">
+                    <tr class="status-row">
+                        <td class="status-toggle pointer"
+                            ng-class="{'status-toggle-on': sec == shown}"
+                            ng-click="opendetails(sec)">
+                            <span ng-hide="sec==shown"
+                                  data-icon="&#xe017;"
+                                  aria-hidden="true">
+                            </span>
+                            <span ng-show="sec==shown"
+                                  data-icon="&#xe01c;"
+                                  aria-hidden="true">
+                            </span>
+                        </td>
+                        <td class="hoverable row-fluid"
+                            ng-class="{fieldSelected: selectedSecurity==sec}"
+                            ng-click="selectSecurity(sec.name)">
+                            <span class="span6">
+                                {{sec.name}}
+                            </span>
+                            <span class="span6">
+                                {{sec.effective_date | date:settings.shortdate}}
+                            </span>
+                        </td>
+                        <td ng-repeat="col in captable.grantColumns">
+                            {{captable.grantSubtotal(col.name, sec.name)
+                            | formatAmount:'units'}}
+                        </td>
+                    </tr>
+                    <tr class="transaction-rows"
+                        ng-if="sec==shown"
+                        ng-repeat="g in captable.grantsOf(sec)">
+                        <td class="viewField"></td>
+                        <td class="row-fluid">
+                            <span class="span6">{{g.attrs.investor}}</span>
+                            <span class="span6">{{g.effective_date | date:settings.shortdate}}</span>
+                        </td>
+                        <td ng-repeat="col in captable.grantColumns"
+                            ng-class="{fieldSelected: selectedCell.roots[0] == g &&
+                                                      selectedCell.kind == col.name,
+                                       hoverable: calculate.isNumber(captable.grantCellFor(g.transaction, col.name).u)}"
+                            ng-click="selectCell(g.transaction, col.name)">
+                            <captable-cell inv="g.attrs.investor" sec="sec.name"
+                            data="captable.grantCellFor(g.transaction, col.name)">
+                            </captable-cell>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr class='tablefooter'>
+                        <td></td>
+                        <td></td>
+                        <td ng-repeat="col in captable.grantColumns">
+                            <input disabled
+                                   value="{{captable.grantSubtotal(col.name)
+                                          | formatAmount:'units'}}">
+                        </td>
+                    </tr>
+                </table>
+                <!--
+                <table class="tableView bodyText grant-table viewmode"
+                       ng-show="optionView == 'Person'">
+                    <tr class="column-label">
+                        <th></th>
+                        <th></th>
+                        <th>Granted</th>
+                        <th>Vested</th>
+                        <th>Forfeited</th>
+                        <th>Exercised</th>
+                    </tr>
+                    <tbody ng-repeat="investor in investorLed">
+                    <tr class="status-row">
+                        <td class="status-toggle pointer" ng-class="{'status-toggle-on': investor.shown}"
+                            ng-click="opendetails(investor.name, 'investor')">
+                            <span ng-hide="investor.shown" data-icon="&#xe017;" aria-hidden="true"></span>
+                            <span ng-show="investor.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
+                        </td>
+                        <td>
+                            <input disabled ng-model="investor.name">
+                        </td>
+                        <td>{{formatAmount(issueGranted(investor))}}</td>
+                        <td>{{formatAmount(issueVested(investor))}}</td>
+                        <td>{{formatAmount(issueActions(investor, 'forfeited'))}}</td>
+                        <td>{{formatAmount(issueActions(investor, 'exercised'))}}</td>
+                    </tr>
+                    <tr class="transaction-rows" ng-show="investor.shown"
+                        ng-repeat="tran in investor.trans | noempty">
+                        <td class="viewField"></td>
+
+                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.investor}"
+                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{tran.issue}}</span></td>
+                        <td ng-class="{fieldSelected:tran.fields[0],'hoverable':tran.units}"
+                            ng-click="getActiveTransaction(tran, '', 'view')"><span>{{formatAmount(tran.units)}}</span></td>
+                        <td ng-class="{fieldSelected:tran.fields[1],'hoverable':(tran.vested.length > 0)}"
+                            ng-click="getActiveTransaction(tran, 'vested', 'view')"><span>{{formatAmount(transactionVested(tran.vested))}}</span>
+                        </td>
+                        <td ng-class="{fieldSelected:tran.fields[2],'hoverable':tran.forfeited}"
+                            ng-click="getActiveTransaction(tran, 'forfeited', 'view')">
+                            <span>{{formatAmount(tran.forfeited)}}</span></td>
+                        <td ng-class="{fieldSelected:tran.fields[3],'hoverable':tran.exercised}"
+                            ng-click="getActiveTransaction(tran, 'exercised', 'view')">
+                            <span>{{formatAmount(tran.exercised)}}</span></td>
+                    </tr>
+                    </tbody>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr class='tablefooter'>
+                        <td></td>
+                        <td></td>
+                        <td><input disabled value="{{formatAmount(footerAction('units', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('vested', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('forfeited', issues), 'zero')}}"></td>
+                        <td><input disabled value="{{formatAmount(footerAction('exercised', issues), 'zero')}}"></td>
+                    </tr>
+                </table>
+                -->
+            </div>
+
+            <internal-right-rail toggle-side="sideToggle">
+                <div ng-switch on="selectedThing()"
+                     class="span4 capright"
+                     ng-style="viewportheight">
+                    <span ng-switch-when="selectedCell"
+                          ng-switch on="selectedCell.kind">
+                        <div ng-switch-when="granted">
+                             <cell-details cell="selectedCell"
+                                           currentTab="currentTab">
+                             </cell-details>
+                        </div>
+                        <div ng-switch-when="vested">
+                             <cell-summary cell="selectedCell">
+                             </cell-summary>
+                        </div>
+                        <div ng-switch-when="exercised">
+                             <cell-summary cell="selectedCell">
+                             </cell-summary>
+                        </div>
+                        <div ng-switch-when="forfeited">
+                             <cell-summary cell="selectedCell">
+                             </cell-summary>
+                        </div>
+                    </span>
+                    <span ng-switch-when="selectedInvestor">
+                        <div class="headsection row-fluid">
+                            <h1>{{selectedInvestor.name}}</h1>
+                        </div>
+                        <span class="capGuide">
+                            <p>{{selectedInvestor.email}}</p>
+                        </span>
+                    </span>
+                    <span ng-switch-when="selectedSecurity">
+                        <security-details sec="selectedSecurity">
+                    </span>
+
+                    <span class="capGuide padded-cap" ng-switch-default>
+                        <h1 class="right-bar-header">View your Grants</h1>
+
+                        <p>The information to the left contains the sum total of your company grants, including
+                        vesting progress and any actions taken. Expand the row to reveal additional detail.</p>
+                    </span>
+                </div>
+            </internal-right-rail>
+        </div>
+    </div>
+</div>

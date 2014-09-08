@@ -123,49 +123,34 @@
                 showSharebar:!state.hideSharebar,
                 slidingcss25:oldSafari()}" class="side-content span4 capright button-offset">
     <h2 class="right-bar-header">SHARE DOCUMENTS</h2>
-    <p>To share documents, check which documents you would like to share then add your contacts and a message below.</p>
+    <p>Select the documents to be shared on the left, and the recipients below by entering email addresses or selecting existing people.</p>
     <div class="shareForm">
         <div class="sharepeople-input">
             <input ui-select2="sharingSelect2Options" ng-model="sharingemail" ng-change="addShareEmail(sharingemail); sharingemail = ''">
         </div>
         <ul class="recipients">
             <li ng-repeat="investor in ShareDocs.emails">
-                <span ng-class="{'incomplete-name': ShareDocs.emailNotPreparedCache(investor)}" class="investor-name" ng-click="expandShareList[investor] = !expandShareList[investor]">
-                    <span class="lower-icon" data-icon="&#xe031;" ng-show="expandShareList[investor]"></span>
-                    <span class="lower-icon" data-icon="&#xe034;" ng-hide="expandShareList[investor]"></span>
+                <span class="investor-name">
                     <span class="investor-name-display">{{getInvestorDisplay(investor)}}</span>
                     <a ng-click="removeShareEmail(investor)"><span data-icon="&#xe00f;" class="remove-icon"></span></a>
                 </span>
-                <ul class="doc-list" ng-show="expandShareList[investor]">
-                    <li ng-repeat="doc in ShareDocs.documents">
-                        <a ng-if="doc.signature_flow > 0" href="/app/documents/company-view?doc={{doc.doc_id}}&investorid={{encodeURIComponent(investor)}}"
-                           ng-class="{'incomplete': ShareDocs.prepCache[doc.doc_id][investor] === false}">
-                            <span>{{doc.docname}}</span>
-                            <span ng-if="ShareDocs.prepCache[doc.doc_id][investor] === true" data-icon="&#xe052;"></span>
-                        </a>
-                        <a ng-if="!(doc.signature_flow > 0)">
-                            <span>{{doc.docname }}</span>
-                            <span data-icon="&#xe001;"></span>
-                        </a>
-                    </li>
-                </ul>
             </li>
         </ul>
-        <textarea class="email-text" rows="4" cols="60" ng-model="ShareDocs.message" placeholder="Add an optional message&hellip;"></textarea>
-        <div class="controls" my-loading-spinner="processing">
-            <div class="standard-button pull-right">
-                <button class="btn"
-                        ng-if="!companyIsZombie()"
-                        ng-click="shareDocuments()"
-                        ng-disabled="processing || checkmany(docShareState.emails, docShareState.doclist, true)
-                                      || !ShareDocs.docsReadyToShare()">
-                    Share Documents
-                </button>
-            </div>
-             <span class="pull-right pointer" ng-click="toggleSide();">
-                 Cancel
-             </span>
-        </div>
+        <ul class="bad recipients" ng-show="badEmails.length > 0">
+            <li><p>Sorry, we couldn't understand the following email addresses. Please re-enter them.</p></li>
+            <li ng-repeat="email in badEmails">
+                <span class="investor-name">
+                    <span class="investor-name-display">{{email}}</span>
+                </span>
+            </li>
+        </ul>
+        <a class="standard-button"
+           href="/app/documents/prepare"
+           ng-disabled="companyIsZombie() || ShareDocs.emails.length === 0 || ShareDocs.documents.length === 0">
+            <button class="btn" ng-disabled="companyIsZombie() || ShareDocs.emails.length === 0 || ShareDocs.documents.length === 0">
+                Next <span data-icon="&#xe016;"></span>
+            </button>
+        </a>
     </div>
 </div>
 </div>

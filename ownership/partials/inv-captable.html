@@ -1,0 +1,193 @@
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
+<div class="maincontent">
+<div class="container dynamic-page">
+<div class="row-fluid leftTabWindow">
+<div ng-style="viewportheightnobar"
+     ng-class="{leftFullTableBlock:toggleSide(),
+                widthtransition25:oldSafari()}"
+     class="span8 docLibrary leftBlock">
+    <div class="row-fluid capcontainer">
+        <table class="captable tableView viewcaptable bodyText">
+            <tr class="column-label">
+                <th colspan="2" ng-show="fullview">Ownership</th>
+                <th class="longrow">Shareholder</th>
+                <th ng-class="{tranViewSelected: sec==selectedSecurity}"
+                    class="staticHeaders"
+                    ng-repeat="sec in ct.securities"
+                    ng-click="selectSecurity(sec.name)">
+                    <span style="display: block;">
+                        {{::sec.name}}
+                    </span>
+                </th>
+            </tr>
+            <!-- Descriptive row viewable from all modes -->
+            <tr class="descriptionRow viewmode" ng-show="fullview">
+                <td class="input-right">Shares</td>
+                <td class="input-right">%</td>
+                <td></td>
+                <td ng-repeat="one in ct.securities">
+                    <span>{{::securityUnitLabel(one)}}</span>
+                    <span>Total Paid</span>
+                </td>
+            </tr>
+            <tr ng-repeat="row in ct.investors track by $index"
+                ng-if="([row] | noUnissue).length > 0">
+                <td class="capsums-col" ng-show="fullview">
+                    <input class="input-right"
+                           disabled
+                           value="{{shareSum(row)}}">
+                </td>
+                <td class="capsums-col" ng-show="fullview">
+                    <input class="input-right" disabled
+                    value="{{captable.investorOwnershipPercentage(
+                                 row.name) || 0.000 | number:3}}%">
+                </td>
+                <!--
+                <td class="capsums-col" ng-hide="fullview">
+                    <input class="input-right"
+                           disabled
+                           value="{{myPercentage(everyone.percentage) | number:3}}%">
+                </td>-->
+                <td ng-class="{tranViewSelected: selectedInvestor==row,
+                               hoverable: row.name}"
+                    class="viewName"
+                    ng-click="selectInvestor(row.name)">
+                    {{::row.name}}
+                </td>
+                <td class="tableFields"
+                    ng-click="selectCell(row.name, key.name)"
+                    ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
+                               hoverable: captable.cellFor(row.name, key.name).a || captable.cellFor(row.name, key.name).u}"
+                    ng-repeat="key in ct.securities | orderBy:issueSort">
+                    <captable-cell inv='row.name' sec='key.name'
+                        data='captable.cellFor(row.name, key.name)'>
+                    </captable-cell>
+                </td>
+            </tr>
+            <tr ng-repeat="row in ct.investors track by $index"
+                ng-show="([row] | unissuedrowviewList).length > 0"
+                class="unissued-rows">
+                <td class="capsums-col">
+                    <input class="input-right" disabled
+                           value="{{shareSum(row)}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right" disabled
+                           value="{{captable.investorOwnershipPercentage(
+                                    row.name) || 0.000 | number:3}}%">
+                </td>
+                <td class="viewName"
+                    ng-class="{hoverable:row.name}">
+                    {{row.name}}
+                </td>
+                <td class="tableFields"
+                    ng-class="{hoverable: captable.cellFor(row.name, key.name).a || captable.cellFor(row.name, key.name).u}"
+                    ng-repeat="key in ct.securities | orderBy:issueSort">
+                    <captable-cell inv='row.name' sec='key.name'
+                        data='captable.cellFor(row.name, key.name)'>
+                    </captable-cell>
+                </td>
+            </tr>
+            <tr class="unissued-rows"
+                ng-repeat="sec in
+                           captable.securitiesWithUnissuedUnits()">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{captable.numUnissued(sec, ct.securities) | number:3}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:3}}%">
+                </td>
+                <td class="viewName">
+                    {{::sec.name}} (Unissued)
+                </td>
+                <td class="tableFields"
+                    ng-repeat="key in ct.securities">
+                    <span class="captablepair-box">
+                        <div ng-class="{editview: editMode}"
+                             class="output clickable">
+                            <span ng-if="sec==key">
+                                {{captable.numUnissued(key, ct.securities) | number:3}}
+                            </span>
+                        </div>
+                        <div ng-class="{editview: editMode}"
+                             class="output second clickable">
+                             <!-- don't need anything here.
+                                  no such thing as unissued amounts -->
+                        </div>
+                   </span>
+                </td>
+            </tr>
+            <!-- Footer Total Row -->
+            <tr ng-show="fullview" class="total-row">
+                <td>Total</td>
+                <td></td>
+                <td></td>
+                <td ng-repeat="one in ct.securities" ></td>
+            </tr>
+            <tr ng-show="fullview" class='tablefooter'>
+                <td class="capsums-col">
+                    <input class="input-right" disabled
+                           value="{{captable.totalOwnershipUnits() | number:3}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled value="100%">
+                </td>
+                <td></td>
+                <td ng-repeat="one in ct.securities">
+                    <span class="captablepair-box">
+                        <div ng-class="{'editview': editMode}"
+                             class="output footer">
+                            {{captable.securityTotalUnits(one) + captable.numUnissued(one, ct.securities) | formatAmount:'units'}}
+                        </div>
+                        <div ng-class="{'editview': editMode}"
+                             class="output second footer">
+                            {{captable.securityTotalAmount(one) | formatAmount:'amount'}}
+                        </div>
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<internal-right-rail toggle-side="sideToggle">
+    <div ng-switch on="sideBar" 
+         class="capright"
+         ng-style="viewportheightnobar">
+        <span ng-switch-when="1">
+            <security-details sec="selectedSecurity">
+        </span>
+        <span ng-switch-when="2">
+            <cell-details cell="selectedCell"
+                          currentTab="currentTab">
+            </cell-details>
+        </span>
+        <span ng-switch-when="3">
+            <div class="headsection row-fluid">
+                <h1>{{selectedInvestor.name}}</h1>
+            </div>
+            <span class="capGuide">
+                <p>{{selectedInvestor.email}}</p>
+            </span>
+        </span>
+        <span ng-switch-default class="capGuide railpadding">
+            <h1 class="right-bar-header">
+                View your Capitalization
+            </h1>
+            <p>
+                The information to the left contains your company
+                holdings and total percent ownership. Click on the
+                values within the table to reveal additional detail.
+            </p>
+        </span>
+    </div>
+</internal-right-rail>
+</div>
+</div>
+</div>

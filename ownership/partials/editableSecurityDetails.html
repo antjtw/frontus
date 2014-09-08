@@ -1,0 +1,244 @@
+<div class="capGuide global" ng-class="{'issue-rail':tourstate==3}">
+    <div class="detailsHeader">
+        <div>{{sec.name}}</div>
+        <div>{{sec.effective_date | date:settings.shortdate}}</div>
+        <p ng-show="sec.attrs.security_type" class="belowTitle">
+            <span ng-bind="sec.attrs.security_type"></span>
+            <span>Security Type</span>
+        </p>
+    </div>
+    <accordion class="lessmargin transaction-accordion"
+               close-others="true">
+    <accordion-group is-open="tran.active"
+                     is-disabled="sec.transactions.length==1"
+                     ng-hide="windowToggle && !tran.active"
+                     ng-repeat="tran in sec.transactions track by $index"
+                    ng-switch on="currentTab">
+        <accordion-heading>
+            <span ng-click="editEvidence()">
+                {{tran.effective_date | date:settings.shortdate}} Transaction
+            </span>
+        </accordion-heading>
+        <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
+            <button
+                    ng-click="switchCapTab('details');"
+                    ng-class="{on: currentTab=='details'}">
+                <span>
+                    <span data-icon="&#xe611;" aria-hidden="true"></span>
+                    Details
+                </span>
+            </button><button
+                    ng-click="switchCapTab('documents');"
+                    ng-class="{on: currentTab=='documents'}">
+                <span>
+                    <span data-icon="&#xe009;" aria-hidden="true"></span>
+                    Documents
+                </span>
+            </button><button
+                    ng-click="switchCapTab('actions');"
+                    ng-class="{on: currentTab=='actions'}"
+                    ng-if="hasActions(tran)">
+                <span>
+                    <span data-icon="&#xe613;" aria-hidden="true"></span>
+                    Actions
+                </span>
+            </button>
+        </div>
+        <div class="capTab" ng-switch-when="details">
+            <div class="capGuide global">
+                <div class="rightTitle">
+                    <span>Security Type</span>
+                    <span class="locked-security" ng-if="captable.secLocked(sec)">
+                        {{tran.attrs.security_type}}
+                    </span>
+                    <ul class="dropdown-list drop-selector" ng-if="!captable.secLocked(sec)">
+                        <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{tran.attrs.security_type}}
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="key in 'security_type' | attributeTypes">
+                                <a ng-click="setIt(tran, 'security_type', key, true)">
+                                    {{key}}
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+            <editable-transaction-attributes ng-if="tran && !sec.creating" data="tran" save="true">
+            </editable-transaction-attributes>
+            <span class="delete-link"
+                  ng-if="tran.kind != 'issue security'"
+                  data-icon="&#xe00c;"
+                  ng-click="captable.deleteSecurityTransaction(tran, sec);">
+                Delete transaction
+            </span>
+        </div>
+        <div class="capTab" ng-switch-when="documents">
+            <div ng-if="tran.evidence_data.length==0 && windowToggle == false || tran.evidence_data == null && windowToggle == false"
+                 class="linkedDocuments">
+                    <div class="noGroups"  ng-click="editEvidence(tran)">
+                    Connect documents that support this transaction by clicking the link below.<br/>
+                    <span>Add Documents</span>
+                    <span data-icon="&#xe016;" aria-hidden="true"></span>
+
+                </div>
+
+            </div>
+            <div ng-if="tran.evidence_data.length>0"
+                 class="linkedDocuments">
+                <div ng-repeat="doc in tran.evidence_data"
+                     class="row-fluid">
+                    <ul class="pull-left">
+                        <li>
+                            <span ng-click="viewEvidence(doc)">
+                                {{doc.docname}}
+
+                            </span>
+                        </li>
+
+                        <li ng-if="doc.name||doc.investor">
+                            <span>
+
+                                {{doc.name || doc.investor}}'s version
+                            </span>
+                        </li>
+                        <li ng-if="doc.original && !doc.name && !doc.investor">
+                            <span>original version</span>
+                        </li>
+
+                    </ul>
+                    <span class="pull-right" data-icon="&#xe00f;"
+                          ng-click="captable.removeEvidence(doc, tran)">
+                    </span>
+                </div>
+            </div>
+            <span ng-if="windowToggle == false && tran.evidence_data.length > 0"
+                  class="delete-link linkedDocuments"
+                  ng-click="editEvidence(tran);">
+                <div class="noGroups addMore">
+                    Add More Documents
+                    <span data-icon="&#xe016;" aria-hidden="true"></span>
+                 </div>
+            </span>
+            <div ng-if="windowToggle == true && tran.evidence_data.length==0 || windowToggle == true && tran.evidence_data ==" class="linkedDocuments">
+                <div class="noGroups">
+                    Select the documents on the right that you wish to link.
+                </div>
+            </div>
+            <div ng-if="windowToggle == true"
+                 class="standard-button linkedDocuments">
+                <button class="btn" ng-click="editEvidence();">
+                    Finished!
+                </button>
+            </div>
+        </div>
+        <div class="capTab" ng-switch-when="actions">
+            <div ng-class="{'actionpicker': !newTran}" class='rightTitle left-space'>
+                <span>Action</span>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{newTran.kind || "Select an action"}}
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="x in tran.attrs.security_type | validActions: 'security'">
+                                <a ng-click="makeNewTran(x)">
+                                    {{x}}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="newTran">
+                <editable-transaction-attributes data="newTran" save="false">
+                </editable-transaction-attributes>
+
+                <div class="action-button standard-button">
+                    <button class="btn" ng-disabled="checkNewTran(newTran)" ng-click="submitAction(newTran);">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+        </accordion-group>
+    </accordion>
+    <doc-mini-viewer docid="viewme"></doc-mini-viewer>
+    <span class="blue-link delete-link"
+          ng-click="captable.deleteSecurity(sec)"
+          data-icon="&#xe00c;">
+        Delete Security
+    </span>
+</div>
+
+<div modal="splitModal" close="splitSharesClose();" options="convertopts">
+    <div class="modalHeader">
+        <span>Split Shares</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="splitSharesClose()"></span>
+    </div>
+    <div class="modalText splitting">
+        <div class="convert-listing">
+            <span>From</span>
+            <ul>
+                <li>{{splitIssue.issue}}</li>
+                <li>Security</li>
+            </ul>
+        </div>
+        <div class="split-input">
+            <div>
+                <span>Date</span>
+                <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
+                       ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                       onkeydown="testForEnter(event);">
+            </div>
+            <div class="ratio-input">
+                <span>Ratio</span>
+                <input type="text" ng-model="splitIssue.ratioa" onkeydown="testForEnter(event);">
+                <span>:</span>
+                <input type="text" ng-model="splitIssue.ratiob" onkeydown="testForEnter(event);">
+            </div>
+        </div>
+        <div class="convert-summary three">
+            <span>Summary</span>
+            <ul>
+                <li>
+                    <span>
+                        <span ng-show="captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) > 0">{{(captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities)) | formatAmount:'units'}}</span>
+                        <span ng-hide="captable.securityTotalUnits(splitIssue) + captable.numUnissued(splitIssue, ct.securities) > 0">No Shares</span>
+                    </span>
+                    <span>Pre-split shares</span>
+                </li>
+                <li>
+                    <span>
+                        <span ng-show="splitvalue(splitIssue)">{{splitvalue(splitIssue) | formatAmount:'units'}}</span>
+                        <span ng-hide="splitvalue(splitIssue)">Invalid Ratio</span>
+                    </span>
+                    <span>Post-split shares</span>
+                </li>
+                <li>
+                    <span>
+                        <span ng-show="splitppshare(splitIssue, ppshare)">{{splitppshare(splitIssue, ppshare) | formatAmount:'amount'}}</span>
+                        <span ng-hide="splitppshare(splitIssue, ppshare)">
+                            <span ng-show="splitvalue(splitIssue, ppshare)">Share Price Not Set</span>
+                            <span ng-hide="splitvalue(splitIssue, ppshare)">Invalid Ratio</span>
+                        </span>
+                    </span>
+                    <span>new price per share</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button">
+            <button ng-disabled="!splitvalue(splitIssue) || splitvalue(splitIssue) == 'Infinity'" class="btn" ng-click="performSplit(splitIssue); splitSharesClose();">Submit</button>
+        </div>
+        <div class="pull-left standard-button small-standard-button gray">
+            <button class="btn" ng-click="splitSharesClose();">Cancel</button>
+        </div>
+    </div>
+</div>
+

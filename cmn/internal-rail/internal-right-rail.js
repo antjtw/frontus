@@ -15,12 +15,17 @@ app.directive('internalRightRail', function() {
         controller: ['$scope', function($scope) {
             // Toggles sidebar back and forth
             $scope.complexSideToggleButton = function() {
+                console.log($scope.windowToggle);
                 if (!$scope.windowToggle) {
                     $scope.sideToggle = !$scope.sideToggle;
                 } else {
                     $scope.windowCallback();
+
                 }
+                // if($sco)
             };
+
+    
 
             var aboveBottomHeight = 0;
 
@@ -37,7 +42,9 @@ app.directive('internalRightRail', function() {
                 } else {
                     aboveBottomHeight = height;
                 }
-                document.querySelector("internal-right-rail .tab-content").style.bottom = aboveBottomHeight + "px";
+                if (document.querySelector("internal-right-rail .tab-content")) {
+                    document.querySelector("internal-right-rail .tab-content").style.bottom = aboveBottomHeight + "px";
+                }
             });
         }]
     };

@@ -28,7 +28,10 @@ div.last-saved {
 
 .capGuide {
     display: block;
-    padding: 0 0 0 20px;
+}
+
+.capGuide.padded-cap {
+    padding: 0 20px;
 }
 
 .capGuide.top10 {
@@ -36,8 +39,9 @@ div.last-saved {
 }
 
 .capGuide.global {
-    margin-top: 20px;
+    padding-top: 40px;
     position: relative;
+    background-color: #F1F1F1;
 }
 
 .capGuide.cap-overflow {
@@ -64,7 +68,7 @@ div.last-saved {
 
 .descriptionRow {
     height: 20px;
-    color: #C7C7C7;
+    color: #A6A6A6;
     font-size: 12px;
     text-transform: capitalize;
 }
@@ -98,11 +102,18 @@ div.last-saved {
     background-clip: padding-box;
 }
 
-.tableView .unissued-rows td {
+.tableView .unissued-rows td:hover {
+    cursor: default !important;
+}
+
+.tableView td.unissuedName {
+    background: transparent;
 }
 
 .tableView.captable td.viewName {
     padding: 0 0 0 20px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 
 .tableView th.longrow {
@@ -204,17 +215,22 @@ div.last-saved {
     padding-left: 20px;
 }
 
-.tableView.captable input:focus {
+.tableView.captable input:focus, .tableView.captable input.tranViewSelected {
     background-color: #E3E3E3;
 }
 
 .tableView.captable .unissued-rows {
     font-style: italic;
+    cursor: default;
 }
 
 .captablepair-box {
     position: relative;
     display: block;
+}
+
+.invalid {
+    border: 1px solid #FF0000;
 }
 
 .tableView .total-row {
@@ -289,35 +305,35 @@ p.captablepair {
     background: none;
 }
 
-.tableView.captable th.staticHeaders:hover, .tableView.captable td.viewName:hover, .tableView.captable td.tableFields.hoverable:hover {
+.tableView.captable th.staticHeaders:hover,
+.tableView.captable td.viewName:hover,
+.tableView.captable td.tableFields.hoverable:hover,
+td:hover .hoverable {
     background-color: rgba(26, 188, 150, 0.1);
     cursor: pointer;
 }
 
-.tableView.captable .unissued-rows td.viewName:hover, .tableView.captable .unissued-rows td.tableFields:hover {
-    background-color: #FFFFFF;
+.tableView.captable td.viewName.unissuedName:hover {
+    background-color: transparent;
+    cursor: default;
 }
 
-.tableView td.tranSelected {
-    border: 2px solid #E3E3E3;
-}
-
-.tableView.captable .tranSelected > input {
+.tableView.captable .tranSelected input {
     padding: 7px 0 7px 4px;
 }
 
-.tableView.captable .tranSelected > input:last-child {
+.tableView.captable .tranSelected input:last-child {
     padding: 7px 0 7px 6px;
     width: 65px;
 }
 
-.tableView.captable .tranSelected > input.first-box {
+.tableView.captable .tranSelected input.first-box {
     border-left: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
 }
 
-.tableView.captable .tranSelected > input.last-box {
+.tableView.captable .tranSelected input.last-box {
     border-right: 2px solid #E3E3E3;
     border-top: 2px solid #E3E3E3;
     border-bottom: 2px solid #E3E3E3;
@@ -453,7 +469,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     font-size: 14px;
     border-bottom: 1px solid #C6C6C6;
     height: 55px;
-    margin-right: 40px;
+    margin-right: 0;
 }
 
 .capright .in-brief div.belowTitle > img {
@@ -556,6 +572,17 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 12px;
+    color:  #3498DB;
+}
+
+.transaction-accordion.lessmargin .delete-link {
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color:  #3498DB;
+    display: inline-block;
+    font-size: 12px;
 }
 
 .transaction-accordion.lessmargin .delete-link.blue-link {
@@ -567,23 +594,25 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading {
-    padding: 0;
+    padding: 0 0 0 0;
 }
 
 .transaction-accordion .accordion-heading .accordion-toggle {
-    padding: 11px 12px;
+    padding: 0 0 0 0;
+    line-height: 40px;
 }
 
 .transaction-accordion .accordion-heading > a > span:not(:last-of-type),
 .transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
     vertical-align: -10%;
     color: #1E2D3D;
+    width: 100%;
 }
 
 .transaction-accordion.lessmargin .capGuide,
 .transaction-accordion.lessmargin .linkedDocuments,
 .transaction-accordion.lessmargin .btn-group {
-    padding-left: 0;
+    padding-left: 20px;
 }
 .transaction-accordion .btn-group,
 .transaction-accordion .linkedDocuments {
@@ -591,25 +620,43 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
-    color: #1E2D3D;
+    color: #8D8D8D;
+    font-size: 14px;
+    line-height: 40px;
+    margin-left: 20px;
+    display: inline-block;
+    font-family: "FS Elliot Web Light", sans-serif;
+    text-transform: capitalize;
+}
+
+.invalidTran {
+    color: #FF0000 !important;
 }
 
 .transaction-accordion .accordion-group {
-    border-bottom: none;
+    border-bottom: 1px solid #C6C6C6;
+    margin-bottom: 0;
 }
 
 .transaction-accordion .accordion-inner {
     border-top: none;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    background-color: #F1F1F1;
 }
 
 .transaction-accordion .capGuide.global {
-    margin-top: 0;
+    padding-top: 0;
 }
 
 .transaction-accordion .accordion {
+    border-top: 1px solid #C6C6C6;
     margin-top: 20px;
+    background-color: #E3E3E3;
+    margin-bottom: 0;
 }
 
 
@@ -626,11 +673,16 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .tabbable .tab-content {
     padding-bottom: 0;
-  
+
 }
+
+.tabbable .tab-content div.palegray {
+    background-color: #F1F1F1;
+}
+
 .tabBorder .tabbable .tab-content {
     border-right: 1px solid #C6C6C6;
-    
+
 }
 .tabbable .info-box {
     margin-bottom: 0;
@@ -710,17 +762,12 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
     border-right: 0;
 }
 
-div.rightTitle {
-    margin: 0 0 10px 0;
-    position: relative;
-}
-
-div.rightTitle.double > span, p.rightTitle.double > span {
+div.rightTitle.double > span, div.rightTitle.double > span {
     line-height: 14px;
     margin-top: 2px;
 }
 
-div.rightTitle.double > ul, p.rightTitle.double > input {
+div.rightTitle.double > ul, div.rightTitle.double > input {
     vertical-align: top;
 }
 
@@ -742,7 +789,7 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     text-transform: capitalize;
 }
 
-.rightTitle > input, .rightTitle > span:last-child {
+.rightTitle > input, .rightTitle > span:last-child, .rightTitle .locked-security {
     width:216px;
     height: 30px;
     -moz-border-radius: 3px;
@@ -757,11 +804,11 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     width: 146px;
 }
 
-.rightTitle.security-type > span.locked-security {
-    width: 146px;
-    padding-left: 10px;
-    margin-left: 2px;
-    border-radius: 3px;
+.rightTitle .locked-security .action {
+    cursor: pointer;
+    float: right;
+    line-height: 32px;
+    margin-right: 5px;
 }
 
 .rightTitle.security-type > span.common-toggle {
@@ -804,10 +851,15 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     margin-left: 5px;
 }
 
-.rightTitle > span.locked-security {
+div.rightTitle span.locked-security {
     line-height: 32px;
     background-color: #E3E3E3;
     display: inline-block;
+    text-transform: capitalize;
+}
+
+div.rightTitle.double span.locked-security {
+    margin-bottom: 8px;
 }
 
 .rightTitle > span:last-child.delete-icon {
@@ -827,7 +879,7 @@ div.rightTitle.double > ul, p.rightTitle.double > input {
     background-color: #E3E3E3;
 }
 
-p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
+div.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
     display: inline-block;
     width: 24px;
@@ -842,12 +894,20 @@ p.rightTitle > span.tooltip-icon, div.rightTitle > span.tooltip-icon {
     color: #C6C6C6;
 }
 
-p.rightTitle {
+div.rightTitle {
     position: relative;
     margin: 0 0 5px;
 }
 
-p.rightTitle.common-toggle span.tooltip-icon + .tooltip {
+div.rightTitle.left-space {
+    margin-left: 20px;
+}
+
+div.rightTitle.actionpicker {
+    margin-bottom: 66px;
+}
+
+div.rightTitle.common-toggle span.tooltip-icon + .tooltip {
     left: -23px !important;
 }
 
@@ -905,13 +965,15 @@ div.rightTitle.interest-rate {
 
 .add-transaction-link {
     display: inline-block;
-    margin-left: 10px;
+    box-sizing: border-box;
     line-height: 32px;
     cursor: pointer;
     padding-left: 5px;
     padding-right: 5px;
-    border-radius: 3px;
-    margin-bottom: 30px;
+    width: 100%;
+    border-bottom: 1px solid #C6C6C6;
+    background-color: #E3E3E3;
+    font-family: "FS Elliot Web Light", sans-serif;
 }
 
 .add-transaction-link:hover {
@@ -927,11 +989,13 @@ p.belowTitle {
     width: 100%;
     float: left;
     position: relative;
+    margin-top: 10px;
 }
 
 .belowTitle > span:first-child {
    display: block;
    color: #1E2D3D;
+   text-transform: capitalize;
 }
 
 .belowTitle > span:last-of-type {
@@ -1033,14 +1097,22 @@ textarea {
 }
 
 .tableView.grant-table td:not(:nth-child(1)) {
-    padding: 0;
+    padding-left: 4px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+.tableView.grant-table td:not(:nth-child(1)) span.span6 {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    line-height: 40px;
 }
 
-.tableView.grant-table tr.status-row td, .tableView.grant-table td > span {
+.tableView.grant-table tr.status-row td,
+.tableView.grant-table tr.transaction-rows td
+.tableView.grant-table td > span {
     padding: 0 0 0 4px;
 }
-
-.tableView.grant-table tr.status-row td:nth-child(1), .tableView.grant-table tr.status-row td:nth-child(2) {
+.tableView.grant-table tr.status-row td:nth-child(1) {
     padding: 0;
 }
 
@@ -1072,6 +1144,7 @@ textarea {
     background-color: #F1F1F1;
     border-left: 1px solid #E3E3E3;
     border-right: 1px solid #E3E3E3;
+    border-top: 1px solid #E3E3E3;
 }
 
 .tableView.grant-table tr.status-row {
@@ -1084,8 +1157,9 @@ textarea {
     height: 40px;
 }
 
-.tableView.grant-table.viewmode tr.transaction-rows > td.hoverable:hover {
-    background-color: #C7C7C7;
+.tableView.grant-table.viewmode tr.transaction-rows > td.hoverable:hover,
+.tableView.grant-table tr.status-row > td.hoverable:hover {
+    background-color: rgba(26, 188, 150, 0.1);
     cursor: pointer;
 }
 
@@ -1093,7 +1167,7 @@ textarea {
     background-color: #F1F1F1;
 }
 
-.tableView.grant-table tr.transaction-rows > td.fieldSelected {
+.tableView.grant-table tr > td.fieldSelected {
     background-color: #C7C7C7;
 }
 
@@ -1142,115 +1216,6 @@ li.grant-list-edit {
 
 li.grant-list-edit:last-child {
     border-bottom: none;
-}
-
-ul.grant-list-view li > span {
-    display: inline-block;
-    width: 100px;
-    color: rgb(30, 45, 61);
-}
-
-ul.grant-list-view li:first-of-type > span {
-    color: rgb(141, 141, 141);
-}
-
-ul.grant-list-view li > span:last-of-type {
-    margin-left: 50px;
-}
-
-ul.grant-list-view li:first-of-type {
-    text-transform: capitalize;
-    font-size: 12px;
-}
-
-.grant-list-table {
-    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-    border-top: 1px solid #E3E3E3;
-    padding: 10px 0 0 20px;
-    width: 100%;
-}
-
-.grant-list-table > table {
-    width: 250px;
-}
-
-.grant-list-table > table > tbody > tr:first-child {
-    text-transform: capitalize;
-    font-size: 12px;
-    padding-bottom: 10px;
-    color: #8D8D8D;
-}
-
-.grant-list-table > table > tbody > tr {
-    color: #1E2D3D;
-    height: 25px;
-}
-
-.schedule-box {
-    margin-bottom: 10px;
-}
-
-.schedule-box > div:first-child {
-    border: 1px solid #F1F1F1;
-    width: 310px;
-    height: 38px;
-    line-height: 38px;
-}
-
-.schedule-box > div:first-child > span:nth-child(1), .schedule-box > div:first-child > span:nth-child(2)  {
-    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-    display: inline-block;
-    width: 40px;
-    padding-left: 15px;
-    border-right: 1px solid #FFFFFF;
-    cursor: pointer;
-}
-
-.schedule-box > div:first-child > span:nth-child(2) {
-    background-color: #F1F1F1;
-    border-right: 1px solid #E3E3E3;
-}
-
-.schedule-box > div:first-child > span:nth-child(4) {
-    display: inline-block;
-    float: right;
-    font-size: 16px;
-    margin-right: 10px;
-    color: #C7C7C7;
-    cursor: pointer;
-}
-
-.schedule-box > div:first-child > span:nth-child(4):hover {
-    color: #A6A6A6;
-}
-
-.schedule-box > div:last-child {
-    background-color: #F1F1F1;
-    overflow: auto;
-    border-left: 1px solid #E3E3E3;
-    border-right: 1px solid #E3E3E3;
-    border-bottom: 1px solid #E3E3E3;
-    width: 310px;
-}
-
-.schedule-box > div:last-child p.belowTitle {
-    margin-left: 45px;
-}
-
-.schedule-box > div:last-child p.belowTitle:first-of-type {
-    margin-top: 10px;
-}
-
-.capGuide.grants.new-schedule {
-    box-sizing: border-box;
-    width: 310px;
-    padding-left: 10px;
-    border: 1px solid #E3E3E3;
-}
-
-.capGuide.grants.new-schedule .standard-button {
-    margin-left: 186px;
-    margin-bottom: 10px;
 }
 
 /* Status Page */
@@ -1399,9 +1364,16 @@ ul.last-edited > li:last-child {
 .docLibrary .captable .column-label, .docLibrary .grant-table .column-label {
     border-top: 0;
 }
+.grant-table .column-label th:nth-child(2) {
+    width: 256px;
+}
 
 .status-columns.column-label > th {
     padding-left: 10px;
+}
+
+table.grant-table tr.column-label > th {
+    text-transform: capitalize;
 }
 
 /* Specialized Modals */
@@ -1735,6 +1707,14 @@ div.modalText > div.convert-listing > ul > li:nth-child(even) {
 .transferModal .share-modal-main .sharepeople-input .select2-container {
     width: 677px;
     height: 100%;
+}
+
+.share-modal-main [disabled], .share-modal-main input[disabled], .share-modal-main .check-box-button:hover:disabled {
+    background-color: #e3e3e3;
+}
+
+.share-modal-main  .check-box-button:disabled > span {
+    color: #e3e3e3;
 }
 
 .tourModal {
@@ -2315,12 +2295,6 @@ span.tour-icon.issue-cog + .tooltip {
     font-family: 'FS Elliot Web Regular', sans-serif;
 }
 
-/* Chrome visual bug fix */
-
-.span4.capright, .span4.capright span, .span4.capright input {
-    -webkit-transform: translateZ(0);
-}
-
 .rightTabWindow > table.status-table.evidence > tbody > tr > td {
     text-align: left;
 }
@@ -2347,4 +2321,221 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
     float: left;
+}
+
+.cellDetails > .detailsHeader {
+    height: 70px;
+}
+.detailsHeader {
+    height: 100px;
+    margin-bottom: 20px;
+    padding: 0 20px 0 20px;
+}
+.detailsHeader > div {
+    font-family: "FS Elliot Web Light", sans-serif;
+    color: #1E2D3d;
+}
+.detailsHeader > div:first-child {
+    font-size: 24px;
+    line-height: 28px;
+}
+.detailsHeader > div:last-child {
+    font-size: 18px;
+}
+.detailsHeader > p {
+    margin-top: 20px;
+}
+
+.faux-tabs > button {
+    box-sizing: border-box;
+    width: 50%;
+    border: none;
+    height: 40px;
+    background-color: #E3E3E3;
+    border-top: 2px solid #E3E3E3;
+    font-size: 12px;
+}
+
+.faux-tabs > button > span > span:before {
+    vertical-align: -14%;
+    font-size: 20px;
+}
+
+.faux-tabs.triplet > button {
+    width: 33.3333333333%;
+}
+
+.faux-tabs.pair > button {
+    width: 50%;
+}
+
+.faux-tabs.single > button {
+    width: 100%;
+}
+
+.faux-tabs > button.on {
+    background-color: #F1F1F1;
+    border-top: 2px solid #19bb95;
+    color: #19bb95;
+}
+
+.action-button.standard-button {
+    margin: 20px 0 0 20px;
+}
+
+.cellSummary {
+    padding: 0 20px 0 20px;
+    font-size: 14px;
+}
+.cellSummary > div {
+    margin-bottom: 33px;
+}
+.cellSummary > div > ul > li:first-child {
+    color: #1E2D3D;
+}
+.cellSummary > table {
+    width: 100%;
+    float: center;
+    text-align: left;
+}
+.cellSummary > table th {
+    font-weight: normal;
+    color: #1E2D3D;
+}
+.cellSummary > table tr {
+    border-bottom: 1px solid #E3E3E3;
+    line-height: 28px;
+}
+
+.add-security-button {
+    color: #3498DB;
+    background: none;
+    border: none;
+}
+
+.add-security-button:hover {
+    color: #2980B9;
+}
+
+.add-security-button > span:before {
+    vertical-align: -10%;
+}
+
+.modal.securitymodal .input-row p {
+    font-size: 12px;
+    margin: 5px 0 0 0;
+}
+
+.modal.securitymodal .input-row > input {
+    margin: 0 0 0 0;
+    width: 306px;
+    float: left;
+}
+
+.modal.securitymodal .input-row > div {
+    text-align: left;
+}
+
+.modal.securitymodal .input-row > div {
+    display: inline-block;
+    float: left;
+}
+
+.modal.securitymodal .input-row > div.short-first {
+    width: 187px;
+}
+
+.modal.securitymodal .input-row > div.short-second {
+    width: 130px;
+}
+
+.modal.securitymodal .input-row > div > input, .modal.securitymodal .input-row > div > ul {
+    margin: 0 0 0 0;
+}
+
+.modal.securitymodal .input-row > div.short-second > input {
+    width: 116px;
+    float: left;
+    height: 23px;
+}
+
+/* Transaction Log */
+
+.tran-list {
+   padding-right: 20px;
+   margin-left: 20px;
+   margin-top: 10px;
+}
+
+.tran-list > li {
+    margin-bottom: 10px;
+    border: 1px solid #E3E3E3;
+}
+
+.tran-list.trans-info > li:hover {
+    background-color: rgba(26, 188, 150, 0.1);;
+}
+
+
+.tran-list > li > ul {
+    margin: 0 20px;
+    overflow: auto;
+}
+
+
+#tran-headline > li:first-of-type > ul > li {
+    height: 30px;
+    line-height: 30px;
+    cursor: default;
+    color: black;
+}
+
+/*.tran-list > li:first-of-type > ul > li {
+    height: 30px;
+    line-height: 30px;
+    cursor: default;
+}*/
+.tran-list > li.activetran {
+    border-color: black;
+}
+
+.tran-list.trans-info > li:last-of-type{
+    margin-bottom: 40px;
+}
+
+.tran-list > li > ul > li {
+    width: 15%;
+    float: left;
+    height: 58px;
+    line-height: 58px;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.tran-list > li > ul > li.longli {
+    width: 20%;
+}
+
+.tranlogtabs .capGuide > p {
+    margin-left: 20px;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
+.notrans {
+    text-align: center;
+    height: 58px;
+    line-height: 58px;
+}
+
+.my-trans-docs{
+   padding-left: 20px; 
+}
+.my-trans-docs:first-of-type{
+    padding-top: 20px;
+}
+
+.drop-selector .standard .dropdown-toggle {
+    text-transform: capitalize;
 }

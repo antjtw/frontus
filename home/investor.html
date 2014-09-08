@@ -1,6 +1,6 @@
 <link type="text/css" rel="stylesheet" href="/documents/css/app.css">
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
-<link type="text/css" rel="stylesheet" href="/documents/css/company.css">
+<link type="text/css" rel="stylesheet" href="/home/company.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
 <div class="row-fluid">
@@ -11,105 +11,38 @@
         </div>
 
   <!--   text in the window -->
+
   		<div class="row-fluid leftTabWindow">
         	<div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
 				<div ng-style="viewportheight" class="span12">
-					<div class="same-row">
-						<div ng-show="(docsummary.num > 0)">
-							<div class="front info-box">
-								<div ng-show="docsummary.num > 0" class="head-box"">
-									<h2>Document Management</h2>
-
-								</div>
-								<div ng-hide="docsummary.num > 0" class="head-box">
-									<h2>Document Management</h2>
-								</div>
-								<div class="body-box">
-									<div>
-										<div class="detail-row row-fluid">
-											<div class="span6">
-												<div>
-													<img src='/img/onboardingicons/dayone/doc-upload.png'>
-													<h2><span>{{docsummary.num}}</span> Documents</h2>
-												</div>
-												<div>
-													<img src='/img/onboardingicons/dayone/doc-sign.png'>
-													<h2><span>{{docsummary.sig}}</span> Waiting for Action</h2>
-												</div>
-											</div>
-											<div ng-show="docsummary.num > 0" class="view-button" id="view-button1">
-												<div class="small-standard-button standard-button gray">
-													<button id='a_home_doc_inv_front' class="btn" ng-click="gotopage('/app/documents/investor-list')">View</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div ng-show="(myownership.shares > 0 || myownership.amount != null)">
-							<div class="front info-box">
-								<div class="head-box">
-									<h2>My Ownership</h2>
-
-								</div>
-								<div class="body-box">
-									<div>
-										<div class="side-graph row-fluid">
-											<div class="span5">
-												<div>
-													<div>
-														<h2><span>{{myownership.shares}}</span>Total Shares</h2>
-													</div>
-													<div ng-show="myownership.amount">
-														<h2><span>{{myownership.amount}}</span>Total Invested</h2>
-													</div>
-												</div>
-											</div>
-											<div class="span7">
-												<d3myownership class="personal-ownership" data='graphdata'></d3myownership>
-												<div class="view-button" id="view-button2">
-													<div class="small-standard-button standard-button gray">
-														<button id='a_home_own_inv_front' class="btn" ng-click="gotopage('/app/ownership/investor-captable')">View</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div ng-show="vestedgraphdata.length > 0">
-							<div class="front info-box">
-								<div class="head-box">
-									<h2>Grant Vesting</h2>
-
-								</div>
-								<div class="body-box">
-									<div>
-										<div class="side-graph row-fluid">
-											<div class="span9">
-												<div id="tooltip" class="hidden">
-													<p><span id="date"></span></p>
-													<p><span id="value"></span> Shares</p>
-												</div>
-												<d3vestedbar data='vestedgraphdata'></d3vestedbar>
-											</div>
-											<div class="span3">
-												<d3myvested class="personal-ownership" data='vesteddonut'></d3myvested>
-												<div class="view-button" id="view-button3">
-													<div class="small-standard-button standard-button gray">
-														<button id='a_home_vesting_inv_front' class="btn" ng-click="gotopage('/app/ownership/investor-grants')">View</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+                    <documents-tile ng-if="docsummary.num > 0"></documents-tile>
+                    <investor-tile></investor-tile>
+					<company-ownership-tile ng-if="navState.level=='Full View'"></company-ownership-tile>
+                    <div class="same-row" style="overflow: auto">
+                        <div ng-if="navState.level!='Full View'" ng-show="vestedgraphdata.length > 0">
+                            <div class="front info-box">
+                                <div class="head-box">
+                                    <h2>Grant Vesting</h2>
+                                </div>
+                                <div class="body-box">
+                                    <div>
+                                        <div class="side-graph row-fluid">
+                                            <div class="span9">
+                                                <div id="tooltip" class="hidden">
+                                                    <p><span id="date"></span></p>
+                                                    <p><span id="value"></span> Shares</p>
+                                                </div>
+                                                <d3vestedbar data='vestedgraphdata'></d3vestedbar>
+                                            </div>
+                                            <div class="span3">
+                                                <d3myvested class="personal-ownership" data='vesteddonut'></d3myvested>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</div>
 
@@ -123,7 +56,7 @@
 									<span>{{company.address}}</span>
 								</div>
 								<div>
-									<span>{{company.city}}<span ng-show="company.city && (company.state || company.zipcode)">, </span>{{company.state}}<span> </span>{{company.zipcode}}
+									<span>{{company.city}}<span ng-show="company.city && (company.state || company.zipcode)">,</span> {{company.state}} {{company.zipcode}}</span>
 								</div>
 							</div>
 						</div>
@@ -161,8 +94,6 @@
 
     </section>
 
-</div>
-</div>
 </div>
 </div>
 </div>

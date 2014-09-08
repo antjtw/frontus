@@ -85,20 +85,20 @@ ownership.service('calculate', function () {
     // Calculates the debt for the captable based on transactions with paid but no shares. Must be called on each row.
     this.debt = function (rows, issue, row) {
         return null;
-/*        var mon = parseFloat(issue.premoney);
-        if (isNaN(parseFloat(mon))) {
-            return null
-        }
-        else {
-            angular.forEach(rows, function (r) {
-                if (r[issue.issue] != undefined) {
-                    if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r[issue.issue]['a']))) {
-                        mon = mon + parseFloat(r[issue.issue]['a']);
-                    }
-                }
-            });
-        }
-        return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)*/
+        /*        var mon = parseFloat(issue.premoney);
+         if (isNaN(parseFloat(mon))) {
+         return null
+         }
+         else {
+         angular.forEach(rows, function (r) {
+         if (r[issue.issue] != undefined) {
+         if ((isNaN(parseFloat(r[issue.issue]['u'])) || r[issue.issue]['u'] == 0 ) && !isNaN(parseFloat(r[issue.issue]['a']))) {
+         mon = mon + parseFloat(r[issue.issue]['a']);
+         }
+         }
+         });
+         }
+         return ((parseFloat(row[issue.issue]['a']) / parseFloat(mon)) * 100)*/
     };
 
     // Calculates the vested amounts for the grant table. This takes in the row array and returns the new row array.
@@ -690,7 +690,7 @@ ownership.service('calculate', function () {
             var cycleDate = angular.copy(convertTran.tran.date);
             var length = 500;
             if (convertTran.tran.term) {
-               length = parseInt(convertTran.tran.term)
+                length = parseInt(convertTran.tran.term)
             }
             if (x < 1) {
                 cycleDate.addWeeks(x * 4);
@@ -999,3 +999,4 @@ app.run(function ($rootScope) {
 function hidePopover() {
     angular.element('.popover').hide();
 }
+
