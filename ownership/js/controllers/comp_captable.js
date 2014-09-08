@@ -897,6 +897,9 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             }
         } else {
             $scope.ctFilter.security_types.splice(idx, 1);
+            if ($scope.ctFilter.security_types.length === 0) {
+                $scope.toggleSecurityType('Show All');
+            }
         }
     };
     $scope.securityFilter = function(sec) {
