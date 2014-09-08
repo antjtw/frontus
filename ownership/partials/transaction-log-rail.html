@@ -4,8 +4,8 @@
         <tab heading="Information">
             <div class="capGuide cap-overflow global cellDetails">
                 <div ng-if="tran.kind != 'issue security'" class="detailsHeader">
-                    <div>{{tran.attrs.investor}}</div>
-                    <div>Investor</div>
+                    <div ng-show="tran.attrs.investor">{{tran.attrs.investor}}</div>
+                    <div ng-show="tran.attrs.investor">Investor</div>
                 </div>
                 <div ng-if="tran.kind == 'issue security'" class="detailsHeader">
                     <div>{{tran.attrs.security}}</div>
