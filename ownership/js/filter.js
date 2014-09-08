@@ -385,6 +385,7 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
     var orderedAttributes = ["security",
                              "effective_date",
                              "security_type",
+                             "optiontype",
                              "units",
                              "amount",
                              "ppshare",

@@ -169,6 +169,10 @@ ownership.value('displayCopy', {
         information:
             "Requires investors are provided with financial statements and other company information",
         redemption:
-            "Investors can require the company to repurchase shares after a period of time"
+            "Investors can require the company to repurchase shares after a period of time",
+        voting:
+            "Shareholders of this security class have the right to vote on certain matters",
+        optiontype:
+            "Identifies the type of stock option for tax implications"
     }
 });
