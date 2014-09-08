@@ -7,12 +7,12 @@
                 <div class="modeling-input-row">
                     <div>
                         <span>Pre-money valuation</span>
-                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.premoney" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
                         <span>Investment amount</span>
-                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{currency()}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
+                        <input ng-change="calculate()" ng-model="fields.investment" ng-disabled="!roundable() || companyIsZombie()" data-ui-jq="autoNumeric" data-a-sign="{{}} " data-ui-options="{ vMin: 1, vMax: 9999999999}">
                         <span class="lockedinput" ng-show="!roundable() || companyIsZombie()" data-icon="&#xe02c;" aria-hidden="true"></span>
                     </div>
                     <div>
@@ -29,7 +29,7 @@
                 </div>
                 <div ng-show="debtpresent" class="modeling-header"><span>Convert Notes</span></div>
                 <div class="modeling-input-row debt">
-                    <div ng-show="round.type == 'Debt'" ng-repeat="round in initialrounds">
+                    <div ng-show="round.attrs.security_type == 'Convertible Debt'" ng-repeat="round in initialrounds">
                         <button class="check-box-button" ng-class="{selected: round.convertme}" ng-click="round.convertme = !round.convertme; calculate()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
                         </button>
@@ -45,7 +45,7 @@
             <div ng-show="roundable()" class="modeling-round first-round">
                 <div class="round-header">Initial Ownership</div>
                 <div class="round-output">
-                    <d3expdonut nosort="true" data="initialrounds"></d3expdonut>
+                    <d3multidonut nosort="true" data="initialrounds"></d3multidonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
@@ -79,7 +79,7 @@
             <div ng-if="debtrounds[0].percent != initialrounds[0].percent && roundable()" class="modeling-round" ng-class="{'collapsed-round': debtcollapsed}">
                 <div class="round-header pointer" ng-click="debtcollapsed = !debtcollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Note Conversion</div>
                 <div class="round-output">
-                    <d3expdonut nosort="true" data="debtrounds"></d3expdonut>
+                    <d3multidonut nosort="true" data="debtrounds"></d3multidonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
@@ -108,7 +108,7 @@
             <div ng-if="optionrounds[0].percent != debtrounds[0].percent && optionrounds[0].percent != initialrounds[0].percent && roundable()" class="modeling-round" ng-class="{'collapsed-round': optioncollapsed}">
                 <div class="round-header pointer" ng-click="optioncollapsed = !optioncollapsed"><span data-icon="&#xe034;" aria-hidden="true"></span>After Option Pool Creation</div>
                 <div class="round-output">
-                    <d3expdonut nosort="true" data="optionrounds"></d3expdonut>
+                    <d3multidonut nosort="true" data="optionrounds"></d3multidonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>
@@ -137,7 +137,7 @@
             <div ng-show="roundable()" class="modeling-round">
                 <div class="round-header">Final Ownership Structure</div>
                 <div class="round-output">
-                    <d3expdonut nosort="true" data="finalrounds"></d3expdonut>
+                    <d3multidonut nosort="true" data="finalrounds"></d3multidonut>
                     <ul class="visualize-table">
                         <li>
                             <ul>

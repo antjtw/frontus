@@ -1,0 +1,62 @@
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
+<div class="maincontent">
+    <div class="container dynamic-page">
+        <subnav>
+            <div>
+                <div class="pull-left">
+                    <span>Search</span>
+                    <input type="text" class="search-box" ng-model="search.text">
+                </div>
+            </div>
+        </subnav>
+
+        <div class="row-fluid leftTabWindow">
+            <div ng-style="viewheight"
+                 class="span8 docLibrary leftBlock"
+                 ng-class="{leftFullTableBlock: sideToggle,
+                            widthtransition25: oldSafari()}" style="overflow-y: visible">
+                <ul class="tran-list" id="tran-headline">
+                    <li style="margin-right: 15px">
+                        <ul>
+                            <li>Date</li>
+                            <li class="longli">Security</li>
+                            <li class="longli">Shareholder</li>
+                            <li>Type</li>
+                            <li>Units</li>
+                            <li>Amount</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="tran-list trans-info" >
+                    <li ng-if="ct.transactions && ct.transactions.length == 0">
+                        <ul class="notrans">
+                            <span>You haven't entered any transactions yet. Go to the cap table to get started!</span>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="tran-list trans-info" style="height: calc(100% - 60px); overflow-y: scroll">
+                    <li ng-click="makeActive(tran)" ng-class="{'activetran': activeTran==tran}" ng-repeat="tran in ct.transactions" ng-show="contains(search.text, tran)">
+                        <ul>
+                            <li>{{tran.effective_date | date:'MM/dd/yyyy'}}</li>
+                            <li class="longli">{{limitLength(tran.attrs.security, 30)}}</li>
+                            <li class="longli">{{limitLength(tran.attrs.investor, 30)}}</li>
+                            <li>{{tran.kind}}</li>
+                            <li>{{tran.attrs.units | formatAmount: 'units'}}</li>
+                            <li>{{tran.attrs.amount | formatAmount: 'amount'}}</li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+            <internal-right-rail toggle-side="sideToggle" ng-show="activeTran">
+                <div
+                     class="span4 capright"
+                     ng-style="viewheight">
+                     <transaction-log tran="activeTran"></transaction-log>
+                </div>
+            </internal-right-rail>
+        </div>
+    </div>
+</div>

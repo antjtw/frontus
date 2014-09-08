@@ -1,0 +1,268 @@
+<div class="capGuide cap-overflow global cellDetails">
+    <div class="detailsHeader">
+        <div>{{cell.investor}}</div>
+        <div>Investor</div>
+        <p></p>
+    </div>
+<accordion class="lessmargin transaction-accordion"
+           close-others="true">
+<accordion-group is-open="tran.active"
+                 ng-hide="windowToggle && !tran.active"
+                 ng-repeat="tran in cell.transactions
+                            | orderBy:['effective_date', 'insertion_date'] track by $index"
+                ng-switch on="currentTab">
+    <accordion-heading>
+        <span ng-click="toggleTransaction()">
+            {{tran.effective_date | date:settings.shortdate}} {{tran.kind}}
+        </span>
+    </accordion-heading>
+    <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
+        <button
+                ng-click="switchCapTab('details');"
+                ng-class="{on: currentTab=='details'}">
+            <span>
+                <span data-icon="&#xe611;" aria-hidden="true"></span>
+                Details
+            </span>
+        </button><button
+                ng-click="switchCapTab('documents');"
+                ng-class="{on: currentTab=='documents'}">
+            <span>
+                <span data-icon="&#xe009;" aria-hidden="true"></span>
+                Documents
+            </span>
+        </button><button
+                ng-click="switchCapTab('actions');"
+                ng-class="{on: currentTab=='actions'}"
+                ng-if="hasActions(tran)">
+            <span>
+                <span data-icon="&#xe613;" aria-hidden="true"></span>
+                Actions
+            </span>
+        </button>
+    </div>
+    <div class="capTab" ng-switch-when="details">
+        <div class="capGuide global">
+            <div ng-if="tran.attrs.investor" class="rightTitle security-type">
+                <span>Investor</span>
+                <span class="locked-security">{{tran.attrs.investor}}</span>
+            </div>
+        </div>
+        <editable-transaction-attributes data="tran" undo="undo" save="true">
+        </editable-transaction-attributes>
+        <span class="delete-link"
+              data-icon="&#xe00c;"
+              ng-click="captable.deleteTransaction(tran, cell);">
+            Delete transaction
+        </span>
+    </div>
+    <div class="capTab" ng-switch-when="documents">
+        <div ng-if="tran.evidence_data.length==0 && !windowToggle|| tran.evidence_data==null && !windowToggle"  class="linkedDocuments">
+             <div class="noGroups" ng-click="editEvidence(tran)">
+                Connect documents that support this transaction by clicking the link below.<br/>
+                <span>Add Documents</span>
+                <span data-icon="&#xe016;" aria-hidden="true"></span>
+            </div>
+        </div>
+        <div ng-if="tran.evidence_data.length > 0"
+             class="linkedDocuments">
+            <div ng-repeat="doc in tran.evidence_data"
+                 class="row-fluid">
+                <ul class="pull-left">
+                    <li>
+                        <span ng-click="viewEvidence(doc)">
+                            {{doc.docname}}
+                        </span>
+                    </li>
+                    <li ng-if="doc.name||doc.investor">
+                        <span>
+                            {{doc.name || doc.investor}}'s version
+                        </span>
+                    </li>
+                    <li ng-if="!doc.name && !doc.investor">
+                        <span>
+                        Orignal version
+                        </span>
+                    </li>
+                </ul>
+                <span class="pull-right" data-icon="&#xe00f;"
+                      ng-click="captable.removeEvidence(doc, tran)">
+                </span>
+            </div>
+        </div>
+
+       <span ng-if="windowToggle == false && tran.evidence_data.length > 0"
+              class="delete-link linkedDocuments"
+              ng-click="editEvidence(tran);">
+            <div class="noGroups addMore">
+                Add More Documents
+                <span data-icon="&#xe016;" aria-hidden="true"></span>
+             </div>
+        </span>
+        <div ng-if="windowToggle == true && tran.evidence_data.length==0 || windowToggle == true && tran.evidence_data== null" class="linkedDocuments">
+            <div class="noGroups">
+                Select the documents on the right that you wish to link.
+            </div>
+        </div>
+        <div ng-show="windowToggle"
+             class="standard-button linkedDocuments">
+            <button class="btn" ng-click="editEvidence();">
+                Finished!
+            </button>
+        </div>
+        <span class="delete-link"
+              data-icon="&#xe00c;"
+              ng-click="captable.deleteTransaction(tran, cell);">
+            Delete transaction
+        </span>
+    </div>
+    <div class="capTab" ng-switch-when="actions">
+        <div ng-class="{'actionpicker': !newTran}" class='rightTitle left-space'>
+            <span>Action</span>
+            <ul class="dropdown-list drop-selector">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{newTran.kind || "Select an action"}}
+                        <span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="x in tran.attrs.security_type | validActions: 'transaction':tran.kind">
+                            <a ng-click="makeNewTran(x, tran)">
+                                {{x}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div ng-if="newTran">
+            <editable-transaction-attributes data="newTran" save="false">
+            </editable-transaction-attributes>
+
+            <div class="action-button standard-button">
+                <button class="btn" ng-disabled="checkNewTran(newTran)" ng-click="submitAction(newTran);">
+                    Submit
+                </button>
+            </div>
+        </div>
+        <span class="delete-link"
+              data-icon="&#xe00c;"
+              ng-click="captable.deleteTransaction(tran, cell);">
+            Delete transaction
+        </span>
+    </div>
+    </accordion-group>
+</accordion>
+<span ng-if="!windowToggle" class="add-transaction-link"
+      ng-click="addTransaction()">
+  <span data-icon="&#xe053;" aria-hidden="true"></span>
+  <span>Add {{captable.defaultKind(cell.transactions[0].attrs.security_type)}}</span>
+</span>
+<doc-mini-viewer docid="viewme"></doc-mini-viewer>
+</div>
+
+<div modal="convertModal" close="convertSharesClose();" options="convertopts">
+    <div class="modalHeader">
+        <span>Convert Shares</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="convertSharesClose()"></span>
+    </div>
+    <div ng-show="convertTran.step == '1'" class="modalText convert-step-one">
+        <div class="pull-right">
+            <span>Convert To</span>
+            <ul class="dropdown-list drop-selector">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{convertTran.toissue.name | maxLength}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in justEquity(ct.securities)">
+                            <span ng-click="assignConvert('toissue', i);">{{i.name | maxLength}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div ng-show="convertTran.toissue.name" class="pull-left">
+            <span>Method</span>
+            <ul class="dropdown-list drop-selector">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{convertTran.method}}<span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <span ng-show="convertTran.toissue.attrs.ppshare" ng-click="assignConvert('method', 'Valuation')">Valuation</span>
+                            <span ng-click="assignConvert('method', 'Price Per Share')">Price Per Share</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div ng-show="convertTran.toissue.name">
+            <span>Conversion Date</span>
+            <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
+                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                   onkeydown="testForEnter(event);">
+        </div>
+
+        <div ng-show="convertTran.method == 'Price Per Share'" class="pull-right">
+            <span class="double">Conversion PPS</span>
+            <input type="text" ng-model="convertTran.ppshare" onkeydown="testForEnter(event);">
+        </div>
+    </div>
+    <div ng-show="convertTran.step == '2'" class="modalText">
+        <div class="convert-listing">
+            <span>From</span>
+            <ul>
+                <li>{{convertTran.tran.attrs.security}}</li>
+                <li>Security</li>
+                <li ng-show="convertTran.tran.attrs.discount && convertTran.method != 'Price Per Share'">
+                    <span ng-hide="convertTran.newtran.valcappercentage">{{convertTran.tran.attrs.discount  | formatAmount:'units'}}%</span>
+                    <span ng-show="convertTran.newtran.valcappercentage">{{convertTran.newtran.valcappercentage  | formatAmount:'units'}}% (w/ valuation cap)</span>
+                </li>
+                <li ng-show="convertTran.tran.attrs.discount && convertTran.method != 'Price Per Share'">Percent Discount</li>
+                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.attrs.valcap && convertTran.method != 'Price Per Share'">{{convertTran.tran.attrs.valcap | formatAmount:'units'}}</li>
+                <li ng-show="convertTran.newtran.valcappercentage && convertTran.tran.attrs.valcap && convertTran.method != 'Price Per Share'">Valuation Cap</li>
+            </ul>
+        </div>
+        <div class="convert-listing">
+            <span>To</span>
+            <ul>
+                <li>{{convertTran.toissue.name}}</li>
+                <li>Security</li>
+                <li ng-show="convertTran.toissue.attrs.premoney">{{convertTran.toissue.attrs.premoney  | formatAmount:'amount'}}</li>
+                <li ng-show="convertTran.toissue.attrs.premoney">Pre-Money Valuation</li>
+                <li ng-show="convertTran.toissue.attrs.ppshare">{{convertTran.toissue.ppshare  | formatAmount:'amount'}}</li>
+                <li ng-show="convertTran.toissue.attrs.ppshare">Security PPS</li>
+            </ul>
+        </div>
+        <div class="convert-summary">
+            <span>Summary</span>
+            <ul>
+                <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
+                <li><span>{{convertTran.newtran.attrs.amount  | formatAmount:'amount'}}</span><span>Debt + Interest</span></li>
+                <li><span>{{convertTran.newtran.attrs.effectivepps  | formatAmount:'amount'}}</span><span>Effective PPS</span></li>
+                <li><span>{{convertTran.newtran.attrs.amount / convertTran.newtran.attrs.effectivepps | formatAmount:'units'}}</span><span>Resulting Shares</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div ng-show="convertTran.step == '1'" class="pull-left standard-button gray">
+            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
+        </div>
+        <div ng-show="convertTran.step == '1'" class="pull-right standard-button blue arrow-right">
+            <button class="btn" ng-disabled="!convertTran.toissue.name || !convertTran.method || !convertTran.date" ng-click="convertgoto('2');">Review</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-left standard-button blue">
+            <button class="btn" ng-click="convertgoto('1');">Back</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-right standard-button">
+            <button class="btn" ng-click="performConvert(convertTran); convertSharesClose();">Submit</button>
+        </div>
+        <div ng-show="convertTran.step == '2'" class="pull-right standard-button small-standard-button gray cancel-convert">
+            <button class="btn" ng-click="convertSharesClose();">Cancel</button>
+        </div>
+    </div>
+</div>

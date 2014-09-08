@@ -192,10 +192,6 @@ input:focus, textarea:focus {
 .accordion-heading:not:first-child {
     padding-top: 20px;
 }
-
-.accordion-heading > a:before {
-    content:'';
-}
 /* Document Viewer Styling */
 .DV-views {
     display:none;
@@ -1605,11 +1601,12 @@ ul.spaced-list > li:nth-child(odd) {
 .activity-feed2 {
     height: 536px;
     overflow: auto;
+    background-color: #F1F1F1;
 
 }
 .activity-feed2 > div > li:first-child {
 	margin-top: 40px;
-}	
+}
 
 .activity-feed2 li.event {
     min-height: 50px;
@@ -1628,7 +1625,7 @@ ul.spaced-list > li:nth-child(odd) {
     text-align: center;
     margin-top: 10px;
     vertical-align: top;
-    
+
 }
 
 .activity-feed2 li.event.roles > div:first-of-type{
@@ -1641,7 +1638,7 @@ ul.spaced-list > li:nth-child(odd) {
 }
 
 
-    
+
 
 .activity-icon {
     width: 30px;
@@ -3306,6 +3303,7 @@ button.icon-button:hover {
 }
 .standard .dropdown-menu > li > a, .standard .dropdown-menu > li > span {
     color: rgb(102, 102, 102);
+    text-transform: capitalize;
 }
 .standard .dropdown-menu > li > a:hover, .standard .dropdown-menu > li > span:hover {
     background: #C7C7C7;
@@ -3375,9 +3373,6 @@ button.icon-button:hover {
     -moz-border-radius-bottomright: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-}
-.btn-group > .btn + .btn {
-    margin-left: 0px;
 }
 .edittoggle > .btn.active {
     color: #FFFFFF;
@@ -4804,7 +4799,7 @@ textarea.email-text {
 }
 
 .messages .activity-feed2 span.recipients {
-    color: #8D8D8D;
+    color: #666;
     padding-left: 19px;
 
 }
@@ -4926,9 +4921,24 @@ textarea.email-text {
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
-    border: 1px dashed #C7C7C7; 
-    width: 200px;
-    margin-left: 20px;
+    border: 1px dashed #C7C7C7;
+    margin-left: 30px;
+}
+
+.noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups{
+    padding-right: 20px;
+}
+
+.linkedDocuments .noGroups.addMore{
+    color: #3498DB;
+}
+
+.linkedDocuments .noGroups.addMore:hover{
+    color: #2980B9 !important;
 }
 
 .noGroups span{
@@ -4940,16 +4950,16 @@ textarea.email-text {
     color: #1E2D3D;
 }
 
-
 .noGroups span:last-of-type{
     position: relative;
     top: 3px;
-} 
+}
 
 .standard-button > button.disabledButton{
     background-color: #8CDDCA;
     cursor: auto;
 }
+
 
 .sidebarInfo {
     margin-left: 20px;
@@ -4990,5 +5000,21 @@ textarea.email-text {
 .go-to{
     color: #666;
     cursor: pointer;
+}
+
+.lower-icon {
+    vertical-align: -10%;
+}
+
+.body-box .cardColumn{
+    width: 30%;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    top: 30%;
+}
+
+.table-border{
+   border-bottom: 1px solid rgb(241, 241, 241); 
 }
 

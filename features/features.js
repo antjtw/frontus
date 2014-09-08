@@ -1,28 +1,28 @@
 var app = angular.module('features', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'ownerFilters', 'ui.event',
     'ownerDirectives', 'ownerServices', '$strap.directives', 'd3', 'ui.jq'], function($routeProvider, $locationProvider){
-  $locationProvider.html5Mode(true).hashPrefix('');
+    $locationProvider.html5Mode(true).hashPrefix('');
 
-  $routeProvider.
-      when('/features/', {
-          controller: 'FeaturesCapCtrl',
-          templateUrl:'/features/partials/captable.html'
-      }).
-      when('/features/debt', {
-          controller: 'FeaturesDebtCtrl',
-          templateUrl:'/features/partials/debt.html'
-      }).
-      when('/features/convertible-notes', {
-          controller: 'FeaturesDebtCtrl',
-          templateUrl:'/features/partials/debt.html'
-      }).
-      otherwise({redirectTo:'/features'});
+    $routeProvider.
+        when('/features/', {
+            controller: 'FeaturesCapCtrl',
+            templateUrl:'/features/partials/captable.html'
+        }).
+        when('/features/debt', {
+            controller: 'FeaturesDebtCtrl',
+            templateUrl:'/features/partials/debt.html'
+        }).
+        when('/features/convertible-notes', {
+            controller: 'FeaturesDebtCtrl',
+            templateUrl:'/features/partials/debt.html'
+        }).
+        otherwise({redirectTo:'/features'});
 });
 
 app.controller('FeaturesCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location',
     function($rootScope, $scope, SWBrijj, $location) {
 
-    $scope.gotopage = function (link) {
-        $location.url("/features/" + link);
+        $scope.gotopage = function (link) {
+            $location.url("/features/" + link);
         };
     }
 ]);
@@ -1148,71 +1148,71 @@ app.controller('FeaturesCapCtrl', ['$rootScope', '$scope', 'SWBrijj', '$location
                             transaction.amount = parseFloat(transaction.units) * parseFloat(transaction.ppshare);
                         }
                     }
-                        $scope.lastsaved = Date.now();
-                        var tempunits = 0;
-                        var tempamount = 0;
-                        angular.forEach($scope.rows, function (row) {
-                            angular.forEach($scope.trans, function (tran) {
-                                if (row.name == tran.investor) {
-                                    if (transaction.tran_id == '' && !tran.tran_id && (!isNaN(parseFloat(tran.units)) || !isNaN(parseFloat(tran.amount)))) {
-                                        tran.tran_id = String(Math.random()*10000);
+                    $scope.lastsaved = Date.now();
+                    var tempunits = 0;
+                    var tempamount = 0;
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.trans, function (tran) {
+                            if (row.name == tran.investor) {
+                                if (transaction.tran_id == '' && !tran.tran_id && (!isNaN(parseFloat(tran.units)) || !isNaN(parseFloat(tran.amount)))) {
+                                    tran.tran_id = String(Math.random()*10000);
+                                }
+                                if (tran.investor == transaction.investor && tran.issue == transaction.issue) {
+                                    tran.key = tran.issue;
+                                    tran.unitskey = tran.units;
+                                    tran.paidkey = tran.amount;
+                                    tempunits = calculate.sum(tempunits, tran.units);
+                                    tempamount = calculate.sum(tempamount, tran.amount);
+                                    if (!isNaN(parseFloat(tran.forfeited))) {
+                                        tempunits = calculate.sum(tempunits, (-tran.forfeited));
                                     }
-                                    if (tran.investor == transaction.investor && tran.issue == transaction.issue) {
-                                        tran.key = tran.issue;
-                                        tran.unitskey = tran.units;
-                                        tran.paidkey = tran.amount;
-                                        tempunits = calculate.sum(tempunits, tran.units);
-                                        tempamount = calculate.sum(tempamount, tran.amount);
-                                        if (!isNaN(parseFloat(tran.forfeited))) {
-                                            tempunits = calculate.sum(tempunits, (-tran.forfeited));
-                                        }
-                                        row[tran.issue]['u'] = tempunits;
-                                        row[tran.issue]['ukey'] = tempunits;
-                                        row[tran.issue]['a'] = tempamount;
-                                        row[tran.issue]['akey'] = tempamount;
+                                    row[tran.issue]['u'] = tempunits;
+                                    row[tran.issue]['ukey'] = tempunits;
+                                    row[tran.issue]['a'] = tempamount;
+                                    row[tran.issue]['akey'] = tempamount;
 
-                                        if (row[tran.issue]['u'] == 0) {
-                                            row[tran.issue]['u'] = null;
-                                            row[tran.issue]['ukey'] = null;
-                                        }
-                                        if (row[tran.issue]['a'] == 0) {
-                                            row[tran.issue]['a'] = null;
-                                            row[tran.issue]['akey'] = null;
-                                        }
-                                        row[tran.issue]['x'] = 0;
+                                    if (row[tran.issue]['u'] == 0) {
+                                        row[tran.issue]['u'] = null;
+                                        row[tran.issue]['ukey'] = null;
                                     }
-                                }
-                            });
-                        });
-
-                        angular.forEach($scope.issues, function (x) {
-                            $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
-                        });
-
-                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(transaction.issue));
-
-
-                        angular.forEach($scope.rows, function (row) {
-                            angular.forEach($scope.issues, function (issue) {
-                                if (row[issue.issue] != undefined) {
-                                    if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
-                                        row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
+                                    if (row[tran.issue]['a'] == 0) {
+                                        row[tran.issue]['a'] = null;
+                                        row[tran.issue]['akey'] = null;
                                     }
+                                    row[tran.issue]['x'] = 0;
                                 }
-                            });
+                            }
                         });
+                    });
+
+                    angular.forEach($scope.issues, function (x) {
+                        $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(x.issue));
+                    });
+
+                    $scope.rows = calculate.unissued($scope.rows, $scope.issues, String(transaction.issue));
 
 
-                        // Make sure we have a clean slate for everyone (including any new unissued rows
-                        angular.forEach($scope.rows, function (row) {
-                            angular.forEach($scope.issuekeys, function (issuekey) {
-                                if (issuekey in row) {
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issues, function (issue) {
+                            if (row[issue.issue] != undefined) {
+                                if (issue.type == "Debt" && (isNaN(parseFloat(row[issue.issue]['u'])) || row[issue.issue]['u'] == 0) && !isNaN(parseFloat(row[issue.issue]['a']))) {
+                                    row[issue.issue]['x'] = calculate.debt($scope.rows, issue, row);
                                 }
-                                else {
-                                    row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
-                                }
-                            });
+                            }
                         });
+                    });
+
+
+                    // Make sure we have a clean slate for everyone (including any new unissued rows
+                    angular.forEach($scope.rows, function (row) {
+                        angular.forEach($scope.issuekeys, function (issuekey) {
+                            if (issuekey in row) {
+                            }
+                            else {
+                                row[issuekey] = {"u": null, "a": null, "ukey": null, "akey": null};
+                            }
+                        });
+                    });
                 }
             }
         };

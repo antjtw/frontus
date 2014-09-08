@@ -162,7 +162,7 @@ navm.controller('NavCtrl',
         });
         $rootScope.leave = function(blacklist, default_url) {
             if (blacklist == undefined) {
-                blacklist = ["-view", "/prepare"];
+                blacklist = ["-view"];
             }
             if (default_url == undefined) {
                 if (navState.role == "investor") {
@@ -334,6 +334,12 @@ navm.controller('NavCtrl',
                 navState.role = thiscmp.role;
                 navState.name = thiscmp.name;
                 navState.reasons = $scope.initReasons(thiscmp.reasons);
+                if (navState.reasons.own)
+                {
+                    SWBrijj.procm('ownership.return_status').then(function (x) {
+                        navState.level = x[0].return_status;
+                    });
+                }
                 // We should take this out I think but need to double check this
                 //$route.reload();
             } else {
@@ -593,31 +599,6 @@ navm.controller('NavCtrl',
             return notifications;
         };
 
-        var idleTime = 0;
-
-        function timerIncrement() {
-            if ($rootScope.navState.userid) {
-                idleTime = idleTime + 1;
-            }
-            if (idleTime > 28) { // 1 minutes
-                sessionStorage.clear();
-                document.location.href = "/login/logout?timeout";
-            }
-        }
-
-        $(document).ready(function () {
-            //Increment the idle time counter every minute.
-            var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
-
-            //Zero the idle timer on mouse movement.
-            $(this).mousemove(function (e) {
-                idleTime = 0;
-            });
-            $(this).keypress(function (e) {
-                idleTime = 0;
-            });
-        });
-
         $scope.pricingregister = function(args) {
             document.location.href = "/register/company-onestep?" + args;
         };
@@ -805,7 +786,7 @@ navm.controller('NavCtrl',
 
         $scope.$watch('windowheight', function() {
             if ($rootScope.companyIsZombie()) {
-                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'hidden'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
                 $scope.viewportactivity = {'height': String($window.innerHeight - 191) + "px", 'overflow-y': 'auto'};
             } else {

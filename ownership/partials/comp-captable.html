@@ -1,0 +1,867 @@
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
+<div class="maincontent">
+<div class="container dynamic-page">
+<div modal="capShare" close="close()" options="shareModalOpts">
+    <div class="modalHeader">
+        <span>Share Cap Table</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="close()"></span>
+    </div>
+    <div class="share-modal-main">
+        <p>Select shareholders and their permissions
+        </p>
+
+        <div class="docLibrary full-width">
+            <table class="captable tableView modal-table">
+                <tbody>
+                    <tr class="column-label">
+                        <th>Name</th>
+                        <th></th>
+                        <th>Email</th>
+                        <th>Permissions <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" tooltip-placement="top" tooltip="{{captabletips.permissions}}"></span></th>
+                    </tr>
+                </tbody>
+                <tbody class="scrollable-body">
+                    <tr ng-repeat="row in ct.investors">
+                        <td>
+                            <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button" ng-disabled="row.alreadyShared"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+                        </td>
+                        <td style="width: 225px;">{{row.name}}</td>
+                        <td style="width: 210px;"><input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
+                                   ng-disabled="row.emailkey || row.alreadyShared" ng-model="row.email" ng-change="updateSendRow(row);"></td>
+                        <td style="width: 210px;">
+                            <ul class="dropdown-list drop-selector">
+                                <li class="dropdown standard">
+                                    <a class="dropdown-toggle" ng-hide="row.alreadyShared">
+                                        {{row.permission}}<span class="invisible-drop">'</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><span ng-click="row.permission = 'Personal'">Personal</span></li>
+                                        <li><span ng-click="row.permission = 'Full'">Full</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>Share with contacts not listed in your cap table</p>
+        <div class="sharepeople-input">
+            <input ui-select2="select2Options" ng-model="extraPeople">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="close();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button id='a_own_share_modal' class="btn" ng-disabled="checkInvites();" ng-click="close(); sendInvites();">Submit</button>
+        </div>
+    </div>
+</div>
+
+<div modal="capEditEmail" close="alterEmailModalClose()" options="opts">
+    <div class="modalHeader">
+        <span>Edit this row's email?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="alterEmailModalClose()"></span>
+    </div>
+    <div class="modalText">
+        <p>Changing the email address of this row will invite a new email to get a personal view of the captable.
+            If the account associated with the old email has a personal view of the captable
+            they will no longer be able to see it.
+        </p>
+        <div class="input-row">
+            <p>Email Address</p>
+            <input ng-model="newEmail">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="alterEmailModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="alterEmailModalClose(); alterEmail();">Change</button>
+        </div>
+    </div>
+</div>
+
+<div modal="issueModal" close="iclose();" options="opts">
+    <div class="modalHeader">
+        <span>Updating Issue?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="iclose(); irevert(changedIssue);"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>There are transactions in this issue with different values.<br> Making this change will override them, are
+                you sure you<br> want to continue?</p>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="iclose(); irevert(changedIssue);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="iclose(); saveIssue(changedIssue, changedIssueField);">Yes</button>
+        </div>
+    </div>
+</div>
+
+<div modal="capDelete" close="dclose(); revertIssue(missue);" options="opts">
+    <div class="modalHeader">
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="dclose(); revertIssue(missue);"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>Do you want to delete this issue, including all associated transactions?</p>
+            <br>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="dclose(); revertIssue(missue);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="dclose(); deleteIssue(missue);">Yes</button>
+        </div>
+    </div>
+</div>
+
+<div modal="rowDelete" close="rclose(); revertPerson(minvestor);" options="opts">
+    <div class="modalHeader">
+        <span>Delete?</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="rclose(); revertPerson(minvestor);"></span>
+    </div>
+    <div class="modalText">
+        <form>
+            <p>Do you want to delete this shareholder, including all associated transactions?</p>
+            <br>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="rclose(); revertPerson(minvestor);">No</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="rclose(); deletePerson(minvestor);">Yes</button>
+        </div>
+    </div>
+</div>
+
+<div modal="capAccess" close="accessclose()" options="shareopts">
+    <div class="modalHeader">
+        <span>Change Permissions</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="accessclose()"></span>
+    </div>
+    <div class="modalText">
+        <form class="capaccess-form">
+            <p>Shareholders only see their personal holdings by default,<br> non-shareholders will see the full table unless revoked.</p>
+            <div class="cf capaccess-drop">
+                <span>CURRENT</span>
+                <li class="dropdown standard pull-left">
+
+                    <ul class="dropdown-list drop-selector">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{selectedI.level}}<span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <span ng-click="selectVisibility('No View', selectedI)">No View</span>
+                                    <span ng-click="selectVisibility('Personal View', selectedI)">Personal View</span>
+                                    <span ng-click="selectVisibility('Full View', selectedI)">Full View</span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="accessclose()">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button class="btn" ng-click="changeVisibility(selectedI); accessclose();">Change</button>
+        </div>
+    </div>
+</div>
+
+<!-- Tour Modal -->
+<div modal="tourModal" close="tourclose();" options="touropts">
+    <div class="modalHeader">
+        <span>Welcome to your cap table!</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="tourclose();"></span>
+    </div>
+    <div class="modalText">
+        <div class="row-fluid">
+            <div class="span6">
+                <p>We've created a simple tour to introduce you to your cap table, and guide you through the basics.</p>
+            </div>
+            <div class="span6">
+                <span class="tour-icon intro-icon"><span>?</span></span>
+                <div class="tooltip fade top in" style="top: 61px; left: 315px; width: 150px;display: block;"><div class="tooltip-arrow"></div><div class="tooltip-inner">{{tourmessages.intro}}</div></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button green">
+            <button id='a_own_tour_start_modal' class="btn" ng-click="tourclose(); moveTour(); kissTour();">Start the Tour</button>
+        </div>
+        <div class="pull-left text-button">
+            <button ng-click="tourclose();">I'm a pro, skip the tour</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Captable From Here Down -->
+<subnav>
+    <div class="box-button pull-right"
+         ng-if="!windowToggle"
+         ng-class="{'disabledme': companyIsZombie()}"
+         ng-click="companyIsZombie() || modalUp();"
+         id='a_own_tour_share_subnav'
+         data-placement="bottom" bs-tooltip="zombiemessage">
+        <span ng-hide="editMode || tourstate == 0"
+              class="tour-icon tour-share"
+              data-placement="bottom"
+              bs-tooltip="tourmessages.share">
+            <span>?</span>
+        </span>
+        <ul>
+            <li>
+                <span data-icon="&#xe604;" aria-hidden="true"></span>
+            </li>
+            <li>
+                <span>Share</span>
+            </li>
+        </ul>
+    </div>
+    <div class="box-button pull-right"
+         ng-if="!windowToggle"
+         ng-class="{'disabledme': companyIsZombie()}"
+         ng-click="companyIsZombie() || editViewToggle();"
+         data-placement="bottom" bs-tooltip="zombiemessage">
+        <span ng-hide="editMode || tourstate == 0"
+              class="tour-icon tour-view"
+              data-placement="bottom"
+              bs-tooltip="tourmessages.view">
+            <span>?</span>
+        </span>
+        <ul>
+            <li>
+                <span ng-show="editMode"
+                      data-icon="&#xe001;"
+                      aria-hidden="true">
+                </span>
+                <span ng-hide="editMode"
+                      data-icon="&#xe00e;"
+                      aria-hidden="true">
+                </span>
+            </li>
+            <li>
+                <span ng-show="editMode">
+                    View
+                </span>
+                <span ng-hide="editMode">
+                    Edit
+                </span>
+            </li>
+        </ul>
+    </div>
+    <div ng-if="false" class="box-button pull-right"
+         ng-click="revert()">
+        <ul>
+            <li>
+                <span data-icon="&#xe136;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>Revert</span>
+            </li>
+        </ul>
+    </div>
+    <!--
+    <div ng-show="editMode" class="box-button pull-right"
+         ng-click="redo()">
+        <ul>
+            <li>
+                <span data-icon="&#xe004;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>Redo</span>
+            </li>
+        </ul>
+    </div>
+    <div ng-show="editMode" class="box-button pull-right"
+         ng-click="undo()">
+        <ul>
+            <li>
+                <span data-icon="&#xe005;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>Undo</span>
+            </li>
+        </ul>
+    </div>
+    -->
+    <div class="evidenceSearch" ng-if="windowToggle">
+        <span>Search</span>
+        <input type="text" class="search-box"
+               ng-model="state.evidenceQuery">
+    </div>
+</subnav>
+
+<div class="row-fluid leftTabWindow"
+     ng-class="{showRightTab:windowToggle}">
+<div ng-style="viewportheight"
+     ng-class="{leftFullTableBlock:sideToggle,
+                widthtransition25:oldSafari()}"
+     class="span8 docLibrary leftBlock">
+
+    <div class="row-fluid capcontainer">
+        <table ng-class="{viewcaptable: !editMode}"
+               class="captable tableView bodyText">
+            <!-- Editable headers -->
+            <tr ng-if="editMode;" class="column-label">
+                <th class="longrow" colspan="2">
+                    Ownership
+                </th>
+                <th class="longrow">Shareholder</th>
+                <th ng-repeat="sec in ct.securities"
+                    ng-click="selectSecurity(sec.name)">
+                    <span ng-class="{'column-highlight':tourstate==2}">
+                        <span class="next-button"
+                              ng-click="moveTour();">
+                            Next
+                        </span>
+                    </span>
+                    <input class="capEditHeaders"
+                           ng-class="{tranViewSelected: sec==selectedSecurity}"
+                           ui-event="{blur:'updateSecurity(sec)'}"
+                           ng-model="sec.new_name"
+                           onkeydown="testForEnter(event);">
+                </th>
+                <th>
+                    <button class="add-security-button" ng-click="createNewSec()">
+                        Add Security <span data-icon="&#xe017;" aria-hidden="true"></span>
+                    </button>
+                </th>
+            </tr>
+            <!-- Uneditable headers -->
+            <tr ng-if="!editMode" class="column-label">
+                <th class="longrow" colspan="2">Ownership</th>
+                <th class="longrow">Shareholder</th>
+                <th ng-class="{tranViewSelected: sec==selectedSecurity}"
+                    class="staticHeaders"
+                    ng-repeat="sec in ct.securities"
+                    ng-click="selectSecurity(sec.name)">
+                    <span>{{::sec.name}}</span>
+                    <span class="next-button"
+                          ng-click="moveTour();">
+                        Next
+                    </span>
+                </th>
+            </tr>
+            <!-- Descriptive row viewable from all modes -->
+            <tr class="descriptionRow" ng-class="{'viewmode':!editMode}">
+                <td class="input-right">Shares</td>
+                <td class="input-right">%</td>
+                <td></td>
+                <td ng-repeat="one in ct.securities">
+                    <span>{{securityUnitLabel(one)}}</span>
+                    <span>Total Paid</span>
+                </td>
+                <!-- for new security col -->
+                <td ng-if="editMode"></td>
+            </tr>
+            <!-- Editable investors -->
+            <tbody ng-if="editMode;">
+            <tr ng-repeat="row in ct.investors"
+                ng-show="([row] | noUnissue).length > 0">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{captable.rowSum(row.name) | number:0}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
+                </td>
+                <td>
+                    <span ng-class="{'box-highlight':tourstate==1}">
+                        <span class="next-button"
+                              ng-click="moveTour();">
+                            Next
+                        </span>
+                    </span>
+                    <span ng-if="true">
+                        <input class="name-row"
+                               placeholder="Add Name"
+                               style="width:140px;"
+                               ng-model="row.new_name"
+                               ng-change="nameChangeLR(row)"
+                               ui-event="{focus: 'selectInvestor(row.name)',
+                                           blur: 'updateInvestor(row)'}"
+                               onkeydown="testForEnter(event);">
+                    </span>
+                    <span ng-if="false">
+                        <input class="name-row"
+                               disabled
+                               style="width:140px;"
+                               ng-click="selectInvestor(row.name)"
+                               ng-model="row.name">
+                    </span>
+                </td>
+                <td ng-repeat="key in ct.securities"
+                    ng-class="{tranSelected: selectedCell
+                        && selectedCell.investor == row.name
+                        && selectedCell.security == key.name}">
+                    <span ng-class="{'tran-highlight':tourstate==4}">
+                        <span class="next-button"
+                              ng-click="closeTour(); tourNotification();">
+                            Done!
+                        </span>
+                    </span>
+                    <editable-captable-cell
+                        sec='key'
+                        inv='row.name'
+                        data="captable.cellFor(row.name, key.name)"
+                        select-cell="selectCell"
+                        selected-cell="selectedCell"></editable-captable-cell>
+                </td>
+                <!-- for new security col -->
+                <td ng-if="editMode;"></td>
+            </tr>
+            <tr>
+                <td class="capsums-col">
+                </td>
+                <td class="capsums-col">
+                </td>
+                <td class="capsums-col">
+                    <input placeholder="Add Investor"
+                           class="name-row"
+                           style="width: 140px;"
+                           ui-event="{blur: 'addInvestor(new_inv)'}"
+                           onpaste="return false"
+                           ng-paste="namePaste($event, row);"
+                           ng-model="$parent.new_inv">
+                </td>
+                <td ng-repeat="key in ct.securities" class="capsums-col">
+                </td>
+                <!-- for new security column -->
+                <td ng-if="editMode;"></td>
+            </tr>
+            </tbody>
+            <!-- Un-editable view -->
+            <!-- Regular Rows -->
+            <tbody ng-if="!editMode">
+            <tr ng-repeat="row in ct.investors">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{::captable.rowSum(row.name) | number:0}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
+                </td>
+                <td ng-class="{tranViewSelected: selectedInvestor == row,
+                               'hoverable': row.name}"
+                    class="viewName tableFields"
+                    ng-click="selectInvestor(row.name);">
+                    {{::row.name}}
+                </td>
+                <td ng-click="selectCell(row.name, key.name)"
+                    class="tableFields"
+                    ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
+                               hoverable: captable.cellFor(row.name, key.name)}"
+                    ng-repeat="key in ct.securities">
+                    <captable-cell inv='row.name' sec='key.name'
+                        data='captable.cellFor(row.name, key.name)'></captable-cell>
+                </td>
+            </tr>
+            </tbody>
+            <!-- Unissued Rows -->
+            <tr class="unissued-rows"
+                ng-repeat="sec in
+                           captable.securitiesWithUnissuedUnits()">
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{captable.numUnissued(sec, ct.securities) | number:0}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:2}}%">
+                </td>
+                <td class="viewName unissuedName">
+                    {{::sec.name}} (Unissued)
+                </td>
+                <td class="tableFields"
+                    ng-repeat="key in ct.securities">
+                    <span class="captablepair-box">
+                        <div ng-class="{editview: editMode}"
+                             class="output clickable">
+                            <span ng-if="sec==key">
+                                {{captable.numUnissued(key, ct.securities) | number:2}}
+                            </span>
+                        </div>
+                        <div ng-class="{editview: editMode}"
+                             class="output second clickable">
+                             <!-- don't need anything here.
+                                  no such thing as unissued amounts -->
+                        </div>
+                   </span>
+                </td>
+            </tr>
+            <!-- Footer Total Row -->
+            <tr class="total-row">
+                <td class="tableFields">Total</td>
+                <td class="tableFields"></td>
+                <td class="tableFields"></td>
+                <td class="tableFields"
+                    ng-repeat="one in ct.securities">
+                </td>
+                <!-- for new security col -->
+                <td ng-if="editMode;"></td>
+            </tr>
+            <tr class='tablefooter'>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="{{captable.totalOwnershipUnits()
+                                  | number:0}}">
+                </td>
+                <td class="capsums-col">
+                    <input class="input-right"
+                           disabled
+                           value="100.00%">
+                </td>
+                <td class="tableFields">
+                </td>
+                <td class="tableFields"
+                    ng-repeat="one in ct.securities">
+                    <span class="captablepair-box">
+                        <div ng-class="{'editview': editMode}"
+                             class="output footer">
+                            {{captable.securityTotalUnits(one)
+                            + captable.numUnissued(one, ct.securities)
+                            | formatAmount:'units'}}
+                        </div>
+                        <div ng-class="{'editview': editMode}"
+                             class="output second footer">
+                            {{captable.securityTotalAmount(one)
+                            | formatAmount:'amount'}}
+                        </div>
+                    </span>
+                </td>
+                <!-- for new security col -->
+                <td ng-if="editMode;"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<internal-right-rail toggle-side="sideToggle"
+                     window-toggle="windowToggle"
+                     window-callback="editEvidence()">
+    <tabset ng-class="{'tabBorder': windowToggle}"
+            ng-style="viewportheight">
+        <tab ng-repeat="tab in tabs"
+             active="tab.active"
+             ng-if="tabvisible(tab)"
+             heading="{{::tab.title}}">
+                <div ng-show="chosenTab(tab, 'Information')"
+                     ng-style="viewportactivity"
+                     ng-class="{'palegray': sideBar != '1' && sideBar != '2' && sideBar != '4' && sideBar != '5'}"
+                     ng-switch on="sideBar">
+                    <span ng-switch-when="1">
+                        <editable-security-details
+                            sec="selectedSecurity"
+                            currenttab ="currentTab" window-toggle="windowToggle"></editable-security-details>
+                    </span>
+                    <span ng-switch-when="2">
+                        <editable-cell-details
+                                   cell="selectedCell"
+                                   currenttab="currentTab"
+                                   undo="undo"
+                                   window-toggle="windowToggle"></editable-cell-details>
+                    </span>
+                    <span ng-switch-when="5">
+                        <security-details sec="selectedSecurity"></security-details>
+                    </span>
+                    <span ng-switch-when="4">
+                        <cell-details cell="selectedCell"
+                                      currenttab="currentTab"></cell-details>
+                    </span>
+                    <span class="padded-cap capGuide in-brief"
+                          ng-switch-when="3">
+                        <div class="headsection row-fluid
+                                    tabbed company-info">
+                            <h1>
+                                <img ng-src="{{ navState.company && '/photo/user?id='+selectedInvestor.email || '' }}">
+                                {{selectedInvestor.name}}
+                            </h1>
+                        </div>
+                        <div ng-if="selectedInvestor.email"
+                             class="summary-bar">
+                            <div ng-if="selectedInvestor.lastlogin"
+                                 class="belowTitle">
+                                <img src="/img/activity/login.png">
+                                <div>
+                                    <span>
+                                        {{selectedInvestor.lastlogin | date:settings.shortdate}}
+                                    </span>
+                                    <span>Last Login</span>
+                                </div>
+                            </div>
+                            <div ng-if="selectedInvestor.received"
+                                 class="belowTitle">
+                                <img src="/img/activity/received.png">
+                                <div>
+                                    <span>
+                                        {{selectedInvestor.received | date:settings.shortdate}}
+                                    </span>
+                                    <span>Delivered</span>
+                                </div>
+                            </div>
+                            <div ng-if="selectedInvestor.viewed"
+                                 class="belowTitle">
+                                <img src="/img/activity/view.png">
+                                <div>
+                                    <span>
+                                        {{selectedInvestor.viewed | date:settings.shortdate}}
+                                    </span>
+                                    <span>Last Viewed</span>
+                                </div>
+                            </div>
+                            <div class="belowTitle">
+                                <img src="/img/activity/permissions.png">
+                                <div>
+                                    <span>
+                                        {{selectedInvestor.access_level}}
+                                    </span>
+                                    <span>Permissions</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-link"
+                             ng-if="selectedInvestor.email"
+                             ng-click="gotoProfile(selectedInvestor.email, selectedInvestor.name);">
+                            <span data-icon="&#xe001;"
+                                  aria-hidden="true">
+                            </span>
+                            <span>View Full Profile</span>
+                        </div>
+
+                        <div ng-if="!companyIsZombie() && !selectedInvestor.email"
+                             class="share-link">
+                            <div ng-click="companyIsZombie() || modalUp();"
+                                 class="profile-link">
+                                <span data-icon="&#xe604;"
+                                      aria-hidden="true">
+                                </span>
+                                <span>Share with Investor</span>
+                            </div>
+                            <div ng-if="editMode"
+                                 ng-click="removeInvestor(selectedInvestor)"
+                                 class="profile-link">
+                                <span data-icon="&#xe00c;"
+                                      aria-hidden="true">
+                                </span>
+                                <span>Remove Investor</span>
+                            </div>
+                        </div>
+                    </span>
+                    <span class="padded-cap capGuide" ng-switch-default>
+                        <span ng-if="editMode;">
+                            <div class="captour railpadding">
+                                <h1 class="right-bar-header">
+                                    Understand your Ownership
+                                </h1>
+                                <p> This capitalization table, often referred to as a cap table, will show you exactly what percentage
+                                    of your company each shareholder owns.</p>
+                                <p>Enter your company's securities, shareholders and their holdings, and we'll take care of the rest.</p>
+                                <br>
+                                <ul>
+                                    <li>What's a security?</li>
+                                    <li>A financial instrument representing ownership, debt, or rights to ownership (e.g. Common, Series A, 2012 Option Pool)</li>
+                                    <li>Why should I enter terms?</li>
+                                    <li>These terms influence capitalization calculations, the more terms you enter the more accurate your information</li>
+                                </ul>
+                            </div>
+                        </span>
+                        <span class="in-brief" ng-if="!editMode;">
+                            <div class="headsection row-fluid
+                                        tabbed company-info">
+                                <h1><img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">{{navState.name}}</h1>
+                            </div>
+
+                            <div class="summary-bar">
+                                <div ng-show="totalPaid(ct.investors)"
+                                     class="belowTitle">
+                                    <img src="/img/activity/invested.png">
+                                    <div>
+                                        <span>
+                                            {{totalPaid(ct.investors) | number:2}}
+                                        </span>
+                                        <span>Total Invested</span>
+                                    </div>
+                                </div>
+                                <div ng-show="captable.totalOwnershipUnits()"
+                                     class="belowTitle">
+                                    <img src="/img/activity/sharews.png">
+                                    <div>
+                                        <span>
+                                            {{captable.totalOwnershipUnits() | number:2}}
+                                        </span>
+                                        <span>
+                                            Fully Diluted Units
+                                        </span>
+                                    </div>
+                                </div>
+                                <div ng-show="numShareholders()"
+                                     class="belowTitle">
+                                    <img src="/img/activity/people.png">
+                                    <div>
+                                        <span ng-bind="numShareholders()"></span>
+                                        <span>Shareholders</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                      </span>
+                </div>
+                <div ng-show="chosenTab(tab, 'Activity')">
+                    <div activity-feed
+                         height='viewportactivity'
+                         user='navState.userid'
+                         type="iss"
+                         view="activityView">
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </internal-right-rail>
+</div>
+<div class="rightTabWindow" ng-if="windowToggle"
+     ng-class="{showRightTab:windowToggle}" ng-style="viewportheight">
+     <evidence-table state="state"></evidence-table>
+</div>
+
+<div ng-hide="!editMode || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
+    <div class="standard-button small-standard-button" ng-click="moveTour();">
+        <h2>Need Help?</h2>
+        <button id='a_own_tour_start_bar' class="btn">Tour</button>
+    </div>
+    <div class="tour-stage first" ng-class="{'slidingcss25':oldSafari(), 'stage-one':tourstate >= 1}">
+        <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);">
+            <span ng-show="tourstate <= 1">1</span>
+            <span ng-hide="tourstate <= 1" data-icon="&#xe052;" aria-hidden="true"></span>
+        </span>
+        <h2>Shareholders</h2>
+        <p ng-show="tourstate == 1">Enter your shareholder names. The table will automatically expand as you go.</p>
+        <div class="standard-button small-standard-button" ng-click="moveTour();">
+            <button class="btn">Next</button>
+        </div>
+    </div>
+    <div class="tour-stage second" ng-class="{'slidingcss25':oldSafari(), 'stage-two':tourstate >= 2}">
+        <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);">
+            <span ng-show="tourstate <= 2">2</span>
+            <span ng-hide="tourstate <= 2" data-icon="&#xe052;" aria-hidden="true"></span>
+        </span>
+        <h2>Security</h2>
+        <p ng-show="tourstate == 2">Name the security (e.g. Common, Seed, Series A)</p>
+        <div class="standard-button small-standard-button" ng-click="moveTour();">
+            <button class="btn">Next</button>
+        </div>
+    </div>
+    <div class="tour-stage third" ng-class="{'slidingcss25':oldSafari(), 'stage-three':tourstate >= 3}">
+        <span ng-class="{'current-icon':tourstate == 3}" ng-click="gotoTour(3);">
+            <span ng-show="tourstate <= 3">3</span>
+            <span ng-hide="tourstate <= 3" data-icon="&#xe052;" aria-hidden="true"></span>
+        </span>
+        <h2>Security Terms</h2>
+        <p ng-show="tourstate == 3">Select the security type and we'll display terms so you can define the security</p>
+        <div class="standard-button small-standard-button" ng-click="moveTour();">
+            <button class="btn">Next</button>
+        </div>
+    </div>
+    <div class="tour-stage fourth" ng-class="{'slidingcss25':oldSafari(), 'stage-four':tourstate >= 4}">
+        <span ng-class="{'current-icon':tourstate == 4}" ng-click="gotoTour(4);">
+            <span ng-show="tourstate <= 4">4</span>
+            <span ng-hide="tourstate <= 4" data-icon="&#xe052;" aria-hidden="true"></span>
+        </span>
+        <h2>Individual Shares</h2>
+        <p ng-show="tourstate == 4">Enter individual amounts. The terms inherit from the
+            security, but you can always override them.</p>
+        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour(); tourNotification();">
+            <button class="btn">Done!</button>
+        </div>
+    </div>
+    <div class="tour-stage fifth" ng-show="tourstate != 0" ng-class="{'slidingcss25':oldSafari()}">
+        <div class="tour-finish-button" ng-click="closeTour();">
+            <button class="btn"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<doc-mini-viewer docid="viewme"></doc-mini-viewer>
+
+<div modal="addSecurityModal" close="addSecuritylModalClose()" options="optsSec">
+    <div class="modalHeader">
+        <span>Add a new security</span>
+        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="addSecurityModalClose()"></span>
+    </div>
+    <div class="modalText">
+        <div class="input-row">
+            <p>Security Name</p>
+            <input type="text" ng-model="newTranName">
+        </div>
+        <div class="input-row">
+            <div class="short-first">
+                <p>Security Type</p>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{newTranType}}
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="key in 'security_type' | attributeTypes">
+                                <a ng-click="setNewType(key)">
+                                    {{key}}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="short-second">
+                <p>Security Date</p>
+                <input id="securitydate" ng-change="dateSecurity()" ui-event="{keydown:'dateSecurity($event)', blur:'dateSecurity(\'blur\')'}" type="text"
+                       ng-model="newTranDate" data-date-format={{settings.lowercasedate}} bs-datepicker
+                       onkeydown="testForEnter(event);">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left standard-button gray">
+            <button class="btn" ng-click="addSecurityModalClose();">Cancel</button>
+        </div>
+        <div class="standard-button green">
+            <button ng-disabled="newTranType.length == 0 || newTranName == 0" class="btn" ng-click="addSecurityModalClose(); modalAddSecurity();">Create</button>
+        </div>
+    </div>
+</div>

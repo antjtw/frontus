@@ -1,0 +1,62 @@
+<div class="capGuide cap-overflow global cellDetails">
+    <div class="detailsHeader">
+        <div>{{cell.investor}}</div>
+        <div>Investor</div>
+        <p></p>
+    </div>
+    <accordion class="lessmargin transaction-accordion" close-others="true">
+    <accordion-group is-open="tran.active"
+                     ng-repeat="tran in cell.transactions
+                                | orderBy:['effective_date', 'insertion_date'] track by $index"
+                     ng-switch on="currentTab">
+        <accordion-heading>
+            <span ng-click="toggleTransaction()">
+                {{tran.effective_date | date:'M/d/yyyy'}} {{tran.kind}}
+            </span>
+        </accordion-heading>
+        <div class="darkgray faux-tabs" ng-class="{single: !hasDocuments(tran)}">
+            <button ng-click="switchCapTab('details');"
+                    ng-class="{on: currentTab=='details'}">
+                <span>
+                    <span data-icon="&#xe611;" aria-hidden="true"></span>
+                    Details
+                </span>
+            </button><button
+                    ng-click="switchCapTab('documents');"
+                    ng-class="{on: currentTab=='documents'}"
+                    ng-if="hasDocuments(tran)">
+                <span>
+                    <span data-icon="&#xe009;" aria-hidden="true"></span>
+                    Documents
+                </span>
+            </button>
+        </div>
+        <div class="capTab" ng-switch-when="details">
+            <transaction-attributes data="tran"></transaction-attributes>
+        </div>
+        <div class="capTab" ng-switch-when="documents">
+            <div ng-if="tran.evidence_data.length==0"
+                 class="linkedDocuments viewOnly">
+                Connect documents that support this transaction by clicking Edit above.
+            </div>
+            <div ng-if="tran.evidence_data.length>0"
+                 class="linkedDocuments viewOnly">
+                <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
+                    <ul class="pull-left">
+                        <li>
+                            <span ng-click="viewEvidence(doc)">
+                                {{doc.docname}}
+                            </span>
+                        </li>
+                        <li ng-if="doc.name||doc.investor">
+                            <span>
+                                {{doc.name || doc.investor}}'s version
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </accordion-group>
+    </accordion>
+</div>

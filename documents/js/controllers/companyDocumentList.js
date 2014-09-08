@@ -167,7 +167,7 @@ app.controller('CompanyDocumentListController',
             $scope.modals.documentUploadClose = function() {
                 $scope.documentUploadModal = false;
             };
-            
+
             $scope.modals.signedUploadOpen = function(docid) {
                 $scope.files = [];
                 $scope.uploadType = 'signed';
@@ -244,7 +244,7 @@ app.controller('CompanyDocumentListController',
                     $scope.modals.documentUploadClose();
                 });
             };
-            
+
             $scope.checkSignedUploaded = function() {
                 SWBrijj.tblm('document.my_counterparty_library', ['doc_id', 'when_signature_provided', 'signed_uploaded', 'signed_upload_attempted']).then(function(data) {
                     angular.forEach(data, function(doc) {
@@ -473,17 +473,15 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.toggleSide = function () {
-                var s = $location.search();
                 if (!$scope.state.hideSharebar) {
-                    s={};
                     $scope.state.hideSharebar = true;
                     $scope.restoreViewState();
+                    $location.search('share', null).replace();
                 } else {
-                    s.share=true;
                     $scope.saveAndClearViewState();
                     $scope.state.hideSharebar = false;
+                    $location.search('share', true).replace();
                 }
-                $location.search(s);
             };
             $scope.saveAndClearViewState = function() {
                 $scope.viewState = {
@@ -537,12 +535,6 @@ app.controller('CompanyDocumentListController',
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
             };
-
-            //Email
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-            //My parentheses format
-            var regExp = /\(([^)]+)\)/;
 
             // TODO: all of these modals should be separate directives
 
@@ -643,6 +635,7 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.reallyDeleteDoc = function(doc) {
+                ShareDocs.removeShareItem(doc);
                 SWBrijj.procm("document.delete_document", doc.doc_id).then(function(data) {
                     void(data);
                     $rootScope.billing.usage.documents_total -= 1;
@@ -701,14 +694,6 @@ app.controller('CompanyDocumentListController',
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                         console.log(x);
                     });
-            };
-
-            $scope.shareDocuments = function() {
-                $scope.processing = true;
-                ShareDocs.shareDocuments().finally(function(result) {
-                    $scope.processing = false;
-                    $route.reload();
-                });
             };
 
             // Infinite Scroll
@@ -881,64 +866,6 @@ app.controller('CompanyDocumentListController',
             $scope.$watch('state.maxRatio', stateChangeTrigger);
             $scope.$watch('state.show_archived', stateChangeTrigger);
 
-            // fully load all the documents in the weird case where we're in the middle of sharing / preparing a document
-            function fullyLoadDocuments(callback) {
-                if (loadState.document.fullyLoaded) {
-                    callback();
-                    return;
-                }
-                $scope.loaddocs();
-                window.setTimeout(function() {fullyLoadDocuments(callback);}, 250);
-                return 4;
-            }
-
-            function loadPrepareState() {
-                var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
-                sessionStorage.removeItem("docPrepareState");
-                if (st1) {
-                    fullyLoadDocuments(function() {
-                        angular.forEach($scope.documents, function(doc) {
-                            if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
-                                ShareDocs.updateShareType(doc, 2);
-                                if (doc.preps) {
-                                    doc.preps.forEach(function(prep) {
-                                        // add the prepared users to the big list
-                                        if (ShareDocs.emails.indexOf(prep) == -1) {
-                                            ShareDocs.addEmail(prep);
-                                        }
-                                    });
-                                }
-                                if (doc.is_prepared) {
-                                    $scope.$emit("notification:success",
-                                        "Success! Document prepared for signature.");
-                                }
-                            }
-                        });
-                        $scope.finishedLoading = true;
-                    });
-                }
-                return st1;
-            }
-            // TODO: store as part of ShareDocs service
-            // If we can eliminate doc.sugnature_flow and only reference the ShareDocs version, that should work
-            function initShareState() {
-                loadPrepareState();
-                if (ShareDocs.documents.length > 0) {
-                    fullyLoadDocuments(function() {
-                        // TODO: rewrite to not depend on having a fully loaded $scope.documents
-                        angular.forEach($scope.documents, function(doc) {
-                            angular.forEach(ShareDocs.documents, function(docToShare) {
-                                if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
-                                    doc.signature_flow = docToShare.signature_flow;
-                                }
-                            });
-                        });
-                    });
-                }
-            }
-
-            initShareState();
-
             // Sharing stuff that should be move to a directive
             $scope.ShareDocs = ShareDocs;
             function filterInvestors(investorList, emails) {
@@ -948,6 +875,10 @@ app.controller('CompanyDocumentListController',
                     });
                 });
             }
+
+            //Email
+            var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
             $scope.sharingSelect2Options = {
                 data: function() {
                     return {
@@ -957,15 +888,38 @@ app.controller('CompanyDocumentListController',
                 placeholder: 'Add Recipients',
                 createSearchChoice: function(text) {
                     // if text was a legit user, would already be in the list, so don't check Investor service
-                    return {id: text, text: text};
+                    if (text.indexOf(',') !== -1 || text.indexOf(' ') !== -1) {
+                        // comma separated list detected. We don't even care anymore, just validate in $scope.addShareEmail
+                        return {id: text, text: "multiple emails"};
+                    }
+                    if (emailRegExp.test(text)) {
+                        return {id: text, text: text};
+                    } else {
+                        return false;
+                    }
                 },
             };
-            $scope.addShareEmail = function(email) {
+            $scope.badEmails = [];
+            $scope.addShareEmail = function(email_input) {
                 // this gets triggered multiple times with multiple types when the data changes
-                if (typeof(email) === "string") {
-                    ShareDocs.addEmail(email);
+                if (typeof(email_input) === "string") {
+                    email_input.split(/[\,, ]/).forEach(function(email) {
+                        email = email.trim();
+                        if (email.length < 3) {
+                            // can't be an email, probably gibberish
+                            return;
+                        }
+                        if (emailRegExp.test(email)) {
+                            ShareDocs.addEmail(email);
+                        } else {
+                            // doesn't look like an email, warn the user
+                            if ($scope.badEmails.indexOf(email) === -1) {
+                                $scope.badEmails.push(email);
+                            }
+                        }
+                    });
                 }
-            }
+            };
             $scope.removeShareEmail = function(email) {
                 ShareDocs.removeEmail(email);
             };
@@ -976,7 +930,6 @@ app.controller('CompanyDocumentListController',
                     return email;
                 }
             };
-            $scope.expandShareList = {};
 
             $scope.encodeURIComponent = encodeURIComponent;
         }
