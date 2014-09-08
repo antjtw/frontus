@@ -165,10 +165,14 @@ ownership.value('displayCopy', {
         permissions:
             "Share just personal holdings, or the full cap table",
         registration:
-            "Something about Registration",
+            "Investors can require the company register their shares with the SEC.",
         information:
-            "Something about Information",
+            "Requires investors are provided with financial statements and other company information",
         redemption:
-            "Investors can require the company to repurchase shares after a period of time"
+            "Investors can require the company to repurchase shares after a period of time",
+        voting:
+            "Shareholders of this security class have the right to vote on certain matters",
+        optiontype:
+            "Identifies the type of stock option for tax implications"
     }
 });
