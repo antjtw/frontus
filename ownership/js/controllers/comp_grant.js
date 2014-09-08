@@ -30,7 +30,7 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate)
         if ($scope.selectedSecurity) return 'selectedSecurity';
         return null;
     };
-    
+
     $scope.limitLength = function(str, len) {
         if (str.length > len)
             return str.substring(0, len - 3) + "...";
@@ -85,22 +85,6 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate)
         }
     };
 
-    // Captable Sharing Modal
-    $scope.modalUp = function () {
-        $scope.capShare = true;
-    };
-
-    $scope.close = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.capShare = false;
-    };
-
-    $scope.shareopts = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'capshareModal mini modal'
-    };
-
     $scope.editViewToggle = function() {
         $scope.viewMode = !$scope.viewMode;
         if (!$scope.viewMode) {
@@ -115,5 +99,5 @@ function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate)
     $scope.setView = function(field) {
         $scope.optionView = field;
     };
-    
+
 }]);

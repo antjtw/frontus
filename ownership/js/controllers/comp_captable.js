@@ -3,9 +3,9 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
          "SWBrijj", "calculate", "navState", "captable",
-         "displayCopy", "History", "Investor",
+         "displayCopy", "History", "Investor", "$modal",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, navState, captable, displayCopy, History, Investor)
+         calculate, navState, captable, displayCopy, History, Investor, $modal)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -29,7 +29,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.state = {evidenceQuery: ""};
     $scope.tourshow = false;
     $scope.tourstate = 0;
-    $scope.tourUp = function () { $scope.tourModal = false; };
     $scope.tourmessages = displayCopy.tourmessages;
     $scope.captabletips = displayCopy.captabletips;
     $scope.activityView = "ownership.company_activity_feed";
@@ -164,7 +163,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
     $scope.createNewSec = function() {
-        $scope.addSecurityModal = true;
+        $scope.addSecurityModal = $modal.open({
+            templateUrl: '/ownership/modals/addSecurity.html',
+            scope: $scope,
+            windowClass: 'modal securitymodal',
+        });
         $scope.newTranName = "";
         $scope.newTranType = "";
         $scope.newTranDate = new Date.today();
@@ -175,7 +178,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.addSecurityModalClose = function () {
-        $scope.addSecurityModal = false;
+        $scope.addSecurityModal.dismiss();
     };
 
     $scope.modalAddSecurity = function() {
@@ -216,12 +219,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 keyPressed = false;
             }
         }
-    };
-
-    $scope.optsSec = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'modal securitymodal'
     };
 
     $scope.addSecurity = function(new_sec) {
@@ -399,12 +396,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return $scope.windowToggle;
     };
 
-    $scope.shareModalOpts = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'transferModal modal'
-    };
-
     // Date grabber
     $scope.dateTransfer = function (evt) {
         //Fix the dates to take into account timezone differences
@@ -447,65 +438,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
 
-    $scope.tourclose = function () {
-        $scope.sideToggle = false;
-        $scope.tourModal = false;
-    };
-
-    $scope.touropts = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'tourModal modal'
-    };
-
-    //Captable Delete Issue Modal
-
-    $scope.dmodalUp = function (issue) {
-        $scope.capDelete = true;
-        $scope.missue = issue;
-    };
-
-    $scope.dclose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.capDelete = false;
-    };
-
-    //Captable row delete modal
-
-    $scope.rmodalUp = function (investor) {
-        $scope.rowDelete = true;
-        $scope.minvestor = investor.namekey;
-    };
-
-    $scope.rclose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.rowDelete = false;
-    };
-
-    // Captable transaction delete modal
-    /*$scope.tranDeleteUp = function (transaction) {
-        $scope.deleteTran = transaction;
-        $scope.tranDelete = true;
-    };
-
-    $scope.deleteclose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.tranDelete = false;
-    };*/
-
-    //modal for updating issue fields that have different underlying values
-
-    $scope.imodalUp = function (issue, field) {
-        $scope.issueModal = true;
-        $scope.changedIssue = issue;
-        $scope.changedIssueField = field;
-    };
-
-    $scope.iclose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.issueModal = false;
-    };
-
     $scope.irevert = function (issue) {
         for (var i = 0, l = $scope.ct.securities.length; i < l; i++) {
             if ($scope.ct.securities[i].issue == issue.issue) {
@@ -522,7 +454,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 inv.alreadyShared = true;
             }
         });
-        $scope.capShare = true;
+        $scope.capShare = $modal.open({
+            templateUrl: '/ownership/modals/capShare.html',
+            scope: $scope,
+            windowClass: 'transferModal modal',
+        });
     };
 
     $scope.close = function () {
@@ -534,24 +470,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             }
         });
         $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.capShare = false;
-    };
-
-    // Alter already shared row's email address
-    $scope.alterEmailModalUp = function (email) {
-        $scope.capEditEmail = true;
-        $scope.oldEmail = email;
-        $scope.newEmail = angular.copy(email);
-    };
-
-    $scope.alterEmailModalClose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.capEditEmail = false;
-    };
-
-    $scope.opts = {
-        backdropFade: true,
-        dialogFade: true
+        $scope.capShare.dismiss();
     };
 
     $scope.select2Options = {
@@ -724,21 +643,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                      $scope.tourmessages.success);
     };
 
-    $scope.accessmodalUp = function (person) {
-        $scope.capAccess = true;
-        angular.forEach($scope.userstatuses, function(user) {
-            if (person == user.email) {
-                person = user;
-            }
-        });
-        $scope.selectedI = angular.copy(person);
-    };
-
-    $scope.accessclose = function () {
-        $scope.closeMsg = 'I was closed at: ' + new Date();
-        $scope.capAccess = false;
-    };
-
     $scope.selectVisibility = function (value, person) {
         $scope.selectedI.level = value;
     };
@@ -756,12 +660,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             void(x);
             $scope.$emit("notification:fail", "Something went wrong, please try again later.");
         });
-    };
-
-    $scope.shareopts = {
-        backdropFade: true,
-        dialogFade: true,
-        dialogClass: 'modal'
     };
 
     $scope.gotoProfile = function(email, name) {
