@@ -1015,6 +1015,8 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls .dropdown-list.big .dropdown-toggle,
 .subnav-controls .dropdown-list.big .dropdown-menu {
     width: 194px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .subnav-controls > div:first-child {
     display: inline-block;
