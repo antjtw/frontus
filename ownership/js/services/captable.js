@@ -414,7 +414,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     this.grantSecurities = grantSecurities;
-    function numUnissued(sec, securities) {
+    function numUnissued(sec, securities, asof, vesting) {
         var unissued = 0;
         var auth_securities = [];
         angular.forEach(captable.securities, function(sec) {
@@ -427,6 +427,28 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var entry_filter = function(el) {
             return el && (el.investor || auth_securities.indexOf(el.security) !== -1);
         };
+        var trans;
+        if (asof)
+        {
+            var d = new Date(asof);
+            if (vesting)
+            {
+                trans = captable.transactions.filter(function(tran) {
+                    return tran.effective_date <= d;
+                }).reduce(accumulateProperty('transaction'), []);
+                entry_filter = function(el) {
+                    return el && (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                        trans.indexOf(el.transaction) != -1;
+                };
+            }
+            else
+            {
+                entry_filter = function(el) {
+                    return el && (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                        el.effective_date <= d;
+                };
+            }
+        }
         angular.forEach(captable.ledger_entries.filter(entry_filter), function(entry) {
             if ((!entry.investor) && (entry.security == sec.name))
             {
@@ -508,11 +530,23 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.grantRowInfoFor = grantRowInfoFor;
-    this.rowSum = function(inv) {
-        return rowFor(inv)
-            .reduce(function(prev, cur, idx, arr) {
+    this.rowSum = function(inv, asof, vesting) {
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellUnits(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            }
+        }
+        else
+        {
+            red = function(prev, cur, idx, arr) {
                 return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
-            }, 0);
+            };
+        }
+        return rowFor(inv)
+            .reduce(red, 0);
     };
     this.investorsIn = function(sec) {
         var names = captable.ledger_entries.filter(function(ent) {
@@ -692,8 +726,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.securitiesWithUnissuedUnits = function() {
         return captable.securities.filter(secHasUnissued(captable.securities));
     };
-    this.securityUnissuedPercentage = function(sec, securities) {
-        return 100 * (numUnissued(sec, securities) / totalOwnershipUnits());
+    this.securityUnissuedPercentage = function(sec, securities, asof, vesting) {
+        return 100 * (numUnissued(sec, securities, asof, vesting) / totalOwnershipUnits());
     };
     function rowFor(inv) {
         return captable.cells
@@ -866,7 +900,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.setCellAmount = setCellAmount;
-    this.getCellAmount = function(cell, asof, vesting) {
+    function getCellAmount(cell, asof, vesting) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             var entries = cell.ledger_entries;
@@ -920,6 +954,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
     };
+    this.getCellAmount = getCellAmount;
     function sum_ledger(entries) {
         return entries.reduce(
                 function(prev, cur, index, arr) {
@@ -1643,11 +1678,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      *
      * TODO incorporate effective date (now vs infinity)
      */
-    function totalOwnershipUnits(dilution) {
+    function totalOwnershipUnits(dilution, asof, vesting) {
         if (!dilution) dilution = 1;
         var entry_filter;
         var ok_securities = [];
         var auth_securities = [];
+        var trans = [];
         if (dilution <= 0) {
             var ok_types = ["Equity Common",
                             "Equity",
@@ -1659,9 +1695,33 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     ok_securities.push(sec.name);
                 }
             });
-            entry_filter = function(el) {
-                return ok_securities.indexOf(el.security) !== -1;
-            };
+            if (asof)
+            {
+                var d = new Date(asof);
+                if (vesting)
+                {
+                    trans = captable.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entry_filter = function(el) {
+                        return ok_securities.indexOf(el.security) !== -1 &&
+                            trans.indexOf(el.transaction) != -1;
+                    };
+                }
+                else
+                {
+                    entry_filter = function(el) {
+                        return ok_securities.indexOf(el.security) !== -1 &&
+                            el.effective_date <= d;
+                    };
+                }
+            }
+            else
+            {
+                entry_filter = function(el) {
+                    return ok_securities.indexOf(el.security) !== -1;
+                };
+            }
         } else if (dilution == 1) {
             ok_securities = [];
             auth_securities = [];
@@ -1679,9 +1739,35 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     auth_securities.push(sec.name);
                 }
             });
-            entry_filter = function(el) {
-                return el && ok_securities.indexOf(el.security) !== -1 && (el.investor || auth_securities.indexOf(el.security) !== -1);
-            };
+            if (asof)
+            {
+                var d = new Date(asof);
+                if (vesting)
+                {
+                    trans = captable.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entry_filter = function(el) {
+                        return el && ok_securities.indexOf(el.security) !== -1 && 
+                            (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                            trans.indexOf(el.transaction) != -1;
+                    };
+                }
+                else
+                {
+                    entry_filter = function(el) {
+                        return el && ok_securities.indexOf(el.security) !== -1 && 
+                            (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                            el.effective_date <= d;
+                    };
+                }
+            }
+            else
+            {
+                entry_filter = function(el) {
+                    return el && ok_securities.indexOf(el.security) !== -1 && (el.investor || auth_securities.indexOf(el.security) !== -1);
+                };
+            }
         } else if (dilution >= 2) {
             console.log("TODO",
                 "implement dilution scenarios involving conversion");
@@ -1691,19 +1777,43 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.totalOwnershipUnits = totalOwnershipUnits;
-    function investorOwnershipPercentage(inv) {
+    function investorOwnershipPercentage(inv, asof, vesting) {
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellUnits(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            };
+        }
+        else
+        {
+            red = sumCellUnits;
+        }
         var x = captable.cells
             .filter(function(el) { return el.investor == inv; })
-            .reduce(sumCellUnits, 0);
-        var res = x / totalOwnershipUnits() * 100;
+            .reduce(red, 0);
+        var res = x / totalOwnershipUnits(1, asof, vesting) * 100;
         return res != Infinity ? res : 0;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
-    function securityTotalUnits(sec) {
+    function securityTotalUnits(sec, asof, vesting) {
         if (!sec) return 0;
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellUnits(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            };
+        }
+        else
+        {
+            red = sumCellUnits;
+        }
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
-            .reduce(sumCellUnits, 0);
+            .reduce(red, 0);
     }
     this.securityTotalUnits = securityTotalUnits;
     function securityUnitsFrom(sec, kind, inv) {
@@ -1773,10 +1883,23 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return sum_ledger(entries);
     }
     this.currentUnits = currentUnits;
-    this.securityTotalAmount = function(sec) {
+    this.securityTotalAmount = function(sec, asof, vesting) {
+        if (!sec) return 0;
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellAmount(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            };
+        }
+        else
+        {
+            red = sumCellAmount;
+        }
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
-            .reduce(sumCellAmount, 0);
+            .reduce(red, 0);
     };
     function sumCellUnits(prev, cur, idx, arr) {
         return prev + (calculate.isNumber(cur.u) ? cur.u : 0);

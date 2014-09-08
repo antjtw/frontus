@@ -901,6 +901,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return !$scope.ctFilter.date || $scope.editMode ||
             sec.effective_date < $scope.ctFilter.date;
     };
+    $scope.rowSum = function(row) {
+        return captable.rowSum(row.name, $scope.ctFilter.date, $scope.ctFilter.vesting);
+    };
+    $scope.investorOwnershipPercentage = function(row) {
+        return captable.investorOwnershipPercentage(row.name, $scope.ctFilter.date, $scope.ctFilter.vesting);
+    };
 }]);
 
 // IE fix to remove enter to submit form
