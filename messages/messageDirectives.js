@@ -249,9 +249,9 @@ mod.directive('sentMessages', function(){
         scope: {sents: "="},
         restrict: 'E',
         templateUrl: '/messages/partials/sent.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter', 'Message',
 
-        function($scope, $rootScope, SWBrijj, $route, $filter) {
+        function($scope, $rootScope, SWBrijj, $route, $filter, Message) {
 
             $scope.showString = function(string){
                 if(string.length > 70){
@@ -261,6 +261,20 @@ mod.directive('sentMessages', function(){
                     return string;
                 }
             };
+            $scope.allSentMsgs = Message.getSentMsgs();
+
+            $scope.$watch('allSentMsgs', function(){
+                console.log("test")
+            }, true)
+
+            
+                
+
+            // $scope.formatMsgs  = function(){
+            //     angular.forEach($scope.allMsgs, function(msg){
+            //         console.log(msg.sender);
+            //     })
+            // }
 
 
          
