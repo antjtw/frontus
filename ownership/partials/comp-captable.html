@@ -226,7 +226,7 @@
             ng-class="{'disabledme': companyIsZombie()}">
             <ul class="dropdown-list drop-selector big">
                 <li class="dropdown standard">
-                    <a class="dropdown-toggle"
+                    <a class="dropdown-toggle" ng-click="checkDateRange();"
                        data-toggle="dropdown" href="#"
                        title="{{ctFilter.security_types | displayList }}">
                         View History
