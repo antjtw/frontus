@@ -9,11 +9,9 @@ mod.directive('composeMessage', function() {
         // transclude: false,
         restrict: 'E',
         templateUrl: '/messages/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location', 'Message',        
 
-        
-
-        function($scope, $rootScope, SWBrijj, navState, $location) {
+        function($scope, $rootScope, SWBrijj, navState, $location, Message) {
 
             $scope.zombiemessage = function(){
                 if(navState.role === "issuer" && ($rootScope.billing.currentPlan === "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
@@ -23,17 +21,11 @@ mod.directive('composeMessage', function() {
                     return null;
                 }
             };
-            // this returns everyone you have ever emailed. yay
-            $scope.getPeople = function(){
-                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-                    $scope.emailLists = data;          
-                });
-                
 
-            };
-            $scope.getPeople();
+            $scope.emailLists = Message.getAllPeople();
 
             $scope.groupMessage = false;
+
             $scope.selectGroupMessage = function(){
                 if($scope.groupMessage === false){
                     $scope.groupMessage = true;

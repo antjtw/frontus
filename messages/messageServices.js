@@ -68,22 +68,21 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
       
     this.getAllThreads = function(){
-
         return allThreads;
     };
 
     this.getAllNames = function(){
         return allUsers;
-    }
+    };
 
     this.getAllPeople = function(){
         return allPeople;
-    }
+    };
 
 
     this.getAllEmails = function(){
         return allEmails;
-    }
+    };
 
 }]);
 
