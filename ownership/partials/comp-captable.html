@@ -402,7 +402,7 @@
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
-                    ng-repeat="sec in ct.securities | filter:securityFilter"
+                    ng-repeat="sec in ct.securities | filter:securityFilter | filter:dateSecurityFilter"
                     ng-click="selectSecurity(sec.name)">
                     <span>{{::sec.name}}</span>
                     <span class="next-button"
@@ -416,7 +416,7 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in ct.securities | filter:securityFilter">
+                <td ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span>{{securityUnitLabel(one)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -527,7 +527,7 @@
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
                                hoverable: captable.cellFor(row.name, key.name)}"
-                    ng-repeat="key in ct.securities | filter:securityFilter">
+                    ng-repeat="key in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <captable-cell filter='ctFilter' inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
                 </td>
@@ -551,7 +551,7 @@
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.securities | filter:securityFilter">
+                    ng-repeat="key in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
@@ -573,7 +573,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities | filter:securityFilter">
+                    ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -593,7 +593,7 @@
                 <td class="tableFields">
                 </td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities | filter:securityFilter">
+                    ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">

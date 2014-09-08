@@ -907,7 +907,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.showSecurityType('Show All') ||
             $scope.showSecurityType(sec.attrs.security_type);
     };
-
+    $scope.dateSecurityFilter = function(sec) {
+        return !$scope.ctFilter.date || $scope.editMode ||
+            sec.effective_date < $scope.ctFilter.date;
+    };
 }]);
 
 // IE fix to remove enter to submit form
