@@ -163,6 +163,12 @@ ownership.value('displayCopy', {
         evidence:
             "Tie documents to items in your captable",
         permissions:
-            "Share just personal holdings, or the full cap table"
+            "Share just personal holdings, or the full cap table",
+        registration:
+            "Something about Registration",
+        information:
+            "Something about Information",
+        redemption:
+            "Investors can require the company to repurchase shares after a period of time"
     }
 });

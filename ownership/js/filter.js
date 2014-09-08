@@ -405,7 +405,10 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                             "liquidpref",
                             "partpref",
                             "dragalong",
-                            "tagalong"];
+                            "tagalong",
+                            "redemption",
+                            "information",
+                            "registration"];
     var attrs = attributes.getAttrs();
     return function(tp, sec_type, kind) {
         var res = orderedAttributes.indexOf(tp);
