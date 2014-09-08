@@ -152,7 +152,14 @@
         </li>
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/home/company'); navhover=false" ng-class="{activepage: navState.path.indexOf('/home/company') != -1 && !navhover, 'singlecompany': companies.length == 1}"><span class="nav-icon dashboard-icon"></span>Dashboard
         </li>
-        <li ng-show="navState.reasons.rol" ng-click="toggleSubmenu('ownership')" ng-class="{activepage: (navhover && submenu == 'ownership') || (navState.path.indexOf('/ownership/company-captable') != -1 && !navhover) || (navState.path.indexOf('/ownership/company-grants') != -1 && !navhover)}"><span class="nav-icon ownership-icon"></span>Ownership
+        <li ng-show="navState.reasons.rol"
+            ng-click="toggleSubmenu('ownership')"
+            ng-class="{activepage: (navhover && submenu == 'ownership')
+                                || (navState.path.indexOf('/ownership/company-captable') != -1 && !navhover)
+                                || (navState.path.indexOf('/ownership/company-trans') != -1 && !navhover)
+                                || (navState.path.indexOf('/ownership/company-grants') != -1 && !navhover)}">
+            <span class="nav-icon ownership-icon"></span>
+            Ownership
         </li>
         <li ng-show="navState.reasons.rol" ng-click="toggleSubmenu('modeling')" ng-class="{activepage: (navhover && submenu == 'modeling') || (navState.path.indexOf('/modeling/round') != -1  && !navhover)  || (navState.path.indexOf('/modeling/convertible-notes') != -1  && !navhover)}"><span class="nav-icon modeling-icon"></span>Modeling
         </li>
