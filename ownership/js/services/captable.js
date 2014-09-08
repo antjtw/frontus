@@ -866,8 +866,59 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.setCellAmount = setCellAmount;
-    this.getCellAmount = function(cell, asof) {
-
+    this.getCellAmount = function(cell, asof, vesting) {
+        if (!cell) return;
+        if (cellPrimaryMeasure(cell) == "amount") {
+            var entries = cell.ledger_entries;
+            if (asof)
+            {
+                var d = new Date(asof);
+                if (vesting)
+                {
+                    var trans = cell.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return trans.indexOf(ent.transaction) != -1;});
+                }
+                else
+                {
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return ent.effective_date <= d;});
+                }
+            }
+            return sum_ledger(entries);
+        } else if (["Option", "Warrant"].indexOf(
+                        cellSecurityType(cell)) != -1) {
+            return;
+        } else {
+            var transactionkeys = [];
+            angular.forEach(cell.transactions, function(tran) {
+                transactionkeys.push(tran.transaction);
+            });
+            var plus_trans = cell.transactions
+                .filter(function(el) {
+                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1) &&
+                            el.kind != 'repurchase') ||
+                           el.attrs.investor_to == cell.investor;});
+            var minus_trans = cell.transactions
+                .filter(function(el) {
+                    return el.attrs.investor_from == cell.investor ;
+                });
+            if (asof)
+            {
+                var d = new Date(asof);
+                plus_trans = plus_trans.filter(function(el) {
+                    return el.effective_date <= d;
+                });
+                minus_trans = minus_trans.filter(function(el) {
+                    return el.effective_date <= d;
+                });
+            }
+            return sum_transactions(plus_trans) - sum_transactions(minus_trans);
+        }
     };
     function sum_ledger(entries) {
         return entries.reduce(
