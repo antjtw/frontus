@@ -996,6 +996,26 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls .dropdown-list {
     line-height: 32px;
 }
+.subnav-controls .dropdown-list.big .dropdown-menu li > div {
+    padding-top: 5px;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button {
+    background-color: #E3E3E3;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button > span{
+    display: inline-block;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button.selected {
+    background-color: #1ABC96;
+    border: 1px solid #1ABC96;
+}
+.subnav-controls .dropdown-list.big .dropdown-menu li > div:last-child {
+    text-align: left;
+}
+.subnav-controls .dropdown-list.big .dropdown-toggle,
+.subnav-controls .dropdown-list.big .dropdown-menu {
+    width: 194px;
+}
 .subnav-controls > div:first-child {
     display: inline-block;
     vertical-align: middle;

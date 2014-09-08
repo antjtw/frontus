@@ -217,6 +217,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             linkUsers(captable.investors, results[5], results[6]);
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
+            updateDays();
         }, logError).finally(function() {
             loadInProgress = false;
         });
@@ -584,11 +585,32 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
+    function daysBetween (start, ended) {
+        var t1 = Math.floor(start.getTime() / 86400000);
+        var t2 = Math.floor(ended.getTime() / 86400000);
+        return t2 - t1;
+    };
+    function startDate() {
+        return captable.transactions.reduce(minDate, null);
+    };
+    this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
         if (!prev || cur.effective_date < prev)
             return cur.effective_date;
         return prev;
     }
+    function maxDate(prev, cur, idx, arr) {
+        if (!prev || cur.effective_date > prev)
+            return cur.effective_date;
+        return prev;
+    }
+    function lastDate() {
+        return captable.ledger_entries.reduce(maxDate, null);
+    };
+    this.lastDate = lastDate;
+    function updateDays() {
+        captable.totalDays = daysBetween(startDate(), lastDate());
+    };
     function transForCell(inv, sec) {
         // Investor identifying attributes
         var invs = $filter('getInvestorAttributes')();
@@ -785,23 +807,46 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (secs.length > 0) return secs[0].attrs.security_type;
         }
     }
-    this.cellSecurityType = cellSecurityType;
-    function setCellUnits(cell) {
+    function getCellUnits(cell, asof, vesting) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
-            cell.u = sum_ledger(cell.ledger_entries);
+            var entries = cell.ledger_entries;
+            if (asof) {
+                var d = new Date(asof);
+                if (vesting)
+                {
+                    var trans = cell.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return trans.indexOf(ent.transaction) != -1;});
+                }
+                else
+                {
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return ent.effective_date <= d;});
+                }
+            }
+            return sum_ledger(entries);
         }
     }
+    this.getCellUnits = getCellUnits;
+    this.cellSecurityType = cellSecurityType;
+    function setCellUnits(cell) {
+        cell.u = getCellUnits(cell, false);
+    }
     function setGrantCellUnits(cell) {
-        setCellUnits(cell);
-        cell.u = Math.abs(cell.u);
+        cell.u = Math.abs(getCellUnits(cell, false));
     }
     this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
-        } else if (["Option", "Warrant"].indexOf(cellSecurityType(cell)) != -1) {
+        } else if (["Option", "Warrant"].indexOf(
+                        cellSecurityType(cell)) != -1) {
             return;
         } else {
             var transactionkeys = [];
@@ -821,6 +866,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.setCellAmount = setCellAmount;
+    this.getCellAmount = function(cell, asof) {
+
+    };
     function sum_ledger(entries) {
         return entries.reduce(
                 function(prev, cur, index, arr) {
@@ -1035,9 +1083,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      *
      */
     function saveTransaction(tran, update, errorFunc) {
-        // TODO this is getting called too often.
-        // use ng-change instead of ui-event?
-        //
         // or maybe add a save button for now
         // TODO: return a promise instead of having errorFunc
         for (var key in tran.attrs) {
@@ -1048,6 +1093,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
+            console.log(new_entries);
             if (new_entries.length < 1)
             {
                 console.log("Error: no ledger entries");
@@ -1104,6 +1150,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     updateCell(cells[c]);
                 }
             }
+            updateDays();
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
@@ -1359,7 +1406,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         {
             tran.attrs.investor_from = inv;
         }
-        console.log(tran);
         return tran;
     }
     this.newTransaction = newTransaction;

@@ -40,8 +40,8 @@
                     <li ng-click="makeActive(tran)" ng-class="{'activetran': activeTran==tran}" ng-repeat="tran in ct.transactions" ng-show="contains(search.text, tran)">
                         <ul>
                             <li>{{tran.effective_date | date:'MM/dd/yyyy'}}</li>
-                            <li class="longli">{{limitLength(tran.attrs.security, 30)}}</li>
-                            <li class="longli">{{limitLength(tran.attrs.investor, 30)}}</li>
+                            <li class="longli">{{limitLength(tran.attrs.security, 25)}}</li>
+                            <li class="longli">{{limitLength(tran.attrs.investor, 25)}}</li>
                             <li>{{tran.kind}}</li>
                             <li>{{tran.attrs.units | formatAmount: 'units'}}</li>
                             <li>{{tran.attrs.amount | formatAmount: 'amount'}}</li>
