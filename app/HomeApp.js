@@ -64,6 +64,10 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'grantController',
             templateUrl: '/ownership/partials/comp-grant.html'
         }).
+        when('/app/ownership/company-trans', {
+            controller: 'tranController',
+            templateUrl: '/ownership/partials/comp-trans.html'
+        }).
         when('/app/ownership/investor-captable', {
             controller: 'invCaptableController',
             templateUrl: '/ownership/partials/inv-captable.html'

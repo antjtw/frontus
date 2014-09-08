@@ -486,6 +486,13 @@ app.directive('d3vestedbar', ['d3', function(d3) {
 
             scope.render = function(data){
                 if (data && data.length > 0) {
+
+                    svg.selectAll('path').remove();
+                    svg.selectAll('g').remove();
+                    svg.selectAll('circle').remove();
+                    svg.selectAll('text').remove();
+                    svg.selectAll('rect').remove();
+
                     data.sort(function(a, b){
                         if(a.date < b.date) return -1;
                         if(a.date > b.date) return 1;

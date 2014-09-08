@@ -100,7 +100,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     function initUI() {
         if (!$rootScope.companyIsZombie()) {
             $scope.editMode = false;
-            $scope.sideToggle = true;
+            $scope.sideToggle = false;
+        } else {
+            if (captable.totalOwnershipUnits() == 0) {
+                $scope.editMode = true;
+            }
         }
     }
     function cellIsSelected(inv, sec) {
