@@ -252,26 +252,43 @@ mod.directive('sentMessages', function(){
 
         function($scope, $rootScope, SWBrijj, $route, $filter, Message) {
 
-            $scope.showString = function(string){
-                if(string.length > 70){
-                    return string.slice(0, 70) + "...";
-                }
-                else{
-                    return string;
-                }
-            };
             $scope.allSentMsgs = Message.getSentMsgs();
 
             $scope.$watch('allSentMsgs', function(){
-                console.log("test");
-                $scope.testFunction();
             }, true)
 
-            $scope.testFunction = function(){
-                angular.forEach($scope.allSentMsgs, function(msg){
-                    console.log(msg);
-                });
+
+            $scope.showString = function(string){
+                if(string == null){
+                    return ""
+                }
+                else if(string.length > 50){
+                    return string.slice(0, 50) + "...";
+                }
+                else {
+                    return string;
+                }
             };
+         
+        }]
+    };
+});
+
+mod.directive('receivedMsgs', function(){
+    return {
+        scope: false,
+        restrict: 'E',
+        templateUrl: '/messages/partials/receivedMsgs.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter', 'Message',
+
+        function($scope, $rootScope, SWBrijj, $route, $filter, Message) {
+
+            $scope.receivedMsgs = Message.getReceivedMsgs();
+
+            $scope.$watch('receivedMsgs', function(){
+            }, true)
+
+
 
             $scope.showString = function(string){
                 if(string == null){

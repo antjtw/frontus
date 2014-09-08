@@ -40,6 +40,7 @@
      
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose'">          
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
+            <received-msgs ng-if="page =='received'"></received-msgs>
             <div ng-if="!page && allThreads.length > 0">
             <div class="span12">
                 <table class="status-table people-table">
@@ -71,7 +72,7 @@
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filters">
                     <div style="clear: both;">
-                        <message-filter sent="sentMsgs" page="page" ilength ="inboxLength"></message-filter>
+                        <message-filter page="page"></message-filter>
                     </div>
                 </tab>
                 <tab heading = "Message Activity">

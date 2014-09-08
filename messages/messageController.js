@@ -36,12 +36,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
         };
 
-        $scope.getArrayfromPosgres = function(array){
-            var array1 = array.replace("{", "");
-            var array2 = array1.replace("}", "");
-            var array3 = array2.split(",");
-            return array3;
-        };
 
 
 
@@ -163,30 +157,8 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     }
 ]);
 
-app.factory('testThreads', ['SWBrijj', function(SWBrijj){
-    return {
-        getMsgs: function(){
-            // return 
-            SWBrijj.tblm('mail.my_threads', ['thread_id']).then(function(data){
-                console.log(data);
-                return data;
-            })
 
-        }
-    }
-    
-}])
 
-app.factory('userRepository', function() {
-    return {
-        getAllUsers: function() {
-            return [
-                { firstName: 'Jane', lastName: 'Doe', age: 29 },
-                { firstName: 'John', lastName: 'Doe', age: 32 }
-            ];
-        }
-    };
-});
 
 
 

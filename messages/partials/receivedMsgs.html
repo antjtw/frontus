@@ -1,0 +1,26 @@
+<div class="span12">
+    <table class="status-table people-table">
+        <tbody>
+        <tr>
+            <th class="button"><span class="title">Recipients</span></th>
+            <th class="button"><span class="title">Subject</span></th>
+            <th></th>
+        </tr>
+        </tbody>
+        <tbody ng-repeat="receivedMsg in receivedMsgs| orderBy:'time':true | filter: $parent.$parent.filterText"> 
+            <tr class="empty-row"></tr>
+            <tr class="forTooltip">
+                <td style="width:550px" class="shareholder-column docname-column">
+                    <a href="/app/company/messages/thread?thread={{receivedMsg.thread_id}}" position="bottom"><div bs-tooltip="receivedMsg.nameStrings">{{showString(receivedMsg.nameString)}}</div></a>
+                </td>
+            
+                <td style="width: 400px">
+                    <div bs-tooltip="receivedMsg.subject">
+                        <span>{{showString(receivedMsg.subject)}}</span>
+                    </div>
+                </td>
+                <td style="width:10px;"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
