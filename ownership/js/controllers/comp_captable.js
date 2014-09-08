@@ -104,6 +104,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         } else {
             if (captable.totalOwnershipUnits() == 0) {
                 $scope.editMode = true;
+                $scope.ctFilter.date = null;
             }
         }
     }
@@ -325,6 +326,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.editViewToggle = function() {
         toggleDetailsView();
         $scope.editMode = !$scope.editMode;
+        if ($scope.editMode)
+        {
+            $scope.ctFilter.date = null;
+        }
         reselectCurrentSelection();
     };
 
@@ -396,6 +401,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         } else {
             hideViewOnlyDetails();
             $scope.editMode = true;
+            $scope.ctFilter.date = null;
             return $scope.editMode;
         }
     };
