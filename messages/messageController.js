@@ -24,7 +24,11 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
 
         $scope.showString = function(string){
-            if(string.length > 50){
+            if(string == null){
+                return ""
+            }
+
+            else if(string.length > 50){
                 return string.slice(0, 50) + "...";
             }
             else {
