@@ -12,8 +12,9 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
     SWBrijj.tblm('mail.my_messages').then(function(msg){
         angular.forEach(msg, function(ms){
-            // allIndThreads.push(ms);
             if(ms.sender == navState.userid){
+                ms.membersArray = getArrayFromPostgres(ms.members);
+                ms.nameString = ms.membersArray.join(", ");
                 allSentThreads.push(ms);
             };
         });
@@ -24,8 +25,12 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
         angular.forEach(data, function(user){
             allUsers.push(user);
+
       }); 
     }); 
+
+
+
 
 
     var getArrayFromPostgres = function(array){

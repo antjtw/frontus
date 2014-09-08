@@ -222,7 +222,7 @@ mod.directive('composeMessage', function() {
 
 mod.directive('messageFilter', function(){
     return {
-        scope: {sent: "=", 
+        scope: {
                 page: "=",
                 inbox: "=",
                 ilength: "="},
@@ -237,7 +237,8 @@ mod.directive('messageFilter', function(){
                 $scope.page="sent"
             };
 
-            $scope.allMessages = Message.getAllThreads()
+            $scope.allMessages = Message.getAllThreads();
+            $scope.sents = Message.getSentMsgs();
 
 
         }]
@@ -246,7 +247,7 @@ mod.directive('messageFilter', function(){
 
 mod.directive('sentMessages', function(){
     return {
-        scope: {sents: "="},
+        scope: false,
         restrict: 'E',
         templateUrl: '/messages/partials/sent.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter', 'Message',
@@ -264,17 +265,28 @@ mod.directive('sentMessages', function(){
             $scope.allSentMsgs = Message.getSentMsgs();
 
             $scope.$watch('allSentMsgs', function(){
-                console.log("test")
+                console.log("test");
+                $scope.testFunction();
             }, true)
 
-            
-                
+            $scope.testFunction = function(){
+                angular.forEach($scope.allSentMsgs, function(msg){
+                    console.log(msg);
+                });
+            };
 
-            // $scope.formatMsgs  = function(){
-            //     angular.forEach($scope.allMsgs, function(msg){
-            //         console.log(msg.sender);
-            //     })
-            // }
+            $scope.showString = function(string){
+                if(string == null){
+                    return ""
+                }
+                else if(string.length > 50){
+                    return string.slice(0, 50) + "...";
+                }
+                else {
+                    return string;
+                }
+            };
+
 
 
          
