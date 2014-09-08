@@ -176,7 +176,6 @@ own.directive('editableCaptableCell', [function() {
                     $scope.destination_transaction = null;
                 }
                 $scope.units = function(newval) {
-                    //console.log(newval, typeof(newval));
                     if (angular.isDefined(newval)) {
                         var num = 0;
                         if (newval !== null)
@@ -376,8 +375,6 @@ own.directive('editableSecurityDetails', [function() {
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
             function($scope, displayCopy, captable, $filter, calculate) {
-                console.log($scope.windowToggle)
-
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
@@ -488,7 +485,6 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.splitIssue = angular.copy(to_convert);
                     $scope.splitIssue.name = $scope.splitIssue.attrs.security;
                     angular.forEach($scope.ct.securities, function(sec) {
-                        console.log(sec);
                         if (sec.name == $scope.splitIssue.name) {
                             if (calculate.isNumber(sec.attrs.ppshare)) {
                                 $scope.ppshare = sec.attrs.ppshare;
@@ -721,7 +717,6 @@ own.directive('editableCellDetails', [function() {
                 };
 
                 $scope.addTransaction = function() {
-                    console.log("here");
                     var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
                                      captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
@@ -838,7 +833,6 @@ own.directive('editableCellDetails', [function() {
                 // Performs the assignment for the dropdown selectors
                 $scope.assignConvert = function(field, value) {
                     $scope.convertTran[field] = value;
-                    console.log($scope.convertTran);
                     if (field == "toissue") {
                         $scope.convertTran.method = null;
                     }
@@ -876,7 +870,6 @@ own.directive('transactionAttributes', [function() {
         replace: true,
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-        // TODO refactor to use attributes service
         controller: ["$scope", "$rootScope", "captable", "displayCopy", "attributes", "$filter",
             function($scope, $rootScope, captable, displayCopy, attributes, $filter) {
                 $scope.displayAttr = captable.displayAttr;
@@ -893,7 +886,6 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 $scope.loaddirective = function () {
-                    console.log($scope.data);
                     $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);
@@ -962,9 +954,6 @@ own.directive('editableTransactionAttributes', [function() {
                 };
 
                 function key_display_info(key) {
-                    //console.log("bug for some values, use below to debug");
-                    //console.log($scope.data.attrs.security_type);
-                    //console.log($scope.data.kind);
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};
                 }
@@ -1218,7 +1207,6 @@ own.directive('transactionLog', [function() {
 
                 $scope.hasDocuments = function(tran) {
                     return tran.evidence_data && (tran.evidence_data.length > 0);
-                    console.log(tran.evidence_data)
                 };
 
                   $scope.viewEvidence = function(ev) {
