@@ -222,10 +222,7 @@ mod.directive('composeMessage', function() {
 
 mod.directive('messageFilter', function(){
     return {
-        scope: {
-                page: "=",
-                inbox: "=",
-                ilength: "="},
+        scope: {page: "="},
         restrict: 'E',
         templateUrl: '/messages/partials/messageFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'Message', 
@@ -239,6 +236,7 @@ mod.directive('messageFilter', function(){
 
             $scope.allMessages = Message.getAllThreads();
             $scope.sents = Message.getSentMsgs();
+            $scope.receives = Message.getReceivedMsgs();
 
 
         }]

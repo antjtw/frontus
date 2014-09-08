@@ -9,6 +9,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     var allPeople = [];
     var allEmails = [];
     var allSentThreads = [];
+    var allReceivedMsgs = [];
 
     SWBrijj.tblm('mail.my_messages').then(function(msg){
         angular.forEach(msg, function(ms){
@@ -16,6 +17,16 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                 ms.membersArray = getArrayFromPostgres(ms.members);
                 ms.nameString = ms.membersArray.join(", ");
                 allSentThreads.push(ms);
+            };
+        });
+    });
+
+    SWBrijj.tblm('mail.my_messages').then(function(msg){
+        angular.forEach(msg, function(ms){
+            if(ms.sender !== navState.userid){
+                ms.membersArray = getArrayFromPostgres(ms.members);
+                ms.nameString = ms.membersArray.join(", ");
+                allReceivedMsgs.push(ms);
             };
         });
     });
@@ -80,6 +91,9 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     });
 
 
+    this.getReceivedMsgs = function(){
+        return allReceivedMsgs;
+    };
 
     this.getSentMsgs = function(){
         return allSentThreads;
