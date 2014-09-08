@@ -252,6 +252,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li ng-click="ctFilter.vesting = !ctFilter.vesting"
+                        onclick="event.stopPropagation();"
                         class="row-fluid">
                         <div class="pull-left span3">
                             <button class="check-box-button"
@@ -266,6 +267,7 @@
                     </li>
                     <li ng-repeat="t in securityTypeDropdown()"
                         ng-click="toggleSecurityType(t)"
+                        onclick="event.stopPropagation();"
                         class="row-fluid">
                         <div class="pull-left span3">
                             <button class="check-box-button"
