@@ -79,6 +79,20 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
     };
     
+    $scope.checkDateRange = function() {
+        if ($scope.editMode)
+        {
+            $scope.ctFilter.date = null;
+            return;
+        }
+        if (!$scope.ctFilter.date)
+        {
+            $scope.ctFilter.date = new Date();
+        }
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+    };
+    
     $scope.updateDateInput = function() {
         //TODO: only works for MM/dd/yy & dd/MM/yy. Must change if we add more date formats.
         var nums = $scope.daterange.fakeDate.split('/');
