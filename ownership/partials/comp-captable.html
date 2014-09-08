@@ -229,7 +229,13 @@
              ng-model-options="{debounce: {'default': 500,
                                            'blur': 0}}">-->
     </div>
-        <div><span>{{ctFilter.date | date:settings.shortdate}}</span></div>
+    <div><span>{{ctFilter.date | date:settings.shortdate}}</span></div>
+    <div class="pull-left checkboxitem"
+         ng-animate="{show: fadeShow, hide: fadeHide}">
+         <span>Vesting</span>
+         <button class="check-box-button"
+                 ng-class="{selected: ctFilter.vesting}">
+    </div>
     <div class="box-button pull-right"
          ng-if="!windowToggle"
          ng-class="{'disabledme': companyIsZombie()}"
