@@ -217,6 +217,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             linkUsers(captable.investors, results[5], results[6]);
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
+            updateDays();
         }, logError).finally(function() {
             loadInProgress = false;
         });
@@ -584,6 +585,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
+    function daysBetween (start, ended) {
+        var t1 = Math.floor(start.getTime() / 86400000);
+        var t2 = Math.floor(ended.getTime() / 86400000);
+        return t2 - t1;
+    };
     function startDate() {
         return captable.transactions.reduce(minDate, null);
     };
@@ -593,6 +599,18 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return cur.effective_date;
         return prev;
     }
+    function maxDate(prev, cur, idx, arr) {
+        if (!prev || cur.effective_date > prev)
+            return cur.effective_date;
+        return prev;
+    }
+    function lastDate() {
+        return captable.ledger_entries.reduce(maxDate, null);
+    };
+    this.lastDate = lastDate;
+    function updateDays() {
+        captable.totalDays = daysBetween(startDate(), lastDate());
+    };
     function transForCell(inv, sec) {
         // Investor identifying attributes
         var invs = $filter('getInvestorAttributes')();
@@ -789,15 +807,27 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (secs.length > 0) return secs[0].attrs.security_type;
         }
     }
-    function getCellUnits(cell, asof) {
+    function getCellUnits(cell, asof, vesting) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
             var entries = cell.ledger_entries;
             if (asof) {
                 var d = new Date(asof);
-                entries = cell.ledger_entries
-                    .filter(function(ent) {
-                        return ent.effective_date <= d;});
+                if (vesting)
+                {
+                    var trans = cell.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return trans.indexOf(ent.transaction) != -1;});
+                }
+                else
+                {
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return ent.effective_date <= d;});
+                }
             }
             return sum_ledger(entries);
         }
@@ -1120,6 +1150,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     updateCell(cells[c]);
                 }
             }
+            updateDays();
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
