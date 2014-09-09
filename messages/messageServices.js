@@ -10,6 +10,14 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     var allEmails = [];
     var allSentThreads = [];
     var allReceivedMsgs = [];
+    var allMessages = [];
+
+    SWBrijj.tblm('mail.my_messages').then(function(msg){
+        angular.forEach(msg, function(ms){
+            allMessages.push(ms);      
+        });
+    });
+
 
     SWBrijj.tblm('mail.my_messages').then(function(msg){
         angular.forEach(msg, function(ms){
@@ -83,6 +91,15 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
             angular.forEach(allThreads, function(thr){
                 thr.nameString = thr.names.join(", ");
             });
+            angular.forEach(allThreads, function(thr){
+                thr.times = [];
+                angular.forEach(allMessages, function(all){
+                    if(all.thread_id === thr.thread_id && thr.times.indexOf(all.time)== -1){
+                        thr.times.push(all.time);
+                        thr.timex = all.time;
+                    }
+                })
+            })
         });
 
     });

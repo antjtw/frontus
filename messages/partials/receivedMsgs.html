@@ -1,4 +1,7 @@
-<div class="span12">
+
+<div ng-show="myRec==undefined">You haven't received any messages.</div>
+<div class="span12" ng-hide="myRec==undefined">
+
     <table class="status-table people-table">
         <tbody>
         <tr>
@@ -7,7 +10,7 @@
             <th></th>
         </tr>
         </tbody>
-        <tbody ng-repeat="myRec in myRecs | orderBy:'time':true | filter: $parent.$parent.filterText"> 
+        <tbody ng-repeat="myRec in myRecs | orderBy:'time':true | filter: $parent.$parent.filterText">
             <tr class="empty-row"></tr>
             <tr class="forTooltip">
                 <td style="width:550px" class="shareholder-column docname-column">
@@ -15,9 +18,11 @@
                 </td>
             
                 <td style="width: 400px">
-                    <div bs-tooltip="receivedMsg.subject">
-                        <span>{{showString(myRec.subject)}}</span> 
-                    </div>
+                    <a href="/app/company/messages/thread?thread={{myRec.thread_id}}">
+                        <div bs-tooltip="receivedMsg.subject">
+                            <span>{{showString(myRec.subject)}}</span> 
+                        </div>
+                    </a>
                 </td>
                 <td style="width:10px;"></td>
             </tr>
