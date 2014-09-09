@@ -10,7 +10,9 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.myPeople = Message.getAllNames();
         $scope.allPeople = Message.getAllPeople();
 
-
+        $scope.$watch('allThreads', function(){}, true)
+        // this watch doesn't work and i'm not sure why
+        
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;

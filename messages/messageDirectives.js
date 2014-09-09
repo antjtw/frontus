@@ -169,6 +169,7 @@ mod.directive('composeMessage', function() {
                         "Message sent!");
                     $location.url('/app/company/messages/');
                     $scope.clicked = false;
+                    // $route.reload();
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",

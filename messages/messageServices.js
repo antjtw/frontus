@@ -96,6 +96,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                 angular.forEach(allMessages, function(all){
                     if(all.thread_id === thr.thread_id && thr.times.indexOf(all.time)== -1){
                         thr.times.push(all.time);
+                        thr.timex = all.time;
                     }
                 })
             })
