@@ -73,6 +73,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.daterange = {};
     $scope.daterange.offset = 0;
     
+    if ($scope.settings)
+    {
+        $scope.daterange.today = $filter('date')(new Date(), $scope.settings.shortdate);
+    }
+    
     $scope.updateDateSlider = function() {
         var d = captable.startDate().getTime();
         $scope.ctFilter.date = new Date(d + $scope.daterange.offset*86400000);
@@ -104,6 +109,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
         $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
         $scope.updateBarColor();
+        $scope.daterange.today = $filter('date')(new Date(), $scope.settings.shortdate);
     };
     
     $scope.updateDateInput = function() {
