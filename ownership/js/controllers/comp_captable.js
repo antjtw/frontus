@@ -989,8 +989,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return false;
     };
 
-    $scope.securityTypeDropdown = function() {
-        return Object.keys(attrs).sort();
+    $scope.securityTypeDropdown = function(for_display) {
+        var not_these = ['Equity', 'Equity Common'];
+        var res = Object.keys(attrs).sort();
+        if (for_display)
+            res = res.filter(function(el) {
+                return not_these.indexOf(el) == -1; });
+        return res;
     };
     $scope.showSecurityType = function(t) {
         if (!t || !$scope.ctFilter || !$scope.ctFilter.security_types) {
