@@ -779,6 +779,7 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
 .dropdown-menu > input.range {
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
+    appearance: none !important;
     width: 90%;
     padding: 0px;
     box-shadow: none;
