@@ -11,11 +11,11 @@
          ng-class="{'disabledme': companyIsZombie()}"
          ng-click="companyIsZombie() || modalUp();"
          id='a_own_tour_share_subnav'
-         data-placement="bottom" bs-tooltip="zombiemessage">
+         tooltip-placement="bottom" tooltip="{{zombiemessage}}">
         <span ng-hide="editMode || tourstate == 0"
               class="tour-icon tour-share"
-              data-placement="bottom"
-              bs-tooltip="tourmessages.share">
+              tooltip-placement="bottom"
+              tooltip="{{tourmessages.share}}">
             <span>?</span>
         </span>
         <ul>
@@ -31,11 +31,11 @@
          ng-if="!windowToggle"
          ng-class="{'disabledme': companyIsZombie()}"
          ng-click="companyIsZombie() || editViewToggle();"
-         data-placement="bottom" bs-tooltip="zombiemessage">
+         tooltip-placement="bottom" tooltip="{{zombiemessage}}">
         <span ng-hide="editMode || tourstate == 0"
               class="tour-icon tour-view"
-              data-placement="bottom"
-              bs-tooltip="tourmessages.view">
+              tooltip-placement="bottom"
+              tooltip="{{tourmessages.view}}">
             <span>?</span>
         </span>
         <ul>

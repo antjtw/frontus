@@ -40,7 +40,7 @@
                     <div class="box-button pull-right"
                          ng-class="{selected:sidebarPage == 'email', 'disabledme': companyIsZombie()}"
                          ng-click="companyIsZombie() || gotoPage('/app/company/messages')"
-                         data-placement="bottom" bs-tooltip="zombiemessage">
+                         tooltip-placement="bottom" tooltip="{{zombiemessage}}">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
 
@@ -55,7 +55,7 @@
                     <div class="box-button pull-right"
                          ng-class="{'disabledme': companyIsZombie(), selected: sidebarPage == 'people'}"
                          ng-click="companyIsZombie() || toggleSide('people'); clearRecipient()"
-                         data-placement="bottom" bs-tooltip="zombiemessage">
+                         tooltip-placement="bottom" tooltip="{{zombiemessage}}">
                         <ul>
                             <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
                             </li>

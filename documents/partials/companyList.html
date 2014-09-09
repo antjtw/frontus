@@ -41,7 +41,7 @@
                      ng-class="{selected:!state.hideSharebar, 'disabledme': companyIsZombie()}"
                      ng-show="documents.length!==0"
                      ng-click="companyIsZombie() || toggleSide();"
-                     data-placement="bottom" bs-tooltip="zombiemessage">
+                     tooltip-placement="bottom" tooltip="{{zombiemessage}}">
                     <ul>
                         <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 
@@ -54,7 +54,7 @@
                 <div class="box-button pull-right"
                      ng-class="{selected: uploadModal, 'disabledme': companyIsZombie()}"
                      ng-click="companyIsZombie() || modals.documentUploadOpen();"
-                     data-placement="bottom" bs-tooltip="zombiemessage">
+                     tooltip-placement="bottom" tooltip="{{zombiemessage}}">
                     <ul>
                         <li> <span data-icon="&#xe053;" aria-hidden="true"></span>
                         </li>

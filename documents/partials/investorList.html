@@ -12,7 +12,7 @@
                         <span>Hide Completed</span>
                         <button class="check-box-button" ng-class="{'selected':hideCompleted}" ng-click="toggleHideCompleted()">
                             <span data-icon="&#xe023;" aria-hidden="true"></span>
-                        </button> 
+                        </button>
                     </div>
                     <div class="pull-left">
                         <span>Search</span>
@@ -35,7 +35,7 @@
                         <td class="shareholder-column docname-column" ng-click="gotoDoc(doc)" style="cursor: pointer">
                             <ul>
                             <li>
-                                <span bs-tooltip="showtooltip(doc.docname)">{{doc.docname | caplength:40}}</span>
+                                <span tooltip="{{showtooltip(doc.docname)}}">{{doc.docname | caplength:40}}</span>
                             </li>
                             <li>
                                 <span>{{docStatusa(doc)}}</span>

@@ -9,8 +9,8 @@
                  ng-show="ct.securities.length !== 0"
                  ng-class="{'disabledme': companyIsZombie()}"
                  ng-click="companyIsZombie() || editViewToggle();"
-                 data-placement="bottom"
-                 bs-tooltip="zombiemessage">
+                 tooltip-placement="bottom"
+                 tooltip="{{zombiemessage}}">
                 <ul>
                     <li>
                         <span ng-show="togglename() == 'View'"

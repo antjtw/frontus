@@ -38,7 +38,7 @@
                 <div ng-if="currentTab == 'documents'">
                     <div class="linkedDocuments">
                         <div ng-repeat="doc in tran.evidence_data" class="row-fluid my-trans-docs">
-                            <ul class="pull-left" bs-tooltip="doc.docname">
+                            <ul class="pull-left" tooltip="{{doc.docname}}">
                                 <li>
                                         <span ng-click="viewEvidence(doc)" >
                                             {{doc.docname}}

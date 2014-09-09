@@ -67,7 +67,7 @@
                     <div class="pull-left" ng-if="access_token">
                         Linked
                     </div>
-                    <div class="pull-right pointer"> 
+                    <div class="pull-right pointer">
                         <span data-icon="&#xe00e;" aria-hidden="true" ng-if="!access_token" ng-click="startOauth('dropbox')">
                         </span>
                         <ul ng-if="access_token" class="dropdown-list">
@@ -156,8 +156,8 @@
                                             <span class="tooltip-icon"
                                                   data-icon="&#xe044;"
                                                   aria-hidden="true"
-                                                  data-placement="top"
-                                                  bs-tooltip="usagetips.documents_total">
+                                                  tooltip-placement="top"
+                                                  tooltip="{{usagetips.documents_total}}">
                                             </span>
                     </div>
                     <div class="pull-right">
@@ -177,8 +177,8 @@
                                             <span class="tooltip-icon"
                                                   data-icon="&#xe044;"
                                                   aria-hidden="true"
-                                                  data-placement="top"
-                                                  bs-tooltip="usagetips.admins_total">
+                                                  tooltip-placement="top"
+                                                  tooltip="{{usagetips.admins_total}}">
                                             </span>
                     </div>
                     <div class="pull-right">
@@ -198,8 +198,8 @@
                                             <span class="tooltip-icon"
                                                   data-icon="&#xe044;"
                                                   aria-hidden="true"
-                                                  data-placement="top"
-                                                  bs-tooltip="usagetips.direct_messages_monthly">
+                                                  tooltip-placement="top"
+                                                  tooltip="{{usagetips.direct_messages_monthly}}">
                                             </span>
                     </div>
                     <div class="pull-right">

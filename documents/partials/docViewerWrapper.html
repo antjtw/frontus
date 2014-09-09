@@ -43,7 +43,7 @@
              ng-class="{'disabledme': companyIsZombie()}"
              ng-show="!invq && !urlInves && !prepareable() && !prepareFor"
              ng-click="companyIsZombie() || shareThisDoc();"
-             data-placement="bottom" bs-tooltip="zombiemessage">
+             tooltip-placement="bottom" tooltip="{{zombiemessage}}">
             <ul>
                 <li> <span data-icon="&#xe604;" aria-hidden="true"></span>
 

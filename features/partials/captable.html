@@ -216,7 +216,7 @@
                                             onkeydown="testForEnter();">
 
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.premoneyval"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.premoneyval}}"></span>
                                     </p>
 
                                     <p class="rightTitle double"><span>Post-Money Valuation</span><input
@@ -226,7 +226,7 @@
                                             onkeydown="testForEnter();">
 
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.postmoneyval"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.postmoneyval}}"></span>
                                     </p>
 
                                     <p class="rightTitle"><span>Share Price</span><input ng-disabled="toggleView();"
@@ -235,7 +235,7 @@
                                                                                          onkeydown="testForEnter();">
 
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.ppshare"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.ppshare}}"></span>
                                     </p>
 
                                     <p class="rightTitle"><span>Total Authorized</span><input
@@ -245,7 +245,7 @@
                                             onkeydown="testForEnter();">
 
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.totalauth"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.totalauth}}"></span>
                                     </p>
 
                                     <div ng-hide="activeIssue.common" class="rightTitle double"><span>Liquidation Preference</span>
@@ -262,7 +262,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.liquidpref}}"></span>
                                     </div>
 
                                     <div ng-hide="activeIssue.common" class="rightTitle double"><span>Participating Preferred</span>
@@ -280,7 +280,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.partpref"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.partpref}}"></span>
                                     </div>
 
 
@@ -299,7 +299,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.dragalong"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.dragalong}}"></span>
                                     </div>
 
                                     <div ng-hide="activeIssue.common" class="rightTitle"><span>Tag Along</span>
@@ -317,7 +317,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.tagalong"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.tagalong}}"></span>
                                     </div>
 
                                     <span ng-show="showPari(allowKeys) && !activeIssue.common" class="paripassu-list">
@@ -338,7 +338,7 @@
                                                 </li>
                                             </ul>
                                             <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                  data-placement="top" bs-tooltip="captabletips.paripassu"></span>
+                                                  tooltip-placement="top" tooltip="{{captabletips.paripassu}}"></span>
                                             <button class="icon-button" ng-click="addIssuePari(activeIssue.paripassu)">
                                                 <span data-icon="&#xe053;" aria-hidden="true"></span></button>
                                         </div>
@@ -363,7 +363,7 @@
                                               </li>
                                           </ul>
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.optundersec"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.optundersec}}"></span>
                                       </div>
 
                                       <p class="rightTitle"><span>Total Authorized</span><input
@@ -372,13 +372,13 @@
                                               ng-model="activeIssue.totalauth"
                                               onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.totalauth"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.totalauth}}"></span>
                                       </p>
 
                                       <p class="rightTitle"><span>Total Granted</span><input disabled
                                                                                              value="{{totalGranted(activeIssue.issue, trans);}}">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.totalgranted"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.totalgranted}}"></span>
                                       </p>
 
                                       <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
@@ -386,7 +386,7 @@
                                                                                             ng-model="activeIssue.price"
                                                                                             onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.price"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.price}}"></span>
                                       </p>
 
                                       <p class="rightTitle double"><span>Vesting Term (months)</span><input
@@ -395,7 +395,7 @@
                                               ng-model="activeIssue.terms"
                                               onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.terms"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.terms}}"></span>
                                       </p>
 
                                       <p class="rightTitle double"><span>Vesting Cliff (Months)</span><input type="text"
@@ -404,7 +404,7 @@
                                                                                                              onkeydown="testForEnter();">
 
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.vestingbegins}}"></span>
                                       </p>
 
                                       <p class="rightTitle"><span>Vesting Cliff %</span><input
@@ -413,7 +413,7 @@
                                               ng-model="activeIssue.vestcliff"
                                               onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.vestcliff}}"></span>
                                       </p>
 
                                       <div class="rightTitle double"><span>Post Cliff Frequency</span>
@@ -430,7 +430,7 @@
                                               </li>
                                           </ul>
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.vestfreq}}"></span>
                                       </div>
                                   </div>
 
@@ -444,7 +444,7 @@
                                               ng-model="activeIssue.premoney"
                                               onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.premoneyval"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.premoneyval}}"></span>
                                       </p>
 
                                       <p class="rightTitle double"><span>Post-Money Valuation</span><input
@@ -453,7 +453,7 @@
                                               ng-model="activeIssue.postmoney"
                                               onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.postmoneyval"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.postmoneyval}}"></span>
                                       </p>
 
                                       <div class="rightTitle interest-rate">
@@ -477,7 +477,7 @@
                                               </li>
                                           </ul>
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.interestrate"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.interestrate}}"></span>
                                       </div>
 
                                       <p style="display: inline-block" class="rightTitle">
@@ -486,7 +486,7 @@
                                                                            ng-model="activeIssue.valcap"
                                                                            onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.valcap}}"></span>
                                       </p>
 
                                       <p class="rightTitle"><span>Percent Discount</span><input
@@ -495,7 +495,7 @@
                                               ng-model="activeIssue.discount"
                                               onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.discount"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.discount}}"></span>
                                       </p>
 
                                       <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
@@ -503,7 +503,7 @@
                                                                                              ng-model="activeIssue.term"
                                                                                              onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.term"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.term}}"></span>
                                       </p>
                                   </div>
 
@@ -516,7 +516,7 @@
                                                                            ng-model="activeIssue.valcap"
                                                                            onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.valcap}}"></span>
                                       </p>
 
                                       <p class="rightTitle"><span>Percent Discount</span><input
@@ -525,7 +525,7 @@
                                               ng-model="activeIssue.discount"
                                               onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.discount"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.discount}}"></span>
                                       </p>
                                   </div>
 
@@ -548,7 +548,7 @@
                                               </li>
                                           </ul>
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.optundersec"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.optundersec}}"></span>
                                       </div>
 
                                       <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
@@ -556,7 +556,7 @@
                                                                                             ng-model="activeIssue.price"
                                                                                             onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.pricewarrant}}"></span>
                                       </p>
 
                                       <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
@@ -564,7 +564,7 @@
                                                                                              ng-model="activeIssue.term"
                                                                                              onkeydown="testForEnter();">
                                           <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                                data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
+                                                tooltip-placement="top" tooltip="{{captabletips.termwarrant}}"></span>
                                       </p>
 
                                   </div>
@@ -654,7 +654,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.liquidpref"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.liquidpref}}"></span>
                                     </div>
 
                                     <div ng-hide="commonstock(tran)" class="rightTitle double"><span>Participating Preferred</span>
@@ -671,7 +671,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.partpref"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.partpref}}"></span>
                                     </div>
 
                                     <div ng-hide="commonstock(tran)" class="rightTitle"><span>Drag Along</span>
@@ -688,7 +688,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.dragalong"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.dragalong}}"></span>
                                     </div>
 
                                     <div ng-hide="commonstock(tran)" class="rightTitle"><span>Tag Along</span>
@@ -705,7 +705,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.tagalong"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.tagalong}}"></span>
                                     </div>
 
                                 </div>
@@ -717,7 +717,7 @@
                                                                                           ui-event="{blur : 'saveTran(tran)'}"
                                                                                           ng-model="tran.price">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.price"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.price}}"></span>
                                     </p>
 
                                     <p class="rightTitle double"><span>Vesting Term (months)</span><input
@@ -726,7 +726,7 @@
                                             ui-event="{blur : 'saveTran(tran)'}"
                                             ng-model="tran.terms">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.terms"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.terms}}"></span>
                                     </p>
 
                                     <p class="rightTitle double"><span>Vesting Cliff (months)</span><input type="text"
@@ -734,7 +734,7 @@
                                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                                            ng-model="tran.vestingbeginsdisplay">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.vestingbegins"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.vestingbegins}}"></span>
                                     </p>
 
                                     <p class="rightTitle"><span>Vesting Cliff %</span><input ng-disabled="toggleView();"
@@ -742,7 +742,7 @@
                                                                                              ui-event="{blur : 'saveTran(tran)'}"
                                                                                              ng-model="tran.vestcliff">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.vestcliff"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.vestcliff}}"></span>
                                     </p>
 
 
@@ -760,7 +760,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.vestfreq"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.vestfreq}}"></span>
                                     </div>
 
                                 </div>
@@ -787,7 +787,7 @@
                                             </li>
                                         </ul>
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.interestrate"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.interestrate}}"></span>
                                     </div>
 
                                     <p style="display:inline-block" class="rightTitle"><span>Valuation Cap</span><input
@@ -796,7 +796,7 @@
                                             ui-event="{blur : 'saveTran(tran)'}"
                                             ng-model="tran.valcap">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.valcap"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.valcap}}"></span>
                                     </p>
 
                                     <p class="rightTitle"><span>Percent Discount</span><input
@@ -805,7 +805,7 @@
                                             ui-event="{blur : 'saveTran(tran)'}"
                                             ng-model="tran.discount">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.discount"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.discount}}"></span>
                                     </p>
 
                                     <p class="rightTitle"><span>Term (months)</span><input ng-disabled="toggleView();"
@@ -813,7 +813,7 @@
                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                            ng-model="tran.term">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.term"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.term}}"></span>
                                     </p>
                                 </div>
 
@@ -826,7 +826,7 @@
                                             ui-event="{blur : 'saveTran(tran)'}"
                                             ng-model="tran.valcap">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.valcapsafe"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.valcapsafe}}"></span>
                                     </p>
 
                                     <p class="rightTitle"><span>Percent Discount</span><input
@@ -835,7 +835,7 @@
                                             ui-event="{blur : 'saveTran(tran)'}"
                                             ng-model="tran.discount">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.discount"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.discount}}"></span>
                                     </p>
 
                                 </div>
@@ -848,7 +848,7 @@
                                                                                            ui-event="{blur : 'saveTran(tran)'}"
                                                                                            ng-model="tran.term">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.termwarrant"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.termwarrant}}"></span>
                                     </p>
 
                                     <p class="rightTitle"><span>Strike Price</span><input ng-disabled="toggleView();"
@@ -856,7 +856,7 @@
                                                                                           ui-event="{blur : 'saveTran(tran)'}"
                                                                                           ng-model="tran.price">
                                         <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true"
-                                              data-placement="top" bs-tooltip="captabletips.pricewarrant"></span>
+                                              tooltip-placement="top" tooltip="{{captabletips.pricewarrant}}"></span>
                                     </p>
 
                                 </div>
