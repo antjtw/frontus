@@ -376,6 +376,7 @@ navm.controller('NavCtrl',
             $rootScope.settings.dateandtime = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y, h:mm a' : 'dd MMMM y, h:mm a';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
             $rootScope.settings.domain = window.location.host;
+            $scope.$broadcast("settings_loaded");
         });
 
         SWBrijj.tblm('account.profile').then(function(x) {

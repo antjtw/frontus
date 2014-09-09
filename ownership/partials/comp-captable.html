@@ -221,6 +221,82 @@
 
 <!-- Captable From Here Down -->
 <subnav>
+    <div class="pull-left captable">
+        <div ng-if="!windowToggle && !editMode"
+            ng-class="{'disabledme': companyIsZombie()}">
+            <ul class="dropdown-list drop-selector big filter-selector">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle" ng-click="checkDateRange();"
+                        data-toggle="dropdown" href="#">
+                        <span ng-if="(ctFilter.date | date:settings.shortdate) != daterange.today">
+                            Viewing {{ctFilter.date | date:settings.shortdate}}
+                        </span>
+                        <span ng-if="(ctFilter.date | date:settings.shortdate) == daterange.today">
+                            Viewing Today
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu history-box" ng-click="$event.stopPropagation()">
+                        <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
+                        <span ng-click="setToday();" class="blue-link">set to today</span>
+                        <input class="range"
+                               style='{{daterange.coloredbar}}'
+                               type="range"
+                               value="0"
+                               min="0"
+                               max="{{ct.totalDays}}" 
+                               step="1"
+                               ng-model="daterange.offset"
+                               ng-change="updateDateSlider()"/>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pull-left"
+         ng-animate="{show: fadeShow, hide: fadeHide}"
+         ng-if="!windowToggle && !editMode">
+        <ul class="dropdown-list drop-selector big filter-selector">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle"
+                   data-toggle="dropdown" href="#"
+                   title="{{ctFilter.security_types | displayList }}">
+                    {{ securityFilterLabel() }}
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-click="ctFilter.vesting = !ctFilter.vesting"
+                        onclick="event.stopPropagation();"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: ctFilter.vesting}">
+                                <span data-icon="&#xe023;"
+                                      aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>Unvested options</span>
+                        </div>
+                    </li>
+                    <li ng-repeat="t in securityTypeDropdown()"
+                        ng-click="toggleSecurityType(t)"
+                        onclick="event.stopPropagation();"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: showSecurityType(t)}">
+                                <span data-icon="&#xe023;" aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>{{t}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
     <div class="box-button pull-right"
          ng-if="!windowToggle"
          ng-class="{'disabledme': companyIsZombie()}"
@@ -332,7 +408,7 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="sec in ct.securities"
+                <th ng-repeat="sec in ct.securities | filter:securityFilter"
                     ng-click="selectSecurity(sec.name)">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
@@ -358,7 +434,7 @@
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
-                    ng-repeat="sec in ct.securities"
+                    ng-repeat="sec in ct.securities | filter:securityFilter | filter:dateSecurityFilter"
                     ng-click="selectSecurity(sec.name)">
                     <span>{{::sec.name}}</span>
                     <span class="next-button"
@@ -372,7 +448,7 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in ct.securities">
+                <td ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span>{{securityUnitLabel(one)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -418,7 +494,7 @@
                                ng-model="row.name">
                     </span>
                 </td>
-                <td ng-repeat="key in ct.securities"
+                <td ng-repeat="key in ct.securities | filter:securityFilter"
                     ng-class="{tranSelected: selectedCell
                         && selectedCell.investor == row.name
                         && selectedCell.security == key.name}">
@@ -452,7 +528,8 @@
                            ng-paste="namePaste($event, row);"
                            ng-model="$parent.new_inv">
                 </td>
-                <td ng-repeat="key in ct.securities" class="capsums-col">
+                <td ng-repeat="key in ct.securities | filter:securityFilter"
+                    class="capsums-col">
                 </td>
                 <!-- for new security column -->
                 <td ng-if="editMode;"></td>
@@ -465,12 +542,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.rowSum(row.name) | number:0}}">
+                           value="{{rowSum(row) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
+                           value="{{investorOwnershipPercentage(row) || 0.000 | number:2}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
@@ -482,8 +559,8 @@
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
                                hoverable: captable.cellFor(row.name, key.name)}"
-                    ng-repeat="key in ct.securities">
-                    <captable-cell inv='row.name' sec='key.name'
+                    ng-repeat="key in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
+                    <captable-cell filter='ctFilter' inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
                 </td>
             </tr>
@@ -491,27 +568,27 @@
             <!-- Unissued Rows -->
             <tr class="unissued-rows"
                 ng-repeat="sec in
-                           captable.securitiesWithUnissuedUnits()">
+                           captable.securitiesWithUnissuedUnits() | filter:dateSecurityFilter">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities) | number:0}}">
+                           value="{{numUnissued(sec) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:2}}%">
+                           value="{{securityUnissuedPercentage(sec) || 0.00 | number:2}}%">
                 </td>
                 <td class="viewName unissuedName">
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.securities">
+                    ng-repeat="key in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities) | number:2}}
+                                {{numUnissued(key) | number:2}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -528,7 +605,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities">
+                    ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -537,8 +614,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits()
-                                  | number:0}}">
+                           value="{{totalOwnershipUnits(1) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -548,17 +624,16 @@
                 <td class="tableFields">
                 </td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities">
+                    ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one)
-                            + captable.numUnissued(one, ct.securities)
+                            {{securityTotalUnits(one) + numUnissued(one)
                             | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one)
+                            {{securityTotalAmount(one)
                             | formatAmount:'amount'}}
                         </div>
                     </span>
@@ -600,6 +675,7 @@
                     </span>
                     <span ng-switch-when="4">
                         <cell-details cell="selectedCell"
+                                      filter='ctFilter'
                                       currenttab="currentTab"></cell-details>
                     </span>
                     <span class="padded-cap capGuide in-brief"

@@ -996,6 +996,28 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls .dropdown-list {
     line-height: 32px;
 }
+.subnav-controls .dropdown-list.big .dropdown-menu li > div {
+    padding-top: 5px;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button {
+    background-color: #E3E3E3;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button > span{
+    display: inline-block;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button.selected {
+    background-color: #1ABC96;
+    border: 1px solid #1ABC96;
+}
+.subnav-controls .dropdown-list.big .dropdown-menu li > div:last-child {
+    text-align: left;
+}
+.subnav-controls .dropdown-list.big .dropdown-toggle,
+.subnav-controls .dropdown-list.big .dropdown-menu {
+    width: 194px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .subnav-controls > div:first-child {
     display: inline-block;
     vertical-align: middle;
@@ -1006,6 +1028,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
 }
+.captable-controls.subnav-controls > div:first-child {
+    margin-left: 0;
+}
 .subnav-controls > div > div:not(.tooltip) {
     position: relative;
 }
@@ -1015,6 +1040,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls ul.drop-selector {
     margin-left: 8px;
     margin-right: 20px;
+}
+.subnav-controls .filter-selector.drop-selector {
+    margin-right: 10px;
 }
 .subnav-controls input {
     border: 0;
@@ -3225,7 +3253,8 @@ button.icon-button:hover {
     width:20px;
     height:30px;
 }
-.standard.open .dropdown-toggle::before {
+.standard.open .dropdown-toggle::before,
+.filter-selector .standard.open .dropdown-toggle::before {
     background: url('/img/up-arrow-20x30.png');
 }
 .standard .dropdown-toggle:hover {
@@ -4976,4 +5005,65 @@ textarea.email-text {
    border-bottom: 1px solid rgb(241, 241, 241); 
 }
 
-
+.filter-selector.dropdown-list.big {
+}
+.filter-selector .standard .dropdown-toggle::before {
+    display: block;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    left: 3px;
+    content:" ";
+    background: url('/img/down-arrow-20x30.png');
+    width:20px;
+    height:30px;
+}
+.filter-selector .standard .dropdown-toggle {
+    padding-left: 26px;
+    background-color: inherit;
+    border: none;
+    width: 140px !important;
+}
+.filter-selector .standard .dropdown-toggle:hover {
+    background-color: inherit;
+}
+.filter-selector .dropdown-menu {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 10px 0 0 0;
+    border-radius: 3px;
+    box-shadow: none;
+    border: 0;
+    width: 150px;
+    background-color: #E3E3E3;
+    min-width: 150px;
+    cursor: pointer;
+    z-index: 1000;
+    overflow: visible !important;
+}
+.filter-selector .dropdown-menu:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-bottom: 10px solid #E3E3E3;
+    top: -10px;
+    left: 4px !important;
+}
+.filter-selector .dropdown-menu:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 9px solid transparent;
+    border-left: 9px solid transparent;
+    border-bottom: 9px solid white;
+    top: -9px;
+    left: 5px !important;
+}

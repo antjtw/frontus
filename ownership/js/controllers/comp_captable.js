@@ -3,9 +3,10 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
          "SWBrijj", "calculate", "navState", "captable",
-         "displayCopy", "History", "Investor",
+         "displayCopy", "History", "Investor", "attributes",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, navState, captable, displayCopy, History, Investor)
+         calculate, navState, captable, displayCopy, History, Investor,
+         attributes)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -17,6 +18,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     captable.forceRefresh();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
+    var attrs = attributes.getAttrs();
 
     // Set the view toggles to their defaults
     $scope.editMode = false;
@@ -27,6 +29,32 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     });
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
+    $scope.ctFilter = {date: new Date(),
+                       vesting: true,
+                       security_types: ['Show All']};
+    $scope.$watch('ctFilter', function(newVal, oldVal) {
+        switch (selectedThing()) {
+            case "selectedCell":
+                if ($scope.filteredSecurityList()
+                        .reduce(captable.accumulateProperty('name'), [])
+                        .indexOf($scope.selectedCell.security) == -1) {
+                    deselectCell();
+                }
+                return;
+            case "selectedInvestor":
+                return;
+            case "selectedSecurity":
+                if ($scope.filteredSecurityList()
+                        .indexOf($scope.selectedSecurity) == -1) {
+                    deselectSecurity();
+                }
+                return;
+        }
+    }, true);
+    $scope.filteredSecurityList = function() {
+        return $filter('filter')($scope.ct.securities, $scope.securityFilter
+                                 );
+    };
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourUp = function () { $scope.tourModal = false; };
@@ -64,6 +92,96 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.issueSort = 'date';
     $scope.rowSort = '-name';
     $scope.activeTran = [];
+    
+    $scope.daterange = {};
+    $scope.daterange.offset = 0;
+    
+    if ($scope.settings)
+    {
+        $scope.daterange.today = $filter('date')(new Date(), $scope.settings.shortdate);
+    }
+    
+    $scope.updateDateSlider = function() {
+        var d = captable.startDate().getTime();
+        $scope.ctFilter.date = new Date(d + $scope.daterange.offset*86400000);
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.updateBarColor();
+    };
+    
+    $scope.updateBarColor = function() {
+        var p = Math.round(Math.min((Math.max($scope.daterange.offset, 0)/$scope.ct.totalDays)*100, 100)*100)/100;
+        $scope.daterange.coloredbar = "background: #C7C7C7;\
+            background: -moz-linear-gradient(left,  #1ABC96 0%, #1ABC96 " + p + "%, #C7C7C7 " + p + "%, #C7C7C7 100%);\
+            background: -webkit-gradient(linear, left top, right top, color-stop(0%,#1ABC96), color-stop(" + p + "%,#1ABC96), color-stop(" + p + "%,#C7C7C7), color-stop(100%,#C7C7C7));\
+            background: -webkit-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
+            background: -o-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
+            background: -ms-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
+            background: linear-gradient(to right,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);"
+    };
+    
+    $scope.checkDateRange = function() {
+        if ($scope.editMode)
+        {
+            $scope.ctFilter.date = null;
+            return;
+        }
+        if (!$scope.ctFilter.date)
+        {
+            $scope.ctFilter.date = new Date();
+        }
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $rootScope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(
+                captable.startDate() || new Date(1980),
+                $scope.ctFilter.date);
+        $scope.updateBarColor();
+        $scope.daterange.today = $filter('date')(new Date(), $rootScope.settings.shortdate);
+    };
+    $scope.$on("settings_loaded", function(evt, msg, cb) {
+        $scope.checkDateRange();
+    });
+    
+    $scope.updateDateInput = function() {
+        //TODO: only works for MM/dd/yy & dd/MM/yy. Must change if we add more date formats.
+        var nums = $scope.daterange.fakeDate.split('/');
+        if (nums.length != 3)
+            return;
+        if (!(nums[2].length == 2 || nums[2].length == 4))
+            return;
+        var year = Number(nums[2]);
+        if (isNaN(year))
+            return;
+        if (year < 1000)
+            year += 2000;
+        var monthInd = ($scope.settings.shortdate.indexOf('MM') == 0) ? 0 : 1;
+        if (nums[monthInd].length < 1 || nums[monthInd].length > 2)
+            return;
+        var month = Number(nums[monthInd]);
+        if (isNaN(month))
+            return;
+        if (month < 1 || month > 12)
+            return;
+        if (nums[1 - monthInd].length < 1 || nums[1 - monthInd].length > 2)
+            return;
+        var day = Number(nums[1 - monthInd]);
+        if (isNaN(day))
+            return;
+        if (day < 1 || day > 31)
+            return;
+        var d = new Date(year, month - 1, day);
+        if (!d)
+            return;
+        $scope.ctFilter.date = d;
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        $scope.updateBarColor();
+    };
+    
+    $scope.setToday = function() {
+        $scope.ctFilter.date = new Date();
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        $scope.updateBarColor();
+    };
 
     // Initialize a few visible variables
     $scope.investorOrder = "name";
@@ -78,6 +196,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         } else {
             if (captable.totalOwnershipUnits() == 0) {
                 $scope.editMode = true;
+                $scope.ctFilter.date = null;
             }
         }
     }
@@ -103,6 +222,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.$broadcast("newSelection");
         }
     };
+    function deselectCell() {
+        displayIntroSidebar();
+        $scope.selectedCell = null;
+        History.forget($scope, 'selectedCell');
+    }
     $scope.selectSecurity = function(security_name, reselect) {
         $scope.selectedCell = $scope.selectedInvestor = null;
         if (!$scope.editMode && ($scope.selectedSecurity && !reselect) &&
@@ -123,14 +247,23 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
         $scope.$broadcast("newSelection");
     };
+    function deselectSecurity() {
+        displayIntroSidebar();
+        $scope.selectedSecurity = null;
+        History.forget($scope, 'selectedSecurity');
+    }
+    function deselectInvestor() {
+        displayIntroSidebar();
+        $scope.selectedInvestor = null;
+        History.forget($scope, 'selectedInvestor');
+    }
     $scope.selectInvestor = function(investor_name, reselect) {
         $scope.selectedCell = $scope.selectedSecurity = null;
         //deselectAllCells();
         if (!$scope.editMode && ($scope.selectedInvestor && !reselect) &&
                 $scope.selectedInvestor.name == investor_name) {
             displayIntroSidebar();
-            $scope.selectedInvestor = null;
-            History.forget($scope, 'selectedInvestor');
+            deselectInvestor();
         } else {
             History.forget($scope, 'selectedInvestor');
             $scope.selectedInvestor = $scope.ct.investors
@@ -299,6 +432,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.editViewToggle = function() {
         toggleDetailsView();
         $scope.editMode = !$scope.editMode;
+        if ($scope.editMode)
+        {
+            $scope.ctFilter.date = null;
+        }
         reselectCurrentSelection();
     };
 
@@ -370,6 +507,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         } else {
             hideViewOnlyDetails();
             $scope.editMode = true;
+            $scope.ctFilter.date = null;
             return $scope.editMode;
         }
     };
@@ -847,6 +985,95 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return false;
     };
 
+    $scope.securityTypeDropdown = function() {
+        return Object.keys(attrs).sort();
+    };
+    $scope.showSecurityType = function(t) {
+        if (!t || !$scope.ctFilter || !$scope.ctFilter.security_types) {
+            return null;
+        } else if ($scope.ctFilter.security_types.indexOf('Show All') !== -1) {
+            return true;
+        } else {
+            return $scope.ctFilter.security_types.indexOf(t) !== -1;
+        }
+    };
+    $scope.toggleSecurityType = function(t) {
+        if (!t) return null;
+        var idx = $scope.ctFilter.security_types.indexOf(t);
+        if (idx == -1) {
+            if ($scope.showSecurityType('Show All')) {
+                $scope.ctFilter.security_types = $scope.securityTypeDropdown()
+                    .filter(function(el) {
+                        return el != t;
+                    });
+            } else {
+                $scope.ctFilter.security_types.push(t);
+                if ($scope.ctFilter.security_types.length ==
+                        $scope.securityTypeDropdown().length) {
+                    $scope.ctFilter.security_types = ['Show All'];
+                }
+            }
+        } else {
+            $scope.ctFilter.security_types.splice(idx, 1);
+            if ($scope.ctFilter.security_types.length === 0) {
+                $scope.toggleSecurityType('Show All');
+            }
+        }
+    };
+    $scope.securityFilter = function(sec) {
+        return $scope.editMode ||
+            $scope.showSecurityType('Show All') ||
+            $scope.showSecurityType(sec.attrs.security_type);
+    };
+    $scope.securityFilterLabel = function() {
+        if (!$scope.ctFilter.vesting ||
+                !$scope.showSecurityType('Show All')) {
+            return "Showing Filtered";
+        } else {
+            return "Showing All";
+        }
+    };
+    $scope.dateSecurityFilter = function(sec) {
+        return !$scope.ctFilter.date || $scope.editMode ||
+            sec.effective_date < $scope.ctFilter.date;
+    };
+    $scope.rowSum = function(row) {
+        return captable.rowSum(
+                row.name,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.investorOwnershipPercentage = function(row) {
+        return captable.investorOwnershipPercentage(
+                row.name,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.numUnissued = function(sec) {
+        return captable.numUnissued(sec, $scope.ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityUnissuedPercentage = function(sec) {
+        return captable.securityUnissuedPercentage(sec, $scope.ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.totalOwnershipUnits = function(x) {
+        return captable.totalOwnershipUnits(x,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalUnits = function(sec) {
+        return captable.securityTotalUnits(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalAmount = function(sec) {
+        return captable.securityTotalAmount(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
 }]);
 
 // IE fix to remove enter to submit form

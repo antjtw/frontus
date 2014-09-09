@@ -90,13 +90,38 @@ own.directive('captableCell', [function() {
         restrict: 'E',
         scope: {inv: '=',
                 sec: '=',
-                data: '='},
+                data: '=',
+                filter: '='},
         templateUrl: '/ownership/partials/captableCell.html',
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
                 $scope.settings = $rootScope.settings;
                 $scope.t = ($scope.data && $scope.data.kind) ? "grant"
                                                              : "cap";
+                if ($scope.filter)
+                {
+                    $scope.units = function() {
+                        return captable.getCellUnits($scope.data,
+                                                     $scope.filter.date, 
+                                                     $scope.filter.vesting);
+                    };
+                    $scope.amount = function() {
+                        return captable.getCellAmount($scope.data,
+                                                      $scope.filter.date, 
+                                                      $scope.filter.vesting);
+                    };
+                }
+                else
+                {
+                    $scope.units = function() { 
+                        if ($scope.data) return $scope.data.u;
+                        return null;
+                    };
+                    $scope.amount = function() { 
+                        if ($scope.data) return $scope.data.a;
+                        return null;
+                    };
+                }
             }
         ],
     };
@@ -134,7 +159,6 @@ own.directive('editableCaptableCell', [function() {
                         data = $scope.selectedCell;
                     }
                     if (data) {
-                        console.log(data);
                         if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
@@ -604,7 +628,8 @@ own.directive('cellDetails', [function() {
     return {
         restrict: 'EA',
         scope: {cell: '=',
-                currentTab: '=currenttab'},
+                currentTab: '=currenttab',
+                filter: '='},
         templateUrl: '/ownership/partials/cellDetails.html',
         controller: ["$scope", "$rootScope", "$location",
                      "displayCopy", "captable",
@@ -616,6 +641,16 @@ own.directive('cellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+                
+                function filter() {
+                    if (!$scope.cell) return [];
+                    $scope.transactions = $scope.cell.transactions.filter(
+                        function(tran) {
+                            return tran.effective_date < $scope.filter.date;
+                        });
+                };
+                
+                filter();
 
                 $scope.loaddirective = function() {
                     if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
@@ -642,6 +677,9 @@ own.directive('cellDetails', [function() {
                 $scope.loaddirective();
                 $scope.$watch('cell', function(newval, oldval) {
                     $scope.loaddirective();
+                }, true);
+                $scope.$watch('filter', function(newval, oldval) {
+                    filter();
                 }, true);
             }
         ],
@@ -854,7 +892,6 @@ own.directive('transactionAttributes', [function() {
         replace: true,
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-        // TODO refactor to use attributes service
         controller: ["$scope", "$rootScope", "captable", "displayCopy", "attributes", "$filter",
             function($scope, $rootScope, captable, displayCopy, attributes, $filter) {
                 $scope.displayAttr = captable.displayAttr;
@@ -871,7 +908,6 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 $scope.loaddirective = function () {
-                    console.log($scope.data);
                     $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);
