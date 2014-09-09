@@ -27,13 +27,11 @@
                         <h2>Personal Information</h2>
                     </div>
                     <div class="body-box">
-                        <ul class="personal-information">
+                        <ul class="personal-information span6">
                             <li>
                                 <ul>
                                     <li>Full Name</li>
                                     <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
-                                    <li>Email</li>
-                                    <li style="line-height: 28px;">{{email}}</li>
                                 </ul>
                             </li>
                             <li>
@@ -46,8 +44,16 @@
                                 <ul>
                                     <li>City</li>
                                     <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
                                     <li>State</li>
                                     <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
                                     <li>Zip Code</li>
                                     <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
                                 </ul>
@@ -65,6 +71,10 @@
                                 </ul>
                             </li>
                         </ul>
+                        <div class="span6">
+                            <h2>Email</h2>
+                            <span style="line-height: 28px;">{{email}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
