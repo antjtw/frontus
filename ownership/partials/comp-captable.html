@@ -227,8 +227,7 @@
             <ul class="dropdown-list drop-selector big filter-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
-                       data-toggle="dropdown" href="#"
-                       title="{{ctFilter.security_types | displayList }}">
+                        data-toggle="dropdown" href="#">
                         <span ng-if="(ctFilter.date | date:settings.shortdate) != daterange.today">Viewing Up To {{ctFilter.date | date:settings.shortdate}}</span>
                         <span ng-if="(ctFilter.date | date:settings.shortdate) == daterange.today">Viewing Today</span>
                     </a>
