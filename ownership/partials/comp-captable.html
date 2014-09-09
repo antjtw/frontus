@@ -567,8 +567,9 @@
             </tbody>
             <!-- Unissued Rows -->
             <tr class="unissued-rows"
-                ng-repeat="sec in
-                           captable.securitiesWithUnissuedUnits() | filter:dateSecurityFilter">
+                ng-repeat="sec in captable.securitiesWithUnissuedUnits()
+                           | filter:securityFilter
+                           | filter:dateSecurityFilter">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
@@ -583,7 +584,9 @@
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
+                    ng-repeat="key in ct.securities
+                              | filter:securityFilter
+                              | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
