@@ -6,6 +6,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.page = null;
         $scope.myMessages = [];
         $scope.allThreads = Message.getAllThreads();
+        console.log($scope.allThreads)
         $scope.myPeople = Message.getAllNames();
         $scope.allPeople = Message.getAllPeople();
 

@@ -57,7 +57,7 @@
                         <tr class="threadMembers" >
                             <td style="width:450px" class="shareholder-column docname-column">
 
-                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}"position="bottom" ><div bs-tooltip="allThread.nameString">{{showString(allThread.nameString)}}<span ng-if="allThread.count > 1">  ({{allThread.count}})</div></a>
+                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}"position="bottom" ><div bs-tooltip="allThread.nameString">{{showString(allThread.nameString)}}{{allThread}}<span ng-if="allThread.count > 1">  ({{allThread.count}})</div></a>
                             </td>
                             <td><div bs-tooltip="allThread.subject"><span>{{showString(allThread.subject)}}</span></div></td>
                             <td style="width:10px;"></td>
