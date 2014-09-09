@@ -643,6 +643,7 @@ own.directive('cellDetails', [function() {
                 };
                 
                 function filter() {
+                    if (!$scope.cell) return [];
                     $scope.transactions = $scope.cell.transactions.filter(
                         function(tran) {
                             return tran.effective_date < $scope.filter.date;

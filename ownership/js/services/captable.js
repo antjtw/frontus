@@ -1868,6 +1868,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return prev;
         };
     }
+    this.accumulateProperty = accumulateProperty;
     function securityCurrentUnits(sec, inv) {
         if (!sec) return 0;
 
