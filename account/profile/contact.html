@@ -1,99 +1,89 @@
 <link type="text/css" rel="stylesheet" href="/account/profile/profile.css">
 <div style="min-height: 900px;" class="container dynamic-page doclistFlow">
+    <subnav>
+        <div>
+            <div class="pull-left">
+                <h1 class="profile-name">{{name}}</h1>
+            </div>
+
+            <div class="box-button pull-right"
+                ng-click="passwordModalOpen();">
+                <ul>
+                    <li>
+                        <span data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </li>
+                    <li>
+                        <span>Password</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </subnav>
     <div class="row-fluid">
-        <div style="margin-left: 0;" class="span12 statusBlock">
+        <div class="span8">
             <div class="row-fluid">
-                <div class="subnav-controls">
-                    <div>
-                        <div class="pull-left">
-                            <h1 class="profile-name">{{name}}</h1>
-                        </div>
-
-                        <div class="box-button pull-right"
-                             ng-click="passwordModalOpen();">
-                            <ul>
-                                <li> <span data-icon="&#xe02c;" aria-hidden="true"></span>
-
-                                </li>
-                                <li> <span>Password</span>
-
-                                </li>
-                            </ul>
-                        </div>
+                <div class="front info-box">
+                    <div class="head-box">
+                        <h2>Personal Information</h2>
                     </div>
-                    <div class="DivHelper"></div>
+                    <div class="body-box">
+                        <ul class="personal-information">
+                            <li>
+                                <ul>
+                                    <li>Full Name</li>
+                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
+                                    <li>Email</li>
+                                    <li style="line-height: 28px;">{{email}}</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>Address</li>
+                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'street\', street)', blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>City</li>
+                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
+                                    <li>State</li>
+                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
+                                    <li>Zip Code</li>
+                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>Country</li>
+                                    <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>Telephone</li>
+                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row-fluid home-top-row span12">
-            <div class="span8">
-                <div class="row-fluid">
-                    <div class="front info-box">
-                        <div class="head-box">
-                            <h2>Personal Information</h2>
-                        </div>
-                        <div class="body-box">
-                            <ul class="personal-information">
-                                <li>
-                                    <ul>
-                                        <li>Full Name</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
-                                        <li>Email</li>
-                                        <li style="line-height: 28px;">{{email}}</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Address</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'street\', street)', blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>City</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
-                                        <li>State</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
-                                        <li>Zip Code</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Country</li>
-                                        <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Telephone</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Profile Image</li>
-                                        <li class='profile-image'>
-                                            <img ng-src="{{photoURL}}">
-                                            <div class="standard-button small-standard-button gray">
-                                                <button ng-click="pictureModalOpen();" class="btn">Change</button>
-                                            </div>
-                                        </li>
-                                        <li class="signature-label">Signature Image</li>
-                                        <li class='signature-image'>
-                                            <div>
-                                                <img ng-src="{{signatureURL}}">
-                                            </div>
-                                            <div class="standard-button small-standard-button gray">
-                                                <button ng-click="sigModalUp();" class="btn">Change</button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
+        <div class="span4">
+            <h2>Profile Image</h2>
+            <div class='profile-image'>
+                <img ng-src="{{photoURL}}">
+                <div class="standard-button small-standard-button gray">
+                    <button ng-click="pictureModalOpen();" class="btn">Change</button>
+                </div>
+            </div>
+            <h2 class="signature-label">Signature Image</h2>
+            <div class='signature-image'>
+                <div>
+                    <img ng-src="{{signatureURL}}">
+                </div>
+                <div class="standard-button small-standard-button gray">
+                    <button ng-click="sigModalUp();" class="btn">Change</button>
                 </div>
             </div>
         </div>
