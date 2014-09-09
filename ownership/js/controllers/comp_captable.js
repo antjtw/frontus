@@ -1008,12 +1008,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.numUnissued = function(sec) {
-        return captable.numUnissued(sec, ct.securities,
+        return captable.numUnissued(sec, $scope.ct.securities,
                 ($scope.editMode ? false : $scope.ctFilter.date),
                 ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.securityUnissuedPercentage = function(sec) {
-        return captable.securityUnissuedPercentage(sec ,ct.securities,
+        return captable.securityUnissuedPercentage(sec, $scope.ct.securities,
                 ($scope.editMode ? false : $scope.ctFilter.date),
                 ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
