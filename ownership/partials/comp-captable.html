@@ -224,7 +224,7 @@
     <div class="pull-left">
         <div ng-if="!windowToggle && !editMode"
             ng-class="{'disabledme': companyIsZombie()}">
-            <ul class="dropdown-list drop-selector big">
+            <ul class="dropdown-list drop-selector big filter-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
                        data-toggle="dropdown" href="#"
@@ -242,13 +242,12 @@
         </div>
     </div>
     <div class="pull-left" ng-animate="{show: fadeShow, hide: fadeHide}">
-        <span>Filters</span>
-        <ul class="dropdown-list drop-selector big">
+        <ul class="dropdown-list drop-selector big filter-selector">
             <li class="dropdown standard">
                 <a class="dropdown-toggle"
                    data-toggle="dropdown" href="#"
                    title="{{ctFilter.security_types | displayList }}">
-                    {{ ctFilter.security_types | displayList }}
+                    {{ securityFilterLabel() }}
                 </a>
                 <ul class="dropdown-menu">
                     <li ng-click="ctFilter.vesting = !ctFilter.vesting"
