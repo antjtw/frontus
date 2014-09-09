@@ -278,7 +278,7 @@
                             <span>Unvested options</span>
                         </div>
                     </li>
-                    <li ng-repeat="t in securityTypeDropdown()"
+                    <li ng-repeat="t in securityTypeDropdown(true)"
                         ng-click="toggleSecurityType(t)"
                         onclick="event.stopPropagation();"
                         class="row-fluid">

@@ -5089,6 +5089,8 @@ li.event.roles > div > ul {
     cursor: pointer;
     z-index: 1000;
     overflow: visible !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .filter-selector .dropdown-menu:before {
     content: ' ';
