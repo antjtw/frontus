@@ -22,7 +22,6 @@ m.directive('groupPeople', function(){
 
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
-                   console.log("success!");
                 }).except(function(x){
                     console.log("failed to add group");
                 });
@@ -917,7 +916,6 @@ m.directive('investorTile', function(){
             $scope.investorNames = [];
             $scope.cti=captable.getCapTable();
             $scope.tips = displayCopy.captabletips;
-            console.log($scope.cti);
 
             $scope.$watch('cti', function(newval, oldval) {
                 if (newval.securities.length > 0) {
@@ -929,7 +927,7 @@ m.directive('investorTile', function(){
 
             $scope.allTransactions = [];
 
-           $scope.hasTip = function(key) {
+            $scope.hasTip = function(key) {
                 return key in $scope.tips;
             };
 
@@ -972,15 +970,14 @@ m.directive('investorTile', function(){
                     angular.forEach(cap.transactions, function(trans){
                         if(trans.attrs.investor == name) {
                             var newtran = angular.copy(trans);
-                            delete newtran.attrs["physical"];
-                            delete newtran.attrs["investor"];
-                            delete newtran.attrs["units"];
-                            $scope.allTransactions.push(newtran)
+                            delete newtran.attrs.physical;
+                            delete newtran.attrs.investor;
+                            delete newtran.attrs.units;
+                            $scope.allTransactions.push(newtran);
                         }
                     });
 
                 });
-                console.log($scope.allTransactions);
                 return($scope.allTransactions);
             };
 
@@ -1001,8 +998,8 @@ m.directive('investorTile', function(){
                     if (calculate.primaryMeasure(tran.attrs.security_type) == "units") {
                         tran.amount = tran.attrs.amount;
                     }
-                    delete tran.attrs["amount"];
-                })
+                    delete tran.attrs.amount;
+                });
             };
 
         }]
