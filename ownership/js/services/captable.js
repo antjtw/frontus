@@ -531,6 +531,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.grantRowInfoFor = grantRowInfoFor;
     this.rowSum = function(inv, securities, asof, vesting) {
+        if (!securities) securities = false;
         var red;
         if (asof)
         {
