@@ -34,12 +34,14 @@
 
   <!--   text in the window -->
 
+
     <div ng-if="allThreads.length== 0" style="margin: 40px; text-align: center"> You haven't sent or received any messages yet!</div>
     <div class="row-fluid leftTabWindow" ng-if="allThreads.length > 0">
         <compose-message ng-if="page == 'compose'"></compose-message>
      
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose'">          
             <sent-messages sents="sentMsgs" ng-if="page == 'sent'"></sent-messages>
+            <received-msgs ng-if="page =='received'"></received-msgs>
             <div ng-if="!page && allThreads.length > 0">
             <div class="span12">
                 <table class="status-table people-table">
@@ -55,9 +57,9 @@
                         <tr class="threadMembers" >
                             <td style="width:450px" class="shareholder-column docname-column">
 
-                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}"position="bottom" ><div bs-tooltip="allThread.names">{{allThread.nameString}}</div></a>
+                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}"position="bottom" ><div bs-tooltip="allThread.nameString">{{showString(allThread.nameString)}}<span ng-if="allThread.count > 1">  ({{allThread.count}})</div></a>
                             </td>
-                            <td><div bs-tooltip="allThread.subject"><span>{{allThread.subject}}</span></div></td>
+                            <td><div bs-tooltip="allThread.subject"><span>{{showString(allThread.subject)}}</span></div></td>
                             <td style="width:10px;"></td>
                         </tr>
                     </tbody>
@@ -71,7 +73,7 @@
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filters">
                     <div style="clear: both;">
-                        <message-filter sent="sentMsgs" inbox="myMessages" page="page" ilength ="inboxLength"></message-filter>
+                        <message-filter page="page"></message-filter>
                     </div>
                 </tab>
                 <tab heading = "Message Activity">

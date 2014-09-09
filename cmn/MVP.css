@@ -4992,10 +4992,10 @@ li.event.roles > div > ul {
     cursor: auto;
 }
 
-
 .lower-icon {
     vertical-align: -10%;
 }
+
 
 .sidebarInfo {
     margin-left: 20px;
@@ -5037,7 +5037,7 @@ li.event.roles > div > ul {
     color: #666;
     cursor: pointer;
 
-}
+
 
 .body-box .cardColumn{
     width: 30%;
@@ -5050,6 +5050,7 @@ li.event.roles > div > ul {
 .table-border{
    border-bottom: 1px solid rgb(241, 241, 241);
 }
+
 
 .filter-selector.dropdown-list.big {
 }

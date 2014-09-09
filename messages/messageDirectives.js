@@ -9,11 +9,9 @@ mod.directive('composeMessage', function() {
         // transclude: false,
         restrict: 'E',
         templateUrl: '/messages/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location',
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location', 'Message',        
 
-        
-
-        function($scope, $rootScope, SWBrijj, navState, $location) {
+        function($scope, $rootScope, SWBrijj, navState, $location, Message) {
 
             $scope.zombiemessage = function(){
                 if(navState.role === "issuer" && ($rootScope.billing.currentPlan === "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
@@ -23,17 +21,11 @@ mod.directive('composeMessage', function() {
                     return null;
                 }
             };
-            // this returns everyone you have ever emailed. yay
-            $scope.getPeople = function(){
-                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
-                    $scope.emailLists = data;          
-                });
-                
 
-            };
-            $scope.getPeople();
+            $scope.emailLists = Message.getAllPeople();
 
             $scope.groupMessage = false;
+
             $scope.selectGroupMessage = function(){
                 if($scope.groupMessage === false){
                     $scope.groupMessage = true;
@@ -146,7 +138,6 @@ mod.directive('composeMessage', function() {
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     $rootScope.$emit('new:message');
-                    // $scope.resetMessage();
                     $scope.clicked = false;
                     $location.url('/app/company/messages/');
                 }).except(function(err) {
@@ -230,10 +221,7 @@ mod.directive('composeMessage', function() {
 
 mod.directive('messageFilter', function(){
     return {
-        scope: {sent: "=", 
-                page: "=",
-                inbox: "=",
-                ilength: "="},
+        scope: {page: "="},
         restrict: 'E',
         templateUrl: '/messages/partials/messageFilter.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'Message', 
@@ -241,11 +229,22 @@ mod.directive('messageFilter', function(){
         function($scope, $rootScope, SWBrijj, $route, Message) {
 
             $scope.whichPage = function(){
-                console.log($scope.page);
-                $scope.page="sent"
+                $scope.page="sent";
             };
 
-            $scope.allMessages = Message.getAllThreads()
+            $scope.getCount = function(array){
+                var count = [];
+                angular.forEach(array, function(arr){
+                    if(count.indexOf(arr.thread_id)== -1){
+                        count.push(arr.thread_id);
+                    };
+                });
+                return count.length;
+            }
+
+            $scope.allMessages = Message.getAllThreads();
+            $scope.sents = Message.getSentMsgs();
+            $scope.receives = Message.getReceivedMsgs();
 
 
         }]
@@ -254,21 +253,147 @@ mod.directive('messageFilter', function(){
 
 mod.directive('sentMessages', function(){
     return {
-        scope: {sents: "="},
+        scope: false,
         restrict: 'E',
         templateUrl: '/messages/partials/sent.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter', 'Message',
 
-        function($scope, $rootScope, SWBrijj, $route, $filter) {
+        function($scope, $rootScope, SWBrijj, $route, $filter, Message) {
+
+            $scope.sentMsgs = Message.getSentMsgs();
+            $scope.allThreads = Message.getAllThreads();
+
+            $scope.$watch('allSentMsgs', function(){
+            }, true)
+
+            $scope.$watch('allThreads', function(){}, true)
+
 
             $scope.showString = function(string){
-                if(string.length > 70){
-                    return string.slice(0, 70) + "...";
+                if(string == null){
+                    return ""
                 }
-                else{
+                else if(string.length > 50){
+                    return string.slice(0, 50) + "...";
+                }
+                else {
                     return string;
                 }
             };
+
+            $scope.getMessageThreads = function(){
+                var mySentThreads = [];
+                var mySents = [];
+                angular.forEach($scope.sentMsgs, function(msg){
+                    if(mySentThreads.indexOf(msg.thread_id)== -1){
+                        mySentThreads.push(msg.thread_id);
+                        mySents.push(msg);
+                    };
+                });
+                return mySents;
+                console.log(mySents);   
+            };
+
+            // if you want to list all messages, best do with a proc m when someone clicks, no need to add to object
+            $scope.getCount = function(){
+                var mySents = $scope.getMessageThreads();
+                angular.forEach(mySents, function(sent){
+                    sent.times = [];
+                    angular.forEach($scope.allThreads, function(thr){
+                        if(thr.thread_id == sent.thread_id){
+                            sent.count = thr.count
+                        };
+                    });
+                    angular.forEach($scope.sentMsgs, function(msg){
+                        if(msg.thread_id == sent.thread_id && sent.times.indexOf(msg.time)== -1){
+                           sent.times.push(msg.time);
+                        };
+                    });
+                });                
+                return mySents;
+            };
+     
+
+            $scope.sents = $scope.getCount();
+  
+
+
+            
+         
+        }]
+    };
+});
+
+mod.directive('receivedMsgs', function(){
+    return {
+        scope: false,
+        restrict: 'E',
+        templateUrl: '/messages/partials/receivedMsgs.html',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$filter', 'Message',
+
+        function($scope, $rootScope, SWBrijj, $route, $filter, Message) {
+
+            $scope.receivedMsgs = Message.getReceivedMsgs();
+            $scope.allThreads = Message.getAllThreads();
+
+            $scope.$watch('receivedMsgs', function(){
+
+            }, true)
+
+
+            $scope.$watch('allThreads', function(){
+
+            }, true)
+
+  
+            $scope.getMessageThreads = function(){
+                var myRecThreads = [];
+                var myRecs = [];
+                angular.forEach($scope.receivedMsgs, function(msg){
+                    if(myRecThreads.indexOf(msg.thread_id)== -1){
+                        myRecThreads.push(msg.thread_id);
+                        myRecs.push(msg);
+                    };
+                });
+                return myRecs;
+            };
+            
+            // if you want to list all messages, best do with a proc m when someone clicks, no need to add to object
+            $scope.getCount = function(){
+                var myRecs = $scope.getMessageThreads();
+                angular.forEach(myRecs, function(rec){
+                    rec.times = [];
+                    angular.forEach($scope.allThreads, function(thr){
+                        if(thr.thread_id == rec.thread_id){
+                            rec.count = thr.count
+                        };
+                    });
+                    angular.forEach($scope.receivedMsgs, function(msg){
+                        if(msg.thread_id == rec.thread_id && rec.times.indexOf(msg.time)== -1){
+                           rec.times.push(msg.time);
+                        };
+                    });
+                });
+                
+                return myRecs;
+            };
+       
+
+            $scope.myRecs = $scope.getCount();
+
+
+            $scope.showString = function(string){
+                if(string == null){
+                    return ""
+                }
+                else if(string.length > 50){
+                    return string.slice(0, 50) + "...";
+                }
+                else {
+                    return string;
+                }
+            };
+
 
 
          

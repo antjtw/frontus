@@ -7,18 +7,16 @@
             <th></th>
         </tr>
         </tbody>
-        <tbody ng-repeat="sent in sents| orderBy:'time':true | filter: $parent.$parent.filterText"> 
+        <tbody ng-repeat="myRec in myRecs | orderBy:'time':true | filter: $parent.$parent.filterText"> 
             <tr class="empty-row"></tr>
             <tr class="forTooltip">
                 <td style="width:550px" class="shareholder-column docname-column">
-                    <a href="/app/company/messages/thread?thread={{sent.thread_id}}" position="bottom"><div tooltip="{{sent.nameString}}">{{showString(sent.nameString)}}<span ng-if="sent.count > 1">  ({{sent.count}})</span>
-                       
-                    </div></a>
+                    <a href="/app/company/messages/thread?thread={{myRec.thread_id}}" position="bottom"><div bs-tooltip="receivedMsg.nameString">{{showString(myRec.nameString)}}   <span ng-if="myRec.count > 1">({{myRec.count}})</span></a>
                 </td>
             
                 <td style="width: 400px">
-                    <div bs-tooltip="sent.subject">
-                        <span>{{showString(sent.subject)}}</span> 
+                    <div bs-tooltip="receivedMsg.subject">
+                        <span>{{showString(myRec.subject)}}</span> 
                     </div>
                 </td>
                 <td style="width:10px;"></td>
