@@ -152,5 +152,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         return allEmails;
     };
 
+
+
 }]);
 

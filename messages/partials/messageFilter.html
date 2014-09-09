@@ -16,9 +16,9 @@
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage()">Message Library</div>
                                     <div class="select_role tinycol left">{{allMessages.length}}</div>
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('sent')">Sent</div>
-                                    <div class="select_role tinycol left">{{sents.length}}</div>
+                                    <div class="select_role tinycol left">{{getCount(sents)}}</div>
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('received')">Received</div>
-                                    <div class="select_role tinycol left">{{receives.length}}</div>
+                                    <div class="select_role tinycol left">{{getCount(receives)}}</div>
                                 </div>
                             </div>
                         </div>          

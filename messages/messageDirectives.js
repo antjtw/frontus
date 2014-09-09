@@ -233,6 +233,16 @@ mod.directive('messageFilter', function(){
                 $scope.page="sent"
             };
 
+            $scope.getCount = function(array){
+                var count = [];
+                angular.forEach(array, function(arr){
+                    if(count.indexOf(arr.thread_id)== -1){
+                        count.push(arr.thread_id);
+                    };
+                });
+                return count.length;
+            }
+
             $scope.allMessages = Message.getAllThreads();
             $scope.sents = Message.getSentMsgs();
             $scope.receives = Message.getReceivedMsgs();
@@ -321,6 +331,7 @@ mod.directive('receivedMsgs', function(){
                     angular.forEach($scope.receivedMsgs, function(msg){
                         if(msg.thread_id == rec.thread_id && rec.times.indexOf(msg.time)== -1){
                            rec.times.push(msg.time)
+                           console.log(myRecs);
                         }
                     })
                 });
