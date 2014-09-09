@@ -990,10 +990,41 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             sec.effective_date < $scope.ctFilter.date;
     };
     $scope.rowSum = function(row) {
-        return captable.rowSum(row.name, $scope.ctFilter.date, $scope.ctFilter.vesting);
+        return captable.rowSum(
+                row.name,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.investorOwnershipPercentage = function(row) {
-        return captable.investorOwnershipPercentage(row.name, $scope.ctFilter.date, $scope.ctFilter.vesting);
+        return captable.investorOwnershipPercentage(
+                row.name,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.numUnissued = function(sec) {
+        return captable.numUnissued(sec, ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityUnissuedPercentage = function(sec) {
+        return captable.securityUnissuedPercentage(sec ,ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.totalOwnershipUnits = function(x) {
+        return captable.totalOwnershipUnits(x,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalUnits = function(sec) {
+        return captable.securityTotalUnits(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalAmount = function(sec) {
+        return captable.securityTotalAmount(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
 }]);
 

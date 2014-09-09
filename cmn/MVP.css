@@ -3247,7 +3247,8 @@ button.icon-button:hover {
     width:20px;
     height:30px;
 }
-.standard.open .dropdown-toggle::before {
+.standard.open .dropdown-toggle::before,
+.filter-selector .standard.open .dropdown-toggle::before {
     background: url('/img/up-arrow-20x30.png');
 }
 .standard .dropdown-toggle:hover {

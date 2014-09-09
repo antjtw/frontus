@@ -241,7 +241,9 @@
             </ul>
         </div>
     </div>
-    <div class="pull-left" ng-animate="{show: fadeShow, hide: fadeHide}">
+    <div class="pull-left"
+         ng-animate="{show: fadeShow, hide: fadeHide}"
+         ng-if="!windowToggle && !editMode">
         <ul class="dropdown-list drop-selector big filter-selector">
             <li class="dropdown standard">
                 <a class="dropdown-toggle"
@@ -558,12 +560,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities, ctFilter.date, ctFilter.vesting) | number:0}}">
+                           value="{{numUnissued(sec) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec, ct.securities, ctFilter.date, ctFilter.vesting) || 0.00 | number:2}}%">
+                           value="{{securityUnissuedPercentage(sec) || 0.00 | number:2}}%">
                 </td>
                 <td class="viewName unissuedName">
                     {{::sec.name}} (Unissued)
@@ -574,7 +576,7 @@
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities, ctFilter.date, ctFilter.vesting) | number:2}}
+                                {{numUnissued(key) | number:2}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -600,8 +602,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits(1, ctFilter.date, ctFilter.vesting)
-                                  | number:0}}">
+                           value="{{totalOwnershipUnits(1) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -615,13 +616,12 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one, ctFilter.date, ctFilter.vesting)
-                            + captable.numUnissued(one, ct.securities, ctFilter.date, ctFiler.vesting)
+                            {{securityTotalUnits(one) + numUnissued(one)
                             | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one, ctFilter.date, ctFilter.vesting)
+                            {{securityTotalAmount(one)
                             | formatAmount:'amount'}}
                         </div>
                     </span>
