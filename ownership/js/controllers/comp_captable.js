@@ -32,6 +32,29 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.ctFilter = {date: new Date(),
                        vesting: true,
                        security_types: ['Show All']};
+    $scope.$watch('ctFilter', function(newVal, oldVal) {
+        switch (selectedThing()) {
+            case "selectedCell":
+                if ($scope.filteredSecurityList()
+                        .reduce(captable.accumulateProperty('name'), [])
+                        .indexOf($scope.selectedCell.security) == -1) {
+                    deselectCell();
+                }
+                return;
+            case "selectedInvestor":
+                return;
+            case "selectedSecurity":
+                if ($scope.filteredSecurityList()
+                        .indexOf($scope.selectedSecurity) == -1) {
+                    deselectSecurity();
+                }
+                return;
+        }
+    }, true);
+    $scope.filteredSecurityList = function() {
+        return $filter('filter')($scope.ct.securities, $scope.securityFilter
+                                 );
+    };
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourUp = function () { $scope.tourModal = false; };
@@ -194,6 +217,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.$broadcast("newSelection");
         }
     };
+    function deselectCell() {
+        displayIntroSidebar();
+        $scope.selectedCell = null;
+        History.forget($scope, 'selectedCell');
+    }
     $scope.selectSecurity = function(security_name, reselect) {
         $scope.selectedCell = $scope.selectedInvestor = null;
         if (!$scope.editMode && ($scope.selectedSecurity && !reselect) &&
@@ -214,14 +242,23 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
         $scope.$broadcast("newSelection");
     };
+    function deselectSecurity() {
+        displayIntroSidebar();
+        $scope.selectedSecurity = null;
+        History.forget($scope, 'selectedSecurity');
+    }
+    function deselectInvestor() {
+        displayIntroSidebar();
+        $scope.selectedInvestor = null;
+        History.forget($scope, 'selectedInvestor');
+    }
     $scope.selectInvestor = function(investor_name, reselect) {
         $scope.selectedCell = $scope.selectedSecurity = null;
         //deselectAllCells();
         if (!$scope.editMode && ($scope.selectedInvestor && !reselect) &&
                 $scope.selectedInvestor.name == investor_name) {
             displayIntroSidebar();
-            $scope.selectedInvestor = null;
-            History.forget($scope, 'selectedInvestor');
+            deselectInvestor();
         } else {
             History.forget($scope, 'selectedInvestor');
             $scope.selectedInvestor = $scope.ct.investors
@@ -934,7 +971,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.securityTypeDropdown = function() {
-        //return ['Show All'].concat(Object.keys(attrs));
         return Object.keys(attrs).sort();
     };
     $scope.showSecurityType = function(t) {
@@ -974,15 +1010,54 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.showSecurityType('Show All') ||
             $scope.showSecurityType(sec.attrs.security_type);
     };
+    $scope.securityFilterLabel = function() {
+        if (!$scope.ctFilter.vesting ||
+                !$scope.showSecurityType('Show All')) {
+            return "Showing Filtered";
+        } else {
+            return "Showing All";
+        }
+    };
     $scope.dateSecurityFilter = function(sec) {
         return !$scope.ctFilter.date || $scope.editMode ||
             sec.effective_date < $scope.ctFilter.date;
     };
     $scope.rowSum = function(row) {
-        return captable.rowSum(row.name, $scope.ctFilter.date, $scope.ctFilter.vesting);
+        return captable.rowSum(
+                row.name,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.investorOwnershipPercentage = function(row) {
-        return captable.investorOwnershipPercentage(row.name, $scope.ctFilter.date, $scope.ctFilter.vesting);
+        return captable.investorOwnershipPercentage(
+                row.name,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.numUnissued = function(sec) {
+        return captable.numUnissued(sec, $scope.ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityUnissuedPercentage = function(sec) {
+        return captable.securityUnissuedPercentage(sec, $scope.ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.totalOwnershipUnits = function(x) {
+        return captable.totalOwnershipUnits(x,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalUnits = function(sec) {
+        return captable.securityTotalUnits(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalAmount = function(sec) {
+        return captable.securityTotalAmount(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
 }]);
 

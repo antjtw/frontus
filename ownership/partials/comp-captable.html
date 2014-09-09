@@ -224,7 +224,7 @@
     <div class="pull-left">
         <div ng-if="!windowToggle && !editMode"
             ng-class="{'disabledme': companyIsZombie()}">
-            <ul class="dropdown-list drop-selector big">
+            <ul class="dropdown-list drop-selector big filter-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
                        data-toggle="dropdown" href="#"
@@ -232,7 +232,7 @@
                         <span ng-if="(ctFilter.date | date:settings.shortdate) != daterange.today">Viewing Up To {{ctFilter.date | date:settings.shortdate}}</span>
                         <span ng-if="(ctFilter.date | date:settings.shortdate) == daterange.today">Viewing Today</span>
                     </a>
-                    <ul class="dropdown-menu" ng-click="$event.stopPropagation()">
+                    <ul class="dropdown-menu history-box" ng-click="$event.stopPropagation()">
                         <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
                         <span ng-click="setToday();" class="blue-link">set to today</span>
                         <input class="range" style='{{daterange.coloredbar}}' type="range" value="0" min="0" max="{{ct.totalDays}}" 
@@ -242,14 +242,15 @@
             </ul>
         </div>
     </div>
-    <div class="pull-left" ng-animate="{show: fadeShow, hide: fadeHide}">
-        <span>Filters</span>
-        <ul class="dropdown-list drop-selector big">
+    <div class="pull-left"
+         ng-animate="{show: fadeShow, hide: fadeHide}"
+         ng-if="!windowToggle && !editMode">
+        <ul class="dropdown-list drop-selector big filter-selector">
             <li class="dropdown standard">
                 <a class="dropdown-toggle"
                    data-toggle="dropdown" href="#"
                    title="{{ctFilter.security_types | displayList }}">
-                    {{ ctFilter.security_types | displayList }}
+                    {{ securityFilterLabel() }}
                 </a>
                 <ul class="dropdown-menu">
                     <li ng-click="ctFilter.vesting = !ctFilter.vesting"
@@ -263,7 +264,7 @@
                             </button>
                         </div>
                         <div class="pull-left span9">
-                            <span>Vesting</span>
+                            <span>Unvested options</span>
                         </div>
                     </li>
                     <li ng-repeat="t in securityTypeDropdown()"
@@ -560,12 +561,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities, ctFilter.date, ctFilter.vesting) | number:0}}">
+                           value="{{numUnissued(sec) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec, ct.securities, ctFilter.date, ctFilter.vesting) || 0.00 | number:2}}%">
+                           value="{{securityUnissuedPercentage(sec) || 0.00 | number:2}}%">
                 </td>
                 <td class="viewName unissuedName">
                     {{::sec.name}} (Unissued)
@@ -576,7 +577,7 @@
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities, ctFilter.date, ctFilter.vesting) | number:2}}
+                                {{numUnissued(key) | number:2}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -602,8 +603,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits(1, ctFilter.date, ctFilter.vesting)
-                                  | number:0}}">
+                           value="{{totalOwnershipUnits(1) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -617,13 +617,12 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one, ctFilter.date, ctFilter.vesting)
-                            + captable.numUnissued(one, ct.securities, ctFilter.date, ctFiler.vesting)
+                            {{securityTotalUnits(one) + numUnissued(one)
                             | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one, ctFilter.date, ctFilter.vesting)
+                            {{securityTotalAmount(one)
                             | formatAmount:'amount'}}
                         </div>
                     </span>

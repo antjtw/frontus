@@ -776,20 +776,34 @@ div.rightTitle.double > ul, div.rightTitle.double > input {
     background: #FFFFFF;
 }
 
-.dropdown-menu > input.range {
+.dropdown-menu.history-box > input.range {
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
     appearance: none !important;
     width: 90%;
     padding: 0px;
     box-shadow: none;
+    border-radius: 3px;
+    height: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.dropdown-menu > input.text {
+.dropdown-menu.history-box > input.text {
     width: 40%;
     padding: 5px;
     border: 1px solid #F1F1F1;
-    border-radius: 2px;
+    border-radius: 3px;
+    margin-left: 0;
+}
+
+.dropdown-menu.history-box > span {
+    text-transform: lowercase;
+}
+
+.dropdown-menu.history-box {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .rightTitle .standard .dropdown-toggle {
