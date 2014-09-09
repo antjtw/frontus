@@ -23,6 +23,15 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
           
         };
 
+        $scope.sortBy = function(col) {
+            console.log(col);
+            if ($scope.sort == col) {
+                $scope.sort = ('-' + col);
+            } else {
+                $scope.sort = col;
+            }
+        };
+
         $scope.showString = function(string){
             if(string == null){
                 return ""

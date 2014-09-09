@@ -11,13 +11,13 @@
             <tr class="empty-row"></tr>
             <tr class="forTooltip">
                 <td style="width:550px" class="shareholder-column docname-column">
-                    <a href="/app/company/messages/thread?thread={{sent.thread_id}}" position="bottom"><div bs-tooltip="allSentMsg.nameString">{{showString(sent.nameString)}}
+                    <a href="/app/company/messages/thread?thread={{sent.thread_id}}" position="bottom"><div tooltip="{{sent.nameString}}">{{showString(sent.nameString)}}<span ng-if="sent.count > 1">  ({{sent.count}})</span>
                        
                     </div></a>
                 </td>
             
                 <td style="width: 400px">
-                    <div bs-tooltip="allSentMsg.subject">
+                    <div bs-tooltip="sent.subject">
                         <span>{{showString(sent.subject)}}</span> 
                     </div>
                 </td>
