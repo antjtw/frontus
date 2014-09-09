@@ -229,7 +229,8 @@
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
                        data-toggle="dropdown" href="#"
                        title="{{ctFilter.security_types | displayList }}">
-                        Viewing Up To {{ctFilter.date | date:settings.shortdate}}
+                        <span ng-if="(ctFilter.date | date:settings.shortdate) != daterange.today">Viewing Up To {{ctFilter.date | date:settings.shortdate}}</span>
+                        <span ng-if="(ctFilter.date | date:settings.shortdate) == daterange.today">Viewing Today</span>
                     </a>
                     <ul class="dropdown-menu history-box" ng-click="$event.stopPropagation()">
                         <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
@@ -263,7 +264,7 @@
                             </button>
                         </div>
                         <div class="pull-left span9">
-                            <span>Vesting</span>
+                            <span>Unvested options</span>
                         </div>
                     </li>
                     <li ng-repeat="t in securityTypeDropdown()"
