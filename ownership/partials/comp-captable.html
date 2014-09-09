@@ -226,15 +226,15 @@
             ng-class="{'disabledme': companyIsZombie()}">
             <ul class="dropdown-list drop-selector big filter-selector">
                 <li class="dropdown standard">
-                    <a class="dropdown-toggle"
+                    <a class="dropdown-toggle" ng-click="checkDateRange();"
                        data-toggle="dropdown" href="#"
                        title="{{ctFilter.security_types | displayList }}">
-                        View History
+                        Viewing Up To {{ctFilter.date | date:settings.shortdate}}
                     </a>
-                    <ul class="dropdown-menu" ng-click="$event.stopPropagation()">
+                    <ul class="dropdown-menu history-box" ng-click="$event.stopPropagation()">
                         <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
-                        <span ng-click="setToday();">set to today</span>
-                        <input class="range" type="range" value="0" min="0" max="{{ct.totalDays}}" 
+                        <span ng-click="setToday();" class="blue-link">set to today</span>
+                        <input class="range" style='{{daterange.coloredbar}}' type="range" value="0" min="0" max="{{ct.totalDays}}" 
                                 step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
                     </ul>
                 </li>
