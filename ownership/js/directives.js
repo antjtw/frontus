@@ -112,8 +112,8 @@ own.directive('editableCaptableCell', [function() {
                 selectedCell: '=selectedCell'},
         templateUrl: '/ownership/partials/editableCaptableCell.html',
         controller: ["$scope", "$rootScope", "$filter",
-                     "calculate", "captable", "History",
-            function($scope, $rootScope, $filter, calculate, captable, history) {
+                     "calculate", "captable", "History", "$modal",
+            function($scope, $rootScope, $filter, calculate, captable, history, $modal) {
                 $scope.settings = $rootScope.settings;
                 $scope.captable = captable;
                 $scope.isDebt = captable.isDebt;
@@ -134,7 +134,6 @@ own.directive('editableCaptableCell', [function() {
                         data = $scope.selectedCell;
                     }
                     if (data) {
-                        console.log(data);
                         if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
@@ -200,10 +199,6 @@ own.directive('editableCaptableCell', [function() {
                         return ($scope.data ? $scope.data.a : null);
                     }
                 };
-                $scope.opts = {
-                    backdropFade: true,
-                    dialogFade: true
-                };
                 $scope.openTranPicker = function(key, val) {
                     $scope.picker = {
                         "key": key,
@@ -216,7 +211,11 @@ own.directive('editableCaptableCell', [function() {
                         captable.setCellAmount($scope.selectedCell);
                     $scope.picker.diff = newVal - $scope.selectedCell[key[0]];
                     if ($scope.picker.diff != 0) {
-                        $scope.tranPicker = true;
+                        $scope.tranPicker = $scope.addSecurityModal = $modal.open({
+                            templateUrl: '/ownership/modals/tranPicker.html',
+                            scope: $scope,
+                            windowClass: 'modal',
+                        });
                     }
                 };
                 $scope.closeTranPicker = function(update) {
@@ -231,7 +230,7 @@ own.directive('editableCaptableCell', [function() {
                         updateAttr($scope.picker.key, $scope.picker.diff);
                     }
                     $scope.picker = {};
-                    $scope.tranPicker = false;
+                    $scope.tranPicker.dismiss();
                 };
                 $scope.pickTran = function(id) {
                     $scope.destination_transaction = id;
@@ -365,10 +364,8 @@ own.directive('editableSecurityDetails', [function() {
             windowToggle: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
-        controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
-            function($scope, displayCopy, captable, $filter, calculate) {
-                console.log($scope.windowToggle)
-
+        controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate', '$modal',
+            function($scope, displayCopy, captable, $filter, calculate, $modal) {
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
@@ -464,22 +461,12 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.sec.transactions.push(tran);
                     $scope.newTran = null;
                 };
-                $scope.$on('newSelection', function(evt) {
-                    $scope.newTran = null;
-                });
-
-                $scope.convertopts = {
-                    backdropFade: true,
-                    dialogFade: true,
-                    dialogClass: 'convertModal modal'
-                };
 
                 // Captable Conversion Modal
                 $scope.splitSharesUp = function(to_convert) {
                     $scope.splitIssue = angular.copy(to_convert);
                     $scope.splitIssue.name = $scope.splitIssue.attrs.security;
                     angular.forEach($scope.ct.securities, function(sec) {
-                        console.log(sec);
                         if (sec.name == $scope.splitIssue.name) {
                             if (calculate.isNumber(sec.attrs.ppshare)) {
                                 $scope.ppshare = sec.attrs.ppshare;
@@ -492,11 +479,15 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.splitIssue.ratioa = 1;
                     $scope.splitIssue.ratiob = 1;
                     $scope.splitIssue.date = new Date.today();
-                    $scope.splitModal = true;
+                    $scope.splitModal = $modal.open({
+                        templateUrl: '/ownership/modals/split.html',
+                        scope: $scope,
+                        windowClass: 'modal convertModal',
+                    });
                 };
 
                 $scope.splitSharesClose = function() {
-                    $scope.splitModal = false;
+                    $scope.splitModal.dismiss();
                 };
 
                 // Date grabber
@@ -655,8 +646,8 @@ own.directive('editableCellDetails', [function() {
                 undo: '=undo',
                 windowToggle: '='},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter",
-            function($scope, $rootScope, attributes, captable, calculate, $filter) {
+        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter", "$modal",
+            function($scope, $rootScope, attributes, captable, calculate, $filter, $modal) {
 
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
@@ -699,7 +690,6 @@ own.directive('editableCellDetails', [function() {
                 };
 
                 $scope.addTransaction = function() {
-                    console.log("here");
                     var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
                                      captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
@@ -763,7 +753,11 @@ own.directive('editableCellDetails', [function() {
                     $scope.convertTran.newtran = {};
                     $scope.convertTran.step = '1';
                     $scope.convertTran.date = new Date.today();
-                    $scope.convertModal = true;
+                    $scope.convertModal = $modal.open({
+                        templateUrl: '/ownership/modals/convert.html',
+                        scope: $scope,
+                        windowClass: 'modal convertModal',
+                    });
 
                     $scope.$watch('convertTran.ppshare', function(newval, oldval) {
                         if (!calculate.isNumber(newval)) {
@@ -773,7 +767,7 @@ own.directive('editableCellDetails', [function() {
                 };
 
                 $scope.convertSharesClose = function() {
-                    $scope.convertModal = false;
+                    $scope.convertModal.dismiss();
                 };
 
                 $scope.convertgoto = function(number) {
@@ -790,12 +784,6 @@ own.directive('editableCellDetails', [function() {
 
                 $scope.performConvert = function (convertTran) {
                     captable.saveTransaction(convertTran.newtran, true);
-                };
-
-                $scope.convertopts = {
-                    backdropFade: true,
-                    dialogFade: true,
-                    dialogClass: 'convertModal modal'
                 };
 
                 // Filters the dropdown to only equity securities
@@ -883,7 +871,7 @@ own.directive('transactionAttributes', [function() {
                         return sorted;
                     }
                 };
-                
+
                 $scope.toFraction = function (num) {
                     var f = new Fraction(num);
                     return f.numerator + " : " + f.denominator;
