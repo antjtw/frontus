@@ -1028,6 +1028,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
 }
+.captable-controls.subnav-controls > div:first-child {
+    margin-left: 0;
+}
 .subnav-controls > div > div:not(.tooltip) {
     position: relative;
 }
@@ -5062,6 +5065,7 @@ li.event.roles > div > ul {
     padding-left: 26px;
     background-color: inherit;
     border: none;
+    width: 140px !important;
 }
 .filter-selector .standard .dropdown-toggle:hover {
     background-color: inherit;

@@ -129,11 +129,16 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         {
             $scope.ctFilter.date = new Date();
         }
-        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
-        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $rootScope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(
+                captable.startDate() || new Date(1980),
+                $scope.ctFilter.date);
         $scope.updateBarColor();
-        $scope.daterange.today = $filter('date')(new Date(), $scope.settings.shortdate);
+        $scope.daterange.today = $filter('date')(new Date(), $rootScope.settings.shortdate);
     };
+    $scope.$on("settings_loaded", function(evt, msg, cb) {
+        $scope.checkDateRange();
+    });
     
     $scope.updateDateInput = function() {
         //TODO: only works for MM/dd/yy & dd/MM/yy. Must change if we add more date formats.

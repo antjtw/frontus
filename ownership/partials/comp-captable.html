@@ -221,22 +221,32 @@
 
 <!-- Captable From Here Down -->
 <subnav>
-    <div class="pull-left">
+    <div class="pull-left captable">
         <div ng-if="!windowToggle && !editMode"
             ng-class="{'disabledme': companyIsZombie()}">
             <ul class="dropdown-list drop-selector big filter-selector">
                 <li class="dropdown standard">
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
-                       data-toggle="dropdown" href="#"
-                       title="{{ctFilter.security_types | displayList }}">
-                        <span ng-if="(ctFilter.date | date:settings.shortdate) != daterange.today">Viewing Up To {{ctFilter.date | date:settings.shortdate}}</span>
-                        <span ng-if="(ctFilter.date | date:settings.shortdate) == daterange.today">Viewing Today</span>
+                        data-toggle="dropdown" href="#">
+                        <span ng-if="(ctFilter.date | date:settings.shortdate) != daterange.today">
+                            Viewing {{ctFilter.date | date:settings.shortdate}}
+                        </span>
+                        <span ng-if="(ctFilter.date | date:settings.shortdate) == daterange.today">
+                            Viewing Today
+                        </span>
                     </a>
                     <ul class="dropdown-menu history-box" ng-click="$event.stopPropagation()">
                         <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
                         <span ng-click="setToday();" class="blue-link">set to today</span>
-                        <input class="range" style='{{daterange.coloredbar}}' type="range" value="0" min="0" max="{{ct.totalDays}}" 
-                                step="1" ng-model="daterange.offset" ng-change="updateDateSlider()"/>
+                        <input class="range"
+                               style='{{daterange.coloredbar}}'
+                               type="range"
+                               value="0"
+                               min="0"
+                               max="{{ct.totalDays}}" 
+                               step="1"
+                               ng-model="daterange.offset"
+                               ng-change="updateDateSlider()"/>
                     </ul>
                 </li>
             </ul>
@@ -259,7 +269,8 @@
                         <div class="pull-left span3">
                             <button class="check-box-button"
                                     ng-class="{selected: ctFilter.vesting}">
-                                <span data-icon="&#xe023;" aria-hidden="true">
+                                <span data-icon="&#xe023;"
+                                      aria-hidden="true">
                                 </span>
                             </button>
                         </div>
