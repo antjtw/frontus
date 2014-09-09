@@ -1683,7 +1683,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      */
     function totalOwnershipUnits(dilution, securities, asof, vesting) {
         if (!dilution) dilution = 1;
-        console.log(securities);
         if (!securities) securities = false;
         var entry_filter;
         var ok_securities = [];
