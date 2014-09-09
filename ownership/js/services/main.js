@@ -165,7 +165,7 @@ ownership.value('displayCopy', {
         permissions:
             "Share just personal holdings, or the full cap table",
         registration:
-            "Investors can require the company register their shares with the SEC.",
+            "Investors can require the company register their shares with the SEC",
         information:
             "Requires investors are provided with financial statements and other company information",
         redemption:
