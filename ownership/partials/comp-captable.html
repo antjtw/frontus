@@ -229,7 +229,7 @@
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
                        data-toggle="dropdown" href="#"
                        title="{{ctFilter.security_types | displayList }}">
-                        View History
+                        Viewing Up To {{ctFilter.date | date:settings.shortdate}}
                     </a>
                     <ul class="dropdown-menu" ng-click="$event.stopPropagation()">
                         <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
