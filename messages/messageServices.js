@@ -89,7 +89,6 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
 
     this.getReceivedMsgs = function(){        
-        console.log(allReceivedMsgs);
         angular.forEach(allReceivedMsgs, function(thread){
             for(var i = 0; i < thread.membersArray.length; i ++){
                 angular.forEach(allPeople, function(person){
@@ -111,6 +110,8 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         }); 
         return allReceivedMsgs;
     };
+
+
 
     this.getSentMsgs = function(){
         angular.forEach(allSentThreads, function(thread){

@@ -7,18 +7,18 @@
             <th></th>
         </tr>
         </tbody>
-        <tbody ng-repeat="allSentMsg in allSentMsgs| orderBy:'time':true | filter: $parent.$parent.filterText"> 
+        <tbody ng-repeat="sent in sents| orderBy:'time':true | filter: $parent.$parent.filterText"> 
             <tr class="empty-row"></tr>
             <tr class="forTooltip">
                 <td style="width:550px" class="shareholder-column docname-column">
-                    <a href="/app/company/messages/thread?thread={{allSentMsg.thread_id}}" position="bottom"><div bs-tooltip="allSentMsg.nameString">{{showString(allSentMsg.nameString)}}
+                    <a href="/app/company/messages/thread?thread={{sent.thread_id}}" position="bottom"><div bs-tooltip="allSentMsg.nameString">{{showString(sent.nameString)}}
                        
                     </div></a>
                 </td>
             
                 <td style="width: 400px">
                     <div bs-tooltip="allSentMsg.subject">
-                        <span>{{showString(allSentMsg.subject)}}</span> 
+                        <span>{{showString(sent.subject)}}</span> 
                     </div>
                 </td>
                 <td style="width:10px;"></td>

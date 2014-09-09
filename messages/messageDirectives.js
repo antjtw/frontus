@@ -229,8 +229,7 @@ mod.directive('messageFilter', function(){
         function($scope, $rootScope, SWBrijj, $route, Message) {
 
             $scope.whichPage = function(){
-                console.log($scope.page);
-                $scope.page="sent"
+                $scope.page="sent";
             };
 
             $scope.getCount = function(array){
@@ -261,10 +260,13 @@ mod.directive('sentMessages', function(){
 
         function($scope, $rootScope, SWBrijj, $route, $filter, Message) {
 
-            $scope.allSentMsgs = Message.getSentMsgs();
+            $scope.sentMsgs = Message.getSentMsgs();
+            $scope.allThreads = Message.getAllThreads();
 
             $scope.$watch('allSentMsgs', function(){
             }, true)
+
+            $scope.$watch('allThreads', function(){}, true)
 
 
             $scope.showString = function(string){
@@ -278,6 +280,45 @@ mod.directive('sentMessages', function(){
                     return string;
                 }
             };
+
+            $scope.getMessageThreads = function(){
+                var mySentThreads = [];
+                var mySents = [];
+                angular.forEach($scope.sentMsgs, function(msg){
+                    if(mySentThreads.indexOf(msg.thread_id)== -1){
+                        mySentThreads.push(msg.thread_id);
+                        mySents.push(msg);
+                    };
+                });
+                return mySents;
+                console.log(mySents);   
+            };
+
+            // if you want to list all messages, best do with a proc m when someone clicks, no need to add to object
+            $scope.getCount = function(){
+                var mySents = $scope.getMessageThreads();
+                angular.forEach(mySents, function(sent){
+                    sent.times = [];
+                    angular.forEach($scope.allThreads, function(thr){
+                        if(thr.thread_id == sent.thread_id){
+                            sent.count = thr.count
+                        };
+                    });
+                    angular.forEach($scope.sentMsgs, function(msg){
+                        if(msg.thread_id == sent.thread_id && sent.times.indexOf(msg.time)== -1){
+                           sent.times.push(msg.time);
+                        };
+                    });
+                });                
+                return mySents;
+            };
+     
+
+            $scope.sents = $scope.getCount();
+  
+
+
+            
          
         }]
     };
@@ -306,7 +347,6 @@ mod.directive('receivedMsgs', function(){
 
   
             $scope.getMessageThreads = function(){
-                var toDelete = [];
                 var myRecThreads = [];
                 var myRecs = [];
                 angular.forEach($scope.receivedMsgs, function(msg){
@@ -318,7 +358,7 @@ mod.directive('receivedMsgs', function(){
                 return myRecs;
             };
             
-
+            // if you want to list all messages, best do with a proc m when someone clicks, no need to add to object
             $scope.getCount = function(){
                 var myRecs = $scope.getMessageThreads();
                 angular.forEach(myRecs, function(rec){
@@ -330,17 +370,17 @@ mod.directive('receivedMsgs', function(){
                     });
                     angular.forEach($scope.receivedMsgs, function(msg){
                         if(msg.thread_id == rec.thread_id && rec.times.indexOf(msg.time)== -1){
-                           rec.times.push(msg.time)
-                           console.log(myRecs);
-                        }
-                    })
+                           rec.times.push(msg.time);
+                        };
+                    });
                 });
                 
                 return myRecs;
             };
        
 
-            $scope.myRecs = $scope.getCount()
+            $scope.myRecs = $scope.getCount();
+
 
             $scope.showString = function(string){
                 if(string == null){
