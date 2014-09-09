@@ -944,7 +944,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.securityTypeDropdown = function() {
-        //return ['Show All'].concat(Object.keys(attrs));
         return Object.keys(attrs).sort();
     };
     $scope.showSecurityType = function(t) {
@@ -983,6 +982,14 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return $scope.editMode ||
             $scope.showSecurityType('Show All') ||
             $scope.showSecurityType(sec.attrs.security_type);
+    };
+    $scope.securityFilterLabel = function() {
+        if (!$scope.ctFilter.vesting ||
+                !$scope.showSecurityType('Show All')) {
+            return "Showing Filtered";
+        } else {
+            return "Showing All";
+        }
     };
     $scope.dateSecurityFilter = function(sec) {
         return !$scope.ctFilter.date || $scope.editMode ||
