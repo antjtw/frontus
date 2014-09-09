@@ -1041,6 +1041,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     margin-left: 8px;
     margin-right: 20px;
 }
+.subnav-controls .filter-selector.drop-selector {
+    margin-right: 10px;
+}
 .subnav-controls input {
     border: 0;
     border-radius: 0;
