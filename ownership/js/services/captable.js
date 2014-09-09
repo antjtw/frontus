@@ -1043,7 +1043,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     setCellUnits(cell);
                     setCellAmount(cell);
                     cell.valid = validateCell(cell);
-                    if (cell.investor=='Robert Walport') console.log(cell);
                     captable.cells.push(cell);
                 }
             });
