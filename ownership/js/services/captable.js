@@ -1183,7 +1183,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            console.log(new_entries);
             if (new_entries.length < 1)
             {
                 console.log("Error: no ledger entries");
