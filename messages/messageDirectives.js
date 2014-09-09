@@ -138,7 +138,6 @@ mod.directive('composeMessage', function() {
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     $rootScope.$emit('new:message');
-                    // $scope.resetMessage();
                     $scope.clicked = false;
                     $location.url('/app/company/messages/');
                 }).except(function(err) {
@@ -284,14 +283,53 @@ mod.directive('receivedMsgs', function(){
         function($scope, $rootScope, SWBrijj, $route, $filter, Message) {
 
             $scope.receivedMsgs = Message.getReceivedMsgs();
+            $scope.allThreads = Message.getAllThreads();
 
             $scope.$watch('receivedMsgs', function(){
 
             }, true)
 
 
-            // $scope.getThreadCount();
+            $scope.$watch('allThreads', function(){
 
+            }, true)
+
+  
+            $scope.getMessageThreads = function(){
+                var toDelete = [];
+                var myRecThreads = [];
+                var myRecs = [];
+                angular.forEach($scope.receivedMsgs, function(msg){
+                    if(myRecThreads.indexOf(msg.thread_id)== -1){
+                        myRecThreads.push(msg.thread_id);
+                        myRecs.push(msg);
+                    };
+                });
+                return myRecs;
+            };
+            
+
+            $scope.getCount = function(){
+                var myRecs = $scope.getMessageThreads();
+                angular.forEach(myRecs, function(rec){
+                    rec.times = [];
+                    angular.forEach($scope.allThreads, function(thr){
+                        if(thr.thread_id == rec.thread_id){
+                            rec.count = thr.count
+                        };
+                    });
+                    angular.forEach($scope.receivedMsgs, function(msg){
+                        if(msg.thread_id == rec.thread_id && rec.times.indexOf(msg.time)== -1){
+                           rec.times.push(msg.time)
+                        }
+                    })
+                });
+                
+                return myRecs;
+            };
+       
+
+            $scope.myRecs = $scope.getCount()
 
             $scope.showString = function(string){
                 if(string == null){
