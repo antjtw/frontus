@@ -16,9 +16,8 @@
             <table class="captable tableView modal-table">
                 <tbody>
                     <tr class="column-label">
-                        <th>Name</th>
-                        <th></th>
-                        <th>Email</th>
+                        <th style="width: 250px;">Captable Row</th>
+                        <th>Shareholder</th>
                         <th>Permissions <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" tooltip-placement="top" tooltip="{{captabletips.permissions}}"></span></th>
                     </tr>
                 </tbody>
@@ -243,7 +242,7 @@
                                type="range"
                                value="0"
                                min="0"
-                               max="{{ct.totalDays}}" 
+                               max="{{ct.totalDays}}"
                                step="1"
                                ng-model="daterange.offset"
                                ng-change="updateDateSlider()"/>
