@@ -632,8 +632,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     };
     this.daysBetween = daysBetween;
     function startDate() {
-        return captable.transactions.reduce(minDate, null);
-    };
+        return captable.transactions.reduce(minDate, null) || new Date(1980);
+    }
     this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
         if (!prev || cur.effective_date < prev)
