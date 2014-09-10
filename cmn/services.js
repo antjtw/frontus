@@ -240,6 +240,27 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
     }
 }]);
 
-// service.service('Messages', ['SWBrijj', function(SWBrijj) {
-//     this.message_data = [];
-// }]);
+service.service('csv', [function() {
+    this.constructFromArrays = function(arrs) {
+        var content = "data:text/csv;charset=utf-8,";
+        angular.forEach(arrs, function(row, idx) {
+            var rowString = row.join(",");
+            content += rowString;
+            if (idx < arrs.length) content += "\n"; 
+        });
+        return content;
+    };
+    this.download = function(contents) {
+        var encodedUri = encodeURI(contents);
+        window.open(encodedUri);
+        /* download attribute doesn't work in IE at all
+           TODO use when available
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "my_data.csv");
+
+        link.click();
+         */
+    };
+}]);
