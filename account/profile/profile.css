@@ -91,6 +91,14 @@ h1.profile-name {
     width: 60px;
 }
 
+.span4.ind-pics > div > .standard-button.small-standard-button.gray{
+    padding-top: 30px;
+}
+
+.span4.ind-pics > div > .standard-button.small-standard-button.gray > button{
+    margin-left: 20px;
+}
+
 .personal-information input {
     width: 180px;
 }

@@ -117,17 +117,26 @@
 
 <!--         side colum -->
         <div class="span4 ind-pics">
-            <h2>Profile Image</h2>
-            <div class='span3 profile-image'>
-                <img ng-src="{{photoURL}}">
+            <div>
+                <h2>Profile Image</h2>
+                <div class='span3 profile-image'>
+                        <img ng-src="{{photoURL}}">
+                </div>
+                <div class="standard-button small-standard-button gray">
+                    <button ng-click="pictureModalOpen();" class="btn">Change</button>
+                </div>
             </div>
+            
+<!-- 
             <div>
                 <div class="standard-button small-standard-button gray">
                     <button ng-click="pictureModalOpen();" class="btn">Change</button>
                 </div>
             </div>
-            <h2 class="signature-label">Signature Image</h2>
+
+           
             <div class='signature-image'>
+                 <h2 class="signature-label">Signature Image</h2>
                 <div>
                     <img ng-src="{{signatureURL}}">
                 </div>
@@ -135,6 +144,7 @@
                     <button ng-click="sigModalUp();" class="btn">Change</button>
                 </div>
             </div>
+ -->
         </div>
     </div>
 </div>
