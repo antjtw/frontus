@@ -1,4 +1,3 @@
-<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <link href="/lib/introjs/introjs.css" rel="stylesheet">
 <div class="maincontent">
@@ -16,9 +15,8 @@
             <table class="captable tableView modal-table">
                 <tbody>
                     <tr class="column-label">
-                        <th>Name</th>
-                        <th></th>
-                        <th>Email</th>
+                        <th style="width: 250px;">Captable Row</th>
+                        <th>Shareholder</th>
                         <th>Permissions <span class="tooltip-icon" data-icon="&#xe044;" aria-hidden="true" tooltip-placement="top" tooltip="{{captabletips.permissions}}"></span></th>
                     </tr>
                 </tbody>
@@ -28,8 +26,11 @@
                             <button ng-class="{'selected':row.send}" ng-click="row.send = !row.send; row.permission = 'Personal'" ng-model="row.send" class="check-box-button" ng-disabled="row.alreadyShared"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
                         </td>
                         <td style="width: 225px;">{{row.name}}</td>
-                        <td style="width: 210px;"><input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
-                                   ng-disabled="row.emailkey || row.alreadyShared" ng-model="row.email" ng-change="updateSendRow(row);"></td>
+                        <td style="width: 210px;">
+                            <input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
+                                   ng-disabled="row.emailkey || row.alreadyShared" ng-model="row.email" ng-change="updateSendRow(row);"
+                                   ui-select2="rowSelect2Options">
+                        </td>
                         <td style="width: 210px;">
                             <ul class="dropdown-list drop-selector">
                                 <li class="dropdown standard">
@@ -243,7 +244,7 @@
                                type="range"
                                value="0"
                                min="0"
-                               max="{{ct.totalDays}}" 
+                               max="{{ct.totalDays}}"
                                step="1"
                                ng-model="daterange.offset"
                                ng-change="updateDateSlider()"/>
