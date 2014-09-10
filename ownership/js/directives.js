@@ -626,6 +626,7 @@ own.directive('cellDetails', [function() {
                     if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
                         $scope.cell.transactions[0].active = true;
                     }
+                    filter();
                 };
 
                 $scope.viewEvidence = function(ev) {
@@ -707,7 +708,6 @@ own.directive('editableCellDetails', [function() {
                 };
 
                 $scope.addTransaction = function() {
-                    console.log("here");
                     var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
                                      captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
@@ -878,6 +878,7 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 $scope.loaddirective = function () {
+                    console.log($scope.data);
                     $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);
@@ -927,7 +928,6 @@ own.directive('editableTransactionAttributes', [function() {
                     $scope.keys = filterSortKeys($scope.tran_attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     if ($scope.data.attrs.security_type == "Equity" || $scope.data.attrs.security_type == "Equity Preferred") {
                         $scope.repurchasing = $scope.hasRepurchasing();
-                        console.log($scope.repurchasing);
                     }
                 };
 
@@ -1035,6 +1035,19 @@ own.directive('editableTransactionAttributes', [function() {
                         return true
                     }
                 };
+
+                $scope.toggleRepurchasing = function(tran, cell, errorFunc) {
+                    $scope.repurchasing = !$scope.repurchasing;
+                    if (!$scope.repurchasing) {
+                        angular.forEach(repurchasingfields, function(field) {
+                            if (tran.attrs[field]) {
+                                delete tran.attrs[field];
+                            }
+                        });
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
+                };
+
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     if (inputType(k) == "array_text") {
                         if (!tran.attrs[k]) {

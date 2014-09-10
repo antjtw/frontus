@@ -9,7 +9,7 @@
                type="text"
                bs-datepicker>
     </div>
-    <div ng-if="filterRepurchasable(key, repurchasing)" ng-repeat="key in keys"
+    <div ng-show="filterRepurchasable(key, repurchasing)" ng-repeat="key in keys"
          class="rightTitle"
          ng-class="{double: inputType(key)!='text_field'}">
         <span ng-class="{'locked-security': key=='security_type'}"
@@ -123,8 +123,10 @@
         </span>
     </div>
     <div ng-show="isEquity(data)">
-        <button ng-class="{'selected':repurchasing}" ng-click="repurchasing = !repurchasing;" ng-model="repurchasing" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
-        <span>Enable Repurchasing</span>
+        <div class="attributes-checkbox">
+            <button ng-class="{'selected':repurchasing}" ng-click="toggleRepurchasing(data, true, undo);" ng-model="repurchasing" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+            <span>Enable Repurchasing</span>
+        </div>
 
         <div ng-if="repurchasing && !filterRepurchasable(key, repurchasing)" ng-repeat="key in keys"
              class="rightTitle"
