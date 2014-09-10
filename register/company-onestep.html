@@ -65,7 +65,7 @@
                                            payments-type-model="type"
                                            ng-class="myForm.number.$card.type">
                                 </div>
-                                <div>
+                                <div style="overflow: auto">
                                     <div class="span6">
                                         <span>Expiration Date</span>
                                         <input type="text"
@@ -89,6 +89,9 @@
                                     <input type="text" disabled
                                            class="input-block-level"
                                            ng-model="formatted_coupon">
+                                </div>
+                                <div ng-if="!coupon_code">
+                                    <p class="free-trial-text">14 days free, cancel anytime.</p>
                                 </div>
                             </div>
                         </div>
