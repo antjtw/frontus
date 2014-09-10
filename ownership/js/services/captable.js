@@ -857,7 +857,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var entries = cell.ledger_entries;
             if (asof) {
                 var d = new Date(asof);
-                if (vesting)
+                if (vesting && cellSecurityType(cell)=='Option')
                 {
                     var trans = cell.transactions.filter(function(tran) {
                         return tran.effective_date <= d;
@@ -917,7 +917,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (asof)
             {
                 var d = new Date(asof);
-                if (vesting)
+                if (vesting && cellSecurityType(cell)=='Option')
                 {
                     var trans = cell.transactions.filter(function(tran) {
                         return tran.effective_date <= d;
