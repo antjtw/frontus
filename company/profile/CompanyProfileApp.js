@@ -333,7 +333,7 @@ app.controller('CompContactCtrl',
                 if (p == $rootScope.billing.currentPlan && p == "000") {
                     return "Subscription Cancelled";
                 } else {
-                    return $filter('billingPlans')(p);
+                    return $filter('billingPlans')(p.substring(0,3));
                 }
             };
             $scope.openModalsFromURL = function() {
