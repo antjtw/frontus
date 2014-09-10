@@ -882,7 +882,6 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 $scope.loaddirective = function () {
-                    console.log($scope.data);
                     $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);
