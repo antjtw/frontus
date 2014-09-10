@@ -16,6 +16,9 @@ app.controller('CompanyOneStep',
         $scope.selectedPlan = '002';
         $scope.coupon_code = $routeParams.c;
         $scope.trial_period = $routeParams.t || "14";
+        if (["7", "14"].indexOf($scope.trial_period) == -1) {
+            $scope.trial_period = "14";
+        }
         if ($scope.coupon_code) {
             payments.get_coupon($scope.coupon_code).then(function(x) {
                 var cpn = JSON.parse(x);
