@@ -517,7 +517,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
                         });
                     });
-                    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+                    SWBrijj.tblm('account.profile', ['user_id']).then(function(me) {
                         angular.forEach($scope.people, function(person) {
                             if (person.email == me[0].email)
                                 person.hideLock = true;

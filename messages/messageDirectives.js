@@ -121,8 +121,7 @@ mod.directive('composeMessage', function() {
             };
 
             $scope.sendBulkMessage = function(msg) {
-                var category = 'company-message';
-                var template = 'company-message.html';
+                console.log("send bulk message");
                 var newtext = msg.text.replace(/\n/g, "<br/>");
                 var recipients = $scope.createRecipients();
                 $scope.clicked = true;
@@ -149,8 +148,7 @@ mod.directive('composeMessage', function() {
             };
 
             $scope.sendMessage = function(msg) {
-                var category = 'company-message';
-                var template = 'company-message.html';
+                console.log("send Message");
                 var newtext = msg.text.replace(/\n/g, "<br/>");
                 var recipients = $scope.createRecipients();
                 recipients.push(navState.userid)
