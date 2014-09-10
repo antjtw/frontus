@@ -55,6 +55,15 @@ h1.profile-name {
     border-top: none;
 }
 
+.ind-information{
+    width: 45%;
+    float: left;
+}
+
+.ind-information.right{
+/*    float:right;*/
+    padding-left: 40px;
+}
 .personal-information {
     padding-top: 30px;
 }
@@ -90,9 +99,9 @@ h1.profile-name {
     width: 70px;
 }
 
-.check-box-button.profile-box {
+/*.check-box-button.profile-box {
 
-}
+}*/
 
 .investor-attributes > ul {
     padding-left: 20px;
