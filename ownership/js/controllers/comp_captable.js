@@ -439,6 +439,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if ($scope.editMode)
         {
             $scope.ctFilter.date = null;
+        } else {
+            $scope.checkDateRange();
         }
         reselectCurrentSelection();
     };
