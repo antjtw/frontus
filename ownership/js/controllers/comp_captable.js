@@ -102,7 +102,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     
     if ($scope.settings)
     {
-        $scope.daterange.today = $filter('date')(new Date(), $rootScope.settings.shortdate);
+        $scope.daterange.today = $filter('date')(new Date(), $scope.settings.shortdate);
     }
     
     $scope.updateDateSlider = function() {
@@ -142,7 +142,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
     $scope.$on("settings_loaded", function(evt, msg, cb) {
         $scope.checkDateRange();
-        $scope.updateDateSlider();
     });
     
     $scope.updateDateInput = function() {
@@ -441,8 +440,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         {
             $scope.ctFilter.date = null;
         } else {
-            $scope.updateDateSlider();
-            //$scope.checkDateRange();
+            $scope.checkDateRange();
         }
         reselectCurrentSelection();
     };
