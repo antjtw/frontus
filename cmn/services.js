@@ -15,7 +15,7 @@ service.filter('caplength', function () {
     };
 });
 
-service.service('payments', function(SWBrijj, $filter) {
+service.service('payments', function(SWBrijj, $filter, $rootScope) {
     var s = {};
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
@@ -51,11 +51,22 @@ service.service('payments', function(SWBrijj, $filter) {
                                " off";
         }
         if (discount.end) {
-            formatted_coupon += ' until ' +
-                                $filter('date')(discount['end']*1000,
-                                                'MMMM d, yyyy');
+            formatted_coupon += ' until ' + formatDate(discount['end']);
         }
         return formatted_coupon;
+    };
+    function formatDate(d, fmt) {
+        fmt = fmt || 'MMMM d, yyyy';
+        return $filter('date')(d*1000, fmt);
+    }
+    s.format_trial = function(d) {
+        var plan = d.data[0].lines.data[0].plan;
+        if (d.count == 1 && plan.trial_period_days)
+        {
+            var period = d.data[0].lines.data[0].period;
+            return "Free Trial expires on " +
+                formatDate(period.end, $rootScope.settings.shortdate);
+        }
     };
     /*
     s.get_coupon = function(cpn) {
