@@ -604,36 +604,35 @@ m.directive('composeMessage', function() {
             $scope.getPeople();
 
             // create the object for selct2
-           $scope.myContacts = [];
+            $scope.myContacts = [];
             $scope.groupsAndPeople = function(){
-                function Contact(namex, details){
-                    this.namex = namex;
+                function Contact(id, name){
+                    this.id = id;
+                    this.name = name;
                     this.details = [];
                 }
 
-                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+                SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data){
                     $scope.myEmails = data;
                     angular.forEach($scope.myEmails, function(email){
-                        $scope.myContacts.push(new Contact(email.email));
+                        $scope.myContacts.push(new Contact(email.email, email.name));
                         angular.forEach($scope.myContacts, function(ct){
-                            if(ct.details.indexOf(ct.namex)== -1){
-                                ct.details.push(ct.namex);
+                            if(ct.details.indexOf(ct.id)== -1){
+                                ct.details.push(ct.id);
                             }
 
                         });
                     });
                 });
                 // make this a promise later
-                SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
-                    var myGroups = data;
+                SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(myGroups){
                     angular.forEach(myGroups, function(gr){
                         var b = JSON.parse(gr.ind_group);
-                        $scope.myContacts.push(new Contact(b));
-                        SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
-                            var emailGroups = data;
+                        $scope.myContacts.push(new Contact(b, b));
+                        SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(emailGroups){
                             angular.forEach(emailGroups, function(group){
                                 angular.forEach($scope.myContacts, function(contact){
-                                    if(JSON.parse(group.json_array_elements) == contact.namex){
+                                    if(JSON.parse(group.json_array_elements) == contact.email){
                                         if(contact.details.indexOf(group.email)== -1){
                                             contact.details.push(group.email);
                                         }
