@@ -175,7 +175,6 @@ service.factory('myPayments', function($q, payments) {
         },
         broadcastResults = function() {
             this.data = d;
-            console.log(this.data);
         };
 
 
@@ -225,7 +224,7 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
 
         this.getDisplayText = function(identifier) {
             if (this.names[identifier]) {
-                return this.names[identifier];// + " (" + identifier + ")";
+                return this.names[identifier];
             } else {
                 return identifier;
             }
