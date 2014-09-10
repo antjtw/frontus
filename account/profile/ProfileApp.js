@@ -90,20 +90,20 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             $scope.editData = null;
         };
 
+        $scope.profilecheck = {};
         $scope.profileCheck = function (attr, value) {
-            $scope.profilecheck = $scope.profilecheck || {};
             $scope.profilecheck[attr] = value;
         };
 
         $scope.profileUpdate = function(attr, value) {
             if ($scope.profilecheck[attr] != value && value !== undefined) {
                 SWBrijj.proc("account.contact_update", attr, value).then(function(x) {
-                    void(x);
                     $scope.$emit("notification:success", "Profile successfully updated");
                     if (attr == 'name') {
                         $rootScope.person.name = value;
                     }
                     $scope[attr] = value;
+                    $scope.profileCheck(attr, value);
                 }).except(function(x) {
                     $scope.$emit("notification:fail", "Something went wrong, please try again later");
                 });
@@ -178,6 +178,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
          * @param {string} table_name */
         SWBrijj.tbl('account.profile').then(function(x) {
             initPage($scope, x);
+            $scope.profileCheck('primary_email', $scope.primary_email); // needed since it's not an input
             $scope.photoURL = '/photo/user?id=' + $scope.user_id;
             var randnum = Math.random();
             $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + randnum;
@@ -284,8 +285,8 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                     SWBrijj.uploadSignatureString(fd).then(function(x) {
                         $scope.uploadSuccess();
                     }).except(function(x) {
-                            $scope.uploadFail();
-                        });
+                        $scope.uploadFail();
+                    });
                 }
                 else {
                     fd = new FormData();
@@ -370,6 +371,45 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 $scope.scribblemode = false;
                 $scope.$apply();
             }
+        };
+
+        $scope.addEmail = function(email) {
+            if (!email) {
+                return;
+            }
+            SWBrijj.insert('account.my_emails', {user_id: $scope.user_id, email: email}).then(function(res) {
+                $scope.emails.push({email: email, verified: false});
+                // TODO: notification:success and call verification flow;
+                $scope.newemail = "";
+            }).except(function(err) {
+                console.error(err);
+                $scope.$emit("notification:fail", "Sorry, we were unable to add " + email + ".");
+            });
+        };
+
+        $scope.removeEmail = function(email) {
+            SWBrijj.delete_one('account.my_emails', {user_id: email.user_id, email: email.email}).then(function(res) {
+                var ix = $scope.emails.indexOf(email);
+                $scope.emails.splice(ix, 1);
+                $scope.$emit("notification:success", "Email removed;");
+            }).except(function(err) {
+                console.error(err);
+                $scope.$emit("notification:fail", "Sorry, we were unable to remove " + email.email + ". Please try again later.");
+            });
+        };
+
+        $scope.updateEmail = function(email) {
+            SWBrijj.update('account.my_emails', {email: email.email}, {user_id: email.user_id, email: $scope.profilecheck.workingEmail}).then(function(res) {
+                // do nothing
+            }).except(function(err) {
+                console.error(err);
+                $scope.$emit("notification:fail", "Sorry, we were unable to change " + $scope.profilecheck.workingEmail + ".");
+                email.email = $scope.profilecheck.workingEmail;
+            });
+        };
+
+        $scope.reverifyEmail = function(email) {
+            // TODO
         };
     }
 ]);

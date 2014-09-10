@@ -384,7 +384,7 @@ navm.controller('NavCtrl',
             if ($rootScope.navState.role == "issuer") {
                 Intercom('update', {'name' : $rootScope.person.name});
             }
-            $rootScope.userURL = '/photo/user?id=' + x[0].email;
+            $rootScope.userURL = '/photo/user?id=' + x[0].user_id;
             $scope.$broadcast("profile_loaded");
         });
 
