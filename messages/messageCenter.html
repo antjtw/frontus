@@ -35,7 +35,13 @@
   <!--   text in the window -->
 
 
-    <div ng-if="allThreads.length== 0" style="margin: 40px; text-align: center"> You haven't sent or received any messages yet!</div>
+    <div ng-show="allThreads==undefined ||allThreads.length==0" class="noElements">
+        <div class="toFill">
+            You haven't sent or received any messages yet. Click compose to start sending!
+        </div>
+    </div>
+
+
     <div class="row-fluid leftTabWindow" ng-if="allThreads.length > 0">
         <compose-message ng-if="page == 'compose'"></compose-message>
      

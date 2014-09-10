@@ -1,4 +1,10 @@
-<div class="span12">
+<div ng-show="sents==undefined ||sents.length==0" class="noElements">
+    <div class="toFill">
+        You haven't sent any messages yet. Click compose to start sending!
+        </div>
+</div>
+
+<div class="span12" ng-hide="sents==undefined || sents.length == 0">
     <table class="status-table people-table">
         <tbody>
         <tr>
