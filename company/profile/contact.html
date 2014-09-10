@@ -98,7 +98,14 @@
                     </div>
                     <div class="pull-left">
                         <span>******{{billing.current_card.last4}}</span>
-                        <span style="padding-left:60px">{{billing.discount}}</span>
+                        <span ng-if="billing.discount"
+                              style="padding-left:60px">
+                            {{billing.discount}}
+                        </span>
+                        <span ng-if="billing.freetrial"
+                              style="padding-left:30px">
+                            {{billing.freetrial}}
+                        </span>
                     </div>
                     <div class="pull-right pointer">
                                             <span data-icon="&#xe00e;" aria-hidden="true" ng-click="ccModalOpen()">

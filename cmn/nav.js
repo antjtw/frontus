@@ -708,9 +708,8 @@ navm.controller('NavCtrl',
             .then(function(x) {
                 if (x && x.length>0 && x!="invalid request") {
                     var resp = JSON.parse(x);
-                    $rootScope.billing.invoices_raw = resp;
-                    console.log($rootScope.billing);
                     if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.freetrial = payments.format_trial(resp);
                     $rootScope.billing.invoices = resp.data.filter(function(el) {
                         return el.amount>0;
                     }) || [];
