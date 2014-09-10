@@ -2017,6 +2017,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!security) return;
         return security.attrs.security_type == "Debt" || security.attrs.security_type == "Safe" || security.attrs.security_type == "Convertible Debt";
     };
+    this.isEquity = function(security) {
+        if (!security) return;
+        return security.attrs.security_type == "Equity" || security.attrs.security_type == "Equity Common";
+    };
     this.isOption = function(security) {
         if (!security) return;
         return security.attrs.security_type == "Option";

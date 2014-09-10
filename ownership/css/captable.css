@@ -767,6 +767,19 @@ div.rightTitle.double > span, div.rightTitle.double > span {
     margin-top: 2px;
 }
 
+div.attributes-checkbox {
+    margin: 10px 0;
+}
+
+div.attributes-checkbox > button {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+div.attributes-checkbox > span {
+    font-size: 12px;
+}
+
 div.rightTitle.double > ul, div.rightTitle.double > input {
     vertical-align: top;
 }
