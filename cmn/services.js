@@ -228,7 +228,7 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
 
         this.getDisplay = function(identifier) {
             if (!this.displays[identifier]) {
-                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier)};
+                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier), name: this.getName(identifier)};
             }
             return this.displays[identifier];
         };
