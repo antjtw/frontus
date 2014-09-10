@@ -2239,7 +2239,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var security_row = ["Ownership", "", "Shareholder"];
         var sub_header_row = ["Shares", "%", ""];
         angular.forEach(captable.securities, function(sec) {
-            security_row.push(sec.name, sec.name);
+            security_row.push(sec.name, "");
             sub_header_row.push($filter('issueUnitLabel')(sec.attrs.security_type),
                                 'Total Paid');
         });
