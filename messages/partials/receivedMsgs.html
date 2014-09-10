@@ -1,6 +1,10 @@
 
-<div ng-show="myRec==undefined">You haven't received any messages.</div>
-<div class="span12" ng-hide="myRec==undefined">
+<div ng-show="myRecs==undefined" class="noElements">
+    <div class="toFill">
+        You haven't received any messages yet.
+    </div>
+</div>
+<div class="span12" ng-show="myRecs!==undefined">
 
     <table class="status-table people-table">
         <tbody>

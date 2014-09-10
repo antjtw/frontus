@@ -109,9 +109,9 @@ mod.directive('composeMessage', function() {
                                 if(recipients.indexOf(contact.details[i])=== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
                                 }
-                                // if(recipients.indexOf(navState.userid) > -1){
-                                //     recipients.splice(indexOf(navState.userid, 1));
-                                // }
+                                if(recipients.indexOf(navState.userid) > -1){
+                                    recipients.splice(indexOf(navState.userid, 1));
+                                }
                                 
                             }
                         }

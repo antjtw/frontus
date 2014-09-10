@@ -73,10 +73,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
             angular.forEach(allThreads, function(thread){
                 for(var i = 0; i < thread.membersArray.length; i ++){
                     angular.forEach(allPeople, function(person){
-                        if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid){
+                        if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid && person.name !== ""){
                             thread.names.push(person.name);
                         }
-                        else if(thread.membersArray[i]== person.email && person.name == null && thread.membersArray[i]!== navState.userid){
+                        else if(thread.membersArray[i]== person.email && person.name == undefined && thread.membersArray[i]!== navState.userid){
                             thread.names.push(person.email);
                         }
                         else if(thread.membersArray[i]== person.email && person.email == navState.userid && thread.names.indexOf("me")== -1){
@@ -85,6 +85,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                         else if(allEmails.indexOf(thread.membersArray[i])== -1 && thread.names.indexOf(thread.membersArray[i])== -1){
                             thread.names.push(thread.membersArray[i]);
                         }
+                        else if(thread.membersArray[i]==person.email && person.name =="" && thread.names.indexOf(thread.membersArray[i])== -1){
+                            thread.names.push(thread.membersArray[i]);
+                        }
+
                     });
                 }
             })
@@ -109,8 +113,9 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         angular.forEach(allReceivedMsgs, function(thread){
             for(var i = 0; i < thread.membersArray.length; i ++){
                 angular.forEach(allPeople, function(person){
-                    if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid){
+                    if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid&& person.name !==""){
                         thread.names.push(person.name);
+                        console.log("this should be added")
                     }
                     else if(thread.membersArray[i]== person.email && person.name == null && thread.membersArray[i]!== navState.userid){
                         thread.names.push(person.email);
@@ -121,6 +126,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                     else if(allEmails.indexOf(thread.membersArray[i])== -1 && thread.names.indexOf(thread.membersArray[i])== -1){
                         thread.names.push(thread.membersArray[i]);
                     }
+                    else if(thread.membersArray[i]==person.email && person.name =="" && thread.names.indexOf(thread.membersArray[i])== -1){
+                            thread.names.push(thread.membersArray[i]);
+                    }
+
                 });
             };
             thread.nameString = thread.names.join(", ");
@@ -134,7 +143,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         angular.forEach(allSentThreads, function(thread){
             for(var i = 0; i < thread.membersArray.length; i ++){
                 angular.forEach(allPeople, function(person){
-                    if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid){
+                    if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid && person.name !=="" && thread.names.indexOf(person.name)==-1){
                         thread.names.push(person.name);
                     }
                     else if(thread.membersArray[i]== person.email && person.name == null && thread.membersArray[i]!== navState.userid){
@@ -145,6 +154,9 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                     }
                     else if(allEmails.indexOf(thread.membersArray[i])== -1 && thread.names.indexOf(thread.membersArray[i])== -1){
                         thread.names.push(thread.membersArray[i]);
+                    }
+                    else if(thread.membersArray[i]==person.email && person.name =="" && thread.names.indexOf(thread.membersArray[i])== -1){
+                            thread.names.push(thread.membersArray[i]);
                     }
                 });
             };
