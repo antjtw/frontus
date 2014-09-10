@@ -218,7 +218,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
             updateDays();
-            csv.downloadFromArrays(toArrays());
         }, logError).finally(function() {
             loadInProgress = false;
         });
@@ -2277,4 +2276,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.toArrays = toArrays;
+    this.download = function() {
+        return csv.downloadFromArrays(toArrays());
+    }
 });
