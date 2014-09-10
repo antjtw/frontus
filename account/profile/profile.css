@@ -102,6 +102,7 @@ h1.profile-name {
 .span4.ind-pics{
     padding-left: 20px;
     border-left: 1px solid #E3E3E3;
+    min-height: 899px;
 }
 
 .investor-attributes > ul {

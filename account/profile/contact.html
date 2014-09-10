@@ -25,7 +25,7 @@
     <div class="row-fluid">
         <div class="span8">
             <div class="row-fluid">
-                 <h2>Personal Information</h2>  
+                 <h2>PROFILE</h2>  
                 <div class="ind-information">
                                 
                     <ul class="personal-information">
@@ -74,16 +74,22 @@
                     </ul>
                 </div>
                <!--      second column -->
-                <!-- <div> -->
                 <div class="ind-information right">
-                    <ul class="personal-information" ng-repeat="email in emails">
+                    <ul class="personal-information">
                         <li  ng-repeat="email in emails">
                             <ul>
                                 <li ng-if="email.email==primary_email">Primary Email*</li>
                                 <li ng-if="email.email !== primary_email">Alternate Email</li>
                                 <li><input type="text" ng-model="email.email"></input></li>
                             </ul>
+                        </li>
                         <li>
+                            <ul>
+                                <li>Alternate Email</li>
+                                <li><input type="text"></input></li>
+                            </ul>
+                        </li>
+
                     </ul>
                     <!-- <div ng-repeat="email in emails">
                         <button class="check-box-button"
@@ -104,13 +110,18 @@
                     </div> -->
                 </div>
             </div>
+            <div class="row-fluid" style="padding-top: 40px;">
+                <h2>EMAIL PREFERENCES</h2>
+            </div>
         </div>
 
 <!--         side colum -->
         <div class="span4 ind-pics">
             <h2>Profile Image</h2>
-            <div class='profile-image'>
+            <div class='span3 profile-image'>
                 <img ng-src="{{photoURL}}">
+            </div>
+            <div>
                 <div class="standard-button small-standard-button gray">
                     <button ng-click="pictureModalOpen();" class="btn">Change</button>
                 </div>
