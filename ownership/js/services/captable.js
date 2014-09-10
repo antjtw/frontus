@@ -2242,7 +2242,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var security_row = ["Ownership", "", "Shareholder"];
         var sub_header_row = ["Shares", "%", ""];
         angular.forEach(captable.securities, function(sec) {
-            security_row.push(sec.name, "");
+            security_row.push(sec.name.replace(/,/g , ""), "");
             sub_header_row.push($filter('issueUnitLabel')(sec.attrs.security_type),
                                 'Total Paid');
         });
@@ -2250,7 +2250,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         angular.forEach(captable.investors, function(inv) {
             var inv_row = [rowSum(inv.name).toString(),
                            (investorOwnershipPercentage(inv.name).toString() || "0.000") + "%",
-                           inv.name];
+                           inv.name.replace(/,/g , "")];
             angular.forEach(captable.securities, function(sec) {
                 var cell = cellFor(inv.name, sec.name) || {u: null, a:null};
                 inv_row.push(cell.u,
@@ -2261,7 +2261,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         angular.forEach(securitiesWithUnissuedUnits(), function(sec) {
             var unissued_row = [numUnissued(sec).toString(),
                                 securityUnissuedPercentage(sec).toString() + "%",
-                                sec.name + " (Unissued)"];
+                                sec.name.replace(/,/g , "") + " (Unissued)"];
             angular.forEach(captable.securities, function(key) {
                 unissued_row.push(sec==key ? numUnissued(key) : "",
                                   "");
