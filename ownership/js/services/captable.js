@@ -91,7 +91,7 @@ var GrantCell = function() {
  *
  */
 ownership.service('captable',
-function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
+function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter, csv) {
 
     function role() {
         return navState ? navState.role : document.sessionState.role;
@@ -218,6 +218,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
             updateDays();
+            csv.downloadFromArrays(toArrays());
         }, logError).finally(function() {
             loadInProgress = false;
         });
@@ -530,7 +531,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.grantRowInfoFor = grantRowInfoFor;
-    this.rowSum = function(inv, securities, asof, vesting) {
+    function rowSum(inv, securities, asof, vesting) {
         if (!securities) securities = false;
         var red;
         if (asof)
@@ -551,7 +552,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return (typeof(securities) == "boolean" ? true :
                     securities.indexOf(el.security) != -1);})
             .reduce(red, 0);
-    };
+    }
+    this.rowSum = rowSum;
     this.investorsIn = function(sec) {
         var names = captable.ledger_entries.filter(function(ent) {
             return ent.security == sec.name;
@@ -728,13 +730,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return numUnissued(sec, securities);
         };
     }
-    this.securitiesWithUnissuedUnits = function() {
+    function securitiesWithUnissuedUnits() {
         return captable.securities
             .filter(secHasUnissued(captable.securities));
-    };
-    this.securityUnissuedPercentage = function(sec, securities, asof, vesting) {
+    }
+    this.securitiesWithUnissuedUnits = securitiesWithUnissuedUnits;
+    function securityUnissuedPercentage(sec, securities, asof, vesting) {
         return 100 * (numUnissued(sec, securities, asof, vesting) / totalOwnershipUnits());
-    };
+    }
+    this.securityUnissuedPercentage = securityUnissuedPercentage;
     function rowFor(inv) {
         return captable.cells
             .filter(function(cell) {
@@ -1899,7 +1903,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return sum_ledger(entries);
     }
     this.currentUnits = currentUnits;
-    this.securityTotalAmount = function(sec, asof, vesting) {
+    function securityTotalAmount(sec, asof, vesting) {
         if (!sec) return 0;
         var red;
         if (asof)
@@ -1916,7 +1920,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
             .reduce(red, 0);
-    };
+    }
+    this.securityTotalAmount = securityTotalAmount;
     function sumCellUnits(prev, cur, idx, arr) {
         return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
     }
@@ -2216,4 +2221,47 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return captable.grantCells.reduce(
                 accumulateProperty('investor'), []).length;
     };
+    function toArrays() {
+        var res = [];
+        var security_row = ["Ownership", "", "Shareholder"];
+        var sub_header_row = ["Shares", "%", ""];
+        angular.forEach(captable.securities, function(sec) {
+            security_row.push(sec.name, sec.name);
+            sub_header_row.push($filter('issueUnitLabel')(sec.attrs.security_type),
+                                'Total Paid');
+        });
+        res.push(security_row, sub_header_row);
+        angular.forEach(captable.investors, function(inv) {
+            var inv_row = [rowSum(inv.name).toString(),
+                           (investorOwnershipPercentage(inv.name).toString() || "0.000") + "%",
+                           inv.name];
+            angular.forEach(captable.securities, function(sec) {
+                var cell = cellFor(inv.name, sec.name) || {u: null, a:null};
+                inv_row.push(cell.u,
+                             cell.a);
+            });
+            res.push(inv_row);
+        });
+        angular.forEach(securitiesWithUnissuedUnits(), function(sec) {
+            var unissued_row = [numUnissued(sec).toString(),
+                                securityUnissuedPercentage(sec).toString() + "%",
+                                sec.name + " (Unissued)"];
+            angular.forEach(captable.securities, function(key) {
+                unissued_row.push(sec==key ? numUnissued(key) : "",
+                                  "");
+            });
+            res.push(unissued_row);
+        });
+        var total_spacer_row = ["Total", "", ""];
+        var total_data_row = [totalOwnershipUnits(1), "100.00%", ""];
+        angular.forEach(captable.securities, function(sec) {
+            total_spacer_row.push("", "");
+            total_data_row.push(securityTotalUnits(sec) + numUnissued(sec),
+                                securityTotalAmount(sec), 'amount');
+        });
+        res.push(total_spacer_row,
+                 total_data_row);
+        return res;
+    }
+    this.toArrays = toArrays;
 });
