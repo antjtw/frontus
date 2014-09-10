@@ -2270,7 +2270,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         angular.forEach(captable.securities, function(sec) {
             total_spacer_row.push("", "");
             total_data_row.push(securityTotalUnits(sec) + numUnissued(sec),
-                                securityTotalAmount(sec), 'amount');
+                                securityTotalAmount(sec));
         });
         res.push(total_spacer_row,
                  total_data_row);
