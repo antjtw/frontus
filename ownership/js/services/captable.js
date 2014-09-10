@@ -857,7 +857,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var entries = cell.ledger_entries;
             if (asof) {
                 var d = new Date(asof);
-                if (vesting && cellSecurityType(cell)=='Option')
+                if (vesting)
                 {
                     var trans = cell.transactions.filter(function(tran) {
                         return tran.effective_date <= d;
@@ -866,7 +866,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         .filter(function(ent) {
                             return trans.indexOf(ent.transaction) != -1;});
                 }
-                else
+                else if (cellSecurityType(cell) == 'Option')
                 {
                     entries = cell.ledger_entries
                         .filter(function(ent) {
@@ -926,7 +926,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         .filter(function(ent) {
                             return trans.indexOf(ent.transaction) != -1;});
                 }
-                else
+                else if (cellSecurityType(cell) == 'Option')
                 {
                     entries = cell.ledger_entries
                         .filter(function(ent) {
