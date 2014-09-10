@@ -123,7 +123,7 @@
         </span>
     </div>
     <div ng-show="isEquity(data)">
-        <div class="attributes-checkbox">
+        <div ng-show="keys.length > 0 && data.kind == 'grant' || data.kind == 'issue security'" class="attributes-checkbox">
             <button ng-class="{'selected':repurchasing}" ng-click="toggleRepurchasing(data, true, undo);" ng-model="repurchasing" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
             <span>Enable Repurchasing</span>
         </div>
