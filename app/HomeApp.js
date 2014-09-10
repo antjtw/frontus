@@ -140,9 +140,7 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
             $scope.message.text = message.text;
         };
 
-
-
-
+        // TODO: move to investor service
         SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
             $scope.people = x;
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
@@ -487,7 +485,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         //initialisation functions called
         $scope.company = navState.name;
-        console.log("navState", navState);
 
         SWBrijj.tblm('account.profile').then(function(x) {
             $scope.person = x[0];

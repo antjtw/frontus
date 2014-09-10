@@ -73,7 +73,7 @@
                         </ul>
                         <div class="span6">
                             <h2>Email</h2>
-                            <span style="line-height: 28px;">{{email}}</span>
+                            <span ng-repeat="email in emails" style="line-height: 28px;">{{email.email}} {{email.verified}}</span>
                         </div>
                     </div>
                 </div>

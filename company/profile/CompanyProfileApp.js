@@ -5,11 +5,17 @@ app.controller('CompContactCtrl',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
                  payments, $route, $filter, $location, $http) {
             if (navState.role == 'investor') {
-                console.log("here", navState);
                 $location.url("/app/home");
                 return;
             }
-            $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+            $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+                                'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina',
+                                'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+                                'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia',
+                                'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
             $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
             $scope.address1 = function() {
@@ -487,18 +493,20 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.isParam = function(person){
             if($scope.filterParam.param == person.role){
-                return person.role
+                return person.role;
             }
             else if($scope.filterParam.param == undefined){
-                return person
+                return person;
             }
             else if(person.groupsArray != undefined && person.groupsArray.indexOf($scope.filterParam.param) > -1){
                 return person.groups;
             }
-        }
+        };
 
 
         $scope.createPeople = function(){
+            // TODO: remove references to email where possible
+            // TODO: migrate to the investor service
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
                 $scope.people = x;
                 SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
@@ -544,7 +552,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.resetFilter = function(){
             $scope.filterParam.param = undefined;
-        }
+        };
         $scope.allGroups = function(){
             SWBrijj.tblm('account.my_user_groups', ['json_array_elements']).then(function(data){
                 $scope.myGroups = data;

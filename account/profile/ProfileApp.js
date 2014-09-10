@@ -162,10 +162,9 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
          * @param {number} [row]
          */
 
-        function initPage($scope, x, row) {
-            if (typeof(row) === 'undefined') row = 1;
+        function initPage($scope, x) {
             var y = x[0]; // the fieldnames
-            var z = x[row]; // the values
+            var z = x[1]; // the values
 
             for (var i = 0; i < y.length; i++) {
                 if (z[i] !== null) {
@@ -179,13 +178,20 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
          * @param {string} table_name */
         SWBrijj.tbl('account.profile').then(function(x) {
             initPage($scope, x);
-            $scope.photoURL = '/photo/user?id=' + $scope.email;
+            $scope.photoURL = '/photo/user?id=' + $scope.user_id;
             var randnum = Math.random();
             $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + randnum;
             $scope.namekey = $scope.name;
             $scope.getInvestorInformation();
         }).except(function(err) {
             document.location.href = '/login';
+        });
+
+        $scope.emails = [];
+        SWBrijj.tblm('account.my_emails').then(function(returned_emails) {
+            returned_emails.forEach(function (e) {
+                $scope.emails.push(e);
+            });
         });
 
         $scope.uploadFile = function() {
@@ -202,13 +208,13 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 void(x);
                 // console.log(x);
                 $scope.$emit("notification:success", "Profile photo successfully updated");
-                $scope.photoURL = '/photo/user?id=' + $scope.email + '#' + new Date().getTime();
-                $rootScope.userURL = '/photo/user?id=' + $scope.email + '#' + new Date().getTime();
+                $scope.photoURL = '/photo/user?id=' + $scope.user_id + '#' + new Date().getTime();
+                $rootScope.userURL = '/photo/user?id=' + $scope.user_id + '#' + new Date().getTime();
             }).except(function(x) {
                 void(x);
                 // console.log(x);
                 $scope.$emit("notification:fail", "Profile photo change was unsuccessful, please try again.");
-                $scope.photoURL = '/photo/user?id=' + $scope.email + '#' + new Date().getTime();
+                $scope.photoURL = '/photo/user?id=' + $scope.user_id + '#' + new Date().getTime();
             });
         };
 
