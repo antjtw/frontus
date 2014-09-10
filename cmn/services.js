@@ -223,11 +223,7 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
         };
 
         this.getDisplayText = function(identifier) {
-            if (this.names[identifier]) {
-                return this.names[identifier];
-            } else {
-                return identifier;
-            }
+            return this.getName(identifier);
         };
 
         this.getDisplay = function(identifier) {
