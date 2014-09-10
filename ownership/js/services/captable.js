@@ -2229,4 +2229,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return captable.grantCells.reduce(
                 accumulateProperty('investor'), []).length;
     };
+    this.toArrays = function() {
+        var res = [];
+        var security_row = ["", ""];
+        var sub_header_row = ["", ""];
+        angular.forEach(captable.securities, function(sec) {
+            security_row.push(sec.name, sec.name);
+            sub_header_row.push(calculate.primaryMeasure(sec.attrs.security_type), 'Total Paid');
+        });
+        angular.forEach(captable.investor, function(inv) {
+
+        });
+        return res;
+    };
 });
