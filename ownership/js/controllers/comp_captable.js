@@ -55,6 +55,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return $filter('filter')($scope.ct.securities, $scope.securityFilter
                                  );
     };
+    $scope.filteredSecurityNames = function() {
+        return $scope.filteredSecurityList()
+            .reduce(captable.accumulateProperty('name'), []);
+    };
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourUp = function () { $scope.tourModal = false; };
@@ -435,6 +439,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if ($scope.editMode)
         {
             $scope.ctFilter.date = null;
+        } else {
+            $scope.checkDateRange();
         }
         reselectCurrentSelection();
     };
@@ -985,8 +991,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return false;
     };
 
-    $scope.securityTypeDropdown = function() {
-        return Object.keys(attrs).sort();
+    $scope.securityTypeDropdown = function(for_display) {
+        var not_these = ['Equity', 'Equity Common'];
+        var res = Object.keys(attrs).sort();
+        if (for_display)
+            res = res.filter(function(el) {
+                return not_these.indexOf(el) == -1; });
+        return res;
     };
     $scope.showSecurityType = function(t) {
         if (!t || !$scope.ctFilter || !$scope.ctFilter.security_types) {
@@ -1039,15 +1050,17 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
     $scope.rowSum = function(row) {
         return captable.rowSum(
-                row.name,
-                ($scope.editMode ? false : $scope.ctFilter.date),
-                ($scope.editMode ? true : $scope.ctFilter.vesting));
+            row.name,
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.investorOwnershipPercentage = function(row) {
         return captable.investorOwnershipPercentage(
-                row.name,
-                ($scope.editMode ? false : $scope.ctFilter.date),
-                ($scope.editMode ? true : $scope.ctFilter.vesting));
+            row.name,
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.numUnissued = function(sec) {
         return captable.numUnissued(sec, $scope.ct.securities,
@@ -1061,8 +1074,9 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
     $scope.totalOwnershipUnits = function(x) {
         return captable.totalOwnershipUnits(x,
-                ($scope.editMode ? false : $scope.ctFilter.date),
-                ($scope.editMode ? true : $scope.ctFilter.vesting));
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.securityTotalUnits = function(sec) {
         return captable.securityTotalUnits(sec,

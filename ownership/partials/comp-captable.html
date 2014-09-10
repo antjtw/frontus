@@ -278,7 +278,7 @@
                             <span>Unvested options</span>
                         </div>
                     </li>
-                    <li ng-repeat="t in securityTypeDropdown()"
+                    <li ng-repeat="t in securityTypeDropdown(true)"
                         ng-click="toggleSecurityType(t)"
                         onclick="event.stopPropagation();"
                         class="row-fluid">
@@ -462,7 +462,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.rowSum(row.name) | number:0}}">
+                           value="{{rowSum(row) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -567,8 +567,9 @@
             </tbody>
             <!-- Unissued Rows -->
             <tr class="unissued-rows"
-                ng-repeat="sec in
-                           captable.securitiesWithUnissuedUnits() | filter:dateSecurityFilter">
+                ng-repeat="sec in captable.securitiesWithUnissuedUnits()
+                           | filter:securityFilter
+                           | filter:dateSecurityFilter">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
@@ -583,7 +584,9 @@
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
+                    ng-repeat="key in ct.securities
+                              | filter:securityFilter
+                              | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
