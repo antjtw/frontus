@@ -76,8 +76,16 @@
                <!--      second column -->
                 <!-- <div> -->
                 <div class="ind-information right">
-                    <h2>Email</h2>
-                    <div ng-repeat="email in emails">
+                    <ul class="personal-information" ng-repeat="email in emails">
+                        <li  ng-repeat="email in emails">
+                            <ul>
+                                <li ng-if="email.email==primary_email">Primary Email*</li>
+                                <li ng-if="email.email !== primary_email">Alternate Email</li>
+                                <li><input type="text" ng-model="email.email"></input></li>
+                            </ul>
+                        <li>
+                    </ul>
+                    <!-- <div ng-repeat="email in emails">
                         <button class="check-box-button"
                                 ng-class="{selected: email.email == primary_email}"
                                 ng-if="email.verified"
@@ -90,16 +98,16 @@
                         <a ng-if="email.email != primary_email" ng-click="removeEmail(email)" data-icon="&#xe01b;" tooltip="remove" tooltip-popup-delay="200"></a>
                         <a ng-if="!email.verified" ng-click="reverifyEmail(email)">resend verification email</a>
                         
-                    </div>
-                    <div>
+                    </div> -->
+                    <!-- <div>
                         <input ng-model="newemail" ng-blur="addEmail(newemail)">
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
 
 <!--         side colum -->
-        <div class="span4">
+        <div class="span4 ind-pics">
             <h2>Profile Image</h2>
             <div class='profile-image'>
                 <img ng-src="{{photoURL}}">

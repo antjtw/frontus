@@ -99,9 +99,10 @@ h1.profile-name {
     width: 70px;
 }
 
-/*.check-box-button.profile-box {
-
-}*/
+.span4.ind-pics{
+    padding-left: 20px;
+    border-left: 1px solid #E3E3E3;
+}
 
 .investor-attributes > ul {
     padding-left: 20px;
