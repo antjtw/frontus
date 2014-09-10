@@ -616,7 +616,11 @@ own.directive('cellDetails', [function() {
                     if (!$scope.cell) return [];
                     $scope.transactions = $scope.cell.transactions.filter(
                         function(tran) {
-                            return tran.effective_date < $scope.filter.date;
+                            if ($scope.filter && $scope.filter.date) {
+                                return tran.effective_date <= $scope.filter.date;
+                            } else {
+                                return true;
+                            }
                         });
                 };
                 
