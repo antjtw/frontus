@@ -6,6 +6,7 @@ function($routeProvider, $locationProvider){
 
     $routeProvider.
         when('/register/company-onestep', {controller:'CompanyOneStep', templateUrl: 'company-onestep.html'}).
+        when('/register/people', {controller:'PeopleCtrl', templateUrl: 'people.html'}).
         otherwise({redirectTo:'/register/company-onestep'});
 });
 
@@ -92,5 +93,45 @@ app.controller('CompanyOneStep',
                 $scope.register();
             }
         };
+    }
+]);
+app.controller('PeopleCtrl', ['$scope', '$location', '$routeParams', 'SWBrijj',
+    function($scope, $location, $routeParams, SWBrijj) {
+        $scope.code = $routeParams.code;
+
+        if (!$scope.code) {
+            document.location.href = "/";
+        }
+
+        SWBrijj.getInvitation($scope.code).then(function(x) {
+            initPage($scope, x);
+            if ($scope.activated) {
+                if ($scope.redirect) {
+                    document.location.href = $scope.redirect;
+                } else {
+                    document.location.href = "/login";
+                }
+            }
+        });
+
+        $scope.doActivate = function() {
+            SWBrijj.doActivate($scope.email.toLowerCase(), $scope.name, $scope.code, $scope.password, false).then(function(y) {
+                if ($scope.redirect) {
+                    if ($scope.redirect.indexOf("?") != -1) {
+                        $scope.redirect = $scope.redirect + "&reg=first"
+                    } else {
+                        $scope.redirect = $scope.redirect + "?reg=first"
+                    }
+                    document.location.href = $scope.redirect;
+                } else {
+                    document.location.href = y + "?reg=first";
+                }
+            });
+        };
+
+        $scope.fieldCheck = function() {
+            return !($scope.name && $scope.password && $scope.name.length > 1);
+        };
+
     }
 ]);
