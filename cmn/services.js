@@ -253,7 +253,7 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
 
 service.service('csv', [function() {
     this.downloadFromArrays = function(arrs) {
-        download(constructFromArrays(arrs));
+        return download(constructFromArrays(arrs));
     };
 
     function constructFromArrays(arrs) {
@@ -267,8 +267,8 @@ service.service('csv', [function() {
     }
     function download(contents) {
         var encodedUri = encodeURI(contents);
-        console.log(encodedUri);
-//        window.open(encodedUri);
+        return encodedUri;
+        //        window.open(encodedUri);
         /* download attribute doesn't work in IE at all
            TODO use when available
         var encodedUri = encodeURI(csvContent);
