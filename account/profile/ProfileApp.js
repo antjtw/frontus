@@ -218,8 +218,10 @@ app.controller('ContactCtrl',
                     primeEmail = email;
                 }
             });
-            $scope.emails.splice($scope.emails.indexOf(primeEmail), 1);
-            $scope.emails.unshift(primeEmail);
+             if($scope.emails.indexOf(primeEmail)!==0){
+                $scope.emails.splice($scope.emails.indexOf(primeEmail), 1);
+                $scope.emails.unshift(primeEmail);
+            }
 
         });
 
