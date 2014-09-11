@@ -797,7 +797,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {
-                        $scope.$emit("notification:fail", "Email : " + people + " failed to send");
+                        $scope.$emit("notification:fail", "Email : " + people.name + " failed to send");
                     });
                 }
             });
@@ -814,7 +814,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 checksome = true;
             }
         });
-        if (typeof($scope.extraPeople) === "string") {
+        if (typeof($scope.extraPeople) === "string" && $scope.extraPeople.length > 0) {
             // convert to an array if it isn't already
             $scope.extraPeople = $scope.extraPeople.split(",");
         }

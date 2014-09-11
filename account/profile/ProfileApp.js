@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
-    function($scope, $rootScope, SWBrijj) {
+app.controller('ContactCtrl',
+    ['$scope', '$rootScope', 'SWBrijj', '$routeParams',
+    function($scope, $rootScope, SWBrijj, $routeParams) {
         function getCanvasOffset(ev) {
             var offx, offy;
             if (ev.offsetX === undefined) { // Firefox code
@@ -12,6 +13,20 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 offy = ev.offsetY;
             }
             return [offx, offy];
+        }
+        if ($routeParams.verificationCode) {
+            SWBrijj.procm('account.verify_email', $routeParams.verificationCode)
+            .then(function(res) {
+                console.log(res);
+                if (res[0].verify_email === true) {
+                    $scope.$emit("notification:success", "Alternate email address verified.");
+                } else {
+                    $scope.$emit("notification:fail", "Failed to verify alternate email address.");
+                }
+            }).except(function(err) {
+                console.log(err);
+                $scope.$emit("notification:fail", "Failed to verify alternate email address.");
+            });
         }
 
        
@@ -193,6 +208,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
 
         $scope.emails = [];
         var primeEmail = ""
+        
         SWBrijj.tblm('account.my_emails').then(function(returned_emails) {
             returned_emails.forEach(function (e) {
                 $scope.emails.push(e);
@@ -203,8 +219,10 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                     primeEmail = email;
                 }
             });
-            $scope.emails.splice($scope.emails.indexOf(primeEmail), 1);
-            $scope.emails.unshift(primeEmail);
+             if($scope.emails.indexOf(primeEmail)!==0){
+                $scope.emails.splice($scope.emails.indexOf(primeEmail), 1);
+                $scope.emails.unshift(primeEmail);
+            }
 
         });
 
@@ -397,6 +415,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to add " + email + ".");
+                $route.$reload();
             });
         };
 

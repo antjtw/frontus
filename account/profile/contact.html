@@ -84,7 +84,8 @@
                                     ng-class="{selected: email.email == primary_email}"
                                     ng-click="profileUpdate('primary_email', email.email)">
                                     </button>
-                                    <input type="text" ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-blur="updateEmail(email)"></input>
+                                    <input type="text" ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-class="{'notVerified': email.email !== primary_email}"></input>
+                                    <div class="standard-button small-standard-button gray" ng-click="updateEmail(email)" ng-hide="email.email ==primary_email"><button class="btn">Update</button></div>
                                     <span data-icon="&#xe01b;" ng-click="removeEmail(email)" ng-hide="email.email== primary_email"></span>
 
                                 </li>
@@ -98,7 +99,8 @@
                                         ng-class="{selected: email.email==primary_email}"
                                         >
                                     </button> -->
-                                    <input type="text" ng-model="newEmail" ng-blur="addEmail(newEmail)"></input>
+                                    <input type="text" ng-model="newEmail" ng-blur="addEmail(newEmail)" class="notVerified"></input>
+                                    <div class="standard-button small-standard-button" ng-click="updateEmail(email)"><button class="btn">Add</button></div>
                                 </li>
                             </ul>
                         </li>
