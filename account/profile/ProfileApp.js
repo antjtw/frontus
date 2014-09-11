@@ -193,6 +193,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
 
         $scope.emails = [];
         var primeEmail = ""
+        
         SWBrijj.tblm('account.my_emails').then(function(returned_emails) {
             returned_emails.forEach(function (e) {
                 $scope.emails.push(e);
@@ -397,6 +398,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to add " + email + ".");
+                $route.$reload();
             });
         };
 
