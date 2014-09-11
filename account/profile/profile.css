@@ -66,6 +66,7 @@ h1.profile-name {
 }
 .personal-information {
     padding-top: 30px;
+    padding-left: 40px;
 }
 
 .personal-information > li > ul {
@@ -73,18 +74,11 @@ h1.profile-name {
     overflow: auto;
 }
 
-.personal-information > li > ul > li {
-    float: left;
-    display: inline-block;
-}
-
 .personal-information > li > ul > li:nth-child(odd) {
     width: 90px;
-    margin-right: 10px;
-    text-align: right;
     text-transform: capitalize;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 20px;
 }
 
 .personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {

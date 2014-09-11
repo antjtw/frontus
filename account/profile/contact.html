@@ -27,7 +27,6 @@
             <div class="row-fluid">
                  <h2>PROFILE</h2>  
                 <div class="ind-information">
-                                
                     <ul class="personal-information">
                         <li>
                             <ul>
@@ -47,13 +46,13 @@
                                 <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
                             </ul>
                         </li>
-                        <li>
+                        <li style="display: inline-block; padding-right: 40px">
                             <ul>
                                 <li>State</li>
                                 <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
                             </ul>
                         </li>
-                        <li>
+                        <li style="display: inline-block">
                             <ul>
                                 <li>Zip Code</li>
                                 <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
