@@ -639,7 +639,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     };
     this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
-        if (!prev || cur.effective_date < prev)
+        if (cur.effective_date && (!prev || cur.effective_date < prev))
             return cur.effective_date;
         return prev;
     }
