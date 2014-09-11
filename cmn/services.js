@@ -175,7 +175,6 @@ service.factory('myPayments', function($q, payments) {
         },
         broadcastResults = function() {
             this.data = d;
-            console.log(this.data);
         };
 
 
@@ -224,16 +223,12 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
         };
 
         this.getDisplayText = function(identifier) {
-            if (this.names[identifier]) {
-                return this.names[identifier];// + " (" + identifier + ")";
-            } else {
-                return identifier;
-            }
+            return this.getName(identifier);
         };
 
         this.getDisplay = function(identifier) {
             if (!this.displays[identifier]) {
-                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier)};
+                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier), name: this.getName(identifier)};
             }
             return this.displays[identifier];
         };

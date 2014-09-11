@@ -19,91 +19,114 @@
             </div>
         </div>
     </subnav>
+
+
+    <div>
     <div class="row-fluid">
         <div class="span8">
             <div class="row-fluid">
-                <div class="front info-box">
-                    <div class="head-box">
-                        <h2>Personal Information</h2>
-                    </div>
-                    <div class="body-box">
-                        <ul class="personal-information span6">
-                            <li>
-                                <ul>
-                                    <li>Full Name</li>
-                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li>Address</li>
-                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'street\', street)', blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li>City</li>
-                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li>State</li>
-                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li>Zip Code</li>
-                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li>Country</li>
-                                    <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li>Telephone</li>
-                                    <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <div class="span6">
-                            <h2>Email</h2>
-                            <div ng-repeat="email in emails">
-                                <input ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-blur="updateEmail(email)">
-                                <a ng-if="email.email != primary_email" ng-click="removeEmail(email)" data-icon="&#xe01b;" tooltip="remove" tooltip-popup-delay="200"></a>
-                                <a ng-if="!email.verified" ng-click="reverifyEmail(email)">resend verification email</a>
-                                <button class="check-box-button"
-                                        ng-class="{selected: email.email == primary_email}"
-                                        ng-if="email.verified"
-                                        ng-click="profileUpdate('primary_email', email.email)">
-                                    <span data-icon="&#xe023;"
-                                          aria-hidden="true">
-                                    </span>
-                                </button>
-                            </div>
-                            <div>
-                                <input ng-model="newemail" ng-blur="addEmail(newemail)">
-                            </div>
-                        </div>
-                    </div>
+                 <h2>PROFILE</h2>  
+                <div class="ind-information">
+                    <ul class="personal-information">
+                        <li>
+                            <ul>
+                                <li>Full Name</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Address</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'street\', street)', blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>City</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
+                            </ul>
+                        </li>
+                        <li style="display: inline-block; padding-right: 40px">
+                            <ul>
+                                <li>State</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
+                            </ul>
+                        </li>
+                        <li style="display: inline-block">
+                            <ul>
+                                <li>Zip Code</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Country</li>
+                                <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Telephone</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+               <!--      second column -->
+                <div class="ind-information right">
+                    <ul class="personal-information">
+                        <li  ng-repeat="email in emails">
+                            <ul>
+                                <li ng-if="email.email==primary_email">Primary Email*</li>
+                                <li ng-if="email.email !== primary_email">Alternate Email</li>
+                                <li><input type="text" ng-model="email.email"></input></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Alternate Email</li>
+                                <li><input type="text"></input></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <!-- <div ng-repeat="email in emails">
+                        <button class="check-box-button"
+                                ng-class="{selected: email.email == primary_email}"
+                                ng-if="email.verified"
+                                ng-click="profileUpdate('primary_email', email.email)">
+                            <span data-icon="&#xe023;"
+                                  aria-hidden="true">
+                            </span>
+                        </button>
+                        <input ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-blur="updateEmail(email)">
+                        <a ng-if="email.email != primary_email" ng-click="removeEmail(email)" data-icon="&#xe01b;" tooltip="remove" tooltip-popup-delay="200"></a>
+                        <a ng-if="!email.verified" ng-click="reverifyEmail(email)">resend verification email</a>
+                        
+                    </div> -->
+                    <!-- <div>
+                        <input ng-model="newemail" ng-blur="addEmail(newemail)">
+                    </div> -->
                 </div>
             </div>
+            <div class="row-fluid" style="padding-top: 40px;">
+                <h2>EMAIL PREFERENCES</h2>
+            </div>
         </div>
-        <div class="span4">
-            <h2>Profile Image</h2>
-            <div class='profile-image'>
-                <img ng-src="{{photoURL}}">
+
+<!--         side colum -->
+        <div class="span4 ind-pics">
+            <div style="margin-bottom: 60px;">
+                <h2>Profile Image</h2>
+                <div class='span3 profile-image'><img ng-src="{{photoURL}}"></div>
                 <div class="standard-button small-standard-button gray">
                     <button ng-click="pictureModalOpen();" class="btn">Change</button>
                 </div>
             </div>
-            <h2 class="signature-label">Signature Image</h2>
-            <div class='signature-image'>
+
+           
+            <div class='signature-image ind-sig'>
+                 <h2 class="signature-label">Signature Image</h2>
                 <div>
                     <img ng-src="{{signatureURL}}">
                 </div>
@@ -111,9 +134,12 @@
                     <button ng-click="sigModalUp();" class="btn">Change</button>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
+<!-- modals go here -->
 <div modal="pictureModal" close="pictureModalClose()" options="opts">
     <div class="modalHeader">
         <span>Profile Picture</span><span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="pictureModalClose()"></span>

@@ -24,7 +24,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.editMode = false;
     $scope.windowToggle = false;
     $scope.$on('windowToggle', function(evt, val) {
-        void(evt);
         $scope.windowToggle = val;
     });
     $scope.currentTab = 'details';
@@ -54,6 +53,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.filteredSecurityList = function() {
         return $filter('filter')($scope.ct.securities, $scope.securityFilter
                                  );
+    };
+    $scope.filteredSecurityNames = function() {
+        return $scope.filteredSecurityList()
+            .reduce(captable.accumulateProperty('name'), []);
     };
     $scope.tourshow = false;
     $scope.tourstate = 0;
@@ -92,22 +95,22 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.issueSort = 'date';
     $scope.rowSort = '-name';
     $scope.activeTran = [];
-    
+
     $scope.daterange = {};
     $scope.daterange.offset = 0;
-    
+
     if ($scope.settings)
     {
         $scope.daterange.today = $filter('date')(new Date(), $scope.settings.shortdate);
     }
-    
+
     $scope.updateDateSlider = function() {
         var d = captable.startDate().getTime();
         $scope.ctFilter.date = new Date(d + $scope.daterange.offset*86400000);
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
         $scope.updateBarColor();
     };
-    
+
     $scope.updateBarColor = function() {
         var p = Math.round(Math.min((Math.max($scope.daterange.offset, 0)/$scope.ct.totalDays)*100, 100)*100)/100;
         $scope.daterange.coloredbar = "background: #C7C7C7;\
@@ -118,7 +121,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             background: -ms-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
             background: linear-gradient(to right,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);"
     };
-    
+
     $scope.checkDateRange = function() {
         if ($scope.editMode)
         {
@@ -139,7 +142,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.$on("settings_loaded", function(evt, msg, cb) {
         $scope.checkDateRange();
     });
-    
+
     $scope.updateDateInput = function() {
         //TODO: only works for MM/dd/yy & dd/MM/yy. Must change if we add more date formats.
         var nums = $scope.daterange.fakeDate.split('/');
@@ -175,7 +178,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
         $scope.updateBarColor();
     };
-    
+
     $scope.setToday = function() {
         $scope.ctFilter.date = new Date();
         $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
@@ -435,6 +438,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if ($scope.editMode)
         {
             $scope.ctFilter.date = null;
+        } else {
+            $scope.checkDateRange();
         }
         reselectCurrentSelection();
     };
@@ -693,11 +698,16 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.select2Options = {
-        'multiple': true,
-        'simple_tags': true,
-        'tags': Investor.investors,
-        'tokenSeparators': [",", " "],
-        'placeholder': 'Enter email address & press enter'
+        multiple: true,
+        data: Investor.investors,
+        tokenSeparators: [",", " "],
+        placeholder: ''
+    };
+
+    $scope.rowSelect2Options = {
+        data: Investor.investors,
+        tokenSeparators: [",", " "],
+        placeholder: 'Enter email address & press enter'
     };
 
     // Controls the orange border around the send boxes if an email is not given
@@ -710,7 +720,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.autoCheck = function(person) {
-        return person != null && person.length > 0;
+        return person !== null && person.id.length > 0; // will fail for new people
     };
 
     $scope.turnOnShares = function () {
@@ -720,7 +730,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.updateSendRow = function(row) {
-        if (row.email.length > 0) {
+        if (typeof(row.email) === "string") {
+            // select2-ui sets string and then object, ignore the string set
+            return;
+        }
+        if (row.email) {
             row.send = $scope.autoCheck(row.email);
             if (!row.permission) {
                 row.permission = "Personal";
@@ -736,13 +750,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     // Send the share invites from the share modal
     $scope.sendInvites = function () {
         angular.forEach($scope.ct.investors, function (row) {
-            if (row.send == true) {
+            if (row.send === true) {
                 SWBrijj.procm("ownership.share_captable",
-                              row.email.toLowerCase(),
+                              row.email.id.toLowerCase(),
                               row.name)
                 .then(function(data) {
                     if (row.permission == "Full") {
-                        SWBrijj.proc('ownership.update_investor_captable', row.email.toLowerCase(), 'Full View').then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', row.email.id.toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                             row.access_level = "Full View";
@@ -756,10 +770,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                     row.send = false;
                 }).except(function(err) {
                     if (err.message == "ERROR: Duplicate email for the row") {
-                        $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
+                        $scope.$emit("notification:fail", row.email.name + " failed to send as this email is already associated with another row");
                     }
                     else {
-                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                        $scope.$emit("notification:fail", "Email : " + row.email.name + " failed to send");
                     }
                 });
             }
@@ -789,7 +803,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     $scope.fieldCheck = function(email) {
-        return re.test(email);
+        //return re.test(email); // TODO: only run on new users, not existing (don't have email for existing)
+        return true;
     };
 
     // Prevents the share button from being clickable until
@@ -798,23 +813,23 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         var checkcontent = false;
         var checksome = false;
         angular.forEach($scope.ct.investors, function(row) {
-            if (row.send == true &&
-                    (row.email != null &&
-                     row.email != "" &&
+            if (row.send === true &&
+                    (row.email !== null &&
+                     row.email.id !== "" &&
                      $scope.fieldCheck(row.email))) {
                 checkcontent = true;
             }
-            if (row.send == true) {
+            if (row.send === true) {
                 checksome = true;
             }
         });
         angular.forEach($scope.extraPeople, function(people) {
             var matches = regExp.exec(people);
-            if (matches == null) {
+            if (matches === null) {
                 matches = ["", people];
             }
-            if (matches[1] != null &&
-                    matches[1] != "" &&
+            if (matches[1] !== null &&
+                    matches[1] !== "" &&
                     $scope.fieldCheck(matches[1])) {
                 checkcontent = true;
             } else {
@@ -985,8 +1000,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return false;
     };
 
-    $scope.securityTypeDropdown = function() {
-        return Object.keys(attrs).sort();
+    $scope.securityTypeDropdown = function(for_display) {
+        var not_these = ['Equity', 'Equity Common'];
+        var res = Object.keys(attrs).sort();
+        if (for_display)
+            res = res.filter(function(el) {
+                return not_these.indexOf(el) == -1; });
+        return res;
     };
     $scope.showSecurityType = function(t) {
         if (!t || !$scope.ctFilter || !$scope.ctFilter.security_types) {
@@ -1039,15 +1059,17 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
     $scope.rowSum = function(row) {
         return captable.rowSum(
-                row.name,
-                ($scope.editMode ? false : $scope.ctFilter.date),
-                ($scope.editMode ? true : $scope.ctFilter.vesting));
+            row.name,
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.investorOwnershipPercentage = function(row) {
         return captable.investorOwnershipPercentage(
-                row.name,
-                ($scope.editMode ? false : $scope.ctFilter.date),
-                ($scope.editMode ? true : $scope.ctFilter.vesting));
+            row.name,
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.numUnissued = function(sec) {
         return captable.numUnissued(sec, $scope.ct.securities,
@@ -1061,8 +1083,9 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
     $scope.totalOwnershipUnits = function(x) {
         return captable.totalOwnershipUnits(x,
-                ($scope.editMode ? false : $scope.ctFilter.date),
-                ($scope.editMode ? true : $scope.ctFilter.vesting));
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.securityTotalUnits = function(sec) {
         return captable.securityTotalUnits(sec,

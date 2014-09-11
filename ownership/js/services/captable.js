@@ -530,14 +530,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.grantRowInfoFor = grantRowInfoFor;
-    this.rowSum = function(inv, asof, vesting) {
+    this.rowSum = function(inv, securities, asof, vesting) {
+        if (!securities) securities = false;
         var red;
         if (asof)
         {
             red = function(prev, cur, idx, arr) {
                 var tmp = getCellUnits(cur, asof, vesting);
                 return prev + (calculate.isNumber(tmp) ? tmp : 0);
-            }
+            };
         }
         else
         {
@@ -546,6 +547,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             };
         }
         return rowFor(inv)
+            .filter(function(el) {
+                return (typeof(securities) == "boolean" ? true :
+                    securities.indexOf(el.security) != -1);})
             .reduce(red, 0);
     };
     this.investorsIn = function(sec) {
@@ -725,7 +729,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         };
     }
     this.securitiesWithUnissuedUnits = function() {
-        return captable.securities.filter(secHasUnissued(captable.securities));
+        return captable.securities
+            .filter(secHasUnissued(captable.securities));
     };
     this.securityUnissuedPercentage = function(sec, securities, asof, vesting) {
         return 100 * (numUnissued(sec, securities, asof, vesting) / totalOwnershipUnits());
@@ -1139,7 +1144,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
     function investorSorting(inv) {
         if (inv === "") { return -100; } // keep new inv rows at bottom
-        return investorOwnershipPercentage(inv);
+        return investorOwnershipPercentage(inv, false, false, false);
     }
     function splice_many(array, elements) {
         var indices = elements
@@ -1179,7 +1184,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
-            console.log(new_entries);
             if (new_entries.length < 1)
             {
                 console.log("Error: no ledger entries");
@@ -1679,11 +1683,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      *
      * Sum all ledger entries associated with warrants
      * and convertible debt.
-     *
-     * TODO incorporate effective date (now vs infinity)
      */
-    function totalOwnershipUnits(dilution, asof, vesting) {
+    function totalOwnershipUnits(dilution, securities, asof, vesting) {
         if (!dilution) dilution = 1;
+        if (!securities) securities = false;
         var entry_filter;
         var ok_securities = [];
         var auth_securities = [];
@@ -1693,8 +1696,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             "Equity",
                             "Options"];
             angular.forEach(captable.securities, function(sec) {
-                if (sec && sec.attrs && ok_types.indexOf(
-                                    sec.attrs.security_type) !== -1)
+                if (sec && sec.attrs &&
+                    ok_types.indexOf(sec.attrs.security_type) !== -1 &&
+                    (typeof(securities) == "boolean" ? true :
+                        securities.indexOf(sec.name) != -1))
                 {
                     ok_securities.push(sec.name);
                 }
@@ -1730,15 +1735,21 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             ok_securities = [];
             auth_securities = [];
             angular.forEach(captable.securities, function(sec) {
-                if (sec && sec.attrs && calculate.primaryMeasure(
-                               sec.attrs.security_type) == "units")
+                if (sec && sec.attrs &&
+                    calculate.primaryMeasure(
+                        sec.attrs.security_type) == "units" &&
+                    (typeof(securities) == "boolean" ? true :
+                        securities.indexOf(sec.name) != -1))
                 {
                     ok_securities.push(sec.name);
                 }
             });
             angular.forEach(captable.securities, function(sec) {
-                if (sec && sec.attrs && calculate.primaryMeasure(
-                    sec.attrs.security_type) == "units" && sec.attrs.totalauth && sec.attrs.totalauth.toString().length > 0)
+                if (sec && sec.attrs &&
+                    calculate.primaryMeasure(sec.attrs.security_type)
+                        == "units" &&
+                    sec.attrs.totalauth &&
+                    sec.attrs.totalauth.toString().length > 0)
                 {
                     auth_securities.push(sec.name);
                 }
@@ -1781,7 +1792,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.totalOwnershipUnits = totalOwnershipUnits;
-    function investorOwnershipPercentage(inv, asof, vesting) {
+    function investorOwnershipPercentage(inv, securities, asof, vesting) {
+        if (!securities) securities = false;
         var red;
         if (asof)
         {
@@ -1795,9 +1807,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             red = sumCellUnits;
         }
         var x = captable.cells
-            .filter(function(el) { return el.investor == inv; })
+            .filter(function(el) { return el.investor == inv &&
+                (typeof(securities) == "boolean" ? true : 
+                    securities.indexOf(el.security) != -1); })
             .reduce(red, 0);
-        var res = x / totalOwnershipUnits(1, asof, vesting) * 100;
+        var res = x / totalOwnershipUnits(1, securities, asof, vesting) * 100;
         return res != Infinity ? res : 0;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
@@ -2006,6 +2020,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.isDebt = function(security) {
         if (!security) return;
         return security.attrs.security_type == "Debt" || security.attrs.security_type == "Safe" || security.attrs.security_type == "Convertible Debt";
+    };
+    this.isEquity = function(security) {
+        if (!security) return;
+        return security.attrs.security_type == "Equity" || security.attrs.security_type == "Equity Common";
     };
     this.isOption = function(security) {
         if (!security) return;
