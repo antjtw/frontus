@@ -240,20 +240,7 @@ app.controller('CompanyCtrl',
                 }
             }
 
-			$scope.fullScreen = function() {
-				/*var elem = document.getElementById("vid");
-				if (elem.requestFullscreen) {
-				  elem.requestFullscreen();
-				} else if (elem.msRequestFullscreen) {
-				  elem.msRequestFullscreen();
-				} else if (elem.mozRequestFullScreen) {
-				  elem.mozRequestFullScreen();
-				} else if (elem.webkitRequestFullscreen) {
-				  elem.webkitRequestFullscreen();
-				}*/
 
-				document.getElementById("vid-pic").style.visibility="hidden";
-			};
             $scope.getTokenInfo = function() {
                 SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
                     $scope.backupInfo = data[0];
@@ -593,6 +580,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.docsummary = {};
                 $scope.docsummary.num = docs.length;
                 $scope.docsummary.sig = 0;
+                $scope.docsummary.waiting = 0;
                 SWBrijj.tblm("document.investor_activity").then(function(active) {
                     angular.forEach($scope.docs, function(doc) {
                         var docActivities = [];
@@ -613,6 +601,10 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                         $scope.setDocStatusRank(doc);
                         if (!((doc.signature_deadline && doc.when_signed) || (!doc.signature_deadline && doc.last_viewed))) {
                             $scope.docsummary.sig += 1;
+                        }
+                        if (doc.when_void_requested && !doc.when_void_accepted)
+                        {
+                            $scope.docsummary.waiting += 1;
                         }
                     });
                 });
