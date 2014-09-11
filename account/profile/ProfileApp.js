@@ -15,9 +15,10 @@ app.controller('ContactCtrl',
             return [offx, offy];
         }
         if ($routeParams.verificationCode) {
-            SWBrijj.procm('account.verify_email', $routeParams.code)
+            SWBrijj.procm('account.verify_email', $routeParams.verificationCode)
             .then(function(res) {
-                if (res[0].verify_email) {
+                cnosole.log(res);
+                if (res[0].verify_email === true) {
                     $scope.$emit("notification:success", "Alternate email address verified.");
                 } else {
                     $scope.$emit("notification:fail", "Failed to verify alternate email address.");
