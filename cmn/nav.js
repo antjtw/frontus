@@ -672,11 +672,15 @@ navm.controller('NavCtrl',
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
                             }
+                            /* If actual invoices.length == 0
+                             *
+                             */
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
                             $rootScope.billingLoaded = true;
                         }
+                        console.log($rootScope.billing);
                     });
                 } else {
                     if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
@@ -705,6 +709,7 @@ navm.controller('NavCtrl',
                 if (x && x.length>0 && x!="invalid request") {
                     var resp = JSON.parse(x);
                     if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.freetrial = payments.format_trial(resp);
                     $rootScope.billing.invoices = resp.data.filter(function(el) {
                         return el.amount>0;
                     }) || [];

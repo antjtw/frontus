@@ -265,3 +265,9 @@ h2.browser {
     text-align: left;
     font-size: 16px;
 }
+
+.free-trial-text {
+    margin-top: -5px;
+    text-align: left;
+    color: #34495E;
+}

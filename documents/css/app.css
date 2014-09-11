@@ -2537,3 +2537,7 @@ div.profile-link > span:first-of-type {
 .docPrepRow a {
     color: #3397da;
 }
+
+.document-list {
+    padding-bottom: 20px;
+}

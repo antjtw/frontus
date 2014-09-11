@@ -15,7 +15,7 @@ service.filter('caplength', function () {
     };
 });
 
-service.service('payments', function(SWBrijj, $filter) {
+service.service('payments', function(SWBrijj, $filter, $rootScope) {
     var s = {};
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
@@ -51,11 +51,22 @@ service.service('payments', function(SWBrijj, $filter) {
                                " off";
         }
         if (discount.end) {
-            formatted_coupon += ' until ' +
-                                $filter('date')(discount['end']*1000,
-                                                'MMMM d, yyyy');
+            formatted_coupon += ' until ' + formatDate(discount['end']);
         }
         return formatted_coupon;
+    };
+    function formatDate(d, fmt) {
+        fmt = fmt || 'MMMM d, yyyy';
+        return $filter('date')(d*1000, fmt);
+    }
+    s.format_trial = function(d) {
+        var plan = d.data[0].lines.data[0].plan;
+        if (d.count == 1 && plan.trial_period_days)
+        {
+            var period = d.data[0].lines.data[0].period;
+            return "Free Trial expires on " +
+                formatDate(period.end, $rootScope.settings.shortdate);
+        }
     };
     /*
     s.get_coupon = function(cpn) {
@@ -232,9 +243,73 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
             }
             return this.displays[identifier];
         };
+
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        this.createInvestorObject = function(id) {
+            // TODO: id may not be the user_id, may be a non-primary email of a user, or no user at all
+            var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+            SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
+                if (data.length == 0 || !data[0].user_id) //email not known
+                    return;
+                investorObject.id = data[0].user_id;
+                investorObject.text = investorObject.name = data[0].name;
+                if (inv_service.names[data[0].user_id])
+                {//known user, different email
+                    investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                    investorObject.name = inv_service.getName(data[0].user_id);
+                    return;
+                }
+                inv_service.names[data[0].user_id] = data[0].name;
+                inv_service.getDisplay(data[0].user_id).text = inv_service.getDisplayText(data[0].user_id);
+                inv_service.investors.push(inv_service.getDisplay(data[0].user_id));
+                investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                investorObject.name = inv_service.getName(data[0].user_id);
+            }).except(function(x) {console.log(x);});
+            return investorObject;
+        };
+
+        this.createSearchChoice = function(text) {
+            // if text was a legit user, would already be in the list, so don't check Investor service
+            //if (text.indexOf(',') !== -1 || text.indexOf(' ') !== -1) {
+                // comma separated list detected. We don't even care anymore, just validate in $scope.addShareEmail
+            //    return {id: text, text: "multiple emails"};
+            //}
+            if (emailRegExp.test(text)) {
+                return inv_service.createInvestorObject(text);
+            } else {
+                return false;
+            }
+        };
     }
 }]);
 
-// service.service('Messages', ['SWBrijj', function(SWBrijj) {
-//     this.message_data = [];
-// }]);
+service.service('csv', [function() {
+    this.downloadFromArrays = function(arrs) {
+        return download(constructFromArrays(arrs));
+    };
+
+    function constructFromArrays(arrs) {
+        var content = "data:text/csv;charset=utf-8,";
+        angular.forEach(arrs, function(row, idx) {
+            var rowString = row.join(",");
+            content += rowString;
+            if (idx < arrs.length) content += "\n"; 
+        });
+        return content;
+    }
+    function download(contents) {
+        var encodedUri = encodeURI(contents);
+        return encodedUri;
+        //        window.open(encodedUri);
+        /* download attribute doesn't work in IE at all
+           TODO use when available
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "my_data.csv");
+
+        link.click();
+         */
+    }
+}]);

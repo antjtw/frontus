@@ -27,8 +27,10 @@
                         </td>
                         <td style="width: 225px;">{{row.name}}</td>
                         <td style="width: 210px;">
-                            <input class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
-                                   ng-disabled="row.emailkey || row.alreadyShared" ng-model="row.email" ng-change="updateSendRow(row);"
+                            <input ng-if="row.emailkey || row.alreadyShared" class="transfer-shares-input"
+                                   disabled ng-model="row.name">
+                            <input ng-if="!(row.emailkey || row.alreadyShared)" class="transfer-shares-input"
+                                   ng-model="row.investor_details" ng-change="updateSendRow(row);"
                                    ui-select2="rowSelect2Options">
                         </td>
                         <td style="width: 210px;">
@@ -295,6 +297,17 @@
                         </div>
                     </li>
                 </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="box-button pull-right"
+         ng-click="downloadCSV()">
+        <ul>
+            <li>
+                <span data-icon="&#xe007;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>CSV</span>
             </li>
         </ul>
     </div>
