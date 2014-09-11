@@ -700,10 +700,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     function filterInvestors(investorList, emails) {
         return investorList.filter(function(val, idx, arr) {
             return ! emails.some(function(emval, eidx, earr) {
-                /*console.log("---");
-                console.log(val);
-                console.log(emval);
-                consle.log(emval.email);*/
                 return val.id == emval.email; // ct.investors still uses email instead of id
             });
         });
@@ -711,7 +707,9 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     $scope.select2Options = {
         multiple: true,
+        tokenSeparators: [",", " "],
         data: Investor.investors,
+        createSearchChoice: Investor.createSearchChoice,
         placeholder: 'Enter name or email address & press enter'
     };
 
@@ -721,8 +719,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 results: filterInvestors(Investor.investors, $scope.ct.investors)
             };
         },
-        placeholder: 'Select Shareholder or type email',
         createSearchChoice: Investor.createSearchChoice,
+        placeholder: 'Pick name or type email',
     };
 
     // Controls the orange border around the send boxes if an email is not given
@@ -735,7 +733,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.autoCheck = function(person) {
-        return person !== null && person.id.length > 0; // will fail for new people
+        return person !== null && person.id.length > 0;
     };
 
     $scope.turnOnShares = function () {
@@ -760,8 +758,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
 
-    //regex to deal with the parentheses
-    var regExp = /\(([^)]+)\)/;
     // Send the share invites from the share modal
     $scope.sendInvites = function () {
         angular.forEach($scope.ct.investors, function (row) {
@@ -798,63 +794,43 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if ($scope.extraPeople.length > 0) {
             angular.forEach($scope.extraPeople, function (people) {
                 if (people) {
-                    var matches = regExp.exec(people);
-                    if (matches == null) {
-                        matches = ["", people];
-                    }
-                    SWBrijj.procm("ownership.share_captable", matches[1].toLowerCase(), "").then(function (data) {
-                        SWBrijj.proc('ownership.update_investor_captable', matches[1].toLowerCase(), 'Full View').then(function (data) {
+                    SWBrijj.procm("ownership.share_captable", people.id, "").then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', people.id, 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {
-                            $scope.$emit("notification:fail", "Email : " + people + " failed to send");
-                        });
+                        $scope.$emit("notification:fail", "Email : " + people + " failed to send");
+                    });
                 }
             });
             $scope.extraPeople = [];
         }
     };
 
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    $scope.fieldCheck = function(email) {
-        //return re.test(email); // TODO: only run on new users, not existing (don't have email for existing)
-        return true;
-    };
-
     // Prevents the share button from being clickable until
     // a send button has been clicked and an address filled out
     $scope.checkInvites = function () {
-        var checkcontent = false;
         var checksome = false;
         angular.forEach($scope.ct.investors, function(row) {
-            if (row.send === true &&
-                    (row.email !== null &&
-                     row.email.id !== "" &&
-                     $scope.fieldCheck(row.email))) {
-                checkcontent = true;
-            }
             if (row.send === true) {
                 checksome = true;
             }
         });
-        angular.forEach($scope.extraPeople, function(people) {
-            var matches = regExp.exec(people);
-            if (matches === null) {
-                matches = ["", people];
-            }
-            if (matches[1] !== null &&
-                    matches[1] !== "" &&
-                    $scope.fieldCheck(matches[1])) {
-                checkcontent = true;
-            } else {
-                checkcontent = false;
+        if (typeof($scope.extraPeople) === "string") {
+            // convert to an array if it isn't already
+            $scope.extraPeople = $scope.extraPeople.split(",");
+        }
+        $scope.extraPeople.forEach(function(people, idx, arr) {
+            if (typeof(people) === "string") {
+                // if it's a string, we want to build an investor object and work on that instead
+                arr[idx] = people = Investor.createInvestorObject(people.trim());
             }
             if (people) {
                 checksome = true;
             }
         });
-        return !(checksome && checkcontent);
+        return !(checksome);
     };
 
     $scope.tourfunc = function() {

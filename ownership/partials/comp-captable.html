@@ -28,7 +28,7 @@
                         <td style="width: 225px;">{{row.name}}</td>
                         <td style="width: 210px;">
                             <input ng-if="row.emailkey || row.alreadyShared" class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
-                                   disabled ng-model="row.email">
+                                   disabled ng-model="row.name">
                             <input ng-if="!(row.emailkey || row.alreadyShared)" class="transfer-shares-input" ng-class="{'error':emailCheck(row.send, row.email)}"
                                    ng-model="row.email" ng-change="updateSendRow(row);"
                                    ui-select2="rowSelect2Options">
