@@ -1037,7 +1037,8 @@ app.filter('interval', function() {
 
 app.filter('billingPlans', function() {
     return function(plan) {
-        switch (plan) {
+        if (!plan) plan = "";
+        switch (plan.substring(0,3)) {
             case '000':
                 return "Cancel Subscription";
             case '001':
@@ -1055,7 +1056,8 @@ app.filter('billingPlans', function() {
 });
 app.filter('billingPlansNameOnly', function() {
     return function(plan) {
-        switch (plan) {
+        if (!plan) plan = "";
+        switch (plan.substring(0,3)) {
             case '000':
                 return "Cancel Subscription";
             case '001':
