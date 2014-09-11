@@ -627,11 +627,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var t1 = Math.floor(start.getTime() / 86400000);
         var t2 = Math.floor(ended.getTime() / 86400000);
         return t2 - t1;
-    };
+    }
     this.daysBetween = daysBetween;
     function startDate() {
         return captable.transactions.reduce(minDate, null);
-    };
+    }
     this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
         if (!prev || cur.effective_date < prev)
@@ -645,11 +645,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function lastDate() {
         return captable.ledger_entries.reduce(maxDate, null);
-    };
+    }
     this.lastDate = lastDate;
     function updateDays() {
         captable.totalDays = daysBetween(startDate(), lastDate());
-    };
+    }
     function transForCell(inv, sec) {
         // Investor identifying attributes
         var invs = $filter('getInvestorAttributes')();
@@ -714,7 +714,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function netCreditFor(transaction, investor) {
         var trans = captable.transactions.filter(function(t) {
-            return t.transaction == transaction || 
+            return t.transaction == transaction ||
                 (t.attrs['transaction_from'] && t.attrs.transaction_from == transaction);
         }).reduce(accumulateProperty('transaction'), []);
         var ledger_entries = captable.ledger_entries.filter(function(e) {
@@ -959,7 +959,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             return sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
-    };
+    }
     this.getCellAmount = getCellAmount;
     function sum_ledger(entries) {
         return entries.reduce(
@@ -1009,7 +1009,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             if (del)
             {
-                console.log("deleting tran", cell.transactions[t].transaction, cell.investor, cell.security);
                 deleteTransaction(cell.transactions[t], cell, true);
             }
         }
@@ -1763,7 +1762,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         return tran.effective_date <= d;
                     }).reduce(accumulateProperty('transaction'), []);
                     entry_filter = function(el) {
-                        return el && ok_securities.indexOf(el.security) !== -1 && 
+                        return el && ok_securities.indexOf(el.security) !== -1 &&
                             (el.investor || auth_securities.indexOf(el.security) !== -1) &&
                             trans.indexOf(el.transaction) != -1;
                     };
@@ -1771,7 +1770,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 else
                 {
                     entry_filter = function(el) {
-                        return el && ok_securities.indexOf(el.security) !== -1 && 
+                        return el && ok_securities.indexOf(el.security) !== -1 &&
                             (el.investor || auth_securities.indexOf(el.security) !== -1) &&
                             el.effective_date <= d;
                     };
@@ -1808,7 +1807,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         var x = captable.cells
             .filter(function(el) { return el.investor == inv &&
-                (typeof(securities) == "boolean" ? true : 
+                (typeof(securities) == "boolean" ? true :
                     securities.indexOf(el.security) != -1); })
             .reduce(red, 0);
         var res = x / totalOwnershipUnits(1, securities, asof, vesting) * 100;
@@ -2100,8 +2099,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     };
 
-
-
     function isEvidence(ev) {
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
@@ -2111,7 +2108,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }).length>0;
         } else {
             return false;
-            console.log("not added")
         }
     }
     this.isEvidence = isEvidence;
@@ -2121,21 +2117,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         //console.log("validateTransaction");
         if (!attrs)
         {
-            console.log("attrs not defined yet");
             return true;
         }
         if (!transaction.attrs.security_type)
         {
-            console.log("security_type not defined");
-            console.log(transaction);
             return false;
         }
         if (!attrs[transaction.attrs.security_type])
         {
-            console.log("wrong security type?");
-            console.log(transaction.attrs.security_type);
-            console.log(attributes.isLoaded());
-            console.log(attrs);
             if (!attributes.isLoaded())
             {//the data could be correct, but the attributes aren't filled in yet
                 return true;

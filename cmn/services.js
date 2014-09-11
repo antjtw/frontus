@@ -232,9 +232,25 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
             }
             return this.displays[identifier];
         };
+
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        this.createInvestorObject = function(id) {
+            // TODO: id may not be the user_id, may be a non-primary email of a user, or no user at all
+            return {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+        };
+
+        this.createSearchChoice = function(text) {
+            // if text was a legit user, would already be in the list, so don't check Investor service
+            //if (text.indexOf(',') !== -1 || text.indexOf(' ') !== -1) {
+                // comma separated list detected. We don't even care anymore, just validate in $scope.addShareEmail
+            //    return {id: text, text: "multiple emails"};
+            //}
+            if (emailRegExp.test(text)) {
+                return inv_service.createInvestorObject(text);
+            } else {
+                return false;
+            }
+        };
     }
 }]);
-
-// service.service('Messages', ['SWBrijj', function(SWBrijj) {
-//     this.message_data = [];
-// }]);

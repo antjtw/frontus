@@ -661,7 +661,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     // Captable Sharing Modal
     $scope.modalUp = function () {
         $scope.ct.investors.forEach(function(inv) {
-            if (inv.email && inv.email.trim().length > 0 && !inv.send) {
+            if (!inv.send && inv.email && ((inv.email.id && inv.email.id.trim().length > 0) || inv.email.trim().length > 0)) {
                 inv.alreadyShared = true;
             }
         });
@@ -697,17 +697,32 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         dialogFade: true
     };
 
+    function filterInvestors(investorList, emails) {
+        return investorList.filter(function(val, idx, arr) {
+            return ! emails.some(function(emval, eidx, earr) {
+                /*console.log("---");
+                console.log(val);
+                console.log(emval);
+                consle.log(emval.email);*/
+                return val.id == emval.email; // ct.investors still uses email instead of id
+            });
+        });
+    }
+
     $scope.select2Options = {
         multiple: true,
         data: Investor.investors,
-        tokenSeparators: [",", " "],
-        placeholder: ''
+        placeholder: 'Enter name or email address & press enter'
     };
 
     $scope.rowSelect2Options = {
-        data: Investor.investors,
-        tokenSeparators: [",", " "],
-        placeholder: 'Enter email address & press enter'
+        data: function() {
+            return {
+                results: filterInvestors(Investor.investors, $scope.ct.investors)
+            };
+        },
+        placeholder: 'Select Shareholder or type email',
+        createSearchChoice: Investor.createSearchChoice,
     };
 
     // Controls the orange border around the send boxes if an email is not given
@@ -731,8 +746,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     $scope.updateSendRow = function(row) {
         if (typeof(row.email) === "string") {
-            // select2-ui sets string and then object, ignore the string set
-            return;
+            // select2-ui sets string and then object, generate the object from the string
+            row.email = Investor.createInvestorObject(row.email);
         }
         if (row.email) {
             row.send = $scope.autoCheck(row.email);
