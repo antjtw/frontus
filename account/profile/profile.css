@@ -73,11 +73,21 @@ h1.profile-name {
     overflow: auto;
 }
 
+ul.personal-information > li > ul > li > div.standard-button.small-standard-button{
+    margin-left: 10px;
+    display: inline-block;
+    vertical-align: 30%;
+}
+
 .personal-information > li > ul > li:nth-child(odd) {
     width: 90px;
     text-transform: capitalize;
     font-size: 12px;
     line-height: 20px;
+}
+
+.ind-information.right .personal-information > li > ul > li:nth-child(odd){
+    padding-left: 20px;
 }
 
 .personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {
@@ -113,6 +123,12 @@ ul.personal-information > li > ul > li> button.radio-button{
 .personal-information input.short-input {
     width: 70px;
 }
+
+div.ind-information.right > ul.personal-information > li > ul > li > input.notVerified {
+    margin-left: 20px;
+}
+
+
 
 .span4.ind-pics{
     padding-left: 20px;
