@@ -412,7 +412,7 @@ app.controller('CompanyDocumentListController',
                     {
                         for (var i = 0; i < files.length; i++) {
                             var newdocument = {
-                                uploaded_by: $rootScope.person.email,
+                                uploaded_by: $rootScope.person.user_id,
                                 iss_annotations: null,
                                 company: $rootScope.navState.company,
                                 doc_id: x[i],

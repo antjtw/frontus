@@ -186,7 +186,6 @@ service.factory('myPayments', function($q, payments) {
         },
         broadcastResults = function() {
             this.data = d;
-            console.log(this.data);
         };
 
 
@@ -235,18 +234,41 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
         };
 
         this.getDisplayText = function(identifier) {
-            if (this.names[identifier]) {
-                return this.names[identifier] + " (" + identifier + ")";
-            } else {
-                return identifier;
-            }
+            return this.getName(identifier);
         };
 
         this.getDisplay = function(identifier) {
             if (!this.displays[identifier]) {
-                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier)};
+                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier), name: this.getName(identifier)};
             }
             return this.displays[identifier];
+        };
+
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        this.createInvestorObject = function(id) {
+            // TODO: id may not be the user_id, may be a non-primary email of a user, or no user at all
+            var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+            SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
+                if (data.length == 0) //email not known
+                    return;
+                investorObject.id = data[0].user_id;
+                investorObject.text = investorObject.name = data[0].name;
+            }).except(function(x) {console.log(x);});
+            return investorObject;
+        };
+
+        this.createSearchChoice = function(text) {
+            // if text was a legit user, would already be in the list, so don't check Investor service
+            //if (text.indexOf(',') !== -1 || text.indexOf(' ') !== -1) {
+                // comma separated list detected. We don't even care anymore, just validate in $scope.addShareEmail
+            //    return {id: text, text: "multiple emails"};
+            //}
+            if (emailRegExp.test(text)) {
+                return inv_service.createInvestorObject(text);
+            } else {
+                return false;
+            }
         };
     }
 }]);

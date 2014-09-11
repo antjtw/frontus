@@ -403,6 +403,11 @@ app.directive('companyOwnershipTile', [function() {
                 $scope.gotopage = function (link){
                     $location.url(link);
                 };
+
+                $scope.fullScreen = function() {
+
+                    document.getElementById("vid-pic").style.visibility="hidden";
+                };
 		
                 $scope.generateSecurityGraph = function() {
                     $scope.graphdata = [];

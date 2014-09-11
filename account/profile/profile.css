@@ -55,31 +55,44 @@ h1.profile-name {
     border-top: none;
 }
 
-.personal-information {
-    padding-top: 30px;
+.ind-information{
+    width: 45%;
+    float: left;
 }
+
+.ind-information.right{
+    padding-left: 40px;
+}
+.personal-information {
+    padding-left: 40px;
+}
+
 
 .personal-information > li > ul {
     display: block;
     overflow: auto;
 }
 
-.personal-information > li > ul > li {
-    float: left;
-    display: inline-block;
-}
-
 .personal-information > li > ul > li:nth-child(odd) {
     width: 90px;
-    margin-right: 10px;
-    text-align: right;
     text-transform: capitalize;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 20px;
 }
 
 .personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {
     width: 60px;
+}
+
+.span4.ind-pics > div > .standard-button.small-standard-button.gray{
+    padding-top: 30px;
+}
+
+.span4.ind-pics > div > .standard-button.small-standard-button.gray > button{
+    margin-left: 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
 }
 
 .personal-information input {
@@ -90,8 +103,10 @@ h1.profile-name {
     width: 70px;
 }
 
-.check-box-button.profile-box {
-
+.span4.ind-pics{
+    padding-left: 20px;
+    border-left: 1px solid #E3E3E3;
+    min-height: 899px;
 }
 
 .investor-attributes > ul {

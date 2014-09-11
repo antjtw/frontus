@@ -2427,6 +2427,14 @@ span.tour-icon.issue-cog + .tooltip {
     color: #19bb95;
 }
 
+.faux-tabs.single > button {
+    height: 20px;
+}
+
+.faux-tabs.single > button > span {
+    visibility: hidden;
+}
+
 .action-button.standard-button {
     margin: 20px 0 0 20px;
 }

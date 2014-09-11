@@ -625,14 +625,18 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     function daysBetween (start, ended) {
+        if (!start || !ended)
+        {
+            return 0;
+        }
         var t1 = Math.floor(start.getTime() / 86400000);
         var t2 = Math.floor(ended.getTime() / 86400000);
         return t2 - t1;
-    };
+    }
     this.daysBetween = daysBetween;
     function startDate() {
         return captable.transactions.reduce(minDate, null);
-    };
+    }
     this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
         if (!prev || cur.effective_date < prev)
@@ -646,11 +650,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function lastDate() {
         return captable.ledger_entries.reduce(maxDate, null);
-    };
+    }
     this.lastDate = lastDate;
     function updateDays() {
         captable.totalDays = daysBetween(startDate(), lastDate());
-    };
+    }
     function transForCell(inv, sec) {
         // Investor identifying attributes
         var invs = $filter('getInvestorAttributes')();
@@ -715,7 +719,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     function netCreditFor(transaction, investor) {
         var trans = captable.transactions.filter(function(t) {
-            return t.transaction == transaction || 
+            return t.transaction == transaction ||
                 (t.attrs['transaction_from'] && t.attrs.transaction_from == transaction);
         }).reduce(accumulateProperty('transaction'), []);
         var ledger_entries = captable.ledger_entries.filter(function(e) {
@@ -962,7 +966,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             return sum_transactions(plus_trans) - sum_transactions(minus_trans);
         }
-    };
+    }
     this.getCellAmount = getCellAmount;
     function sum_ledger(entries) {
         return entries.reduce(
@@ -1763,7 +1767,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         return tran.effective_date <= d;
                     }).reduce(accumulateProperty('transaction'), []);
                     entry_filter = function(el) {
-                        return el && ok_securities.indexOf(el.security) !== -1 && 
+                        return el && ok_securities.indexOf(el.security) !== -1 &&
                             (el.investor || auth_securities.indexOf(el.security) !== -1) &&
                             trans.indexOf(el.transaction) != -1;
                     };
@@ -1771,7 +1775,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 else
                 {
                     entry_filter = function(el) {
-                        return el && ok_securities.indexOf(el.security) !== -1 && 
+                        return el && ok_securities.indexOf(el.security) !== -1 &&
                             (el.investor || auth_securities.indexOf(el.security) !== -1) &&
                             el.effective_date <= d;
                     };
@@ -1808,7 +1812,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         var x = captable.cells
             .filter(function(el) { return el.investor == inv &&
-                (typeof(securities) == "boolean" ? true : 
+                (typeof(securities) == "boolean" ? true :
                     securities.indexOf(el.security) != -1); })
             .reduce(red, 0);
         var res = x / totalOwnershipUnits(1, securities, asof, vesting) * 100;
@@ -2092,8 +2096,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     };
 
-
-
     function isEvidence(ev) {
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
@@ -2103,7 +2105,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }).length>0;
         } else {
             return false;
-            console.log("not added")
         }
     }
     this.isEvidence = isEvidence;
@@ -2112,21 +2113,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var correct = true;
         if (!attrs)
         {
-            console.log("attrs not defined yet");
             return true;
         }
         if (!transaction.attrs.security_type)
         {
-            console.log("security_type not defined");
-            console.log(transaction);
             return false;
         }
         if (!attrs[transaction.attrs.security_type])
         {
-            console.log("wrong security type?");
-            console.log(transaction.attrs.security_type);
-            console.log(attributes.isLoaded());
-            console.log(attrs);
             if (!attributes.isLoaded())
             {//the data could be correct, but the attributes aren't filled in yet
                 return true;
@@ -2229,7 +2223,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var security_row = ["Ownership", "", "Shareholder"];
         var sub_header_row = ["Shares", "%", ""];
         angular.forEach(captable.securities, function(sec) {
-            security_row.push(sec.name, "");
+            security_row.push(sec.name.replace(/,/g , ""), "");
             sub_header_row.push($filter('issueUnitLabel')(sec.attrs.security_type),
                                 'Total Paid');
         });
@@ -2237,7 +2231,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         angular.forEach(captable.investors, function(inv) {
             var inv_row = [rowSum(inv.name).toString(),
                            (investorOwnershipPercentage(inv.name).toString() || "0.000") + "%",
-                           inv.name];
+                           inv.name.replace(/,/g , "")];
             angular.forEach(captable.securities, function(sec) {
                 var cell = cellFor(inv.name, sec.name) || {u: null, a:null};
                 inv_row.push(cell.u,
@@ -2248,7 +2242,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         angular.forEach(securitiesWithUnissuedUnits(), function(sec) {
             var unissued_row = [numUnissued(sec).toString(),
                                 securityUnissuedPercentage(sec).toString() + "%",
-                                sec.name + " (Unissued)"];
+                                sec.name.replace(/,/g , "") + " (Unissued)"];
             angular.forEach(captable.securities, function(key) {
                 unissued_row.push(sec==key ? numUnissued(key) : "",
                                   "");

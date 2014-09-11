@@ -332,6 +332,10 @@ own.directive('securityDetails', [function() {
                     }
                 };
 
+                $scope.hasDocuments = function(tran) {
+                    return tran.evidence_data && (tran.evidence_data.length > 0);
+                };
+
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
@@ -878,7 +882,6 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 $scope.loaddirective = function () {
-                    console.log($scope.data);
                     $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);

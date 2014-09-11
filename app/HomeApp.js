@@ -144,9 +144,7 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
             $scope.message.text = message.text;
         };
 
-
-
-
+        // TODO: move to investor service
         SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
             $scope.people = x;
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
@@ -164,7 +162,7 @@ app.controller('MessagesCtrl', ['$rootScope', '$scope', 'messages', 'SWBrijj',
                         }
                     });
                 });
-                SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+                SWBrijj.tblm('account.profile', ['user_id']).then(function(me) {
                     angular.forEach($scope.people, function(person) {
                         if (person.email == me[0].email)
                             person.hideLock = true;
@@ -188,7 +186,14 @@ app.controller('CompanyCtrl',
         function($scope, $rootScope, $route, $location,
                  $routeParams, $filter, SWBrijj, navState, calculate, captable)
         {
-            $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+            $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+                                'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina',
+                                'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+                                'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia',
+                                'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
             $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
             $scope.flipped1 = false;
@@ -197,8 +202,7 @@ app.controller('CompanyCtrl',
             $scope.default = "100%";
 			$scope.ct = captable.getCapTable();
             $scope.totalIssued = 0;
-            console.log("navState", navState);
-			
+
             if (navState.role == 'investor') {
                 $location.path('/app/home/investor');
                 return;
@@ -210,7 +214,7 @@ app.controller('CompanyCtrl',
 
             $scope.uselessbrowser = !Modernizr.csstransforms3d;
             //console.log($scope.uselessbrowser);
-            
+
             $scope.$watch('ct', function(newval, oldval) {
 				if (newval.securities.length > 0) {
 					$scope.ct = angular.copy($scope.ct);
@@ -232,7 +236,6 @@ app.controller('CompanyCtrl',
                 // Get all the data required
                 $scope.getTokenInfo();
                 $scope.getDocumentInfo();
-               
             });
 
             if ($routeParams.msg) {
@@ -241,20 +244,7 @@ app.controller('CompanyCtrl',
                 }
             }
 
-			$scope.fullScreen = function() {
-				/*var elem = document.getElementById("vid");
-				if (elem.requestFullscreen) {
-				  elem.requestFullscreen();
-				} else if (elem.msRequestFullscreen) {
-				  elem.msRequestFullscreen();
-				} else if (elem.mozRequestFullScreen) {
-				  elem.mozRequestFullScreen();
-				} else if (elem.webkitRequestFullscreen) {
-				  elem.webkitRequestFullscreen();
-				}*/
 
-				document.getElementById("vid-pic").style.visibility="hidden";
-			};
             $scope.getTokenInfo = function() {
                 SWBrijj.tblm('oauth.company_tokens_info', ['swid', 'service', 'auth_code_exists', 'access_token_exists', 'last_backup']).then(function(data) {
                     $scope.backupInfo = data[0];
@@ -457,7 +447,7 @@ app.controller('CompanyCtrl',
             $scope.formatAbrAmount = function(amount) {
                 var output = calculate.formatMoneyAmount(calculate.abrAmount(amount), $rootScope.settings);
                 return output;
-            }
+            };
         }]);
 
 app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$routeParams', 'SWBrijj', 'navState', 'calculate', 'captable',
@@ -474,7 +464,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             }
         }
         $scope.cti=captable.getCapTable();
-        console.log($scope.cti);
 
         $scope.uselessbrowser = !Modernizr.csstransforms3d;
 
@@ -487,7 +476,6 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
 
         //initialisation functions called
         $scope.company = navState.name;
-        console.log("navState", navState);
 
         SWBrijj.tblm('account.profile').then(function(x) {
             $scope.person = x[0];
@@ -584,14 +572,11 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
             $scope.createVestingGraphs();
         };
 
-          // Total Shares | Paid for an issue column (type is either u or a)
-    	var colTotal = memoize(calculate.colTotal);
-    	$scope.colTotal = function(header, rows, type) {
-      
-        
-        return colTotal(header, rows, type);
-        
-    };
+        // Total Shares | Paid for an issue column (type is either u or a)
+        var colTotal = memoize(calculate.colTotal);
+        $scope.colTotal = function(header, rows, type) {
+            return colTotal(header, rows, type);
+        };
 
         $scope.getDocumentInfo = function() {
             SWBrijj.tblm("document.this_investor_library").then(function(docs) {
@@ -599,6 +584,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.docsummary = {};
                 $scope.docsummary.num = docs.length;
                 $scope.docsummary.sig = 0;
+                $scope.docsummary.waiting = 0;
                 SWBrijj.tblm("document.investor_activity").then(function(active) {
                     angular.forEach($scope.docs, function(doc) {
                         var docActivities = [];
@@ -619,6 +605,10 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                         $scope.setDocStatusRank(doc);
                         if (!((doc.signature_deadline && doc.when_signed) || (!doc.signature_deadline && doc.last_viewed))) {
                             $scope.docsummary.sig += 1;
+                        }
+                        if (doc.when_void_requested && !doc.when_void_accepted)
+                        {
+                            $scope.docsummary.waiting += 1;
                         }
                     });
                 });
@@ -789,8 +779,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                     SWBrijj.uploadImage(fd).then(function(x) {
                         $scope.$emit("notification:success", "Profile successfully updated");
                         void(x);
-                        $scope.photoURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
-                        $rootScope.userURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
+                        $scope.photoURL = '/photo/user?id=' + $scope.person.user_id + '#' + new Date().getTime();
+                        $rootScope.userURL = '/photo/user?id=' + $scope.person.user_id + '#' + new Date().getTime();
                         $scope.person = person;
                     }).except( function(x) {
                             void(x);
