@@ -99,6 +99,17 @@ h1.profile-name {
     width: 180px;
 }
 
+.personal-information > li > ul > li{
+    line-height: 30px;
+}
+
+
+
+ul.personal-information > li > ul > li> button.radio-button{
+    vertical-align: 30%;
+}
+
+
 .personal-information input.short-input {
     width: 70px;
 }

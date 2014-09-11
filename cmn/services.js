@@ -272,12 +272,21 @@ service.service('Investor', ['SWBrijj', 'navState', '$q', '$window', function(SW
             var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
             if (!this.displays[id]) { // if we don't know this id ...
                 SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
-                    if (data.length === 0 || data[0].user_id === null) //email not known
+                    if (data.length == 0 || !data[0].user_id) //email not known
                         return;
-                    inv_service.names[data[0].user_id] = data[0].name;
                     investorObject.id = data[0].user_id;
                     investorObject.text = investorObject.name = data[0].name;
-                }).except(function(x) {console.error(x);});
+                    if (inv_service.names[data[0].user_id])
+                    {//known user, different email
+                        investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                        investorObject.name = inv_service.getName(data[0].user_id);
+                        return;
+                    }
+                    inv_service.names[data[0].user_id] = data[0].name;
+                    inv_service.getDisplay(data[0].user_id).text = inv_service.getDisplayText(data[0].user_id);
+                    investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                    investorObject.name = inv_service.getName(data[0].user_id);
+                }).except(function(x) {console.log(x);});
             }
             return investorObject;
         };

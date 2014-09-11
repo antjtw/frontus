@@ -14,6 +14,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             return [offx, offy];
         }
 
+       
         $scope.pictureModalOpen = function() {
             $scope.pictureModal = true;
         };
@@ -188,11 +189,23 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             document.location.href = '/login';
         });
 
+
+
         $scope.emails = [];
+        var primeEmail = ""
         SWBrijj.tblm('account.my_emails').then(function(returned_emails) {
             returned_emails.forEach(function (e) {
                 $scope.emails.push(e);
             });
+            angular.forEach($scope.emails, function(email){
+                if(email.email==$scope.primary_email){
+                    console.log("i am the primary!");
+                    primeEmail = email;
+                }
+            });
+            $scope.emails.splice($scope.emails.indexOf(primeEmail), 1);
+            $scope.emails.unshift(primeEmail);
+
         });
 
         $scope.uploadFile = function() {
@@ -380,7 +393,7 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
             SWBrijj.insert('account.my_emails', {user_id: $scope.user_id, email: email}).then(function(res) {
                 $scope.emails.push({email: email, verified: false});
                 // TODO: notification:success and call verification flow;
-                $scope.newemail = "";
+                $scope.newEmail = "";
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to add " + email + ".");
