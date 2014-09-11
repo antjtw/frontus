@@ -2304,7 +2304,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (security) {
                 security = security.replace(/,/g, "");
             }
-            var transactionrow = [Date.parse(tran.effective_date).toString($rootScope.settings.shortdate), tran.transaction, tran.kind, evidencedata, security, investor, tran.attrs.units, tran.attrs.amount, JSON.stringify(tran.attrs).replace(/,\"/g, " | \"").replace(/,/g, ""), tran.insertion_date, tran.entered_by, tran.inet];
+            var date = tran.effective_date;
+            if (date) {
+                date = Date.parse(tran.effective_date).toString($rootScope.settings.shortdate)
+            }
+            var transactionrow = [date, tran.transaction, tran.kind, evidencedata, security, investor, tran.attrs.units, tran.attrs.amount, JSON.stringify(tran.attrs).replace(/,\"/g, " | \"").replace(/,/g, ""), tran.insertion_date, tran.entered_by, tran.inet];
             res.push(transactionrow);
         });
         return res;
