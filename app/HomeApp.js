@@ -582,6 +582,7 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                 $scope.docsummary = {};
                 $scope.docsummary.num = docs.length;
                 $scope.docsummary.sig = 0;
+                $scope.docsummary.waiting = 0;
                 SWBrijj.tblm("document.investor_activity").then(function(active) {
                     angular.forEach($scope.docs, function(doc) {
                         var docActivities = [];
@@ -602,6 +603,10 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                         $scope.setDocStatusRank(doc);
                         if (!((doc.signature_deadline && doc.when_signed) || (!doc.signature_deadline && doc.last_viewed))) {
                             $scope.docsummary.sig += 1;
+                        }
+                        if (doc.when_void_requested && !doc.when_void_accepted)
+                        {
+                            $scope.docsummary.waiting += 1;
                         }
                     });
                 });
