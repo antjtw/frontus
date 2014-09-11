@@ -886,18 +886,7 @@ app.controller('CompanyDocumentListController',
                     };
                 },
                 placeholder: 'Add Recipients',
-                createSearchChoice: function(text) {
-                    // if text was a legit user, would already be in the list, so don't check Investor service
-                    if (text.indexOf(',') !== -1 || text.indexOf(' ') !== -1) {
-                        // comma separated list detected. We don't even care anymore, just validate in $scope.addShareEmail
-                        return {id: text, text: "multiple emails"};
-                    }
-                    if (emailRegExp.test(text)) {
-                        return {id: text, text: text};
-                    } else {
-                        return false;
-                    }
-                },
+                createSearchChoice: Investor.createSearchChoice,
             };
             $scope.badEmails = [];
             $scope.addShareEmail = function(email_input) {

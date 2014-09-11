@@ -75,52 +75,39 @@
                <!--      second column -->
                 <div class="ind-information right">
                     <ul class="personal-information">
-                        <li  ng-repeat="email in emails">
-                            <ul>
-                                <li ng-if="email.email==primary_email">Primary Email*</li>
+                        <li ng-repeat="email in emails">
+                            <ul>                           
+                                <li ng-if="email.email==primary_email" >Primary Email*</li>
                                 <li ng-if="email.email !== primary_email">Alternate Email</li>
                                 <li>
-                                <button class="check-box-button"
-                                ng-class="{selected: email.email == primary_email}"
-                                ng-if="email.verified"
-                                ng-click="profileUpdate('primary_email', email.email)">
-                                    <span data-icon="&#xe023;"
-                                  aria-hidden="true">
-                                    </span>
-                                </button>
-                                <input type="text" ng-model="email.email" ng-disbaled="email.email == email.verified"></input></li>
+                                    <button class="radio-button" ng-if="email.verified"
+                                    ng-class="{selected: email.email == primary_email}"
+                                    ng-click="profileUpdate('primary_email', email.email)">
+                                    </button>
+                                    <input type="text" ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-blur="updateEmail(email)"></input>
+                                    <span data-icon="&#xe01b;" ng-click="removeEmail(email)" ng-hide="email.email== primary_email"></span>
+
+                                </li>
                             </ul>
                         </li>
                         <li>
                             <ul>
                                 <li>Alternate Email</li>
-                                <li><input type="text"></input></li>
+                                <li>
+<!--                                     <button class="radio-button"
+                                        ng-class="{selected: email.email==primary_email}"
+                                        >
+                                    </button> -->
+                                    <input type="text" ng-model="newEmail" ng-blur="addEmail(newEmail)"></input>
+                                </li>
                             </ul>
                         </li>
-
                     </ul>
-                    <!-- <div ng-repeat="email in emails">
-                        <button class="check-box-button"
-                                ng-class="{selected: email.email == primary_email}"
-                                ng-if="email.verified"
-                                ng-click="profileUpdate('primary_email', email.email)">
-                            <span data-icon="&#xe023;"
-                                  aria-hidden="true">
-                            </span>
-                        </button>
-                        <input ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-blur="updateEmail(email)">
-                        <a ng-if="email.email != primary_email" ng-click="removeEmail(email)" data-icon="&#xe01b;" tooltip="remove" tooltip-popup-delay="200"></a>
-                        <a ng-if="!email.verified" ng-click="reverifyEmail(email)">resend verification email</a>
-                        
-                    </div> -->
-                    <!-- <div>
-                        <input ng-model="newemail" ng-blur="addEmail(newemail)">
-                    </div> -->
+                   
                 </div>
             </div>
-           <!--  <div class="row-fluid" style="padding-top: 40px;">
-                <h2>EMAIL PREFERENCES</h2>
-            </div> -->
+
+
         </div>
 
 <!--         side colum -->
@@ -135,7 +122,7 @@
 
            
             <div class='signature-image ind-sig'>
-                 <h2 class="signature-label">Signature Image</h2>
+                 <h2 class="signature-label">SIGNATURE</h2>
                 <div>
                     <img ng-src="{{signatureURL}}">
                 </div>
