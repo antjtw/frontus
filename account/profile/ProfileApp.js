@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
-    function($scope, $rootScope, SWBrijj) {
+app.controller('ContactCtrl',
+    ['$scope', '$rootScope', 'SWBrijj', '$routeParams',
+    function($scope, $rootScope, SWBrijj, $routeParams) {
         function getCanvasOffset(ev) {
             var offx, offy;
             if (ev.offsetX === undefined) { // Firefox code
@@ -12,6 +13,19 @@ app.controller('ContactCtrl', ['$scope', '$rootScope', 'SWBrijj',
                 offy = ev.offsetY;
             }
             return [offx, offy];
+        }
+        if ($routeParams.verificationCode) {
+            SWBrijj.procm('account.verify_email', $routeParams.code)
+            .then(function(res) {
+                if (res[0].verify_email) {
+                    $scope.$emit("notification:success", "Alternate email address verified.");
+                } else {
+                    $scope.$emit("notification:fail", "Failed to verify alternate email address.");
+                }
+            }).except(function(err) {
+                console.log(err);
+                $scope.$emit("notification:fail", "Failed to verify alternate email address.");
+            });
         }
 
        
