@@ -886,7 +886,7 @@ app.controller('CompanyDocumentListController',
                     };
                 },
                 placeholder: 'Add Recipients',
-                createSearchChoice: Investor.createSearchChoice,
+                createSearchChoice: Investor.createSearchChoiceMultiple,
             };
             $scope.badEmails = [];
             $scope.addShareEmail = function(email_input) {
