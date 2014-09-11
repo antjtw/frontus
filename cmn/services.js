@@ -237,7 +237,14 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
 
         this.createInvestorObject = function(id) {
             // TODO: id may not be the user_id, may be a non-primary email of a user, or no user at all
-            return {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+            var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+            SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
+                if (data.length == 0) //email not known
+                    return;
+                investorObject.id = data[0].user_id;
+                investorObject.text = investorObject.name = data[0].name;
+            }).except(function(x) {console.log(x);});
+            return investorObject;
         };
 
         this.createSearchChoice = function(text) {
