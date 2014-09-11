@@ -783,8 +783,8 @@ app.controller('InvestorCtrl', ['$scope','$rootScope','$location', '$route','$ro
                     SWBrijj.uploadImage(fd).then(function(x) {
                         $scope.$emit("notification:success", "Profile successfully updated");
                         void(x);
-                        $scope.photoURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
-                        $rootScope.userURL = '/photo/user?id=' + $scope.person.email + '#' + new Date().getTime();
+                        $scope.photoURL = '/photo/user?id=' + $scope.person.user_id + '#' + new Date().getTime();
+                        $rootScope.userURL = '/photo/user?id=' + $scope.person.user_id + '#' + new Date().getTime();
                         $scope.person = person;
                     }).except( function(x) {
                             void(x);

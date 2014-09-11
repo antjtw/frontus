@@ -61,30 +61,23 @@ h1.profile-name {
 }
 
 .ind-information.right{
-/*    float:right;*/
     padding-left: 40px;
 }
 .personal-information {
-    padding-top: 30px;
+    padding-left: 40px;
 }
+
 
 .personal-information > li > ul {
     display: block;
     overflow: auto;
 }
 
-.personal-information > li > ul > li {
-    float: left;
-    display: inline-block;
-}
-
 .personal-information > li > ul > li:nth-child(odd) {
     width: 90px;
-    margin-right: 10px;
-    text-align: right;
     text-transform: capitalize;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 20px;
 }
 
 .personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {
@@ -97,6 +90,9 @@ h1.profile-name {
 
 .span4.ind-pics > div > .standard-button.small-standard-button.gray > button{
     margin-left: 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
 }
 
 .personal-information input {
