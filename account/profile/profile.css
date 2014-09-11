@@ -103,11 +103,17 @@ h1.profile-name {
     line-height: 30px;
 }
 
-ul.personal-information > li> ul > li > span {
-    background-color:   #E3E3E3;
-    padding: 5px;
-    border-radius: 2px;
+
+
+ul.personal-information > li > ul > li> button.radio-button{
+    vertical-align: 30%;
 }
+
+/*ul.personal-information > li > ul > li> button.radio-button.disabled{
+        background-color: #C7C7C7;
+        border: solid 2px #FFFFFF;
+
+}*/
 
 .personal-information input.short-input {
     width: 70px;
