@@ -1088,6 +1088,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                 ($scope.editMode ? false : $scope.ctFilter.date),
                 ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
+
+    $scope.downloadCSV = function() {
+        window.location.href = captable.download();
+    };
 }]);
 
 // IE fix to remove enter to submit form

@@ -161,11 +161,11 @@ ownership.filter('received', function () {
 ownership.filter('issueUnitLabel', function() {
     return function(iss) {
         if (iss == "Option") {
-            return "options";
+            return "Options";
         } else if (iss == "Warrant") {
-            return "warrants";
+            return "Warrants";
         } else {
-            return "shares";
+            return "Shares";
         }
     };
 });

@@ -15,7 +15,7 @@ service.filter('caplength', function () {
     };
 });
 
-service.service('payments', function(SWBrijj, $filter) {
+service.service('payments', function(SWBrijj, $filter, $rootScope) {
     var s = {};
     s.available_plans = function() {
         return SWBrijj.tblm('account.available_payment_plans', ['plan']);
@@ -51,11 +51,22 @@ service.service('payments', function(SWBrijj, $filter) {
                                " off";
         }
         if (discount.end) {
-            formatted_coupon += ' until ' +
-                                $filter('date')(discount['end']*1000,
-                                                'MMMM d, yyyy');
+            formatted_coupon += ' until ' + formatDate(discount['end']);
         }
         return formatted_coupon;
+    };
+    function formatDate(d, fmt) {
+        fmt = fmt || 'MMMM d, yyyy';
+        return $filter('date')(d*1000, fmt);
+    }
+    s.format_trial = function(d) {
+        var plan = d.data[0].lines.data[0].plan;
+        if (d.count == 1 && plan.trial_period_days)
+        {
+            var period = d.data[0].lines.data[0].period;
+            return "Free Trial expires on " +
+                formatDate(period.end, $rootScope.settings.shortdate);
+        }
     };
     /*
     s.get_coupon = function(cpn) {
@@ -237,7 +248,14 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
 
         this.createInvestorObject = function(id) {
             // TODO: id may not be the user_id, may be a non-primary email of a user, or no user at all
-            return {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+            var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+            SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
+                if (data.length == 0) //email not known
+                    return;
+                investorObject.id = data[0].user_id;
+                investorObject.text = investorObject.name = data[0].name;
+            }).except(function(x) {console.log(x);});
+            return investorObject;
         };
 
         this.createSearchChoice = function(text) {
@@ -252,5 +270,35 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
                 return false;
             }
         };
+    }
+}]);
+
+service.service('csv', [function() {
+    this.downloadFromArrays = function(arrs) {
+        return download(constructFromArrays(arrs));
+    };
+
+    function constructFromArrays(arrs) {
+        var content = "data:text/csv;charset=utf-8,";
+        angular.forEach(arrs, function(row, idx) {
+            var rowString = row.join(",");
+            content += rowString;
+            if (idx < arrs.length) content += "\n"; 
+        });
+        return content;
+    }
+    function download(contents) {
+        var encodedUri = encodeURI(contents);
+        return encodedUri;
+        //        window.open(encodedUri);
+        /* download attribute doesn't work in IE at all
+           TODO use when available
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "my_data.csv");
+
+        link.click();
+         */
     }
 }]);

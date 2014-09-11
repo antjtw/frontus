@@ -946,7 +946,7 @@ address {
 }
 
 .pricing .pricing-blocks > div > ul > li:nth-child(3) {
-    height: 209px;
+    height: 150px;
     color: #666666;
 }
 
@@ -1116,6 +1116,10 @@ address {
     padding-left: 4px;
 }
 
+.pricing .pricing-blocks > div:hover > ul > li:nth-child(2) > span.reverse > ul > li > div > button > span:before {
+    vertical-align: 2%;
+}
+
 .container.full-image {
     display: none;
 }
@@ -1191,6 +1195,10 @@ address {
 
     .features .white-stripe.grey-stripe > div {
         padding-top: 60px;
+    }
+
+    .pricing .pricing-blocks > div > ul > li:nth-child(2) {
+        height: 90px;
     }
 }
 

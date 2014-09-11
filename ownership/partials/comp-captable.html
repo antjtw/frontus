@@ -301,6 +301,17 @@
         </ul>
     </div>
     <div class="box-button pull-right"
+         ng-click="downloadCSV()">
+        <ul>
+            <li>
+                <span data-icon="&#xe007;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>CSV</span>
+            </li>
+        </ul>
+    </div>
+    <div class="box-button pull-right"
          ng-if="!windowToggle"
          ng-class="{'disabledme': companyIsZombie()}"
          ng-click="companyIsZombie() || modalUp();"
