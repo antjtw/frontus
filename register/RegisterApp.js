@@ -138,3 +138,15 @@ app.controller('PeopleCtrl', ['$scope', '$location', '$routeParams', 'SWBrijj',
 
     }
 ]);
+
+function initPage($scope, x, row) {
+    if (typeof(row) === 'undefined') row = 1;
+    var y = x[0]; // the fieldnames
+    var z = x[row]; // the values
+
+    for (var i = 0; i < y.length; i++) {
+        if (z[i] !== null) {
+            $scope[y[i]] = z[i];
+        }
+    }
+}
