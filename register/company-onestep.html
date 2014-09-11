@@ -65,7 +65,7 @@
                                            payments-type-model="type"
                                            ng-class="myForm.number.$card.type">
                                 </div>
-                                <div>
+                                <div style="overflow: auto">
                                     <div class="span6">
                                         <span>Expiration Date</span>
                                         <input type="text"
@@ -90,12 +90,15 @@
                                            class="input-block-level"
                                            ng-model="formatted_coupon">
                                 </div>
+                                <div ng-if="!coupon_code">
+                                    <p class="free-trial-text">{{trial_period}} days free, cancel anytime.</p>
+                                </div>
                             </div>
                         </div>
                         <div class="span12 regfooter"
                              my-loading-spinner="processing">
                             <p class="caption legal">
-                                By clicking the button below<span ng-show="!coupon_code">, your first month will be paid and</span> you agree to our <br ng-show="!coupon_code"><a target="_blank" href="/terms">Terms of Use</a> and <a target="_blank" href="/privacy">Privacy Policy</a>
+                                By clicking the button below you agree to our <a target="_blank" href="/terms">Terms of Use</a> and <a target="_blank" href="/privacy">Privacy Policy</a>
                             </p>
                             <div  class="standard-button large-standard-button">
                                 <button id="pricing_register"
