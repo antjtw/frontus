@@ -625,6 +625,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     function daysBetween (start, ended) {
+        if (!start || !ended)
+        {
+            return 0;
+        }
         var t1 = Math.floor(start.getTime() / 86400000);
         var t2 = Math.floor(ended.getTime() / 86400000);
         return t2 - t1;
