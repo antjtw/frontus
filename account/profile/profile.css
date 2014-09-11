@@ -109,11 +109,6 @@ ul.personal-information > li > ul > li> button.radio-button{
     vertical-align: 30%;
 }
 
-/*ul.personal-information > li > ul > li> button.radio-button.disabled{
-        background-color: #C7C7C7;
-        border: solid 2px #FFFFFF;
-
-}*/
 
 .personal-information input.short-input {
     width: 70px;
