@@ -66,7 +66,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.activityView = "ownership.company_activity_feed";
     $scope.tabs = [{'title': "Information"}, {'title': "Activity"}];
     $scope.tf = ["yes", "no"];
-    $scope.liquidpref = ['None', '1X', '2X', '3X'];
     $scope.extraPeople = [];
     function logError(err) { console.log(err); }
 
@@ -81,7 +80,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return null;
     }
     $scope.undo = function() {
-        console.log("undo");
         History.undo(selectedThing(), $scope);
     };
     $scope.redo = function() {
@@ -661,7 +659,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     // Captable Sharing Modal
     $scope.modalUp = function () {
         $scope.ct.investors.forEach(function(inv) {
-            if (!inv.send && inv.email && ((inv.email.id && inv.email.id.trim().length > 0) || inv.email.trim().length > 0)) {
+            if (!inv.send && inv.email && inv.email.trim().length > 0) {
                 inv.alreadyShared = true;
             }
         });
@@ -671,8 +669,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.close = function () {
         $scope.ct.investors.forEach(function(inv) {
             if (!inv.alreadyshared && !inv.send) {
-                // if they didn't have an email to start with, and we aren't emailing them now, blank out their email
-                inv.email = "";
                 inv.permission = "";
             }
         });
@@ -743,12 +739,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.updateSendRow = function(row) {
-        if (typeof(row.email) === "string") {
+        if (typeof(row.investor_details) === "string") {
             // select2-ui sets string and then object, generate the object from the string
-            row.email = Investor.createInvestorObject(row.email);
+            row.investor_details = Investor.createInvestorObject(row.investor_details);
         }
-        if (row.email) {
-            row.send = $scope.autoCheck(row.email);
+        if (row.investor_details) {
+            row.send = $scope.autoCheck(row.investor_details);
             if (!row.permission) {
                 row.permission = "Personal";
             }
@@ -763,11 +759,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         angular.forEach($scope.ct.investors, function (row) {
             if (row.send === true) {
                 SWBrijj.procm("ownership.share_captable",
-                              row.email.id.toLowerCase(),
+                              row.investor_details.id.toLowerCase(),
                               row.name)
                 .then(function(data) {
+                    row.email = row.investor_details.id;
                     if (row.permission == "Full") {
-                        SWBrijj.proc('ownership.update_investor_captable', row.email.id.toLowerCase(), 'Full View').then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', row.investor_details.id.toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                             row.access_level = "Full View";
@@ -781,10 +778,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                     row.send = false;
                 }).except(function(err) {
                     if (err.message == "ERROR: Duplicate email for the row") {
-                        $scope.$emit("notification:fail", row.email.name + " failed to send as this email is already associated with another row");
+                        $scope.$emit("notification:fail", row.name + " failed to send as " + row.investor_details.name + " is already associated with another row");
                     }
                     else {
-                        $scope.$emit("notification:fail", "Email : " + row.email.name + " failed to send");
+                        $scope.$emit("notification:fail", "Sharholder : " + row.investor_details.name + " failed to send");
                     }
                 });
             }
@@ -813,7 +810,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.checkInvites = function () {
         var checksome = false;
         angular.forEach($scope.ct.investors, function(row) {
-            if (row.send === true) {
+            if (row.send === true && row.investor_details) {
                 checksome = true;
             }
         });
@@ -889,7 +886,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     $scope.changeVisibility = function (person) {
         SWBrijj.proc('ownership.update_investor_captable', person.email, person.level).then(function (data) {
-            void(data);
             angular.forEach($scope.userstatuses, function(peep) {
                 if (peep.email == person.email) {
                     peep.level = person.level;
