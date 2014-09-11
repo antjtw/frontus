@@ -250,10 +250,21 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
             // TODO: id may not be the user_id, may be a non-primary email of a user, or no user at all
             var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
             SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
-                if (data.length == 0) //email not known
+                if (data.length == 0 || !data[0].user_id) //email not known
                     return;
                 investorObject.id = data[0].user_id;
                 investorObject.text = investorObject.name = data[0].name;
+                if (inv_service.names[data[0].user_id])
+                {//known user, different email
+                    investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                    investorObject.name = inv_service.getName(data[0].user_id);
+                    return;
+                }
+                inv_service.names[data[0].user_id] = data[0].name;
+                inv_service.getDisplay(data[0].user_id).text = inv_service.getDisplayText(data[0].user_id);
+                inv_service.investors.push(inv_service.getDisplay(data[0].user_id));
+                investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                investorObject.name = inv_service.getName(data[0].user_id);
             }).except(function(x) {console.log(x);});
             return investorObject;
         };
