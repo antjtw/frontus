@@ -25,7 +25,7 @@
     <div class="row-fluid">
         <div class="span8">
             <div class="row-fluid">
-                 <h2>PROFILE</h2>  
+                 <h2 class="personal-information">PROFILE</h2>  
                 <div class="ind-information">
                     <ul class="personal-information">
                         <li>
@@ -46,7 +46,7 @@
                                 <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
                             </ul>
                         </li>
-                        <li style="display: inline-block; padding-right: 40px">
+                        <li style="display: inline-block; padding-right: 20px">
                             <ul>
                                 <li>State</li>
                                 <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
@@ -79,7 +79,16 @@
                             <ul>
                                 <li ng-if="email.email==primary_email">Primary Email*</li>
                                 <li ng-if="email.email !== primary_email">Alternate Email</li>
-                                <li><input type="text" ng-model="email.email"></input></li>
+                                <li>
+                                <button class="check-box-button"
+                                ng-class="{selected: email.email == primary_email}"
+                                ng-if="email.verified"
+                                ng-click="profileUpdate('primary_email', email.email)">
+                                    <span data-icon="&#xe023;"
+                                  aria-hidden="true">
+                                    </span>
+                                </button>
+                                <input type="text" ng-model="email.email" ng-disbaled="email.email == email.verified"></input></li>
                             </ul>
                         </li>
                         <li>
@@ -109,15 +118,15 @@
                     </div> -->
                 </div>
             </div>
-            <div class="row-fluid" style="padding-top: 40px;">
+           <!--  <div class="row-fluid" style="padding-top: 40px;">
                 <h2>EMAIL PREFERENCES</h2>
-            </div>
+            </div> -->
         </div>
 
 <!--         side colum -->
         <div class="span4 ind-pics">
             <div style="margin-bottom: 60px;">
-                <h2>Profile Image</h2>
+                <h2>PROFILE IMAGE</h2>
                 <div class='span3 profile-image'><img ng-src="{{photoURL}}"></div>
                 <div class="standard-button small-standard-button gray">
                     <button ng-click="pictureModalOpen();" class="btn">Change</button>

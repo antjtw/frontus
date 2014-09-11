@@ -61,13 +61,12 @@ h1.profile-name {
 }
 
 .ind-information.right{
-/*    float:right;*/
     padding-left: 40px;
 }
 .personal-information {
-    padding-top: 30px;
     padding-left: 40px;
 }
+
 
 .personal-information > li > ul {
     display: block;
@@ -91,6 +90,9 @@ h1.profile-name {
 
 .span4.ind-pics > div > .standard-button.small-standard-button.gray > button{
     margin-left: 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
 }
 
 .personal-information input {
