@@ -118,7 +118,11 @@
     background: url('/img/accordion-arrow-up.png') no-repeat right center;
 }
 
-.careers a, .careers a:hover{
+.careers a.accordion-toggle {
+    font-size: 16px;
+}
+
+.careers a.accordion-toggle, .careers a.accordion-toggle:hover{
     color: rgb(141, 141, 141);
 }
 
@@ -147,6 +151,10 @@
 
 .careers .mail a:hover {
     color: rgb(41, 128, 185)
+}
+
+.careers.job-posting p.subtext {
+    font-size: 14px;
 }
 
 
