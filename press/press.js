@@ -2,6 +2,6 @@ var app = angular.module('press', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'e
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
-      when('/', {}).
-      otherwise({redirectTo:'/'});
+      when('/press/', {}).
+      otherwise({redirectTo:'/press/'});
 });

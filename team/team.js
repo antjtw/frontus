@@ -2,6 +2,6 @@ var app = angular.module('team', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 'ex
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
-      when('/', {}).
-      otherwise({redirectTo:'/'});
+      when('/team/', {}).
+      otherwise({redirectTo:'/team/'});
 });

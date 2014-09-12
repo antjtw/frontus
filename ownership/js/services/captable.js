@@ -639,7 +639,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
-        if (!prev || cur.effective_date < prev)
+        if (cur.effective_date && (!prev || cur.effective_date < prev))
             return cur.effective_date;
         return prev;
     }
@@ -2260,8 +2260,44 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                  total_data_row);
         return res;
     }
+
+    function transToArray() {
+        var res = [];
+        var headers = ["Effective Date", "Transaction Id", "Type", "Associated DocIds", "Security", "Shareholder", "Units", "Amount", "Attributes", "Insertion Date", "Entered By", "IP"]
+        res.push(headers);
+        angular.forEach(captable.transactions, function(tran) {
+            var evidencedata = "";
+            if (tran.evidence_data) {
+                angular.forEach(tran.evidence_data, function(ev) {
+                    var id = ev.doc_id || ev.original;
+                    evidencedata += id  + " ";
+                });
+            }
+            var investor = tran.attrs.investor;
+            if (investor) {
+                investor = investor.replace(/,/g, "");
+            }
+            var security = tran.attrs.security;
+            if (security) {
+                security = security.replace(/,/g, "");
+            }
+            var date = tran.effective_date;
+            if (date) {
+                date = Date.parse(tran.effective_date).toString($rootScope.settings.shortdate)
+            }
+            var transactionrow = [date, tran.transaction, tran.kind, evidencedata, security, investor, tran.attrs.units, tran.attrs.amount, JSON.stringify(tran.attrs).replace(/,\"/g, " | \"").replace(/,/g, ""), tran.insertion_date, tran.entered_by, tran.inet];
+            res.push(transactionrow);
+        });
+        return res;
+
+    }
+
     this.toArrays = toArrays;
     this.download = function() {
         return csv.downloadFromArrays(toArrays());
-    }
+    };
+
+    this.downloadTransactions = function() {
+        return csv.downloadFromArrays(transToArray());
+    };
 });
