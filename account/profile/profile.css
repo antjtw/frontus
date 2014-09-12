@@ -126,6 +126,12 @@ ul.personal-information > li > ul > li> button.radio-button{
     width: 70px;
 }
 
+.personal-information .primary-info {
+    display: inline-block;
+    margin-left: 25px;
+    font-size: 12px;
+}
+
 div.ind-information.right > ul.personal-information > li > ul > li > input.notVerified {
     margin-left: 25px;
 }
