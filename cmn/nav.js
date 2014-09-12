@@ -680,7 +680,6 @@ navm.controller('NavCtrl',
                         } else {
                             $rootScope.billingLoaded = true;
                         }
-                        console.log($rootScope.billing);
                     });
                 } else {
                     if (parseInt($rootScope.billing.recommendedPlan, 10) > 2) {
