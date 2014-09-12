@@ -2,8 +2,8 @@ var app = angular.module('careers', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 
   $locationProvider.html5Mode(true).hashPrefix('');
 
   $routeProvider.
-      when('/', {}).
-      otherwise({redirectTo:'/'});
+      when('/careers/', {}).
+      otherwise({redirectTo:'/careers/'});
 });
 
 app.controller('AccordionCtrl',['$scope', function($scope) {
