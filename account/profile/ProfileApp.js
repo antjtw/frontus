@@ -17,9 +17,14 @@ app.controller('ContactCtrl',
         if ($routeParams.verificationCode) {
             SWBrijj.procm('account.verify_email', $routeParams.verificationCode)
             .then(function(res) {
-                console.log(res);
-                if (res[0].verify_email === true) {
-                    $scope.$emit("notification:success", "Alternate email address verified.");
+                    console.log(res);
+                if (res[0].verify_email) {
+                    angular.forEach($scope.emails, function(email) {
+                        if (email.email == res[0].verify_email) {
+                            email.verified = true;
+                        }
+                    });
+                    $scope.$emit("notification:success", "Email address verified.");
                 } else {
                     $scope.$emit("notification:fail", "Failed to verify alternate email address.");
                 }
