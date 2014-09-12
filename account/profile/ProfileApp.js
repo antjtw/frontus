@@ -218,14 +218,28 @@ app.controller('ContactCtrl',
             returned_emails.forEach(function (e) {
                 e.key = e.email;
                 $scope.emails.push(e);
+                e.primary = false;
+                if (e.email == $scope.primary_email) {
+                    e.primary = true;
+                }
             });
             angular.forEach($scope.emails, function(email){
                 if(email.email==$scope.primary_email){
                     primeEmail = email;
                 }
             });
+            $scope.emails.sort(primarySort);
 
         });
+
+        function primarySort(a,b) {
+            if (a.primary)
+                return -1;
+            else if (b.primary)
+                return 1;
+            else
+                return 0;
+        }
 
         $scope.uploadFile = function() {
             $scope.photoURL = "/img/image-loader-140.gif";
