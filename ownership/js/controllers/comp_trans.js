@@ -1,6 +1,6 @@
 app.controller('tranController',
-    ['$scope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate', '$filter', '$window',
-        function($scope, $location, SWBrijj, navState, captable, displayCopy, calculate, $filter, $window) {
+    ['$scope', '$rootScope', '$location', 'SWBrijj', 'navState', 'captable', 'displayCopy', 'calculate', '$filter', '$window',
+        function($scope, $rootScope, $location, SWBrijj, navState, captable, displayCopy, calculate, $filter, $window) {
 
             var company = navState.company;
             $scope.company = company;
@@ -60,5 +60,9 @@ app.controller('tranController',
                 if ($scope.selectedInvestor) return 'selectedInvestor';
                 if ($scope.selectedSecurity) return 'selectedSecurity';
                 return null;
+            };
+
+            $scope.downloadCsv = function() {
+                window.location.href = captable.downloadTransactions();
             };
         }]);

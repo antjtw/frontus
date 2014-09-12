@@ -376,6 +376,7 @@ navm.controller('NavCtrl',
             $rootScope.settings.dateandtime = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y, h:mm a' : 'dd MMMM y, h:mm a';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
             $rootScope.settings.domain = window.location.host;
+            $scope.$broadcast("settings_loaded");
         });
 
         SWBrijj.tblm('account.profile').then(function(x) {
@@ -671,6 +672,9 @@ navm.controller('NavCtrl',
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
                             }
+                            /* If actual invoices.length == 0
+                             *
+                             */
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
@@ -704,6 +708,7 @@ navm.controller('NavCtrl',
                 if (x && x.length>0 && x!="invalid request") {
                     var resp = JSON.parse(x);
                     if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.freetrial = payments.format_trial(resp);
                     $rootScope.billing.invoices = resp.data.filter(function(el) {
                         return el.amount>0;
                     }) || [];

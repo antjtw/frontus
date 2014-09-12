@@ -90,13 +90,38 @@ own.directive('captableCell', [function() {
         restrict: 'E',
         scope: {inv: '=',
                 sec: '=',
-                data: '='},
+                data: '=',
+                filter: '='},
         templateUrl: '/ownership/partials/captableCell.html',
         controller: ["$scope", "$rootScope", "captable",
             function($scope, $rootScope, captable) {
                 $scope.settings = $rootScope.settings;
                 $scope.t = ($scope.data && $scope.data.kind) ? "grant"
                                                              : "cap";
+                if ($scope.filter)
+                {
+                    $scope.units = function() {
+                        return captable.getCellUnits($scope.data,
+                                                     $scope.filter.date, 
+                                                     $scope.filter.vesting);
+                    };
+                    $scope.amount = function() {
+                        return captable.getCellAmount($scope.data,
+                                                      $scope.filter.date, 
+                                                      $scope.filter.vesting);
+                    };
+                }
+                else
+                {
+                    $scope.units = function() { 
+                        if ($scope.data) return $scope.data.u;
+                        return null;
+                    };
+                    $scope.amount = function() { 
+                        if ($scope.data) return $scope.data.a;
+                        return null;
+                    };
+                }
             }
         ],
     };
@@ -134,7 +159,6 @@ own.directive('editableCaptableCell', [function() {
                         data = $scope.selectedCell;
                     }
                     if (data) {
-                        console.log(data);
                         if (data.transactions.length > 1) {
                             $scope.openTranPicker(key, value);
                         } else {
@@ -167,7 +191,6 @@ own.directive('editableCaptableCell', [function() {
                     $scope.destination_transaction = null;
                 }
                 $scope.units = function(newval) {
-                    //console.log(newval, typeof(newval));
                     if (angular.isDefined(newval)) {
                         var num = 0;
                         if (newval !== null)
@@ -286,37 +309,7 @@ own.directive('editableCaptableCell', [function() {
         ],
     };
 }]);
-/*
-own.directive('grantCell', [function() {
-    return {
-        restrict: 'E',
-        scope: {inv: '=',
-                sec: '=',
-                kind: '=',
-                data: '='},
-        templateUrl: '/ownership/partials/grantCell.html',
-        controller: ["$scope", "$rootScope", "captable",
-            function($scope, $rootScope, captable) {
-                $scope.settings = $rootScope.settings;
-            }
-        ],
-    };
-}]);
-own.directive('editableGrantCell', [function() {
-    return {
-        restrict: 'E',
-        scope: {inv: '=',
-                sec: '=',
-                kind: '=',
-                data: '='},
-        templateUrl: '/ownership/partials/editableGrantCell.html',
-        controller: ["$scope", "$rootScope", "captable",
-            function($scope, $rootScope, captable) {
-            }
-        ],
-    };
-}]);
-*/
+
 own.directive('securityDetails', [function() {
     return {
         restrict: 'EA',
@@ -337,6 +330,10 @@ own.directive('securityDetails', [function() {
                     if ($scope.sec && $scope.sec.transactions && $scope.sec.transactions.length == 1) {
                         $scope.sec.transactions[0].active = true;
                     }
+                };
+
+                $scope.hasDocuments = function(tran) {
+                    return tran.evidence_data && (tran.evidence_data.length > 0);
                 };
 
                 $scope.viewEvidence = function(ev) {
@@ -367,8 +364,8 @@ own.directive('editableSecurityDetails', [function() {
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
         controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
             function($scope, displayCopy, captable, $filter, calculate) {
-                console.log($scope.windowToggle)
 
+                $scope.isEquity = captable.isEquity;
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
@@ -479,7 +476,6 @@ own.directive('editableSecurityDetails', [function() {
                     $scope.splitIssue = angular.copy(to_convert);
                     $scope.splitIssue.name = $scope.splitIssue.attrs.security;
                     angular.forEach($scope.ct.securities, function(sec) {
-                        console.log(sec);
                         if (sec.name == $scope.splitIssue.name) {
                             if (calculate.isNumber(sec.attrs.ppshare)) {
                                 $scope.ppshare = sec.attrs.ppshare;
@@ -604,7 +600,8 @@ own.directive('cellDetails', [function() {
     return {
         restrict: 'EA',
         scope: {cell: '=',
-                currentTab: '=currenttab'},
+                currentTab: '=currenttab',
+                filter: '='},
         templateUrl: '/ownership/partials/cellDetails.html',
         controller: ["$scope", "$rootScope", "$location",
                      "displayCopy", "captable",
@@ -616,11 +613,26 @@ own.directive('cellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
+                
+                function filter() {
+                    if (!$scope.cell) return [];
+                    $scope.transactions = $scope.cell.transactions.filter(
+                        function(tran) {
+                            if ($scope.filter && $scope.filter.date) {
+                                return tran.effective_date <= $scope.filter.date;
+                            } else {
+                                return true;
+                            }
+                        });
+                };
+                
+                filter();
 
                 $scope.loaddirective = function() {
                     if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
                         $scope.cell.transactions[0].active = true;
                     }
+                    filter();
                 };
 
                 $scope.viewEvidence = function(ev) {
@@ -642,6 +654,9 @@ own.directive('cellDetails', [function() {
                 $scope.loaddirective();
                 $scope.$watch('cell', function(newval, oldval) {
                     $scope.loaddirective();
+                }, true);
+                $scope.$watch('filter', function(newval, oldval) {
+                    filter();
                 }, true);
             }
         ],
@@ -699,7 +714,6 @@ own.directive('editableCellDetails', [function() {
                 };
 
                 $scope.addTransaction = function() {
-                    console.log("here");
                     var tran = captable.addTransaction($scope.cell.investor, $scope.cell.security,
                                      captable.defaultKind($scope.cell.transactions[0].attrs.security_type));
                     tran.active = true;
@@ -816,7 +830,6 @@ own.directive('editableCellDetails', [function() {
                 // Performs the assignment for the dropdown selectors
                 $scope.assignConvert = function(field, value) {
                     $scope.convertTran[field] = value;
-                    console.log($scope.convertTran);
                     if (field == "toissue") {
                         $scope.convertTran.method = null;
                     }
@@ -854,7 +867,6 @@ own.directive('transactionAttributes', [function() {
         replace: true,
         scope: {data: '='},
         templateUrl: '/ownership/partials/transactionAttributes.html',
-        // TODO refactor to use attributes service
         controller: ["$scope", "$rootScope", "captable", "displayCopy", "attributes", "$filter",
             function($scope, $rootScope, captable, displayCopy, attributes, $filter) {
                 $scope.displayAttr = captable.displayAttr;
@@ -871,7 +883,6 @@ own.directive('transactionAttributes', [function() {
                 };
 
                 $scope.loaddirective = function () {
-                    console.log($scope.data);
                     $scope.keys = filterSortKeys($scope.data.attrs, $scope.data.attrs.security_type, $scope.data.kind);
                     function filterSortKeys(attrs, sec_type, kind) {
                     var filtered = $filter('attrsForDisplay')(attrs);
@@ -911,6 +922,7 @@ own.directive('editableTransactionAttributes', [function() {
                 var attrs = attributes.getAttrs();
                 var ct;
                 $scope.attrs = attrs;
+                $scope.isEquity = captable.isEquity;
                 $scope.loaddirective = function() {
                     ct = captable.getCapTable();
                     $scope.securities = ct.securities;
@@ -918,6 +930,9 @@ own.directive('editableTransactionAttributes', [function() {
                         attrs[$scope.data.attrs.security_type]
                             [$scope.data.kind];
                     $scope.keys = filterSortKeys($scope.tran_attrs, $scope.data.attrs.security_type, $scope.data.kind);
+                    if ($scope.data.attrs.security_type == "Equity" || $scope.data.attrs.security_type == "Equity Preferred") {
+                        $scope.repurchasing = $scope.hasRepurchasing();
+                    }
                 };
 
                 function filterSortKeys(attrs, sec_type, kind) {
@@ -940,9 +955,6 @@ own.directive('editableTransactionAttributes', [function() {
                 };
 
                 function key_display_info(key) {
-                    //console.log("bug for some values, use below to debug");
-                    //console.log($scope.data.attrs.security_type);
-                    //console.log($scope.data.kind);
                     return attrs[$scope.data.attrs.security_type]
                                 [$scope.data.kind][key] || {};
                 }
@@ -1002,6 +1014,41 @@ own.directive('editableTransactionAttributes', [function() {
                 $scope.pickMulti = function(key) {
                     return inputType(key) == "array_text";
                 };
+                var repurchasingfields = ["terms",
+                    "vestingbegins",
+                    "vestcliff",
+                    "vestfreq"];
+
+                $scope.hasRepurchasing = function() {
+                    var repurchase = false;
+                    angular.forEach($scope.keys, function(key) {
+                        if (repurchasingfields.indexOf(key) != -1 && $scope.data.attrs[key] && $scope.data.attrs[key].length > 0) {
+                            repurchase = true;
+                        }
+                    });
+                    return repurchase;
+                };
+
+                $scope.filterRepurchasable = function(key) {
+                    if ($scope.isEquity($scope.data) && repurchasingfields.indexOf(key) != -1) {
+                        return false;
+                    } else {
+                        return true
+                    }
+                };
+
+                $scope.toggleRepurchasing = function(tran, cell, errorFunc) {
+                    $scope.repurchasing = !$scope.repurchasing;
+                    if (!$scope.repurchasing) {
+                        angular.forEach(repurchasingfields, function(field) {
+                            if (tran.attrs[field]) {
+                                delete tran.attrs[field];
+                            }
+                        });
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
+                };
+
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     if (inputType(k) == "array_text") {
                         if (!tran.attrs[k]) {
@@ -1103,7 +1150,7 @@ own.directive('editableTransactionAttributes', [function() {
                 };
 
                 $scope.loaddirective();
-                $scope.$watch('data', function(newval, oldval) {
+                $scope.$watch('data.transaction', function(newval, oldval) {
                     $scope.loaddirective();
                 }, true);
                 var dropdowncalctime = Date.parse('1970');
@@ -1196,7 +1243,6 @@ own.directive('transactionLog', [function() {
 
                 $scope.hasDocuments = function(tran) {
                     return tran.evidence_data && (tran.evidence_data.length > 0);
-                    console.log(tran.evidence_data)
                 };
 
                   $scope.viewEvidence = function(ev) {

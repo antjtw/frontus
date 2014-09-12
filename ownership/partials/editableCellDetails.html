@@ -8,8 +8,7 @@
            close-others="true">
 <accordion-group is-open="tran.active"
                  ng-hide="windowToggle && !tran.active"
-                 ng-repeat="tran in cell.transactions
-                            | orderBy:['effective_date', 'insertion_date'] track by $index"
+                 ng-repeat="tran in cell.transactions track by $index"
                 ng-switch on="currentTab">
     <accordion-heading>
         <span ng-click="toggleTransaction()">

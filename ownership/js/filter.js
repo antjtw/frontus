@@ -161,11 +161,11 @@ ownership.filter('received', function () {
 ownership.filter('issueUnitLabel', function() {
     return function(iss) {
         if (iss == "Option") {
-            return "options";
+            return "Options";
         } else if (iss == "Warrant") {
-            return "warrants";
+            return "Warrants";
         } else {
-            return "shares";
+            return "Shares";
         }
     };
 });
@@ -385,6 +385,7 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
     var orderedAttributes = ["security",
                              "effective_date",
                              "security_type",
+                             "optiontype",
                              "units",
                              "amount",
                              "ppshare",
@@ -405,7 +406,11 @@ ownership.filter('sortAttributeTypes', ['attributes', function(attributes) {
                             "liquidpref",
                             "partpref",
                             "dragalong",
-                            "tagalong"];
+                            "tagalong",
+                            "redemption",
+                            "information",
+                            "registration",
+                            "voting"];
     var attrs = attributes.getAttrs();
     return function(tp, sec_type, kind) {
         var res = orderedAttributes.indexOf(tp);
@@ -447,10 +452,33 @@ ownership.filter('noempty', function () {
     return function (trans) {
         var returntrans = [];
         angular.forEach(trans, function (tran) {
-            if (tran.investor != null) {
+            if (tran.investor !== null) {
                 returntrans.push(tran);
             }
         });
         return returntrans;
+    };
+});
+
+ownership.filter('displayList', function() {
+    return function(list) {
+        switch (list.length) {
+            case 0:
+                return null;
+            case 1:
+                return list[0];
+            case 2:
+                return list[0] + " and " + list[1];
+            default:
+                var res = "";
+                angular.forEach(list, function(el, idx) {
+                    if (idx + 1 < list.length) {
+                        res += el + (idx + 2 == list.length ? " " : ", ");
+                    } else {
+                        res += "and " + el;
+                    }
+                });
+                return res;
+        }
     };
 });

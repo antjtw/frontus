@@ -767,8 +767,55 @@ div.rightTitle.double > span, div.rightTitle.double > span {
     margin-top: 2px;
 }
 
+div.attributes-checkbox {
+    margin: 10px 0;
+}
+
+div.attributes-checkbox > button {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+div.attributes-checkbox > span {
+    font-size: 12px;
+}
+
 div.rightTitle.double > ul, div.rightTitle.double > input {
     vertical-align: top;
+}
+
+.dropdown-menu > input {
+    margin: 5px;
+    background: #FFFFFF;
+}
+
+.dropdown-menu.history-box > input.range {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    width: 163px;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 3px;
+    height: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dropdown-menu.history-box > input.text {
+    width: 40%;
+    padding: 5px;
+    border: 1px solid #F1F1F1;
+    border-radius: 3px;
+    margin-left: 0;
+}
+
+.dropdown-menu.history-box > span {
+    text-transform: lowercase;
+}
+
+.dropdown-menu.history-box {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .rightTitle .standard .dropdown-toggle {
@@ -855,6 +902,7 @@ div.rightTitle span.locked-security {
     line-height: 32px;
     background-color: #E3E3E3;
     display: inline-block;
+    text-transform: capitalize;
 }
 
 div.rightTitle.double span.locked-security {
@@ -972,6 +1020,7 @@ div.rightTitle.interest-rate {
     width: 100%;
     border-bottom: 1px solid #C6C6C6;
     background-color: #E3E3E3;
+    font-family: "FS Elliot Web Light", sans-serif;
 }
 
 .add-transaction-link:hover {
@@ -2377,6 +2426,14 @@ span.tour-icon.issue-cog + .tooltip {
     color: #19bb95;
 }
 
+.faux-tabs.single > button {
+    height: 20px;
+}
+
+.faux-tabs.single > button > span {
+    visibility: hidden;
+}
+
 .action-button.standard-button {
     margin: 20px 0 0 20px;
 }
@@ -2470,7 +2527,7 @@ span.tour-icon.issue-cog + .tooltip {
     border: 1px solid #E3E3E3;
 }
 
-.tran-list > li:hover {
+.tran-list.trans-info > li:hover {
     background-color: rgba(26, 188, 150, 0.1);;
 }
 
@@ -2532,4 +2589,8 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .my-trans-docs:first-of-type{
     padding-top: 20px;
+}
+
+.drop-selector .standard .dropdown-toggle {
+    text-transform: capitalize;
 }
