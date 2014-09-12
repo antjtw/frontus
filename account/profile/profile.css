@@ -56,12 +56,12 @@ h1.profile-name {
 }
 
 .ind-information{
-    width: 45%;
+    width: 40%;
     float: left;
 }
 
 .ind-information.right{
-    padding-left: 40px;
+    width: 55%;
 }
 .personal-information {
     padding-left: 40px;
@@ -77,7 +77,7 @@ h1.profile-name {
 }
 
 ul.personal-information > li > ul > li > div.standard-button.small-standard-button{
-    margin-left: 10px;
+    margin-left: 5px;
     display: inline-block;
     vertical-align: 30%;
 }
@@ -90,7 +90,7 @@ ul.personal-information > li > ul > li > div.standard-button.small-standard-butt
 }
 
 .ind-information.right .personal-information > li > ul > li:nth-child(odd){
-    padding-left: 20px;
+    padding-left: 25px;
 }
 
 .personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {
@@ -98,18 +98,17 @@ ul.personal-information > li > ul > li > div.standard-button.small-standard-butt
 }
 
 .span4.ind-pics > div > .standard-button.small-standard-button.gray{
-    padding-top: 30px;
+    padding-top: 10px;
 }
 
 .span4.ind-pics > div > .standard-button.small-standard-button.gray > button{
-    margin-left: 20px;
     background-color: white;
     color: black;
     border: 1px solid black;
 }
 
 .personal-information input {
-    width: 180px;
+    width: 220px;
 }
 
 .personal-information > li > ul > li{
@@ -136,7 +135,7 @@ div.ind-information.right > ul.personal-information > li > ul > li > input.notVe
 .span4.ind-pics{
     padding-left: 20px;
     border-left: 1px solid #E3E3E3;
-    min-height: 899px;
+    min-height: 600px;
 }
 
 .investor-attributes > ul {
@@ -199,7 +198,7 @@ div.ind-information.right > ul.personal-information > li > ul > li > input.notVe
     display: inline-block;
 }
 
-li.profile-image > img {
+div.profile-image > img {
     width: 106px;
     height: 106px;
     border-radius: 3px;
@@ -207,19 +206,19 @@ li.profile-image > img {
 }
 
 
-li.profile-image > div, li.signature-image > div:last-of-type {
+div.profile-image > div, li.signature-image > div:last-of-type {
     text-align: center;
     margin-top: 10px;
 }
 
-li.signature-image > div:first-of-type {
-    width: 198px;
-    height: 108px;
+div.signature-image > div:first-of-type {
+    width: 290px;
+    height: 158px;
     border: 1px solid #E3E3E3;
     border-radius: 3px;
 }
 
-li.signature-image > div:first-of-type > img {
+div.signature-image > div:first-of-type > img {
     height: 100%;
     width: auto;
 }
@@ -375,4 +374,12 @@ div.imgsig > div > img {
     background-color: #FFFFFF;
     border: 1px solid rgb(227, 227, 227);
     text-transform: uppercase;
+}
+
+ul.personal-information > li > ul > li > div.standard-button.small-standard-button.add-button {
+    margin-left: 30px;
+}
+
+.remove-button {
+    margin-left: 5px;
 }

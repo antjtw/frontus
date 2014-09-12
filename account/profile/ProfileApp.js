@@ -207,22 +207,18 @@ app.controller('ContactCtrl',
 
 
         $scope.emails = [];
-        var primeEmail = ""
+        var primeEmail = "";
         
         SWBrijj.tblm('account.my_emails').then(function(returned_emails) {
             returned_emails.forEach(function (e) {
+                e.key = e.email;
                 $scope.emails.push(e);
             });
             angular.forEach($scope.emails, function(email){
                 if(email.email==$scope.primary_email){
-                    console.log("i am the primary!");
                     primeEmail = email;
                 }
             });
-             if($scope.emails.indexOf(primeEmail)!==0){
-                $scope.emails.splice($scope.emails.indexOf(primeEmail), 1);
-                $scope.emails.unshift(primeEmail);
-            }
 
         });
 
@@ -431,8 +427,9 @@ app.controller('ContactCtrl',
         };
 
         $scope.updateEmail = function(email) {
-            SWBrijj.update('account.my_emails', {email: email.email}, {user_id: email.user_id, email: $scope.profilecheck.workingEmail}).then(function(res) {
-                // do nothing
+            console.log(email);
+            SWBrijj.update('account.my_emails', {email: email.email}, {user_id: email.user_id, email: email.key}).then(function(res) {
+                email.key = email.email;
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to change " + $scope.profilecheck.workingEmail + ".");
