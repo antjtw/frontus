@@ -41,7 +41,7 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
       SWBrijj.login($scope.username.toLowerCase(), $scope.password, $scope.redirect).then(function(x) { 
       if(x) {
 			document.location.href = x;
-			// console.log("redirecting to: "+x);
+			console.log("redirecting to: "+x);
 		  }
          else {
           $scope.showError = true;
