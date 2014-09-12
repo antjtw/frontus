@@ -406,6 +406,7 @@ app.controller('ContactCtrl',
             }
             SWBrijj.insert('account.my_emails', {user_id: $scope.user_id, email: email}).then(function(res) {
                 $scope.emails.push({email: email, verified: false});
+                $scope.$emit("notification:success", "Email added. We've sent you an email to verify ownership");
                 // TODO: notification:success and call verification flow;
                 $scope.newEmail = "";
             }).except(function(err) {
@@ -419,7 +420,7 @@ app.controller('ContactCtrl',
             SWBrijj.delete_one('account.my_emails', {user_id: email.user_id, email: email.email}).then(function(res) {
                 var ix = $scope.emails.indexOf(email);
                 $scope.emails.splice(ix, 1);
-                $scope.$emit("notification:success", "Email removed;");
+                $scope.$emit("notification:success", "Email removed");
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to remove " + email.email + ". Please try again later.");
@@ -430,6 +431,7 @@ app.controller('ContactCtrl',
             console.log(email);
             SWBrijj.update('account.my_emails', {email: email.email}, {user_id: email.user_id, email: email.key}).then(function(res) {
                 email.key = email.email;
+                $scope.$emit("notification:success", "Check ");
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to change " + $scope.profilecheck.workingEmail + ".");
