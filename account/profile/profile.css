@@ -67,6 +67,9 @@ h1.profile-name {
     padding-left: 40px;
 }
 
+.personal-information .email {
+    margin-left: 5px;
+}
 
 .personal-information > li > ul {
     display: block;
@@ -125,7 +128,7 @@ ul.personal-information > li > ul > li> button.radio-button{
 }
 
 div.ind-information.right > ul.personal-information > li > ul > li > input.notVerified {
-    margin-left: 20px;
+    margin-left: 25px;
 }
 
 
