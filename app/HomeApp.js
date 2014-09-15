@@ -113,7 +113,8 @@ app.config(function($routeProvider, $locationProvider){
         }).
         when('/app/company/messages', {
             templateUrl: '/messages/messageCenter.html',
-            controller: 'MsgCtrl'
+            controller: 'MsgCtrl',
+            reloadOnSearch: false
         }).
         when('/app/company/messages/thread', {
             templateUrl: '/messages/thread.html',
