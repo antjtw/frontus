@@ -121,9 +121,9 @@ mod.directive('composeMessage', function() {
             
             $scope.send = function(msg) {
                 if ($scope.groupMessage)
-                    $scope.sendBulkMessage(msg);
-                else
                     $scope.sendMessage(msg);
+                else
+                    $scope.sendBulkMessage(msg);
             };
 
             $scope.sendBulkMessage = function(msg) {
