@@ -179,10 +179,6 @@ the compose message page styling*/
     position: relative;
 }
 
-.message_input > div {
-    width: 100%;
-}
-
 .message_headline{
     display: inline-block;
     width: 7.5%;
