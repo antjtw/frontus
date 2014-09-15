@@ -63,7 +63,7 @@ mod.directive('composeMessage', function() {
                         SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(emailGroups){
                             angular.forEach(emailGroups, function(group){
                                 angular.forEach($scope.myContacts, function(contact){
-                                    if(JSON.parse(group.json_array_elements) === contact.email){
+                                    if(JSON.parse(group.json_array_elements) === contact.name){
                                         if(contact.details.indexOf(group.email)=== -1){
                                             contact.details.push(group.email);
                                         }
@@ -102,14 +102,14 @@ mod.directive('composeMessage', function() {
                 var recipients = [];
                 angular.forEach($scope.message.recipients, function(recip){
                     angular.forEach($scope.myContacts, function(contact){
-                        if(recip === contact.namex){
+                        if(recip === contact.id){
                             for(var i = 0; i < contact.details.length; i++){
                                 // cannot send message to the same person more than once, ie if person is in group and listed, they will only get the email one time.
                                 if(recipients.indexOf(contact.details[i])=== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
                                 }
                                 if(recipients.indexOf(navState.userid) > -1){
-                                    recipients.splice(indexOf(navState.userid, 1));
+                                    recipients.splice(recipients.indexOf(navState.userid, 1));
                                 }
                                 
                             }
