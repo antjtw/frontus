@@ -268,11 +268,6 @@ mod.directive('sentMessages', function(){
             $scope.sentMsgs = Message.getSentMsgs();
             $scope.allThreads = Message.getAllThreads();
 
-            $scope.$watch('allSentMsgs', function(){
-            }, true)
-
-            $scope.$watch('allThreads', function(){}, true)
-
 
             $scope.showString = function(string){
                 if(string == null){
@@ -296,7 +291,6 @@ mod.directive('sentMessages', function(){
                     };
                 });
                 return mySents;
-                console.log(mySents);   
             };
 
             // if you want to list all messages, best do with a proc m when someone clicks, no need to add to object
@@ -340,15 +334,6 @@ mod.directive('receivedMsgs', function(){
 
             $scope.receivedMsgs = Message.getReceivedMsgs();
             $scope.allThreads = Message.getAllThreads();
-
-            $scope.$watch('receivedMsgs', function(){
-
-            }, true)
-
-
-            $scope.$watch('allThreads', function(){
-
-            }, true)
 
   
             $scope.getMessageThreads = function(){
