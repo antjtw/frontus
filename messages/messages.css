@@ -341,3 +341,13 @@ tr.threadMembers, tr.forTooltip {
     padding: 10px;
     border: 1px dashed #C7C7C7;
 }
+
+.messages-table.status-table > tbody > tr > td {
+    padding-left: 20px;
+}
+
+.messages-table.status-table > tbody > tr > td:last-child {
+    text-align: left;
+    padding-left: 0;
+}
+

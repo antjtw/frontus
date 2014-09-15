@@ -50,7 +50,7 @@
             <received-msgs ng-if="page =='received'"></received-msgs>
             <div ng-if="!page && allThreads.length > 0">
             <div class="span12">
-                <table class="status-table people-table">
+                <table class="status-table messages-table">
                     <tbody>
                     <tr>
                         <th class="button"><span class="title">Name</span></th>
@@ -60,7 +60,7 @@
                     <tbody ng-repeat="allThread in allThreads |filter: filterText | orderBy: 'timex':true ">
                         <tr class="empty-row"></tr>
                         <tr class="threadMembers" ng-click="gotoThread(allThread.thread_id)">
-                            <td class="shareholder-column docname-column">
+                            <td>
                                 <div>{{showString(allThread.nameString)}}<span ng-if="allThread.count > 1">  ({{allThread.count}})</span></div>
                             </td>
                             <td>

@@ -1,6 +1,6 @@
 <div class="span12" ng-show="myRecs!==undefined">
 
-    <table class="status-table people-table">
+    <table class="status-table messages-table">
         <tbody>
         <tr>
             <th class="button"><span class="title">Recipients</span></th>
@@ -10,7 +10,7 @@
         <tbody ng-repeat="myRec in myRecs | orderBy:'time':true | filter: $parent.$parent.filterText">
         <tr class="empty-row"></tr>
         <tr class="forTooltip" ng-click="gotoThread(myRec.thread_id)">
-            <td class="shareholder-column docname-column">
+            <td>
                 <div>{{showString(myRec.nameString)}}   <span ng-if="myRec.count > 1">({{myRec.count}})</span></div>
             </td>
 
