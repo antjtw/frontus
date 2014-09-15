@@ -1,5 +1,5 @@
 <div class="span12" ng-hide="sents==undefined || sents.length == 0">
-    <table class="status-table people-table">
+    <table class="status-table messages-table">
         <tbody>
         <tr>
             <th class="button"><span class="title">Recipients</span></th>
@@ -9,7 +9,7 @@
         <tbody ng-repeat="sent in sents| orderBy:'time':true | filter: $parent.$parent.filterText"> 
             <tr class="empty-row"></tr>
             <tr class="forTooltip" ng-click="gotoThread(sent.thread_id)">
-                <td class="shareholder-column docname-column">
+                <td>
                     <div>{{showString(sent.nameString)}}
                         <span ng-if="sent.count > 1">  ({{sent.count}})</span>
                     </div>
