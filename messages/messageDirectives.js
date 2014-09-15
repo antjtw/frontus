@@ -444,7 +444,7 @@ mod.directive('threadPeople', function(){
 
             $scope.getPhotoUrl = function(sender){
                 if(sender == navState.userid){
-                    return '/photo/user?id=company:' + navState.company;
+                    return '/photo/user?id=' + sender;
                 }
                 else if(sender !== navState.userid && $scope.investors.indexOf(sender) > - 1){
                     return '/photo/user?id=issuer:' + sender;
