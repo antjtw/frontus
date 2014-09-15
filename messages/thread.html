@@ -14,6 +14,10 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+            <div class="thread-subject">
+                {{myThreads[0].subject}}
+            </div>
+
             <div class="replyMessage" ng-repeat="myThread in myThreads">
                 <div class="replySide">
                     <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">

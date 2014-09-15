@@ -1,9 +1,4 @@
 <div class="sidebarInfo">
-      <div class="infoBox">
-            <div class="headline">
-              {{threads[0].subject}}
-            </div>
-      </div>
 
     <div class="infoBox" ng-repeat="msgPerson in msgPeople">
         <img ng-src="{{getPhotoUrl(msgPerson.email)}}" class="replyPic">

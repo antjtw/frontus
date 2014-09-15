@@ -351,3 +351,12 @@ tr.threadMembers, tr.forTooltip {
     padding-left: 0;
 }
 
+.thread-subject {
+    line-height: 40px;
+    font-size: 20px;
+    color: #1d2c3c;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    line-height: 90px;
+    margin-left: 40px;
+}
+
