@@ -119,6 +119,13 @@ mod.directive('composeMessage', function() {
                 });
                 return recipients;
             };
+            
+            $scope.send = function(msg) {
+                if ($scope.groupMessage)
+                    $scope.sendBulkMessage(msg);
+                else
+                    $scope.sendMessage(msg);
+            };
 
             $scope.sendBulkMessage = function(msg) {
                 console.log("send bulk message");
