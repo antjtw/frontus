@@ -22,9 +22,8 @@ m.directive('groupPeople', function(){
 
             $scope.updateGroup = function(array, json){
                 SWBrijj.procm('account.multi_update_groups', array, json).then(function(x){
-                   console.log("success!");
                 }).except(function(x){
-                    console.log("failed to add group");
+                    console.error("failed to add group");
                 });
             };
 
@@ -50,7 +49,7 @@ m.directive('groupPeople', function(){
             $scope.fromFront = function(person){
                 var allGroups = [];
                 angular.forEach(person, function(info){
-                    if(info.groups != undefined){
+                    if(info.groups !== undefined){
                         var a = info.groups.split(", ");
                         for(var i = 0; i < a.length; i++){
                             if(allGroups.indexOf(a[i])== -1){
@@ -69,7 +68,7 @@ m.directive('groupPeople', function(){
                 var deleteArray = [];
                 var allGroups = $scope.fromFront(person);
                 angular.forEach(person, function(elem){
-                    if(elem.groups != null && elem.groups != undefined){
+                    if(elem.groups !== null && elem.groups !== undefined){
                         var elemGroup = elem.groups.split(", ");
                         angular.forEach(allGroups, function(gr){
                             if(elemGroup.indexOf(gr)==-1){
@@ -77,7 +76,7 @@ m.directive('groupPeople', function(){
                             }
                         });
                     }
-                    else if(elem.groups == null){
+                    else if(elem.groups === null){
                         deleteArray = allGroups;
                     }
 
@@ -91,7 +90,7 @@ m.directive('groupPeople', function(){
                 var uncheckGroup = [];
                 var allGroups = $scope.fromFront(person);
                 angular.forEach(person, function(ind){
-                    if(ind.groups != null && ind.groups != undefined){
+                    if(ind.groups !== null && ind.groups !== undefined){
                         var indArray = ind.groups.split(", ");
                         angular.forEach($scope.selectedGroup, function(group){
                             if(indArray.indexOf(group)==-1 && uncheckGroup.indexOf(group)== -1){
@@ -127,7 +126,7 @@ m.directive('groupPeople', function(){
                     // this is working and letting me know whenever groups change
                 if($scope.people.length > 0){
                     angular.forEach($scope.people, function(ind){
-                        if(ind.groups == undefined){
+                        if(ind.groups === undefined){
                             $scope.selectedGroup = [];
                         }
                         else{
@@ -163,7 +162,6 @@ m.directive('groupPeople', function(){
                     $scope.selectedGroup.splice(toDelete, 1);
                     if($scope.unChecked.indexOf(group)==-1){
                         $scope.unChecked.push(group);
-                        console.log($scope.unChecked);
                     }
 
                 }
@@ -180,16 +178,15 @@ m.directive('groupPeople', function(){
                         var deleteInx = [];
                         SWBrijj.tblmm('account.my_user_role', "email", info.email).then(function(data){
                             var myInfo = data;
-                            if(myInfo.length == 0){
+                            if(myInfo.length === 0){
                                 bigGroup.push([info.email, 'investor']);
                                 newGroupsArray = [];
                             }
                             else{
                                 angular.forEach(myInfo, function(thing){
                                     bigGroup.push([thing.email, thing.role]);
-                                    if(thing.groups == null || thing.groups == undefined || thing.groups == "" || thing.groups == []){
+                                    if(thing.groups === null || thing.groups === undefined || thing.groups === "" || thing.groups == []){
                                         newGroupsArray = [];
-                                        console.log("I don't have groups");
                                     }
                                     else{
                                         newGroupsArray = JSON.parse(thing.groups);
@@ -222,15 +219,10 @@ m.directive('groupPeople', function(){
                                 if(newGroupsArray.indexOf($scope.groupName) == -1 && checkNew.indexOf($scope.groupName)== -1){
                                     newGroupsArray.push($scope.groupName);
                                 }
-                                else{
-                                    console.log("already in group");
-                                }
 
                             }
-                            console.log(newGroupsArray);
                             // remove empty entries, and cannot add an empty group
                         if(newGroupsArray.indexOf("") > -1){
-                           console.log(newGroupsArray.indexOf(""));
                            var toDelete= newGroupsArray.indexOf("");
                            newGroupsArray.splice(toDelete, 1);
                         }
@@ -291,9 +283,7 @@ m.directive('peopleFilter', function(){
                         $scope.myRoles = data;
                         $scope.myAdmins = $scope.myRoles.length;
                         $scope.myShareholders = $scope.myContacts.length - $scope.myAdmins;
-
                     });
-
                 });
             };
             $scope.getUserRoles();
@@ -344,7 +334,7 @@ m.directive('messageSide', function(){
                     var obj = {};
                     angular.forEach($scope.people, function(info){
                         array.push(obj[info.email] = info.name);
-                        if(info.name == ""){
+                        if(info.name === ""){
                             array.push(obj[info.email]= null);
                         }
                     });
@@ -377,7 +367,7 @@ m.directive('messageSide', function(){
                 }
 
             }).except(function(data){
-                console.log('error');
+                console.error(data);
             });
            };
 
@@ -412,7 +402,7 @@ m.directive('messageSide', function(){
                     $scope.getLogins();
 
                 }).except(function(data){
-                    console.log("error");
+                    console.error(data);
                 });
             };
 
@@ -458,57 +448,56 @@ m.directive('messageSide', function(){
                                 myEvents[i].tox.push(value.tox);
                             }
                             myEvents[i].event.push(value.event);
-                            if($scope.peopleDict[value.tox]==null){
+                            if($scope.peopleDict[value.tox]===null){
                                 myEvents[i].to_names.push(value.tox);
                             }
                             else {
                                 myEvents[i].to_names.push($scope.peopleDict[value.tox]);
                             }
                             var idx = myEvents[i].our_id.indexOf(value.our_id);
-                                if(idx == -1){
-                                    myEvents[i].our_id.push(value.our_id);
-                                    myEvents[i].foo.push(new IndEvent(value.our_id, value.tox));
-                                }
-                                angular.forEach(myEvents[i].foo, function(myThings){
-                                    myThings[value.event_time] = value.event;
-                                    if(myThings.our_id == value.our_id){
-                                        myThings.array.push({
-                                            time: value.event_time,
-                                            event: value.event,
-                                        });
-                                        myThings.event_time.push(value.event_time);
-                                        var newEvent = myThings.event_time.sort();
-                                        var lastEvent = newEvent[newEvent.length -1];
-                                        myThings.timestamp = lastEvent;
-                                        myThings.event = myThings[lastEvent];
-                                        if(myThings.event == 'open'){
-                                            myThings.event = 'opened';
-                                        }
-                                        if(myThings.event == 'dropped'){
-                                            myThings.event = 'failed';
-                                        }
-                                        if(myThings.event == 'bounce'){
-                                            myThings.event = 'bounced';
-                                        }
-                                        if($scope.peopleDict[myThings.email]==null){
-                                            myThings.personName = myThings.email;
-                                        }
-                                        else {
-                                            myThings.personName = $scope.peopleDict[myThings.email];
-                                        }
-                                    }
-                                });
-                                angular.forEach($scope.logins, function(login){
-                                    if(login.email == value.tox){
-                                        myEvents[i].foo.forEach(function(elem){
-                                            elem.login = login.logintime;
-                                        });
-                                    }
-                                });
-
-
+                            if(idx == -1){
+                                myEvents[i].our_id.push(value.our_id);
+                                myEvents[i].foo.push(new IndEvent(value.our_id, value.tox));
                             }
+                            angular.forEach(myEvents[i].foo, function(myThings){
+                                myThings[value.event_time] = value.event;
+                                if(myThings.our_id == value.our_id){
+                                    myThings.array.push({
+                                        time: value.event_time,
+                                        event: value.event,
+                                    });
+                                    myThings.event_time.push(value.event_time);
+                                    var newEvent = myThings.event_time.sort();
+                                    var lastEvent = newEvent[newEvent.length -1];
+                                    myThings.timestamp = lastEvent;
+                                    myThings.event = myThings[lastEvent];
+                                    if(myThings.event == 'open'){
+                                        myThings.event = 'opened';
+                                    }
+                                    if(myThings.event == 'dropped'){
+                                        myThings.event = 'failed';
+                                    }
+                                    if(myThings.event == 'bounce'){
+                                        myThings.event = 'bounced';
+                                    }
+                                    if($scope.peopleDict[myThings.email]===null){
+                                        myThings.personName = myThings.email;
+                                    }
+                                    else {
+                                        myThings.personName = $scope.peopleDict[myThings.email];
+                                    }
+                                }
+                            });
+                            angular.forEach($scope.logins, function(login){
+                                if(login.email == value.tox){
+                                    myEvents[i].foo.forEach(function(elem){
+                                        elem.login = login.logintime;
+                                    });
+                                }
+                            });
+
                         }
+                    }
                     $scope.message_data = myEvents;
                 });
 
@@ -516,8 +505,8 @@ m.directive('messageSide', function(){
 
 
             $scope.gotoPerson = function(person) {
-                if(person.login == undefined){
-                    $scope.hasLink = false;     
+                if(person.login === undefined){
+                    $scope.hasLink = false;
                 }
                 else{
                     var link = '/app/company/profile/view?id=' + encodeURIComponent(person.email);
@@ -543,22 +532,18 @@ m.directive('addPerson', function(){
             $scope.createPerson = function() {
                 if ($scope.newRole) {
                     SWBrijj.proc('account.create_admin', $scope.newEmail.toLowerCase()).then(function(x) {
-                        void(x);
                         $rootScope.billing.usage.admins_total += 1;
                         $rootScope.$emit("notification:success", "Admin Added");
 
                         $route.reload();
                     }).except(function(x) {
-                        void(x);
                         $rootScope.$emit("notification:fail", "Something went wrong, please try again later.");
                     });
                 } else {
                     SWBrijj.proc('account.create_investor', $scope.newEmail.toLowerCase(), $scope.newName).then(function(x) {
-                        void(x);
                         $rootScope.$emit("notification:success", "Person Added");
                         $route.reload();
                     }).except(function(x) {
-                        void(x);
                         $rootScope.$emit("notification:fail", "Something went wrong, please try again later.");
                     });
                 }
@@ -588,7 +573,6 @@ m.directive('addPerson', function(){
 });
 
 
-
 m.directive('paymentPlanSelector', function() {
     return {
         scope: false,
@@ -612,8 +596,6 @@ m.directive('paymentPlanSelector', function() {
                     if ($rootScope.billing) {
                         if ($rootScope.billing.plans.indexOf(p)!==-1) {
                             $rootScope.selectedPlan = p;
-                        } else {
-                            console.log(p);
                         }
                     } else {
                         $rootScope.selectedPlan = p;
@@ -728,7 +710,6 @@ m.directive('investorTile', function(){
             $scope.investorNames = [];
             $scope.cti=captable.getCapTable();
             $scope.tips = displayCopy.captabletips;
-            console.log($scope.cti);
 
             $scope.$watch('cti', function(newval, oldval) {
                 if (newval.securities.length > 0) {
@@ -740,7 +721,7 @@ m.directive('investorTile', function(){
 
             $scope.allTransactions = [];
 
-           $scope.hasTip = function(key) {
+            $scope.hasTip = function(key) {
                 return key in $scope.tips;
             };
 
@@ -783,15 +764,14 @@ m.directive('investorTile', function(){
                     angular.forEach(cap.transactions, function(trans){
                         if(trans.attrs.investor == name) {
                             var newtran = angular.copy(trans);
-                            delete newtran.attrs["physical"];
-                            delete newtran.attrs["investor"];
-                            delete newtran.attrs["units"];
-                            $scope.allTransactions.push(newtran)
+                            delete newtran.attrs.physical;
+                            delete newtran.attrs.investor;
+                            delete newtran.attrs.units;
+                            $scope.allTransactions.push(newtran);
                         }
                     });
 
                 });
-                console.log($scope.allTransactions);
                 return($scope.allTransactions);
             };
 
@@ -812,8 +792,8 @@ m.directive('investorTile', function(){
                     if (calculate.primaryMeasure(tran.attrs.security_type) == "units") {
                         tran.amount = tran.attrs.amount;
                     }
-                    delete tran.attrs["amount"];
-                })
+                    delete tran.attrs.amount;
+                });
             };
 
         }]
@@ -836,40 +816,6 @@ m.directive('documentsTile', function(){
             };
             $scope.getmyDocuments();
 
-
-            $scope.shortStatus = function(version) {
-                if (!version) return "";
-                if ($scope.isvoided(version)) {
-                    return "Voided";
-                }
-                else if ($scope.isPendingVoid(version)) {
-                    return "Void requested by company";
-                } else if ($scope.wasJustRejected(version) && $scope.lastEventByInvestor(version)) {
-                    return "Rejected by you";
-                } else if ($scope.wasJustRejected(version) &&
-                    !$scope.lastEventByInvestor(version)) {
-                    return "Rejected by company";
-                } else if ($scope.isPendingSignature(version)){
-                    return "Review and Sign";
-                } else if ($scope.isPendingCountersignature(version)){
-                    return "Signed and Sent for Review";
-                } else if ($scope.isPendingFinalization(version)) {
-                    return "Awaiting Your Approval";
-                } else if ($scope.isCompleteSigned(version)){
-                    return "Completed";
-                } else if ($scope.isPendingView(version)){
-                    return "Unviewed";
-                } else if ($scope.isCompleteViewed(version)){
-                    return "Viewed";
-                } else {
-                    return "Sent";
-                }
-            };
-
-            $scope.lastEventByInvestor = function(doc) {
-                return doc.last_event.person == navState.userid;
-            };
-
             $scope.wasJustRejected = function(doc) {
                 return doc.last_event && doc.last_event.activity == 'rejected';
             };
@@ -890,16 +836,6 @@ m.directive('documentsTile', function(){
             $scope.isPendingView = function(doc) {
                 return doc.signature_flow===0 && !doc.last_viewed;
             };
-            $scope.isCompleteSigned = function(version) {
-                return basics.isCompleteSigned(version);
-            };
-            $scope.isCompleteViewed = function(version) {
-                return basics.isCompleteViewed(version);
-            };
-
-            $scope.docIsComplete = function(doc) {
-                return  $scope.isCompleteSigned(doc) || $scope.isCompleteViewed(doc);
-            };
 
             $scope.isPendingVoid = function(version) {
                 return version.signature_flow > 0 && !version.when_void_accepted && version.when_void_requested;
@@ -911,9 +847,7 @@ m.directive('documentsTile', function(){
 
 
             $scope.gotoDoc = function(doc) {
-                var link;
-                if (doc.template_id && !doc.when_signed) link = "/app/documents/investor-view?template=" + doc.template_id + "&subid=" + doc.doc_id;
-                else link = "/app/documents/investor-view?doc=" + doc.doc_id;
+                var link = "/app/documents/investor-view?doc=" + doc.doc_id;
                 $location.url(link);
             };
 

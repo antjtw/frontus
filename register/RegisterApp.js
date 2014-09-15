@@ -36,6 +36,8 @@ app.controller('CompanyOneStep',
                 }
             });
         }
+        
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         $scope.fieldCheck = function() {
             var fs = angular.element('form[name="stripeForm"]').scope();
@@ -43,6 +45,7 @@ app.controller('CompanyOneStep',
                      fs.pname &&
                      fs.cname &&
                      fs.email &&
+                     emailRegExp.test(fs.email) &&
                      fs.password &&
                      fs.cardname &&
                      fs.number &&

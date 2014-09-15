@@ -2,7 +2,7 @@
 
 var docs = angular.module('docServices');
 
-docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SWBrijj, $q, $rootScope, $window) {
+docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", "Investor", function(SWBrijj, $q, $rootScope, $window, Investor) {
     // Session storage
     var sdref = this;
     $window.addEventListener('beforeunload', function(event) {
@@ -11,6 +11,7 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
         sessionStorage.setItem('shareDocs-message', angular.toJson(sdref.message));
     });
 
+    // this.emails is really a list of user_ids, not emails
     this.emails = angular.fromJson(sessionStorage.getItem('shareDocs-emails'));
     this.documents = angular.fromJson(sessionStorage.getItem('shareDocs-documents'));
     this.message = angular.fromJson(sessionStorage.getItem('shareDocs-message'));
@@ -53,6 +54,15 @@ docs.service('ShareDocs', ["SWBrijj", "$q", "$rootScope", "$window", function(SW
         if (email.length > 0 && this.emails.indexOf(email) == -1) {
             this.emails.push(email);
             this.checkEmail(email);
+            if (!Investor.displays[email]) {
+                // this isn't an email we recognize off hand
+                Investor.getInvestorId(email).then(function(user_id) {
+                    if (user_id != email) {
+                        sdref.removeEmail(email);
+                        sdref.addEmail(user_id); // recurses, but with the right info this time
+                    }
+                });
+            }
         }
     };
     this.removeEmail = function(email) {

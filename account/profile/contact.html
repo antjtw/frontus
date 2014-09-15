@@ -1,210 +1,139 @@
 <link type="text/css" rel="stylesheet" href="/account/profile/profile.css">
 <div style="min-height: 900px;" class="container dynamic-page doclistFlow">
-    <div class="row-fluid">
-        <div style="margin-left: 0;" class="span12 statusBlock">
-            <div class="row-fluid">
-                <div class="subnav-controls">
-                    <div>
-                        <div class="pull-left">
-                            <h1 class="profile-name">{{name}}</h1>
-                        </div>
+    <subnav>
+        <div>
+            <div class="pull-left">
+                <h1 class="profile-name">{{name}}</h1>
+            </div>
 
-                        <div class="box-button pull-right"
-                             ng-click="passwordModalOpen();">
-                            <ul>
-                                <li> <span data-icon="&#xe02c;" aria-hidden="true"></span>
-
-                                </li>
-                                <li> <span>Password</span>
-
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="DivHelper"></div>
-                </div>
+            <div class="box-button pull-right"
+                ng-click="passwordModalOpen();">
+                <ul>
+                    <li>
+                        <span data-icon="&#xe02c;" aria-hidden="true"></span>
+                    </li>
+                    <li>
+                        <span>Password</span>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="row-fluid home-top-row span12">
-            <div class="span8">
-                <div class="row-fluid">
-                    <div class="front info-box">
-                        <div class="head-box">
-                            <h2>Personal Information</h2>
-                        </div>
-                        <div class="body-box">
-                            <ul class="personal-information">
-                                <li>
-                                    <ul>
-                                        <li>Full Name</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
-                                        <li>Email</li>
-                                        <li style="line-height: 28px;">{{email}}</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Address</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'street\', street)', blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>City</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
-                                        <li>State</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
-                                        <li>Zip Code</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Country</li>
-                                        <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Telephone</li>
-                                        <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <ul>
-                                        <li>Profile Image</li>
-                                        <li class='profile-image'>
-                                            <img ng-src="{{photoURL}}">
-                                            <div class="standard-button small-standard-button gray">
-                                                <button ng-click="pictureModalOpen();" class="btn">Change</button>
-                                            </div>
-                                        </li>
-                                        <li class="signature-label">Signature Image</li>
-                                        <li class='signature-image'>
-                                            <div>
-                                                <img ng-src="{{signatureURL}}">
-                                            </div>
-                                            <div class="standard-button small-standard-button gray">
-                                                <button ng-click="sigModalUp();" class="btn">Change</button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+    </subnav>
 
-                </div>
-            </div>
-            <div class="span4"><!-- TODO show if user is an investor with any company -->
-                <div class="row-fluid">
-                    <div class="front info-box">
-                        <div class="head-box">
-                            <h2>Investor Information</h2>
-                        </div>
-                        <div class="body-box investor-attributes">
+
+    <div>
+    <div class="row-fluid">
+        <div class="span8">
+            <div class="row-fluid">
+                 <h2 class="personal-information">PROFILE</h2>  
+                <div class="ind-information">
+                    <ul class="personal-information">
+                        <li>
                             <ul>
-                                <li>
-                                    <ul class="radioOption">
-                                        <li>
-                                            Type of Investor
-                                        </li>
-                                        <li>
-                                            <button class="radio-button" ng-class="{'selected':investor_attributes.investorIsAnIndividual[0]==='true'}" ng-click="setInvestor('investorIsAnIndividual', 'investorIsNotAnIndividual')"></button>
-                                            Individual
-                                        </li>
-                                        <li>
-                                            <button class="radio-button"
-                                                    ng-class="{'selected':investor_attributes.investorIsNotAnIndividual[0]==='true'}"
-                                                    ng-click="setInvestor('investorIsNotAnIndividual', 'investorIsAnIndividual')">
-                                            </button>
-                                            Institution
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="text-input" ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'"><span>EIN</span><input type="text" maxlength='9' ui-event="{blur:'attributeUpdate(\'investorEin\', investor_attributes.investorEin[0])'}" ng-model="investor_attributes.investorEin[0]"></li>
-                                <li ng-show="investor_attributes.investorIsAnIndividual[0]==='true'">
-                                    <ul class="radioOption">
-                                        <li>
-                                            Accredited
-                                        </li>
-                                        <li>
-                                            <button class="radio-button"
-                                                    ng-class="{'selected':investor_attributes.investorIsAnAccreditedInvestor[0]==='true'}"
-                                                    ng-click="attributeUpdate('investorIsNotAnAccreditedInvestor', 'false')">
-                                            </button>
-                                            Accredited
-                                        </li>
-                                        <li>
-                                            <button class="radio-button"
-                                                    ng-class="{'selected':investor_attributes.investorIsNotAnAccreditedInvestor[0]==='true'}"
-                                                    ng-click="attributeUpdate('investorIsNotAnAccreditedInvestor', 'true')">
-                                            </button>
-                                            Non-accredited
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li ng-show="investor_attributes.investorIsAnAccreditedInvestor[0]==='true' && investor_attributes.investorIsAnIndividual[0]==='true'">
-                                    <button ng-class="{'selected':investor_attributes.investorMeetsNetWorthRequirement[0]=='true'}"
-                                            ng-click="booleanUpdate('investorMeetsNetWorthRequirement', investor_attributes.investorMeetsNetWorthRequirement[0])" class="check-box-button profile-box">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                    </button>
-                                    <span>{{investor_attributes.investorMeetsNetWorthRequirement[1]}}</span>
-                                </li>
-                                <li ng-show="investor_attributes.investorIsAnAccreditedInvestor[0]==='true' && investor_attributes.investorIsAnIndividual[0]==='true'">
-                                    <button ng-class="{'selected':investor_attributes.investorMeetsIncomeRequirement[0]=='true'}"
-                                            ng-click="booleanUpdate('investorMeetsIncomeRequirement', investor_attributes.investorMeetsIncomeRequirement[0])" class="check-box-button profile-box">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                    </button>
-                                    <span>{{investor_attributes.investorMeetsIncomeRequirement[1]}}</span>
-                                </li>
-                                <li ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'">
-                                    <button ng-class="{'selected':investor_attributes.investorIsFinancialInstitution[0]=='true'}"
-                                            ng-click="booleanUpdate('investorIsFinancialInstitution', investor_attributes.investorIsFinancialInstitution[0])" class="check-box-button profile-box">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                    </button>
-                                    <span>{{investor_attributes.investorIsFinancialInstitution[1]}}</span>
-                                </li>
-                                <li ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'">
-                                    <button ng-class="{'selected':investor_attributes.investorIsBizdevCompany[0]=='true'}"
-                                            ng-click="booleanUpdate('investorIsBizdevCompany', investor_attributes.investorIsBizdevCompany[0])" class="check-box-button profile-box">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                    </button>
-                                    <span>{{investor_attributes.investorIsBizdevCompany[1]}}</span>
-                                </li>
-                                <li ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'">
-                                    <button ng-class="{'selected':investor_attributes.investorIs501c3Corporation[0]=='true'}"
-                                            ng-click="booleanUpdate('investorIs501c3Corporation', investor_attributes.investorIs501c3Corporation[0])" class="check-box-button profile-box">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                    </button>
-                                    <span>{{investor_attributes.investorIs501c3Corporation[1]}}</span>
-                                </li>
-
-                                <li ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'">
-                                    <button ng-class="{'selected':investor_attributes.investorIsSophisticatedPerson[0]=='true'}"
-                                            ng-click="booleanUpdate('investorIsSophisticatedPerson', investor_attributes.investorIsSophisticatedPerson[0])" class="check-box-button profile-box">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                    </button>
-                                    <span>{{investor_attributes.investorIsSophisticatedPerson[1]}}</span>
-                                </li>
-                                <li ng-show="investor_attributes.investorIsNotAnIndividual[0]==='true'">
-                                    <button ng-class="{'selected':investor_attributes.investorIsOwnedByAccreditedInvestors[0]=='true'}"
-                                            ng-click="booleanUpdate('investorIsOwnedByAccreditedInvestors', investor_attributes.investorIsOwnedByAccreditedInvestors[0])" class="check-box-button profile-box">
-                                        <span data-icon="&#xe023;" aria-hidden="true"></span>
-                                    </button>
-                                    <span>{{investor_attributes.investorIsOwnedByAccreditedInvestors[1]}}</span>
-                                </li>
-
+                                <li>Full Name</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'name\', name)', blur:'profileUpdate(\'name\', name)'}" ng-model="name"></li>
                             </ul>
-                        </div>
-                    </div>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Address</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'street\', street)', blur:'profileUpdate(\'street\', street)'}" ng-model="street"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>City</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'city\', city)', blur:'profileUpdate(\'city\', city)'}" ng-model="city"></li>
+                            </ul>
+                        </li>
+                        <li style="display: inline-block; padding-right: 20px">
+                            <ul>
+                                <li>State</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'state\', state)', blur:'profileUpdate(\'state\', state)'}" class="short-input" maxlength="2" ng-model="state"></li>
+                            </ul>
+                        </li>
+                        <li style="display: inline-block">
+                            <ul>
+                                <li>Zip Code</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'postalcode\', postalcode)', blur:'profileUpdate(\'postalcode\', postalcode)'}" class="short-input" maxlength="12" ng-model="postalcode"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Country</li>
+                                <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Telephone</li>
+                                <li><input type="text" ui-event="{focus : 'profileCheck(\'phone\', phone)', blur:'profileUpdate(\'phone\', phone)'}" ng-model="phone"></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+               <!--      second column -->
+                <div class="ind-information right">
+                    <ul class="personal-information">
+                        <li ng-repeat="email in emails">
+                            <ul>
+                                <li ng-if="email.email==primary_email" >Primary Email*</li>
+                                <li ng-if="email.email !== primary_email">Alternate Email</li>
+                                <li>
+                                    <button class="radio-button" ng-if="email.verified"
+                                    ng-class="{selected: email.email == primary_email}"
+                                    ng-click="profileUpdate('primary_email', email.email)">
+                                    </button>
+                                    <input type="text" class="email" ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-class="{'notVerified': !email.verified}">
+                                    <div class="standard-button small-standard-button gray" ng-click="updateEmail(email)" ng-hide="email.email ==primary_email"><button class="btn">Update</button></div>
+                                    <span data-icon="&#xe01b;" ng-click="removeEmail(email)" ng-hide="email.email== primary_email"></span>
+
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <ul>
+                                <li>Alternate Email</li>
+                                <li>
+                                    <input type="text" ng-model="newEmail" class="notVerified">
+                                    <div class="standard-button small-standard-button" ng-click="addEmail(newEmail)"><button class="btn">Add</button></div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                   
                 </div>
             </div>
+
+
+        </div>
+
+<!--         side colum -->
+        <div class="span4 ind-pics">
+            <div style="margin-bottom: 60px;">
+                <h2>PROFILE IMAGE</h2>
+                <div class='span3 profile-image'><img ng-src="{{photoURL}}"></div>
+                <div class="standard-button small-standard-button gray">
+                    <button ng-click="pictureModalOpen();" class="btn">Change</button>
+                </div>
+            </div>
+
+           
+            <div class='signature-image ind-sig'>
+                 <h2 class="signature-label">SIGNATURE</h2>
+                <div>
+                    <img ng-src="{{signatureURL}}">
+                </div>
+                <div class="standard-button small-standard-button gray">
+                    <button ng-click="sigModalUp();" class="btn">Change</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+<!-- modals go here -->
 <div modal="pictureModal" close="pictureModalClose()" options="opts">
     <div class="modalHeader">
         <span>Profile Picture</span><span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="pictureModalClose()"></span>
