@@ -14,37 +14,34 @@
   <!--   text in the window -->
     <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
+            <div class="thread-subject">
+                {{myThreads[0].subject}}
+            </div>
+
             <div class="replyMessage" ng-repeat="myThread in myThreads">
-                <div class="replySide">
-                    <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
+                <div class="message-header-content">
+                   <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
-                   <div ng-if="myThread.senderName !== undefined">{{myThread.senderName}}</div>
+                   <div ng-if="myThread.senderName !== undefined">
+                       {{myThread.senderName}} to {{myThread.members}}
+                   </div>
                     <div>{{myThread.time |date :'MMM d, y h:mm a' }}</div>
                 </div>
-                <div class="replyInput" style="width: 70%">
+                <div class="message-body-content">
                     <div ng-bind-html="myThread.message"></div>
                 </div>    
             </div>
 
-            <div class="replyMessage">
-                <div class="replySide"> 
-                    <img ng-src="{{getPhotoUrl(navState.userid)}}" class="replyPic">
-                    <div>{{navState.name}}</div>
-                </div>
-                <div class="replyInput" style="width: 70%">
+            <div class="replyBox">
+                <div class="replyInput">
                     <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
                 </div>
-                <div style="margin-top: 20px; margin-bottom: 20px">
-                    <div style="display: inline-block; width: 220px; visibility: hidden">
-                    this is a placeholder for spacing purposes
-                    </div>
-                    <div class="replyInput">
-                        <div class="standard-button">
-                            <button class="btn" ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message)}"
-                            ng-click="replyMessage(message)">
-                                Reply All
-                            </button>
-                        </div>
+                <div class="replyInput">
+                    <div class="standard-button">
+                        <button class="btn" ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message)}"
+                        ng-click="replyMessage(message)">
+                            Reply All
+                        </button>
                     </div>
                 </div>
             </div>           
@@ -54,9 +51,15 @@
 
         <internal-right-rail toggle-side="hideRail" ng-style="viewportheight">
             <tabset style="display:block;" ng-style="viewportheight">
-                <tab heading="People">
+                <tab heading="Recipients">
                     <div style="clear:both;">
                         <thread-people threads="myThreads" investors = "myInvestors"></thread-people>
+                    </div>
+                </tab>
+
+                <tab heading="Activity">
+                    <div>
+                        Will Be Activity
                     </div>
                 </tab>
                 
@@ -66,4 +69,6 @@
     </div>
 
 
+</div>
+</div>
 </div>

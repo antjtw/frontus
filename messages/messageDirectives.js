@@ -36,35 +36,34 @@ mod.directive('composeMessage', function() {
             };
 
             // create the object for selct2
-           $scope.myContacts = [];
+            $scope.myContacts = [];
             $scope.groupsAndPeople = function(){
-                function Contact(namex, details){
-                    this.namex = namex;
+                function Contact(id, name){
+                    this.id = id;
+                    this.name = name;
                     this.details = [];
                 };
 
-                SWBrijj.tblm('global.investor_list', ['email']).then(function(data){
+                SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data){
                     $scope.myEmails = data;
                     angular.forEach($scope.myEmails, function(email){
-                        $scope.myContacts.push(new Contact(email.email));
+                        $scope.myContacts.push(new Contact(email.email, email.name));
                         angular.forEach($scope.myContacts, function(ct){
-                            if(ct.details.indexOf(ct.namex)== -1){
-                                ct.details.push(ct.namex);
+                            if(ct.details.indexOf(ct.id)== -1){
+                                ct.details.push(ct.id);
                             }
                         });
                     });
                 });
                 // make this a promise later
-                SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(data){
-                    var myGroups = data;
+                SWBrijj.tblm('account.ind_user_group', ['ind_group']).then(function(myGroups){
                     angular.forEach(myGroups, function(gr){
                         var b = JSON.parse(gr.ind_group);
-                        $scope.myContacts.push(new Contact(b));
-                        SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(data){
-                            var emailGroups = data;
+                        $scope.myContacts.push(new Contact(b, b));
+                        SWBrijj.tblm('account.my_user_groups', ['email', 'json_array_elements']).then(function(emailGroups){
                             angular.forEach(emailGroups, function(group){
                                 angular.forEach($scope.myContacts, function(contact){
-                                    if(JSON.parse(group.json_array_elements) === contact.namex){
+                                    if(JSON.parse(group.json_array_elements) === contact.name){
                                         if(contact.details.indexOf(group.email)=== -1){
                                             contact.details.push(group.email);
                                         }
@@ -103,14 +102,14 @@ mod.directive('composeMessage', function() {
                 var recipients = [];
                 angular.forEach($scope.message.recipients, function(recip){
                     angular.forEach($scope.myContacts, function(contact){
-                        if(recip === contact.namex){
+                        if(recip === contact.id){
                             for(var i = 0; i < contact.details.length; i++){
                                 // cannot send message to the same person more than once, ie if person is in group and listed, they will only get the email one time.
                                 if(recipients.indexOf(contact.details[i])=== -1 && contact.details[i].indexOf('@') > -1){
                                     recipients.push(contact.details[i]);
                                 }
                                 if(recipients.indexOf(navState.userid) > -1){
-                                    recipients.splice(indexOf(navState.userid, 1));
+                                    recipients.splice(recipients.indexOf(navState.userid, 1));
                                 }
                                 
                             }
@@ -119,10 +118,15 @@ mod.directive('composeMessage', function() {
                 });
                 return recipients;
             };
+            
+            $scope.send = function(msg) {
+                if ($scope.groupMessage)
+                    $scope.sendMessage(msg);
+                else
+                    $scope.sendBulkMessage(msg);
+            };
 
             $scope.sendBulkMessage = function(msg) {
-                var category = 'company-message';
-                var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
                 var recipients = $scope.createRecipients();
                 $scope.clicked = true;
@@ -149,8 +153,6 @@ mod.directive('composeMessage', function() {
             };
 
             $scope.sendMessage = function(msg) {
-                var category = 'company-message';
-                var template = 'company-message.html';
                 var newtext = msg.text.replace(/\n/g, "<br/>");
                 var recipients = $scope.createRecipients();
                 recipients.push(navState.userid)
@@ -264,11 +266,6 @@ mod.directive('sentMessages', function(){
             $scope.sentMsgs = Message.getSentMsgs();
             $scope.allThreads = Message.getAllThreads();
 
-            $scope.$watch('allSentMsgs', function(){
-            }, true)
-
-            $scope.$watch('allThreads', function(){}, true)
-
 
             $scope.showString = function(string){
                 if(string == null){
@@ -292,7 +289,6 @@ mod.directive('sentMessages', function(){
                     };
                 });
                 return mySents;
-                console.log(mySents);   
             };
 
             // if you want to list all messages, best do with a proc m when someone clicks, no need to add to object
@@ -303,12 +299,12 @@ mod.directive('sentMessages', function(){
                     angular.forEach($scope.allThreads, function(thr){
                         if(thr.thread_id == sent.thread_id){
                             sent.count = thr.count
-                        };
+                        }
                     });
                     angular.forEach($scope.sentMsgs, function(msg){
                         if(msg.thread_id == sent.thread_id && sent.times.indexOf(msg.time)== -1){
                            sent.times.push(msg.time);
-                        };
+                        }
                     });
                 });                
                 return mySents;
@@ -336,15 +332,6 @@ mod.directive('receivedMsgs', function(){
 
             $scope.receivedMsgs = Message.getReceivedMsgs();
             $scope.allThreads = Message.getAllThreads();
-
-            $scope.$watch('receivedMsgs', function(){
-
-            }, true)
-
-
-            $scope.$watch('allThreads', function(){
-
-            }, true)
 
   
             $scope.getMessageThreads = function(){
@@ -440,7 +427,7 @@ mod.directive('threadPeople', function(){
 
             $scope.getPhotoUrl = function(sender){
                 if(sender == navState.userid){
-                    return '/photo/user?id=company:' + navState.company;
+                    return '/photo/user?id=' + sender;
                 }
                 else if(sender !== navState.userid && $scope.investors.indexOf(sender) > - 1){
                     return '/photo/user?id=issuer:' + sender;

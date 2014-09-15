@@ -5024,9 +5024,8 @@ li.event.roles > div > ul {
 .replyPic{
     height: 50px;
     width: 50px;
-    margin-left: 20px;
-    padding-bottom: 10px;
-    border-radius: 50%;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 .personEmail {
@@ -5050,7 +5049,6 @@ li.event.roles > div > ul {
 .table-border{
    border-bottom: 1px solid rgb(241, 241, 241);
 }
-
 
 .filter-selector.dropdown-list.big {
 }

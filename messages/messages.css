@@ -296,14 +296,6 @@ the compose message page styling*/
     min-width: 200px;
 }
 
-.replyMessage{
-    margin-left: auto; 
-    margin-right: auto;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #E3E3E3;
-}
-
 .replyInput {
     display: inline-block;
     position: relative;
@@ -311,16 +303,12 @@ the compose message page styling*/
     max-width: 800px;*/
 }
 
-.replySide {
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 20px;
-    margin-left: 20px;
-    width: 180px;
-}
-
 .threadMembers div.tooltip-inner{
     max-width: none;
+}
+
+tr.threadMembers, tr.forTooltip {
+    cursor: pointer;
 }
 
 .shareholder-column.docname-column *:hover{
@@ -337,3 +325,76 @@ the compose message page styling*/
     padding: 10px;
     border: 1px dashed #C7C7C7;
 }
+
+.messages-table.status-table > tbody > tr > td {
+    padding-left: 20px;
+}
+
+.messages-table.status-table > tbody > tr > td:last-child {
+    text-align: left;
+    padding-left: 0;
+}
+
+.replyMessage{
+    width: -moz-calc(100% - 80px);
+    width: -webkit-calc(100% - 80px);
+    width: calc(100% - 80px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.thread-subject {
+    line-height: 40px;
+    font-size: 20px;
+    color: #1d2c3c;
+    font-family: 'FS Elliot Web Light', sans-serif;
+    line-height: 90px;
+    margin-left: 40px;
+}
+
+.message-header-content {
+    height: 90px;
+    border-bottom: 1px solid #E3E3E3;
+    border-top: 1px solid #E3E3E3;
+    line-height: 90px;
+}
+
+.message-header-content > div:first-of-type {
+    display: inline-block;
+    width: 400px;
+    margin-left: 10px;
+}
+
+.message-header-content > div:last-of-type {
+    display: inline-block;
+    float: right;
+    width: 150px;
+    line-height: 90px;
+}
+
+.message-body-content {
+    width: -moz-calc(100% - 80px);
+    width: -webkit-calc(100% - 80px);
+    width: calc(100% - 80px);
+    margin: 20px auto 20px auto;
+}
+
+.replyBox {
+    width: -moz-calc(100% - 80px);
+    width: -webkit-calc(100% - 80px);
+    width: calc(100% - 80px);
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 1px solid #E3E3E3;
+    padding-top: 20px;
+}
+
+.replyBox > .replyInput {
+    width: 100%;
+}
+
+.replyBox > .replyInput > .standard-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+

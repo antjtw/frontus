@@ -1,30 +1,31 @@
 'use strict';
 
-app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message) {
+app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message', '$routeParams',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message, $routeParams) {
 
         $scope.page = null;
         $scope.myMessages = [];
         $scope.allThreads = Message.getAllThreads();
-        console.log($scope.allThreads)
         $scope.myPeople = Message.getAllNames();
         $scope.allPeople = Message.getAllPeople();
 
-        $scope.$watch('allThreads', function(){}, true)
-        // this watch doesn't work and i'm not sure why
         
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;
+                $location.search('p', button);
             }
             else if($scope.page === button){
                 $scope.page = null;
+                $location.search('p', null);
             }
             else{
                 $scope.page = null;
+                $location.search('p', null);
             }
           
         };
+
 
         $scope.sortBy = function(col) {
             console.log(col);
@@ -47,12 +48,18 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
             }
         };
 
-
+        $scope.gotoThread = function(thread) {
+            $location.url("/app/company/messages/thread?thread=" + thread);
+        };
 
 
         $scope.getThread = function(elem){  
             $scope.myThread = elem;
         };
+
+        if ($routeParams.p) {
+            $scope.togglePage($routeParams.p);
+        }
         
     }
 ]);
@@ -150,9 +157,9 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
          $scope.getPhotoUrl = function(sender){
-                if(sender == navState.userid){
-                    return '/photo/user?id=company:' + navState.company;
-                }
+                 if(sender == navState.userid){
+                     return '/photo/user?id=' + sender;
+                 }
                 else if(sender !== navState.userid && $scope.myInvestors.indexOf(sender) > - 1){
                     return '/photo/user?id=issuer:' + sender;
                 }
