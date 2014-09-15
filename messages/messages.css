@@ -323,6 +323,10 @@ the compose message page styling*/
     max-width: none;
 }
 
+tr.threadMembers, tr.forTooltip {
+    cursor: pointer;
+}
+
 .shareholder-column.docname-column *:hover{
     color: #666;
 }

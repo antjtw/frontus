@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message) {
+app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message', '$routeParams',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message, $routeParams) {
 
         $scope.page = null;
         $scope.myMessages = [];
@@ -13,12 +13,15 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;
+                $location.search('p', button);
             }
             else if($scope.page === button){
                 $scope.page = null;
+                $location.search('p', null);
             }
             else{
                 $scope.page = null;
+                $location.search('p', null);
             }
           
         };
@@ -53,6 +56,10 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.getThread = function(elem){  
             $scope.myThread = elem;
         };
+
+        if ($routeParams.p) {
+            $scope.togglePage($routeParams.p);
+        }
         
     }
 ]);

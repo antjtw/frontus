@@ -2,10 +2,14 @@
 
 var service = angular.module('commonServices');
 
+var Messages = function() {
+    this.allThreads = [];
+};
+
 service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navState, $q){
 
+    var messages = new Messages();
     var allUsers = [];
-    var allThreads = [];
     var allPeople = [];
     var allEmails = [];
     var allSentThreads = [];
@@ -43,11 +47,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
             allUsers.push(user);
 
       }); 
-    }); 
-
-
-
-
+    });
 
     var getArrayFromPostgres = function(array){
         var array1 = array.replace("{", "");
@@ -61,7 +61,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         angular.forEach(data, function(thr){
             thr.names = [];
             thr.membersArray = getArrayFromPostgres(thr.members);
-            allThreads.push(thr);
+            messages.allThreads.push(thr);
         });
         SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(info){
             angular.forEach(info, function(inf){
@@ -70,7 +70,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                     allEmails.push(inf.email);
                }          
             });
-            angular.forEach(allThreads, function(thread){
+            angular.forEach(messages.allThreads, function(thread){
                 for(var i = 0; i < thread.membersArray.length; i ++){
                     angular.forEach(allPeople, function(person){
                         if(person.email == thread.membersArray[i] && person.name !== null && thread.membersArray[i]!== navState.userid && person.name !== ""){
@@ -92,10 +92,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                     });
                 }
             })
-            angular.forEach(allThreads, function(thr){
+            angular.forEach(messages.allThreads, function(thr){
                 thr.nameString = thr.names.join(", ");
             });
-            angular.forEach(allThreads, function(thr){
+            angular.forEach(messages.allThreads, function(thr){
                 thr.times = [];
                 angular.forEach(allMessages, function(all){
                     if(all.thread_id === thr.thread_id && thr.times.indexOf(all.time)== -1){
@@ -129,9 +129,8 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                     else if(thread.membersArray[i]==person.email && person.name =="" && thread.names.indexOf(thread.membersArray[i])== -1){
                             thread.names.push(thread.membersArray[i]);
                     }
-
                 });
-            };
+            }
             thread.nameString = thread.names.join(", ");
         }); 
         return allReceivedMsgs;
@@ -166,7 +165,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     };
 
     this.getAllThreads = function(){
-        return allThreads;
+        return messages.allThreads;
     };
 
     this.getAllNames = function(){
