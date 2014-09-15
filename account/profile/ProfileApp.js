@@ -17,9 +17,14 @@ app.controller('ContactCtrl',
         if ($routeParams.verificationCode) {
             SWBrijj.procm('account.verify_email', $routeParams.verificationCode)
             .then(function(res) {
-                console.log(res);
-                if (res[0].verify_email === true) {
-                    $scope.$emit("notification:success", "Alternate email address verified.");
+                    console.log(res);
+                if (res[0].verify_email) {
+                    angular.forEach($scope.emails, function(email) {
+                        if (email.email == res[0].verify_email) {
+                            email.verified = true;
+                        }
+                    });
+                    $scope.$emit("notification:success", "Email address verified.");
                 } else {
                     $scope.$emit("notification:fail", "Failed to verify alternate email address.");
                 }
@@ -207,24 +212,34 @@ app.controller('ContactCtrl',
 
 
         $scope.emails = [];
-        var primeEmail = ""
+        var primeEmail = "";
         
         SWBrijj.tblm('account.my_emails').then(function(returned_emails) {
             returned_emails.forEach(function (e) {
+                e.key = e.email;
                 $scope.emails.push(e);
+                e.primary = false;
+                if (e.email == $scope.primary_email) {
+                    e.primary = true;
+                }
             });
             angular.forEach($scope.emails, function(email){
                 if(email.email==$scope.primary_email){
-                    console.log("i am the primary!");
                     primeEmail = email;
                 }
             });
-             if($scope.emails.indexOf(primeEmail)!==0){
-                $scope.emails.splice($scope.emails.indexOf(primeEmail), 1);
-                $scope.emails.unshift(primeEmail);
-            }
+            $scope.emails.sort(primarySort);
 
         });
+
+        function primarySort(a,b) {
+            if (a.primary)
+                return -1;
+            else if (b.primary)
+                return 1;
+            else
+                return 0;
+        }
 
         $scope.uploadFile = function() {
             $scope.photoURL = "/img/image-loader-140.gif";
@@ -410,6 +425,7 @@ app.controller('ContactCtrl',
             }
             SWBrijj.insert('account.my_emails', {user_id: $scope.user_id, email: email}).then(function(res) {
                 $scope.emails.push({email: email, verified: false});
+                $scope.$emit("notification:success", "Email added. We've sent you an email to verify ownership");
                 // TODO: notification:success and call verification flow;
                 $scope.newEmail = "";
             }).except(function(err) {
@@ -423,7 +439,7 @@ app.controller('ContactCtrl',
             SWBrijj.delete_one('account.my_emails', {user_id: email.user_id, email: email.email}).then(function(res) {
                 var ix = $scope.emails.indexOf(email);
                 $scope.emails.splice(ix, 1);
-                $scope.$emit("notification:success", "Email removed;");
+                $scope.$emit("notification:success", "Email removed");
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to remove " + email.email + ". Please try again later.");
@@ -431,8 +447,10 @@ app.controller('ContactCtrl',
         };
 
         $scope.updateEmail = function(email) {
-            SWBrijj.update('account.my_emails', {email: email.email}, {user_id: email.user_id, email: $scope.profilecheck.workingEmail}).then(function(res) {
-                // do nothing
+            console.log(email);
+            SWBrijj.update('account.my_emails', {email: email.email}, {user_id: email.user_id, email: email.key}).then(function(res) {
+                email.key = email.email;
+                $scope.$emit("notification:success", "Check ");
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to change " + $scope.profilecheck.workingEmail + ".");
