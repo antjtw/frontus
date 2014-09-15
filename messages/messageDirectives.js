@@ -9,9 +9,9 @@ mod.directive('composeMessage', function() {
         // transclude: false,
         restrict: 'E',
         templateUrl: '/messages/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location', 'Message',        
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location', 'Message', 'Investor',
 
-        function($scope, $rootScope, SWBrijj, navState, $location, Message) {
+        function($scope, $rootScope, SWBrijj, navState, $location, Message, Investor) {
 
             $scope.zombiemessage = function(){
                 if(navState.role === "issuer" && ($rootScope.billing.currentPlan === "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
@@ -32,7 +32,7 @@ mod.directive('composeMessage', function() {
                 }
                 else if($scope.groupMessage === true){
                     $scope.groupMessage = false;
-                };
+                }
             };
 
             // create the object for selct2
@@ -85,10 +85,18 @@ mod.directive('composeMessage', function() {
             };
 
             $scope.resetMessage();
-            $scope.composeopts = {
-                backdropFade: true,
-                dialogFade: true
+
+            $scope.messageSelect2Options = {
+                multiple: true,
+                tokenSeparators: [",", " "],
+                data: Investor.investors,
+                createSearchChoice: Investor.createSearchChoice,
+                placeholder: 'Enter name or email address & press enter'
             };
+
+            $scope.$watch('message', function(newVal, oldVal) {
+                console.log(newVal.recipients);
+            }, true);
 
             
 
