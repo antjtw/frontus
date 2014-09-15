@@ -60,16 +60,21 @@
                     </tbody>
                     <tbody ng-repeat="allThread in allThreads |filter: filterText | orderBy: 'timex':true ">
                         <tr class="empty-row"></tr>
-                        <tr class="threadMembers" ><a href="/app/company/messages/thread?thread={{allThread.thread_id}}">
-                            <td style="width:450px" class="shareholder-column docname-column">
+                        <tr class="threadMembers" >
+                            <a href="/app/company/messages/thread?thread={{allThread.thread_id}}">
+                                <td style="width:450px" class="shareholder-column docname-column">
 
-                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}" ><div bs-tooltip="allThread.nameString">{{showString(allThread.nameString)}}<span ng-if="allThread.count > 1">  ({{allThread.count}})</div></a>
-                            </td>
-                            <td>
-                                <a href="/app/company/messages/thread?thread={{allThread.thread_id}}" >
-                                    <div bs-tooltip="allThread.subject"><span>{{showString(allThread.subject)}}</span></div></td>
-                                </a>
-                            <td style="width:10px;"></td>
+                                    <a href="/app/company/messages/thread?thread={{allThread.thread_id}}" >
+                                        <div bs-tooltip="allThread.nameString">{{showString(allThread.nameString)}}<span ng-if="allThread.count > 1">  ({{allThread.count}})</span></div>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/app/company/messages/thread?thread={{allThread.thread_id}}" >
+                                        <div bs-tooltip="allThread.subject"><span>{{showString(allThread.subject)}}</span></div>
+                                    </a>
+                                </td>
+                                <td style="width:10px;"></td>
+                            </a>
                         </tr>
                     </tbody>
                 </table>
