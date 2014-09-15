@@ -301,12 +301,12 @@ mod.directive('sentMessages', function(){
                     angular.forEach($scope.allThreads, function(thr){
                         if(thr.thread_id == sent.thread_id){
                             sent.count = thr.count
-                        };
+                        }
                     });
                     angular.forEach($scope.sentMsgs, function(msg){
                         if(msg.thread_id == sent.thread_id && sent.times.indexOf(msg.time)== -1){
                            sent.times.push(msg.time);
-                        };
+                        }
                     });
                 });                
                 return mySents;
