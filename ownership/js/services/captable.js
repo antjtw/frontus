@@ -1557,6 +1557,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.addInvestor = function(name) {
         var inv = new Investor();
         inv.editable = true;
+        var currentrows =[];
+        angular.forEach(captable.investors, function(investor) {
+            currentrows.push(investor.name)
+        });
+        if (currentrows.indexOf(name) != -1) {
+            name += " (1)"
+        }
         inv.new_name = inv.name = name;
         inv.company = $rootScope.navState.company;
         inv.percentage = function() {return investorSorting(inv.name);};
