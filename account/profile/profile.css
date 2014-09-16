@@ -55,8 +55,20 @@ h1.profile-name {
     border-top: none;
 }
 
+.ind-information{
+    width: 40%;
+    float: left;
+}
+
+.ind-information.right{
+    width: 55%;
+}
 .personal-information {
-    padding-top: 30px;
+    padding-left: 40px;
+}
+
+.personal-information .email {
+    margin-left: 5px;
 }
 
 .personal-information > li > ul {
@@ -64,34 +76,76 @@ h1.profile-name {
     overflow: auto;
 }
 
-.personal-information > li > ul > li {
-    float: left;
+ul.personal-information > li > ul > li > div.standard-button.small-standard-button{
+    margin-left: 5px;
     display: inline-block;
+    vertical-align: 30%;
 }
 
 .personal-information > li > ul > li:nth-child(odd) {
     width: 90px;
-    margin-right: 10px;
-    text-align: right;
     text-transform: capitalize;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 20px;
+}
+
+.ind-information.right .personal-information > li > ul > li:nth-child(odd){
+    padding-left: 25px;
 }
 
 .personal-information > li > ul > li:nth-child(odd):nth-child(n+2) {
     width: 60px;
 }
 
-.personal-information input {
-    width: 180px;
+.span4.ind-pics > div > .standard-button.small-standard-button.gray{
+    padding-top: 10px;
 }
+
+.span4.ind-pics > div > .standard-button.small-standard-button.gray > button{
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+
+.personal-information input {
+    width: 220px;
+}
+
+.personal-information input:disabled {
+    background-color: #e3e3e3;
+}
+
+.personal-information > li > ul > li{
+    line-height: 30px;
+}
+
+
+
+ul.personal-information > li > ul > li> button.radio-button{
+    vertical-align: 30%;
+}
+
 
 .personal-information input.short-input {
     width: 70px;
 }
 
-.check-box-button.profile-box {
+.personal-information .primary-info {
+    display: inline-block;
+    margin-left: 25px;
+    font-size: 12px;
+}
 
+div.ind-information.right > ul.personal-information > li > ul > li > input.notVerified {
+    margin-left: 25px;
+}
+
+
+
+.span4.ind-pics{
+    padding-left: 20px;
+    border-left: 1px solid #E3E3E3;
+    min-height: 600px;
 }
 
 .investor-attributes > ul {
@@ -154,7 +208,7 @@ h1.profile-name {
     display: inline-block;
 }
 
-li.profile-image > img {
+div.profile-image > img {
     width: 106px;
     height: 106px;
     border-radius: 3px;
@@ -162,19 +216,19 @@ li.profile-image > img {
 }
 
 
-li.profile-image > div, li.signature-image > div:last-of-type {
+div.profile-image > div, li.signature-image > div:last-of-type {
     text-align: center;
     margin-top: 10px;
 }
 
-li.signature-image > div:first-of-type {
-    width: 198px;
-    height: 108px;
+div.signature-image > div:first-of-type {
+    width: 290px;
+    height: 158px;
     border: 1px solid #E3E3E3;
     border-radius: 3px;
 }
 
-li.signature-image > div:first-of-type > img {
+div.signature-image > div:first-of-type > img {
     height: 100%;
     width: auto;
 }
@@ -330,4 +384,12 @@ div.imgsig > div > img {
     background-color: #FFFFFF;
     border: 1px solid rgb(227, 227, 227);
     text-transform: uppercase;
+}
+
+ul.personal-information > li > ul > li > div.standard-button.small-standard-button.add-button {
+    margin-left: 30px;
+}
+
+.remove-button {
+    margin-left: 5px;
 }

@@ -186,7 +186,6 @@ service.factory('myPayments', function($q, payments) {
         },
         broadcastResults = function() {
             this.data = d;
-            console.log(this.data);
         };
 
 
@@ -210,12 +209,20 @@ service.service('User', ['SWBrijj', function(SWBrijj) {
     });
 }]);
 
-service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) {
+service.service('Investor', ['SWBrijj', 'navState', '$q', '$window', function(SWBrijj, navState, $q, $window) {
     if (navState.role == 'issuer') {
-        this.investors = [];
-        this.names = {};
-        this.displays = {};
         var inv_service = this;
+
+        // store the names list, so that if there's any references in flight on reload, we can still display the name
+        $window.addEventListener('beforeunload', function(event) {
+            sessionStorage.setItem('Investor-names', angular.toJson(inv_service.names));
+        });
+        this.names = angular.fromJson(sessionStorage.getItem('Investor-names'));
+        if (this.names === null) {
+            this.names = {}; // holds all known names
+        }
+        this.investors = [];
+        this.displays = {}; // should only hold known investors
         SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
             for (var i = 0; i < data.length; i++) {
                 if (data[i].name) {
@@ -235,18 +242,76 @@ service.service('Investor', ['SWBrijj', 'navState', function(SWBrijj, navState) 
         };
 
         this.getDisplayText = function(identifier) {
-            if (this.names[identifier]) {
-                return this.names[identifier] + " (" + identifier + ")";
-            } else {
-                return identifier;
-            }
+            return this.getName(identifier);
         };
 
         this.getDisplay = function(identifier) {
             if (!this.displays[identifier]) {
-                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier)};
+                this.displays[identifier] = {id: identifier, text: this.getDisplayText(identifier), name: this.getName(identifier)};
             }
             return this.displays[identifier];
+        };
+
+        this.getInvestorId = function(email) {
+            var p = $q.defer();
+            SWBrijj.procm('account.get_user_from_email', email).then(function(data) {
+                if (data.length === 0 || data[0].user_id === null) {
+                    p.reject();
+                } else {
+                    inv_service.names[data[0].user_id] = data[0].name;
+                    p.resolve(data[0].user_id);
+                }
+            }).except(function(err) {
+                console.error(err);
+                p.reject(err);
+            });
+            return p.promise;
+        };
+
+        this.createInvestorObject = function(id) {
+            var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
+            if (!this.displays[id]) { // if we don't know this id ...
+                SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
+                    if (data.length == 0 || !data[0].user_id) //email not known
+                        return;
+                    investorObject.id = data[0].user_id;
+                    investorObject.text = investorObject.name = data[0].name;
+                    if (inv_service.names[data[0].user_id])
+                    {//known user, different email
+                        investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                        investorObject.name = inv_service.getName(data[0].user_id);
+                        return;
+                    }
+                    inv_service.names[data[0].user_id] = data[0].name;
+                    inv_service.getDisplay(data[0].user_id).text = inv_service.getDisplayText(data[0].user_id);
+                    investorObject.text = inv_service.getDisplayText(data[0].user_id);
+                    investorObject.name = inv_service.getName(data[0].user_id);
+                }).except(function(x) {console.log(x);});
+            }
+            return investorObject;
+        };
+
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        this.createSearchChoice = function(text) {
+            // if text was a legit user, would already be in the list, so don't check Investor service
+            if (emailRegExp.test(text)) {
+                return inv_service.createInvestorObject(text);
+            } else {
+                return false;
+            }
+        };
+        this.createSearchChoiceMultiple = function(text) {
+            // if text was a legit user, would already be in the list, so don't check Investor service
+            if (text.indexOf(',') !== -1 || text.indexOf(' ') !== -1) {
+                // comma separated list detected. We don't even care anymore, just validate later
+                return {id: text, text: "multiple emails"};
+            }
+            if (emailRegExp.test(text)) {
+                return inv_service.createInvestorObject(text);
+            } else {
+                return false;
+            }
         };
     }
 }]);
@@ -261,7 +326,7 @@ service.service('csv', [function() {
         angular.forEach(arrs, function(row, idx) {
             var rowString = row.join(",");
             content += rowString;
-            if (idx < arrs.length) content += "\n"; 
+            if (idx < arrs.length) content += "\n";
         });
         return content;
     }

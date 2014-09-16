@@ -354,7 +354,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
                 investor_attributes.investorCountry = angular.copy(person.country);
                 investor_attributes.investorStreet = angular.copy(person.street);
                 investor_attributes.investorPhone = angular.copy(person.phone);
-                investor_attributes.investorEmail = angular.copy(person.email);
+                investor_attributes.investorEmail = angular.copy(person.email);//might be wrong but doesn't matter because we don't support smartdocs now
                 investor_attributes.investorPostalcode = angular.copy(person.postalcode);
                 investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
             });
