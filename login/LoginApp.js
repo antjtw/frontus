@@ -22,11 +22,15 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
     document.cookie = "selectedCompany=; expires=Fri, 18 Feb 1994 01:23:45 GMT; path=/";
     $scope.username = "";
     $scope.password = "";
+    $scope.redirect = null;
     if ($routeParams.error) {
       $scope.showError = true;
       $scope.username = $routeParams.error;
     } else {
       $scope.showError = false;
+    }
+    if ($routeParams.redirect) {
+        $scope.redirect = $routeParams.redirect;
     }
     $scope.doLogin = function() {
       /** @name SWBrijj#login
@@ -34,7 +38,7 @@ app.controller('LoginCtrl', ['$scope','$routeParams','SWBrijj', function($scope,
        * @param {string} username
        * @param {string} password
        */
-      SWBrijj.login($scope.username.toLowerCase(), $scope.password).then(function(x) { 
+      SWBrijj.login($scope.username.toLowerCase(), $scope.password, $scope.redirect).then(function(x) { 
       if(x) {
 			document.location.href = x;
 			// console.log("redirecting to: "+x);

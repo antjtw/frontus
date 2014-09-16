@@ -27,19 +27,6 @@ app.filter('fromNowSortandFilter', function() {
     };
 });
 
-app.filter('fileLength', function() {
-    return function(word) {
-        if (word) {
-            if (word.length > 21) {
-                return word.substring(0, 20) + "..";
-            } else {
-                return word;
-            }
-        }
-        return '';
-    };
-});
-
 app.filter('lengthLimiter', function() {
     return function(word) {
         return word && word.length > 58 ? word.substring(0, 57) + "..." : word;
