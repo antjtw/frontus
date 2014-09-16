@@ -86,7 +86,11 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             var promise = $q.defer();
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                 $scope.myPeople = data;
-                promise.resolve($scope.myPeople);
+                $scope.peopleDict = {};
+                angular.forEach($scope.myPeople, function(person){
+                    $scope.peopleDict[person.email] = person.name;
+                });
+                promise.resolve($scope.peopleDict);
             });
             return promise.promise;
         };
@@ -96,16 +100,17 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.getPeopleNames().then(function(){
                     $scope.myThreads = data;
                     angular.forEach($scope.myThreads, function(thread){
-                        angular.forEach($scope.myPeople, function(ppl){
-                            if(thread.sender === ppl.email){
-                                thread.senderName = ppl.name;
-                            }
-                        });
-                    });
-                    angular.forEach($scope.myThreads, function(th){
-                        if(th.senderName === undefined){
-                            th.senderName = th.sender;
+                        thread.senderName = $scope.peopleDict[thread.sender];
+                        if(!thread.senderName){
+                            thread.senderName = thread.sender;
                         }
+                        thread.members = JSON.parse(thread.members);
+                        thread.recipients = [];
+                        angular.forEach(thread.members, function(member){
+                            if (member != thread.sender)
+                                thread.recipients.push($scope.peopleDict[member]);
+                        });
+                        thread.recipientsString = thread.recipients.join(", ");
                     });
                 });
             });
@@ -124,7 +129,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.message = {};
         $scope.replyMessage = function(msg){
             var msgInfo = $scope.myThreads[0];
-            var recipients = JSON.parse(msgInfo.members);
             var category = 'company-message';
             var template = 'company-message.html';
             var newtext = msg.text.replace(/\n/g, "<br/>");
@@ -136,7 +140,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 null
             ).then(function(x) {
                 void(x);
-                $rootScope.billing.usage.direct_messages_monthly += recipients.length;
                 $location.url('/app/messages/');
                 $scope.clicked = false;
             }).except(function(err) {

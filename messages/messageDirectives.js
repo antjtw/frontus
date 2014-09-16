@@ -303,8 +303,7 @@ mod.directive('threadPeople', function(){
             $scope.$watch('threads', function(){
                 if($scope.threads !== undefined){
                     $scope.myThread = $scope.threads[0];
-                    var members = $scope.myThread.members;
-                    $scope.members = $scope.getArrayfromPostgres(members);
+                    $scope.members = $scope.myThread.members;
                     $scope.getNames($scope.members);
                 }
 
