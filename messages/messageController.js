@@ -8,7 +8,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.allThreads = Message.getAllThreads();
         $scope.myPeople = Message.getAllNames();
         $scope.allPeople = Message.getAllPeople();
-
+        $scope.myRecs = Message.getAllMsgs();
 
         $scope.togglePage = function(button){
             if($scope.page !== button){
@@ -41,7 +41,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 
         $scope.showString = function(string){
             if(string == null){
-                return ""
+                return "";
             }
             else if(string.length > 50){
                 return string.slice(0, 50) + "...";
@@ -63,7 +63,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         if ($routeParams.p) {
             $scope.togglePage($routeParams.p);
         }
-
     }
 ]);
 
@@ -72,10 +71,10 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         console.log($routeParams.thread);
         var threadId = parseInt($routeParams.thread);
 
-        $scope.myInvestors=[]
+        $scope.myInvestors=[];
         $scope.isInvestor = function(){
             SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
-                var myInvestors = data
+                var myInvestors = data;
                 angular.forEach(myInvestors, function(inv){
                     $scope.myInvestors.push(inv.email);
                 });
@@ -89,7 +88,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.myPeople = data;
                 promise.resolve($scope.myPeople);
             });
-            return promise.promise
+            return promise.promise;
         };
 
         $scope.getMessages = function(){
@@ -104,7 +103,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         });
                     });
                     angular.forEach($scope.myThreads, function(th){
-                        if(th.senderName == undefined){
+                        if(th.senderName === undefined){
                             th.senderName = th.sender;
                         }
                     });
@@ -122,20 +121,10 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
-
-
-
-        $scope.getArrayfromPosgres = function(array){
-            var array1 = array.replace("{", "");
-            var array2 = array1.replace("}", "");
-            var array3 = array2.split(",");
-            return array3;
-        }
-
         $scope.message = {};
         $scope.replyMessage = function(msg){
-            var msgInfo = $scope.myThreads[0]
-            var recipients = $scope.getArrayfromPosgres(msgInfo.members);
+            var msgInfo = $scope.myThreads[0];
+            var recipients = JSON.parse(msgInfo.members);
             var category = 'company-message';
             var template = 'company-message.html';
             var newtext = msg.text.replace(/\n/g, "<br/>");
@@ -160,9 +149,9 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
          $scope.getPhotoUrl = function(sender){
-                 if(sender == navState.userid){
-                     return '/photo/user?id=' + sender;
-                 }
+                if(sender == navState.userid){
+                    return '/photo/user?id=' + sender;
+                }
                 else if(sender !== navState.userid && $scope.myInvestors.indexOf(sender) > - 1){
                     return '/photo/user?id=issuer:' + sender;
                 }
@@ -171,7 +160,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 }
                 else{
                     return '/img/ike.png';
-                };
+                }
             };
 
 

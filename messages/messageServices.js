@@ -33,7 +33,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
             angular.forEach(msg, function(ms){
                 allMessages.push(ms);
                 ms.names = [];
-                ms.membersArray = getArrayFromPostgres(ms.members);
+                ms.membersArray = JSON.parse(ms.members);
                 for(var i = 0; i < ms.membersArray.length; i ++)
                 {
                     angular.forEach(allPeople, function(person){
@@ -50,7 +50,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                             ms.names.push(ms.membersArray[i]);
                         }
                         else if(ms.membersArray[i]==person.email && person.name ==="" && ms.names.indexOf(ms.membersArray[i])== -1){
-                                ms.names.push(ms.membersArray[i]);
+                            ms.names.push(ms.membersArray[i]);
                         }
                     });
                 }
@@ -69,22 +69,13 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
             angular.forEach(data, function(user){
                 allUsers.push(user);
-
-          });
+            });
         });
-
-        var getArrayFromPostgres = function(array){
-            var array1 = array.replace("{", "");
-            var array2 = array1.replace("}", "");
-            var array3 = array2.split(",");
-            return array3;
-        };
-
 
         SWBrijj.tblm('mail.my_threads', ['members', 'thread_id', 'subject', 'starts_like', 'count']).then(function(data){
             angular.forEach(data, function(thr){
                 thr.names = [];
-                thr.membersArray = getArrayFromPostgres(thr.members);
+                thr.membersArray = JSON.parse(thr.members);
                 messages.allThreads.push(thr);
             });
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(info){
@@ -140,6 +131,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
     this.getSentMsgs = function(){
         return allSentThreads;
+    };
+
+    this.getAllMsgs = function() {
+        return allMessages;
     };
 
     this.getAllThreads = function(){
