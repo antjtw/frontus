@@ -120,6 +120,10 @@ app.config(function($routeProvider, $locationProvider){
             templateUrl: '/messages/thread.html',
             controller: 'threadCtrl'
         }).
+        when('/app/company/messages/compose', {
+            templateUrl: '/messages/partials/compose.html',
+            controller: 'MsgCtrl'
+        }).
 
 
         otherwise({redirectTo:'/app/home/investor'});

@@ -9,7 +9,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.myPeople = Message.getAllNames();
         $scope.allPeople = Message.getAllPeople();
 
-        
+
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;
@@ -23,9 +23,12 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
                 $scope.page = null;
                 $location.search('p', null);
             }
-          
+
         };
 
+        $scope.gotoCompose = function() {
+            $location.url('/app/company/messages/compose');
+        };
 
         $scope.sortBy = function(col) {
             console.log(col);
@@ -53,14 +56,14 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
 
 
-        $scope.getThread = function(elem){  
+        $scope.getThread = function(elem){
             $scope.myThread = elem;
         };
 
         if ($routeParams.p) {
             $scope.togglePage($routeParams.p);
         }
-        
+
     }
 ]);
 
@@ -79,14 +82,14 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 return $scope.myInvestors;
             });
         };
-        
+
         $scope.getPeopleNames = function(){
             var promise = $q.defer();
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
                 $scope.myPeople = data;
-                promise.resolve($scope.myPeople);             
-            });  
-            return promise.promise             
+                promise.resolve($scope.myPeople);
+            });
+            return promise.promise
         };
 
         $scope.getMessages = function(){
@@ -141,7 +144,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 msgInfo.thread_id,
                 'Re: ' + msgInfo.subject,
                 newtext,
-                null               
+                null
             ).then(function(x) {
                 void(x);
                 $rootScope.billing.usage.direct_messages_monthly += recipients.length;
@@ -170,16 +173,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     return '/img/ike.png';
                 };
             };
-       
-    
+
+
     }
 ]);
-
-
-
-
-
-
-
-
-

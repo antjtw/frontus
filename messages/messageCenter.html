@@ -1,6 +1,3 @@
-
-<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
-<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
 <link type="text/css" rel="stylesheet" href="/messages/messages.css">
 <div class="maincontent openflow">
@@ -17,9 +14,8 @@
 
 
                     <div class="box-button pull-right"
-                     ng-class="{selected: page == 'compose'}"
-                     ng-click="companyIsZombie() ||  togglePage('compose')" 
-                     data-placement="bottom" bs-tooltip="zombiemessage">
+                     ng-click="companyIsZombie() || gotoCompose()"
+                     tooltip-placement="bottom" tooltip="{{zombiemessage}}">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
                             </li>
@@ -44,7 +40,7 @@
 
     <div class="row-fluid leftTabWindow">
         <compose-message ng-if="page == 'compose'"></compose-message>
-     
+
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose' && allThreads.length > 0">
             <sent-messages ng-if="page == 'sent'"></sent-messages>
             <received-msgs ng-if="page =='received'"></received-msgs>
@@ -86,7 +82,7 @@
                         <message-side></message-side>
                     </div>
                 </tab>
-                
+
             </tabset>
         </internal-right-rail>
 
