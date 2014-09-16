@@ -225,20 +225,9 @@ mod.directive('messageFilter', function(){
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'Message',
 
         function($scope, $rootScope, SWBrijj, $route, Message) {
-            $scope.getCount = function(array){
-                var count = [];
-                angular.forEach(array, function(arr){
-                    if(count.indexOf(arr.thread_id)== -1){
-                        count.push(arr.thread_id);
-                    }
-                });
-                return count.length;
-            };
-
             $scope.allMessages = Message.getAllThreads();
             $scope.sents = Message.getSentMsgs();
             $scope.receives = Message.getReceivedMsgs();
-
         }]
     };
 });
