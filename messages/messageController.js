@@ -27,7 +27,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
 
         $scope.gotoCompose = function() {
-            $location.url('/app/company/messages/compose');
+            $location.url('/app/messages/compose');
         };
 
         $scope.sortBy = function(col) {
@@ -52,7 +52,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         };
 
         $scope.gotoThread = function(thread) {
-            $location.url("/app/company/messages/thread?thread=" + thread);
+            $location.url("/app/messages/thread?thread=" + thread);
         };
 
 
@@ -137,7 +137,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             ).then(function(x) {
                 void(x);
                 $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-                $location.url('/app/company/messages/');
+                $location.url('/app/messages/');
                 $scope.clicked = false;
             }).except(function(err) {
                 void(err);

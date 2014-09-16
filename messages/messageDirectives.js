@@ -138,7 +138,7 @@ mod.directive('composeMessage', function() {
                         "Message sent!");
                     $rootScope.$emit('new:message');
                     $scope.clicked = false;
-                    $location.url('/app/company/messages/');
+                    $location.url('/app/messages/');
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",
@@ -164,7 +164,7 @@ mod.directive('composeMessage', function() {
 
                     $rootScope.$emit("notification:success",
                         "Message sent!");
-                    $location.url('/app/company/messages/');
+                    $location.url('/app/messages/');
                     $scope.clicked = false;
                     // $route.reload();
                 }).except(function(err) {
