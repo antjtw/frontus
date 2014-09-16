@@ -244,7 +244,6 @@ mod.directive('messageFilter', function(){
             $scope.sents = Message.getSentMsgs();
             $scope.receives = Message.getReceivedMsgs();
 
-
         }]
     };
 });
