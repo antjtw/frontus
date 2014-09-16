@@ -318,9 +318,10 @@ own.directive('securityDetails', [function() {
 
         },
         templateUrl: '/ownership/partials/securityDetails.html',
-        controller: ["$scope", "displayCopy", '$location',
-            function($scope, displayCopy, $location) {
+        controller: ["$scope", "$rootScope", "displayCopy", '$location',
+            function($scope, $rootScope, displayCopy, $location) {
                 $scope.tips = displayCopy.captabletips;
+                $scope.settings = $rootScope.settings;
                 $scope.currentTab = 'details';
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
@@ -362,10 +363,11 @@ own.directive('editableSecurityDetails', [function() {
             windowToggle: '='
         },
         templateUrl: '/ownership/partials/editableSecurityDetails.html',
-        controller: ["$scope", "displayCopy", "captable", "$filter", 'calculate',
-            function($scope, displayCopy, captable, $filter, calculate) {
+        controller: ["$scope", "$rootScope", "displayCopy", "captable", "$filter", 'calculate',
+            function($scope, $rootScope, displayCopy, captable, $filter, calculate) {
 
                 $scope.isEquity = captable.isEquity;
+                $scope.settings = $rootScope.settings;
                 $scope.loaddirective = function() {
                     $scope.captable = captable;
                     $scope.tips = displayCopy.captabletips;
