@@ -667,7 +667,7 @@ m.directive('composeMessage', function() {
                 var recipients = [];
                 angular.forEach($scope.message.recipients, function(recip){
                     angular.forEach($scope.myContacts, function(contact){
-                        if(recip === contact.name){
+                        if(recip === contact.id){
                             for(var i = 0; i < contact.details.length; i++){
                                 // cannot send message to the same person more than once, ie if person is in group and listed, they will only get the email one time.
                                 if(recipients.indexOf(contact.details[i])== -1 && contact.details[i].indexOf('@') > -1){
