@@ -4,15 +4,11 @@ var mod = angular.module('messageDirectives', ['ui.select2', 'brijj', 'ui.filter
 
 mod.directive('composeMessage', function() {
     return {
-        scope: false,
-        // replace: true,
-        // transclude: false,
+        scope: true,
         restrict: 'E',
         templateUrl: '/messages/partials/composeMessage.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location', 'Message',
-
-        function($scope, $rootScope, SWBrijj, navState, $location, Message) {
-
+        controller: ['$scope', '$rootScope', 'SWBrijj', 'navState', '$location', 'Message', '$window',
+        function($scope, $rootScope, SWBrijj, navState, $location, Message, $window) {
             $scope.zombiemessage = function(){
                 if(navState.role === "issuer" && ($rootScope.billing.currentPlan === "000" || $rootScope.billing.payment_token === null || !$rootScope.billing.payment_token)){
                     return "Please update your payment information to use this feature.";
@@ -76,14 +72,18 @@ mod.directive('composeMessage', function() {
             };
             $scope.groupsAndPeople();
 
-
             $scope.resetMessage = function() {
                 $scope.message = {recipients: [],
                                   text:"",
                                   subject:""};
             };
-
-            $scope.resetMessage();
+            $window.addEventListener('beforeunload', function(event) {
+                sessionStorage.setItem('composeMessage-message', angular.toJson($scope.message));
+            });
+            $scope.message = angular.fromJson(sessionStorage.getItem('composeMessage-message'));
+            if (!$scope.message) {
+                $scope.resetMessage();
+            }
             $scope.composeopts = {
                 backdropFade: true,
                 dialogFade: true
