@@ -1214,7 +1214,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             {
                 if (captable.transactions[i].transaction == tran.transaction)
                 {
-                    if (tran.transaction == null)
+                    if (tran.transaction === null)
                     {
                         if ((captable.transactions[i].attrs.investor == tran.attrs.investor) &&
                             (captable.transactions[i].attrs.security == tran.attrs.security))
@@ -1250,7 +1250,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
-            console.log("error");
             console.error(e);
             if (errorFunc)
             {
@@ -1273,7 +1272,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     }
                     var trans = captable.transactions.filter(function(t) {
                         return t.transaction == tran.transaction ||
-                            (t.attrs['transaction_from'] && t.attrs.transaction_from == tran.transaction);
+                            (t.attrs.transaction_from && t.attrs.transaction_from == tran.transaction);
                     });
                     var ids = trans.reduce(
                             accumulateProperty('transaction'), []);
