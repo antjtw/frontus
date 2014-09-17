@@ -64,7 +64,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.gotoThread = function(thread) {
             $location.url("/app/messages/thread?thread=" + thread);
         };
-        
+
         $scope.today = function() {
             return Math.floor(Date.now() / 86400000)*86400000;
         };
@@ -77,7 +77,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 
 app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams', '$q',
     function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams, $q) {
-        console.log($routeParams.thread);
         $scope.threadId = parseInt($routeParams.thread);
 
         $scope.myInvestors=[];
