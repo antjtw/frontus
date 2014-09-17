@@ -111,14 +111,18 @@ app.config(function($routeProvider, $locationProvider){
             templateUrl: '/modeling/pages/note.html',
             controller: 'noteController'
         }).
-        when('/app/company/messages', {
+        when('/app/messages', {
             templateUrl: '/messages/messageCenter.html',
             controller: 'MsgCtrl',
             reloadOnSearch: false
         }).
-        when('/app/company/messages/thread', {
+        when('/app/messages/thread', {
             templateUrl: '/messages/thread.html',
             controller: 'threadCtrl'
+        }).
+        when('/app/messages/compose', {
+            templateUrl: '/messages/partials/compose.html',
+            controller: 'MsgCtrl'
         }).
 
 

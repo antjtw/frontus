@@ -23,13 +23,13 @@
                    <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
                    <div ng-if="myThread.senderName !== undefined">
-                       {{myThread.senderName}} to {{myThread.members}}
+                       {{myThread.senderName}} to {{myThread.recipientsString}}
                    </div>
                     <div>{{myThread.time |date :'MMM d, y h:mm a' }}</div>
                 </div>
                 <div class="message-body-content">
                     <div ng-bind-html="myThread.message"></div>
-                </div>    
+                </div>
             </div>
 
             <div class="replyBox">
@@ -44,7 +44,7 @@
                         </button>
                     </div>
                 </div>
-            </div>           
+            </div>
         </div>
 
 
@@ -58,11 +58,11 @@
                 </tab>
 
                 <tab heading="Activity">
-                    <div>
-                        Will Be Activity
+                    <div style="clear: both;">
+                        <message-side thread="threadId"></message-side>
                     </div>
                 </tab>
-                
+
             </tabset>
         </internal-right-rail>
 

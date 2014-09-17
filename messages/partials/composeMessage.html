@@ -7,7 +7,7 @@
                 <div class="message_headline" ng-if="groupMessage">CC</div>
                 <div class="message_headline" ng-if="!groupMessage">BCC</div>
                 <div class="message_input">
-                    <select ui-select2 multiple ng-model='message.recipients' placeholder="Please enter an investor or group name" style="width: 100%;">
+                    <select ui-select2 multiple ng-model='message.recipients' placeholder="Please enter an shareholder or group name" style="width: 100%;">
                         <option ng-repeat="myContact in myContacts" value="{{myContact.id}}">{{myContact.name}}</option>
                     </select>
                 </div>
@@ -21,7 +21,8 @@
                 <div class="message_input">
                     <button class="check-box-button group" ng-class="{'selected': groupMessage}" ng-click="selectGroupMessage()">
                     <span data-icon="&#xe023;" aria-hidden="true"></span>
-                    </button> Create group message, where every message is reply all
+                    </button>
+                    <span class="group-message-text">Send group message, every message is reply all</span>
                 </div>
             </div>
         </div>
@@ -30,7 +31,7 @@
         <div class="message_elem">
             <div class="message_headline">Subject</div>
             <div class="message_input">
-                <input type="text" ng-model ="message.subject" class="msgsubject" style="padding-right: 0px; width: calc(100% - 5px);"></input>
+                <input type="text" ng-model ="message.subject" class="msgsubject" style="padding-right: 0px; width: calc(100% - 5px);">
             </div>
         </div>
 
@@ -53,16 +54,6 @@
     ng-hide="!readyToPreview(message)">
     Preview Message
 </div>
-
-<!-- <div class="msgButtons" ng-if="groupMessage">
-    <div class = "standard-button green" tooltip="{{zombiemessage()}}">
-        <button class="btn" style="font-size: 14px"
-            ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
-            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
-            Send Group Message
-        </button>
-    </div>
-</div> -->
 
 <div class="msgButtons">
     <div class = "standard-button" tooltip="{{zombiemessage()}}">

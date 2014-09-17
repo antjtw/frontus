@@ -1,7 +1,3 @@
-
-<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
-<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
-<link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
 <link type="text/css" rel="stylesheet" href="/messages/messages.css">
 <div class="maincontent openflow">
 <div class="container dynamic-page doclistFlow">
@@ -17,9 +13,8 @@
 
 
                     <div class="box-button pull-right"
-                     ng-class="{selected: page == 'compose'}"
-                     ng-click="companyIsZombie() ||  togglePage('compose')" 
-                     data-placement="bottom" bs-tooltip="zombiemessage">
+                     ng-click="companyIsZombie() || gotoCompose()"
+                     tooltip-placement="bottom" tooltip="{{zombiemessage}}">
                         <ul>
                             <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
                             </li>
@@ -32,49 +27,72 @@
             </div>
         </div>
 
-  <!--   text in the window -->
-
-
-    <div ng-show="allThreads == undefined || allThreads.length == 0 && page != 'compose'" class="noElements">
+    <div ng-show="allThreads == undefined || allThreads.length == 0" class="noElements">
         <div class="toFill">
             You haven't sent or received any messages yet. Click compose to start sending!
         </div>
     </div>
 
-
     <div class="row-fluid leftTabWindow">
-        <compose-message ng-if="page == 'compose'"></compose-message>
-     
-        <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="page !== 'compose' && allThreads.length > 0">
-            <sent-messages ng-if="page == 'sent'"></sent-messages>
-            <received-msgs ng-if="page =='received'"></received-msgs>
-            <div ng-if="!page && allThreads.length > 0">
-            <div class="span12">
-                <table class="status-table messages-table">
-                    <tbody>
-                    <tr>
-                        <th class="button"><span class="title">Name</span></th>
-                        <th class="button"><span class="title">Subject</span></th>
-                    </tr>
-                    </tbody>
-                    <tbody ng-repeat="allThread in allThreads |filter: filterText | orderBy: 'timex':true ">
-                        <tr class="empty-row"></tr>
-                        <tr class="threadMembers" ng-click="gotoThread(allThread.thread_id)">
-                            <td>
-                                <div>{{showString(allThread.nameString)}}<span ng-if="allThread.count > 1">  ({{allThread.count}})</span></div>
-                            </td>
-                            <td>
-                                <div><span>{{showString(allThread.subject)}}</span></div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            </div>
+        <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="allThreads.length > 0">
+            <div ng-if="allThreads.length > 0">
+                <div class="span12">
+                    <table ng-if="!page" class="status-table messages-table">
+                        <tbody>
+                            <tr>
+                                <th class="button"><span class="title">Recipients</span></th>
+                                <th class="button"><span class="title">Subject</span></th>
+                                <th class="button"><span class="title">Last Activity</span></th>
+                            </tr>
+                        </tbody>
+                        <tbody ng-repeat="allThread in allThreads | filter: filterText | orderBy: 'maxTime':true ">
+                            <tr class="empty-row"></tr>
+                            <tr class="threadMembers" ng-click="gotoThread(allThread.thread_id)">
+                                <td>
+                                    <div>{{showString(allThread.nameString)}}<span ng-if="allThread.count > 1">({{allThread.count}})</span></div>
+                                </td>
+                                <td>
+                                    <div><span>{{showString(allThread.subject)}}</span></div>
+                                </td>
+                                <td>
+                                    <div ng-if="allThread.maxTime.getTime() < today()"><span>{{allThread.maxTime | date : settings.date}}</span></div>
+                                    <div ng-if="allThread.maxTime.getTime() >= today()"><span>{{allThread.maxTime | date : 'shortTime'}}</span></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table ng-if="page" class="status-table messages-table">
+                        <tbody>
+                            <tr>
+                                <th class="button"><span class="title">Recipients</span></th>
+                                <th class="button"><span class="title">Subject</span></th>
+                                <th class="button"><span class="title">Date</span></th>
+                            </tr>
+                        </tbody>
+                        <tbody ng-repeat="myRec in myRecs | messageFolderFilter: page | orderBy:'time':true | filter: filterText">
+                            <tr class="empty-row"></tr>
+                            <tr class="forTooltip" ng-click="gotoThread(myRec.thread_id)">
+                                <td>
+                                    <div>{{myRec.nameString | limitTo: 50}}   <span ng-if="myRec.count > 1">({{myRec.count}})</span></div>
+                                </td>
 
+                                <td>
+                                    <div>
+                                        <span>{{myRec.subject | limitTo: 50}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div ng-if="myRec.time.getTime() < today()"><span>{{myRec.time | date : settings.date}}</span></div>
+                                    <div ng-if="myRec.time.getTime() >= today()"><span>{{myRec.time | date : 'shortTime'}}</span></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <internal-right-rail ng-if="allThreads.length > 0" toggle-side="hideRail" ng-style="viewportheight" ng-hide="page=='compose'">
+        <internal-right-rail ng-if="allThreads.length > 0" toggle-side="hideRail" ng-style="viewportheight">
             <tabset style="display:block;" ng-style="viewportheight">
                 <tab heading="Filters">
                     <div style="clear: both;">
@@ -86,7 +104,7 @@
                         <message-side></message-side>
                     </div>
                 </tab>
-                
+
             </tabset>
         </internal-right-rail>
 

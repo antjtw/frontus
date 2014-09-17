@@ -326,13 +326,21 @@ tr.threadMembers, tr.forTooltip {
     border: 1px dashed #C7C7C7;
 }
 
-.messages-table.status-table > tbody > tr > td {
+.messages-table.status-table > tbody > tr > td:first-child {
     padding-left: 20px;
 }
 
 .messages-table.status-table > tbody > tr > td:last-child {
     text-align: left;
     padding-left: 0;
+}
+
+.messages-table.status-table > tbody > tr > th:first-of-type {
+    width: 300px;
+}
+
+.messages-table.status-table > tbody > tr > th:last-of-type {
+    width: 150px;
 }
 
 .replyMessage{
@@ -396,5 +404,10 @@ tr.threadMembers, tr.forTooltip {
 .replyBox > .replyInput > .standard-button {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.group-message-text {
+    display: inline-block;
+    margin-left: 5px;
 }
 
