@@ -119,7 +119,12 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         thread.recipients = [];
                         angular.forEach(thread.members, function(member){
                             if (member != thread.sender)
+                            if ($scope.peopleDict[member]) {
                                 thread.recipients.push($scope.peopleDict[member]);
+                            } else {
+                                thread.recipients.push(member);
+                            }
+
                         });
                         thread.recipientsString = thread.recipients.join(", ");
                     });
