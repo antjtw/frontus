@@ -402,3 +402,8 @@ tr.threadMembers, tr.forTooltip {
     margin-bottom: 20px;
 }
 
+.group-message-text {
+    display: inline-block;
+    margin-left: 5px;
+}
+

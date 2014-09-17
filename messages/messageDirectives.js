@@ -24,7 +24,7 @@ mod.directive('composeMessage', function() {
 
             $scope.emailLists = Message.getAllPeople();
 
-            $scope.groupMessage = false;
+            $scope.groupMessage = true;
 
             $scope.selectGroupMessage = function(){
                 if($scope.groupMessage === false){
