@@ -1,39 +1,29 @@
 <link type="text/css" rel="stylesheet" href="/messages/messages.css">
-<div class="maincontent openflow">
-<div class="container dynamic-page doclistFlow">
-<div class="row-fluid">
-    <section class="statusBlock">
-        <div class="row-fluid">
-            <div class="subnav-controls">
-                <div>
-                    <div class="pull-left" ng-hide="page == 'compose'">
-                        <span>Search</span>
-                        <input type="text" ng-model="filterText" class="search-box">
-                    </div>
+<div class="container dynamic-page">
+    <subnav>
+        <div class="pull-left" ng-hide="page == 'compose'">
+            <span>Search</span>
+            <input type="text" ng-model="filterText" class="search-box">
+        </div>
 
+        <div class="box-button pull-right"
+             ng-click="companyIsZombie() || gotoCompose()"
+             tooltip-placement="bottom" tooltip="{{zombiemessage}}">
+            <ul>
+                <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
+                </li>
+                <li> <span>Compose</span>
+                </li>
+            </ul>
+        </div>
+    </subnav>
 
-                    <div class="box-button pull-right"
-                     ng-click="companyIsZombie() || gotoCompose()"
-                     tooltip-placement="bottom" tooltip="{{zombiemessage}}">
-                        <ul>
-                            <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
-                            </li>
-                            <li> <span>Compose</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="DivHelper"></div>
+    <div class="row-fluid leftTabWindow" ng-style="viewportheight">
+        <div ng-show="allThreads == undefined || allThreads.length == 0" class="noElements">
+            <div class="toFill">
+                You haven't sent or received any messages yet. Click compose to start sending!
             </div>
         </div>
-
-    <div ng-show="allThreads == undefined || allThreads.length == 0" class="noElements">
-        <div class="toFill">
-            You haven't sent or received any messages yet. Click compose to start sending!
-        </div>
-    </div>
-
-    <div class="row-fluid leftTabWindow">
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="allThreads.length > 0">
             <div ng-if="allThreads.length > 0">
                 <div class="span12">
@@ -73,12 +63,12 @@
                             <tr class="empty-row"></tr>
                             <tr class="forTooltip" ng-click="gotoThread(myRec.thread_id)">
                                 <td>
-                                    <div>{{myRec.nameString | limitTo: 50}}   <span ng-if="myRec.count > 1">({{myRec.count}})</span></div>
+                                    <div>{{myRec.nameString | limitTo: 50}}<span ng-if="myRec.nameString.length > 50">&hellip;</span>   <span ng-if="myRec.count > 1">({{myRec.count}})</span></div>
                                 </td>
 
                                 <td>
                                     <div>
-                                        <span>{{myRec.subject | limitTo: 50}}</span>
+                                        <span>{{myRec.subject | limitTo: 50}}<span ng-if="myRec.subject.length > 50">&hellip;</span></span>
                                     </div>
                                 </td>
                                 <td>
@@ -110,9 +100,4 @@
 
     </div>
 
-
-    </section>
-
-</div>
-</div>
 </div>
