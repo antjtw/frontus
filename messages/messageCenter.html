@@ -65,6 +65,7 @@
                             <tr>
                                 <th class="button"><span class="title">Recipients</span></th>
                                 <th class="button"><span class="title">Subject</span></th>
+                                <th class="button"><span class="title">Date</span></th>
                             </tr>
                         </tbody>
                         <tbody ng-repeat="myRec in myRecs | messageFolderFilter: page | orderBy:'time':true | filter: filterText">
@@ -78,6 +79,9 @@
                                     <div>
                                         <span>{{myRec.subject | limitTo: 50}}</span>
                                     </div>
+                                </td>
+                                <td>
+                                    <div><span>{{myRec.time | date : settings.date}}</span></div>
                                 </td>
                             </tr>
                         </tbody>
