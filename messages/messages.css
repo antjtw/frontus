@@ -417,3 +417,16 @@ tr.threadMembers, tr.forTooltip {
     color: #333333;
 }
 
+.go-to-profile {
+    margin-top: 5px;
+}
+
+.go-to-profile > span:first-of-type:before {
+    vertical-align: -10%;
+}
+
+.go-to-profile > span:last-of-type {
+    display: inline-block;
+    margin-left: 5px;
+}
+
