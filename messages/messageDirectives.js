@@ -132,8 +132,8 @@ mod.directive('composeMessage', function() {
                             null
                 ).then(function(x) {
                     void(x);
-                    $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-
+                    //$rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                    Message.refresh();
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     $rootScope.$emit('new:message');
@@ -160,8 +160,8 @@ mod.directive('composeMessage', function() {
                             null
                 ).then(function(x) {
                     void(x);
-                    $rootScope.billing.usage.direct_messages_monthly += recipients.length;
-
+                    //$rootScope.billing.usage.direct_messages_monthly += recipients.length;
+                    Message.refresh();
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     $location.url('/app/messages/');

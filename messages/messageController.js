@@ -64,7 +64,10 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.gotoThread = function(thread) {
             $location.url("/app/messages/thread?thread=" + thread);
         };
-
+        
+        $scope.today = function() {
+            return Math.floor(Date.now() / 86400000)*86400000;
+        };
 
         $scope.getThread = function(elem){
             $scope.myThread = elem;
@@ -75,7 +78,7 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
 app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams', '$q',
     function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams, $q) {
         console.log($routeParams.thread);
-        var threadId = parseInt($routeParams.thread);
+        $scope.threadId = parseInt($routeParams.thread);
 
         $scope.myInvestors=[];
         $scope.isInvestor = function(){
@@ -105,7 +108,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
 
         $scope.getMessages = function(){
-            SWBrijj.tblmm('mail.my_messages', 'thread_id', threadId).then(function(data){
+            SWBrijj.tblmm('mail.my_messages', 'thread_id', $scope.threadId).then(function(data){
                 $scope.getPeopleNames().then(function(){
                     $scope.myThreads = data;
                     angular.forEach($scope.myThreads, function(thread){

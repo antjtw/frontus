@@ -55,7 +55,8 @@
                                     <div><span>{{allThread.subject|limitTo: 50}}</span><span ng-if="allThread.subject.length > 50">&hellip;</span></div>
                                 </td>
                                 <td>
-                                    <div><span>{{allThread.maxTime | date : settings.date}}</span></div>
+                                    <div ng-if="allThread.maxTime.getTime() < today()"><span>{{allThread.maxTime | date : settings.date}}</span></div>
+                                    <div ng-if="allThread.maxTime.getTime() >= today()"><span>{{allThread.maxTime | date : 'shortTime'}}</span></div>
                                 </td>
                             </tr>
                         </tbody>
@@ -81,7 +82,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div><span>{{myRec.time | date : settings.date}}</span></div>
+                                    <div ng-if="myRec.time.getTime() < today()"><span>{{myRec.time | date : settings.date}}</span></div>
+                                    <div ng-if="myRec.time.getTime() >= today()"><span>{{myRec.time | date : 'shortTime'}}</span></div>
                                 </td>
                             </tr>
                         </tbody>
