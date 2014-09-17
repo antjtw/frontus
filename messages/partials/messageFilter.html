@@ -13,12 +13,10 @@
 
                             <div ng-if="!showStatus">
                                 <div class="select_role">
-                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage()" ng-class="{'picked': page == null}">Message Library</div>
-                                    <div class="select_role tinycol left" ng-class="{'picked': page == null}">{{allMessages.length}}</div>
+                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage()" ng-class="{'picked': page == null}">Inbox</div>
+                                    <div class="select_role tinycol left" ng-class="{'picked': page == null}">{{threadCount()}}</div>
                                     <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('sent')" ng-class="{'picked': page=='sent'}">Sent</div>
                                     <div class="select_role tinycol left" ng-class="{'picked': page=='sent'}">{{sents.length}}</div>
-                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('received')" ng-class="{'picked': page=='received'}">Received</div>
-                                    <div class="select_role tinycol left" ng-class="{'picked': page=='received'}">{{receives.length}}</div>
                                 </div>
                             </div>
                         </div>          
