@@ -49,10 +49,12 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                 ms.membersArray = JSON.parse(ms.members);
                 for(var i = 0; i < ms.membersArray.length; i ++)
                 {
-                    var n = peopleDict[ms.membersArray[i]];
-                    if (!n)
-                        n = ms.membersArray[i];
-                    ms.names.push(n);
+                    if (ms.membersArray[i] != navState.userid) {
+                        var n = peopleDict[ms.membersArray[i]];
+                        if (!n)
+                            n = ms.membersArray[i];
+                        ms.names.push(n);
+                    }
                 }
                 ms.nameString = ms.names.join(", ");
                 allMessages.push(ms);
