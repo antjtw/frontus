@@ -4811,9 +4811,6 @@ textarea.email-text {
 }
 
 /*//Message status sidebar*/
-.message-side ul.activity-feed2 {
-    width: 345px;
-}
 
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
@@ -4860,12 +4857,6 @@ textarea.email-text {
     padding-right: 0;
 }
 
-
-.messages .activity-feed2 {
-    height: 95%;
-    /*height: calc(100%-40px);*/
-    position: fixed;
-}
 .messages .activity-feed2 li.event{
     margin-right: 20px;
 }

@@ -7,14 +7,14 @@
 </div>
 
  <div class="messages tabbable" ng-if="getNumber > 0">            
-    <ul class="activity-feed2">
+    <ul ng-style="height" class="activity-feed2">
                     <li class="event" ng-repeat="message_datum in message_data | orderBy:'time':true">
                         <div><img ng-src="/img/activity/message.png"></div>
                         <div>
                             <ul>
                                 <li>
                                     <span>
-                                        Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': 'one shareholder', 'other': '{} shareholders'}">
+                                        Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': 'one shareholder', 'other': '{} shareholders'}"></ng-pluralize>
                                     </span><br/>
                                     
                                     <div>
