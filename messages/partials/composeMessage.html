@@ -7,7 +7,7 @@
                 <div class="message_headline" ng-if="groupMessage">CC</div>
                 <div class="message_headline" ng-if="!groupMessage">BCC</div>
                 <div class="message_input">
-                    <select ui-select2 multiple ng-model='message.recipients' placeholder="Please enter an shareholder or group name" style="width: 100%;">
+                    <select ui-select2 multiple ng-model='message.recipients' placeholder="Enter a person or group from your Sharewave contacts" style="width: 100%;">
                         <option ng-repeat="myContact in myContacts" value="{{myContact.id}}">{{myContact.name}}</option>
                     </select>
                 </div>
