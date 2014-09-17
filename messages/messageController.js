@@ -88,7 +88,10 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.myPeople = data;
                 $scope.peopleDict = {};
                 angular.forEach($scope.myPeople, function(person){
-                    $scope.peopleDict[person.email] = person.name;
+                    if (person.email == navState.userid)
+                        $scope.peopleDict[person.email] = "me";
+                    else
+                        $scope.peopleDict[person.email] = person.name;
                 });
                 promise.resolve($scope.peopleDict);
             });
