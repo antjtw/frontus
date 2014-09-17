@@ -320,7 +320,7 @@ m.directive('peopleFilter', function(){
 
 m.directive('messageSide', function(){
     return {
-        scope: false,
+        scope: {thread: '='},
         restrict: 'E',
         templateUrl: '/cmn/partials/messageSide.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
@@ -395,7 +395,12 @@ m.directive('messageSide', function(){
 
 
             $scope.getFeed = function(){
-                SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested']).then(function(data){
+                var p;
+                if ($scope.thread)
+                    p = SWBrijj.tblmm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested', 'thread_id'], 'thread_id', $scope.thread);
+                else
+                    p = SWBrijj.tblm('mail.msgstatus', ['our_id', 'event', 'event_time', 'tox', 'category', 'when_requested', 'thread_id']);
+                p.then(function(data){
                     $scope.msgstatus = data;
                     $scope.getNumber = $scope.msgstatus.length;
                     $scope.getLogs();
@@ -409,8 +414,9 @@ m.directive('messageSide', function(){
 
             $scope.getLogs = function(){
                 // $scope.getLogins();
-                function Message(time, event, tox, to_names, our_id, foo){
+                function Message(time, thread_id){
                     this.time = time;
+                    this.thread = thread_id;
                     this.event = [];
                     this.tox = [];
                     this.to_names = [];
@@ -426,19 +432,19 @@ m.directive('messageSide', function(){
                     this.event_time = [];
                 }
 
-                var msgdata = [];
+                var myEvents = [];
                 angular.forEach($scope.msgstatus, function(value){
-                    if (!msgdata.some(function(timestamp, idx, arr){
-                         return timestamp.equals(value.when_requested);
+                    if (!myEvents.some(function(mess, idx, arr){
+                         return (mess.thread == value.thread_id) && (mess.time.equals(value.when_requested));
                     })) {
-                        msgdata.push(value.when_requested);
+                        myEvents.push(new Message(value.when_requested, value.thread_id));
                     }
 
                 });
-                var myEvents = [];
+                /*var myEvents = [];
                 for (var i = 0; i < msgdata.length; i++){
                    myEvents.push(new Message(msgdata[i]));
-                }
+                }*/
                 angular.forEach($scope.msgstatus, function(value){
                     for (var i = 0; i < myEvents.length; i++){
                         if(value.when_requested.equals(myEvents[i].time)) {
