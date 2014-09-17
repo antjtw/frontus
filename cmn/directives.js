@@ -447,7 +447,7 @@ m.directive('messageSide', function(){
                 }*/
                 angular.forEach($scope.msgstatus, function(value){
                     for (var i = 0; i < myEvents.length; i++){
-                        if(value.when_requested.equals(myEvents[i].time)) {
+                        if(value.thread_id == myEvents[i].thread && value.when_requested.equals(myEvents[i].time)) {
                             myEvents[i].category = value.category;
                             var idxtox = myEvents[i].tox.indexOf(value.tox);
                             if(idxtox == -1){

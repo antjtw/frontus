@@ -54,7 +54,10 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.gotoThread = function(thread) {
             $location.url("/app/messages/thread?thread=" + thread);
         };
-
+        
+        $scope.today = function() {
+            return Math.floor(Date.now() / 86400000)*86400000;
+        };
 
         $scope.getThread = function(elem){
             $scope.myThread = elem;
