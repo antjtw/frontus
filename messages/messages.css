@@ -326,7 +326,7 @@ tr.threadMembers, tr.forTooltip {
     border: 1px dashed #C7C7C7;
 }
 
-.messages-table.status-table > tbody > tr > td {
+.messages-table.status-table > tbody > tr > td:first-child {
     padding-left: 20px;
 }
 
