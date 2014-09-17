@@ -578,7 +578,6 @@ m.directive('addPerson', function(){
     };
 });
 
-
 m.directive('paymentPlanSelector', function() {
     return {
         scope: false,
