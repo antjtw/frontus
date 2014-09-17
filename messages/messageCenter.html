@@ -42,9 +42,10 @@
                             <tr>
                                 <th class="button"><span class="title">Recipients</span></th>
                                 <th class="button"><span class="title">Subject</span></th>
+                                <th class="button"><span class="title">Last Activity</span></th>
                             </tr>
                         </tbody>
-                        <tbody ng-repeat="allThread in allThreads | filter: filterText | orderBy: 'timex':true ">
+                        <tbody ng-repeat="allThread in allThreads | filter: filterText | orderBy: 'maxTime':true ">
                             <tr class="empty-row"></tr>
                             <tr class="threadMembers" ng-click="gotoThread(allThread.thread_id)">
                                 <td>
@@ -52,6 +53,9 @@
                                 </td>
                                 <td>
                                     <div><span>{{showString(allThread.subject)}}</span></div>
+                                </td>
+                                <td>
+                                    <div><span>{{allThread.maxTime | date : settings.date}}</span></div>
                                 </td>
                             </tr>
                         </tbody>
