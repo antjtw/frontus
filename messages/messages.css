@@ -413,3 +413,7 @@ tr.threadMembers, tr.forTooltip {
     font-size: 12px;
 }
 
+.message_input .btn.active {
+    color: #333333;
+}
+
