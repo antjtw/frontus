@@ -335,6 +335,10 @@ tr.threadMembers, tr.forTooltip {
     padding-left: 0;
 }
 
+.messages-table.status-table > tbody > tr > th:first-of-type {
+    width: 300px;
+}
+
 .replyMessage{
     width: -moz-calc(100% - 80px);
     width: -webkit-calc(100% - 80px);
