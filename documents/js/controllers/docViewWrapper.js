@@ -122,6 +122,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                  * @type {Date} */
                 SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
                     $scope.docviews = data;
+                    $scope.docviews.minimum = Math.min.apply(null,
+                        Object.keys(data).map(function(e) {
+                            return data[e]['max'];
+                        }));
                 }).except(function(x) {
                     console.log(x);
                 });

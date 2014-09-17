@@ -1213,7 +1213,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             {
                 if (captable.transactions[i].transaction == tran.transaction)
                 {
-                    if (tran.transaction == null)
+                    if (tran.transaction === null)
                     {
                         if ((captable.transactions[i].attrs.investor == tran.attrs.investor) &&
                             (captable.transactions[i].attrs.security == tran.attrs.security))
@@ -1248,7 +1248,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             updateDays();
             //captable.ledger_entries.push.apply(captable., new_entries);
         }).except(function(e) {
-            console.log("error");
             console.error(e);
             if (errorFunc)
             {
@@ -1555,6 +1554,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.addInvestor = function(name) {
         var inv = new Investor();
         inv.editable = true;
+        var currentrows =[];
+        angular.forEach(captable.investors, function(investor) {
+            currentrows.push(investor.name)
+        });
+        if (currentrows.indexOf(name) != -1) {
+            name += " (1)"
+        }
         inv.new_name = inv.name = name;
         inv.company = $rootScope.navState.company;
         inv.percentage = function() {return investorSorting(inv.name);};
