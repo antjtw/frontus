@@ -45,7 +45,7 @@
                                 <th class="button"><span class="title">Last Activity</span></th>
                             </tr>
                         </tbody>
-                        <tbody ng-repeat="allThread in allThreads | filter: filterText | orderBy: 'maxTime':true ">
+                        <tbody ng-repeat="allThread in allThreads | filter: filterText  | filter:{hasReplies:true} | orderBy: 'maxTime':true ">
                             <tr class="empty-row"></tr>
                             <tr class="threadMembers" ng-click="gotoThread(allThread.thread_id)">
                                 <td>
