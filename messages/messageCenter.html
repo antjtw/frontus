@@ -49,7 +49,7 @@
                             <tr class="empty-row"></tr>
                             <tr class="threadMembers" ng-click="gotoThread(allThread.thread_id)">
                                 <td>
-                                    <div>{{allThread.nameString|limitTo: 50}}<span ng-if="allThread.nameString.length > 50">&hellip;</span><span ng-if="allThread.count > 1">({{allThread.count}})</span></div>
+                                    <div>{{allThread.nameString|limitTo: 45}}<span ng-if="allThread.nameString.length > 45">&hellip;</span><span ng-if="allThread.count > 1">({{allThread.count}})</span></div>
                                 </td>
                                 <td>
                                     <div><span>{{allThread.subject|limitTo: 50}}</span><span ng-if="allThread.subject.length > 50">&hellip;</span></div>
