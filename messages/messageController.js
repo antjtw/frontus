@@ -1,9 +1,10 @@
 'use strict';
 
-app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message', '$routeParams',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message, $routeParams) {
+app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$q', 'Message', '$routeParams', '$timeout',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $q, Message, $routeParams, $timeout) {
 
-        $scope.page = null;
+        $scope.page = $routeParams.folder;
+        $scope.filterText = $routeParams.q;
         $scope.myMessages = [];
         $scope.allThreads = Message.getAllThreads();
         $scope.myPeople = Message.getAllNames();
@@ -13,41 +14,50 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.togglePage = function(button){
             if($scope.page !== button){
                 $scope.page = button;
-                $location.search('p', button);
             }
             else if($scope.page === button){
                 $scope.page = null;
-                $location.search('p', null);
             }
             else{
                 $scope.page = null;
-                $location.search('p', null);
             }
-
         };
+
+        $scope.$watch('page', function(new_page, old_page) {
+            if (new_page != old_page) {
+                $location.search('folder', new_page).replace();
+            }
+        });
+
+        var searchChangeTimeout;
+        $scope.$watch('filterText', function(new_text, old_text) {
+            if (searchChangeTimeout) {
+                $timeout.cancel(searchChangeTimeout);
+            }
+            searchChangeTimeout = $timeout(function() {
+                if (new_text != old_text) {
+                    if (new_text === "") {
+                        // delete the term instead of setting it to ""
+                        $location.search('q', null).replace();
+                    } else {
+                        $location.search('q', new_text).replace();
+                    }
+                }
+            }, 100);
+            searchChangeTimeout.then(function() {
+                searchChangeTimeout = null;
+            });
+        });
 
         $scope.gotoCompose = function() {
             $location.url('/app/messages/compose');
         };
 
         $scope.sortBy = function(col) {
-            console.log(col);
             if ($scope.sort == col) {
                 $scope.sort = ('-' + col);
             } else {
                 $scope.sort = col;
-            }
-        };
-
-        $scope.showString = function(string){
-            if(string == null){
-                return "";
-            }
-            else if(string.length > 50){
-                return string.slice(0, 50) + "...";
-            }
-            else {
-                return string;
             }
         };
 
@@ -59,10 +69,6 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
         $scope.getThread = function(elem){
             $scope.myThread = elem;
         };
-
-        if ($routeParams.p) {
-            $scope.togglePage($routeParams.p);
-        }
     }
 ]);
 
