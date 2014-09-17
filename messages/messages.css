@@ -88,7 +88,7 @@
 
 
  .ta-scroll-window.form-control a {
-  color: blue !important;
+  color: #3498DB !important;
 }
  .ta-scroll-window.form-control h3 {
     font-size: 1.17em;
@@ -238,7 +238,7 @@ the compose message page styling*/
 }
 
 .msgText a {
-  color: #15c !important;
+  color: #3498DB !important;
 }
 
 .msgText blockquote * {
@@ -636,5 +636,9 @@ tr.threadMembers, tr.forTooltip {
 
 .reset-this.mimic-email ul li {
     list-style-type: disc;
+}
+
+.reset-this.mimic-email a {
+    color: #3498DB;
 }
 
