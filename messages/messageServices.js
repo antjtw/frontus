@@ -51,7 +51,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
                 {
                     var n = peopleDict[ms.membersArray[i]];
                     if (!n)
-                        n = "";
+                        n = ms.membersArray[i];
                     ms.names.push(n);
                 }
                 ms.nameString = ms.names.join(", ");
