@@ -320,7 +320,9 @@ m.directive('peopleFilter', function(){
 
 m.directive('messageSide', function(){
     return {
-        scope: {thread: '='},
+        scope: {
+            thread: '=',
+            height: '='},
         restrict: 'E',
         templateUrl: '/cmn/partials/messageSide.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
