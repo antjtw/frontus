@@ -925,8 +925,8 @@ own.directive('editableTransactionAttributes', [function() {
                 save: '=save'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$rootScope","$scope", "$filter", "captable", "attributes", "calculate",
-            function($rootScope, $scope, $filter, captable, attributes, calculate) {
+        controller: ["$rootScope","$scope", "$filter", "captable", "attributes", "calculate", "$timeout",
+            function($rootScope, $scope, $filter, captable, attributes, calculate, $timeout) {
                 var attrs = attributes.getAttrs();
                 var ct;
                 var keyPressed = false; // used to distinguish blurs from datepicker vs regular blurs
@@ -1093,7 +1093,8 @@ own.directive('editableTransactionAttributes', [function() {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
                 };
-                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
+                function reallySaveDate(tran, cell, errorFunc, evt, field) {
+                    // TODO: keyPressed is used to minimize saving. Logic may no longer work / be needed
                     if (evt) {
                         if (evt.type != 'blur') {
                             keyPressed = true;
@@ -1119,6 +1120,21 @@ own.directive('editableTransactionAttributes', [function() {
                             keyPressed = false;
                         }
                     }
+                }
+                var currentDateSave;
+                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
+                    // debounce the actual save, to prevent duplicates
+                    // TODO: figure out why there are duplicate events firing
+                    if (currentDateSave) {
+                        $timeout.cancel(currentDateSave);
+                        currentDateSave = null;
+                    }
+                    currentDateSave = $timeout(function() {
+                        reallySaveDate(tran, cell, errorFunc, evt, field);
+                    }, 100);
+                    currentDateSave.then(function() {
+                        currentDateSave = null;
+                    });
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
