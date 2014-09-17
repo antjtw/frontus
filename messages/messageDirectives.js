@@ -76,6 +76,7 @@ mod.directive('composeMessage', function() {
                 $scope.message = {recipients: [],
                                   text:"",
                                   subject:""};
+                sessionStorage.removeItem('composeMessage-message');
             };
             $window.addEventListener('beforeunload', function(event) {
                 sessionStorage.setItem('composeMessage-message', angular.toJson($scope.message));
@@ -131,12 +132,11 @@ mod.directive('composeMessage', function() {
                             newtext,
                             null
                 ).then(function(x) {
-                    void(x);
-                    //$rootScope.billing.usage.direct_messages_monthly += recipients.length;
                     Message.refresh();
                     $rootScope.$emit("notification:success",
                         "Message sent!");
                     $rootScope.$emit('new:message');
+                    $scope.resetMessage();
                     $scope.clicked = false;
                     $location.url('/app/messages/');
                 }).except(function(err) {
@@ -159,14 +159,12 @@ mod.directive('composeMessage', function() {
                             newtext,
                             null
                 ).then(function(x) {
-                    void(x);
-                    //$rootScope.billing.usage.direct_messages_monthly += recipients.length;
                     Message.refresh();
                     $rootScope.$emit("notification:success",
                         "Message sent!");
+                    $scope.resetMessage();
                     $location.url('/app/messages/');
                     $scope.clicked = false;
-                    // $route.reload();
                 }).except(function(err) {
                     void(err);
                     $rootScope.$emit("notification:fail",
