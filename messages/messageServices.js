@@ -17,23 +17,32 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     var allMessages = [];
     var peopleDict = {};
 
-    SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(info){
-        angular.forEach(info, function(inf){
-            allUsers.push(inf);
-            allPeople.push(inf);
-            allEmails.push(inf.email);
-            if (inf.email == navState.userid)
-                peopleDict[inf.email] = "me";
-            else
-                peopleDict[inf.email] = inf.name;
+    function start() {
+        SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(info){
+            allUsers.splice(0, allUsers.length);
+            allPeople.splice(0, allPeople.length);
+            allEmails.splice(0, allEmails.length);
+            angular.forEach(info, function(inf){
+                allUsers.push(inf);
+                allPeople.push(inf);
+                allEmails.push(inf.email);
+                if (inf.email == navState.userid)
+                    peopleDict[inf.email] = "me";
+                else
+                    peopleDict[inf.email] = inf.name;
+            });
+            //All of the messages and threads rely on allPeople, so fill in that
+            //array and then call a function to start filling all msg arrays.
+            fillMessages();
         });
-        //All of the messages and threads rely on allPeople, so fill in that
-        //array and then call a function to start filling all msg arrays.
-        fillMessages();
-    });
+    }
+    start();
 
     function fillMessages() {
         SWBrijj.tblm('mail.my_messages').then(function(msg){
+            allMessages.splice(0, allMessages.length);
+            allSentThreads.splice(0, allSentThreads.length);
+            allReceivedMsgs.splice(0, allReceivedMsgs.length);
             angular.forEach(msg, function(ms){
                 ms.time = new Date(ms.time);
                 ms.names = [];
@@ -62,6 +71,7 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     
     function fillThreads() {
         SWBrijj.tblm('mail.my_threads', ['members', 'thread_id', 'subject', 'starts_like', 'count']).then(function(data){
+            messages.allThreads.splice(0, messages.allThreads.length);
             angular.forEach(data, function(thr){
                 thr.names = [];
                 thr.membersArray = JSON.parse(thr.members);
@@ -114,6 +124,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
 
     this.getAllEmails = function(){
         return allEmails;
+    };
+    
+    this.refresh = function(){
+        start();
     };
 
 }]);
