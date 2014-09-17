@@ -228,6 +228,12 @@ mod.directive('messageFilter', function(){
             $scope.allMessages = Message.getAllThreads();
             $scope.sents = Message.getSentMsgs();
             $scope.receives = Message.getReceivedMsgs();
+
+            $scope.threadCount = function() {
+                return $scope.allMessages.filter(function(val) {
+                    return val.hasReplies == true;
+                }).length;
+            }
         }]
     };
 });
