@@ -125,6 +125,10 @@ ul.personal-information > li > ul > li> button.radio-button{
     vertical-align: 30%;
 }
 
+button.radio-button.hiddentoggle {
+    visibility: hidden;
+}
+
 
 .personal-information input.short-input {
     width: 70px;
