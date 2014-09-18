@@ -37,10 +37,9 @@ app.controller('roundController',
             if (round.attrs.security_type == "Option") {
                 angular.forEach($scope.ct.transactions, function(tran) {
                     if (tran.kind == "grant" && tran.attrs.security == round.name) {
+                        console.log(tran);
                         round.units += captable.securityTotalUnits(round);
-                        console.log(round.units);
                         totals.units += captable.securityTotalUnits(round);
-                        console.log(totals.units);
                     }
                 });
                 if (!isNaN(round.attrs.totalauth)) {
