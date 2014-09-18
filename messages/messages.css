@@ -384,9 +384,9 @@ tr.threadMembers, tr.forTooltip {
 }
 
 .message-body-content {
-    width: -moz-calc(100% - 80px);
-    width: -webkit-calc(100% - 80px);
-    width: calc(100% - 80px);
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
     margin: 20px auto 40px auto;
 }
 
