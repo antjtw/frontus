@@ -1204,7 +1204,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 {
                     spliced.push(new_entries[new_entry].transaction);
                     splice_many_by(captable.ledger_entries, function(el) {
-                            return el.transaction == new_entries[new_entry].transaction;
+                        return el.transaction == new_entries[new_entry].transaction;
                     });
                 }
                 captable.ledger_entries.push(new_entries[new_entry]);
@@ -1250,7 +1250,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             //captable.ledger_entries.push.apply(captable., new_entries);
             //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
-            console.log("error");
             console.error(e);
             if (errorFunc)
             {
@@ -1539,13 +1538,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             tran.attrs.security = tran.attrs.security + " (1)";
             return this.addSecurity(security);
         }
-        console.log("addSecurity");
 
         security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
         security.insertion_date = tran.insertion_date;
         security.attrs = tran.attrs;
-        console.log(security.attrs);
 
         // FIXME should we be using AddTran
         // which takes care of the ledger entries?

@@ -220,14 +220,6 @@ app.controller('CompanyCtrl',
             $scope.uselessbrowser = !Modernizr.csstransforms3d;
             //console.log($scope.uselessbrowser);
 
-            $scope.$watch('ct', function(newval, oldval) {
-				if (newval.securities.length > 0) {
-					$scope.ct = angular.copy($scope.ct);
-					$scope.getOwnershipInfo();
-                    $scope.totalIssued = captable.totalOwnershipUnits();
-				}
-			}, true);
-
             SWBrijj.tblm('account.my_company', ['name', 'company', 'zipcode', 'state', 'address', 'city', 'currency', 'dateformat']).then(function(x) {
                 $scope.company = x[0];
                 angular.forEach($scope.currencies, function(c) {
@@ -311,23 +303,6 @@ app.controller('CompanyCtrl',
             };
             $scope.isPendingFinalization = function(doc) {
                 return doc.when_signed && doc.when_countersigned && !doc.when_finalized;
-            };
-
-            $scope.generateSecurityGraph = function() {
-                $scope.graphdata = [];
-                var maxPercent = 0;
-                var percent;
-                console.log($scope.ct);
-                angular.forEach($scope.ct.securities, function(security) {
-                    percent = (((captable.securityTotalUnits(security) + captable.numUnissued(security, $scope.ct.securities)) /  captable.totalOwnershipUnits()) * 100);
-                    $scope.graphdata.push([{'name': security.name, 'issued': captable.securityTotalUnits(security), 'amount': captable.securityTotalAmount(security)}, [{'name':security.name, 'percent':percent}, {'name':'whatever', 'percent':maxPercent}, {'name':'zero', 'percent': 0}]]);
-                    maxPercent += percent;
-                });
-            };
-
-            $scope.getOwnershipInfo = function() {
-                $scope.generateSecurityGraph();
-
             };
 
             $scope.activityView = "global.get_company_activity";
@@ -420,7 +395,7 @@ app.controller('CompanyCtrl',
 
             $scope.setDateFormat = function(dateformat) {
                 $scope.editcompany.dateformat = dateformat;
-            }
+            };
 
             $scope.saveSettings = function(company) {
                 var dateformat = company.dateformat == 'MM/DD/YYYY' ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
