@@ -38,7 +38,7 @@ app.controller('roundController',
                 round.units += captable.securityTotalUnits(round);
                 totals.units += captable.securityTotalUnits(round);
                 if (!isNaN(round.attrs.totalauth)) {
-                    if (round.attrs.totalauth > round.units) {
+                    if ((captable.numUnissued(round, $scope.ct.securities) > 0)) {
                         var unauth = (captable.numUnissued(round, $scope.ct.securities));
                         existingoptions += unauth;
                         totals.units += unauth;
