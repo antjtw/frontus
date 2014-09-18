@@ -23,7 +23,9 @@
                    <img ng-src="{{getPhotoUrl(myThread.sender)}}" class="replyPic">
                    <!--  this should be who the message is from -->
                    <div ng-if="myThread.senderName !== undefined">
-                       From {{myThread.senderName}} to {{myThread.recipientsString}}
+                       From {{myThread.senderName}} to
+                       <span ng-show="myThread.recipients.length <= 6">{{myThread.recipientsString}}</span>
+                       <span ng-show="myThread.recipients.length > 6">11 Recipients</span>
                    </div>
                     <div>{{myThread.time |date :'MMM d, y h:mm a' }}</div>
                 </div>
