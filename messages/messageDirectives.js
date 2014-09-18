@@ -206,7 +206,7 @@ mod.directive('composeMessage', function() {
                 $scope.company = $rootScope.navState.name;
                 var recipients = $scope.createRecipients();
                 if ($scope.groupMessage && recipients.length > 1) {
-                    $scope.replyto = " all " + (recipients.length + 1) + " people on this thread"
+                    $scope.replyto = "to all " + (recipients.length + 1) + " people on this thread"
                 } else {
                     $scope.replyto = " directly to " + $rootScope.person.name
                 }
