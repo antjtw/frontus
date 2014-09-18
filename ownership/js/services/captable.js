@@ -190,6 +190,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.investors.splice(0);
             captable.securities.splice(0);
             captable.transactions.splice(0);
+            angular.forEach(captable.transactions, function(tran) {
+                tran.effectivedate = calculate.timezoneOffset(tran.effectivedate);
+            });
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
             captable.grantCells.splice(0);
