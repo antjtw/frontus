@@ -1,3 +1,5 @@
+'use strict';
+
 var own = angular.module('ownerDirectives', []);
 
 own.directive('currency', function() {
@@ -13,7 +15,7 @@ own.directive('currency', function() {
             });
             ctrl.$parsers.push(function(viewValue) {
                 var re = new RegExp(",", "g");
-                if (viewValue == '')
+                if (viewValue === '')
                     return null;
                 var res = parseFloat(viewValue.replace(re, ''));
                 return isNaN(res) ? undefined : res;
@@ -102,22 +104,22 @@ own.directive('captableCell', [function() {
                 {
                     $scope.units = function() {
                         return captable.getCellUnits($scope.data,
-                                                     $scope.filter.date, 
+                                                     $scope.filter.date,
                                                      $scope.filter.vesting);
                     };
                     $scope.amount = function() {
                         return captable.getCellAmount($scope.data,
-                                                      $scope.filter.date, 
+                                                      $scope.filter.date,
                                                       $scope.filter.vesting);
                     };
                 }
                 else
                 {
-                    $scope.units = function() { 
+                    $scope.units = function() {
                         if ($scope.data) return $scope.data.u;
                         return null;
                     };
-                    $scope.amount = function() { 
+                    $scope.amount = function() {
                         if ($scope.data) return $scope.data.a;
                         return null;
                     };
@@ -238,7 +240,7 @@ own.directive('editableCaptableCell', [function() {
                     else
                         captable.setCellAmount($scope.selectedCell);
                     $scope.picker.diff = newVal - $scope.selectedCell[key[0]];
-                    if ($scope.picker.diff != 0) {
+                    if ($scope.picker.diff !== 0) {
                         $scope.tranPicker = true;
                     }
                 };
@@ -246,7 +248,7 @@ own.directive('editableCaptableCell', [function() {
                     if (update) {
                         if (!$scope.destination_transaction) {
                             $scope.destination_transaction =
-                                captable.newTransaction($scope.selectedCell.security, captable.defaultKind($scope.sec.attrs['security_type']), $scope.selectedCell.investor);
+                                captable.newTransaction($scope.selectedCell.security, captable.defaultKind($scope.sec.attrs.security_type), $scope.selectedCell.investor);
                         }
                         if (calculate.isNumber($scope.destination_transaction.attrs[$scope.picker.key])) {
                             $scope.picker.diff = $scope.picker.diff + parseFloat($scope.destination_transaction.attrs[$scope.picker.key]);
@@ -267,24 +269,25 @@ own.directive('editableCaptableCell', [function() {
                     var startindex = -1;
                     angular.forEach($scope.ct.investors, function(investor) {
                         if (investor.name == row) {
-                            startindex = $scope.ct.investors.indexOf(investor)
+                            startindex = $scope.ct.investors.indexOf(investor);
                         }
                     });
                     var number = splitvalues.length;
                     for (var i = 0; i < number; i++) {
                         splitvalues[i] = Number(calculate.cleannumber(splitvalues[i]));
+                        var anewTran;
                         if (isNaN(splitvalues[i]))
                         {
                             startindex += 1;
                             break;
                         }
-                        if (i == 0)
+                        if (i === 0)
                         {
-                            var anewTran = captable.newTransaction(sec.name, captable.defaultKind(sec.transactions[0].attrs.security_type), $scope.ct.investors[startindex].name);
+                            anewTran = captable.newTransaction(sec.name, captable.defaultKind(sec.transactions[0].attrs.security_type), $scope.ct.investors[startindex].name);
                         }
                         else
                         {
-                            var anewTran = captable.addTransaction($scope.ct.investors[startindex].name, sec.name, captable.defaultKind(sec.transactions[0].attrs.security_type));
+                            anewTran = captable.addTransaction($scope.ct.investors[startindex].name, sec.name, captable.defaultKind(sec.transactions[0].attrs.security_type));
                         }
                         anewTran.attrs[type] = splitvalues[i];
                         captable.saveTransaction(
@@ -450,7 +453,7 @@ own.directive('editableSecurityDetails', [function() {
                     var invalid = false;
                     for (var attribute in tran.attrs) {
                         if (tran.attrs.hasOwnProperty(attribute)) {
-                            if ($filter('isRequired')(tran.attrs.security_type, tran.kind, attribute) && (tran.attrs[attribute] == null  || tran.attrs[attribute].toString().length == 0)) {
+                            if ($filter('isRequired')(tran.attrs.security_type, tran.kind, attribute) && (tran.attrs[attribute] === null  || tran.attrs[attribute].toString().length === 0)) {
                                 invalid = true;
                             }
                         }
@@ -505,7 +508,7 @@ own.directive('editableSecurityDetails', [function() {
                         if (evt != 'blur')
                             keyPressed = true;
                         var dateString = angular.element('splitissuedate').val();
-                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                        var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                         if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                             var date = Date.parse(dateString);
                             if (date) {
@@ -539,11 +542,11 @@ own.directive('editableSecurityDetails', [function() {
                     splittran.attrs.ratio =  parseFloat(splittran.ratioa) / parseFloat(splittran.ratiob);
                     var trans = [splittran];
                     angular.forEach($scope.ct.securities, function (sec) {
-                        if (sec.transactions[0].attrs['optundersecurity'] == $scope.sec.name)
+                        if (sec.transactions[0].attrs.optundersecurity == $scope.sec.name)
                         {
                             var tmp = angular.copy(splittran);
-                            tmp.attrs['security'] = sec.transactions[0].attrs['security'];
-                            tmp.attrs['security_type'] = sec.transactions[0].attrs['security_type'];
+                            tmp.attrs.security = sec.transactions[0].attrs.security;
+                            tmp.attrs.security_type = sec.transactions[0].attrs.security_type;
                             trans.push(tmp);
                             sec.transactions.push(tmp);
                         }
@@ -615,7 +618,7 @@ own.directive('cellDetails', [function() {
                 $scope.switchCapTab = function(tab) {
                     $scope.currentTab = tab;
                 };
-                
+
                 function filter() {
                     if (!$scope.cell) return [];
                     $scope.transactions = $scope.cell.transactions.filter(
@@ -626,8 +629,8 @@ own.directive('cellDetails', [function() {
                                 return true;
                             }
                         });
-                };
-                
+                }
+
                 filter();
 
                 $scope.loaddirective = function() {
@@ -679,6 +682,8 @@ own.directive('editableCellDetails', [function() {
                 $scope.attrs = attributes.getAttrs();
                 $scope.ct = captable.getCapTable();
                 $scope.captable = captable;
+
+                var keyPressed = false;
 
                 $scope.loaddirective = function() {
                     if ($scope.cell && $scope.cell.transactions && $scope.cell.transactions.length == 1) {
@@ -754,7 +759,7 @@ own.directive('editableCellDetails', [function() {
                     var invalid = false;
                     for (var attribute in tran.attrs) {
                         if (tran.attrs.hasOwnProperty(attribute)) {
-                            if ($filter('isRequired')(tran.attrs.security_type, tran.kind, attribute) && (tran.attrs[attribute] == null  || tran.attrs[attribute].toString().length == 0)) {
+                            if ($filter('isRequired')(tran.attrs.security_type, tran.kind, attribute) && (tran.attrs[attribute] === null  || tran.attrs[attribute].toString().length === 0)) {
                                 invalid = true;
                             }
                         }
@@ -841,10 +846,11 @@ own.directive('editableCellDetails', [function() {
                 $scope.dateConvert = function (evt) {
                     //Fix the dates to take into account timezone differences
                     if (evt) { // User is typing
-                        if (evt != 'blur')
+                        if (evt != 'blur') {
                             keyPressed = true;
+                        }
                         var dateString = angular.element('converttrandate').val();
-                        var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
+                        var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                         if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
                             var date = Date.parse(dateString);
                             if (date) {
@@ -896,7 +902,7 @@ own.directive('transactionAttributes', [function() {
                         return sorted;
                     }
                 };
-                
+
                 $scope.toFraction = function (num) {
                     var f = new Fraction(num);
                     return f.numerator + " : " + f.denominator;
@@ -919,10 +925,11 @@ own.directive('editableTransactionAttributes', [function() {
                 save: '=save'},
         templateUrl:
             '/ownership/partials/editableTransactionAttributes.html',
-        controller: ["$rootScope","$scope", "$filter", "captable", "attributes", "calculate",
-            function($rootScope, $scope, $filter, captable, attributes, calculate) {
+        controller: ["$rootScope","$scope", "$filter", "captable", "attributes", "calculate", "$timeout",
+            function($rootScope, $scope, $filter, captable, attributes, calculate, $timeout) {
                 var attrs = attributes.getAttrs();
                 var ct;
+                var keyPressed = false; // used to distinguish blurs from datepicker vs regular blurs
                 $scope.attrs = attrs;
                 $scope.isEquity = captable.isEquity;
                 $scope.loaddirective = function() {
@@ -1035,7 +1042,7 @@ own.directive('editableTransactionAttributes', [function() {
                     if ($scope.isEquity($scope.data) && repurchasingfields.indexOf(key) != -1) {
                         return false;
                     } else {
-                        return true
+                        return true;
                     }
                 };
 
@@ -1064,7 +1071,7 @@ own.directive('editableTransactionAttributes', [function() {
                             tran.attrs[k] = v;
                         }
                     }
-                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
                     {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
@@ -1081,71 +1088,56 @@ own.directive('editableTransactionAttributes', [function() {
                     } else {
                         delete tran.attrs[k];
                     }
-                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
                     {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
                 };
-                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
-                    if (field == "effective_date") {
-                        if (evt) {
-                            if (evt != 'blur')
-                                keyPressed = true;
-                            var dateString = angular.element(field + '#' + tran.$$hashKey).val();
-                            var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
-                            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                                var date = Date.parse(dateString);
-                                if (date) {
-                                    tran[field] = calculate.timezoneOffset(date);
-                                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
-                                    {
-                                        captable.saveTransaction(tran, cell, errorFunc);
-                                    }
-                                    keyPressed = false;
-                                }
-                            }
-                        } else { // User is using calendar
-                            if (tran[field] instanceof Date) {
-                                tran[field] = calculate.timezoneOffset(tran[field]);
-                                if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
-                                {
+                function reallySaveDate(tran, cell, errorFunc, evt, field) {
+                    // TODO: keyPressed is used to minimize saving. Logic may no longer work / be needed
+                    if (evt) {
+                        if (evt.type != 'blur') {
+                            keyPressed = true;
+                        }
+                        var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                        var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
+                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                            var date = Date.parse(dateString);
+                            if (date) {
+                                tran[field] = calculate.timezoneOffset(date);
+                                if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0)) {
                                     captable.saveTransaction(tran, cell, errorFunc);
                                 }
                                 keyPressed = false;
                             }
                         }
-                    } else {
-                        if (evt) {
-                            if (evt != 'blur')
-                                keyPressed = true;
-                            var dateString = angular.element(field + '#' + tran.$$hashKey).val();
-                            var charCode = (evt.which) ? evt.which : event.keyCode; // Get key
-                            if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                                var date = Date.parse(dateString);
-                                if (date) {
-                                    tran.attrs[field] = moment(calculate.timezoneOffset(date)).format($rootScope.settings.lowercasedate.toUpperCase());
-                                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
-                                    {
-                                        captable.saveTransaction(tran, cell, errorFunc);
-                                    }
-                                    keyPressed = false;
-                                }
+                    } else { // User is using calendar
+                        if (tran[field] instanceof Date) {
+                            tran[field] = calculate.timezoneOffset(tran[field]);
+                            if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0)) {
+                                captable.saveTransaction(tran, cell, errorFunc);
                             }
-                        } else { // User is using calendar
-                            if (tran.attrs[field] instanceof Date) {
-                                tran.attrs[field] = moment(calculate.timezoneOffset(tran.attrs[field])).format($rootScope.settings.lowercasedate.toUpperCase());
-                                if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
-                                {
-                                    captable.saveTransaction(tran, cell, errorFunc);
-                                }
-                                keyPressed = false;
-                            }
+                            keyPressed = false;
                         }
                     }
-
+                }
+                var currentDateSave;
+                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
+                    // debounce the actual save, to prevent duplicates
+                    // TODO: figure out why there are duplicate events firing
+                    if (currentDateSave) {
+                        $timeout.cancel(currentDateSave);
+                        currentDateSave = null;
+                    }
+                    currentDateSave = $timeout(function() {
+                        reallySaveDate(tran, cell, errorFunc, evt, field);
+                    }, 100);
+                    currentDateSave.then(function() {
+                        currentDateSave = null;
+                    });
                 };
                 $scope.saveIt = function(tran, cell, errorFunc) {
-                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length == 0))
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
                     {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }

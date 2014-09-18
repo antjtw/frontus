@@ -51,8 +51,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     }, true);
     $scope.filteredSecurityList = function() {
-        return $filter('filter')($scope.ct.securities, $scope.securityFilter
-                                 );
+        return $filter('filter')($scope.ct.securities, $scope.securityFilter);
     };
     $scope.filteredSecurityNames = function() {
         return $scope.filteredSecurityList()
@@ -117,7 +116,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             background: -webkit-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
             background: -o-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
             background: -ms-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
-            background: linear-gradient(to right,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);"
+            background: linear-gradient(to right,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);";
     };
 
     $scope.checkDateRange = function() {
