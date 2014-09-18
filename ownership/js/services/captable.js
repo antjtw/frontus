@@ -191,7 +191,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.securities.splice(0);
             captable.transactions.splice(0);
             angular.forEach(captable.transactions, function(tran) {
+                if (tran.attrs.investor=="David Employee") {
+                    console.log(angular.copy(tran.effectivedate));
+                }
                 tran.effectivedate = calculate.timezoneOffset(tran.effectivedate);
+                if (tran.attrs.investor=="David Employee") {
+                    console.log(angular.copy(tran.effectivedate));
+                }
             });
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
