@@ -55,7 +55,7 @@
                                 <span ng-if="destination_transaction">
                                     <!-- TODO display more than date.-->
                                     {{destination_transaction.effective_date
-                                      | date:settings.formatdate}}
+                                      | utcdate:settings.formatdate}}
                                 </span>
                             </a>
                             <ul class="dropdown-menu">
@@ -67,7 +67,7 @@
                                 <li ng-repeat="t in data.transactions">
                                     <a ng-click="pickTran(t)">
                                         {{t.effective_date
-                                          | date:settings.formatdate}}
+                                          | utcdate:settings.formatdate}}
                                     </a>
                                 </li>
                             </ul>
