@@ -12,6 +12,10 @@
                 </div>
                 <div class="scribblewindow" ng-show="scribblemode" ng-style="{{signaturestyle}}" >
                     <canvas id="scribbleboard"></canvas>
+                </div><br>
+                <div ng-if="options.labelrequired">
+                    <span>Label:</span>
+                    <input ng-model="label.value"></input>
                 </div>
                 <div class="DivHelper"></div>
             </div>
@@ -39,7 +43,7 @@
         <div class="pull-right standard-button green" style="margin-right: 30px;">
             <button class="btn"
                     ng-click="uploadSignatureNow();"
-                    ng-disabled="(!files && !scribblemode) || files.length===0">Done</button>
+                    ng-disabled="(!files && !scribblemode) || files.length===0 || (options.labelrequired && label.value.length==0)">Done</button>
         </div>
         <div class="pull-right standard-button gray">
             <button class="btn"

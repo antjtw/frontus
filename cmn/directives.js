@@ -645,6 +645,9 @@ m.directive('signatureModal', function() {
                 
                 $scope.signaturestyle = {height: String(180), width: String(330) };
                 
+                $scope.label = {};
+                $scope.label.value = "";
+                
                 function getCanvasOffset(ev) {
                     var offx, offy;
                     if (ev.offsetX === undefined) { // Firefox code
@@ -659,6 +662,7 @@ m.directive('signatureModal', function() {
                 
                 $scope.sigModalUp = function () {
                     $scope.signatureModal = true;
+                    $scope.label.value = "";
                 };
 
                 $scope.sigclose = function () {
@@ -670,39 +674,46 @@ m.directive('signatureModal', function() {
                 $scope.touropts = {
                     backdropFade: true,
                     dialogFade: true,
-                    dialogClass: 'helpModal modal'
+                    dialogClass: 'signatureModal modal'
                 };
 
                 $scope.uploadSignatureNow = function() {
-                    if ($scope.files || $scope.scribblemode) {
+                    if (($scope.files || $scope.scribblemode) && 
+                        (!$scope.options.labelrequired || $scope.label.value.length > 0)) 
+                    {
                         $scope.signatureURL = "/img/image-loader-140.gif";
                         $scope.signatureprocessing = true;
                         $scope.progressVisible = true;
                         var fd;
+                        var p;
+                        var label = ($scope.options.labelrequired) ? $scope.label.value : $scope.options.label;
                         if ($scope.scribblemode) {
                             var canvas = document.getElementById("scribbleboard");
                             fd = canvas.toDataURL();
                             $scope.signatureModal = false;
-                            SWBrijj.uploadSignatureString(fd).then(function(x) {
-                                if ($scope.options.successCallback)
-                                    $scope.options.successCallback();
-                            }).except(function(x) {
-                                if ($scope.options.failureCallback)
-                                    $scope.options.failureCallback();
-                            });
+                            if ($scope.options.type)
+                                p = SWBrijj.uploadSignatureString(fd, $scope.options.type, label);
+                            else
+                                p = SWBrijj.uploadSignatureString(fd);
+                            //p = SWBrijj.uploadSignatureString(fd, $scope.options.type, $scope.label.value);
                         }
                         else {
                             fd = new FormData();
                             for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
                             $scope.signatureModal = false;
-                            SWBrijj.uploadSignatureImage(fd).then(function(x) {
-                                if ($scope.options.successCallback)
-                                    $scope.options.successCallback();
-                            }).except(function(x) {
-                                if ($scope.options.failureCallback)
-                                    $scope.options.failureCallback();
-                            });
+                            if ($scope.options.type)
+                                p = SWBrijj.uploadSignatureImage(fd, $scope.options.type, label);
+                            else
+                                p = SWBrijj.uploadSignatureImage(fd);
+                            //p = SWBrijj.uploadSignatureImage(fd, $scope.options.type, $scope.label.value);
                         }
+                        p.then(function(x) {
+                            if ($scope.options.successCallback)
+                                $scope.options.successCallback(label);
+                        }).except(function(x) {
+                            if ($scope.options.failureCallback)
+                                $scope.options.failureCallback();
+                        });
                     }
                     else {
                         $scope.signatureModal = false;
@@ -779,10 +790,11 @@ m.directive('signatureModal', function() {
                 };
         
                 $scope.$watch('options.open', function() {
-                    console.log("watch", $scope.options.open)
                     if ($scope.options.open)
                     {
                         $scope.signatureURL = $scope.options.sigURL;
+                        if ($scope.options.label)
+                            $scope.label.value = $scope.options.label;
                         $scope.sigModalUp();
                     }
                     else

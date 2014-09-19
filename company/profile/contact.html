@@ -286,6 +286,29 @@
         </div>
     </div>
 </div>
+<div class="span4">
+    <div class="row-fluid">
+        <div class="front info-box">
+            <div class="head-box">
+                <h2>Company Signatures</h2>
+            </div>
+            <div class="body-box">
+                <div class='signature-image ind-sig' ng-repeat="sig in companySignatures">
+                     <h2 class="signature-label">SIGNATURE: {{sig.label}}</h2>
+                    <div>
+                        <img ng-src="{{sig.url}}">
+                    </div>
+                    <div class="standard-button small-standard-button gray">
+                        <button ng-click="sigModalUpUpdate(sig.label, sig.url);" class="btn">Change</button>
+                    </div>
+                </div>
+                <div class="standard-button small-standard-button gray">
+                    <button ng-click="sigModalUpNew();" class="btn">New Signature</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 </div>
@@ -607,3 +630,4 @@
         </div>
     </div>
 </div>
+<signature-modal options="sigOptions"></signature-modal>
