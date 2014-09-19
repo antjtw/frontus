@@ -129,8 +129,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                          },
                          ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
+                                 var d = new Date();
+                                 // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                                 d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+
                                  return ids.indexOf(x.transaction) != -1 &&
-                                     x.effective_date <= Date.now() &&
+                                     x.effective_date <= d &&
                                      x.investor == inv &&
                                      x.security == sec;
                              };
@@ -434,6 +438,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (asof)
         {
             var d = new Date(asof);
+            // d is local date, but ledger is utc date, so offset d so the comparisons always work
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
             if (vesting)
             {
                 trans = captable.transactions.filter(function(tran) {
@@ -703,27 +709,27 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                        security_matches;
             });
         var startingDate = trans.filter(function(tran) {
-                return tran.kind != 'split';
-            }).reduce(minDate, null);
+            return tran.kind != 'split';
+        }).reduce(minDate, null);
         var trans2;
         if (startingDate)
         {
             trans2 = trans.filter(function(tran) {
-                    return tran.kind != 'split' || tran.effective_date > startingDate;
-                });
+                return tran.kind != 'split' || tran.effective_date > startingDate;
+            });
         }
         else
         {
             trans2 = trans.filter(function(tran) {
-                    return tran.kind != 'split';
-                });
+                return tran.kind != 'split';
+            });
         }
         return trans2;
     }
     function netCreditFor(transaction, investor) {
         var trans = captable.transactions.filter(function(t) {
             return t.transaction == transaction ||
-                (t.attrs['transaction_from'] && t.attrs.transaction_from == transaction);
+                (t.attrs.transaction_from && t.attrs.transaction_from == transaction);
         }).reduce(accumulateProperty('transaction'), []);
         var ledger_entries = captable.ledger_entries.filter(function(e) {
             return trans.indexOf(e.transaction) != -1 && e.investor == investor;
@@ -863,6 +869,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var entries = cell.ledger_entries;
             if (asof) {
                 var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting)
                 {
                     var trans = cell.transactions.filter(function(tran) {
@@ -918,11 +926,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.setCellAmount = setCellAmount;
     function getCellAmount(cell, asof, vesting) {
         if (!cell) return;
+        var d;
         if (cellPrimaryMeasure(cell) == "amount") {
             var entries = cell.ledger_entries;
             if (asof)
             {
-                var d = new Date(asof);
+                d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting && cellSecurityType(cell)=='Option')
                 {
                     var trans = cell.transactions.filter(function(tran) {
@@ -959,7 +970,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 });
             if (asof)
             {
-                var d = new Date(asof);
+                d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 plus_trans = plus_trans.filter(function(el) {
                     return el.effective_date <= d;
                 });
@@ -986,9 +999,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // only look at year, month day or dates
         var t1date = new Date(t1.effective_date);
         var t2date = new Date(t2.effective_date);
-        if (t1date.getDay() != t2date.getDay() ||
-                t1date.getMonth() != t2date.getMonth() ||
-                t1date.getYear() != t2date.getYear() ||
+        if (t1date.getUTCDate() != t2date.getUTCDate() ||
+                t1date.getUTCMonth() != t2date.getUTCMonth() ||
+                t1date.getUTCFullYear() != t2date.getUTCFullYear() ||
                 t1.evidence != t2.evidence) {
             return true;
         }
@@ -1210,7 +1223,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 {
                     spliced.push(new_entries[new_entry].transaction);
                     splice_many_by(captable.ledger_entries, function(el) {
-                            return el.transaction == new_entries[new_entry].transaction;
+                        return el.transaction == new_entries[new_entry].transaction;
                     });
                 }
                 captable.ledger_entries.push(new_entries[new_entry]);
@@ -1340,7 +1353,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     "Transaction deleted");
                 splice_many(captable.transactions, [tran]);
                 splice_many_by(captable.ledger_entries, function(el) {
-                        return el.transaction == tran.transaction;
+                    return el.transaction == tran.transaction;
                 });
                 splice_many(sec.transactions, [tran]);
                 var cells = colFor(sec.name);
@@ -1488,8 +1501,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var tran = new Transaction();
         tran.kind = kind;
         tran.company = $rootScope.navState.company;
-        tran.insertion_date = new Date(Date.now());
-        tran.effective_date = new Date(Date.now());
+        tran.insertion_date = new Date();
+        // effective date needs to be midnight UTC of intended day
+        tran.effective_date = new Date();
+        // set to midnight local time (close enough)
+        tran.effective_date.setHours(0);
+        tran.effective_date.setMinutes(0);
+        tran.effective_date.setSeconds(0);
+        // convert to UTC / timezoneless
+        tran.effective_date.setMinutes(tran.effective_date.getMinutes() - tran.effective_date.getTimezoneOffset());
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==sec && el.attrs.security_type;
@@ -1514,8 +1534,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.newSecurity = function() {
         var security = nullSecurity();
         security.newName = security.name = "";
-        security.effective_date = new Date(Date.now());
         security.insertion_date = new Date(Date.now());
+        // effective date needs to be midnight UTC of intended day
+        security.effective_date = new Date(Date.now());
+        // set to midnight local time (close enough)
+        security.effective_date.setHours(0);
+        security.effective_date.setMinutes(0);
+        security.effective_date.setSeconds(0);
+        // convert to UTC / timezoneless
+        security.effective_date.setMinutes(security.effective_date.getMinutes() - security.effective_date.getTimezoneOffset());
         initAttrs(security, 'Option', 'issue security');
         security.attrs.security = security.name;
         security.attrs.security_type = 'Option';
@@ -1563,10 +1590,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         inv.editable = true;
         var currentrows =[];
         angular.forEach(captable.investors, function(investor) {
-            currentrows.push(investor.name)
+            currentrows.push(investor.name);
         });
         if (currentrows.indexOf(name) != -1) {
-            name += " (1)"
+            name += " (1)";
         }
         inv.new_name = inv.name = name;
         inv.company = $rootScope.navState.company;
@@ -1724,6 +1751,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (asof)
             {
                 var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting)
                 {
                     trans = captable.transactions.filter(function(tran) {
@@ -1774,6 +1803,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (asof)
             {
                 var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting)
                 {
                     trans = captable.transactions.filter(function(tran) {
@@ -1900,11 +1931,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return tran.attrs.security == sec.name;
         }).reduce(accumulateProperty('transaction'), []);
 
+        var d = new Date();
+        // d is local date, but ledger is utc date, so offset d so the comparisons always work
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
                 ent.investor &&
                 (!inv || ent.investor == inv.name) &&
-                ent.effective_date <= Date.now();
+                ent.effective_date <= d;
         });
         return sum_ledger(entries);
     }
@@ -1912,9 +1946,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function currentUnits() {
         var trans = captable.transactions.reduce(
                 accumulateProperty('transaction'), []);
+        var d = new Date();
+        // d is local date, but ledger is utc date, so offset d so the comparisons always work
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
-                ent.effective_date <= Date.now();
+                ent.effective_date <= d;
         });
         return sum_ledger(entries);
     }

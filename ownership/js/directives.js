@@ -572,16 +572,17 @@ own.directive('cellSummary', [function() {
         restrict: 'E',
         scope: {cell: '='},
         templateUrl: '/ownership/partials/cellSummary.html',
-        controller: ["$scope", "captable",
-            function($scope, captable) {
+        controller: ["$scope", "$rootScope", "captable",
+            function($scope, $rootScope, captable) {
                 $scope.grouped_entries = [];
+                $scope.settings = $rootScope.settings;
                 $scope.$watchCollection('cell.ledger_entries', function(entries) {
                     $scope.grouped_entries.splice(0);
                     entries.forEach(function(orig_entry) {
                         if (!$scope.grouped_entries.some(function(new_entry) {
-                            if (orig_entry.effective_date.getFullYear() == new_entry.effective_date.getFullYear() &&
-                                orig_entry.effective_date.getMonth() == new_entry.effective_date.getMonth() &&
-                                orig_entry.effective_date.getDate() == new_entry.effective_date.getDate()) {
+                            if (orig_entry.effective_date.getUTCFullYear() == new_entry.effective_date.getUTCFullYear() &&
+                                orig_entry.effective_date.getUTCMonth() == new_entry.effective_date.getUTCMonth() &&
+                                orig_entry.effective_date.getUTCDate() == new_entry.effective_date.getUTCDate()) {
                                 // sum the credits and debits (which is all we really care about)
                                 new_entry.credit = parseFloat(new_entry.credit) + parseFloat(orig_entry.credit);
                                 new_entry.debit = parseFloat(new_entry.debit) + parseFloat(orig_entry.debit);
