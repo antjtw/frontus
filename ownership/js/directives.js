@@ -573,9 +573,10 @@ own.directive('cellSummary', [function() {
         restrict: 'E',
         scope: {cell: '='},
         templateUrl: '/ownership/partials/cellSummary.html',
-        controller: ["$scope", "captable",
-            function($scope, captable) {
+        controller: ["$scope", "$rootScope", "captable",
+            function($scope, $rootScope, captable) {
                 $scope.grouped_entries = [];
+                $scope.settings = $rootScope.settings;
                 $scope.$watchCollection('cell.ledger_entries', function(entries) {
                     $scope.grouped_entries.splice(0);
                     entries.forEach(function(orig_entry) {
