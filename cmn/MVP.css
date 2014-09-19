@@ -4811,9 +4811,6 @@ textarea.email-text {
 }
 
 /*//Message status sidebar*/
-.message-side ul.activity-feed2 {
-    width: 345px;
-}
 
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
@@ -4860,12 +4857,6 @@ textarea.email-text {
     padding-right: 0;
 }
 
-
-.messages .activity-feed2 {
-    height: 95%;
-    /*height: calc(100%-40px);*/
-    position: fixed;
-}
 .messages .activity-feed2 li.event{
     margin-right: 20px;
 }
@@ -4987,6 +4978,47 @@ textarea.email-text {
 .standard-button > button.disabledButton{
     background-color: #8CDDCA;
     cursor: auto;
+}
+
+
+.sidebarInfo {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.sidebarInfo .infoBox .headline{
+    color: #003045;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    font-size: 20px;
+}
+
+.infoBox{
+    margin-top: 20px;
+    border-bottom: 1px solid #C7C7C7;
+    padding-bottom: 20px;
+}
+
+.emailName{
+    padding-top: 5px;
+    color: #666;
+    font-size: 14px;
+}
+
+.replyPic{
+    height: 50px;
+    width: 50px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.personEmail {
+    padding-bottom: 10px;
+}
+
+.go-to{
+    color: #666;
+    cursor: pointer;
 }
 
 .lower-icon {

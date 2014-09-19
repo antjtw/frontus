@@ -475,8 +475,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             return;
         }
         $scope.sidebarPage = null;
-        // $scope.hideRail = false;
-
         $scope.filterParam = {};
         $scope.oldRoles = [];
 
@@ -510,10 +508,17 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
                         });
                     });
-                    angular.forEach($scope.people, function(person) {
-                        if (!person.name) {
-                            person.name = person.email;
-                        }
+                    SWBrijj.tblm('account.profile', ['user_id']).then(function(me) {
+                        angular.forEach($scope.people, function(person) {
+                            if (person.email == me[0].email)
+                                person.hideLock = true;
+                            if (!person.name) {
+                                person.name = person.email;
+                            }
+
+                        });
+                        $scope.setLastLogins();
+                        $scope.setGroups();
                     });
                     $scope.setLastLogins();
                     $scope.setGroups();
@@ -537,6 +542,8 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.setGroups = function(){
             SWBrijj.tblm('account.my_user_role', ["email", "groups"]).then(function(data){
                 var groups = data;
+                console.log(data);
+                console.log("hellloooo")
                 angular.forEach($scope.people, function(person){
                     angular.forEach(groups, function(group){
                         if(group.email == person.email && group.groups !== null){
@@ -611,7 +618,6 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.sortRolesForAdd = function(people){
             angular.forEach(people, function(ind){
                 if(ind.email === $scope.navState.userid){
-                   console.log("you must stay where you are");
                 }
                 else if(ind.email !== $scope.navState.userid && $scope.oldRoles.indexOf(ind.role)=== -1){
                     $scope.oldRoles.push(ind.role);

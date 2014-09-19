@@ -1,7 +1,7 @@
 <div class="capGuide global" ng-class="{'issue-rail':tourstate==3}">
     <div class="detailsHeader">
         <div>{{sec.name}}</div>
-        <div>{{sec.effective_date | date:settings.shortdate}}</div>
+        <div>{{sec.effective_date | utcdate:settings.shortdate}}</div>
         <p ng-show="sec.attrs.security_type" class="belowTitle">
             <span ng-bind="sec.attrs.security_type"></span>
             <span>Security Type</span>
@@ -16,7 +16,7 @@
                     ng-switch on="currentTab">
         <accordion-heading>
             <span ng-click="editEvidence()">
-                {{tran.effective_date | date:settings.shortdate}} Transaction
+                {{tran.effective_date | utcdate:settings.shortdate}} Transaction
             </span>
         </accordion-heading>
         <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
@@ -192,7 +192,7 @@
             <div>
                 <span>Date</span>
                 <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
-                       ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                       ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} date-type="string" bs-datepicker
                        onkeydown="testForEnter(event);">
             </div>
             <div class="ratio-input">

@@ -296,11 +296,13 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             captable.updateSecurityName(security);
         }
     };
+
     $scope.createNewSec = function() {
         $scope.addSecurityModal = true;
         $scope.newTranName = "";
         $scope.newTranType = "";
-        $scope.newTranDate = new Date.today();
+        $scope.newTranDate = calculate.makeDateString($rootScope.settings.shortdate);
+        console.log($scope.newTranDate);
         $scope.newthing = null;
         $scope.selectedCell = $scope.selectedInvestor = null;
         History.forget($scope, 'selectedSecurity');

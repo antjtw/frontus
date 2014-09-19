@@ -1,0 +1,20 @@
+<link type="text/css" rel="stylesheet" href="/messages/messages.css">
+<div class="container dynamic-page">
+    <subnav>
+        <div class="box-button pull-right selected"
+             ng-click="$root.leave()"
+             tooltip-placement="bottom" tooltip="{{zombiemessage}}">
+            <ul>
+                <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
+                </li>
+                <li> <span>Compose</span>
+                </li>
+            </ul>
+        </div>
+    </subnav>
+
+    <div class="row-fluid leftTabWindow">
+        <compose-message></compose-message>
+    </div>
+
+</div>
