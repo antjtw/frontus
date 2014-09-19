@@ -1,0 +1,33 @@
+<div class="row-fluid">
+<div class="message-side">
+<div class="messages tabbable">          
+    <ul class="activity-feed2">
+        <li class="event roles">
+            <div>
+                <ul>
+                    <li>
+                        <div>
+                            <span data-icon="&#xe034;"aria-hidden="true" class="msgarrow" ng-click="showStatus = !showStatus" ng-show="showStatus"></span>
+                            <span data-icon="&#xe031;"aria-hidden="true" class="msgarrow" ng-show="!showStatus" ng-click="showStatus = !showStatus"></span>
+                            <span style="cursor:pointer" ng-click = "showStatus= !showStatus">Status</span>
+
+                            <div ng-if="!showStatus">
+                                <div class="select_role">
+                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage()" ng-class="{'picked': page == null}">Inbox</div>
+                                    <div class="select_role tinycol left" ng-class="{'picked': page == null}">{{threadCount()}}</div>
+                                    <div class="select_role tinycol" ng-click="$parent.$parent.togglePage('sent')" ng-class="{'picked': page=='sent'}">Sent</div>
+                                    <div class="select_role tinycol left" ng-class="{'picked': page=='sent'}">{{sents.length}}</div>
+                                </div>
+                            </div>
+                        </div>          
+                    </li>                
+                </ul>
+            </div>
+        </li>
+           
+    </ul>
+
+</div>
+</div>
+</div>
+

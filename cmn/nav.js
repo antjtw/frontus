@@ -150,11 +150,14 @@ navm.controller('NavCtrl',
         navState.path = document.location.pathname;
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
+        $window.addEventListener('beforeunload', function(event) {
+            sessionStorage.setItem('rootScope-pageHistory', angular.toJson($rootScope.pageHistory));
+        });
+        $rootScope.pageHistory = angular.fromJson(sessionStorage.getItem('rootScope-pageHistory'));
+        if (!$rootScope.pageHistory) {
+            $rootScope.pageHistory = [];
+        }
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
-            // TODO: store and retrieve pageHistory
-            if (!$rootScope.pageHistory) {
-                $rootScope.pageHistory = [];
-            }
             if (document.location.pathname.indexOf("/register/") === -1 &&
                 document.location.pathname.indexOf("/login/") === -1) {
                 $rootScope.pageHistory.push({pathname: document.location.pathname, search: document.location.search, hash: document.location.hash});
