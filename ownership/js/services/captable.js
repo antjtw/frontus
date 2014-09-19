@@ -1544,10 +1544,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (sec.name === tran.attrs.security);
         })) {
             // duplicated security name
-            tran.attrs.security = tran.attrs.security + " (1)";
+            security.transactions[0].attrs.security = tran.attrs.security + " (1)";
             return this.addSecurity(security);
         }
-        console.log("addSecurity");
 
         security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
