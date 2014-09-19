@@ -231,10 +231,10 @@
                 <li class="dropdown standard">
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
                         data-toggle="dropdown" href="#">
-                        <span ng-if="(ctFilter.date | date:settings.shortdate) != daterange.today">
-                            Viewing {{ctFilter.date | date:settings.shortdate}}
+                        <span ng-if="(ctFilter.date | utcdate:settings.shortdate) != daterange.today">
+                            Viewing {{ctFilter.date | utcdate:settings.shortdate}}
                         </span>
-                        <span ng-if="(ctFilter.date | date:settings.shortdate) == daterange.today">
+                        <span ng-if="(ctFilter.date | utcdate:settings.shortdate) == daterange.today">
                             Viewing Today
                         </span>
                     </a>
@@ -711,7 +711,7 @@
                                 <img src="/img/activity/login.png">
                                 <div>
                                     <span>
-                                        {{selectedInvestor.lastlogin | date:settings.shortdate}}
+                                        {{selectedInvestor.lastlogin | utcdate:settings.shortdate}}
                                     </span>
                                     <span>Last Login</span>
                                 </div>
@@ -721,7 +721,7 @@
                                 <img src="/img/activity/received.png">
                                 <div>
                                     <span>
-                                        {{selectedInvestor.received | date:settings.shortdate}}
+                                        {{selectedInvestor.received | utcdate:settings.shortdate}}
                                     </span>
                                     <span>Delivered</span>
                                 </div>
@@ -731,7 +731,7 @@
                                 <img src="/img/activity/view.png">
                                 <div>
                                     <span>
-                                        {{selectedInvestor.viewed | date:settings.shortdate}}
+                                        {{selectedInvestor.viewed | utcdate:settings.shortdate}}
                                     </span>
                                     <span>Last Viewed</span>
                                 </div>

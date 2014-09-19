@@ -11,7 +11,7 @@
                      ng-switch on="currentTab">
         <accordion-heading>
             <span ng-click="toggleTransaction()">
-                {{tran.effective_date | date:settings.shortdate}} {{tran.kind}}
+                {{tran.effective_date | utcdate:settings.shortdate}} {{tran.kind}}
             </span>
         </accordion-heading>
         <div class="darkgray faux-tabs" ng-class="{single: !hasDocuments(tran)}">

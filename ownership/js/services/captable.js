@@ -1203,16 +1203,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 delete tran.attrs[key];
             }
         }
+        if (typeof tran.effective_date == 'object') {
+            tran.effective_date = calculate.castDateString(tran.effective_date, $rootScope.settings.shortdate);
+        }
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
+            tran.effective_date = Date.parse(tran.effective_date);
             if (new_entries.length < 1)
             {
                 console.log("Error: no ledger entries");
                 return;
             }
             var transaction = new_entries.splice(0, 1)[0].transaction;
-            //console.log("new ledger", new_entries.length, new_entries, JSON.stringify(tran));
             var spliced = [];
             for (var new_entry in new_entries)
             {
@@ -2339,7 +2342,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             var date = tran.effective_date;
             if (date) {
-                date = Date.parse(tran.effective_date).toString($rootScope.settings.shortdate);
+                date = new Date(tran.effective_date.getUTCFullYear(), tran.effective_date.getUTCMonth(), tran.effective_date.getUTCDate()).toString($rootScope.settings.shortdate);
             }
             var transactionrow = [date, tran.transaction, tran.kind, evidencedata, security, investor, tran.attrs.units, tran.attrs.amount, JSON.stringify(tran.attrs).replace(/,\"/g, " | \"").replace(/,/g, ""), tran.insertion_date, tran.entered_by, tran.inet];
             res.push(transactionrow);
