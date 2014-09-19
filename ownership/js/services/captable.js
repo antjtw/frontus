@@ -1190,6 +1190,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 delete tran.attrs[key];
             }
         }
+        console.log(tran.effective_date);
+        console.log(typeof tran.effective_date);
+        if (typeof tran.effective_date == 'object') {
+            tran.effective_date = calculate.castDateString(tran.effective_date, $rootScope.settings.shortdate);
+        }
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {

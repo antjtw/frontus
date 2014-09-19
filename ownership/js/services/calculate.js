@@ -450,6 +450,29 @@ ownership.service('calculate', function () {
         return today
     };
 
+    this.castDateString = function(date, dateformat) {
+        var dd = date.getUTCDate();
+        var mm = date.getUTCMonth()+1; //January is 0!
+        var yyyy = date.getUTCFullYear();
+
+        if(dd<10) {
+            dd='0'+dd
+        }
+
+        if(mm<10) {
+            mm='0'+mm
+        }
+
+        var today;
+        if (dateformat[0] == "M") {
+            today = mm+'/'+dd+'/'+yyyy;
+        } else {
+            today = dd+'/'+mm+'/'+yyyy;
+        }
+
+        return today
+    };
+
     this.isDate = function(date) {
         return ((new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) ));
     };
