@@ -129,8 +129,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                          },
                          ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
+                                 var d = new Date();
+                                 // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                                 d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+
                                  return ids.indexOf(x.transaction) != -1 &&
-                                     x.effective_date <= Date.now() &&
+                                     x.effective_date <= d &&
                                      x.investor == inv &&
                                      x.security == sec;
                              };
@@ -434,6 +438,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (asof)
         {
             var d = new Date(asof);
+            // d is local date, but ledger is utc date, so offset d so the comparisons always work
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
             if (vesting)
             {
                 trans = captable.transactions.filter(function(tran) {
@@ -723,7 +729,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function netCreditFor(transaction, investor) {
         var trans = captable.transactions.filter(function(t) {
             return t.transaction == transaction ||
-                (t.attrs['transaction_from'] && t.attrs.transaction_from == transaction);
+                (t.attrs.transaction_from && t.attrs.transaction_from == transaction);
         }).reduce(accumulateProperty('transaction'), []);
         var ledger_entries = captable.ledger_entries.filter(function(e) {
             return trans.indexOf(e.transaction) != -1 && e.investor == investor;
@@ -863,6 +869,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var entries = cell.ledger_entries;
             if (asof) {
                 var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting)
                 {
                     var trans = cell.transactions.filter(function(tran) {
@@ -918,11 +926,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.setCellAmount = setCellAmount;
     function getCellAmount(cell, asof, vesting) {
         if (!cell) return;
+        var d;
         if (cellPrimaryMeasure(cell) == "amount") {
             var entries = cell.ledger_entries;
             if (asof)
             {
-                var d = new Date(asof);
+                d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting && cellSecurityType(cell)=='Option')
                 {
                     var trans = cell.transactions.filter(function(tran) {
@@ -959,7 +970,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 });
             if (asof)
             {
-                var d = new Date(asof);
+                d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 plus_trans = plus_trans.filter(function(el) {
                     return el.effective_date <= d;
                 });
@@ -1207,7 +1220,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 {
                     spliced.push(new_entries[new_entry].transaction);
                     splice_many_by(captable.ledger_entries, function(el) {
-                            return el.transaction == new_entries[new_entry].transaction;
+                        return el.transaction == new_entries[new_entry].transaction;
                     });
                 }
                 captable.ledger_entries.push(new_entries[new_entry]);
@@ -1336,7 +1349,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     "Transaction deleted");
                 splice_many(captable.transactions, [tran]);
                 splice_many_by(captable.ledger_entries, function(el) {
-                        return el.transaction == tran.transaction;
+                    return el.transaction == tran.transaction;
                 });
                 splice_many(sec.transactions, [tran]);
                 var cells = colFor(sec.name);
@@ -1904,11 +1917,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return tran.attrs.security == sec.name;
         }).reduce(accumulateProperty('transaction'), []);
 
+        var d = new Date();
+        // d is local date, but ledger is utc date, so offset d so the comparisons always work
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
                 ent.investor &&
                 (!inv || ent.investor == inv.name) &&
-                ent.effective_date <= Date.now();
+                ent.effective_date <= d;
         });
         return sum_ledger(entries);
     }
@@ -1916,9 +1932,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function currentUnits() {
         var trans = captable.transactions.reduce(
                 accumulateProperty('transaction'), []);
+        var d = new Date();
+        // d is local date, but ledger is utc date, so offset d so the comparisons always work
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
-                ent.effective_date <= Date.now();
+                ent.effective_date <= d;
         });
         return sum_ledger(entries);
     }
