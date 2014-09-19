@@ -5,6 +5,7 @@
                ng-model="data.effective_date"
                ng-change="saveItDate(data, true, undo, $event, 'effective_date')"
                data-date-format={{settings.lowercasedate}}
+               date-type="string"
                type="text"
                bs-datepicker>
     </div>

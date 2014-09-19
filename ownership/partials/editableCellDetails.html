@@ -202,7 +202,7 @@
         <div ng-show="convertTran.toissue.name">
             <span>Conversion Date</span>
             <input id="converttrandate" ng-change="dateConvert()" ui-event="{keydown:'dateConvert($event)', blur:'dateConvert(\'blur\')'}" type="text"
-                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                   ng-model="convertTran.date" data-date-format={{settings.lowercasedate}} date-type="string" bs-datepicker
                    onkeydown="testForEnter(event);">
         </div>
 

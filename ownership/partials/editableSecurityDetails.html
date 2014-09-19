@@ -192,7 +192,7 @@
             <div>
                 <span>Date</span>
                 <input id="splitissuedate" ng-change="dateSplit()" ui-event="{keydown:'dateSplit($event)', blur:'dateSplit(\'blur\')'}" type="text"
-                       ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} bs-datepicker
+                       ng-model="splitIssue.date" data-date-format={{settings.lowercasedate}} date-type="string" bs-datepicker
                        onkeydown="testForEnter(event);">
             </div>
             <div class="ratio-input">

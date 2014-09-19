@@ -510,17 +510,17 @@ own.directive('editableSecurityDetails', [function() {
                         var dateString = angular.element('splitissuedate').val();
                         var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                         if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                            var date = Date.parse(dateString);
-                            if (date) {
-                                $scope.splitIssue.effective_date = calculate.timezoneOffset(date);
+                            var date = dateString;
+                            if (calculate.isDate(date)) {
+                                $scope.splitIssue.effective_date = date;
                                 keyPressed = false;
                             }
                         }
                     } else { // User is using calendar
-                        if ($scope.splitIssue.effective_date instanceof Date) {
-                            $scope.splitIssue.effective_date = calculate.timezoneOffset($scope.splitIssue.date);
-                            keyPressed = false;
+                        if (calculate.isDate($scope.splitIssue.date)) {
+                            $scope.splitIssue.effective_date = $scope.splitIssue.date;
                         }
+                        keyPressed = false;
                     }
                 };
 
@@ -852,17 +852,19 @@ own.directive('editableCellDetails', [function() {
                         var dateString = angular.element('converttrandate').val();
                         var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                         if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                            var date = Date.parse(dateString);
-                            if (date) {
-                                $scope.convertTran.date = calculate.timezoneOffset(date);
+                            var date = dateString;
+                            if (calculate.isDate(date)) {
+                                $scope.convertTran.date = date;
                                 keyPressed = false;
                             }
                         }
-                    } else { // User is using calendar
-                        if ($scope.convertTran.date instanceof Date) {
-                            $scope.convertTran.date = calculate.timezoneOffset($scope.convertTran.date);
-                            keyPressed = false;
+                    } else {
+                    // User is using calendar
+                        if (calculate.isDate(tran.convertTran.date)) {
+                            $scope.convertTran.date = $scope.convertTran.date;
                         }
+
+                        keyPressed = false;
                     }
                 };
             }
@@ -932,6 +934,7 @@ own.directive('editableTransactionAttributes', [function() {
                 var keyPressed = false; // used to distinguish blurs from datepicker vs regular blurs
                 $scope.attrs = attrs;
                 $scope.isEquity = captable.isEquity;
+                $scope.settings = $rootScope.settings;
                 $scope.loaddirective = function() {
                     ct = captable.getCapTable();
                     $scope.securities = ct.securities;
@@ -1102,9 +1105,9 @@ own.directive('editableTransactionAttributes', [function() {
                         var dateString = angular.element(field + '#' + tran.$$hashKey).val();
                         var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
                         if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
-                            var date = Date.parse(dateString);
-                            if (date) {
-                                tran[field] = calculate.timezoneOffset(date);
+                            var date = dateString;
+                            if (calculate.isDate(date)) {
+                                tran[field] = date;
                                 if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0)) {
                                     captable.saveTransaction(tran, cell, errorFunc);
                                 }
@@ -1112,13 +1115,10 @@ own.directive('editableTransactionAttributes', [function() {
                             }
                         }
                     } else { // User is using calendar
-                        if (tran[field] instanceof Date) {
-                            tran[field] = calculate.timezoneOffset(tran[field]);
-                            if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0)) {
-                                captable.saveTransaction(tran, cell, errorFunc);
-                            }
-                            keyPressed = false;
+                        if ($scope.save && !(tran.kind == "issue security" && tran.attrs.security.length === 0) && calculate.isDate(tran.effective_date)) {
+                            captable.saveTransaction(tran, cell, errorFunc);
                         }
+                        keyPressed = false;
                     }
                 }
                 var currentDateSave;
