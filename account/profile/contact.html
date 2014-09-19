@@ -81,7 +81,7 @@
                                 <li ng-if="email.email !== primary_email">Alternate Email</li>
                                 <li>
                                     <button class="radio-button" ng-if="email.verified"
-                                    ng-class="{selected: email.email == primary_email}"
+                                    ng-class="{selected: email.email == primary_email, hiddentoggle: emails.length == 1}"
                                     ng-click="profileUpdate('primary_email', email.email)">
                                     </button>
                                     <input type="text" class="email" ng-model="email.email" ng-disabled="email.verified" ng-focus="profileCheck('workingEmail', email.email)" ng-class="{'notVerified': !email.verified}">

@@ -453,6 +453,7 @@ font-size: 17px;
     width: 40%;
     display: inline-block;
     text-align: center;
+    float: left;
 }
 
 .cardHeadline > div > div {
