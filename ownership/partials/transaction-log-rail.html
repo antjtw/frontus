@@ -9,7 +9,7 @@
                 </div>
                 <div ng-if="tran.kind == 'issue security'" class="detailsHeader">
                     <div>{{tran.attrs.security}}</div>
-                    <div>{{tran.effective_date | date:settings.shortdate}}</div>
+                    <div>{{tran.effective_date | utcdate:settings.shortdate}}</div>
                     <p ng-show="tran.attrs.security_type" class="belowTitle">
                         <span ng-bind="tran.attrs.security_type"></span>
                         <span>Security Type</span>

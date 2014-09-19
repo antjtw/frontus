@@ -482,3 +482,9 @@ ownership.filter('displayList', function() {
         }
     };
 });
+
+ownership.filter('utcdate', function() {
+    return function(input, format) {
+        return new Date(input.getUTCFullYear(), input.getUTCMonth(), input.getUTCDate()).toString(format);
+    };
+});

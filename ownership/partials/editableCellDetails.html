@@ -12,7 +12,7 @@
                 ng-switch on="currentTab">
     <accordion-heading>
         <span ng-click="toggleTransaction()">
-            {{tran.effective_date | date:settings.shortdate}} {{tran.kind}}
+            {{tran.effective_date | utcdate:settings.shortdate}} {{tran.kind}}
         </span>
     </accordion-heading>
     <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
@@ -240,7 +240,7 @@
         <div class="convert-summary">
             <span>Summary</span>
             <ul>
-                <li><span>{{convertTran.date | date:settings.shortdate}}</span><span>Date</span></li>
+                <li><span>{{convertTran.date | utcdate:settings.shortdate}}</span><span>Date</span></li>
                 <li><span>{{convertTran.newtran.attrs.amount  | formatAmount:'amount'}}</span><span>Debt + Interest</span></li>
                 <li><span>{{convertTran.newtran.attrs.effectivepps  | formatAmount:'amount'}}</span><span>Effective PPS</span></li>
                 <li><span>{{convertTran.newtran.attrs.amount / convertTran.newtran.attrs.effectivepps | formatAmount:'units'}}</span><span>Resulting Shares</span></li>
