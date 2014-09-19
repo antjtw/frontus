@@ -386,42 +386,40 @@ app.directive('companyOwnershipTile', [function() {
         controller: ['navState', 'captable', '$scope', '$location',
             function(navState, captable, $scope, $location) {
                 $scope.totalIssued = 0;
-                
-		        $scope.ct = captable.getCapTable();
-		
-		        $scope.graphdata = [];
-		
-		        $scope.$watch('ct', function(newval, oldval) {
-				        if (newval.securities.length > 0) {
-					        $scope.ct = angular.copy($scope.ct);
-					        $scope.generateSecurityGraph();
-                            $scope.totalIssued = captable.totalOwnershipUnits();
-                            $scope.currentRole = navState.role;
-				        }
-			        }, true);
+
+                $scope.ct = captable.getCapTable();
+
+                $scope.graphdata = [];
+
+                $scope.$watch('ct.securities', function(newval, oldval) {
+                    if (newval.length > 0) {
+                        $scope.generateSecurityGraph();
+                        $scope.totalIssued = captable.totalOwnershipUnits();
+                        $scope.currentRole = navState.role;
+                    }
+                }, true);
 
                 $scope.gotopage = function (link){
                     $location.url(link);
                 };
 
                 $scope.fullScreen = function() {
-
                     document.getElementById("vid-pic").style.visibility="hidden";
                 };
-		
+
                 $scope.generateSecurityGraph = function() {
                     $scope.graphdata = [];
                     var maxPercent = 0;
                     var percent;
-                    console.log($scope.ct);
-                    
+
                     angular.forEach($scope.ct.securities, function(security) {
                         percent = (((captable.securityTotalUnits(security) + captable.numUnissued(security, $scope.ct.securities)) /  captable.totalOwnershipUnits()) * 100);
+                        // TODO: only push if percent > 0 and graphdata.length < 3 (the max we show anyway)
                         $scope.graphdata.push([{'name': security.name, 'issued': captable.securityTotalUnits(security), 'amount': captable.securityTotalAmount(security)}, [{'name':security.name, 'percent':percent}, {'name':'whatever', 'percent':maxPercent}, {'name':'zero', 'percent': 0}]]);
                         maxPercent += percent;
                     });
                 };
-                
+
                 $scope.generateSecurityGraph();
             }
         ],

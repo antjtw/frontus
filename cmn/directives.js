@@ -635,6 +635,175 @@ m.directive('meter', function() {
     };
 });
 
+m.directive('signatureModal', function() {
+    return {
+        scope: {options: "="},
+        restrict: 'E',
+        templateUrl: '/cmn/partials/signatureModal.html',
+        controller: ['$scope', 'SWBrijj',
+            function($scope, SWBrijj) {
+                
+                $scope.signaturestyle = {height: String(180), width: String(330) };
+                
+                $scope.label = {};
+                $scope.label.value = "";
+                
+                function getCanvasOffset(ev) {
+                    var offx, offy;
+                    if (ev.offsetX === undefined) { // Firefox code
+                        offx = ev.layerX-ev.target.offsetLeft;
+                        offy = ev.layerY-ev.target.offsetTop;
+                    } else {
+                        offx = ev.offsetX;
+                        offy = ev.offsetY;
+                    }
+                    return [offx, offy];
+                }
+                
+                $scope.sigModalUp = function () {
+                    $scope.signatureModal = true;
+                    $scope.label.value = "";
+                };
+
+                $scope.sigclose = function () {
+                    $scope.signatureModal = false;
+                    $scope.scribblemode = false;
+                    $scope.options.open = false;
+                };
+
+                $scope.touropts = {
+                    backdropFade: true,
+                    dialogFade: true,
+                    dialogClass: 'signatureModal modal'
+                };
+
+                $scope.uploadSignatureNow = function() {
+                    if (($scope.files || $scope.scribblemode) && 
+                        (!$scope.options.labelrequired || $scope.label.value.length > 0)) 
+                    {
+                        $scope.signatureURL = "/img/image-loader-140.gif";
+                        $scope.signatureprocessing = true;
+                        $scope.progressVisible = true;
+                        var fd;
+                        var p;
+                        var label = ($scope.options.labelrequired) ? $scope.label.value : $scope.options.label;
+                        if ($scope.scribblemode) {
+                            var canvas = document.getElementById("scribbleboard");
+                            fd = canvas.toDataURL();
+                            $scope.signatureModal = false;
+                            if ($scope.options.type)
+                                p = SWBrijj.uploadSignatureString(fd, $scope.options.type, label);
+                            else
+                                p = SWBrijj.uploadSignatureString(fd);
+                            //p = SWBrijj.uploadSignatureString(fd, $scope.options.type, $scope.label.value);
+                        }
+                        else {
+                            fd = new FormData();
+                            for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
+                            $scope.signatureModal = false;
+                            if ($scope.options.type)
+                                p = SWBrijj.uploadSignatureImage(fd, $scope.options.type, label);
+                            else
+                                p = SWBrijj.uploadSignatureImage(fd);
+                            //p = SWBrijj.uploadSignatureImage(fd, $scope.options.type, $scope.label.value);
+                        }
+                        p.then(function(x) {
+                            if ($scope.options.successCallback)
+                                $scope.options.successCallback(label);
+                        }).except(function(x) {
+                            if ($scope.options.failureCallback)
+                                $scope.options.failureCallback();
+                        });
+                    }
+                    else {
+                        $scope.signatureModal = false;
+                    }
+
+                };
+
+                $scope.createNewSignature = function() {
+                    $scope.scribblemode = true;
+                    $scope.files = null;
+
+                    var canvas = document.getElementById("scribbleboard");
+
+                    var ctx = canvas.getContext('2d');
+                    canvas.height = 180;
+                    canvas.width = 330;
+                    ctx.lineCap = 'round';
+                    ctx.color = "blue";
+                    ctx.lineWidth = 2;
+                    ctx.fillStyle = "white";
+                    // ctx.setAlpha(0);
+                    ctx.fillRect(0, 0, 200, 200);
+                    // ctx.setAlpha(0.5);
+
+                    canvas.addEventListener('mousedown', function(e) {
+                        canvas.down = true;
+                        var offs = getCanvasOffset(e);
+                        canvas.X = offs[0];
+                        canvas.Y = offs[1];
+                    }, false);
+
+                    canvas.addEventListener('mouseover', function(e) {
+                        canvas.down = false;
+                    });
+
+                    canvas.addEventListener('mouseout', function(e) {
+                        canvas.down = false;
+                    });
+
+                    canvas.addEventListener('mouseup', function(e) {
+                        canvas.down = false;
+                    });
+
+                    canvas.strokes = [];
+
+                    canvas.addEventListener('mousemove', function(e) {
+                        if (canvas.down) {
+                            ctx.beginPath();
+                            ctx.moveTo(canvas.X, canvas.Y);
+                            var offs = getCanvasOffset(e);
+                            ctx.lineTo(offs[0], offs[1]);
+                            canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
+                            ctx.stroke();
+                            canvas.X = offs[0];
+                            canvas.Y = offs[1];
+                        }
+                    }, true);
+                };
+                
+                $scope.setFilesSig = function(element) {
+                    $scope.files = [];
+                    for (var i = 0; i < element.files.length; i++) {
+                        $scope.files.push(element.files[i]);
+
+                        var oFReader = new FileReader();
+                        oFReader.readAsDataURL($scope.files[0]);
+
+                        oFReader.onload = function (oFREvent) {
+                            document.getElementById("signaturevisual").src = oFREvent.target.result;
+                        };
+                        $scope.scribblemode = false;
+                        $scope.$apply();
+                    }
+                };
+        
+                $scope.$watch('options.open', function() {
+                    if ($scope.options.open)
+                    {
+                        $scope.signatureURL = $scope.options.sigURL;
+                        if ($scope.options.label)
+                            $scope.label.value = $scope.options.label;
+                        $scope.sigModalUp();
+                    }
+                    else
+                        $scope.sigclose();
+                });
+            }]
+    };
+});
+
 m.directive('docMiniViewer', function() {
     return {
         scope: {docid: "="},

@@ -150,6 +150,70 @@ app.controller('CompContactCtrl',
                     }
                 });
             }).except(initFail);
+            
+            $scope.companySignatures = [];
+            
+            SWBrijj.tblm('account.my_company_signatures', ['label']).then(function(x) {
+                var randnum = Math.random();
+                for (var i in x)
+                {
+                    var a = {};
+                    a.label = x[i].label;
+                    a.url = '/photo/user?id=company_signature:' + x[i].label + '&dontcache=' + randnum;
+                    $scope.companySignatures.push(a);
+                }
+            });
+            
+            $scope.uploadSuccessNew = function(label) {
+                var randnum = Math.random();
+                var a = {};
+                a.label = label;
+                a.url = '/photo/user?id=company_signature:' + label + '&dontcache=' + randnum;
+                $scope.companySignatures.push(a);
+                $scope.$emit("notification:success", "Signature uploaded");
+            };
+            
+            $scope.uploadSuccessUpdate = function(label) {
+                var randnum = Math.random();
+                for (var i in $scope.companySignatures)
+                {
+                    if ($scope.companySignatures[i].label == label)
+                        $scope.companySignatures[i].url = '/photo/user?id=company_signature:' + label + '&dontcache=' + randnum;
+                }
+                $scope.$emit("notification:success", "Signature uploaded");
+            };
+
+            $scope.uploadFail = function() {
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            };
+            
+            
+            $scope.sigOptions = { open: false,
+                                failureCallback: $scope.uploadFail };
+
+            $scope.sigModalUpNew = function () {
+                $scope.sigOptions.labelrequired = true;
+                $scope.sigOptions.type = 'new company signature';
+                $scope.sigOptions.successCallback = $scope.uploadSuccessNew;
+                $scope.sigOptions.sigURL = "";
+                $scope.sigOptions.label = "";
+                $scope.sigOptions.open = true;
+            };
+            
+            $scope.sigModalUpUpdate = function (label, url) {
+                $scope.sigOptions.labelrequired = false;
+                $scope.sigOptions.label = label;
+                $scope.sigOptions.type = 'update company signature';
+                $scope.sigOptions.sigURL = url;
+                $scope.sigOptions.successCallback = $scope.uploadSuccessUpdate;
+                $scope.sigOptions.open = true;
+            };
+
+            $scope.sigclose = function () {
+                //$scope.signatureModal = false;
+                //$scope.scribblemode = false;
+                $scope.sigOptions.open = false;
+            };
 
 
             $scope.uploadFile = function() {
