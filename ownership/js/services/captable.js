@@ -709,20 +709,20 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                        security_matches;
             });
         var startingDate = trans.filter(function(tran) {
-                return tran.kind != 'split';
-            }).reduce(minDate, null);
+            return tran.kind != 'split';
+        }).reduce(minDate, null);
         var trans2;
         if (startingDate)
         {
             trans2 = trans.filter(function(tran) {
-                    return tran.kind != 'split' || tran.effective_date > startingDate;
-                });
+                return tran.kind != 'split' || tran.effective_date > startingDate;
+            });
         }
         else
         {
             trans2 = trans.filter(function(tran) {
-                    return tran.kind != 'split';
-                });
+                return tran.kind != 'split';
+            });
         }
         return trans2;
     }
@@ -999,9 +999,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // only look at year, month day or dates
         var t1date = new Date(t1.effective_date);
         var t2date = new Date(t2.effective_date);
-        if (t1date.getDay() != t2date.getDay() ||
-                t1date.getMonth() != t2date.getMonth() ||
-                t1date.getYear() != t2date.getYear() ||
+        if (t1date.getUTCDate() != t2date.getUTCDate() ||
+                t1date.getUTCMonth() != t2date.getUTCMonth() ||
+                t1date.getUTCFullYear() != t2date.getUTCFullYear() ||
                 t1.evidence != t2.evidence) {
             return true;
         }
@@ -1497,8 +1497,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var tran = new Transaction();
         tran.kind = kind;
         tran.company = $rootScope.navState.company;
-        tran.insertion_date = new Date(Date.now());
-        tran.effective_date = new Date(Date.now());
+        tran.insertion_date = new Date();
+        // effective date needs to be midnight UTC of intended day
+        tran.effective_date = new Date();
+        // set to midnight local time (close enough)
+        tran.effective_date.setHours(0);
+        tran.effective_date.setMinutes(0);
+        tran.effective_date.setSeconds(0);
+        // convert to UTC / timezoneless
+        tran.effective_date.setMinutes(tran.effective_date.getMinutes() - tran.effective_date.getTimezoneOffset());
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==sec && el.attrs.security_type;
@@ -1523,8 +1530,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.newSecurity = function() {
         var security = nullSecurity();
         security.newName = security.name = "";
-        security.effective_date = new Date(Date.now());
         security.insertion_date = new Date(Date.now());
+        // effective date needs to be midnight UTC of intended day
+        security.effective_date = new Date(Date.now());
+        // set to midnight local time (close enough)
+        security.effective_date.setHours(0);
+        security.effective_date.setMinutes(0);
+        security.effective_date.setSeconds(0);
+        // convert to UTC / timezoneless
+        security.effective_date.setMinutes(security.effective_date.getMinutes() - security.effective_date.getTimezoneOffset());
         initAttrs(security, 'Option', 'issue security');
         security.attrs.security = security.name;
         security.attrs.security_type = 'Option';
@@ -1554,13 +1568,11 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             tran.attrs.security = tran.attrs.security + " (1)";
             return this.addSecurity(security);
         }
-        console.log("addSecurity");
 
         security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
         security.insertion_date = tran.insertion_date;
         security.attrs = tran.attrs;
-        console.log(security.attrs);
 
         // FIXME should we be using AddTran
         // which takes care of the ledger entries?
@@ -1574,10 +1586,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         inv.editable = true;
         var currentrows =[];
         angular.forEach(captable.investors, function(investor) {
-            currentrows.push(investor.name)
+            currentrows.push(investor.name);
         });
         if (currentrows.indexOf(name) != -1) {
-            name += " (1)"
+            name += " (1)";
         }
         inv.new_name = inv.name = name;
         inv.company = $rootScope.navState.company;
@@ -1735,6 +1747,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (asof)
             {
                 var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting)
                 {
                     trans = captable.transactions.filter(function(tran) {
@@ -1785,6 +1799,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (asof)
             {
                 var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
                 if (vesting)
                 {
                     trans = captable.transactions.filter(function(tran) {
@@ -2323,7 +2339,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             var date = tran.effective_date;
             if (date) {
-                date = Date.parse(tran.effective_date).toString($rootScope.settings.shortdate)
+                date = Date.parse(tran.effective_date).toString($rootScope.settings.shortdate);
             }
             var transactionrow = [date, tran.transaction, tran.kind, evidencedata, security, investor, tran.attrs.units, tran.attrs.amount, JSON.stringify(tran.attrs).replace(/,\"/g, " | \"").replace(/,/g, ""), tran.insertion_date, tran.entered_by, tran.inet];
             res.push(transactionrow);
