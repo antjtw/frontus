@@ -34,7 +34,6 @@ app.controller('ContactCtrl',
             });
         }
 
-       
         $scope.pictureModalOpen = function() {
             $scope.pictureModal = true;
         };
@@ -213,7 +212,7 @@ app.controller('ContactCtrl',
 
         $scope.emails = [];
         var primeEmail = "";
-        
+
         SWBrijj.tblm('account.my_emails').then(function(returned_emails) {
             returned_emails.forEach(function (e) {
                 e.key = e.email;
@@ -229,7 +228,6 @@ app.controller('ContactCtrl',
                 }
             });
             $scope.emails.sort(primarySort);
-
         });
 
         function primarySort(a,b) {
@@ -431,7 +429,6 @@ app.controller('ContactCtrl',
             }).except(function(err) {
                 console.error(err);
                 $scope.$emit("notification:fail", "Sorry, we were unable to add " + email + ".");
-                $route.$reload();
             });
         };
 
