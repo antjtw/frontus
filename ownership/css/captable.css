@@ -2349,9 +2349,10 @@ span.tour-icon.issue-cog + .tooltip {
 
 .rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(1) {
     cursor: pointer;
+    padding-left: 20px;
 }
 
-.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:not(:first-of-type) {
     min-width: 200px;
     padding-left: 0;
 }
@@ -2362,10 +2363,6 @@ span.tour-icon.issue-cog + .tooltip {
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > div {
     float: left;
     width: 30px;
-}
-.rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
-    float: left;
-    padding-left: 20px;
 }
 
 .cellDetails > .detailsHeader {
@@ -2607,13 +2604,23 @@ span.tour-icon.issue-cog + .tooltip {
     color: #666666;
     margin-left: 20px;
     margin-right: 60px;
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
-.drop-zone {
+.linkedDocuments.drop-zone {
+    margin-bottom: 20px;
+}
+
+.drop-zone > div {
     padding-left: 20px;
     padding-right: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
     border: 1px dashed #C7C7C7;
+}
+
+.transaction-accordion.lessmargin .delete-link.add-more-docs {
+    margin-top: 0;
 }

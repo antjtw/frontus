@@ -6,6 +6,9 @@
                     Document Name
                 </span>
             </th>
+            <th>
+                Recipient
+            </th>
             <th class="left">Tags</th>
         </tr>
     </tbody>
@@ -14,9 +17,10 @@
         <tr draggable item="item" id='{{invdoc.doc_id || invdoc.original}}' class="version"
             class="version">
             <td>
-                <ul ng-click="viewEvidence(invdoc)">
-                    <li>{{invdoc.docname}} <span ng-show="invdoc.name">({{invdoc.name}}'s copy)</span></li>
-                </ul>
+                {{invdoc.docname}}
+            </td>
+            <td>
+                {{invdoc.name || invdoc.investor}}
             </td>
             <td>
                 <span class="tag"

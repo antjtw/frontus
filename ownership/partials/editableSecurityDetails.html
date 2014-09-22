@@ -116,15 +116,15 @@
                 </div>
             </div>
             <span ng-if="windowToggle == false && tran.evidence_data.length > 0"
-                  class="delete-link linkedDocuments"
+                  class="delete-link linkedDocuments add-more-docs"
                   ng-click="editEvidence(tran);">
                 <div class="noGroups addMore">
                     Add More Documents
                     <span data-icon="&#xe016;" aria-hidden="true"></span>
                 </div>
             </span>
-            <div ng-if="windowToggle == true" class="linkedDocuments">
-                <div class="drop-zone" droppable drop="handleDrop" bin="bin" id="bin">
+            <div ng-if="windowToggle == true" class="linkedDocuments drop-zone">
+                <div droppable drop="handleDrop" bin="bin" id="bin">
                     Drop documents here.
                 </div>
             </div>
