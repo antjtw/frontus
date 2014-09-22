@@ -2042,6 +2042,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 if (x.tags) { x.tags = JSON.parse(x.tags); }
                 eligible_evidence.push(x);
             });
+            angular.forEach(eligible_evidence, function(evidence1) {
+                angular.forEach(eligible_evidence, function(evidence2) {
+                    if (evidence1.doc_id && !evidence2.doc_id && evidence1.original == evidence2.original) {
+                        evidence1.tags = evidence2.tags;
+                    }
+                });
+            });
         }).except(logError);
     }
     if (role() == 'issuer') { loadEligibleEvidence(); }

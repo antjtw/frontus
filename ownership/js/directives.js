@@ -775,6 +775,25 @@ own.directive('editableCellDetails', [function() {
                     $scope.$emit('windowToggle', $scope.windowToggle);
                 };
 
+                $scope.handleDrop = function(item, bin) {
+                    var evidence = captable.getEligibleEvidence();
+                    var doc;
+                    angular.forEach(evidence, function(ev) {
+                        if (ev.doc_id != null) {
+                            if (ev.doc_id == item) {
+                                doc = ev;
+                            }
+                        } else {
+                            if (ev.original == item) {
+                                doc = ev;
+                            }
+                        }
+                    });
+                    if (doc) {
+                        captable.toggleForEvidence(doc);
+                    }
+                };
+
                 $scope.checkNewTran = function(tran) {
                     var invalid = false;
                     for (var attribute in tran.attrs) {

@@ -1,57 +1,30 @@
 <table class="status-table investor evidence">
     <tbody>
         <tr>
-            <th class="left"></th>
             <th class="left">
-                <span class="padding-left-ten">
+                <span>
                     Document Name
                 </span>
             </th>
             <th class="left">Tags</th>
         </tr>
     </tbody>
-    <tbody ng-repeat="doc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceOrder" ng-if="!doc.investor && !doc.doc_id">
+    <tbody ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceOrder">
         <tr class="empty-row"/>
-        <tr>
-            <td ng-click="toggleShown(doc)" class="pointer status-toggle" ng-class="{'status-toggle-on': (doc.shown)}">
-                <div>
-                    <span class="toggle-icon" ng-hide="doc.shown" data-icon="&#xe017;" aria-hidden="true"></span>
-                    <span class="toggle-icon" ng-show="doc.shown" data-icon="&#xe01c;" aria-hidden="true"></span>
-                </div>
-            </td>
-            <td ng-click="viewEvidence(doc)">
-                <ul>
-                    <li title="{{doc.docname}}"><span class="padding-left-ten">{{doc.docname}}</span></li>
+        <tr draggable item="item" id='{{invdoc.doc_id || invdoc.original}}' class="version"
+            class="version">
+            <td>
+                <ul ng-click="viewEvidence(invdoc)">
+                    <li>{{invdoc.docname}} <span ng-show="invdoc.name">({{invdoc.name}}'s copy)</span></li>
                 </ul>
             </td>
             <td>
                 <span class="tag"
-                      ng-repeat="tag in doc.tags"
+                      ng-repeat="tag in invdoc.tags"
                       ng-click="state.evidenceQuery = tag">
                     {{tag + (($last && ' ') || ', ')}}
                 </span>
             </td>
-        </tr>
-        <tr draggable item="item" id='{{doc.original}}' class="version" ng-show="doc.shown">
-            <td/>
-            <td>
-                <ul ng-click="viewEvidence(doc)">
-                    <li>Original</li>
-                </ul>
-            </td>
-            <td/>
-        </tr>
-        <tr ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceNestedOrder"
-            ng-if="invdoc.original==doc.original && invdoc.doc_id && invdoc.investor"
-            draggable item="item" id='{{invdoc.doc_id}}' class="version" ng-show="doc.shown"
-            class="version" ng-show="doc.shown">
-            <td/>
-            <td>
-                <ul ng-click="viewEvidence(invdoc)">
-                    <li>{{invdoc.name || invdoc.investor}}</li>
-                </ul>
-            </td>
-            <td/>
         </tr>
     </tbody>
 </table>
