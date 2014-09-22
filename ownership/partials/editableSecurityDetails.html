@@ -119,12 +119,12 @@
                   class="delete-link linkedDocuments"
                   ng-click="editEvidence(tran);">
                 <div class="noGroups addMore">
+                    Add More Documents
                     <span data-icon="&#xe016;" aria-hidden="true"></span>
-                 </div>
+                </div>
             </span>
             <div ng-if="windowToggle == true" class="linkedDocuments">
-                <div class="noGroups">
-                    <div class="bin" droppable drop="handleDrop" bin="bin" id="bin">{{ bin }}</div>
+                <div class="bin noGroups" droppable drop="handleDrop" bin="bin" id="bin">
                     Select the documents on the right that you wish to link.
                 </div>
             </div>
