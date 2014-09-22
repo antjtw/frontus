@@ -1,38 +1,43 @@
 <div modal="signatureModal" close="sigclose();" options="touropts">
     <div class="modal-title">
         <p>
-            Pick your Signature
+            Add/Update Signature
         </p>
     </div>
     <div class="sigmodal modalText">
         <div class="row-fluid">
             <div class="imgsig span6">
-                <div ng-hide="scribblemode" ng-style="{{signaturestyle}}" >
-                    <img id="signaturevisual" ng-src="{{signatureURL}}">
+                <div class="signature-box" ng-show="!imageReady && !scribblemode" ng-style="{{signaturestyle}}" ng-click="createNewSignature()">
+                    Draw Signature
                 </div>
-                <div class="scribblewindow" ng-show="scribblemode" ng-style="{{signaturestyle}}" >
+                <div ng-show="imageReady" class="signature-box">
+                    <img id="signaturevisual">
+                </div>
+                <div class="scribblewindow signature-box" ng-show="scribblemode">
                     <canvas id="scribbleboard"></canvas>
                 </div><br>
-                <div ng-if="options.labelrequired">
-                    <span>Label:</span>
-                    <input ng-model="label.value"></input>
-                </div>
                 <div class="DivHelper"></div>
             </div>
-            <div class="span6 gif-text">
+            <div class="span6">
                 <p>
                     Upload an image or draw out your signature. We'll store it in your profile for use when signing documents.
                 </p>
                 <form class="form-inline">
                     <fieldset>
+                        <div class="sig-label" ng-if="options.labelrequired || (options.label && options.label.length > 0)">
+                            <p>Label:</p>
+                            <div ng-if="options.labelrequired">
+                                <input ng-model="label.value"></input>
+                            </div>
+                            <div ng-if="!options.labelrequired">
+                                <input disabled ng-model="options.label"></input>
+                            </div>
+                        </div>
                         <div class="fileinputs">
                             <input type="file" class='file' onchange="angular.element(this).scope().setFilesSig(this);"/>
                             <div class="fakefile">
-                                <span>CHOOSE FILE</span>
+                                <div class="pull-left standard-button gray"><button class="btn">Upload Signature</button></div>
                             </div>
-                        </div>
-                        <div class="scribblebutton">
-                            <button ng-click="createNewSignature()">Draw Signature</button>
                         </div>
                     </fieldset>
                 </form>
@@ -40,14 +45,13 @@
         </div>
     </div>
     <div class="modal-footer">
-        <div class="pull-right standard-button green" style="margin-right: 30px;">
+        <div class="pull-right standard-button green">
             <button class="btn"
                     ng-click="uploadSignatureNow();"
                     ng-disabled="(!imageReady && !scribblemode) || (options.labelrequired && label.value.length==0)">Done</button>
         </div>
-        <div class="pull-right standard-button gray">
-            <button class="btn"
-                    ng-click="sigclose();">Cancel</button>
+        <div class="pull-right blue-link">
+            <span ng-click="sigclose();">Cancel</span>
         </div>
     </div>
 </div>

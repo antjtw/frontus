@@ -5108,28 +5108,25 @@ li.event.roles > div > ul {
 
 .signatureModal {
     margin-left: -360px;
-    width:718px;
+    width:738px;
     z-index: 1060;
-    background-color: transparent;
+    background-color: #FFFFFF;
     box-shadow: none;
 }
 
 .signatureModal .modal-title {
-    background-color: #FFFFFF;
-    margin-bottom: 10px;
+    padding-left: 30px;
     height: 80px;
 }
 
 .signatureModal .modal-title > p {
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 14px;
+    text-align: left;
+    font-size: 18px;
     color: #1D2C3C;
     line-height: 80px;
 }
 
 .signatureModal .modalText {
-    background-color: #FFFFFF;
 }
 
 .signatureModal .modalText h6 {
@@ -5141,7 +5138,7 @@ li.event.roles > div > ul {
 }
 
 .signatureModal .modalText p {
-    font-size: 14px;
+    font-size: 16px;
     text-align: left;
     margin: 0 0 10px 0;
 }
@@ -5150,10 +5147,6 @@ li.event.roles > div > ul {
     color: #000;
     display: block;
 
-}
-
-.signatureModal .gif-text {
-    margin-top: 10px;
 }
 
 .signatureModal .modalText > div > div > img {
@@ -5166,14 +5159,21 @@ li.event.roles > div > ul {
 }
 
 .sigmodal.modalText {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
     padding-bottom: 10px;
-    padding-top: 40px;
+    padding-top: 0px;
     margin-bottom: 0;
 }
 .sigmodal + .modal-footer > .standard-button {
     padding-left: 20px;
+}
+.sigmodal + .modal-footer {
+    padding-top: 0px;
+    padding-right: 30px;
+}
+.sigmodal + .modal-footer > div.blue-link {
+    line-height: 32px;
 }
 div.imgsig {
     height: 200px;
@@ -5195,16 +5195,25 @@ div.imgsig > div > img {
     float: left;
 }
 
-.sigmodal .gif-text > p {
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-right: 30px;
+div.imgsig > div.signature-box {
+    width: 330px;
+    height: 180px;
+    line-height: 180px;
 }
 
 .modal.signatureModal input.file {
     float: left;
     width: 50%;
-    margin-left: 15px;
+}
+
+.modal.signatureModal div.fakefile {
+    float: left;
+    width: 50%;
+    margin-left: 0px;
+}
+
+.modal.signatureModal div.fakefile > div {
+    margin-left: 0px;
 }
 
 .scribblewindow {
@@ -5220,16 +5229,23 @@ div.imgsig > div > img {
 .modal.signatureModal div.fileinputs {
     display: inline-block;
     float: left;
+    margin-top: 22px;
 }
 
-.scribblebutton > button {
+.modal.signatureModal div.sig-label {
+    display: inline-block;
     float: left;
-    margin-left: 20px;
-    display: block;
-    width: 162px;
-    height: 34px;
-    text-align: center;
-    background-color: #FFFFFF;
-    border: 1px solid rgb(227, 227, 227);
-    text-transform: uppercase;
+    margin-top: 16px;
+    width: 100%;
+}
+
+.modal.signatureModal div.sig-label p {
+    margin: 0px;
+    font-size: 12px;
+}
+
+.modal.signatureModal div.sig-label input {
+    line-height: 25px;
+    width: 100%;
+    margin: 0px;
 }
