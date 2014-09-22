@@ -195,7 +195,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.securities.splice(0);
             captable.transactions.splice(0);
             angular.forEach(captable.transactions, function(tran) {
+                if (tran.attrs.investor=="David Employee") {
+                    console.log(angular.copy(tran.effectivedate));
+                }
                 tran.effectivedate = calculate.timezoneOffset(tran.effectivedate);
+                if (tran.attrs.investor=="David Employee") {
+                    console.log(angular.copy(tran.effectivedate));
+                }
             });
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
@@ -1569,7 +1575,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (sec.name === tran.attrs.security);
         })) {
             // duplicated security name
-            tran.attrs.security = tran.attrs.security + " (1)";
+            security.transactions[0].attrs.security = tran.attrs.security + " (1)";
             return this.addSecurity(security);
         }
 

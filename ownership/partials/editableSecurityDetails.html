@@ -16,7 +16,7 @@
                     ng-switch on="currentTab">
         <accordion-heading>
             <span ng-click="editEvidence()">
-                {{tran.effective_date | utcdate:settings.shortdate}} Transaction
+                {{tran.effective_date | utcdate:settings.shortdate}} {{tran.kind}}
             </span>
         </accordion-heading>
         <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
