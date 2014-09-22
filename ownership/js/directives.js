@@ -409,8 +409,23 @@ own.directive('editableSecurityDetails', [function() {
                 };
 
                 $scope.handleDrop = function(item, bin) {
-                    alert('Item ' + item + ' has been dropped into ' + bin);
-                }
+                    var evidence = captable.getEligibleEvidence();
+                    var doc;
+                    angular.forEach(evidence, function(ev) {
+                        if (ev.doc_id != null) {
+                            if (ev.doc_id == item) {
+                                doc = ev;
+                            }
+                        } else {
+                            if (ev.original == item) {
+                                doc = ev;
+                            }
+                        }
+                    });
+                    if (doc) {
+                        captable.toggleForEvidence(doc);
+                    }
+                };
 
                 $scope.addSecurity = function() {
                     $scope.$emit('addSecurity');
@@ -1340,7 +1355,7 @@ own.directive('droppable', function() {
 
                     var binId = this.id;
                     var item = document.getElementById(e.dataTransfer.getData('Text'));
-                    this.appendChild(item);
+                    //this.appendChild(item);
                     // call the passed drop function
                     scope.$apply(function(scope) {
                         var fn = scope.drop();
