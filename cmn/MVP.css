@@ -4788,7 +4788,6 @@ textarea.email-text {
     line-height: 12px;
 }
 .linkedDocuments > div > span.pull-right {
-    line-height: 32px;
     cursor: pointer;
 }
 .capTab span.blue-link.delete-link {
@@ -4958,6 +4957,8 @@ li.event.roles > div > ul {
 
 .linkedDocuments .noGroups.addMore{
     color: #3498DB;
+    margin-left: -20px;
+    margin-right: 20px;
 }
 
 .linkedDocuments .noGroups.addMore:hover{

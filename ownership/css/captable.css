@@ -2346,22 +2346,18 @@ span.tour-icon.issue-cog + .tooltip {
 .rightTabWindow > table.status-table.evidence > tbody > tr > td {
     text-align: left;
 }
-.rightTabWindow > table.status-table.evidence > tbody > tr > td:first-child {
-    width: 60px;
-    text-align: center;
-}
-.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
-    //min-width: 300px;
-    width: 200px;
+
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(1) {
     cursor: pointer;
 }
-.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(3) {
-    width: 100px;
+
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
+    min-width: 200px;
     padding-left: 0;
 }
 
 .rightTabWindow > table.status-table.evidence > tbody > tr.version {
-    background-color: #F1F1F1;
+    cursor: pointer;
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > div {
     float: left;
@@ -2369,6 +2365,7 @@ span.tour-icon.issue-cog + .tooltip {
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
     float: left;
+    padding-left: 20px;
 }
 
 .cellDetails > .detailsHeader {
@@ -2594,4 +2591,29 @@ span.tour-icon.issue-cog + .tooltip {
 
 .drop-selector .standard .dropdown-toggle {
     text-transform: capitalize;
+}
+
+/* Drag and drop basics */
+
+.drag {
+    opacity: 0.6;
+}
+
+.over {
+    background: #FFFFFF;
+}
+
+.drag-help {
+    color: #666666;
+    margin-left: 20px;
+    margin-right: 60px;
+}
+
+.drop-zone {
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px dashed #C7C7C7;
 }
