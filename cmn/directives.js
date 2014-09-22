@@ -640,8 +640,8 @@ m.directive('signatureModal', function() {
         scope: {options: "="},
         restrict: 'E',
         templateUrl: '/cmn/partials/signatureModal.html',
-        controller: ['$scope', 'SWBrijj',
-            function($scope, SWBrijj) {
+        controller: ['$scope', 'SWBrijj', '$rootScope',
+            function($scope, SWBrijj, $rootScope) {
                 
                 $scope.signaturestyle = {height: String(180), width: String(330) };
                 
@@ -715,6 +715,7 @@ m.directive('signatureModal', function() {
                             if ($scope.options.failureCallback)
                                 $scope.options.failureCallback();
                         });
+                        $rootScope.$emit("notification:success", "Uploading New Signature . . .");
                     }
                     else {
                         $scope.signatureModal = false;
