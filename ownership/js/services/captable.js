@@ -195,13 +195,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.securities.splice(0);
             captable.transactions.splice(0);
             angular.forEach(captable.transactions, function(tran) {
-                if (tran.attrs.investor=="David Employee") {
-                    console.log(angular.copy(tran.effectivedate));
-                }
                 tran.effectivedate = calculate.timezoneOffset(tran.effectivedate);
-                if (tran.attrs.investor=="David Employee") {
-                    console.log(angular.copy(tran.effectivedate));
-                }
             });
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
@@ -1458,11 +1452,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     function processIssue(iss) {
-        setIssueKey(iss);
+        setIssueKey(iss); // FIXME: this function got deleted somewhere along the line?
         reformatDate(iss);
         setVestingDates(iss);
     }
-    function logError(err) { console.log(err); }
+    function logError(err) {
+        console.error(err);
+    }
     function nullCell() {
         return new Cell();
     }
@@ -2145,8 +2141,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!ev || !captable.evidence_object) {return;}
         if (!captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data = [];
-            console.log(ev);
-            console.log(captable);
         } else {
             var action = "";
             if (isEvidence(ev)) {
@@ -2208,8 +2202,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     if (!attrs.hasOwnProperty(transaction.attrs[att]))
                     {
                         correct = false;
-                        console.log("invalid security type");
-                        console.log(att);
                         return correct;
                     }
                     break;
@@ -2221,8 +2213,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         if (!calculate.isNumber(transaction.attrs[att]))
                         {
                             correct = false;
-                            console.log("wrong type number");
-                            console.log(att);
                             return correct;
                         }
                         break;
@@ -2230,8 +2220,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         if (attrs[transaction.attrs.security_type][transaction.kind][att].labels.indexOf(transaction.attrs[att]) == -1)
                         {
                             correct = false;
-                            console.log("wrong type enum");
-                            console.log(att);
                             return correct;
                         }
                         break;
@@ -2242,8 +2230,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             (typeof(transaction.attrs[att]) != attrs[transaction.attrs.security_type][transaction.kind][att].type))
                         {
                             correct = false;
-                            console.log("wrong type default");
-                            console.log(att);
                             return correct;
                         }
                 }
