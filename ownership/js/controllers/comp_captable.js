@@ -302,7 +302,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.newTranName = "";
         $scope.newTranType = "";
         $scope.newTranDate = calculate.makeDateString($rootScope.settings.shortdate);
-        console.log($scope.newTranDate);
         $scope.newthing = null;
         $scope.selectedCell = $scope.selectedInvestor = null;
         History.forget($scope, 'selectedSecurity');
