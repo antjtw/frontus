@@ -1209,11 +1209,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 delete tran.attrs[key];
             }
         }
-        if (typeof tran.effective_date == 'object') {
-            tran.effective_date = calculate.castDateString(tran.effective_date, $rootScope.settings.shortdate);
+        var saveTran = angular.copy(tran);
+        if (typeof saveTran.effective_date == 'object') {
+            saveTran.effective_date = calculate.castDateString(saveTran.effective_date, $rootScope.settings.shortdate);
         }
         SWBrijj.procm('_ownership.save_transaction',
-                      JSON.stringify(tran))
+                      JSON.stringify(saveTran))
         .then(function(new_entries) {
             tran.effective_date = Date.parse(tran.effective_date);
             if (new_entries.length < 1)
