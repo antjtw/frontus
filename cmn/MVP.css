@@ -4759,7 +4759,6 @@ textarea.email-text {
 }
 .linkedDocuments {
     width: 260px;
-    margin-bottom: 20px;
 }
 .linkedDocuments.viewOnly {
     width: 280px;
