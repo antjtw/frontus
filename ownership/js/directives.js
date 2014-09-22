@@ -148,6 +148,15 @@ own.directive('editableCaptableCell', [function() {
                 $scope.isWarrant = captable.isWarrant;
                 $scope.ct = captable.getCapTable();
 
+                $scope.$watchCollection('data', function(new_data) {
+                    if (new_data) {
+                        console.log("==============");
+                        console.log($scope.sec.name);
+                        console.log($scope.inv);
+                        console.log(new_data);
+                    }
+                });
+
                 $scope.loaddirective = function() {
                     $scope.destination_transaction = null;
                     if ($scope.data && $scope.data.transactions && $scope.data.transactions.length == 1) {
@@ -204,7 +213,6 @@ own.directive('editableCaptableCell', [function() {
                         }
                         $scope.data.u = num;
                         updateAttr('units', num);
-
                     } else {
                         return ($scope.data ? $filter('formatAmount')($scope.data.u, 'units') : null);
                     }
@@ -235,10 +243,11 @@ own.directive('editableCaptableCell', [function() {
                         "diff": 0
                     };
                     var newVal = $scope.selectedCell[key[0]];
-                    if (key == 'units')
+                    if (key == 'units') {
                         captable.setCellUnits($scope.selectedCell);
-                    else
+                    } else {
                         captable.setCellAmount($scope.selectedCell);
+                    }
                     $scope.picker.diff = newVal - $scope.selectedCell[key[0]];
                     if ($scope.picker.diff !== 0) {
                         $scope.tranPicker = true;
@@ -555,7 +564,7 @@ own.directive('editableSecurityDetails', [function() {
                     {
                         captable.saveTransaction(trans[t], true);
                     }
-
+                    console.log(splittran);
                     $scope.sec.transactions.push(splittran);
                 };
 

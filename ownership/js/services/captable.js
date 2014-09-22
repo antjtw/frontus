@@ -720,6 +720,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         else
         {
+            // TODO: dead code? can you have a transaction without an effective date?
+            // probably should be trans2 = []
             trans2 = trans.filter(function(tran) {
                 return tran.kind != 'split';
             });
@@ -866,6 +868,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function getCellUnits(cell, asof, vesting) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
+            console.log("=== get Cell Units ===");
+            console.log(cell);
+            console.log(asof);
+            console.log(vesting);
             var entries = cell.ledger_entries;
             if (asof) {
                 var d = new Date(asof);
@@ -911,6 +917,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             angular.forEach(cell.transactions, function(tran) {
                 transactionkeys.push(tran.transaction);
             });
+            // TODO: should just be able to sum the ledger, instead of trying to figure out "plus" and "minus" trans
             var plus_trans = cell.transactions
                 .filter(function(el) {
                     return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1) &&
@@ -1079,6 +1086,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             };
         });
     }
+    // TODO: this is only needed on the grants page, so only generate when called
     function generateGrantCells() {
         var grants = captable.transactions
             .filter(function(tran) {
@@ -1293,10 +1301,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         return t.transaction == tran.transaction ||
                             (t.attrs.transaction_from && t.attrs.transaction_from == tran.transaction);
                     });
+                    // generate a list of transaction ids
                     var ids = trans.reduce(
                             accumulateProperty('transaction'), []);
+                    // generate a list of ledger entries
                     var entries = captable.ledger_entries.filter(function(ent) {
-                        return ids.indexOf(ent.transaction) != -1;
+                        return ids.indexOf(ent.transaction) != -1 || ids.indexOf(ent.modifying_transaction) != -1;
                     });
                     splice_many(captable.transactions, trans);
                     splice_many(captable.ledger_entries, entries);
