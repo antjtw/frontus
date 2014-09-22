@@ -1368,6 +1368,7 @@ own.directive('droppable', function() {
                 function(e) {
                     // Stops some browsers from redirecting.
                     if (e.stopPropagation) e.stopPropagation();
+                    e.preventDefault();
 
                     this.classList.remove('over');
 
