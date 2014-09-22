@@ -678,7 +678,7 @@ m.directive('signatureModal', function() {
                 };
 
                 $scope.uploadSignatureNow = function() {
-                    if (($scope.files || $scope.scribblemode) && 
+                    if (($scope.scribblemode || $scope.imageReady) && 
                         (!$scope.options.labelrequired || $scope.label.value.length > 0)) 
                     {
                         $scope.signatureURL = "/img/image-loader-140.gif";
@@ -687,7 +687,7 @@ m.directive('signatureModal', function() {
                         var fd;
                         var p;
                         var label = ($scope.options.labelrequired) ? $scope.label.value : $scope.options.label;
-                        if ($scope.scribblemode) {
+                        //if ($scope.scribblemode) {
                             var canvas = document.getElementById("scribbleboard");
                             fd = canvas.toDataURL();
                             $scope.signatureModal = false;
@@ -696,9 +696,10 @@ m.directive('signatureModal', function() {
                             else
                                 p = SWBrijj.uploadSignatureString(fd);
                             //p = SWBrijj.uploadSignatureString(fd, $scope.options.type, $scope.label.value);
-                        }
+                        /*}
                         else {
                             fd = new FormData();
+                            console.log($scope.files.length, $scope.options.type);
                             for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
                             $scope.signatureModal = false;
                             if ($scope.options.type)
@@ -706,7 +707,7 @@ m.directive('signatureModal', function() {
                             else
                                 p = SWBrijj.uploadSignatureImage(fd);
                             //p = SWBrijj.uploadSignatureImage(fd, $scope.options.type, $scope.label.value);
-                        }
+                        }*/
                         p.then(function(x) {
                             if ($scope.options.successCallback)
                                 $scope.options.successCallback(label);
@@ -723,7 +724,8 @@ m.directive('signatureModal', function() {
 
                 $scope.createNewSignature = function() {
                     $scope.scribblemode = true;
-                    $scope.files = null;
+                    //$scope.files = null;
+                    $scope.imageReady = false;
 
                     var canvas = document.getElementById("scribbleboard");
 
@@ -774,15 +776,29 @@ m.directive('signatureModal', function() {
                 };
                 
                 $scope.setFilesSig = function(element) {
-                    $scope.files = [];
-                    for (var i = 0; i < element.files.length; i++) {
-                        $scope.files.push(element.files[i]);
+                    //$scope.files = [];
+                    if (element.files.length > 0) {
+                        $scope.imageReady = false;
+                        //$scope.files.push(element.files[i]);
 
                         var oFReader = new FileReader();
-                        oFReader.readAsDataURL($scope.files[0]);
+                        oFReader.readAsDataURL(element.files[0]);
 
                         oFReader.onload = function (oFREvent) {
-                            document.getElementById("signaturevisual").src = oFREvent.target.result;
+                            var im = document.getElementById("signaturevisual");
+                            im.src = oFREvent.target.result;
+                            im.onload = function () {
+                                var canvas = document.getElementById("scribbleboard");
+                                if (!canvas)
+                                    return;
+                                var ctx=canvas.getContext("2d");
+                                canvas.width = im.naturalWidth;
+                                canvas.height = im.naturalHeight;
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                ctx.drawImage(im, 0, 0, canvas.width, canvas.height);
+                                $scope.imageReady = true;
+                                $scope.$apply();
+                            };
                         };
                         $scope.scribblemode = false;
                         $scope.$apply();

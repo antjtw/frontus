@@ -43,7 +43,7 @@
         <div class="pull-right standard-button green" style="margin-right: 30px;">
             <button class="btn"
                     ng-click="uploadSignatureNow();"
-                    ng-disabled="(!files && !scribblemode) || files.length===0 || (options.labelrequired && label.value.length==0)">Done</button>
+                    ng-disabled="(!imageReady && !scribblemode) || (options.labelrequired && label.value.length==0)">Done</button>
         </div>
         <div class="pull-right standard-button gray">
             <button class="btn"
