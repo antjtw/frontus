@@ -2103,9 +2103,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
-                          parseInt(obj.transaction, 10),
+                          parseInt(obj.transaction),
                           JSON.stringify(obj.evidence_data)
             ).then(function(r) {
+                console.log(r);
                 void(r);
             }).except(function(e) {
                 $rootScope.$emit("notification:fail",
@@ -2152,8 +2153,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!ev || !captable.evidence_object) {return;}
         if (!captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data = [];
-            console.log(ev);
-            console.log(captable);
         } else {
             var action = "";
             if (isEvidence(ev)) {
