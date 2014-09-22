@@ -868,10 +868,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function getCellUnits(cell, asof, vesting) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
-            console.log("=== get Cell Units ===");
-            console.log(cell);
-            console.log(asof);
-            console.log(vesting);
             var entries = cell.ledger_entries;
             if (asof) {
                 var d = new Date(asof);

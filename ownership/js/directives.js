@@ -148,15 +148,6 @@ own.directive('editableCaptableCell', [function() {
                 $scope.isWarrant = captable.isWarrant;
                 $scope.ct = captable.getCapTable();
 
-                $scope.$watchCollection('data', function(new_data) {
-                    if (new_data) {
-                        console.log("==============");
-                        console.log($scope.sec.name);
-                        console.log($scope.inv);
-                        console.log(new_data);
-                    }
-                });
-
                 $scope.loaddirective = function() {
                     $scope.destination_transaction = null;
                     if ($scope.data && $scope.data.transactions && $scope.data.transactions.length == 1) {
@@ -564,7 +555,7 @@ own.directive('editableSecurityDetails', [function() {
                     {
                         captable.saveTransaction(trans[t], true);
                     }
-                    console.log(splittran);
+
                     $scope.sec.transactions.push(splittran);
                 };
 
