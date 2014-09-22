@@ -643,7 +643,7 @@ m.directive('signatureModal', function() {
         controller: ['$scope', 'SWBrijj', '$rootScope',
             function($scope, SWBrijj, $rootScope) {
                 
-                $scope.signaturestyle = {height: String(180), width: String(330) };
+                //$scope.signaturestyle = {height: String(180), width: String(330), line-height: String(180/2) };
                 
                 $scope.label = {};
                 $scope.label.value = "";
@@ -668,6 +668,7 @@ m.directive('signatureModal', function() {
                 $scope.sigclose = function () {
                     $scope.signatureModal = false;
                     $scope.scribblemode = false;
+                    $scope.imageReady = false;
                     $scope.options.open = false;
                 };
 
@@ -681,7 +682,6 @@ m.directive('signatureModal', function() {
                     if (($scope.scribblemode || $scope.imageReady) && 
                         (!$scope.options.labelrequired || $scope.label.value.length > 0)) 
                     {
-                        $scope.signatureURL = "/img/image-loader-140.gif";
                         $scope.signatureprocessing = true;
                         $scope.progressVisible = true;
                         var fd;
@@ -809,7 +809,6 @@ m.directive('signatureModal', function() {
                 $scope.$watch('options.open', function() {
                     if ($scope.options.open)
                     {
-                        $scope.signatureURL = $scope.options.sigURL;
                         if ($scope.options.label)
                             $scope.label.value = $scope.options.label;
                         $scope.sigModalUp();
