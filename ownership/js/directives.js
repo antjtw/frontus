@@ -1266,11 +1266,36 @@ own.directive('securityTerms', [function() {
 
         },
         templateUrl: '/ownership/partials/securityTerms.html',
-        controller: ["$scope", "$rootScope", "displayCopy",
-            function($scope, $rootScope, displayCopy) {
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes",
+            function($scope, $rootScope, displayCopy, attributes) {
                 $scope.tips = displayCopy.captabletips;
                 
+                var attrs = attributes.getAttrs();
                 
+                function getKeys() {
+                    var att = Object.keys($scope.issue.attrs);
+                    $scope.keys = [];
+                    for (var i = 0; i < att.length; i += 2)
+                    {
+                        var tmp = [];
+                        for (var j = 0; j < 2 && i + j < att.length; j++)
+                        {
+                            tmp.push(att[i + j]);
+                        }
+                        $scope.keys.push(tmp);
+                    }
+                    console.log(att, $scope.keys);
+                };
+                
+                $scope.description = function(key) {
+                    return $scope.tips[key];
+                };
+                
+                $scope.displayName = function(key) {
+                    return attrs[$scope.issue.attrs.security_type]['issue security'][key].display_name;
+                };
+                
+                getKeys();
 
             }
         ],
