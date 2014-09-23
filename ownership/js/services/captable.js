@@ -1219,7 +1219,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 console.log("Error: no ledger entries");
                 return;
             }
+            // the first item is a fake ledger entry with the correct transaction information
             var transaction = new_entries.splice(0, 1)[0].transaction;
+            // splice the existing ledger_entries out of their arrays
+            // TODO: I think this logic only makes sense for transactions that aren't splits
+            // TODO: check if on a transaction, we're getting back split rows for other transactions
+            //       if we are, are we handling them correctly?
             var spliced = [];
             for (var new_entry in new_entries)
             {
@@ -1232,6 +1237,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
                 captable.ledger_entries.push(new_entries[new_entry]);
             }
+            // check if the transaction is one we already have
             var found = false;
             for (var i in captable.transactions)
             {
