@@ -1228,7 +1228,7 @@ own.directive('evidenceTable', [function() {
                     var truthiness = res.length;
                     var result = 0;
                     angular.forEach(res, function(re) {
-                        if (re.test(obj.docname) || re.test(obj.tags)) {
+                        if (re.test(obj.docname) || re.test(obj.tags) || re.test(obj.name) || re.test(obj.investor)) {
                             result += 1;
                         }
                     });
