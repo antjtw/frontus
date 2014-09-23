@@ -526,8 +526,8 @@ own.directive('editableSecurityDetails', [function() {
 
                 $scope.splitvalue = function(issue) {
                     var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
-                    if (isFinite(($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue, $scope.ct.securities)) / ratio)) {
-                        return (($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue, $scope.ct.securities)) / ratio);
+                    if (isFinite(($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue)) / ratio)) {
+                        return (($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue)) / ratio);
                     }
                 };
 
@@ -1269,9 +1269,9 @@ own.directive('securityTerms', [function() {
         controller: ["$scope", "$rootScope", "displayCopy", "attributes",
             function($scope, $rootScope, displayCopy, attributes) {
                 $scope.tips = displayCopy.captabletips;
-                
+
                 var attrs = attributes.getAttrs();
-                
+
                 function getKeys() {
                     var att = Object.keys($scope.issue.attrs);
                     $scope.keys = [];
@@ -1286,15 +1286,15 @@ own.directive('securityTerms', [function() {
                     }
                     console.log(att, $scope.keys);
                 };
-                
+
                 $scope.description = function(key) {
                     return $scope.tips[key];
                 };
-                
+
                 $scope.displayName = function(key) {
                     return attrs[$scope.issue.attrs.security_type]['issue security'][key].display_name;
                 };
-                
+
                 getKeys();
 
             }

@@ -427,7 +427,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     this.grantSecurities = grantSecurities;
-    function numUnissued(sec, securities, asof, vesting) {
+    function numUnissued(sec, asof, vesting) {
         var unissued = 0;
         var auth_securities = [];
         angular.forEach(captable.securities, function(sec) {
@@ -743,9 +743,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return sum_ledger(ledger_entries);
     }
     this.netCreditFor = netCreditFor;
-    function secHasUnissued(securities) {
+    function secHasUnissued() {
         return function(sec) {
-            return numUnissued(sec, securities);
+            return numUnissued(sec);
         };
     }
     function securitiesWithUnissuedUnits() {
@@ -754,7 +754,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.securitiesWithUnissuedUnits = securitiesWithUnissuedUnits;
     function securityUnissuedPercentage(sec, securities, asof, vesting) {
-        return 100 * (numUnissued(sec, securities, asof, vesting) / totalOwnershipUnits());
+        return 100 * (numUnissued(sec, asof, vesting) / totalOwnershipUnits());
     }
     this.securityUnissuedPercentage = securityUnissuedPercentage;
     function rowFor(inv) {

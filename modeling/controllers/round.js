@@ -23,7 +23,6 @@ app.controller('roundController',
     $scope.getRounds = function() {
         var existingoptions = 0;
         var rounds = angular.copy($scope.ct.securities);
-        console.log($scope.ct.securities);
         totals = {'units': 0, 'amount': 0};
         angular.forEach(rounds, function(round) {
             round.units = 0;
@@ -38,16 +37,16 @@ app.controller('roundController',
                 round.units += Math.ceil(captable.securityTotalUnits(round));
                 totals.units += Math.ceil(captable.securityTotalUnits(round));
                 if (!isNaN(round.attrs.totalauth)) {
-                    if ((captable.numUnissued(round, $scope.ct.securities) > 0)) {
-                        var unauth = (captable.numUnissued(round, $scope.ct.securities));
+                    if ((captable.numUnissued(round) > 0)) {
+                        var unauth = (captable.numUnissued(round));
                         existingoptions += unauth;
                         totals.units += unauth;
                     }
                 }
             }
             else {
-                round.units += captable.securityTotalUnits(round) + captable.numUnissued(round, $scope.ct.securities);
-                totals.units += captable.securityTotalUnits(round) + captable.numUnissued(round, $scope.ct.securities);
+                round.units += captable.securityTotalUnits(round) + captable.numUnissued(round);
+                totals.units += captable.securityTotalUnits(round) + captable.numUnissued(round);
             }
         });
 
