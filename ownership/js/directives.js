@@ -1256,3 +1256,23 @@ own.directive('transactionLog', [function() {
         ],
     };
 }]);
+
+
+own.directive('securityTerms', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+            issue: '=',
+
+        },
+        templateUrl: '/ownership/partials/securityTerms.html',
+        controller: ["$scope", "$rootScope", "displayCopy",
+            function($scope, $rootScope, displayCopy) {
+                $scope.tips = displayCopy.captabletips;
+                
+                
+
+            }
+        ],
+    };
+}]);
