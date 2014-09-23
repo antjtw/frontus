@@ -89,7 +89,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 fields = viable_actions[transaction_type].fields;
             }
             type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
-            for (t in variableDefaultTypes)
+            for (var t in variableDefaultTypes)
             {
                 type_list.push(variableDefaultTypes[t]);
             }
