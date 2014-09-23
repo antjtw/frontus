@@ -1,0 +1,26 @@
+<div class="secterms">
+    <div class="row-fluid">
+        <div class="span3">
+            Security terms
+        </div>
+        <div class="span9">
+            <span>Instructions here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet diam dictum, congue odio quis, hendrerit erat.
+            </span>
+            <div ng-repeat="pair in keys">
+                <div class="row-fluid">
+                    <div ng-repeat="key in pair" class="span4">
+                        <span>{{displayName(key)}}</span><br>
+                        <input ng-model="issue.attrs[key]"></input>
+                        <span ng-if="description(key)"
+                              class="tooltip-icon"
+                              data-icon="&#xe044;"
+                              aria-hidden="true"
+                              tooltip-placement="top"
+                              tooltip="{{description(key)}}">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
