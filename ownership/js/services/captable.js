@@ -1277,7 +1277,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             updateDays();
             //captable.ledger_entries.push.apply(captable., new_entries);
-            //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
             console.error(e);
             if (errorFunc)
@@ -1308,7 +1307,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             accumulateProperty('transaction'), []);
                     // generate a list of ledger entries
                     var entries = captable.ledger_entries.filter(function(ent) {
-                        return ids.indexOf(ent.transaction) != -1 || ids.indexOf(ent.modifying_transaction) != -1;
+                        return ids.indexOf(ent.transaction) != -1 ||
+                            ids.indexOf(ent.modifying_transactions) != -1;
                     });
                     splice_many(captable.transactions, trans);
                     splice_many(captable.ledger_entries, entries);
@@ -1899,12 +1899,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!(sec && kind)) return 0;
 
         var trans = captable.transactions.filter(function(tran) {
-            // FIXME not working
-            /*
-            if (tran.kind == kind && kind!='grant' && tran.attrs.security == sec.name) {
-                console.log(tran);
-            }
-            */
             return tran.attrs.security == sec.name &&
                 tran.kind == kind;
         }).reduce(accumulateProperty('transaction'), []);
@@ -2129,7 +2123,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data.push(ev);
-            console.log(captable.evidence_object.evidence_data)
         }
     }
     this.addEvidence = addEvidence;
@@ -2181,7 +2174,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
     function validateTransaction(transaction) {
         var correct = true;
-        //console.log("validateTransaction");
         if (!attrs)
         {
             return true;
