@@ -7,7 +7,7 @@ app.directive('grantIssue', [function() {
             choose: "@"
         },
         templateUrl: '/ownership/partials/grantIssue.html',
-        controller: ["$scope", "captable", function($scope, captable) {
+        controller: ["$scope", "captable", "grants", function($scope, captable, grants) {
             // Get the company's Issues
             $scope.issues = captable.getCapTable().securities;
             $scope.selected = { // need an object to bind through ng-if
@@ -35,8 +35,22 @@ app.directive('grantIssue', [function() {
                 }
             });
 
-            $scope.$watch('selected.issue', function(new_issue) {
-                $scope.issue = new_issue.issue;
+            $scope.issue = grants.issue;
+
+            $scope.$watch('selected.issue', function(new_issue, old_issue) {
+                if (new_issue && typeof(new_issue) !== "string" && (!grants.issue[0] || new_issue.text !== grants.issue[0].name)) {
+                    grants.setIssue(new_issue.issue);
+                }
+            });
+
+            $scope.$watchCollection('issue', function(new_issue) {
+                if (new_issue && new_issue[0]) {
+                    $scope.selected.issue = {
+                        id: new_issue[0].name,
+                        text: new_issue[0].name,
+                        issue: new_issue[0]
+                    };
+                }
             });
         }]
     };
