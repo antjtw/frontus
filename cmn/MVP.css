@@ -4559,10 +4559,19 @@ h2.onboard {
     margin-top: 20px;
 }
 
-.signature-image > div:first-of-type {
+.signature-image > div:last-of-type {
     width: 250px;
     border: 1px solid #F1F1F1;
     margin-bottom: 10px;
+}
+
+.signature-image div.pointer {
+    margin-top: 12px;
+    display: inline-block;
+}
+
+.signature-label {
+    display: inline-block;
 }
 
 .persistentNotification {

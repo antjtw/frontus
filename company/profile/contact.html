@@ -272,12 +272,12 @@
             </div>
             <div class="body-box">
                 <div class='signature-image ind-sig' ng-repeat="sig in companySignatures">
-                     <h2 class="signature-label">SIGNATURE: {{sig.label}}</h2>
+                     <h2 class="signature-label">{{sig.label}}</h2>
+                    <div class="pointer">
+                        <span data-icon="&#xe00e;" aria-hidden="true" ng-click="sigModalUpUpdate(sig.label, sig.url);"></span>
+                    </div>
                     <div>
                         <img ng-src="{{sig.url}}">
-                    </div>
-                    <div class="standard-button small-standard-button gray">
-                        <button ng-click="sigModalUpUpdate(sig.label, sig.url);" class="btn">Change</button>
                     </div>
                 </div>
                 <div class="signature-button standard-button">
