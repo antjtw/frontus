@@ -79,7 +79,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             }
         });
     }
-    updateAvailableSignatures();
+    if ($rootScope.navState.role == 'issuer') {
+        updateAvailableSignatures();
+    }
     function updateAnnotationTypes(issue_type, transaction_type, type_list, annotation_list) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
