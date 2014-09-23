@@ -1,4 +1,5 @@
 <span class="captablepair-box">
+    <!-- left input -->
     <input ng-if="!isDebt(sec);"
            class="captablepair first-box"
            ui-event="{focus: 'selectCell(inv, sec.name)',
@@ -13,6 +14,7 @@
     <input ng-if="isDebt(sec);"
            class="captablepair default-pointer first-box"
            disabled>
+    <!-- right input -->
     <input ng-if="!(isOption(sec) || isWarrant(sec))"
            class="captablepair last-box"
            ui-event="{focus: 'selectCell(inv, sec.name)',

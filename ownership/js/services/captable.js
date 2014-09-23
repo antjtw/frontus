@@ -717,6 +717,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
         else
         {
+            // TODO: dead code? can you have a transaction without an effective date?
+            // probably should be trans2 = []
             trans2 = trans.filter(function(tran) {
                 return tran.kind != 'split';
             });
@@ -908,6 +910,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             angular.forEach(cell.transactions, function(tran) {
                 transactionkeys.push(tran.transaction);
             });
+            // TODO: should just be able to sum the ledger, instead of trying to figure out "plus" and "minus" trans
             var plus_trans = cell.transactions
                 .filter(function(el) {
                     return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1) &&
@@ -1076,6 +1079,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             };
         });
     }
+    // TODO: this is only needed on the grants page, so only generate when called
     function generateGrantCells() {
         var grants = captable.transactions
             .filter(function(tran) {
@@ -1212,7 +1216,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 console.log("Error: no ledger entries");
                 return;
             }
+            // the first item is a fake ledger entry with the correct transaction information
             var transaction = new_entries.splice(0, 1)[0].transaction;
+            // splice the existing ledger_entries out of their arrays
+            // TODO: I think this logic only makes sense for transactions that aren't splits
+            // TODO: check if on a transaction, we're getting back split rows for other transactions
+            //       if we are, are we handling them correctly?
             var spliced = [];
             for (var new_entry in new_entries)
             {
@@ -1225,6 +1234,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }
                 captable.ledger_entries.push(new_entries[new_entry]);
             }
+            // check if the transaction is one we already have
             var found = false;
             for (var i in captable.transactions)
             {
@@ -1290,11 +1300,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             (t.attrs.transaction_from &&
                              t.attrs.transaction_from == tran.transaction);
                     });
+                    // generate a list of transaction ids
                     var ids = trans.reduce(
                             accumulateProperty('transaction'), []);
+                    // generate a list of ledger entries
                     var entries = captable.ledger_entries.filter(function(ent) {
-                        return ids.indexOf(ent.transaction) != -1 ||
-                            ids.indexOf(ent.modifying_transactions) != -1;
+                        return ids.indexOf(ent.transaction) != -1 || ids.indexOf(ent.modifying_transaction) != -1;
                     });
                     splice_many(captable.transactions, trans);
                     splice_many(captable.ledger_entries, entries);
@@ -1450,11 +1461,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     function processIssue(iss) {
-        setIssueKey(iss);
+        setIssueKey(iss); // FIXME: this function got deleted somewhere along the line?
         reformatDate(iss);
         setVestingDates(iss);
     }
-    function logError(err) { console.log(err); }
+    function logError(err) {
+        console.error(err);
+    }
     function nullCell() {
         return new Cell();
     }
@@ -2197,8 +2210,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     if (!attrs.hasOwnProperty(transaction.attrs[att]))
                     {
                         correct = false;
-                        console.log("invalid security type");
-                        console.log(att);
                         return correct;
                     }
                     break;
@@ -2210,8 +2221,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         if (!calculate.isNumber(transaction.attrs[att]))
                         {
                             correct = false;
-                            console.log("wrong type number");
-                            console.log(att);
                             return correct;
                         }
                         break;
@@ -2219,8 +2228,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         if (attrs[transaction.attrs.security_type][transaction.kind][att].labels.indexOf(transaction.attrs[att]) == -1)
                         {
                             correct = false;
-                            console.log("wrong type enum");
-                            console.log(att);
                             return correct;
                         }
                         break;
@@ -2231,8 +2238,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             (typeof(transaction.attrs[att]) != attrs[transaction.attrs.security_type][transaction.kind][att].type))
                         {
                             correct = false;
-                            console.log("wrong type default");
-                            console.log(att);
                             return correct;
                         }
                 }
