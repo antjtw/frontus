@@ -329,7 +329,7 @@ app.controller('ContactCtrl',
                 return;
             }
             SWBrijj.insert('account.my_emails', {user_id: $scope.user_id, email: email}).then(function(res) {
-                $scope.emails.push({email: email, verified: false});
+                $scope.emails.push({email: email, verified: false, user_id: $scope.user_id});
                 $scope.$emit("notification:success", "Email added. We've sent you an email to verify ownership");
                 // TODO: notification:success and call verification flow;
                 $scope.newEmail = "";

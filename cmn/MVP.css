@@ -4573,6 +4573,7 @@ h2.onboard {
 .signature-label {
     display: inline-block;
     color: rgb(141, 141, 141);
+    width: 230px;
 }
 
 .persistentNotification {
