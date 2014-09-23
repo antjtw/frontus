@@ -1,7 +1,7 @@
 <div modal="signatureModal" close="sigclose();" options="touropts">
     <div class="modal-title">
         <p>
-            Add/Update Signature
+            Add or Update Signature
         </p>
     </div>
     <div class="sigmodal modalText">
@@ -19,18 +19,21 @@
                 <div class="DivHelper"></div>
             </div>
             <div class="span6">
-                <p>
+                <p ng-if="!options.type">
                     Upload an image or draw out your signature. We'll store it in your profile for use when signing documents.
+                </p>
+                <p ng-if="options.type">
+                    Upload or draw a signature for use when signing documents. All company admins will be able to use this signature.
                 </p>
                 <form class="form-inline">
                     <fieldset>
                         <div class="sig-label" ng-if="options.labelrequired || (options.label && options.label.length > 0)">
-                            <p>Label:</p>
+                            <p>Signature Name</p>
                             <div ng-if="options.labelrequired">
-                                <input ng-model="label.value"></input>
+                                <input ng-model="label.value">
                             </div>
                             <div ng-if="!options.labelrequired">
-                                <input disabled ng-model="options.label"></input>
+                                <input disabled ng-model="options.label">
                             </div>
                         </div>
                         <div class="fileinputs">
