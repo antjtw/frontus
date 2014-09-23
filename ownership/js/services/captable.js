@@ -1297,15 +1297,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     }
                     var trans = captable.transactions.filter(function(t) {
                         return t.transaction == tran.transaction ||
-                            (t.attrs.transaction_from &&
-                             t.attrs.transaction_from == tran.transaction);
+                            (t.attrs.transaction_from && t.attrs.transaction_from == tran.transaction);
                     });
                     // generate a list of transaction ids
                     var ids = trans.reduce(
                             accumulateProperty('transaction'), []);
                     // generate a list of ledger entries
                     var entries = captable.ledger_entries.filter(function(ent) {
-                        return ids.indexOf(ent.transaction) != -1 || ids.indexOf(ent.modifying_transaction) != -1;
+                        return ids.indexOf(ent.transaction) != -1 ||
+                            ids.indexOf(ent.modifying_transactions) != -1;
                     });
                     splice_many(captable.transactions, trans);
                     splice_many(captable.ledger_entries, entries);
