@@ -5107,8 +5107,8 @@ li.event.roles > div > ul {
 }
 
 .signatureModal {
-    margin-left: -360px;
-    width:738px;
+    margin-left: -360px !important;
+    width:738px !important;
     z-index: 1060;
     background-color: #FFFFFF;
     box-shadow: none;
@@ -5124,9 +5124,6 @@ li.event.roles > div > ul {
     font-size: 18px;
     color: #1D2C3C;
     line-height: 80px;
-}
-
-.signatureModal .modalText {
 }
 
 .signatureModal .modalText h6 {
