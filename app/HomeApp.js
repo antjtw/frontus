@@ -75,6 +75,18 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'invGrantController',
             templateUrl: '/ownership/partials/inv-grant.html'
         }).
+        when('/app/ownership/grants/issue', {
+            controller: 'chooseGrantIssue',
+            templateUrl: '/ownership/partials/chooseGrantIssue.html'
+        }).
+        when('/app/ownership/grants/people', {
+            controller: 'chooseGrantIssue',
+            templateUrl: '/ownership/partials/chooseGrantIssue.html'
+        }).
+        when('/app/ownership/grants/review', {
+            controller: 'chooseGrantIssue',
+            templateUrl: '/ownership/partials/chooseGrantIssue.html'
+        }).
         when('/app/documents/company-list', {
             templateUrl: '/documents/partials/companyList.html',
             controller: 'CompanyDocumentListController',
