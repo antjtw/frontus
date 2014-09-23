@@ -199,29 +199,7 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                <div class="row-fluid">
-                    <div class="pull-left">
-                        Direct Messages (monthly)
-                                            <span class="tooltip-icon"
-                                                  data-icon="&#xe044;"
-                                                  aria-hidden="true"
-                                                  data-placement="top"
-                                                  bs-tooltip="usagetips.direct_messages_monthly">
-                                            </span>
-                    </div>
-                    <div class="pull-right">
-                        <div>
-                            <meter cur="billing.usage.direct_messages_monthly" tot="billing.usage.direct_messages_monthly_limit"></meter>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <div> <span>{{billing.usage.direct_messages_monthly || 0}} / {{billing.usage.direct_messages_monthly_limit || 0}}</span>
 
-                        </div>
-                    </div>
-                </div>
-                -->
                 <div class="row-fluid">
                     <div class="pull-left"
                          ng-if="billing.currentPlan
@@ -302,7 +280,7 @@
                         <button ng-click="sigModalUpUpdate(sig.label, sig.url);" class="btn">Change</button>
                     </div>
                 </div>
-                <div class="standard-button small-standard-button gray">
+                <div class="standard-button">
                     <button ng-click="sigModalUpNew();" class="btn">New Signature</button>
                 </div>
             </div>

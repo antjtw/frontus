@@ -4551,6 +4551,16 @@ h2.onboard {
     font-size: 14px;
 }
 
+.signature-image {
+    margin-bottom: 20px;
+}
+
+.signature-image > div:first-of-type {
+    width: 250px;
+    border: 1px solid #F1F1F1;
+    margin-bottom: 10px;
+}
+
 .persistentNotification {
     height: 50px;
     background-color: #FBC68E;
@@ -5138,6 +5148,7 @@ li.event.roles > div > ul {
     font-size: 16px;
     text-align: left;
     margin: 0 0 10px 0;
+    font-family:'FS Elliot Web Light', sans-serif;
 }
 
 .signatureModal .subtitle {
@@ -5243,6 +5254,8 @@ div.imgsig > div.signature-box {
 
 .modal.signatureModal div.sig-label input {
     line-height: 25px;
-    width: 100%;
     margin: 0px;
+    padding-left: 10px;
+    float: left;
+    width: 315px;
 }
