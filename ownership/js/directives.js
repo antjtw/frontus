@@ -381,7 +381,7 @@ own.directive('editableSecurityDetails', [function() {
                 };
 
                 $scope.switchCapTab = function(tab) {
-                        $scope.currentTab = tab;
+                    $scope.currentTab = tab;
                 };
 
                 $scope.addTransaction = function() {
