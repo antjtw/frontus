@@ -2346,29 +2346,23 @@ span.tour-icon.issue-cog + .tooltip {
 .rightTabWindow > table.status-table.evidence > tbody > tr > td {
     text-align: left;
 }
-.rightTabWindow > table.status-table.evidence > tbody > tr > td:first-child {
-    width: 60px;
-    text-align: center;
-}
-.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(2) {
-    //min-width: 300px;
-    width: 200px;
+
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(1) {
     cursor: pointer;
+    padding-left: 20px;
 }
-.rightTabWindow > table.status-table.evidence > tbody > tr > td:nth-child(3) {
-    width: 100px;
+
+.rightTabWindow > table.status-table.evidence > tbody > tr > td:not(:first-of-type) {
+    min-width: 200px;
     padding-left: 0;
 }
 
 .rightTabWindow > table.status-table.evidence > tbody > tr.version {
-    background-color: #F1F1F1;
+    cursor: pointer;
 }
 .rightTabWindow > table.status-table.evidence > tbody > tr.version > td > div {
     float: left;
     width: 30px;
-}
-.rightTabWindow > table.status-table.evidence > tbody > tr.version > td > ul {
-    float: left;
 }
 
 .cellDetails > .detailsHeader {
@@ -2594,4 +2588,39 @@ span.tour-icon.issue-cog + .tooltip {
 
 .drop-selector .standard .dropdown-toggle {
     text-transform: capitalize;
+}
+
+/* Drag and drop basics */
+
+.drag {
+    opacity: 0.6;
+}
+
+.over {
+    background: #FFFFFF;
+}
+
+.drag-help {
+    color: #666666;
+    margin-left: 20px;
+    margin-right: 60px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.linkedDocuments.drop-zone {
+    margin-bottom: 20px;
+}
+
+.drop-zone > div {
+    padding-left: 20px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px dashed #C7C7C7;
+}
+
+.transaction-accordion.lessmargin .delete-link.add-more-docs {
+    margin-top: 0;
 }

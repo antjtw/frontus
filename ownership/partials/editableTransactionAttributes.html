@@ -17,13 +17,11 @@
             {{displayName(key)}}
         </span>
         <input ng-if="useTextField(key)"
-               ui-event="{keyup: 'saveIt(data, true, undo)',
-                          blur: 'saveIt(data, true, undo)'}"
+               ui-event="{blur: 'saveIt(data, true, undo)'}"
                type="text"
                ng-model="data.attrs[key]">
         <input ng-if="useNumberField(key)"
-               ui-event="{keyup: 'saveIt(data, true, undo)',
-                          blur: 'saveIt(data, true, undo)'}"
+               ui-event="{blur: 'saveIt(data, true, undo)'}"
                type="text"
                float
                ng-model="data.attrs[key]">
@@ -136,13 +134,11 @@
                 {{displayName(key)}}
             </span>
             <input ng-if="useTextField(key)"
-                   ui-event="{keyup: 'saveIt(data, true, undo)',
-                          blur: 'saveIt(data, true, undo)'}"
+                   ui-event="{blur: 'saveIt(data, true, undo)'}"
                    type="text"
                    ng-model="data.attrs[key]">
             <input ng-if="useNumberField(key)"
-                   ui-event="{keyup: 'saveIt(data, true, undo)',
-                          blur: 'saveIt(data, true, undo)'}"
+                   ui-event="{blur: 'saveIt(data, true, undo)'}"
                    type="text"
                    float
                    ng-model="data.attrs[key]">
