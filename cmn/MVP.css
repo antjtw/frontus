@@ -4551,6 +4551,31 @@ h2.onboard {
     font-size: 14px;
 }
 
+.signature-image:not(:last-of-type) {
+    margin-bottom: 20px;
+}
+
+.signature-button {
+    margin-top: 20px;
+}
+
+.signature-image > div:last-of-type {
+    width: 250px;
+    border: 1px solid #F1F1F1;
+    margin-bottom: 10px;
+}
+
+.signature-image div.pointer {
+    margin-top: 12px;
+    display: inline-block;
+}
+
+.signature-label {
+    display: inline-block;
+    color: rgb(141, 141, 141);
+    width: 230px;
+}
+
 .persistentNotification {
     height: 50px;
     background-color: #FBC68E;
@@ -5100,4 +5125,148 @@ textarea.email-text {
     border-bottom: 9px solid white;
     top: -9px;
     left: 5px !important;
+}
+
+.signatureModal {
+    margin-left: -360px !important;
+    width:738px !important;
+    z-index: 1060;
+    background-color: #FFFFFF;
+    box-shadow: none;
+}
+
+.signatureModal .modal-title {
+    padding-left: 30px;
+    height: 80px;
+}
+
+.signatureModal .modal-title > p {
+    text-align: left;
+    font-size: 20px;
+    color: #1D2C3C;
+    line-height: 80px;
+    font-family:'FS Elliot Web Light', sans-serif;
+}
+
+.signatureModal .modalText h6 {
+    color: #15A085;
+    text-transform: capitalize;
+    font-size: 12px;
+    text-align: left;
+    margin: 10px 0 10px 0;
+}
+
+.signatureModal .modalText p {
+    font-size: 14px;
+    text-align: left;
+    margin: 0 0 10px 0;
+}
+
+.signatureModal .subtitle {
+    color: #000;
+    display: block;
+
+}
+
+.signatureModal .modalText > div > div > img {
+    margin-top: 10px;
+}
+
+.signatureModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
+}
+
+.sigmodal.modalText {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+    padding-top: 0px;
+    margin-bottom: 0;
+}
+.sigmodal + .modal-footer > .standard-button {
+    padding-left: 20px;
+}
+.sigmodal + .modal-footer {
+    padding-top: 0px;
+    padding-right: 30px;
+}
+.sigmodal + .modal-footer > div.blue-link {
+    line-height: 32px;
+}
+div.imgsig {
+    height: 200px;
+    white-space: nowrap;
+}
+div.imgsig > div {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+div.imgsig > div:first-child {
+    border: #1ABC96 solid 1px;
+}
+
+div.imgsig > div > img {
+    margin: 0 !important;
+    height: 100%;
+    float: left;
+}
+
+div.imgsig > div.signature-box {
+    width: 330px;
+    height: 180px;
+    line-height: 180px;
+}
+
+.modal.signatureModal input.file {
+    float: left;
+    width: 50%;
+}
+
+.modal.signatureModal div.fakefile {
+    float: left;
+    width: 50%;
+    margin-left: 0px;
+}
+
+.modal.signatureModal div.fakefile > div {
+    margin-left: 0px;
+}
+
+.scribblewindow {
+    border: #1ABC96 solid 1px;
+}
+
+.scribblewindow > canvas {
+    cursor: default;
+    background-color: transparent;
+}
+
+
+.modal.signatureModal div.fileinputs {
+    display: inline-block;
+    float: left;
+    margin-top: 22px;
+}
+
+.modal.signatureModal div.sig-label {
+    display: inline-block;
+    float: left;
+    margin-top: 16px;
+    width: 100%;
+}
+
+.modal.signatureModal div.sig-label p {
+    margin: 0px;
+    font-size: 12px;
+}
+
+.modal.signatureModal div.sig-label input {
+    line-height: 25px;
+    margin: 0px;
+    padding-left: 10px;
+    float: left;
+    width: 315px;
 }
