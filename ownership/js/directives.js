@@ -1299,18 +1299,18 @@ own.directive('securityTerms', [function() {
     return {
         restrict: 'EA',
         scope: {
-            issue: '=',
-
         },
         templateUrl: '/ownership/partials/securityTerms.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate",
-            function($scope, $rootScope, displayCopy, attributes, captable, calculate) {
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants) {
                 $scope.tips = displayCopy.captabletips;
+                
+                $scope.issue = grants.issue;
 
-                var attrs = attributes.getAttrs();
+                $scope.attrs = attributes.getAttrs();
                 
                 function fixKeys(keys) {
-                    var skip = ['security', 'pariwith'];
+                    var skip = ['security', 'pariwith', 'optundersecurity'];
                     for (var i = 0; i < keys.length; i++)
                     {
                         if (skip.indexOf(keys[i]) != -1)
@@ -1325,9 +1325,7 @@ own.directive('securityTerms', [function() {
 
                 function getKeys() {
                     $scope.keys = [];
-                    if (!$scope.issue)
-                        return;
-                    var att = fixKeys(Object.keys($scope.issue.attrs));
+                    var att = fixKeys(Object.keys($scope.attrs['Option']['issue security']));
                     for (var i = 0; i < att.length; i += 2)
                     {
                         var tmp = [];
@@ -1337,7 +1335,6 @@ own.directive('securityTerms', [function() {
                         }
                         $scope.keys.push(tmp);
                     }
-                    console.log(att, $scope.keys);
                 };
 
                 $scope.description = function(key) {
@@ -1347,17 +1344,10 @@ own.directive('securityTerms', [function() {
                 $scope.displayName = function(key) {
                     if (key == 'effective_date')
                         return 'Date';
-                    return attrs[$scope.issue.attrs.security_type]['issue security'][key].display_name;
+                    return $scope.attrs[$scope.issue[0].transactions[0].attrs.security_type]['issue security'][key].display_name;
                 };
 
                 getKeys();
-                
-                $scope.$watch($scope.issue, function () { //TODO: watch doesn't work
-                    console.log("new issue");
-                    getKeys();
-                });
-                
-                
                 
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     if (inputType(k) == "array_text") {
@@ -1436,10 +1426,10 @@ own.directive('securityTerms', [function() {
                     }
                     if (key == 'effective_date')
                         return 'date';
-                    switch (attrs[$scope.issue.attrs.security_type]['issue security'][key].type)
+                    switch ($scope.attrs[$scope.issue[0].transactions[0].attrs.security_type]['issue security'][key].type)
                     {
                         case "enum":
-                            return attrs[$scope.issue.attrs.security_type]['issue security'][key].labels;
+                            return "enum";
                         case "boolean":
                             return "boolean";
                         case "fraction":
@@ -1462,7 +1452,7 @@ own.directive('securityTerms', [function() {
                     return inputType(key) == "boolean";
                 };
                 $scope.useDropdown = function(key) {
-                    return isArray(inputType(key));
+                    return inputType(key) == "enum";
                 };
                 $scope.useDate = function(key) {
                     return inputType(key) == 'date';
