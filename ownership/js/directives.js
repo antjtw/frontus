@@ -1266,15 +1266,31 @@ own.directive('securityTerms', [function() {
 
         },
         templateUrl: '/ownership/partials/securityTerms.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "attributes",
-            function($scope, $rootScope, displayCopy, attributes) {
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate) {
                 $scope.tips = displayCopy.captabletips;
 
                 var attrs = attributes.getAttrs();
+                
+                function fixKeys(keys) {
+                    var skip = ['security', 'pariwith'];
+                    for (var i = 0; i < keys.length; i++)
+                    {
+                        if (skip.indexOf(keys[i]) != -1)
+                        {
+                            keys.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    keys.splice(0, 0, 'effective_date')
+                    return keys;
+                }
 
                 function getKeys() {
-                    var att = Object.keys($scope.issue.attrs);
                     $scope.keys = [];
+                    if (!$scope.issue)
+                        return;
+                    var att = fixKeys(Object.keys($scope.issue.attrs));
                     for (var i = 0; i < att.length; i += 2)
                     {
                         var tmp = [];
@@ -1292,10 +1308,128 @@ own.directive('securityTerms', [function() {
                 };
 
                 $scope.displayName = function(key) {
+                    if (key == 'effective_date')
+                        return 'Date';
                     return attrs[$scope.issue.attrs.security_type]['issue security'][key].display_name;
                 };
 
                 getKeys();
+                
+                $scope.$watch($scope.issue, function () { //TODO: watch doesn't work
+                    console.log("new issue");
+                    getKeys();
+                });
+                
+                
+                
+                $scope.setIt = function(tran, cell, errorFunc, k, v) {
+                    if (inputType(k) == "array_text") {
+                        if (!tran.attrs[k]) {
+                            tran.attrs[k] = [];
+                        }
+                        tran.attrs[k].push(v);
+                    } else {
+                        if (v === "") {
+                            delete tran.attrs[k];
+                        } else {
+                            tran.attrs[k] = v;
+                        }
+                    }
+                    $scope.saveIt(tran, cell, errorFunc);
+                };
+                
+                $scope.saveIt = function(tran, cell, errorFunc) {
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
+                };
+                
+                function reallySaveDate(tran, cell, errorFunc, evt, field) {
+                    // TODO: keyPressed is used to minimize saving. Logic may no longer work / be needed
+                    if (evt) {
+                        if (evt.type != 'blur') {
+                            keyPressed = true;
+                        }
+                        var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                        var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
+                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                            var date = dateString;
+                            if (calculate.isDate(date)) {
+                                tran[field] = date;
+                                if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0)) {
+                                    captable.saveTransaction(tran, cell, errorFunc);
+                                }
+                                keyPressed = false;
+                            }
+                        }
+                    } else { // User is using calendar
+                        if (calculate.isDate(tran.effective_date)) {
+                            $scope.saveIt(tran, cell, errorFunc);
+                        }
+                        keyPressed = false;
+                    }
+                }
+                var currentDateSave;
+                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
+                    // debounce the actual save, to prevent duplicates
+                    // TODO: figure out why there are duplicate events firing
+                    if (currentDateSave) {
+                        $timeout.cancel(currentDateSave);
+                        currentDateSave = null;
+                    }
+                    currentDateSave = $timeout(function() {
+                        reallySaveDate(tran, cell, errorFunc, evt, field);
+                    }, 100);
+                    currentDateSave.then(function() {
+                        currentDateSave = null;
+                    });
+                };
+                
+                
+                function inputType(key) {
+                    if (key.indexOf("investor") != -1)
+                    {
+                        return "investor";
+                    }
+                    if (key.indexOf("security") != -1 &&
+                            key.indexOf("type") == -1)
+                    {
+                        return "security";
+                    }
+                    if (key == 'effective_date')
+                        return 'date';
+                    switch (attrs[$scope.issue.attrs.security_type]['issue security'][key].type)
+                    {
+                        case "enum":
+                            return attrs[$scope.issue.attrs.security_type]['issue security'][key].labels;
+                        case "boolean":
+                            return "boolean";
+                        case "fraction":
+                        case "number":
+                            return "number";
+                        case "array_text":
+                            return "array_text";
+                        default:
+                            return "text_field";
+                    }
+                }
+                this.inputType = inputType;
+                $scope.useTextField = function(key) {
+                    return inputType(key) == "text_field";
+                };
+                $scope.useNumberField = function(key) {
+                    return inputType(key) == "number";
+                };
+                $scope.useBool = function(key) {
+                    return inputType(key) == "boolean";
+                };
+                $scope.useDropdown = function(key) {
+                    return isArray(inputType(key));
+                };
+                $scope.useDate = function(key) {
+                    return inputType(key) == 'date';
+                };
 
             }
         ],

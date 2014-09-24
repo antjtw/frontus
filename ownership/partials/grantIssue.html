@@ -1,4 +1,5 @@
 <div>
     <input ng-if="choose" ui-select2="issueSelectOptions" ng-model="selected.issue">
     <span ng-if="!choose">{{issue[0].name}}</span>
+    <security-terms issue="issue[0].transactions[0]"></security-terms>
 </div>
