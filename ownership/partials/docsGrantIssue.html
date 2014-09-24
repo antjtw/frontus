@@ -7,6 +7,17 @@
     <internal-right-rail>
         <div ng-style="viewportheight">
             <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
+
+            <div ng-if="issue[0].getDocs().plan.docname">
+                {{issue[0].getDocs().plan.docname}}
+                <button ng-click="issue[0].removeDoc(issue[0].getDocs().plan)">Delete Me</button>
+            </div>
+            <div ng-if="!issue[0].getDocs().plan.docname" class="linkedDocuments drop-zone">
+                <div droppable drop="handleDrop" bin="bin" id="plan">
+                    Plan
+                </div>
+            </div>
+
             <div ng-if="issue[0].getDocs().grant.docname">
                 {{issue[0].getDocs().grant.docname}}
                 <button ng-click="issue[0].removeDoc(issue[0].getDocs().grant)">Delete Me</button>
@@ -16,7 +27,11 @@
                     Agreement
                 </div>
             </div>
+            <div>
+                <a href="/app/ownership/grants/issue"><button>Done Linking</button></a>
+            </div>
         </div>
+
     </internal-right-rail>
 </div>
 
