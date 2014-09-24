@@ -1480,6 +1480,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function nullSecurity() {
         return new Security();
     }
+    this.nullSecurity = nullSecurity;
     /* initAttrs
      *
      * Grab valid attribute keys from the attributes service
@@ -1557,6 +1558,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // Silly future date so that the issue always appears
         // on the leftmost side of the table
         tran.insertion_date = new Date(2100, 1, 1);
+        tran.effective_date = security.effective_date;
 
         security.transactions.push(tran);
         return security;
