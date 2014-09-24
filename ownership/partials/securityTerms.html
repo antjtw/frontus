@@ -10,7 +10,62 @@
                 <div class="row-fluid">
                     <div ng-repeat="key in pair" class="span4">
                         <span>{{displayName(key)}}</span><br>
-                        <input ng-model="issue.attrs[key]"></input>
+                        
+                        <input ng-if="useTextField(key)"
+                               ui-event="{blur: 'saveIt(issue, true)'}"
+                               type="text"
+                               ng-model="issue.attrs[key]">
+                        <input ng-if="useNumberField(key)"
+                               ui-event="{blur: 'saveIt(issue, true)'}"
+                               type="text"
+                               float
+                               ng-model="issue.attrs[key]">
+                        <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
+                            <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{issue.attrs[key]}}
+                                <span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="i in attrs[issue.attrs.security_type][issue.kind][key].labels">
+                                    <a ng-click="setIt(issue, true, null, key, i)">
+                                        {{i}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </ul>
+                        <ul class="dropdown-list drop-selector" ng-if="useBool(key)">
+                            <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                <span ng-if="issue.attrs[key] == true">Yes</span>
+                                <span ng-if="issue.attrs[key] == false">No</span>
+                                <span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="setIt(issue, true, null, key, true)">
+                                        Yes
+                                    </a>
+                                </li>
+                                <li>
+                                    <a ng-click="setIt(issue, true, null, key, false)">
+                                        No
+                                    </a>
+                                </li>
+                            </ul>
+                        </ul>
+                        
+                        <input id="effective_date{{::issue.$$hashKey}}"
+                               ng-if="useDate(key)"
+                               ng-model="issue.effective_date"
+                               ng-change="saveItDate(issue, true, null, $event, 'effective_date')"
+                               data-date-format={{settings.lowercasedate}}
+                               date-type="string"
+                               type="text"
+                               bs-datepicker>
+                        
+                        
+                        
                         <span ng-if="description(key)"
                               class="tooltip-icon"
                               data-icon="&#xe044;"
