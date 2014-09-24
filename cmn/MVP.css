@@ -996,6 +996,28 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls .dropdown-list {
     line-height: 32px;
 }
+.subnav-controls .dropdown-list.big .dropdown-menu li > div {
+    padding-top: 5px;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button {
+    background-color: #E3E3E3;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button > span{
+    display: inline-block;
+}
+.dropdown-list.big .dropdown-menu li:hover .check-box-button.selected {
+    background-color: #1ABC96;
+    border: 1px solid #1ABC96;
+}
+.subnav-controls .dropdown-list.big .dropdown-menu li > div:last-child {
+    text-align: left;
+}
+.subnav-controls .dropdown-list.big .dropdown-toggle,
+.subnav-controls .dropdown-list.big .dropdown-menu {
+    width: 194px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .subnav-controls > div:first-child {
     display: inline-block;
     vertical-align: middle;
@@ -1006,6 +1028,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
 }
+.captable-controls.subnav-controls > div:first-child {
+    margin-left: 0;
+}
 .subnav-controls > div > div:not(.tooltip) {
     position: relative;
 }
@@ -1015,6 +1040,9 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
 .subnav-controls ul.drop-selector {
     margin-left: 8px;
     margin-right: 20px;
+}
+.subnav-controls .filter-selector.drop-selector {
+    margin-right: 10px;
 }
 .subnav-controls input {
     border: 0;
@@ -3225,7 +3253,8 @@ button.icon-button:hover {
     width:20px;
     height:30px;
 }
-.standard.open .dropdown-toggle::before {
+.standard.open .dropdown-toggle::before,
+.filter-selector .standard.open .dropdown-toggle::before {
     background: url('/img/up-arrow-20x30.png');
 }
 .standard .dropdown-toggle:hover {
@@ -4522,6 +4551,31 @@ h2.onboard {
     font-size: 14px;
 }
 
+.signature-image:not(:last-of-type) {
+    margin-bottom: 20px;
+}
+
+.signature-button {
+    margin-top: 20px;
+}
+
+.signature-image > div:last-of-type {
+    width: 250px;
+    border: 1px solid #F1F1F1;
+    margin-bottom: 10px;
+}
+
+.signature-image div.pointer {
+    margin-top: 12px;
+    display: inline-block;
+}
+
+.signature-label {
+    display: inline-block;
+    color: rgb(141, 141, 141);
+    width: 230px;
+}
+
 .persistentNotification {
     height: 50px;
     background-color: #FBC68E;
@@ -4730,7 +4784,6 @@ textarea.email-text {
 }
 .linkedDocuments {
     width: 260px;
-    margin-bottom: 20px;
 }
 .linkedDocuments.viewOnly {
     width: 280px;
@@ -4759,7 +4812,6 @@ textarea.email-text {
     line-height: 12px;
 }
 .linkedDocuments > div > span.pull-right {
-    line-height: 32px;
     cursor: pointer;
 }
 .capTab span.blue-link.delete-link {
@@ -4782,9 +4834,6 @@ textarea.email-text {
 }
 
 /*//Message status sidebar*/
-.message-side ul.activity-feed2 {
-    width: 345px;
-}
 
 .messages .activity-feed2 li.event > div:last-of-type > ul > li:last-of-type {
     text-transform: none;
@@ -4831,12 +4880,6 @@ textarea.email-text {
     padding-right: 0;
 }
 
-
-.messages .activity-feed2 {
-    height: 95%;
-    /*height: calc(100%-40px);*/
-    position: fixed;
-}
 .messages .activity-feed2 li.event{
     margin-right: 20px;
 }
@@ -4935,6 +4978,8 @@ textarea.email-text {
 
 .linkedDocuments .noGroups.addMore{
     color: #3498DB;
+    margin-left: -20px;
+    margin-right: 20px;
 }
 
 .linkedDocuments .noGroups.addMore:hover{
@@ -4960,6 +5005,47 @@ textarea.email-text {
     cursor: auto;
 }
 
+
+.sidebarInfo {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.sidebarInfo .infoBox .headline{
+    color: #003045;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    font-size: 20px;
+}
+
+.infoBox{
+    margin-top: 20px;
+    border-bottom: 1px solid #C7C7C7;
+    padding-bottom: 20px;
+}
+
+.emailName{
+    padding-top: 5px;
+    color: #666;
+    font-size: 14px;
+}
+
+.replyPic{
+    height: 50px;
+    width: 50px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.personEmail {
+    padding-bottom: 10px;
+}
+
+.go-to{
+    color: #666;
+    cursor: pointer;
+}
+
 .lower-icon {
     vertical-align: -10%;
 }
@@ -4976,4 +5062,211 @@ textarea.email-text {
    border-bottom: 1px solid rgb(241, 241, 241); 
 }
 
+.filter-selector.dropdown-list.big {
+}
+.filter-selector .standard .dropdown-toggle::before {
+    display: block;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    left: 3px;
+    content:" ";
+    background: url('/img/down-arrow-20x30.png');
+    width:20px;
+    height:30px;
+}
+.filter-selector .standard .dropdown-toggle {
+    padding-left: 26px;
+    background-color: inherit;
+    border: none;
+    width: 140px !important;
+}
+.filter-selector .standard .dropdown-toggle:hover {
+    background-color: inherit;
+}
+.filter-selector .dropdown-menu {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 10px 0 0 0;
+    border-radius: 3px;
+    box-shadow: none;
+    border: 0;
+    width: 150px;
+    background-color: #E3E3E3;
+    min-width: 150px;
+    cursor: pointer;
+    z-index: 1000;
+    overflow: visible !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.filter-selector .dropdown-menu:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-bottom: 10px solid #E3E3E3;
+    top: -10px;
+    left: 4px !important;
+}
+.filter-selector .dropdown-menu:after {
+    content: ' ';
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 9px solid transparent;
+    border-left: 9px solid transparent;
+    border-bottom: 9px solid white;
+    top: -9px;
+    left: 5px !important;
+}
 
+.signatureModal {
+    margin-left: -360px !important;
+    width:738px !important;
+    z-index: 1060;
+    background-color: #FFFFFF;
+    box-shadow: none;
+}
+
+.signatureModal .modal-title {
+    padding-left: 30px;
+    height: 80px;
+}
+
+.signatureModal .modal-title > p {
+    text-align: left;
+    font-size: 20px;
+    color: #1D2C3C;
+    line-height: 80px;
+    font-family:'FS Elliot Web Light', sans-serif;
+}
+
+.signatureModal .modalText h6 {
+    color: #15A085;
+    text-transform: capitalize;
+    font-size: 12px;
+    text-align: left;
+    margin: 10px 0 10px 0;
+}
+
+.signatureModal .modalText p {
+    font-size: 14px;
+    text-align: left;
+    margin: 0 0 10px 0;
+}
+
+.signatureModal .subtitle {
+    color: #000;
+    display: block;
+
+}
+
+.signatureModal .modalText > div > div > img {
+    margin-top: 10px;
+}
+
+.signatureModal + .modal-backdrop {
+    z-index: 1050;
+    background-color: #33485D;
+}
+
+.sigmodal.modalText {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+    padding-top: 0px;
+    margin-bottom: 0;
+}
+.sigmodal + .modal-footer > .standard-button {
+    padding-left: 20px;
+}
+.sigmodal + .modal-footer {
+    padding-top: 0px;
+    padding-right: 30px;
+}
+.sigmodal + .modal-footer > div.blue-link {
+    line-height: 32px;
+}
+div.imgsig {
+    height: 200px;
+    white-space: nowrap;
+}
+div.imgsig > div {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+}
+
+div.imgsig > div:first-child {
+    border: #1ABC96 solid 1px;
+}
+
+div.imgsig > div > img {
+    margin: 0 !important;
+    height: 100%;
+    float: left;
+}
+
+div.imgsig > div.signature-box {
+    width: 330px;
+    height: 180px;
+    line-height: 180px;
+}
+
+.modal.signatureModal input.file {
+    float: left;
+    width: 50%;
+}
+
+.modal.signatureModal div.fakefile {
+    float: left;
+    width: 50%;
+    margin-left: 0px;
+}
+
+.modal.signatureModal div.fakefile > div {
+    margin-left: 0px;
+}
+
+.scribblewindow {
+    border: #1ABC96 solid 1px;
+}
+
+.scribblewindow > canvas {
+    cursor: default;
+    background-color: transparent;
+}
+
+
+.modal.signatureModal div.fileinputs {
+    display: inline-block;
+    float: left;
+    margin-top: 22px;
+}
+
+.modal.signatureModal div.sig-label {
+    display: inline-block;
+    float: left;
+    margin-top: 16px;
+    width: 100%;
+}
+
+.modal.signatureModal div.sig-label p {
+    margin: 0px;
+    font-size: 12px;
+}
+
+.modal.signatureModal div.sig-label input {
+    line-height: 25px;
+    margin: 0px;
+    padding-left: 10px;
+    float: left;
+    width: 315px;
+}

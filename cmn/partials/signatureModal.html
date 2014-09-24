@@ -1,0 +1,60 @@
+<div modal="signatureModal" close="sigclose();" options="touropts">
+    <div class="modal-title">
+        <p>
+            Add or Update Signature
+        </p>
+    </div>
+    <div class="sigmodal modalText">
+        <div class="row-fluid">
+            <div class="imgsig span6">
+                <div class="signature-box" ng-show="!imageReady && !scribblemode" ng-style="{{signaturestyle}}" ng-click="createNewSignature()">
+                    Draw Signature
+                </div>
+                <div ng-show="imageReady" class="signature-box">
+                    <img id="signaturevisual">
+                </div>
+                <div class="scribblewindow signature-box" ng-show="scribblemode">
+                    <canvas id="scribbleboard"></canvas>
+                </div><br>
+                <div class="DivHelper"></div>
+            </div>
+            <div class="span6">
+                <p ng-if="!options.type">
+                    Upload an image or draw out your signature. We'll store it in your profile for use when signing documents.
+                </p>
+                <p ng-if="options.type">
+                    Upload or draw a signature for use when signing documents. All company admins will be able to use this signature.
+                </p>
+                <form class="form-inline">
+                    <fieldset>
+                        <div class="sig-label" ng-if="options.labelrequired || (options.label && options.label.length > 0)">
+                            <p>Signature Name</p>
+                            <div ng-if="options.labelrequired">
+                                <input ng-model="label.value">
+                            </div>
+                            <div ng-if="!options.labelrequired">
+                                <input disabled ng-model="options.label">
+                            </div>
+                        </div>
+                        <div class="fileinputs">
+                            <input type="file" class='file' onchange="angular.element(this).scope().setFilesSig(this);"/>
+                            <div class="fakefile">
+                                <div class="pull-left standard-button gray"><button class="btn">Upload Signature</button></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-right standard-button green">
+            <button class="btn"
+                    ng-click="uploadSignatureNow();"
+                    ng-disabled="(!imageReady && !scribblemode) || (options.labelrequired && label.value.length==0)">Done</button>
+        </div>
+        <div class="pull-right blue-link">
+            <span ng-click="sigclose();">Cancel</span>
+        </div>
+    </div>
+</div>

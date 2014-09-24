@@ -1,4 +1,3 @@
-<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
 <link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <link href="/lib/introjs/introjs.css" rel="stylesheet">
 <div class="maincontent">
@@ -6,6 +5,93 @@
 
 <!-- Captable From Here Down -->
 <subnav>
+    <div class="pull-left captable">
+        <div ng-if="!windowToggle && !editMode"
+            ng-class="{'disabledme': companyIsZombie()}">
+            <ul class="dropdown-list drop-selector big filter-selector">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle" ng-click="checkDateRange();"
+                        data-toggle="dropdown" href="#">
+                        <span ng-if="(ctFilter.date | utcdate:settings.shortdate) != daterange.today">
+                            Viewing {{ctFilter.date | utcdate:settings.shortdate}}
+                        </span>
+                        <span ng-if="(ctFilter.date | utcdate:settings.shortdate) == daterange.today">
+                            Viewing Today
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu history-box" ng-click="$event.stopPropagation()">
+                        <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
+                        <span ng-click="setToday();" class="blue-link">set to today</span>
+                        <input class="range"
+                               style='{{daterange.coloredbar}}'
+                               type="range"
+                               value="0"
+                               min="0"
+                               max="{{ct.totalDays}}"
+                               step="1"
+                               ng-model="daterange.offset"
+                               ng-change="updateDateSlider()"/>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pull-left"
+         ng-animate="{show: fadeShow, hide: fadeHide}"
+         ng-if="!windowToggle && !editMode">
+        <ul class="dropdown-list drop-selector big filter-selector">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle"
+                   data-toggle="dropdown" href="#"
+                   title="{{ctFilter.security_types | displayList }}">
+                    {{ securityFilterLabel() }}
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-click="ctFilter.vesting = !ctFilter.vesting"
+                        onclick="event.stopPropagation();"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: ctFilter.vesting}">
+                                <span data-icon="&#xe023;"
+                                      aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>Unvested options</span>
+                        </div>
+                    </li>
+                    <li ng-repeat="t in securityTypeDropdown(true)"
+                        ng-click="toggleSecurityType(t)"
+                        onclick="event.stopPropagation();"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: showSecurityType(t)}">
+                                <span data-icon="&#xe023;" aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>{{t}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="box-button pull-right"
+         ng-click="downloadCSV()">
+        <ul>
+            <li>
+                <span data-icon="&#xe007;" arai-hidden="true"></span>
+            </li>
+            <li>
+                <span>CSV</span>
+            </li>
+        </ul>
+    </div>
     <div class="box-button pull-right"
          ng-if="!windowToggle"
          ng-class="{'disabledme': companyIsZombie()}"
@@ -117,7 +203,7 @@
                     Ownership
                 </th>
                 <th class="longrow">Shareholder</th>
-                <th ng-repeat="sec in ct.securities"
+                <th ng-repeat="sec in ct.securities | filter:securityFilter"
                     ng-click="selectSecurity(sec.name)">
                     <span ng-class="{'column-highlight':tourstate==2}">
                         <span class="next-button"
@@ -143,7 +229,7 @@
                 <th class="longrow">Shareholder</th>
                 <th ng-class="{tranViewSelected: sec==selectedSecurity}"
                     class="staticHeaders"
-                    ng-repeat="sec in ct.securities"
+                    ng-repeat="sec in ct.securities | filter:securityFilter | filter:dateSecurityFilter"
                     ng-click="selectSecurity(sec.name)">
                     <span>{{::sec.name}}</span>
                     <span class="next-button"
@@ -157,7 +243,7 @@
                 <td class="input-right">Shares</td>
                 <td class="input-right">%</td>
                 <td></td>
-                <td ng-repeat="one in ct.securities">
+                <td ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span>{{securityUnitLabel(one)}}</span>
                     <span>Total Paid</span>
                 </td>
@@ -171,7 +257,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.rowSum(row.name) | number:0}}">
+                           value="{{rowSum(row) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -203,7 +289,7 @@
                                ng-model="row.name">
                     </span>
                 </td>
-                <td ng-repeat="key in ct.securities"
+                <td ng-repeat="key in ct.securities | filter:securityFilter"
                     ng-class="{tranSelected: selectedCell
                         && selectedCell.investor == row.name
                         && selectedCell.security == key.name}">
@@ -237,7 +323,8 @@
                            ng-paste="namePaste($event, row);"
                            ng-model="$parent.new_inv">
                 </td>
-                <td ng-repeat="key in ct.securities" class="capsums-col">
+                <td ng-repeat="key in ct.securities | filter:securityFilter"
+                    class="capsums-col">
                 </td>
                 <!-- for new security column -->
                 <td ng-if="editMode;"></td>
@@ -250,12 +337,12 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.rowSum(row.name) | number:0}}">
+                           value="{{rowSum(row) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{::captable.investorOwnershipPercentage(row.name) || 0.000 | number:2}}%">
+                           value="{{investorOwnershipPercentage(row) || 0.000 | number:2}}%">
                 </td>
                 <td ng-class="{tranViewSelected: selectedInvestor == row,
                                'hoverable': row.name}"
@@ -267,36 +354,39 @@
                     class="tableFields"
                     ng-class="{tranViewSelected: selectedCell.investor==row.name && selectedCell.security==key.name,
                                hoverable: captable.cellFor(row.name, key.name)}"
-                    ng-repeat="key in ct.securities">
-                    <captable-cell inv='row.name' sec='key.name'
+                    ng-repeat="key in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
+                    <captable-cell filter='ctFilter' inv='row.name' sec='key.name'
                         data='captable.cellFor(row.name, key.name)'></captable-cell>
                 </td>
             </tr>
             </tbody>
             <!-- Unissued Rows -->
             <tr class="unissued-rows"
-                ng-repeat="sec in
-                           captable.securitiesWithUnissuedUnits()">
+                ng-repeat="sec in captable.securitiesWithUnissuedUnits()
+                           | filter:securityFilter
+                           | filter:dateSecurityFilter">
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.numUnissued(sec, ct.securities) | number:0}}">
+                           value="{{numUnissued(sec) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.securityUnissuedPercentage(sec, ct.securities) || 0.00 | number:2}}%">
+                           value="{{securityUnissuedPercentage(sec) || 0.00 | number:2}}%">
                 </td>
                 <td class="viewName unissuedName">
                     {{::sec.name}} (Unissued)
                 </td>
                 <td class="tableFields"
-                    ng-repeat="key in ct.securities">
+                    ng-repeat="key in ct.securities
+                              | filter:securityFilter
+                              | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{editview: editMode}"
                              class="output clickable">
                             <span ng-if="sec==key">
-                                {{captable.numUnissued(key, ct.securities) | number:2}}
+                                {{numUnissued(key) | number:2}}
                             </span>
                         </div>
                         <div ng-class="{editview: editMode}"
@@ -313,7 +403,7 @@
                 <td class="tableFields"></td>
                 <td class="tableFields"></td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities">
+                    ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                 </td>
                 <!-- for new security col -->
                 <td ng-if="editMode;"></td>
@@ -322,8 +412,7 @@
                 <td class="capsums-col">
                     <input class="input-right"
                            disabled
-                           value="{{captable.totalOwnershipUnits()
-                                  | number:0}}">
+                           value="{{totalOwnershipUnits(1) | number:0}}">
                 </td>
                 <td class="capsums-col">
                     <input class="input-right"
@@ -333,17 +422,16 @@
                 <td class="tableFields">
                 </td>
                 <td class="tableFields"
-                    ng-repeat="one in ct.securities">
+                    ng-repeat="one in ct.securities | filter:securityFilter | filter:dateSecurityFilter">
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{captable.securityTotalUnits(one)
-                            + captable.numUnissued(one, ct.securities)
+                            {{securityTotalUnits(one) + numUnissued(one)
                             | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"
                              class="output second footer">
-                            {{captable.securityTotalAmount(one)
+                            {{securityTotalAmount(one)
                             | formatAmount:'amount'}}
                         </div>
                     </span>
@@ -385,6 +473,7 @@
                     </span>
                     <span ng-switch-when="4">
                         <cell-details cell="selectedCell"
+                                      filter='ctFilter'
                                       currenttab="currentTab"></cell-details>
                     </span>
                     <span class="padded-cap capGuide in-brief"
@@ -403,7 +492,7 @@
                                 <img src="/img/activity/login.png">
                                 <div>
                                     <span>
-                                        {{selectedInvestor.lastlogin | date:settings.shortdate}}
+                                        {{selectedInvestor.lastlogin | utcdate:settings.shortdate}}
                                     </span>
                                     <span>Last Login</span>
                                 </div>
@@ -413,7 +502,7 @@
                                 <img src="/img/activity/received.png">
                                 <div>
                                     <span>
-                                        {{selectedInvestor.received | date:settings.shortdate}}
+                                        {{selectedInvestor.received | utcdate:settings.shortdate}}
                                     </span>
                                     <span>Delivered</span>
                                 </div>
@@ -423,7 +512,7 @@
                                 <img src="/img/activity/view.png">
                                 <div>
                                     <span>
-                                        {{selectedInvestor.viewed | date:settings.shortdate}}
+                                        {{selectedInvestor.viewed | utcdate:settings.shortdate}}
                                     </span>
                                     <span>Last Viewed</span>
                                 </div>
@@ -543,62 +632,6 @@
      <evidence-table state="state"></evidence-table>
 </div>
 
-<div ng-hide="!editMode || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
-    <div class="standard-button small-standard-button" ng-click="moveTour();">
-        <h2>Need Help?</h2>
-        <button id='a_own_tour_start_bar' class="btn">Tour</button>
-    </div>
-    <div class="tour-stage first" ng-class="{'slidingcss25':oldSafari(), 'stage-one':tourstate >= 1}">
-        <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);">
-            <span ng-show="tourstate <= 1">1</span>
-            <span ng-hide="tourstate <= 1" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Shareholders</h2>
-        <p ng-show="tourstate == 1">Enter your shareholder names. The table will automatically expand as you go.</p>
-        <div class="standard-button small-standard-button" ng-click="moveTour();">
-            <button class="btn">Next</button>
-        </div>
-    </div>
-    <div class="tour-stage second" ng-class="{'slidingcss25':oldSafari(), 'stage-two':tourstate >= 2}">
-        <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);">
-            <span ng-show="tourstate <= 2">2</span>
-            <span ng-hide="tourstate <= 2" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Security</h2>
-        <p ng-show="tourstate == 2">Name the security (e.g. Common, Seed, Series A)</p>
-        <div class="standard-button small-standard-button" ng-click="moveTour();">
-            <button class="btn">Next</button>
-        </div>
-    </div>
-    <div class="tour-stage third" ng-class="{'slidingcss25':oldSafari(), 'stage-three':tourstate >= 3}">
-        <span ng-class="{'current-icon':tourstate == 3}" ng-click="gotoTour(3);">
-            <span ng-show="tourstate <= 3">3</span>
-            <span ng-hide="tourstate <= 3" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Security Terms</h2>
-        <p ng-show="tourstate == 3">Select the security type and we'll display terms so you can define the security</p>
-        <div class="standard-button small-standard-button" ng-click="moveTour();">
-            <button class="btn">Next</button>
-        </div>
-    </div>
-    <div class="tour-stage fourth" ng-class="{'slidingcss25':oldSafari(), 'stage-four':tourstate >= 4}">
-        <span ng-class="{'current-icon':tourstate == 4}" ng-click="gotoTour(4);">
-            <span ng-show="tourstate <= 4">4</span>
-            <span ng-hide="tourstate <= 4" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Individual Shares</h2>
-        <p ng-show="tourstate == 4">Enter individual amounts. The terms inherit from the
-            security, but you can always override them.</p>
-        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour(); tourNotification();">
-            <button class="btn">Done!</button>
-        </div>
-    </div>
-    <div class="tour-stage fifth" ng-show="tourstate != 0" ng-class="{'slidingcss25':oldSafari()}">
-        <div class="tour-finish-button" ng-click="closeTour();">
-            <button class="btn"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
-        </div>
-    </div>
-</div>
 </div>
 </div>
 

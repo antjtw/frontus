@@ -2527,13 +2527,18 @@ div.profile-link > span:first-of-type {
 }
 
 .docPrepRow > span:first-child {
-    min-width: 300px;
-    width: 300px;
+    min-width: 400px;
+    width: 400px;
 }
+
 .docPrepRow > span:first-child ~ span{
     min-width: 150px;
 }
 
 .docPrepRow a {
     color: #3397da;
+}
+
+.document-list {
+    padding-bottom: 20px;
 }

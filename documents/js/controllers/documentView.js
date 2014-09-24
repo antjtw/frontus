@@ -145,7 +145,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             $scope.investor_attributes.investorState = angular.copy($rootScope.person.state);
                             $scope.investor_attributes.investorAddress = angular.copy($rootScope.person.street);
                             $scope.investor_attributes.investorPhone = angular.copy($rootScope.person.phone);
-                            $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);
+                            $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);//might be wrong but doesn't matter because we don't support smartdocs now
                             $scope.investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
 
                             //Sort through all the !!! and make the appropriate replacement
@@ -221,135 +221,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         function uploadSuccess() {
-            var rand = Math.random();
-            $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + rand;
-            $scope.signatureprocessing = false;
-            $scope.progressVisible = false;
             User.signaturePresent = true;
-            var elements = document.getElementsByClassName('draggable imagesignature mysignature');
-            angular.forEach(elements, function(element) {
-                element = element.querySelector("textarea");
-                element.style.backgroundImage = 'url(/photo/user?id=signature:&dontcache' + rand + ')';
-            });
             $scope.$emit("notification:success", "Signature uploaded");
-            $scope.scribblemode = false;
         }
 
         function uploadFail() {
             void(0);
-            $scope.progressVisible = false;
-            $scope.signatureprocessing = false;
-            $scope.signatureURL = '/photo/user?id=signature:';
             $scope.$emit("notification:fail", "Oops, something went wrong.");
             // console.log(x);
         }
-
-        $scope.uploadSignatureNow = function() {
-            if ($scope.files || $scope.scribblemode) {
-                $scope.signatureURL = "/img/image-loader-140.gif";
-                $scope.signatureprocessing = true;
-                $scope.progressVisible = true;
-                var fd;
-                if ($scope.scribblemode) {
-                    var canvas = document.getElementById("scribbleboard");
-                    fd = canvas.toDataURL();
-                    $scope.signatureModal.dismiss();
-                    SWBrijj.uploadSignatureString(fd).then(function(x) {
-                        uploadSuccess();
-                    }).except(function(x) {
-                            $scope.uploadFail();
-                        });
-                }
-                else {
-                    fd = new FormData();
-                    for (var i = 0; i < $scope.files.length; i++) {
-                        fd.append("uploadedFile", $scope.files[i]);
-                    }
-                    $scope.signatureModal.dismiss();
-                    SWBrijj.uploadSignatureImage(fd).then(function(x) {
-                        uploadSuccess();
-                    }).except(function(x) {
-                        $scope.uploadFail();
-                    });
-                }
-            }
-            else {
-                $scope.signatureModal.dismiss();
-            }
-
-        };
-
-        $scope.createNewSignature = function() {
-            $scope.scribblemode = true;
-
-            var canvas = document.getElementById("scribbleboard");
-
-            var ctx = canvas.getContext('2d');
-            canvas.height = 180;
-            canvas.width = 330;
-            console.log(ctx);
-            console.log(canvas);
-            ctx.lineCap = 'round';
-            ctx.color = "blue";
-            ctx.lineWidth = 2;
-            ctx.fillStyle = "white";
-            // ctx.setAlpha(0);
-            ctx.fillRect(0, 0, 200, 200);
-            // ctx.setAlpha(0.5);
-
-            canvas.addEventListener('mousedown', function(e) {
-                canvas.down = true;
-                var offs = getCanvasOffset(e);
-                canvas.X = offs[0];
-                canvas.Y = offs[1];
-            }, false);
-
-            canvas.addEventListener('mouseover', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.addEventListener('mouseout', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.addEventListener('mouseup', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.strokes = [];
-
-            canvas.addEventListener('mousemove', function(e) {
-                if (canvas.down) {
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.X, canvas.Y);
-                    var offs = getCanvasOffset(e);
-                    ctx.lineTo(offs[0], offs[1]);
-                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
-                    ctx.stroke();
-                    canvas.X = offs[0];
-                    canvas.Y = offs[1];
-                }
-            }, true);
-        };
-
-        $scope.setFiles = function(element) {
-            $scope.files = [];
-            for (var i = 0; i < element.files.length; i++) {
-                $scope.files.push(element.files[i]);
-
-                var oFReader = new FileReader();
-                oFReader.readAsDataURL($scope.files[0]);
-
-                oFReader.onload = function (oFREvent) {
-                    document.getElementById("signaturevisual").src = oFREvent.target.result;
-                };
-                $scope.scribblemode = false;
-                $scope.$apply();
-            }
-        };
 
         function loadAnnotations() {
             /** @name SWBrijj#tblm
@@ -526,7 +406,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
         };
 
+        $scope.sigOptions = { open: false,
+                                failureCallback: uploadFail,
+                                successCallback: uploadSuccess,
+                                labelrequired: false,
+                                label: null,
+                                type: '' };
+
         $scope.sigModalUp = function () {
+            // $scope.sigOptions.open = true;
             $scope.signatureModal = $modal.open({
                 templateUrl: '/documents/modals/uploadSignature.html',
                 scope: $scope,
@@ -535,8 +423,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.sigclose = function () {
+            //$scope.sigOptions.open = false;
             $scope.signatureModal.dismiss();
-            $scope.scribblemode = false;
         };
 
         $scope.removeannot = function(annotation) {

@@ -35,14 +35,10 @@ app.controller('roundController',
             }
 
             if (round.attrs.security_type == "Option") {
-                angular.forEach($scope.ct.transactions, function(tran) {
-                    if (tran.kind == "grant" && tran.attrs.security == round.name) {
-                        round.units += captable.securityTotalUnits(round);
-                        totals.units += captable.securityTotalUnits(round);
-                    }
-                });
+                round.units += Math.ceil(captable.securityTotalUnits(round));
+                totals.units += Math.ceil(captable.securityTotalUnits(round));
                 if (!isNaN(round.attrs.totalauth)) {
-                    if (round.attrs.totalauth > round.units) {
+                    if ((captable.numUnissued(round, $scope.ct.securities) > 0)) {
                         var unauth = (captable.numUnissued(round, $scope.ct.securities));
                         existingoptions += unauth;
                         totals.units += unauth;

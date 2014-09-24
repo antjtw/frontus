@@ -3,9 +3,10 @@
 app.controller('captableController',
         ["$scope", "$rootScope", "$location", "$parse", "$filter",
          "SWBrijj", "calculate", "navState", "captable",
-         "displayCopy", "History", "Investor", "$modal",
+         "displayCopy", "History", "Investor", "$modal", "attributes",
 function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
-         calculate, navState, captable, displayCopy, History, Investor, $modal)
+         calculate, navState, captable, displayCopy, History, Investor,
+         $modal, attributes)
 {
     if (navState.role == 'investor') {
         $location.path('/investor-captable');
@@ -17,16 +18,45 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     captable.forceRefresh();
     $scope.ct = captable.getCapTable();
     $scope.captable = captable;
+    var attrs = attributes.getAttrs();
 
     // Set the view toggles to their defaults
     $scope.editMode = false;
     $scope.windowToggle = false;
     $scope.$on('windowToggle', function(evt, val) {
-        void(evt);
         $scope.windowToggle = val;
     });
     $scope.currentTab = 'details';
     $scope.state = {evidenceQuery: ""};
+    $scope.ctFilter = {date: new Date(),
+                       vesting: true,
+                       security_types: ['Show All']};
+    $scope.$watch('ctFilter', function(newVal, oldVal) {
+        switch (selectedThing()) {
+            case "selectedCell":
+                if ($scope.filteredSecurityList()
+                        .reduce(captable.accumulateProperty('name'), [])
+                        .indexOf($scope.selectedCell.security) == -1) {
+                    deselectCell();
+                }
+                return;
+            case "selectedInvestor":
+                return;
+            case "selectedSecurity":
+                if ($scope.filteredSecurityList()
+                        .indexOf($scope.selectedSecurity) == -1) {
+                    deselectSecurity();
+                }
+                return;
+        }
+    }, true);
+    $scope.filteredSecurityList = function() {
+        return $filter('filter')($scope.ct.securities, $scope.securityFilter);
+    };
+    $scope.filteredSecurityNames = function() {
+        return $scope.filteredSecurityList()
+            .reduce(captable.accumulateProperty('name'), []);
+    };
     $scope.tourshow = false;
     $scope.tourstate = 0;
     $scope.tourmessages = displayCopy.tourmessages;
@@ -34,7 +64,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.activityView = "ownership.company_activity_feed";
     $scope.tabs = [{'title': "Information"}, {'title': "Activity"}];
     $scope.tf = ["yes", "no"];
-    $scope.liquidpref = ['None', '1X', '2X', '3X'];
     $scope.extraPeople = [];
     function logError(err) { console.log(err); }
 
@@ -49,7 +78,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return null;
     }
     $scope.undo = function() {
-        console.log("undo");
         History.undo(selectedThing(), $scope);
     };
     $scope.redo = function() {
@@ -64,6 +92,96 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.rowSort = '-name';
     $scope.activeTran = [];
 
+    $scope.daterange = {};
+    $scope.daterange.offset = 0;
+
+    if ($scope.settings)
+    {
+        $scope.daterange.today = $filter('date')(new Date(), $scope.settings.shortdate);
+    }
+
+    $scope.updateDateSlider = function() {
+        var d = captable.startDate().getTime();
+        $scope.ctFilter.date = new Date(d + $scope.daterange.offset*86400000);
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.updateBarColor();
+    };
+
+    $scope.updateBarColor = function() {
+        var p = Math.round(Math.min((Math.max($scope.daterange.offset, 0)/$scope.ct.totalDays)*100, 100)*100)/100;
+        $scope.daterange.coloredbar = "background: #C7C7C7;\
+            background: -moz-linear-gradient(left,  #1ABC96 0%, #1ABC96 " + p + "%, #C7C7C7 " + p + "%, #C7C7C7 100%);\
+            background: -webkit-gradient(linear, left top, right top, color-stop(0%,#1ABC96), color-stop(" + p + "%,#1ABC96), color-stop(" + p + "%,#C7C7C7), color-stop(100%,#C7C7C7));\
+            background: -webkit-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
+            background: -o-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
+            background: -ms-linear-gradient(left,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);\
+            background: linear-gradient(to right,  #1ABC96 0%,#1ABC96 " + p + "%,#C7C7C7 " + p + "%,#C7C7C7 100%);";
+    };
+
+    $scope.checkDateRange = function() {
+        if ($scope.editMode)
+        {
+            $scope.ctFilter.date = null;
+            return;
+        }
+        if (!$scope.ctFilter.date)
+        {
+            $scope.ctFilter.date = new Date();
+        }
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $rootScope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(
+                captable.startDate() || new Date(1980),
+                $scope.ctFilter.date);
+        $scope.updateBarColor();
+        $scope.daterange.today = $filter('date')(new Date(), $rootScope.settings.shortdate);
+    };
+    $scope.$on("settings_loaded", function(evt, msg, cb) {
+        $scope.checkDateRange();
+    });
+
+    $scope.updateDateInput = function() {
+        //TODO: only works for MM/dd/yy & dd/MM/yy. Must change if we add more date formats.
+        var nums = $scope.daterange.fakeDate.split('/');
+        if (nums.length != 3)
+            return;
+        if (!(nums[2].length == 2 || nums[2].length == 4))
+            return;
+        var year = Number(nums[2]);
+        if (isNaN(year))
+            return;
+        if (year < 1000)
+            year += 2000;
+        var monthInd = ($scope.settings.shortdate.indexOf('MM') == 0) ? 0 : 1;
+        if (nums[monthInd].length < 1 || nums[monthInd].length > 2)
+            return;
+        var month = Number(nums[monthInd]);
+        if (isNaN(month))
+            return;
+        if (month < 1 || month > 12)
+            return;
+        if (nums[1 - monthInd].length < 1 || nums[1 - monthInd].length > 2)
+            return;
+        var day = Number(nums[1 - monthInd]);
+        if (isNaN(day))
+            return;
+        if (day < 1 || day > 31)
+            return;
+        var d = new Date(year, month - 1, day);
+        if (!d)
+            return;
+        $scope.ctFilter.date = d;
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        $scope.updateBarColor();
+    };
+
+    $scope.setToday = function() {
+        $scope.ctFilter.date = new Date();
+        $scope.daterange.fakeDate = $filter('date')($scope.ctFilter.date, $scope.settings.shortdate);
+        $scope.daterange.offset = captable.daysBetween(captable.startDate(), $scope.ctFilter.date);
+        $scope.updateBarColor();
+    };
+
     // Initialize a few visible variables
     $scope.investorOrder = "name";
     $scope.sideToggleName = "Hide";
@@ -77,6 +195,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         } else {
             if (captable.totalOwnershipUnits() == 0) {
                 $scope.editMode = true;
+                $scope.ctFilter.date = null;
             }
         }
     }
@@ -102,6 +221,11 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             $scope.$broadcast("newSelection");
         }
     };
+    function deselectCell() {
+        displayIntroSidebar();
+        $scope.selectedCell = null;
+        History.forget($scope, 'selectedCell');
+    }
     $scope.selectSecurity = function(security_name, reselect) {
         $scope.selectedCell = $scope.selectedInvestor = null;
         if (!$scope.editMode && ($scope.selectedSecurity && !reselect) &&
@@ -122,14 +246,23 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
         $scope.$broadcast("newSelection");
     };
+    function deselectSecurity() {
+        displayIntroSidebar();
+        $scope.selectedSecurity = null;
+        History.forget($scope, 'selectedSecurity');
+    }
+    function deselectInvestor() {
+        displayIntroSidebar();
+        $scope.selectedInvestor = null;
+        History.forget($scope, 'selectedInvestor');
+    }
     $scope.selectInvestor = function(investor_name, reselect) {
         $scope.selectedCell = $scope.selectedSecurity = null;
         //deselectAllCells();
         if (!$scope.editMode && ($scope.selectedInvestor && !reselect) &&
                 $scope.selectedInvestor.name == investor_name) {
             displayIntroSidebar();
-            $scope.selectedInvestor = null;
-            History.forget($scope, 'selectedInvestor');
+            deselectInvestor();
         } else {
             History.forget($scope, 'selectedInvestor');
             $scope.selectedInvestor = $scope.ct.investors
@@ -162,6 +295,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             captable.updateSecurityName(security);
         }
     };
+
     $scope.createNewSec = function() {
         $scope.addSecurityModal = $modal.open({
             templateUrl: '/ownership/modals/addSecurity.html',
@@ -170,7 +304,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         });
         $scope.newTranName = "";
         $scope.newTranType = "";
-        $scope.newTranDate = new Date.today();
+        $scope.newTranDate = calculate.makeDateString($rootScope.settings.shortdate);
         $scope.newthing = null;
         $scope.selectedCell = $scope.selectedInvestor = null;
         History.forget($scope, 'selectedSecurity');
@@ -296,6 +430,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.editViewToggle = function() {
         toggleDetailsView();
         $scope.editMode = !$scope.editMode;
+        if ($scope.editMode)
+        {
+            $scope.ctFilter.date = null;
+        } else {
+            $scope.checkDateRange();
+        }
         reselectCurrentSelection();
     };
 
@@ -367,6 +507,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         } else {
             hideViewOnlyDetails();
             $scope.editMode = true;
+            $scope.ctFilter.date = null;
             return $scope.editMode;
         }
     };
@@ -450,7 +591,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     // Captable Sharing Modal
     $scope.modalUp = function () {
         $scope.ct.investors.forEach(function(inv) {
-            if (inv.email && inv.email.trim().length > 0 && !inv.send) {
+            if (!inv.send && inv.email && inv.email.trim().length > 0) {
                 inv.alreadyShared = true;
             }
         });
@@ -464,8 +605,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.close = function () {
         $scope.ct.investors.forEach(function(inv) {
             if (!inv.alreadyshared && !inv.send) {
-                // if they didn't have an email to start with, and we aren't emailing them now, blank out their email
-                inv.email = "";
                 inv.permission = "";
             }
         });
@@ -473,12 +612,30 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         $scope.capShare.dismiss();
     };
 
+    function filterInvestors(investorList, emails) {
+        return investorList.filter(function(val, idx, arr) {
+            return ! emails.some(function(emval, eidx, earr) {
+                return val.id == emval.email; // ct.investors still uses email instead of id
+            });
+        });
+    }
+
     $scope.select2Options = {
-        'multiple': true,
-        'simple_tags': true,
-        'tags': Investor.investors,
-        'tokenSeparators': [",", " "],
-        'placeholder': 'Enter email address & press enter'
+        multiple: true,
+        tokenSeparators: [",", " "],
+        data: Investor.investors,
+        createSearchChoice: Investor.createSearchChoice,
+        placeholder: 'Enter name or email address & press enter'
+    };
+
+    $scope.rowSelect2Options = {
+        data: function() {
+            return {
+                results: filterInvestors(Investor.investors, $scope.ct.investors)
+            };
+        },
+        createSearchChoice: Investor.createSearchChoice,
+        placeholder: 'Pick name or type email',
     };
 
     // Controls the orange border around the send boxes if an email is not given
@@ -491,7 +648,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.autoCheck = function(person) {
-        return person != null && person.length > 0;
+        return person !== null && person.id.length > 0;
     };
 
     $scope.turnOnShares = function () {
@@ -501,8 +658,12 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.updateSendRow = function(row) {
-        if (row.email.length > 0) {
-            row.send = $scope.autoCheck(row.email);
+        if (typeof(row.investor_details) === "string") {
+            // select2-ui sets string and then object, generate the object from the string
+            row.investor_details = Investor.createInvestorObject(row.investor_details);
+        }
+        if (row.investor_details) {
+            row.send = $scope.autoCheck(row.investor_details);
             if (!row.permission) {
                 row.permission = "Personal";
             }
@@ -512,18 +673,17 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         }
     };
 
-    //regex to deal with the parentheses
-    var regExp = /\(([^)]+)\)/;
     // Send the share invites from the share modal
     $scope.sendInvites = function () {
         angular.forEach($scope.ct.investors, function (row) {
-            if (row.send == true) {
+            if (row.send === true) {
                 SWBrijj.procm("ownership.share_captable",
-                              row.email.toLowerCase(),
+                              row.investor_details.id.toLowerCase(),
                               row.name)
                 .then(function(data) {
+                    row.email = row.investor_details.id;
                     if (row.permission == "Full") {
-                        SWBrijj.proc('ownership.update_investor_captable', row.email.toLowerCase(), 'Full View').then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', row.investor_details.id.toLowerCase(), 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                             row.access_level = "Full View";
@@ -537,10 +697,10 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
                     row.send = false;
                 }).except(function(err) {
                     if (err.message == "ERROR: Duplicate email for the row") {
-                        $scope.$emit("notification:fail", row.email + " failed to send as this email is already associated with another row");
+                        $scope.$emit("notification:fail", row.name + " failed to send as " + row.investor_details.name + " is already associated with another row");
                     }
                     else {
-                        $scope.$emit("notification:fail", "Email : " + row.email + " failed to send");
+                        $scope.$emit("notification:fail", "Sharholder : " + row.investor_details.name + " failed to send");
                     }
                 });
             }
@@ -550,62 +710,43 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         if ($scope.extraPeople.length > 0) {
             angular.forEach($scope.extraPeople, function (people) {
                 if (people) {
-                    var matches = regExp.exec(people);
-                    if (matches == null) {
-                        matches = ["", people];
-                    }
-                    SWBrijj.procm("ownership.share_captable", matches[1].toLowerCase(), "").then(function (data) {
-                        SWBrijj.proc('ownership.update_investor_captable', matches[1].toLowerCase(), 'Full View').then(function (data) {
+                    SWBrijj.procm("ownership.share_captable", people.id, "").then(function (data) {
+                        SWBrijj.proc('ownership.update_investor_captable', people.id, 'Full View').then(function (data) {
                             $scope.lastsaved = Date.now();
                             $scope.$emit("notification:success", "Your table has been shared!");
                         });
                     }).except(function(err) {
-                            $scope.$emit("notification:fail", "Email : " + people + " failed to send");
-                        });
+                        $scope.$emit("notification:fail", "Email : " + people.name + " failed to send");
+                    });
                 }
             });
             $scope.extraPeople = [];
         }
     };
 
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    $scope.fieldCheck = function(email) {
-        return re.test(email);
-    };
-
     // Prevents the share button from being clickable until
     // a send button has been clicked and an address filled out
     $scope.checkInvites = function () {
-        var checkcontent = false;
         var checksome = false;
         angular.forEach($scope.ct.investors, function(row) {
-            if (row.send == true &&
-                    (row.email != null &&
-                     row.email != "" &&
-                     $scope.fieldCheck(row.email))) {
-                checkcontent = true;
-            }
-            if (row.send == true) {
+            if (row.send === true && row.investor_details) {
                 checksome = true;
             }
         });
-        angular.forEach($scope.extraPeople, function(people) {
-            var matches = regExp.exec(people);
-            if (matches == null) {
-                matches = ["", people];
-            }
-            if (matches[1] != null &&
-                    matches[1] != "" &&
-                    $scope.fieldCheck(matches[1])) {
-                checkcontent = true;
-            } else {
-                checkcontent = false;
+        if (typeof($scope.extraPeople) === "string" && $scope.extraPeople.length > 0) {
+            // convert to an array if it isn't already
+            $scope.extraPeople = $scope.extraPeople.split(",");
+        }
+        $scope.extraPeople.forEach(function(people, idx, arr) {
+            if (typeof(people) === "string") {
+                // if it's a string, we want to build an investor object and work on that instead
+                arr[idx] = people = Investor.createInvestorObject(people.trim());
             }
             if (people) {
                 checksome = true;
             }
         });
-        return !(checksome && checkcontent);
+        return !(checksome);
     };
 
     $scope.tourfunc = function() {
@@ -649,7 +790,6 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
 
     $scope.changeVisibility = function (person) {
         SWBrijj.proc('ownership.update_investor_captable', person.email, person.level).then(function (data) {
-            void(data);
             angular.forEach($scope.userstatuses, function(peep) {
                 if (peep.email == person.email) {
                     peep.level = person.level;
@@ -745,6 +885,107 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return false;
     };
 
+    $scope.securityTypeDropdown = function(for_display) {
+        var not_these = ['Equity', 'Equity Common'];
+        var res = Object.keys(attrs).sort();
+        if (for_display)
+            res = res.filter(function(el) {
+                return not_these.indexOf(el) == -1; });
+        return res;
+    };
+    $scope.showSecurityType = function(t) {
+        if (!t || !$scope.ctFilter || !$scope.ctFilter.security_types) {
+            return null;
+        } else if ($scope.ctFilter.security_types.indexOf('Show All') !== -1) {
+            return true;
+        } else {
+            return $scope.ctFilter.security_types.indexOf(t) !== -1;
+        }
+    };
+    $scope.toggleSecurityType = function(t) {
+        if (!t) return null;
+        var idx = $scope.ctFilter.security_types.indexOf(t);
+        if (idx == -1) {
+            if ($scope.showSecurityType('Show All')) {
+                $scope.ctFilter.security_types = $scope.securityTypeDropdown()
+                    .filter(function(el) {
+                        return el != t;
+                    });
+            } else {
+                $scope.ctFilter.security_types.push(t);
+                if ($scope.ctFilter.security_types.length ==
+                        $scope.securityTypeDropdown().length) {
+                    $scope.ctFilter.security_types = ['Show All'];
+                }
+            }
+        } else {
+            $scope.ctFilter.security_types.splice(idx, 1);
+            if ($scope.ctFilter.security_types.length === 0) {
+                $scope.toggleSecurityType('Show All');
+            }
+        }
+    };
+    $scope.securityFilter = function(sec) {
+        return $scope.editMode ||
+            $scope.showSecurityType('Show All') ||
+            $scope.showSecurityType(sec.attrs.security_type);
+    };
+    $scope.securityFilterLabel = function() {
+        if (!$scope.ctFilter.vesting ||
+                !$scope.showSecurityType('Show All')) {
+            return "Showing Filtered";
+        } else {
+            return "Showing All";
+        }
+    };
+    $scope.dateSecurityFilter = function(sec) {
+        return !$scope.ctFilter.date || $scope.editMode ||
+            sec.effective_date < $scope.ctFilter.date;
+    };
+    $scope.rowSum = function(row) {
+        return captable.rowSum(
+            row.name,
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.investorOwnershipPercentage = function(row) {
+        return captable.investorOwnershipPercentage(
+            row.name,
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.numUnissued = function(sec) {
+        return captable.numUnissued(sec, $scope.ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityUnissuedPercentage = function(sec) {
+        return captable.securityUnissuedPercentage(sec, $scope.ct.securities,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.totalOwnershipUnits = function(x) {
+        return captable.totalOwnershipUnits(x,
+            ($scope.editMode ? false : $scope.filteredSecurityNames()),
+            ($scope.editMode ? false : $scope.ctFilter.date),
+            ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalUnits = function(sec) {
+        return captable.securityTotalUnits(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+    $scope.securityTotalAmount = function(sec) {
+        return captable.securityTotalAmount(sec,
+                ($scope.editMode ? false : $scope.ctFilter.date),
+                ($scope.editMode ? true : $scope.ctFilter.vesting));
+    };
+
+    $scope.downloadCSV = function() {
+        window.location.href = captable.download();
+    };
 }]);
 
 // IE fix to remove enter to submit form

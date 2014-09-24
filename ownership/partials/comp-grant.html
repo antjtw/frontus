@@ -95,7 +95,7 @@
                                     {{sec.name}}
                                 </span>
                                 <span ng-show="viewMode" class="span6">
-                                    {{sec.effective_date | date:settings.shortdate}}
+                                    {{sec.effective_date | utcdate:settings.shortdate}}
                                 </span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns">
@@ -111,7 +111,7 @@
                             <td class="viewField"></td>
                             <td class="row-fluid">
                                 <span class="span6">{{limitLength(row.attrs.investor, 25)}}</span>
-                                <span class="span6">{{row.effective_date | date:settings.shortdate}}</span>
+                                <span class="span6">{{row.effective_date | utcdate:settings.shortdate}}</span>
                             </td>
                             <td ng-repeat="col in captable.grantColumns"
                                 ng-class="{fieldSelected: selectedCell.roots[0] == row &&

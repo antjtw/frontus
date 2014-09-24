@@ -150,11 +150,14 @@ navm.controller('NavCtrl',
         navState.path = document.location.pathname;
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
+        $window.addEventListener('beforeunload', function(event) {
+            sessionStorage.setItem('rootScope-pageHistory', angular.toJson($rootScope.pageHistory));
+        });
+        $rootScope.pageHistory = angular.fromJson(sessionStorage.getItem('rootScope-pageHistory'));
+        if (!$rootScope.pageHistory) {
+            $rootScope.pageHistory = [];
+        }
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
-            // TODO: store and retrieve pageHistory
-            if (!$rootScope.pageHistory) {
-                $rootScope.pageHistory = [];
-            }
             if (document.location.pathname.indexOf("/register/") === -1 &&
                 document.location.pathname.indexOf("/login/") === -1) {
                 $rootScope.pageHistory.push({pathname: document.location.pathname, search: document.location.search, hash: document.location.hash});
@@ -370,12 +373,13 @@ navm.controller('NavCtrl',
 
         SWBrijj.tblm('account.my_company_settings').then(function (x) {
             $rootScope.settings = x[0];
-            $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
+            $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
             $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
             $rootScope.settings.fulldate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y' : 'dd MMMM y';
             $rootScope.settings.dateandtime = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y, h:mm a' : 'dd MMMM y, h:mm a';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
             $rootScope.settings.domain = window.location.host;
+            $scope.$broadcast("settings_loaded");
         });
 
         SWBrijj.tblm('account.profile').then(function(x) {
@@ -383,7 +387,7 @@ navm.controller('NavCtrl',
             if ($rootScope.navState.role == "issuer") {
                 Intercom('update', {'name' : $rootScope.person.name});
             }
-            $rootScope.userURL = '/photo/user?id=' + x[0].email;
+            $rootScope.userURL = '/photo/user?id=' + x[0].user_id;
             $scope.$broadcast("profile_loaded");
         });
 
@@ -671,6 +675,9 @@ navm.controller('NavCtrl',
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
                             }
+                            /* If actual invoices.length == 0
+                             *
+                             */
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
@@ -704,6 +711,7 @@ navm.controller('NavCtrl',
                 if (x && x.length>0 && x!="invalid request") {
                     var resp = JSON.parse(x);
                     if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.freetrial = payments.format_trial(resp);
                     $rootScope.billing.invoices = resp.data.filter(function(el) {
                         return el.amount>0;
                     }) || [];

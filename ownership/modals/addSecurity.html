@@ -30,7 +30,7 @@
             <div class="short-second">
                 <p>Security Date</p>
                 <input id="securitydate" ng-change="dateSecurity()" ui-event="{keydown:'dateSecurity($event)', blur:'dateSecurity(\'blur\')'}" type="text"
-                       ng-model="newTranDate" data-date-format={{settings.lowercasedate}} bs-datepicker
+                       ng-model="newTranDate" data-date-format={{settings.lowercasedate}} date-type="string" bs-datepicker
                        onkeydown="testForEnter(event);">
             </div>
         </div>

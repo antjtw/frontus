@@ -1,6 +1,6 @@
 'use strict';
 
-function annotationController($scope, $rootScope, $element, $document, Annotations, $timeout, navState, SWBrijj) {
+function annotationController($scope, $rootScope, $element, $document, Annotations, $timeout, navState, SWBrijj, User) {
     $scope.navState = navState; // TODO: UI is very dependant on navState
     $scope.transaction_types_mapping = $rootScope.transaction_types_mapping;
     function applyLineBreaks(oTextarea) {
@@ -98,6 +98,14 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.current.val = "";
         }
     });
+    
+    $scope.signatureURL = function(annot) {
+        if (annot.whattype != "ImgSignature" || !annot.forRole(navState.role))
+            return "";
+        if (!annot.val || annot.val.length == 0 || annot.val == "Personal")
+            return "/photo/user?id=signature:";
+        return '/photo/user?id=company_signature:' + annot.val;
+    };
 
     $scope.$watch('annot.whattype', function(newval, oldval) {
         if (newval != oldval) { // don't run this on the first $watch call
@@ -295,10 +303,18 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         var dprt = dpr.top - dp.offsetTop; // top of document itself
         $scope.startX = ev.clientX - dprl + 5; // mouse start positions relative to the box/pad
         var bb = $element[0].querySelector("textarea");
+        if (!bb)
+        {
+            bb = $element[0].querySelector("img");
+        }
         $scope.startY = ev.clientY - dprt; // TODO can we get 6 dynamically?
         if (bb.style.height)
         {
             $scope.startY = $scope.startY - (parseInt(bb.style.height)/2);
+        }
+        else if (bb.height)
+        {
+            $scope.startY = $scope.startY - (parseInt(bb.height)/2);
         }
         $scope.initialMouseX = ev.clientX;
         $scope.initialMouseY = ev.clientY;
@@ -360,7 +376,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if ($scope.annot.whattype == "ImgSignature" &&
             ($scope.annot.forRole(navState.role) && !$scope.doc.countersignable(navState.role))) {
             $scope.signaturestyle = {height: 180, width: 330 };
-            $scope.sigModalUp();
+            if (!User.signaturePresent)
+                $scope.sigModalUp();
         }
     };
 
@@ -397,6 +414,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
+    $scope.annotationSizeImageStyle = {};
     $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
     $scope.enumBoxMode = function() {
@@ -430,6 +448,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if (new_size) {
             $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
             $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            $scope.annotationSizeImageStyle["max-width"] = (new_size.width - 14) + "px";
+            $scope.annotationSizeImageStyle["max-height"] = (new_size.height - 10) + "px";
             $scope.annotationHighlightStyle.width = (new_size.width) + "px";
             $scope.annotationHighlightStyle.height = (new_size.height) + "px";
         }
@@ -522,4 +542,4 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     }
 }
 
-annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "$timeout", "navState", "SWBrijj"];
+annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "$timeout", "navState", "SWBrijj", "User"];

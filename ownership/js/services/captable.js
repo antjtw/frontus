@@ -91,7 +91,7 @@ var GrantCell = function() {
  *
  */
 ownership.service('captable',
-function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter) {
+function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter, csv) {
 
     function role() {
         return navState ? navState.role : document.sessionState.role;
@@ -129,8 +129,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                          },
                          ledgerFilter: function(ids, inv, sec) {
                              return function(x) {
+                                 var d = new Date();
+                                 // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                                 d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+
                                  return ids.indexOf(x.transaction) != -1 &&
-                                     x.effective_date <= Date.now() &&
+                                     x.effective_date <= d &&
                                      x.investor == inv &&
                                      x.security == sec;
                              };
@@ -217,6 +221,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             linkUsers(captable.investors, results[5], results[6]);
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
+            updateDays();
         }, logError).finally(function() {
             loadInProgress = false;
         });
@@ -413,7 +418,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     this.grantSecurities = grantSecurities;
-    function numUnissued(sec, securities) {
+    function numUnissued(sec, securities, asof, vesting) {
         var unissued = 0;
         var auth_securities = [];
         angular.forEach(captable.securities, function(sec) {
@@ -426,6 +431,30 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var entry_filter = function(el) {
             return el && (el.investor || auth_securities.indexOf(el.security) !== -1);
         };
+        var trans;
+        if (asof)
+        {
+            var d = new Date(asof);
+            // d is local date, but ledger is utc date, so offset d so the comparisons always work
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+            if (vesting)
+            {
+                trans = captable.transactions.filter(function(tran) {
+                    return tran.effective_date <= d;
+                }).reduce(accumulateProperty('transaction'), []);
+                entry_filter = function(el) {
+                    return el && (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                        trans.indexOf(el.transaction) != -1;
+                };
+            }
+            else
+            {
+                entry_filter = function(el) {
+                    return el && (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                        el.effective_date <= d;
+                };
+            }
+        }
         angular.forEach(captable.ledger_entries.filter(entry_filter), function(entry) {
             if ((!entry.investor) && (entry.security == sec.name))
             {
@@ -507,12 +536,29 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.grantRowInfoFor = grantRowInfoFor;
-    this.rowSum = function(inv) {
-        return rowFor(inv)
-            .reduce(function(prev, cur, idx, arr) {
+    function rowSum(inv, securities, asof, vesting) {
+        if (!securities) securities = false;
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellUnits(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            };
+        }
+        else
+        {
+            red = function(prev, cur, idx, arr) {
                 return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
-            }, 0);
-    };
+            };
+        }
+        return rowFor(inv)
+            .filter(function(el) {
+                return (typeof(securities) == "boolean" ? true :
+                    securities.indexOf(el.security) != -1);})
+            .reduce(red, 0);
+    }
+    this.rowSum = rowSum;
     this.investorsIn = function(sec) {
         var names = captable.ledger_entries.filter(function(ent) {
             return ent.security == sec.name;
@@ -584,10 +630,36 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (inv || (invs.length === 0 && tran.kind != 'issue security')) && sec;
         });
     }
+    function daysBetween (start, ended) {
+        if (!start || !ended)
+        {
+            return 0;
+        }
+        var t1 = Math.floor(start.getTime() / 86400000);
+        var t2 = Math.floor(ended.getTime() / 86400000);
+        return t2 - t1;
+    }
+    this.daysBetween = daysBetween;
+    function startDate() {
+        return captable.transactions.reduce(minDate, null);
+    }
+    this.startDate = startDate;
     function minDate(prev, cur, idx, arr) {
-        if (!prev || cur.effective_date < prev)
+        if (cur.effective_date && (!prev || cur.effective_date < prev))
             return cur.effective_date;
         return prev;
+    }
+    function maxDate(prev, cur, idx, arr) {
+        if (!prev || cur.effective_date > prev)
+            return cur.effective_date;
+        return prev;
+    }
+    function lastDate() {
+        return captable.ledger_entries.reduce(maxDate, null);
+    }
+    this.lastDate = lastDate;
+    function updateDays() {
+        captable.totalDays = daysBetween(startDate(), lastDate());
     }
     function transForCell(inv, sec) {
         // Investor identifying attributes
@@ -634,27 +706,27 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                        security_matches;
             });
         var startingDate = trans.filter(function(tran) {
-                return tran.kind != 'split';
-            }).reduce(minDate, null);
+            return tran.kind != 'split';
+        }).reduce(minDate, null);
         var trans2;
         if (startingDate)
         {
             trans2 = trans.filter(function(tran) {
-                    return tran.kind != 'split' || tran.effective_date > startingDate;
-                });
+                return tran.kind != 'split' || tran.effective_date > startingDate;
+            });
         }
         else
         {
             trans2 = trans.filter(function(tran) {
-                    return tran.kind != 'split';
-                });
+                return tran.kind != 'split';
+            });
         }
         return trans2;
     }
     function netCreditFor(transaction, investor) {
         var trans = captable.transactions.filter(function(t) {
-            return t.transaction == transaction || 
-                (t.attrs['transaction_from'] && t.attrs.transaction_from == transaction);
+            return t.transaction == transaction ||
+                (t.attrs.transaction_from && t.attrs.transaction_from == transaction);
         }).reduce(accumulateProperty('transaction'), []);
         var ledger_entries = captable.ledger_entries.filter(function(e) {
             return trans.indexOf(e.transaction) != -1 && e.investor == investor;
@@ -667,12 +739,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return numUnissued(sec, securities);
         };
     }
-    this.securitiesWithUnissuedUnits = function() {
-        return captable.securities.filter(secHasUnissued(captable.securities));
-    };
-    this.securityUnissuedPercentage = function(sec, securities) {
-        return 100 * (numUnissued(sec, securities) / totalOwnershipUnits());
-    };
+    function securitiesWithUnissuedUnits() {
+        return captable.securities
+            .filter(secHasUnissued(captable.securities));
+    }
+    this.securitiesWithUnissuedUnits = securitiesWithUnissuedUnits;
+    function securityUnissuedPercentage(sec, securities, asof, vesting) {
+        return 100 * (numUnissued(sec, securities, asof, vesting) / totalOwnershipUnits());
+    }
+    this.securityUnissuedPercentage = securityUnissuedPercentage;
     function rowFor(inv) {
         return captable.cells
             .filter(function(cell) {
@@ -785,23 +860,48 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             if (secs.length > 0) return secs[0].attrs.security_type;
         }
     }
-    this.cellSecurityType = cellSecurityType;
-    function setCellUnits(cell) {
+    function getCellUnits(cell, asof, vesting) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "units") {
-            cell.u = sum_ledger(cell.ledger_entries);
+            var entries = cell.ledger_entries;
+            if (asof) {
+                var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                if (vesting)
+                {
+                    var trans = cell.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return trans.indexOf(ent.transaction) != -1;});
+                }
+                else if (cellSecurityType(cell) == 'Option')
+                {
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return ent.effective_date <= d;});
+                }
+            }
+            return sum_ledger(entries);
         }
     }
+    this.getCellUnits = getCellUnits;
+    this.cellSecurityType = cellSecurityType;
+    function setCellUnits(cell) {
+        cell.u = getCellUnits(cell, false);
+    }
     function setGrantCellUnits(cell) {
-        setCellUnits(cell);
-        cell.u = Math.abs(cell.u);
+        cell.u = Math.abs(getCellUnits(cell, false));
     }
     this.setCellUnits = setCellUnits;
     function setCellAmount(cell) {
         if (!cell) return;
         if (cellPrimaryMeasure(cell) == "amount") {
             cell.a = sum_ledger(cell.ledger_entries);
-        } else if (["Option", "Warrant"].indexOf(cellSecurityType(cell)) != -1) {
+        } else if (["Option", "Warrant"].indexOf(
+                        cellSecurityType(cell)) != -1) {
             return;
         } else {
             var transactionkeys = [];
@@ -821,6 +921,66 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     }
     this.setCellAmount = setCellAmount;
+    function getCellAmount(cell, asof, vesting) {
+        if (!cell) return;
+        var d;
+        if (cellPrimaryMeasure(cell) == "amount") {
+            var entries = cell.ledger_entries;
+            if (asof)
+            {
+                d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                if (vesting && cellSecurityType(cell)=='Option')
+                {
+                    var trans = cell.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return trans.indexOf(ent.transaction) != -1;});
+                }
+                else if (cellSecurityType(cell) == 'Option')
+                {
+                    entries = cell.ledger_entries
+                        .filter(function(ent) {
+                            return ent.effective_date <= d;});
+                }
+            }
+            return sum_ledger(entries);
+        } else if (["Option", "Warrant"].indexOf(
+                        cellSecurityType(cell)) != -1) {
+            return;
+        } else {
+            var transactionkeys = [];
+            angular.forEach(cell.transactions, function(tran) {
+                transactionkeys.push(tran.transaction);
+            });
+            var plus_trans = cell.transactions
+                .filter(function(el) {
+                    return (el.attrs.investor == cell.investor && (transactionkeys.indexOf(el.attrs.transaction_from) == -1) &&
+                            el.kind != 'repurchase') ||
+                           el.attrs.investor_to == cell.investor;});
+            var minus_trans = cell.transactions
+                .filter(function(el) {
+                    return el.attrs.investor_from == cell.investor ;
+                });
+            if (asof)
+            {
+                d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                plus_trans = plus_trans.filter(function(el) {
+                    return el.effective_date <= d;
+                });
+                minus_trans = minus_trans.filter(function(el) {
+                    return el.effective_date <= d;
+                });
+            }
+            return sum_transactions(plus_trans) - sum_transactions(minus_trans);
+        }
+    }
+    this.getCellAmount = getCellAmount;
     function sum_ledger(entries) {
         return entries.reduce(
                 function(prev, cur, index, arr) {
@@ -836,9 +996,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // only look at year, month day or dates
         var t1date = new Date(t1.effective_date);
         var t2date = new Date(t2.effective_date);
-        if (t1date.getDay() != t2date.getDay() ||
-                t1date.getMonth() != t2date.getMonth() ||
-                t1date.getYear() != t2date.getYear() ||
+        if (t1date.getUTCDate() != t2date.getUTCDate() ||
+                t1date.getUTCMonth() != t2date.getUTCMonth() ||
+                t1date.getUTCFullYear() != t2date.getUTCFullYear() ||
                 t1.evidence != t2.evidence) {
             return true;
         }
@@ -869,7 +1029,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             }
             if (del)
             {
-                console.log("deleting tran", cell.transactions[t].transaction, cell.investor, cell.security);
                 deleteTransaction(cell.transactions[t], cell, true);
             }
         }
@@ -908,7 +1067,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     setCellUnits(cell);
                     setCellAmount(cell);
                     cell.valid = validateCell(cell);
-                    if (cell.investor=='Robert Walport') console.log(cell);
                     captable.cells.push(cell);
                 }
             });
@@ -1005,7 +1163,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
 
     function investorSorting(inv) {
         if (inv === "") { return -100; } // keep new inv rows at bottom
-        return investorOwnershipPercentage(inv);
+        return investorOwnershipPercentage(inv, false, false, false);
     }
     function splice_many(array, elements) {
         var indices = elements
@@ -1035,9 +1193,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      *
      */
     function saveTransaction(tran, update, errorFunc) {
-        // TODO this is getting called too often.
-        // use ng-change instead of ui-event?
-        //
         // or maybe add a save button for now
         // TODO: return a promise instead of having errorFunc
         for (var key in tran.attrs) {
@@ -1045,16 +1200,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 delete tran.attrs[key];
             }
         }
+        if (typeof tran.effective_date == 'object') {
+            tran.effective_date = calculate.castDateString(tran.effective_date, $rootScope.settings.shortdate);
+        }
         SWBrijj.procm('_ownership.save_transaction',
                       JSON.stringify(tran))
         .then(function(new_entries) {
+            tran.effective_date = Date.parse(tran.effective_date);
             if (new_entries.length < 1)
             {
                 console.log("Error: no ledger entries");
                 return;
             }
             var transaction = new_entries.splice(0, 1)[0].transaction;
-            //console.log("new ledger", new_entries.length, new_entries, JSON.stringify(tran));
             var spliced = [];
             for (var new_entry in new_entries)
             {
@@ -1062,7 +1220,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 {
                     spliced.push(new_entries[new_entry].transaction);
                     splice_many_by(captable.ledger_entries, function(el) {
-                            return el.transaction == new_entries[new_entry].transaction;
+                        return el.transaction == new_entries[new_entry].transaction;
                     });
                 }
                 captable.ledger_entries.push(new_entries[new_entry]);
@@ -1072,7 +1230,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             {
                 if (captable.transactions[i].transaction == tran.transaction)
                 {
-                    if (tran.transaction == null)
+                    if (tran.transaction === null)
                     {
                         if ((captable.transactions[i].attrs.investor == tran.attrs.investor) &&
                             (captable.transactions[i].attrs.security == tran.attrs.security))
@@ -1104,10 +1262,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     updateCell(cells[c]);
                 }
             }
+            updateDays();
             //captable.ledger_entries.push.apply(captable., new_entries);
-            //console.log(captable.ledger_entries.filter(function(el) {return el.transaction==tran.transaction;}));
         }).except(function(e) {
-            console.log("error");
             console.error(e);
             if (errorFunc)
             {
@@ -1130,12 +1287,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     }
                     var trans = captable.transactions.filter(function(t) {
                         return t.transaction == tran.transaction ||
-                            (t.attrs['transaction_from'] && t.attrs.transaction_from == tran.transaction);
+                            (t.attrs.transaction_from && t.attrs.transaction_from == tran.transaction);
                     });
                     var ids = trans.reduce(
                             accumulateProperty('transaction'), []);
                     var entries = captable.ledger_entries.filter(function(ent) {
-                        return ids.indexOf(ent.transaction) != -1;
+                        return ids.indexOf(ent.transaction) != -1 ||
+                            ids.indexOf(ent.modifying_transactions) != -1;
                     });
                     splice_many(captable.transactions, trans);
                     splice_many(captable.ledger_entries, entries);
@@ -1191,7 +1349,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     "Transaction deleted");
                 splice_many(captable.transactions, [tran]);
                 splice_many_by(captable.ledger_entries, function(el) {
-                        return el.transaction == tran.transaction;
+                    return el.transaction == tran.transaction;
                 });
                 splice_many(sec.transactions, [tran]);
                 var cells = colFor(sec.name);
@@ -1339,8 +1497,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var tran = new Transaction();
         tran.kind = kind;
         tran.company = $rootScope.navState.company;
-        tran.insertion_date = new Date(Date.now());
-        tran.effective_date = new Date(Date.now());
+        tran.insertion_date = new Date();
+        // effective date needs to be midnight UTC of intended day
+        tran.effective_date = new Date();
+        // set to midnight local time (close enough)
+        tran.effective_date.setHours(0);
+        tran.effective_date.setMinutes(0);
+        tran.effective_date.setSeconds(0);
+        // convert to UTC / timezoneless
+        tran.effective_date.setMinutes(tran.effective_date.getMinutes() - tran.effective_date.getTimezoneOffset());
         var sec_obj = captable.securities
             .filter(function(el) {
                 return el.name==sec && el.attrs.security_type;
@@ -1359,15 +1524,21 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         {
             tran.attrs.investor_from = inv;
         }
-        console.log(tran);
         return tran;
     }
     this.newTransaction = newTransaction;
     this.newSecurity = function() {
         var security = nullSecurity();
         security.newName = security.name = "";
-        security.effective_date = new Date(Date.now());
         security.insertion_date = new Date(Date.now());
+        // effective date needs to be midnight UTC of intended day
+        security.effective_date = new Date(Date.now());
+        // set to midnight local time (close enough)
+        security.effective_date.setHours(0);
+        security.effective_date.setMinutes(0);
+        security.effective_date.setSeconds(0);
+        // convert to UTC / timezoneless
+        security.effective_date.setMinutes(security.effective_date.getMinutes() - security.effective_date.getTimezoneOffset());
         initAttrs(security, 'Option', 'issue security');
         security.attrs.security = security.name;
         security.attrs.security_type = 'Option';
@@ -1394,16 +1565,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return (sec.name === tran.attrs.security);
         })) {
             // duplicated security name
-            tran.attrs.security = tran.attrs.security + " (1)";
+            security.transactions[0].attrs.security = tran.attrs.security + " (1)";
             return this.addSecurity(security);
         }
-        console.log("addSecurity");
 
         security.new_name = security.name = tran.attrs.security;
         security.effective_date = tran.effective_date;
         security.insertion_date = tran.insertion_date;
         security.attrs = tran.attrs;
-        console.log(security.attrs);
 
         // FIXME should we be using AddTran
         // which takes care of the ledger entries?
@@ -1415,6 +1584,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.addInvestor = function(name) {
         var inv = new Investor();
         inv.editable = true;
+        var currentrows =[];
+        angular.forEach(captable.investors, function(investor) {
+            currentrows.push(investor.name);
+        });
+        if (currentrows.indexOf(name) != -1) {
+            name += " (1)";
+        }
         inv.new_name = inv.name = name;
         inv.company = $rootScope.navState.company;
         inv.percentage = function() {return investorSorting(inv.name);};
@@ -1547,48 +1723,110 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      *
      * Sum all ledger entries associated with warrants
      * and convertible debt.
-     *
-     * TODO incorporate effective date (now vs infinity)
      */
-    function totalOwnershipUnits(dilution) {
+    function totalOwnershipUnits(dilution, securities, asof, vesting) {
         if (!dilution) dilution = 1;
+        if (!securities) securities = false;
         var entry_filter;
         var ok_securities = [];
         var auth_securities = [];
+        var trans = [];
         if (dilution <= 0) {
             var ok_types = ["Equity Common",
                             "Equity",
                             "Options"];
             angular.forEach(captable.securities, function(sec) {
-                if (sec && sec.attrs && ok_types.indexOf(
-                                    sec.attrs.security_type) !== -1)
+                if (sec && sec.attrs &&
+                    ok_types.indexOf(sec.attrs.security_type) !== -1 &&
+                    (typeof(securities) == "boolean" ? true :
+                        securities.indexOf(sec.name) != -1))
                 {
                     ok_securities.push(sec.name);
                 }
             });
-            entry_filter = function(el) {
-                return ok_securities.indexOf(el.security) !== -1;
-            };
+            if (asof)
+            {
+                var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                if (vesting)
+                {
+                    trans = captable.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entry_filter = function(el) {
+                        return ok_securities.indexOf(el.security) !== -1 &&
+                            trans.indexOf(el.transaction) != -1;
+                    };
+                }
+                else
+                {
+                    entry_filter = function(el) {
+                        return ok_securities.indexOf(el.security) !== -1 &&
+                            el.effective_date <= d;
+                    };
+                }
+            }
+            else
+            {
+                entry_filter = function(el) {
+                    return ok_securities.indexOf(el.security) !== -1;
+                };
+            }
         } else if (dilution == 1) {
             ok_securities = [];
             auth_securities = [];
             angular.forEach(captable.securities, function(sec) {
-                if (sec && sec.attrs && calculate.primaryMeasure(
-                               sec.attrs.security_type) == "units")
+                if (sec && sec.attrs &&
+                    calculate.primaryMeasure(
+                        sec.attrs.security_type) == "units" &&
+                    (typeof(securities) == "boolean" ? true :
+                        securities.indexOf(sec.name) != -1))
                 {
                     ok_securities.push(sec.name);
                 }
             });
             angular.forEach(captable.securities, function(sec) {
-                if (sec && sec.attrs && calculate.primaryMeasure(
-                    sec.attrs.security_type) == "units" && sec.attrs.totalauth && sec.attrs.totalauth.toString().length > 0)
+                if (sec && sec.attrs &&
+                    calculate.primaryMeasure(sec.attrs.security_type)
+                        == "units" &&
+                    sec.attrs.totalauth &&
+                    sec.attrs.totalauth.toString().length > 0)
                 {
                     auth_securities.push(sec.name);
                 }
             });
-            entry_filter = function(el) {
-                return el && ok_securities.indexOf(el.security) !== -1 && (el.investor || auth_securities.indexOf(el.security) !== -1);
-            };
+            if (asof)
+            {
+                var d = new Date(asof);
+                // d is local date, but ledger is utc date, so offset d so the comparisons always work
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                if (vesting)
+                {
+                    trans = captable.transactions.filter(function(tran) {
+                        return tran.effective_date <= d;
+                    }).reduce(accumulateProperty('transaction'), []);
+                    entry_filter = function(el) {
+                        return el && ok_securities.indexOf(el.security) !== -1 &&
+                            (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                            trans.indexOf(el.transaction) != -1;
+                    };
+                }
+                else
+                {
+                    entry_filter = function(el) {
+                        return el && ok_securities.indexOf(el.security) !== -1 &&
+                            (el.investor || auth_securities.indexOf(el.security) !== -1) &&
+                            el.effective_date <= d;
+                    };
+                }
+            }
+            else
+            {
+                entry_filter = function(el) {
+                    return el && ok_securities.indexOf(el.security) !== -1 && (el.investor || auth_securities.indexOf(el.security) !== -1);
+                };
+            }
         } else if (dilution >= 2) {
             console.log("TODO",
                 "implement dilution scenarios involving conversion");
@@ -1598,31 +1836,52 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return res;
     }
     this.totalOwnershipUnits = totalOwnershipUnits;
-    function investorOwnershipPercentage(inv) {
+    function investorOwnershipPercentage(inv, securities, asof, vesting) {
+        if (!securities) securities = false;
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellUnits(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            };
+        }
+        else
+        {
+            red = sumCellUnits;
+        }
         var x = captable.cells
-            .filter(function(el) { return el.investor == inv; })
-            .reduce(sumCellUnits, 0);
-        var res = x / totalOwnershipUnits() * 100;
+            .filter(function(el) { return el.investor == inv &&
+                (typeof(securities) == "boolean" ? true :
+                    securities.indexOf(el.security) != -1); })
+            .reduce(red, 0);
+        var res = x / totalOwnershipUnits(1, securities, asof, vesting) * 100;
         return res != Infinity ? res : 0;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;
-    function securityTotalUnits(sec) {
+    function securityTotalUnits(sec, asof, vesting) {
         if (!sec) return 0;
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellUnits(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            };
+        }
+        else
+        {
+            red = sumCellUnits;
+        }
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
-            .reduce(sumCellUnits, 0);
+            .reduce(red, 0);
     }
     this.securityTotalUnits = securityTotalUnits;
     function securityUnitsFrom(sec, kind, inv) {
         if (!(sec && kind)) return 0;
 
         var trans = captable.transactions.filter(function(tran) {
-            // FIXME not working
-            /*
-            if (tran.kind == kind && kind!='grant' && tran.attrs.security == sec.name) {
-                console.log(tran);
-            }
-            */
             return tran.attrs.security == sec.name &&
                 tran.kind == kind;
         }).reduce(accumulateProperty('transaction'), []);
@@ -1660,6 +1919,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return prev;
         };
     }
+    this.accumulateProperty = accumulateProperty;
     function securityCurrentUnits(sec, inv) {
         if (!sec) return 0;
 
@@ -1667,11 +1927,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return tran.attrs.security == sec.name;
         }).reduce(accumulateProperty('transaction'), []);
 
+        var d = new Date();
+        // d is local date, but ledger is utc date, so offset d so the comparisons always work
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
                 ent.investor &&
                 (!inv || ent.investor == inv.name) &&
-                ent.effective_date <= Date.now();
+                ent.effective_date <= d;
         });
         return sum_ledger(entries);
     }
@@ -1679,18 +1942,35 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function currentUnits() {
         var trans = captable.transactions.reduce(
                 accumulateProperty('transaction'), []);
+        var d = new Date();
+        // d is local date, but ledger is utc date, so offset d so the comparisons always work
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         var entries = captable.ledger_entries.filter(function(ent) {
             return trans.indexOf(ent.transaction) != -1 &&
-                ent.effective_date <= Date.now();
+                ent.effective_date <= d;
         });
         return sum_ledger(entries);
     }
     this.currentUnits = currentUnits;
-    this.securityTotalAmount = function(sec) {
+    function securityTotalAmount(sec, asof, vesting) {
+        if (!sec) return 0;
+        var red;
+        if (asof)
+        {
+            red = function(prev, cur, idx, arr) {
+                var tmp = getCellAmount(cur, asof, vesting);
+                return prev + (calculate.isNumber(tmp) ? tmp : 0);
+            };
+        }
+        else
+        {
+            red = sumCellAmount;
+        }
         return captable.cells
             .filter(function(el) { return el.security == sec.name; })
-            .reduce(sumCellAmount, 0);
-    };
+            .reduce(red, 0);
+    }
+    this.securityTotalAmount = securityTotalAmount;
     function sumCellUnits(prev, cur, idx, arr) {
         return prev + (calculate.isNumber(cur.u) ? cur.u : 0);
     }
@@ -1747,6 +2027,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 if (x.tags) { x.tags = JSON.parse(x.tags); }
                 eligible_evidence.push(x);
             });
+            angular.forEach(eligible_evidence, function(evidence1) {
+                angular.forEach(eligible_evidence, function(evidence2) {
+                    if (evidence1.doc_id && !evidence2.doc_id && evidence1.original == evidence2.original) {
+                        evidence1.tags = evidence2.tags;
+                    }
+                });
+            });
         }).except(logError);
     }
     if (role() == 'issuer') { loadEligibleEvidence(); }
@@ -1786,6 +2073,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!security) return;
         return security.attrs.security_type == "Debt" || security.attrs.security_type == "Safe" || security.attrs.security_type == "Convertible Debt";
     };
+    this.isEquity = function(security) {
+        if (!security) return;
+        return security.attrs.security_type == "Equity" || security.attrs.security_type == "Equity Common";
+    };
     this.isOption = function(security) {
         if (!security) return;
         return security.attrs.security_type == "Option";
@@ -1797,7 +2088,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
-                          parseInt(obj.transaction, 10),
+                          parseInt(obj.transaction),
                           JSON.stringify(obj.evidence_data)
             ).then(function(r) {
                 void(r);
@@ -1822,7 +2113,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data.push(ev);
-            console.log(captable.evidence_object.evidence_data)
         }
     }
     this.addEvidence = addEvidence;
@@ -1846,8 +2136,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!ev || !captable.evidence_object) {return;}
         if (!captable.evidence_object.evidence_data) {
             captable.evidence_object.evidence_data = [];
-            console.log(ev);
-            console.log(captable);
         } else {
             var action = "";
             if (isEvidence(ev)) {
@@ -1861,8 +2149,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }
     };
 
-
-
     function isEvidence(ev) {
         if (captable.evidence_object &&
                 captable.evidence_object.evidence_data) {
@@ -1872,31 +2158,22 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 }).length>0;
         } else {
             return false;
-            console.log("not added")
         }
     }
     this.isEvidence = isEvidence;
 
     function validateTransaction(transaction) {
         var correct = true;
-        //console.log("validateTransaction");
         if (!attrs)
         {
-            console.log("attrs not defined yet");
             return true;
         }
         if (!transaction.attrs.security_type)
         {
-            console.log("security_type not defined");
-            console.log(transaction);
             return false;
         }
         if (!attrs[transaction.attrs.security_type])
         {
-            console.log("wrong security type?");
-            console.log(transaction.attrs.security_type);
-            console.log(attributes.isLoaded());
-            console.log(attrs);
             if (!attributes.isLoaded())
             {//the data could be correct, but the attributes aren't filled in yet
                 return true;
@@ -1993,5 +2270,87 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     this.numGrantholders = function() {
         return captable.grantCells.reduce(
                 accumulateProperty('investor'), []).length;
+    };
+    function toArrays() {
+        var res = [];
+        var security_row = ["Ownership", "", "Shareholder"];
+        var sub_header_row = ["Shares", "%", ""];
+        angular.forEach(captable.securities, function(sec) {
+            security_row.push(sec.name.replace(/,/g , ""), "");
+            sub_header_row.push($filter('issueUnitLabel')(sec.attrs.security_type),
+                                'Total Paid');
+        });
+        res.push(security_row, sub_header_row);
+        angular.forEach(captable.investors, function(inv) {
+            var inv_row = [rowSum(inv.name).toString(),
+                           (investorOwnershipPercentage(inv.name).toString() || "0.000") + "%",
+                           inv.name.replace(/,/g , "")];
+            angular.forEach(captable.securities, function(sec) {
+                var cell = cellFor(inv.name, sec.name) || {u: null, a:null};
+                inv_row.push(cell.u,
+                             cell.a);
+            });
+            res.push(inv_row);
+        });
+        angular.forEach(securitiesWithUnissuedUnits(), function(sec) {
+            var unissued_row = [numUnissued(sec).toString(),
+                                securityUnissuedPercentage(sec).toString() + "%",
+                                sec.name.replace(/,/g , "") + " (Unissued)"];
+            angular.forEach(captable.securities, function(key) {
+                unissued_row.push(sec==key ? numUnissued(key) : "",
+                                  "");
+            });
+            res.push(unissued_row);
+        });
+        var total_spacer_row = ["Total", "", ""];
+        var total_data_row = [totalOwnershipUnits(1), "100.00%", ""];
+        angular.forEach(captable.securities, function(sec) {
+            total_spacer_row.push("", "");
+            total_data_row.push(securityTotalUnits(sec) + numUnissued(sec),
+                                securityTotalAmount(sec));
+        });
+        res.push(total_spacer_row,
+                 total_data_row);
+        return res;
+    }
+
+    function transToArray() {
+        var res = [];
+        var headers = ["Effective Date", "Transaction Id", "Type", "Associated DocIds", "Security", "Shareholder", "Units", "Amount", "Attributes", "Insertion Date", "Entered By", "IP"]
+        res.push(headers);
+        angular.forEach(captable.transactions, function(tran) {
+            var evidencedata = "";
+            if (tran.evidence_data) {
+                angular.forEach(tran.evidence_data, function(ev) {
+                    var id = ev.doc_id || ev.original;
+                    evidencedata += id  + " ";
+                });
+            }
+            var investor = tran.attrs.investor;
+            if (investor) {
+                investor = investor.replace(/,/g, "");
+            }
+            var security = tran.attrs.security;
+            if (security) {
+                security = security.replace(/,/g, "");
+            }
+            var date = tran.effective_date;
+            if (date) {
+                date = new Date(tran.effective_date.getUTCFullYear(), tran.effective_date.getUTCMonth(), tran.effective_date.getUTCDate()).toString($rootScope.settings.shortdate);
+            }
+            var transactionrow = [date, tran.transaction, tran.kind, evidencedata, security, investor, tran.attrs.units, tran.attrs.amount, JSON.stringify(tran.attrs).replace(/,\"/g, " | \"").replace(/,/g, ""), tran.insertion_date, tran.entered_by, tran.inet];
+            res.push(transactionrow);
+        });
+        return res;
+
+    }
+
+    this.toArrays = toArrays;
+    this.download = function() {
+        return csv.downloadFromArrays(toArrays());
+    };
+
+    this.downloadTransactions = function() {
+        return csv.downloadFromArrays(transToArray());
     };
 });

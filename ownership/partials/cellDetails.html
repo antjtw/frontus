@@ -6,12 +6,12 @@
     </div>
     <accordion class="lessmargin transaction-accordion" close-others="true">
     <accordion-group is-open="tran.active"
-                     ng-repeat="tran in cell.transactions
+                     ng-repeat="tran in transactions
                                 | orderBy:['effective_date', 'insertion_date'] track by $index"
                      ng-switch on="currentTab">
         <accordion-heading>
             <span ng-click="toggleTransaction()">
-                {{tran.effective_date | date:'M/d/yyyy'}} {{tran.kind}}
+                {{tran.effective_date | utcdate:settings.shortdate}} {{tran.kind}}
             </span>
         </accordion-heading>
         <div class="darkgray faux-tabs" ng-class="{single: !hasDocuments(tran)}">

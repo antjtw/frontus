@@ -35,8 +35,11 @@ app.directive('d3Discount', ['d3', 'calculate', function(d3, calculate) {
 
             var formatShortAmount = function (amount) {
                 var decimal = calculate.funcformatAmount(amount);
-                var nodecimal = decimal.split(".")[0];
-                return nodecimal
+                if (decimal) {
+                    var nodecimal = decimal.split(".")[0];
+                    return nodecimal
+                }
+                return decimal
             };
 
 

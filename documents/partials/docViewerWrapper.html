@@ -97,7 +97,7 @@
                             </div>
                             <div class="inforow" ng-if="doc.last_viewed && navState.role == 'issuer'">
                                 <span class="activity-icon doc-view-icon"></span>
-                                <span class="info"><span>Viewed by {{doc.name}}</span><span>{{doc.last_viewed  | date:settings.dateandtime}}</span></span>
+                                <span class="info"><span>Viewed by {{doc.name}}</span><span>{{docviews.minimum  | date:settings.dateandtime}}</span></span>
 
                                 <div class="investor-views" ng-if="doc.last_viewed && navState.role == 'issuer'">
                                     <span class="toggle-icon" data-icon="&#xe034;"aria-hidden="true" ng-show="!showViews" ng-click = "showViews = !showViews"></span>

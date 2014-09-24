@@ -1,7 +1,7 @@
 <div class="capGuide global" ng-class="{'issue-rail':tourstate==3}">
     <div class="detailsHeader">
         <div>{{sec.name}}</div>
-        <div>{{sec.effective_date | date:settings.shortdate}}</div>
+        <div>{{sec.effective_date | utcdate:settings.shortdate}}</div>
         <p ng-show="sec.attrs.security_type" class="belowTitle">
             <span ng-bind="sec.attrs.security_type"></span>
             <span>Security Type</span>
@@ -11,12 +11,12 @@
                close-others="true">
     <accordion-group is-open="tran.active"
                      is-disabled="sec.transactions.length==1"
-                     ng-hide="windowToggle && !tran.active"
+                     ng-hide="windowToggle && (sec.transactions.length > 1 && !tran.active)"
                      ng-repeat="tran in sec.transactions track by $index"
                     ng-switch on="currentTab">
         <accordion-heading>
             <span ng-click="editEvidence()">
-                {{tran.effective_date | date:settings.shortdate}} Transaction
+                {{tran.effective_date | utcdate:settings.shortdate}} {{tran.kind}}
             </span>
         </accordion-heading>
         <div class="darkgray faux-tabs triplet" ng-class="{pair: !hasActions(tran)}">
@@ -87,6 +87,9 @@
                 </div>
 
             </div>
+            <div ng-if="tran.evidence_data.length == 0 && windowToggle == true">
+                <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
+            </div>
             <div ng-if="tran.evidence_data.length>0"
                  class="linkedDocuments">
                 <div ng-repeat="doc in tran.evidence_data"
@@ -105,9 +108,6 @@
                                 {{doc.name || doc.investor}}'s version
                             </span>
                         </li>
-                        <li ng-if="doc.original && !doc.name && !doc.investor">
-                            <span>original version</span>
-                        </li>
 
                     </ul>
                     <span class="pull-right" data-icon="&#xe00f;"
@@ -116,16 +116,16 @@
                 </div>
             </div>
             <span ng-if="windowToggle == false && tran.evidence_data.length > 0"
-                  class="delete-link linkedDocuments"
+                  class="delete-link linkedDocuments add-more-docs"
                   ng-click="editEvidence(tran);">
                 <div class="noGroups addMore">
                     Add More Documents
                     <span data-icon="&#xe016;" aria-hidden="true"></span>
-                 </div>
+                </div>
             </span>
-            <div ng-if="windowToggle == true && tran.evidence_data.length==0 || windowToggle == true && tran.evidence_data ==" class="linkedDocuments">
-                <div class="noGroups">
-                    Select the documents on the right that you wish to link.
+            <div ng-if="windowToggle == true" class="linkedDocuments drop-zone">
+                <div droppable drop="handleDrop" bin="bin" id="bin">
+                    Drop documents here.
                 </div>
             </div>
             <div ng-if="windowToggle == true"

@@ -1,27 +1,37 @@
-<link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
+
 <div class="compose_message">
-   
+
     <div>
-        <div ng-if="triggerUpgradeMessages(message.recipients)" class="upgradeWarning">
-            <span>Warning: Sending this message will automatically upgrade your payment plan.</span>
-        </div> 
-
-
         <div>
             <div class="message_elem">
-                <div class="message_headline">To</div>
+                <div class="message_headline" ng-if="groupMessage">To</div>
+                <div class="message_headline" ng-if="!groupMessage">BCC</div>
                 <div class="message_input">
-                    <select ui-select2 multiple ng-model='message.recipients' data-placeholder="Please enter an email address or group name" style="width: 100%;">
-                        <option ng-repeat="myContact in myContacts" value="{{myContact.namex}}">{{myContact.namex}}</option>
+                    <select ui-select2 multiple ng-model='message.recipients' placeholder="Enter a person or group from your Sharewave contacts" style="width: 100%;">
+                        <option ng-repeat="myContact in myContacts" value="{{myContact.id}}">{{myContact.name}}</option>
                     </select>
                 </div>
             </div>
         <div>
 
+
+        <div>
+            <div class="message_elem">
+                <div class="message_headline" style="visibility:hidden">Group</div>
+                <div class="message_input">
+                    <button class="check-box-button group" ng-class="{'selected': groupMessage}" ng-click="selectGroupMessage()">
+                    <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                    <span class="group-message-text">Send group message, every message is reply all</span>
+                </div>
+            </div>
+        </div>
+
+
         <div class="message_elem">
-            <div class="message_headline"> Subject</div>
+            <div class="message_headline">Subject</div>
             <div class="message_input">
-                <input type="text" ng-model ="message.subject" class="msgsubject" style="padding-right: 0px; width: calc(100% - 5px);"></input>
+                <input type="text" ng-model ="message.subject" class="msgsubject" style="padding-right: 0px; width: calc(100% - 5px);">
             </div>
         </div>
 
@@ -32,28 +42,27 @@
             </div>
         </div>
 
-        
+
     </div>
 
 
-  
-   
 
-<div class="preview-message" 
+
+
+<div class="preview-message"
     ng-click= "previewModalOpen(message)"
     ng-hide="!readyToPreview(message)">
-    Preview Message 
+    Preview Message
 </div>
 
 <div class="msgButtons">
-    <div class = "standard-button green" tooltip="{{zombiemessage()}}">
+    <div class = "standard-button" tooltip="{{zombiemessage()}}">
         <button class="btn" style="font-size: 14px"
             ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
-            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && sendMessage(message)">
+            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && send(message)">
             Send
         </button>
     </div>
-
 </div>
 
 <div class="msgButtons left">
@@ -69,8 +78,8 @@
 
 
 
-     
-     
+
+
 
 
 <div modal="previewModal" close="previewModalClose()" options="{dialogClass: 'modal preview-modal'}">
@@ -105,7 +114,7 @@
                                                         <td class="mcnImageContent" valign="top" style="padding-right: 0px;padding-left: 0px;padding-top: 0;padding-bottom: 0;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
 
 
-                                                            <img align="left" alt="Sharewave Logo" src="http://www.sharewave.com/img/email/logo.png" width="122" style="max-width: 122px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;" class="mcnImage">
+                                                            <img align="left" alt="Sharewave Logo" src="/img/email/logo.png" width="122" style="max-width: 122px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;" class="mcnImage">
 
 
                                                         </td>
@@ -149,21 +158,23 @@
                                                             <p style="color: #34495E;font-size: 24px;font-family: 'Helvetica Neue''Helvetica', Arial, sans-serif; margin-bottom:10px; font-weight:200 ">Message from {{sendername}}</p>
                                                             <div>
                                                                 {{company}} is using Sharewave to organize and share company information with you.
-                                                            </div>                                           
+                                                            </div>
                                                             <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:40px; margin-bottom:20px; border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div >
                                                             <div ng-bind-html="messagetext" class="msgText"></div>
                                                             <div>&nbsp;</div>
                                                             <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
                                                             <div>&nbsp;</div>
 
-                                                          <div><span style="font-family:arial,helvetica neue,helvetica,sans-serif; "><p style="color: #3498db;font-weight: normal;text-decoration: none;word-wrap: break-word !important;letter-spacing:0.125em; font-size: 11px;">VISIT SHAREWAVE <b></b></p></span></div>
+                                                            <div><span style="font-family:arial,helvetica neue,helvetica,sans-serif; "><p style="color: #3498db;font-weight: normal;text-decoration: none;word-wrap: break-word !important;letter-spacing:0.125em; font-size: 11px;">VISIT SHAREWAVE <b></b></p></span></div>
+                                                            <div>&nbsp;</div>
+                                                            <div>Replies to this message will go {{replyto}}</div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </td>
                                     </tr>
-                                </tbody>       
+                                </tbody>
                             </table>
                             <tr>
                         <td align="center" valign="top" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
@@ -215,5 +226,3 @@
                 </div>
             </tr>
 </div>
-
-
