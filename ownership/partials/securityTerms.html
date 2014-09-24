@@ -6,7 +6,7 @@
         <div class="span9">
             <span>Instructions here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet diam dictum, congue odio quis, hendrerit erat.
             </span>
-            <div ng-repeat="pair in keys">
+            <div ng-repeat="pair in keys" ng-if="issue.length > 0">
                 <div class="row-fluid">
                     <div ng-repeat="key in pair" class="span4">
                         <span>{{displayName(key)}}</span><br>
