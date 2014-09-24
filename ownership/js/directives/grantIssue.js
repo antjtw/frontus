@@ -16,7 +16,7 @@ app.directive('grantIssue', [function() {
 
             $scope.issueSelectOptions = {
                 data: [],
-                placeholder: "Pick a security",
+                placeholder: "Pick an option security",
             };
 
             $scope.$watchCollection('issues', function(issues) {

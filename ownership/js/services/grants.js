@@ -35,7 +35,7 @@ function(captable, $window, $rootScope, SWBrijj) {
         this.issue.splice(0);
         this.issue.push(issue);
     };
-    
+
     this.addDocument = function(doc_id, type, label) {
         if (grantsref.issue.length != 1)
             return null;

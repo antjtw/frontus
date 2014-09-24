@@ -25,14 +25,6 @@ var Transaction = function() {
     this.kind = null;
     this.verified = false;
 };
-var Security = function() {
-    this.name = "";
-    this.new_name = "";
-    this.effective_date = null;
-    this.insertion_date = null;
-    this.transactions = [];
-    this.attrs = {};
-};
 var Investor = function() {
     this.name = "";
     this.new_name = "";
@@ -92,6 +84,29 @@ var GrantCell = function() {
  */
 ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter, csv) {
+    var captableref = this;
+
+    var Security = function() {
+        this.name = "";
+        this.new_name = "";
+        this.effective_date = null;
+        this.insertion_date = null;
+        this.transactions = [];
+        this.attrs = {};
+    };
+    Security.prototype = {
+        numUnissued: function(asof, vesting) {
+            return captableref.numUnissued(this, asof, vesting);
+        },
+        totalUnits: function(asof, vesting) {
+            // returns the number of issued units
+            return captableref.securityTotalUnits(this, asof, vesting);
+        },
+        totalAuthorized: function(asof) {
+            // TODO: probably wildly wasteful. Should be able to pull transaction[0].totalauth and divide by whatever split ratios are applicatble
+            return this.numUnissued(asof, false) + this.totalUnits(asof, false);
+        }
+    };
 
     function role() {
         return navState ? navState.role : document.sessionState.role;
@@ -1448,11 +1463,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 calculate.monthDiff(obj.vestingbegins, obj.date);
         }
     }
-    function processIssue(iss) {
-        setIssueKey(iss);
-        reformatDate(iss);
-        setVestingDates(iss);
-    }
     function logError(err) { console.log(err); }
     function nullCell() {
         return new Cell();
@@ -1467,10 +1477,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return cell;
     }
     this.newCell = newCell;
-    function nullIssue() {
-        return new Issue();
-    }
-    this.nullIssue = nullIssue;
     function nullSecurity() {
         return new Security();
     }
