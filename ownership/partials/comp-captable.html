@@ -194,33 +194,6 @@
     </div>
 </div>
 
-<!-- Tour Modal -->
-<div modal="tourModal" close="tourclose();" options="touropts">
-    <div class="modalHeader">
-        <span>Welcome to your cap table!</span>
-        <span class="close" data-icon="&#xe00f;" aria-hidden="true" ng-click="tourclose();"></span>
-    </div>
-    <div class="modalText">
-        <div class="row-fluid">
-            <div class="span6">
-                <p>We've created a simple tour to introduce you to your cap table, and guide you through the basics.</p>
-            </div>
-            <div class="span6">
-                <span class="tour-icon intro-icon"><span>?</span></span>
-                <div class="tooltip fade top in" style="top: 61px; left: 315px; width: 150px;display: block;"><div class="tooltip-arrow"></div><div class="tooltip-inner">{{tourmessages.intro}}</div></div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="pull-left standard-button green">
-            <button id='a_own_tour_start_modal' class="btn" ng-click="tourclose(); moveTour(); kissTour();">Start the Tour</button>
-        </div>
-        <div class="pull-left text-button">
-            <button ng-click="tourclose();">I'm a pro, skip the tour</button>
-        </div>
-    </div>
-</div>
-
 
 <!-- Captable From Here Down -->
 <subnav>
@@ -851,62 +824,6 @@
      <evidence-table state="state"></evidence-table>
 </div>
 
-<div ng-hide="!editMode || !tourshow" class="tour-box" ng-class="{'slidingcss25':oldSafari(), 'showtour':tourstate != 0}">
-    <div class="standard-button small-standard-button" ng-click="moveTour();">
-        <h2>Need Help?</h2>
-        <button id='a_own_tour_start_bar' class="btn">Tour</button>
-    </div>
-    <div class="tour-stage first" ng-class="{'slidingcss25':oldSafari(), 'stage-one':tourstate >= 1}">
-        <span ng-class="{'current-icon':tourstate == 1}" ng-click="gotoTour(1);">
-            <span ng-show="tourstate <= 1">1</span>
-            <span ng-hide="tourstate <= 1" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Shareholders</h2>
-        <p ng-show="tourstate == 1">Enter your shareholder names. The table will automatically expand as you go.</p>
-        <div class="standard-button small-standard-button" ng-click="moveTour();">
-            <button class="btn">Next</button>
-        </div>
-    </div>
-    <div class="tour-stage second" ng-class="{'slidingcss25':oldSafari(), 'stage-two':tourstate >= 2}">
-        <span ng-class="{'current-icon':tourstate == 2}" ng-click="gotoTour(2);">
-            <span ng-show="tourstate <= 2">2</span>
-            <span ng-hide="tourstate <= 2" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Security</h2>
-        <p ng-show="tourstate == 2">Name the security (e.g. Common, Seed, Series A)</p>
-        <div class="standard-button small-standard-button" ng-click="moveTour();">
-            <button class="btn">Next</button>
-        </div>
-    </div>
-    <div class="tour-stage third" ng-class="{'slidingcss25':oldSafari(), 'stage-three':tourstate >= 3}">
-        <span ng-class="{'current-icon':tourstate == 3}" ng-click="gotoTour(3);">
-            <span ng-show="tourstate <= 3">3</span>
-            <span ng-hide="tourstate <= 3" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Security Terms</h2>
-        <p ng-show="tourstate == 3">Select the security type and we'll display terms so you can define the security</p>
-        <div class="standard-button small-standard-button" ng-click="moveTour();">
-            <button class="btn">Next</button>
-        </div>
-    </div>
-    <div class="tour-stage fourth" ng-class="{'slidingcss25':oldSafari(), 'stage-four':tourstate >= 4}">
-        <span ng-class="{'current-icon':tourstate == 4}" ng-click="gotoTour(4);">
-            <span ng-show="tourstate <= 4">4</span>
-            <span ng-hide="tourstate <= 4" data-icon="&#xe052;" aria-hidden="true"></span>
-        </span>
-        <h2>Individual Shares</h2>
-        <p ng-show="tourstate == 4">Enter individual amounts. The terms inherit from the
-            security, but you can always override them.</p>
-        <div ng-show="tourstate == 4" class="standard-button small-standard-button" ng-click="closeTour(); tourNotification();">
-            <button class="btn">Done!</button>
-        </div>
-    </div>
-    <div class="tour-stage fifth" ng-show="tourstate != 0" ng-class="{'slidingcss25':oldSafari()}">
-        <div class="tour-finish-button" ng-click="closeTour();">
-            <button class="btn"><span data-icon="&#xe00f;" aria-hidden="true"></span></button>
-        </div>
-    </div>
-</div>
 </div>
 </div>
 
