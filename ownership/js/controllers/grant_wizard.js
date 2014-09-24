@@ -6,11 +6,15 @@ app.controller('chooseGrantIssue',
 }]);
 
 app.controller('docsGrantIssue',
-    ["$scope", function($scope){
+    ["$scope", "captable", "grants", function($scope, captable, grants) {
 
         $scope.state = {evidenceQuery: ""};
-        $scope.windowToggle = false;
-        $scope.sideToggle = true;
+        $scope.issue = grants.issue;
+        console.log($scope.issue);
+
+        $scope.handleDrop = function(item, bin) {
+
+        }
 }]);
 
 app.controller('peopleGrantIssue',

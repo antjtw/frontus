@@ -1,10 +1,19 @@
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
 <subnav>
 
 </subnav>
 
 <div class="left-rail">
     <internal-right-rail>
-        Hello World
+        <div ng-style="viewportheight">
+            <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
+
+            <div class="linkedDocuments drop-zone">
+                <div droppable drop="handleDrop" bin="bin" id="agreement">
+                    Agreement
+                </div>
+            </div>
+        </div>
     </internal-right-rail>
 </div>
 

@@ -35,13 +35,4 @@ function(captable, $window, $rootScope, SWBrijj) {
         this.issue.splice(0);
         this.issue.push(issue);
     };
-
-    this.addDocument = function(doc_id, type, label) {
-        if (grantsref.issue.length != 1)
-            return null;
-        if (!grantsref.issue[0].transactions || !grantsref.issue[0].transactions[0].transaction)
-            return null;
-        return SWBrijj.procm('ownership.add_issue_document', [grantsref.issue[0].transactions[0].transaction,
-            doc_id, type, label]);
-    };
 }]);

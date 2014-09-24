@@ -2105,6 +2105,12 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
         }
     }
+
+    this.addSpecificEvidence = function(security, doc_id, type, label) {
+        return SWBrijj.procm('ownership.add_issue_document', [security,
+            doc_id, type, label]);
+    };
+
     this.updateEvidenceInDB = updateEvidenceInDB;
     function evidenceEquals(ev1, ev2) {
         return (ev1.doc_id && ev2.doc_id &&
