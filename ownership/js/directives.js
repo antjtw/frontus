@@ -1564,3 +1564,32 @@ own.directive('droppable', function() {
         }
     }
 });
+
+
+own.directive('linkedDocuments', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+        },
+        templateUrl: '/ownership/partials/linkedDocuments.html',
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants) {
+
+                $scope.issue = grants.issue;
+                $scope.selected = { // need an object to bind through ng-if
+                    issue: ""
+                };
+
+                $scope.$watchCollection('issue', function(new_issue) {
+                    if (new_issue && new_issue[0]) {
+                        $scope.selected.issue = {
+                            id: new_issue[0].name,
+                            text: new_issue[0].name,
+                            issue: new_issue[0]
+                        };
+                    }
+                });
+            }
+        ]
+    };
+}]);

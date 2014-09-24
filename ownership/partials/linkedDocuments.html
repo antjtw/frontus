@@ -1,0 +1,49 @@
+<div>
+    <h2>Linked Documents</h2>
+    <p>In order to issue options, you will need to upload a few documents for your employees to complete. </p>
+    <div>
+        <ul>
+            <li>
+                <div>
+                    <div>Plan</div>
+                    <div ng-if="issue[0].getDocs().plan.docname">{{issue[0].getDocs().plan.docname}}</div>
+                    <div ng-if="issue[0].getDocs().plan.docname">
+                        <a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().plan.doc_id}}&page=1&prepare=true"><button>
+                            Prepare
+                        </button></a>
+                    </div>
+                    <div ng-if="issue[0].getDocs().plan.docname">
+                        <button ng-click="issue[0].removeDoc(issue[0].getDocs().plan)">
+                            Delete
+                        </button>
+                    </div>
+                    <div ng-if="!issue[0].getDocs().plan.docname">
+                        <a href="/app/ownership/grants/docs"><button>
+                            Pick from Library
+                        </button></a>
+                    </div>
+                </div>
+
+                <div>
+                    <div>Agreement</div>
+                    <div ng-if="issue[0].getDocs().agreement.docname">{{issue[0].getDocs().agreement.docname}}</div>
+                    <div ng-if="issue[0].getDocs().plan.docname">
+                        <a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().plan.doc_id}}&page=1&prepare=true"><button>
+                            Prepare
+                        </button></a>
+                    </div>
+                    <div ng-if="issue[0].getDocs().agreement.docname">
+                        <button ng-click="issue[0].removeDoc(issue[0].getDocs().agreement)">
+                            Delete
+                        </button>
+                    </div>
+                    <div ng-if="!issue[0].getDocs().agreement.docname">
+                        <a href="/app/ownership/grants/docs"><button>
+                            Pick from Library
+                        </button></a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
