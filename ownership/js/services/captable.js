@@ -194,15 +194,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.investors.splice(0);
             captable.securities.splice(0);
             captable.transactions.splice(0);
-            angular.forEach(captable.transactions, function(tran) {
-                if (tran.attrs.investor=="David Employee") {
-                    console.log(angular.copy(tran.effectivedate));
-                }
-                tran.effectivedate = calculate.timezoneOffset(tran.effectivedate);
-                if (tran.attrs.investor=="David Employee") {
-                    console.log(angular.copy(tran.effectivedate));
-                }
-            });
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
             captable.grantCells.splice(0);
@@ -2036,6 +2027,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 if (x.tags) { x.tags = JSON.parse(x.tags); }
                 eligible_evidence.push(x);
             });
+            angular.forEach(eligible_evidence, function(evidence1) {
+                angular.forEach(eligible_evidence, function(evidence2) {
+                    if (evidence1.doc_id && !evidence2.doc_id && evidence1.original == evidence2.original) {
+                        evidence1.tags = evidence2.tags;
+                    }
+                });
+            });
         }).except(logError);
     }
     if (role() == 'issuer') { loadEligibleEvidence(); }
@@ -2090,7 +2088,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
-                          parseInt(obj.transaction, 10),
+                          parseInt(obj.transaction),
                           JSON.stringify(obj.evidence_data)
             ).then(function(r) {
                 void(r);

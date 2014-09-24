@@ -1,4 +1,4 @@
-<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(navState.role, prepareFor), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'mysignature': annot.forRole(navState.role), 'processing':signatureprocessing, 'otherperson': !annot.forRole(navState.role)}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
+<div ng-class="{'redrequired':annot.required, 'greenrequired':annot.filled(navState.role, prepareFor), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'processing':signatureprocessing, 'otherperson': !annot.forRole(navState.role)}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
     <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
@@ -13,7 +13,9 @@
                           placeholder="{{current.placeholder}}"
                           ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum'"
                           ng-keyup="addLineBreaks($event)" ng-model="current.val" style="resize:none"
-                          class="row-fluid" ng-style="annotationSizeStyle"/>
+                          class="row-fluid" ng-style="annotationSizeStyle"
+                          ng-hide="(annot.whattype == 'ImgSignature') && annot.forRole(navState.role)"/>
+                <img ng-style="annotationSizeImageStyle" ng-show="(annot.whattype == 'ImgSignature') && annot.forRole(navState.role)" src="{{signatureURL(annot)}}"></img>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">
                 <select class="height-force" ui-select2 ng-model="current.val" ng-style="annotationSizeStyle" placeholder="{{current.placeholder}}">
