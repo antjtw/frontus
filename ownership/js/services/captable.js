@@ -136,6 +136,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var security = this;
             return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction, doc_id, type, label).then(function(x) {
                 security.docs[type] = {'doc_id': doc_id, 'type': type, 'docname': x[0].add_issue_document};
+                if (type == "grant") {
+                    SWBrijj.update("document.my_company_library", {issue: security.name, "transaction_type": "grant"}, {doc_id: doc_id});
+                }
             }).except(logError);
         }
     };
