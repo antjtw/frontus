@@ -1571,9 +1571,9 @@ own.directive('grantWizardNav', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantWizardNav.html',
-        controller: ["$scope", "$rootScope",
-            function($scope, $rootScope) {
-
+        controller: ["$scope", "$rootScope", "navState",
+            function($scope, $rootScope, navState) {
+                $scope.path = navState.path;
             }
         ]
     };
