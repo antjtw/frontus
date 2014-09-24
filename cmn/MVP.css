@@ -5277,6 +5277,15 @@ grant-wizard-nav > div {
     display: inline-block;
 }
 
+grant-wizard-nav > div:first-of-type {
+    float: left;
+}
+
+grant-wizard-nav > div:last-of-type {
+    float: right;
+}
+
 grant-wizard-nav > div > ul > li {
     float: left;
+    padding: 0 15px;
 }
