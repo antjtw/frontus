@@ -116,7 +116,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                         // reset the existing cap table
                         angular.forEach(results[0], function(doc) {
                             if (doc.type) {
-                                security.docs[doc.type] = doc.doc_id;
+                                security.docs[doc.type] = doc;
                             }
                         });
                         security.evidenceloading = false;

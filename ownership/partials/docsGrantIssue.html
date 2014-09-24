@@ -7,8 +7,10 @@
     <internal-right-rail>
         <div ng-style="viewportheight">
             <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
-            {{issue[0].getDocs()}}
-            <div class="linkedDocuments drop-zone">
+            <div ng-if="issue[0].getDocs().grant">
+                {{issue[0].getDocs().grant.docname}}
+            </div>
+            <div ng-if="!issue[0].getDocs().grant" class="linkedDocuments drop-zone">
                 <div droppable drop="handleDrop" bin="bin" id="grant">
                     Agreement
                 </div>
