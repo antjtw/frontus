@@ -93,7 +93,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         this.transactions = [];
         this.attrs = {};
         this.docs = {};
-        this.evidenceloading = false;
+        this.evidenceloaded = false;
     };
     Security.prototype = {
         numUnissued: function(asof, vesting) {
@@ -108,7 +108,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return this.numUnissued(asof, false) + this.totalUnits(asof, false);
         },
         getDocs: function() {
-            if (!this.docs.specificEvidence && !this.evidenceloading) {
+            if (!this.evidenceloading) {
                 this.evidenceloading = true;
                 var security = this;
                 $q.all([loadSpecificEvidence()])
@@ -119,7 +119,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                                 security.docs[doc.type] = doc;
                             }
                         });
-                        security.evidenceloading = false;
+                        security.evidenceloaded = true;
                         return security.docs;
                     }, logError);
             } else {
