@@ -49,7 +49,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
     var defaultTypes = [
         {name: "Text", display: "Text"},
         {name: "Signature", display: "Signature Text"},
-        {name: "ImgSignature", display: "Signature Image"},
         {name: "investorName", display: "Name"},
         {name: "investorStreet", display: "Address"},
         {name: "investorState", display: "State"},
@@ -57,6 +56,32 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
     ];
+    var variableDefaultTypes = [
+        {name: "ImgSignature", display: "Signature Image"}
+    ];
+    function updateAvailableSignatures()
+    {
+        SWBrijj.tblm('account.my_company_signatures', ['label']).then(function(data) {
+            if (data.length == 0)
+                return;
+            for (var t in variableDefaultTypes)
+            {
+                if (variableDefaultTypes[t].name == "ImgSignature")
+                {
+                    variableDefaultTypes[t].typename = "enum";
+                    variableDefaultTypes[t].labels = ["Personal"];
+                    for (var l in data)
+                    {
+                        variableDefaultTypes[t].labels.push(data[l].label);
+                    }
+                    break;
+                }
+            }
+        });
+    }
+    if ($rootScope.navState.role == 'issuer') {
+        updateAvailableSignatures();
+    }
     function updateAnnotationTypes(issue_type, transaction_type, type_list, annotation_list) {
         // transaction_attributes may not be defined yet (race condition on initialization)
         function reallyDo() {
@@ -66,6 +91,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 fields = viable_actions[transaction_type].fields;
             }
             type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
+            for (var t in variableDefaultTypes)
+            {
+                type_list.push(variableDefaultTypes[t]);
+            }
             var tmp_array = [];
             for (var field in fields) {
                 var f = fields[field];
@@ -105,6 +134,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
     var Document = function() {
         this.annotations = [];
         this.annotation_types = angular.copy(defaultTypes);
+        for (var t in variableDefaultTypes)
+        {
+            this.annotation_types.push(variableDefaultTypes[t]);
+        }
 
         var doc = this;
         $rootScope.$watch(function() {
