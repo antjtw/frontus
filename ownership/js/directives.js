@@ -1433,5 +1433,5 @@ own.directive('droppable', function() {
                 false
             );
         }
-    };
+    }
 });
