@@ -128,6 +128,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         },
         removeDoc: function(doc_id) {
             return SWBrijj.procm('ownership.remove_issue_document', this.transactions[0].transaction, doc_id);
+        },
+        addSpecificEvidence: function(doc_id, type, label) {
+        return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction,
+            doc_id, type, label);
         }
     };
 
@@ -2143,11 +2147,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
         }
     }
-
-    this.addSpecificEvidence = function(security, doc_id, type, label) {
-        return SWBrijj.procm('ownership.add_issue_document', security,
-            doc_id, type, label);
-    };
 
     this.updateEvidenceInDB = updateEvidenceInDB;
     function evidenceEquals(ev1, ev2) {
