@@ -5,6 +5,13 @@ app.controller('chooseGrantIssue',
 
 }]);
 
+app.controller('docsGrantIssue',
+    ["$scope", function($scope){
+
+        $scope.state = {evidenceQuery: ""};
+
+}]);
+
 app.controller('peopleGrantIssue',
     ["$scope", function($scope){
 
