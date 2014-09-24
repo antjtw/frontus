@@ -2,7 +2,7 @@
 
 var ownership = angular.module('ownerServices');
 
-ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBirjj',
+ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBrijj',
 function(captable, $window, $rootScope, SWBrijj) {
     var grantsref = this;
     var issue_name;
