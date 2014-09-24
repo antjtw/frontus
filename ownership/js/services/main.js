@@ -13,11 +13,10 @@ function(SWBrijj, $q, $filter, displayCopy) {
      */
     var special = {investor: [], security: []};
     var loaded = false;
-    init();
     this.getAttrs = function() { return attrs; };
     this.getSpecialAttrs = function() { return special; };
     this.isLoaded = function() { return loaded; };
-    function init() { loadAttributes().then(handleAttrs); }
+    loadAttributes().then(handleAttrs);
     function handleAttrs(data) {
         special.investor = [];
         special.security = [];
