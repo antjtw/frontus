@@ -5270,3 +5270,13 @@ div.imgsig > div.signature-box {
     float: left;
     width: 315px;
 }
+
+/* The Wizard Grant */
+
+grant-wizard-nav > div {
+    display: inline-block;
+}
+
+grant-wizard-nav > div > ul > li {
+    float: left;
+}

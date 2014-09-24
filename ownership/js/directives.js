@@ -1565,6 +1565,20 @@ own.directive('droppable', function() {
     }
 });
 
+own.directive('grantWizardNav', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+        },
+        templateUrl: '/ownership/partials/grantWizardNav.html',
+        controller: ["$scope", "$rootScope",
+            function($scope, $rootScope) {
+
+            }
+        ]
+    };
+}]);
+
 
 own.directive('linkedDocuments', [function() {
     return {
