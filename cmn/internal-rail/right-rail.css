@@ -335,7 +335,6 @@ internal-right-rail .sides-padded {
 .left-rail {
     float: left;
     position: relative;
-    margin-left: 80px;
 }
 
 .left-rail button.right-rail-button {
