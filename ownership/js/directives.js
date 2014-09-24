@@ -204,7 +204,6 @@ own.directive('editableCaptableCell', [function() {
                         }
                         $scope.data.u = num;
                         updateAttr('units', num);
-
                     } else {
                         return ($scope.data ? $filter('formatAmount')($scope.data.u, 'units') : null);
                     }
@@ -235,10 +234,11 @@ own.directive('editableCaptableCell', [function() {
                         "diff": 0
                     };
                     var newVal = $scope.selectedCell[key[0]];
-                    if (key == 'units')
+                    if (key == 'units') {
                         captable.setCellUnits($scope.selectedCell);
-                    else
+                    } else {
                         captable.setCellAmount($scope.selectedCell);
+                    }
                     $scope.picker.diff = newVal - $scope.selectedCell[key[0]];
                     if ($scope.picker.diff !== 0) {
                         $scope.tranPicker = true;
