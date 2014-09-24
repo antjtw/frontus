@@ -6,14 +6,14 @@ ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBrijj', 'Do
 function(captable, $window, $rootScope, SWBrijj, DocShareFactory) {
     var grantsref = this;
     var issue_name;
-    var ds = new DocShareFactory();
+    this.docsshare = new DocShareFactory();
     $window.addEventListener('beforeunload', function(event) {
         sessionStorage.setItem('grants-issueName', issue_name);
-        ds.save('grantsDocs');
+        grantsref.docshare.save('grantsDocs');
     });
     issue_name = sessionStorage.getItem('grants-issueName');
-    ds.restore('grantsDocs');
-    ds.checkAllPrepared();
+    this.docsshare.restore('grantsDocs');
+    this.docsshare.checkAllPrepared();
     this.issue = []; // an array of 1 object to make the binding work ...
     // if the captable securities change (it loads or is refreshed), sync our security object
     $rootScope.$watchCollection(function() {
