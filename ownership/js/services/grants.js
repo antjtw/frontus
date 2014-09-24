@@ -2,8 +2,8 @@
 
 var ownership = angular.module('ownerServices');
 
-ownership.service('grants', ['captable', '$window', '$rootScope',
-function(captable, $window, $rootScope) {
+ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBirjj',
+function(captable, $window, $rootScope, SWBrijj) {
     var grantsref = this;
     var issue_name;
     $window.addEventListener('beforeunload', function(event) {
@@ -34,5 +34,14 @@ function(captable, $window, $rootScope) {
     this.setIssue = function(issue) {
         this.issue.splice(0);
         this.issue.push(issue);
+    };
+    
+    this.addDocument = function(doc_id, type, label) {
+        if (grantsref.issue.length != 1)
+            return null;
+        if (!grantsref.issue[0].transactions || !grantsref.issue[0].transactions[0].transaction)
+            return null;
+        return SWBrijj.procm('ownership.add_issue_document', [grantsref.issue[0].transactions[0].transaction,
+            doc_id, type, label]);
     };
 }]);
