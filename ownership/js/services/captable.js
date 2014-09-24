@@ -125,7 +125,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             } else {
                 return this.docs;
             }
-    }
+        },
+        removeDoc: function(doc_id) {
+            return SWBrijj.procm('ownership.remove_issue_document', this.transactions[0].transaction, doc_id);
+        }
     };
 
     function role() {

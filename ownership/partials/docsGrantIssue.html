@@ -9,6 +9,7 @@
             <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
             <div ng-if="issue[0].getDocs().grant">
                 {{issue[0].getDocs().grant.docname}}
+                <button ng-click="issue[0].removeDoc(issue[0].getDocs().grant.doc_id)">Delete Me</button>
             </div>
             <div ng-if="!issue[0].getDocs().grant" class="linkedDocuments drop-zone">
                 <div droppable drop="handleDrop" bin="bin" id="grant">
