@@ -9,7 +9,8 @@ app.controller('docsGrantIssue',
     ["$scope", function($scope){
 
         $scope.state = {evidenceQuery: ""};
-
+        $scope.windowToggle = false;
+        $scope.sideToggle = true;
 }]);
 
 app.controller('peopleGrantIssue',

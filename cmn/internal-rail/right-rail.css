@@ -329,3 +329,15 @@ internal-right-rail .sides-padded {
     padding: 0 20px 20px 20px;
     overflow: auto;
 }
+
+/* Styling for right rail fixed to the left */
+
+.left-rail {
+    float: left;
+    position: relative;
+    margin-left: 80px;
+}
+
+.left-rail button.right-rail-button {
+    display: none;
+}
