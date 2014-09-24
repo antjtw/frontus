@@ -21,7 +21,6 @@ app.controller('docsGrantIssue',
                     text: new_issue[0].name,
                     issue: new_issue[0]
                 };
-                console.log($scope.selected.issue);
             }
         });
 

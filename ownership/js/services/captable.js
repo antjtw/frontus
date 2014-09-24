@@ -85,7 +85,6 @@ var GrantCell = function() {
 ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter, csv) {
     var captableref = this;
-
     var Security = function() {
         this.name = "";
         this.new_name = "";
@@ -93,6 +92,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         this.insertion_date = null;
         this.transactions = [];
         this.attrs = {};
+        this.docs = {};
+        this.evidenceloading = false;
     };
     Security.prototype = {
         numUnissued: function(asof, vesting) {
@@ -105,7 +106,26 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         totalAuthorized: function(asof) {
             // TODO: probably wildly wasteful. Should be able to pull transaction[0].totalauth and divide by whatever split ratios are applicatble
             return this.numUnissued(asof, false) + this.totalUnits(asof, false);
-        }
+        },
+        getDocs: function() {
+            if (!this.docs.specificEvidence && !this.evidenceloading) {
+                this.evidenceloading = true;
+                var security = this;
+                $q.all([loadSpecificEvidence()])
+                    .then(function(results) {
+                        // reset the existing cap table
+                        angular.forEach(results[0], function(doc) {
+                            if (doc.type) {
+                                security.docs[doc.type] = doc.doc_id;
+                            }
+                        });
+                        security.evidenceloading = false;
+                        return security.docs;
+                    }, logError);
+            } else {
+                return this.docs;
+            }
+    }
     };
 
     function role() {
@@ -249,6 +269,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     };
 
     /* Data Gathering Functions */
+
+    function loadSpecificEvidence() {
+        var promise = $q.defer();
+        if (role() == 'issuer') {
+            SWBrijj.tblm('ownership.my_issue_documents')
+                .then(function(evidence) {
+                    promise.resolve(evidence);
+                }).except(logError);
+        } else {
+            promise.resolve([]);
+        }
+        return promise.promise;
+    }
 
     function loadEvidence() {
         var promise = $q.defer();
