@@ -1295,7 +1295,6 @@ own.directive('transactionLog', [function() {
     };
 }]);
 
-
 own.directive('securityTerms', [function() {
     return {
         restrict: 'EA',
@@ -1366,7 +1365,7 @@ own.directive('draggable', function() {
             },
             false
         );
-    }
+    };
 });
 
 own.directive('droppable', function() {
@@ -1436,4 +1435,3 @@ own.directive('droppable', function() {
         }
     }
 });
-
