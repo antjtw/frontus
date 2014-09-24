@@ -16,14 +16,14 @@ app.directive('grantIssue', [function() {
 
             $scope.issueSelectOptions = {
                 data: [],
-                placeholder: "Pick a security",
+                placeholder: "Pick an option security",
             };
 
             $scope.$watchCollection('issues', function(issues) {
                 // set up the select box
                 if (issues) {
                     $scope.issueSelectOptions.data.splice(0);
-                    issues.forEach(function(issue) {
+                    captable.grantSecurities().forEach(function(issue) {
                         if (issue.attrs.security_type) {
                             $scope.issueSelectOptions.data.push({
                                 id: issue.name,

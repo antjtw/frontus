@@ -25,14 +25,6 @@ var Transaction = function() {
     this.kind = null;
     this.verified = false;
 };
-var Security = function() {
-    this.name = "";
-    this.new_name = "";
-    this.effective_date = null;
-    this.insertion_date = null;
-    this.transactions = [];
-    this.attrs = {};
-};
 var Investor = function() {
     this.name = "";
     this.new_name = "";
@@ -92,6 +84,29 @@ var GrantCell = function() {
  */
 ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter, csv) {
+    var captableref = this;
+
+    var Security = function() {
+        this.name = "";
+        this.new_name = "";
+        this.effective_date = null;
+        this.insertion_date = null;
+        this.transactions = [];
+        this.attrs = {};
+    };
+    Security.prototype = {
+        numUnissued: function(asof, vesting) {
+            return captableref.numUnissued(this, asof, vesting);
+        },
+        totalUnits: function(asof, vesting) {
+            // returns the number of issued units
+            return captableref.securityTotalUnits(this, asof, vesting);
+        },
+        totalAuthorized: function(asof) {
+            // TODO: probably wildly wasteful. Should be able to pull transaction[0].totalauth and divide by whatever split ratios are applicatble
+            return this.numUnissued(asof, false) + this.totalUnits(asof, false);
+        }
+    };
 
     function role() {
         return navState ? navState.role : document.sessionState.role;
@@ -194,15 +209,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.investors.splice(0);
             captable.securities.splice(0);
             captable.transactions.splice(0);
-            angular.forEach(captable.transactions, function(tran) {
-                if (tran.attrs.investor=="David Employee") {
-                    console.log(angular.copy(tran.effectivedate));
-                }
-                tran.effectivedate = calculate.timezoneOffset(tran.effectivedate);
-                if (tran.attrs.investor=="David Employee") {
-                    console.log(angular.copy(tran.effectivedate));
-                }
-            });
             captable.ledger_entries.splice(0);
             captable.cells.splice(0);
             captable.grantCells.splice(0);
@@ -1457,11 +1463,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 calculate.monthDiff(obj.vestingbegins, obj.date);
         }
     }
-    function processIssue(iss) {
-        setIssueKey(iss);
-        reformatDate(iss);
-        setVestingDates(iss);
-    }
     function logError(err) { console.log(err); }
     function nullCell() {
         return new Cell();
@@ -1476,10 +1477,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return cell;
     }
     this.newCell = newCell;
-    function nullIssue() {
-        return new Issue();
-    }
-    this.nullIssue = nullIssue;
     function nullSecurity() {
         return new Security();
     }
@@ -2036,6 +2033,13 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 if (x.tags) { x.tags = JSON.parse(x.tags); }
                 eligible_evidence.push(x);
             });
+            angular.forEach(eligible_evidence, function(evidence1) {
+                angular.forEach(eligible_evidence, function(evidence2) {
+                    if (evidence1.doc_id && !evidence2.doc_id && evidence1.original == evidence2.original) {
+                        evidence1.tags = evidence2.tags;
+                    }
+                });
+            });
         }).except(logError);
     }
     if (role() == 'issuer') { loadEligibleEvidence(); }
@@ -2090,7 +2094,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function updateEvidenceInDB(obj, action) {
         if (obj.transaction && obj.evidence_data) {
             SWBrijj.procm('_ownership.upsert_transaction_evidence',
-                          parseInt(obj.transaction, 10),
+                          parseInt(obj.transaction),
                           JSON.stringify(obj.evidence_data)
             ).then(function(r) {
                 void(r);
