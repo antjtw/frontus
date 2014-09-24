@@ -23,7 +23,7 @@ app.directive('grantIssue', [function() {
                 // set up the select box
                 if (issues) {
                     $scope.issueSelectOptions.data.splice(0);
-                    issues.forEach(function(issue) {
+                    captable.grantSecurities().forEach(function(issue) {
                         if (issue.attrs.security_type) {
                             $scope.issueSelectOptions.data.push({
                                 id: issue.name,
