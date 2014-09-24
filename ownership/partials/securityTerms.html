@@ -6,7 +6,7 @@
         <div class="span9">
             <span>Instructions here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet diam dictum, congue odio quis, hendrerit erat.
             </span>
-            <div ng-repeat="pair in keys">
+            <div ng-repeat="pair in keys" ng-if="issue.length > 0">
                 <div class="row-fluid">
                     <div ng-repeat="key in pair" class="span4">
                         <span>{{displayName(key)}}</span><br>
@@ -14,12 +14,10 @@
                         <input ng-if="useTextField(key)"
                                ui-event="{blur: 'saveIt(issue[0].transactions[0], true)'}"
                                type="text"
-                               disabled="!scope.save"
                                ng-model="issue[0].transactions[0].attrs[key]">
                         <input ng-if="useNumberField(key)"
                                ui-event="{blur: 'saveIt(issue[0].transactions[0], true)'}"
                                type="text"
-                               disabled="!scope.save"
                                float
                                ng-model="issue[0].transactions[0].attrs[key]">
                         <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
@@ -28,7 +26,7 @@
                                 {{issue[0].transactions[0].attrs[key]}}
                                 <span class="invisible-drop">'</span>
                             </a>
-                            <ul class="dropdown-menu" ng-if="scope.save">
+                            <ul class="dropdown-menu" ng-if="save">
                                 <li ng-repeat="i in attrs[issue[0].transactions[0].attrs.security_type][issue[0].transactions[0].kind][key].labels">
                                     <a ng-click="setIt(issue[0].transactions[0], true, null, key, i)">
                                         {{i}}
@@ -43,7 +41,7 @@
                                 <span ng-if="issue[0].transactions[0].attrs[key] == false">No</span>
                                 <span class="invisible-drop">'</span>
                             </a>
-                            <ul class="dropdown-menu" ng-if="scope.save">
+                            <ul class="dropdown-menu" ng-if="save">
                                 <li>
                                     <a ng-click="setIt(issue[0].transactions[0], true, null, key, true)">
                                         Yes
@@ -64,7 +62,6 @@
                                data-date-format={{settings.lowercasedate}}
                                date-type="string"
                                type="text"
-                               disabled="!scope.save"
                                bs-datepicker>
                         
                         

@@ -1299,10 +1299,11 @@ own.directive('securityTerms', [function() {
     return {
         restrict: 'EA',
         scope: {
+            save: '='
         },
         templateUrl: '/ownership/partials/securityTerms.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants",
-            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants) {
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "$timeout",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, $timeout) {
                 $scope.tips = displayCopy.captabletips;
                 
                 $scope.issue = grants.issue;
@@ -1335,6 +1336,7 @@ own.directive('securityTerms', [function() {
                         }
                         $scope.keys.push(tmp);
                     }
+                    console.log($scope.save, !$scope.save);
                 };
 
                 $scope.description = function(key) {
@@ -1371,7 +1373,7 @@ own.directive('securityTerms', [function() {
                         captable.saveTransaction(tran, cell, errorFunc);
                     }
                 };
-                
+                var keyPressed;
                 function reallySaveDate(tran, cell, errorFunc, evt, field) {
                     // TODO: keyPressed is used to minimize saving. Logic may no longer work / be needed
                     if (evt) {
