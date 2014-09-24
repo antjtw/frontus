@@ -126,12 +126,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 return this.docs;
             }
         },
-        removeDoc: function(doc_id) {
-            return SWBrijj.procm('ownership.remove_issue_document', this.transactions[0].transaction, doc_id);
+        removeDoc: function(doc) {
+            var security = this;
+            return SWBrijj.procm('ownership.remove_issue_document', this.transactions[0].transaction, doc.doc_id).then(function(x) {
+                security.docs[doc.type] = null;
+            }).except(logError);
         },
         addSpecificEvidence: function(doc_id, type, label) {
-        return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction,
-            doc_id, type, label);
+            var security = this;
+            return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction, doc_id, type, label).then(function(x) {
+                security.docs[type] = {'doc_id': doc_id, 'type': type, 'docname': x[0].add_issue_document};
+            }).except(logError);
         }
     };
 
