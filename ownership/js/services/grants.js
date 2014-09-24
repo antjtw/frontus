@@ -2,14 +2,18 @@
 
 var ownership = angular.module('ownerServices');
 
-ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBrijj',
-function(captable, $window, $rootScope, SWBrijj) {
+ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBrijj', 'DocShareFactory',
+function(captable, $window, $rootScope, SWBrijj, DocShareFactory) {
     var grantsref = this;
     var issue_name;
+    var ds = new DocShareFactory();
     $window.addEventListener('beforeunload', function(event) {
         sessionStorage.setItem('grants-issueName', issue_name);
+        ds.save('grantsDocs');
     });
     issue_name = sessionStorage.getItem('grants-issueName');
+    ds.restore('grantsDocs');
+    ds.checkAllPrepared();
     this.issue = []; // an array of 1 object to make the binding work ...
     // if the captable securities change (it loads or is refreshed), sync our security object
     $rootScope.$watchCollection(function() {
