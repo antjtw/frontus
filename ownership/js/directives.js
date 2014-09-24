@@ -1305,11 +1305,11 @@ own.directive('securityTerms', [function() {
         controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "$timeout",
             function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, $timeout) {
                 $scope.tips = displayCopy.captabletips;
-                
+
                 $scope.issue = grants.issue;
 
                 $scope.attrs = attributes.getAttrs();
-                
+
                 function fixKeys(keys) {
                     var skip = ['security', 'pariwith', 'optundersecurity'];
                     for (var i = 0; i < keys.length; i++)
@@ -1320,13 +1320,13 @@ own.directive('securityTerms', [function() {
                             i--;
                         }
                     }
-                    keys.splice(0, 0, 'effective_date')
+                    keys.splice(0, 0, 'effective_date');
                     return keys;
                 }
 
                 function getKeys() {
                     $scope.keys = [];
-                    var att = fixKeys(Object.keys($scope.attrs['Option']['issue security']));
+                    var att = fixKeys(Object.keys($scope.attrs.Option['issue security']));
                     for (var i = 0; i < att.length; i += 2)
                     {
                         var tmp = [];
@@ -1336,8 +1336,7 @@ own.directive('securityTerms', [function() {
                         }
                         $scope.keys.push(tmp);
                     }
-                    console.log($scope.save, !$scope.save);
-                };
+                }
 
                 $scope.description = function(key) {
                     return $scope.tips[key];
@@ -1349,8 +1348,12 @@ own.directive('securityTerms', [function() {
                     return $scope.attrs[$scope.issue[0].transactions[0].attrs.security_type]['issue security'][key].display_name;
                 };
 
-                getKeys();
-                
+                $scope.$watch('attrs', function(new_attrs) {
+                    if (new_attrs.Option) {
+                        getKeys();
+                    }
+                }, true);
+
                 $scope.setIt = function(tran, cell, errorFunc, k, v) {
                     if (inputType(k) == "array_text") {
                         if (!tran.attrs[k]) {
@@ -1366,7 +1369,7 @@ own.directive('securityTerms', [function() {
                     }
                     $scope.saveIt(tran, cell, errorFunc);
                 };
-                
+
                 $scope.saveIt = function(tran, cell, errorFunc) {
                     if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
                     {
@@ -1414,8 +1417,8 @@ own.directive('securityTerms', [function() {
                         currentDateSave = null;
                     });
                 };
-                
-                
+
+
                 function inputType(key) {
                     if (key.indexOf("investor") != -1)
                     {
