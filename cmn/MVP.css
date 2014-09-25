@@ -5383,7 +5383,7 @@ grant-wizard-nav a.active {
     display: inline-block;
 }
 
-.wizard-linking > li > div > div:first-of-type {
+.wizard-linking > li > div > div.wizard-doc {
     display: inline-block;
     vertical-align: middle;
     color: #1d2c3c;
