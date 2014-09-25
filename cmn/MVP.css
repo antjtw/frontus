@@ -5449,6 +5449,18 @@ grant-wizard-nav a.active {
     margin-top: 20px;
 }
 
+.wizard-next {
+    float: right;
+    margin: 40px 40px;
+}
+
+.wizard-next > div > button {
+    width: 160px;
+    height: 40px;
+    font-size: 20px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
 grant-doc-prep .name-table {
     width: 250px;
     float: left;
@@ -5468,7 +5480,7 @@ grant-doc-prep .name-table td a {
 }
 
 grant-doc-prep .doc-table {
-    width: calc(100%-250px);
+    width: calc(100% - 250px);
     overflow-x: auto;
     white-space: nowrap;
 }
