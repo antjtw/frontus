@@ -5374,6 +5374,12 @@ grant-wizard-nav a.active {
     width: 224px;
 }
 
+.wizard-linking > li > div {
+    margin: 20px 0;
+}
+
 .wizard-linking > li > div > div {
     display: inline-block;
+    vertical-align: middle;
+    color: #1d2c3c;
 }
