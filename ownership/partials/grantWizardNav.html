@@ -3,11 +3,11 @@
 </div>
 <div>
     <ul>
-        <li><a href="/app/ownership/grants/issue">Choose Security</a></li>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/issue') != -1}" href="/app/ownership/grants/issue">Choose Security</a></li>
         <li><span data-icon="&#xe033;"aria-hidden="true"></span></li>
-        <li><a href="/app/ownership/grants/people">Add People</a></li>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/people') != -1}" href="/app/ownership/grants/people">Add People</a></li>
         <li><span data-icon="&#xe033;"aria-hidden="true"></span></li>
-        <li>Review</li>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/review') != -1}" href="/app/ownership/grants/review">Review</a></li>
     </ul>
 </div>
 
