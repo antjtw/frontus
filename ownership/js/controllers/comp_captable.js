@@ -1049,7 +1049,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             ($scope.editMode ? true : $scope.ctFilter.vesting));
     };
     $scope.numUnissued = function(sec) {
-        return captable.numUnissued(sec, $scope.ct.securities,
+        return captable.numUnissued(sec,
                 ($scope.editMode ? false : $scope.ctFilter.date),
                 ($scope.editMode ? true : $scope.ctFilter.vesting));
     };

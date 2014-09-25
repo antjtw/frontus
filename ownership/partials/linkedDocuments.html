@@ -1,0 +1,90 @@
+<div class="wizard-tile wizard-flow">
+    <h2>Linked Documents</h2>
+    <div class="wizard-right">
+        <p>In order to issue options, you will need to upload a few documents for your employees to complete. </p>
+        <ul class="wizard-linking">
+            <li>
+                <div>
+                    <div>
+                        <span ng-show="issue[0].getDocs().plan.docname && isPrepared(issue[0].getDocs().plan.doc_id)" data-icon="&#xe052;" aria-hidden="true"></span>
+                        <span ng-show="!issue[0].getDocs().plan.docname || !isPrepared(issue[0].getDocs().plan.doc_id)" data-icon="&#xe0000;" aria-hidden="true"></span>
+                    </div>
+                    <div class="wizard-doc">Plan</div>
+                    <div ng-if="issue[0].getDocs().plan.docname"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().plan.doc_id}}&page=1&prepare=true">{{issue[0].getDocs().plan.docname}}</a></div>
+                    <div class="wizard-selects pull-right">
+                        <ul ng-if="issue[0].getDocs().plan.docname" class="dropdown-list">
+                            <li class="dropdown standard menu-drop">
+                                <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>Prepare</li>
+                                    <li ng-click="issue[0].removeDoc(issue[0].getDocs().plan)">Delete</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-right" ng-if="issue[0].getDocs().plan.docname && !isPrepared(issue[0].getDocs().plan.doc_id)">
+                        <a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().plan.doc_id}}&page=1&prepare=true">
+                            <div class="standard-button pull-right">
+                                <button class="btn">
+                                    Prepare
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="pull-right" ng-if="!issue[0].getDocs().plan.docname">
+                        <a href="/app/ownership/grants/docs">
+                            <div class="standard-button pull-right gray">
+                                <button class="btn">
+                                    Pick from Library
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="wizard-selects pull-right">
+
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <span ng-show="issue[0].getDocs().grant.docname && isPrepared(issue[0].getDocs().grant.doc_id)" data-icon="&#xe052;" aria-hidden="true"></span>
+                        <span ng-show="!issue[0].getDocs().grant.docname || !isPrepared(issue[0].getDocs().grant.doc_id)" data-icon="&#xe0000;" aria-hidden="true"></span>
+                    </div>
+                    <div class="wizard-doc">Agreement</div>
+                    <div ng-if="issue[0].getDocs().grant.docname"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().grant.doc_id}}&page=1&prepare=true">{{issue[0].getDocs().grant.docname}}</a></div>
+                    <div class="wizard-selects pull-right">
+                        <ul ng-if="issue[0].getDocs().grant.docname" class="dropdown-list">
+                            <li class="dropdown standard menu-drop">
+                                <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>Prepare</li>
+                                    <li ng-click="issue[0].removeDoc(issue[0].getDocs().grant)">Delete</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-right" ng-if="issue[0].getDocs().grant.docname && !isPrepared(issue[0].getDocs().grant.doc_id)">
+                        <a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().grant.doc_id}}&page=1&prepare=true">
+                            <div class="standard-button pull-right">
+                                <button class="btn">
+                                    Prepare
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="pull-right" ng-if="!issue[0].getDocs().grant.docname">
+                        <a href="/app/ownership/grants/docs">
+                            <div class="standard-button pull-right gray">
+                                <button class="btn">
+                                    Pick from Library
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

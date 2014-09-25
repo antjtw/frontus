@@ -25,14 +25,6 @@ var Transaction = function() {
     this.kind = null;
     this.verified = false;
 };
-var Security = function() {
-    this.name = "";
-    this.new_name = "";
-    this.effective_date = null;
-    this.insertion_date = null;
-    this.transactions = [];
-    this.attrs = {};
-};
 var Investor = function() {
     this.name = "";
     this.new_name = "";
@@ -92,6 +84,64 @@ var GrantCell = function() {
  */
 ownership.service('captable',
 function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $filter, csv) {
+    var captableref = this;
+    var Security = function() {
+        this.name = "";
+        this.new_name = "";
+        this.effective_date = null;
+        this.insertion_date = null;
+        this.transactions = [];
+        this.attrs = {};
+        this.docs = {};
+        this.evidenceloaded = false;
+    };
+    Security.prototype = {
+        numUnissued: function(asof, vesting) {
+            return captableref.numUnissued(this, asof, vesting);
+        },
+        totalUnits: function(asof, vesting) {
+            // returns the number of issued units
+            return captableref.securityTotalUnits(this, asof, vesting);
+        },
+        totalAuthorized: function(asof) {
+            // TODO: probably wildly wasteful. Should be able to pull transaction[0].totalauth and divide by whatever split ratios are applicatble
+            return this.numUnissued(asof, false) + this.totalUnits(asof, false);
+        },
+        getDocs: function() {
+            if (!this.evidenceloading) {
+                this.evidenceloading = true;
+                var security = this;
+                $q.all([loadSpecificEvidence()])
+                    .then(function(results) {
+                        // reset the existing cap table
+                        angular.forEach(results[0], function(doc) {
+                            if (doc.type && doc.issue == security.transactions[0].transaction) {
+                                security.docs[doc.type] = doc;
+                            }
+                        });
+                        security.evidenceloaded = true;
+                        return security.docs;
+                    }, logError);
+            } else {
+                return this.docs;
+            }
+        },
+        removeDoc: function(doc) {
+            var security = this;
+            return SWBrijj.procm('ownership.remove_issue_document', this.transactions[0].transaction, doc.doc_id, doc.type, doc.label).then(function(x) {
+                security.docs[doc.type] = null;
+            }).except(logError);
+        },
+        addSpecificEvidence: function(doc_id, type, label) {
+            var security = this;
+            return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction, doc_id, type, label).then(function(x) {
+                security.docs[type] = {'doc_id': doc_id, 'type': type, 'docname': x[0].add_issue_document};
+                if (type == "grant") {
+                    SWBrijj.update("document.my_company_library", {issue: security.name, "transaction_type": "grant"}, {doc_id: doc_id});
+                }
+            }).except(logError);
+        }
+    };
 
     function role() {
         return navState ? navState.role : document.sessionState.role;
@@ -234,6 +284,19 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     };
 
     /* Data Gathering Functions */
+
+    function loadSpecificEvidence() {
+        var promise = $q.defer();
+        if (role() == 'issuer') {
+            SWBrijj.tblm('ownership.my_issue_documents')
+                .then(function(evidence) {
+                    promise.resolve(evidence);
+                }).except(logError);
+        } else {
+            promise.resolve([]);
+        }
+        return promise.promise;
+    }
 
     function loadEvidence() {
         var promise = $q.defer();
@@ -418,7 +481,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         });
     }
     this.grantSecurities = grantSecurities;
-    function numUnissued(sec, securities, asof, vesting) {
+    function numUnissued(sec, asof, vesting) {
         var unissued = 0;
         var auth_securities = [];
         angular.forEach(captable.securities, function(sec) {
@@ -736,9 +799,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return sum_ledger(ledger_entries);
     }
     this.netCreditFor = netCreditFor;
-    function secHasUnissued(securities) {
+    function secHasUnissued() {
         return function(sec) {
-            return numUnissued(sec, securities);
+            return numUnissued(sec);
         };
     }
     function securitiesWithUnissuedUnits() {
@@ -747,7 +810,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     }
     this.securitiesWithUnissuedUnits = securitiesWithUnissuedUnits;
     function securityUnissuedPercentage(sec, securities, asof, vesting) {
-        return 100 * (numUnissued(sec, securities, asof, vesting) / totalOwnershipUnits());
+        return 100 * (numUnissued(sec, asof, vesting) / totalOwnershipUnits());
     }
     this.securityUnissuedPercentage = securityUnissuedPercentage;
     function rowFor(inv) {
@@ -1460,11 +1523,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 calculate.monthDiff(obj.vestingbegins, obj.date);
         }
     }
-    function processIssue(iss) {
-        setIssueKey(iss); // FIXME: this function got deleted somewhere along the line?
-        reformatDate(iss);
-        setVestingDates(iss);
-    }
     function logError(err) {
         console.error(err);
     }
@@ -1481,13 +1539,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         return cell;
     }
     this.newCell = newCell;
-    function nullIssue() {
-        return new Issue();
-    }
-    this.nullIssue = nullIssue;
     function nullSecurity() {
         return new Security();
     }
+    this.nullSecurity = nullSecurity;
     /* initAttrs
      *
      * Grab valid attribute keys from the attributes service
@@ -1565,6 +1620,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         // Silly future date so that the issue always appears
         // on the leftmost side of the table
         tran.insertion_date = new Date(2100, 1, 1);
+        tran.effective_date = security.effective_date;
 
         security.transactions.push(tran);
         return security;
@@ -2113,6 +2169,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             });
         }
     }
+
     this.updateEvidenceInDB = updateEvidenceInDB;
     function evidenceEquals(ev1, ev2) {
         return (ev1.doc_id && ev2.doc_id &&

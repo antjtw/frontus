@@ -413,7 +413,7 @@ app.directive('companyOwnershipTile', [function() {
                     var percent;
 
                     angular.forEach($scope.ct.securities, function(security) {
-                        percent = (((captable.securityTotalUnits(security) + captable.numUnissued(security, $scope.ct.securities)) /  captable.totalOwnershipUnits()) * 100);
+                        percent = (((captable.securityTotalUnits(security) + captable.numUnissued(security)) /  captable.totalOwnershipUnits()) * 100);
                         // TODO: only push if percent > 0 and graphdata.length < 3 (the max we show anyway)
                         $scope.graphdata.push([{'name': security.name, 'issued': captable.securityTotalUnits(security), 'amount': captable.securityTotalAmount(security)}, [{'name':security.name, 'percent':percent}, {'name':'whatever', 'percent':maxPercent}, {'name':'zero', 'percent': 0}]]);
                         maxPercent += percent;

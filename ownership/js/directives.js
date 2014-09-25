@@ -544,8 +544,8 @@ own.directive('editableSecurityDetails', [function() {
 
                 $scope.splitvalue = function(issue) {
                     var ratio = parseFloat(issue.ratioa) / parseFloat(issue.ratiob);
-                    if (isFinite(($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue, $scope.ct.securities)) / ratio)) {
-                        return (($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue, $scope.ct.securities)) / ratio);
+                    if (isFinite(($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue)) / ratio)) {
+                        return (($scope.captable.securityTotalUnits(issue) + $scope.captable.numUnissued(issue)) / ratio);
                     }
                 };
 
@@ -1231,8 +1231,11 @@ own.directive('evidenceTable', [function() {
                             result += 1;
                         }
                     });
-                    return !$scope.state.evidenceQuery ||
-                        truthiness == result;
+                    var libFilt = true;
+                    if ($scope.state.originalOnly)
+                        libFilt = !obj.investor;
+                    return (!$scope.state.evidenceQuery ||
+                        truthiness == result) && libFilt;
                 };
                 $scope.toggleShown = function(obj) {
                     if (obj.shown === undefined) {
@@ -1294,6 +1297,179 @@ own.directive('transactionLog', [function() {
     };
 }]);
 
+own.directive('securityTerms', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+            save: '='
+        },
+        templateUrl: '/ownership/partials/securityTerms.html',
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "$timeout",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, $timeout) {
+                $scope.tips = displayCopy.captabletips;
+
+                $scope.issue = grants.issue;
+
+                $scope.attrs = attributes.getAttrs();
+
+                function fixKeys(keys) {
+                    var skip = ['security', 'pariwith', 'optundersecurity'];
+                    for (var i = 0; i < keys.length; i++)
+                    {
+                        if (skip.indexOf(keys[i]) != -1)
+                        {
+                            keys.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    keys.splice(0, 0, 'effective_date');
+                    return keys;
+                }
+
+                function getKeys() {
+                    $scope.keys = [];
+                    var att = fixKeys(Object.keys($scope.attrs.Option['issue security']));
+                    for (var i = 0; i < att.length; i += 2)
+                    {
+                        var tmp = [];
+                        for (var j = 0; j < 2 && i + j < att.length; j++)
+                        {
+                            tmp.push(att[i + j]);
+                        }
+                        $scope.keys.push(tmp);
+                    }
+                }
+
+                $scope.description = function(key) {
+                    return $scope.tips[key];
+                };
+
+                $scope.displayName = function(key) {
+                    if (key == 'effective_date')
+                        return 'Date';
+                    return $scope.attrs[$scope.issue[0].transactions[0].attrs.security_type]['issue security'][key].display_name;
+                };
+
+                $scope.$watch('attrs', function(new_attrs) {
+                    if (new_attrs.Option) {
+                        getKeys();
+                    }
+                }, true);
+
+                $scope.setIt = function(tran, cell, errorFunc, k, v) {
+                    if (inputType(k) == "array_text") {
+                        if (!tran.attrs[k]) {
+                            tran.attrs[k] = [];
+                        }
+                        tran.attrs[k].push(v);
+                    } else {
+                        if (v === "") {
+                            delete tran.attrs[k];
+                        } else {
+                            tran.attrs[k] = v;
+                        }
+                    }
+                    $scope.saveIt(tran, cell, errorFunc);
+                };
+
+                $scope.saveIt = function(tran, cell, errorFunc) {
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
+                };
+                var keyPressed;
+                function reallySaveDate(tran, cell, errorFunc, evt, field) {
+                    // TODO: keyPressed is used to minimize saving. Logic may no longer work / be needed
+                    if (evt) {
+                        if (evt.type != 'blur') {
+                            keyPressed = true;
+                        }
+                        var dateString = angular.element(field + '#' + tran.$$hashKey).val();
+                        var charCode = (evt.which) ? evt.which : evt.keyCode; // Get key
+                        if (charCode == 13 || (evt == 'blur' && keyPressed)) { // Enter key pressed or blurred
+                            var date = dateString;
+                            if (calculate.isDate(date)) {
+                                tran[field] = date;
+                                if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0)) {
+                                    captable.saveTransaction(tran, cell, errorFunc);
+                                }
+                                keyPressed = false;
+                            }
+                        }
+                    } else { // User is using calendar
+                        if (calculate.isDate(tran.effective_date)) {
+                            $scope.saveIt(tran, cell, errorFunc);
+                        }
+                        keyPressed = false;
+                    }
+                }
+                var currentDateSave;
+                $scope.saveItDate = function(tran, cell, errorFunc, evt, field) {
+                    // debounce the actual save, to prevent duplicates
+                    // TODO: figure out why there are duplicate events firing
+                    if (currentDateSave) {
+                        $timeout.cancel(currentDateSave);
+                        currentDateSave = null;
+                    }
+                    currentDateSave = $timeout(function() {
+                        reallySaveDate(tran, cell, errorFunc, evt, field);
+                    }, 100);
+                    currentDateSave.then(function() {
+                        currentDateSave = null;
+                    });
+                };
+
+
+                function inputType(key) {
+                    if (key.indexOf("investor") != -1)
+                    {
+                        return "investor";
+                    }
+                    if (key.indexOf("security") != -1 &&
+                            key.indexOf("type") == -1)
+                    {
+                        return "security";
+                    }
+                    if (key == 'effective_date')
+                        return 'date';
+                    switch ($scope.attrs[$scope.issue[0].transactions[0].attrs.security_type]['issue security'][key].type)
+                    {
+                        case "enum":
+                            return "enum";
+                        case "boolean":
+                            return "boolean";
+                        case "fraction":
+                        case "number":
+                            return "number";
+                        case "array_text":
+                            return "array_text";
+                        default:
+                            return "text_field";
+                    }
+                }
+                this.inputType = inputType;
+                $scope.useTextField = function(key) {
+                    return inputType(key) == "text_field";
+                };
+                $scope.useNumberField = function(key) {
+                    return inputType(key) == "number";
+                };
+                $scope.useBool = function(key) {
+                    return inputType(key) == "boolean";
+                };
+                $scope.useDropdown = function(key) {
+                    return inputType(key) == "enum";
+                };
+                $scope.useDate = function(key) {
+                    return inputType(key) == 'date';
+                };
+
+            }
+        ],
+    };
+}]);
+
 own.directive('draggable', function() {
     return function(scope, element) {
         // this gives us the native JS object
@@ -1320,7 +1496,7 @@ own.directive('draggable', function() {
             },
             false
         );
-    }
+    };
 });
 
 own.directive('droppable', function() {
@@ -1390,3 +1566,60 @@ own.directive('droppable', function() {
         }
     }
 });
+
+own.directive('grantWizardNav', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+        },
+        templateUrl: '/ownership/partials/grantWizardNav.html',
+        controller: ["$scope", "$rootScope", "navState",
+            function($scope, $rootScope, navState) {
+                $scope.path = navState.path;
+            }
+        ]
+    };
+}]);
+
+
+own.directive('linkedDocuments', [function() {
+    return {
+        restrict: 'EA',
+        scope: {
+        },
+        templateUrl: '/ownership/partials/linkedDocuments.html',
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, Documents) {
+
+                $scope.issue = grants.issue;
+                $scope.selected = { // need an object to bind through ng-if
+                    issue: ""
+                };
+
+                $scope.$watchCollection('issue', function(new_issue) {
+                    if (new_issue && new_issue[0]) {
+                        $scope.selected.issue = {
+                            id: new_issue[0].name,
+                            text: new_issue[0].name,
+                            issue: new_issue[0]
+                        };
+                    }
+                });
+
+                $scope.isPrepared = function(doc_id) {
+                    if (doc_id) {
+                        var document = Documents.getOriginal(doc_id);
+                        if (document) {
+                            return document.validTransaction();
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+
+                }
+            }
+        ]
+    };
+}]);

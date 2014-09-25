@@ -1,0 +1,77 @@
+<div class="wizard-tile wizard-flow">
+    <h2>Security Details</h2>
+    <div class="wizard-right">
+        <p>Add terms and rights for this security, which will be visible to each option grant recipient.
+        </p>
+        <div ng-repeat="pair in keys" ng-if="issue.length > 0">
+            <div class="row-fluid">
+                <div ng-repeat="key in pair" class="span4">
+                    <span>{{displayName(key)}}</span><br>
+
+                    <input ng-if="useTextField(key)"
+                           ui-event="{blur: 'saveIt(issue[0].transactions[0], true)'}"
+                           type="text"
+                           ng-model="issue[0].transactions[0].attrs[key]">
+                    <input ng-if="useNumberField(key)"
+                           ui-event="{blur: 'saveIt(issue[0].transactions[0], true)'}"
+                           type="text"
+                           float
+                           ng-model="issue[0].transactions[0].attrs[key]">
+                    <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
+                        <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{issue[0].transactions[0].attrs[key]}}
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu" ng-if="save">
+                            <li ng-repeat="i in attrs[issue[0].transactions[0].attrs.security_type][issue[0].transactions[0].kind][key].labels">
+                                <a ng-click="setIt(issue[0].transactions[0], true, null, key, i)">
+                                    {{i}}
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
+                    <ul class="dropdown-list drop-selector" ng-if="useBool(key)">
+                        <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            <span ng-if="issue[0].transactions[0].attrs[key] == true">Yes</span>
+                            <span ng-if="issue[0].transactions[0].attrs[key] == false">No</span>
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu" ng-if="save">
+                            <li>
+                                <a ng-click="setIt(issue[0].transactions[0], true, null, key, true)">
+                                    Yes
+                                </a>
+                            </li>
+                            <li>
+                                <a ng-click="setIt(issue[0].transactions[0], true, null, key, false)">
+                                    No
+                                </a>
+                            </li>
+                        </ul>
+                    </ul>
+
+                    <input id="effective_date{{::issue[0].transactions[0].$$hashKey}}"
+                           ng-if="useDate(key)"
+                           ng-model="issue[0].transactions[0].effective_date"
+                           ng-change="saveItDate(issue[0].transactions[0], true, null, $event, 'effective_date')"
+                           data-date-format={{settings.lowercasedate}}
+                           date-type="string"
+                           type="text"
+                           bs-datepicker>
+
+
+
+                    <span ng-if="description(key)"
+                          class="tooltip-icon"
+                          data-icon="&#xe044;"
+                          aria-hidden="true"
+                          tooltip-placement="top"
+                          tooltip="{{description(key)}}">
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
