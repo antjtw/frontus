@@ -10,7 +10,7 @@
                         <span ng-show="!issue[0].getDocs().plan.docname || !isPrepared(issue[0].getDocs().plan.doc_id)" data-icon="&#xe0000;" aria-hidden="true"></span>
                     </div>
                     <div class="wizard-doc">Plan</div>
-                    <div ng-if="issue[0].getDocs().plan.docname">{{issue[0].getDocs().plan.docname}}</div>
+                    <div ng-if="issue[0].getDocs().plan.docname"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().plan.doc_id}}&page=1&prepare=true">{{issue[0].getDocs().plan.docname}}</a></div>
                     <div class="wizard-selects pull-right">
                         <ul ng-if="issue[0].getDocs().plan.docname" class="dropdown-list">
                             <li class="dropdown standard menu-drop">
@@ -52,7 +52,7 @@
                         <span ng-show="!issue[0].getDocs().grant.docname || !isPrepared(issue[0].getDocs().grant.doc_id)" data-icon="&#xe0000;" aria-hidden="true"></span>
                     </div>
                     <div class="wizard-doc">Agreement</div>
-                    <div ng-if="issue[0].getDocs().grant.docname">{{issue[0].getDocs().grant.docname}}</div>
+                    <div ng-if="issue[0].getDocs().grant.docname"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().grant.doc_id}}&page=1&prepare=true">{{issue[0].getDocs().grant.docname}}</a></div>
                     <div class="wizard-selects pull-right">
                         <ul ng-if="issue[0].getDocs().grant.docname" class="dropdown-list">
                             <li class="dropdown standard menu-drop">

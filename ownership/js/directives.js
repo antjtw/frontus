@@ -1609,7 +1609,12 @@ own.directive('linkedDocuments', [function() {
 
                 $scope.isPrepared = function(doc_id) {
                     if (doc_id) {
-                        return Documents.getOriginal(doc_id).isPrepared();
+                        var document = Documents.getOriginal(doc_id);
+                        if (document) {
+                            return document.validTransaction();
+                        } else {
+                            return false;
+                        }
                     } else {
                         return false;
                     }
