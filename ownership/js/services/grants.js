@@ -9,7 +9,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory) {
     this.docsshare = new DocShareFactory();
     $window.addEventListener('beforeunload', function(event) {
         sessionStorage.setItem('grants-issueName', issue_name);
-        grantsref.docshare.save('grantsDocs');
+        grantsref.docsshare.save('grantsDocs');
     });
     issue_name = sessionStorage.getItem('grants-issueName');
     this.docsshare.restore('grantsDocs');

@@ -2,5 +2,8 @@
     <span>{{email}}</span>
     <div ng-repeat="doc in docs">
         <span>{{doc.docname}}</span>
+        <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email)}}' class="pull-right">
+            <span>View / Edit</span>
+        </a>
     </div>
 </div>
