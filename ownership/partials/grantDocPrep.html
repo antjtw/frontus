@@ -28,7 +28,7 @@
             <table>
                 <tr>
                     <td ng-repeat="doc in doc_arr">
-                        <table>
+                        <table class="sub-doc-table">
                             <tr>
                                 <th colspan=0>
                                     <span data-icon="&#xe009;" class="status"></span>
@@ -37,6 +37,7 @@
                                     <span data-icon="&#xe60E;" ng-show="doc.issue" class="info" tooltip="Linked to {{doc.issue}}"></span>
                                     <span data-icon="&#xe612;" ng-show="!doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
                                 </th>
+                                <th ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"></th>
                             </tr>
                             <tr>
                                 <td ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">

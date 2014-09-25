@@ -5461,11 +5461,16 @@ grant-doc-prep .name-table {
     width: 250px;
     float: left;
     white-space: nowrap;
-    margin-top: 40px;
+    margin-top: 63px;
 }
 grant-doc-prep .name-table td {
     height: 40px;
     width: 250px;
+    border-bottom: 1px solid #F1F1F1;
+    border-left: 1px solid #F1F1F1;
+}
+grant-doc-prep .name-table td:first-of-type {
+    border-top: 1px solid #F1F1F1;
 }
 grant-doc-prep .name-table td .name {
     float: left;
@@ -5481,14 +5486,22 @@ grant-doc-prep .doc-table {
     white-space: nowrap;
 }
 
-grant-doc-prep .doc-table th {
+grant-doc-prep .sub-doc-table tr:first-child {
     background-color: #F1F1F1;
+}
+
+grant-doc-prep .sub-doc-table tr:not(:first-child) {
+    height: 40px;
+    border-bottom: 1px solid #F1F1F1;
+}
+
+grant-doc-prep .doc-table th {
     text-align: left;
 }
 
-grant-doc-prep .doc-table table {
-    border-left: 3px solid #F1F1F1;
-    border-right: 3px solid #F1F1F1;
+grant-doc-prep table.sub-doc-table {
+    border-left: 1px solid #F1F1F1;
+    border-right: 1px solid #F1F1F1;
 }
 
 grant-doc-prep .doc-table table > tr > td {
