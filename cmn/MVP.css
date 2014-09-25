@@ -5414,6 +5414,37 @@ grant-wizard-nav a.active {
     color: #3397da;
 }
 
+.wizard-selected-doc {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.wizard-selected-doc > span:first-of-type {
+    display: block;
+    color: #1d2c3c;
+}
+
+
+.wizard-selected-doc > span:last-of-type {
+    float: right;
+    cursor: pointer;
+}
+
+.wizard-selected-doc a {
+    color: #3397da;
+}
+
+.wizard-drop-zone {
+    margin-left: 20px;
+}
+
+.wizard-done-linking {
+    float: left;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
 grant-doc-prep .name-table {
     width: 250px;
     float: left;

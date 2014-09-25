@@ -1314,7 +1314,7 @@ own.directive('securityTerms', [function() {
                 $scope.attrs = attributes.getAttrs();
 
                 function fixKeys(keys) {
-                    var skip = ['security', 'pariwith', 'optundersecurity'];
+                    var skip = ['security', 'pariwith', 'optundersecurity', 'vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
                     for (var i = 0; i < keys.length; i++)
                     {
                         if (skip.indexOf(keys[i]) != -1)
