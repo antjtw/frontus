@@ -5414,6 +5414,10 @@ grant-wizard-nav a.active {
     background-color: #F1F1F1;
 }
 
+.wizard-tile .preview-docs a {
+    color: #3397da;
+}
+
 grant-doc-prep .name-table {
     width: 250px;
     float: left;
