@@ -5379,11 +5379,80 @@ grant-wizard-nav a.active {
 }
 
 grant-doc-prep .name-table {
-    width: 10%;
+    width: 250px;
     float: left;
+    white-space: nowrap;
+    margin-top: 40px;
+}
+grant-doc-prep .name-table td {
+    height: 40px;
+    width: 250px;
+}
+grant-doc-prep .name-table td .name {
+    float: left;
+}
+grant-doc-prep .name-table td a {
+    cursor: pointer;
+    float: right;
 }
 
 grant-doc-prep .doc-table {
-    width: 90%;
+    width: calc(100%-250px);
     overflow-x: auto;
+    white-space: nowrap;
+}
+
+grant-doc-prep .doc-table th {
+    background-color: #F1F1F1;
+    text-align: left;
+}
+
+grant-doc-prep .doc-table table {
+    border-left: 3px solid #F1F1F1;
+    border-right: 3px solid #F1F1F1;
+}
+
+grant-doc-prep .doc-table table > tr > td {
+    padding: 0;
+}
+
+/* inputs */
+
+grant-doc-prep .doc-table td input,
+grant-doc-prep .doc-table td .select2-container,
+grant-doc-prep .doc-table td .select2-container a {
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    border-radius: 0;
+    border: 1px solid #fff;
+    margin: 0;
+    min-width: 120px;
+}
+
+grant-doc-prep .doc-table td.required input,
+grant-doc-prep .doc-table td .ng-invalid,
+grant-doc-prep .doc-table td.required .select2-chosen {
+    /* moz colors the placeholder automatically based on input color */
+    color: #eb6f1c;
+}
+
+grant-doc-prep .doc-table td.required input::placeholder,
+grant-doc-prep .doc-table td .ng-invalid::placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+grant-doc-prep .doc-table td.required input::-webkit-input-placeholder,
+grant-doc-prep .doc-table td .ng-invalid::-webkit-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+grant-doc-prep .doc-table td .ng-invalid:-ms-input-placeholder,
+grant-doc-prep .doc-table td.required input:-ms-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+grant-doc-prep .doc-table td.required .select2-default .select2-chosen { /* no placeholder */
+    color: #eb6f1c;
+    opacity: 0.6;
 }
