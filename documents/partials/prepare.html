@@ -62,7 +62,7 @@
                                 {{Investor.getName(email)}}
                             </span>
                             <span class="warning" ng-if="already_shared[doc.doc_id][email]">
-                                <span>{{email}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
+                                <span>{{Investor.getName(email)}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
                                 <span><a ng-click="ShareDocs.removeEmail(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
                             </span>
                         </span>

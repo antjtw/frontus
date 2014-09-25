@@ -1,10 +1,3 @@
-<div>
-    <span ng-repeat="doc in docs">{{doc.docname}}</span>
-</div>
-<div>
-    <span ng-repeat="email in emails">{{email}}</span>
-</div>
-
 <div ng-repeat="doc in doc_arr" class="docPrep">
     <div class="docPrepRow header">
         <span>
@@ -19,18 +12,18 @@
             <span ng-if="annot.required" data-icon="&#xe603;" class="info lower-icon" tooltip="{{annot.type_info.display}} is required"></span>
         </span>
     </div>
-    <div ng-repeat="email in ShareDocs.emails" class="docPrepRow" ng-class="{warningheight: already_shared[doc.doc_id][email]}">
+    <div ng-repeat="email in emails" class="docPrepRow" ng-class="{warningheight: already_shared[doc.doc_id][email]}">
         <span>
             <span class="status">
                 <span class="good" ng-if="doc.preparedFor[email].is_prepared && !doc.hasInvalidAnnotation(email)" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
                 <span class="bad" data-icon="&#xe612;" ng-show="doc.hasInvalidAnnotation(email)" tooltip-placement="right" tooltip="Some fields for this user are invalid"></span>
             </span>
             <span class="name">
-                {{Investor.getName(email)}}
+                {{getName(email)}} <a ng-click="removeRecipient(email)" data-icon="&#xe00f;"></a>
             </span>
             <span class="warning" ng-if="already_shared[doc.doc_id][email]">
-                <span>{{Investor.getName(email)}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
-                <span><a ng-click="ShareDocs.removeEmail(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
+                <span>{{getName(email)}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
+                <span><a ng-click="removeRecipient(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
             </span>
         </span>
         <span ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
@@ -55,7 +48,7 @@
             <span class="status">
             </span>
             <span class="name">
-                <input ui-select2="recipientSelectOptions" ng-model="newRecipient">
+                <input ui-select2="recipientSelectOptions" ng-model="obj.newRecipient">
             </span>
         </span>
         <span>
