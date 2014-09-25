@@ -5316,6 +5316,10 @@ grant-wizard-nav a.active {
     overflow: auto;
 }
 
+.wizard-tile.wizard-flow {
+    overflow: visible;
+}
+
 .wizard-tile .select2-container {
     width: 320px;
     margin-top: 10px;
@@ -5360,4 +5364,12 @@ grant-wizard-nav a.active {
 
 .wizard-tile .wizard-right > p {
     margin: 15px 0;
+}
+
+.wizard-tile .standard .dropdown-toggle {
+    width: 220px;
+}
+
+.wizard-tile .drop-selector .standard .dropdown-menu {
+    width: 224px;
 }
