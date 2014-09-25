@@ -88,8 +88,8 @@ app.config(function($routeProvider, $locationProvider){
             templateUrl: '/ownership/partials/peopleGrantIssue.html'
         }).
         when('/app/ownership/grants/review', {
-            controller: 'chooseGrantIssue',
-            templateUrl: '/ownership/partials/chooseGrantIssue.html'
+            controller: 'reviewGrantIssue',
+            templateUrl: '/ownership/partials/reviewGrantIssue.html'
         }).
         when('/app/documents/company-list', {
             templateUrl: '/documents/partials/companyList.html',

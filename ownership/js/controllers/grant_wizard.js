@@ -33,3 +33,8 @@ app.controller('peopleGrantIssue',
     ["$scope", function($scope){
 
 }]);
+
+app.controller('reviewGrantIssue',
+    ["$scope", function($scope){
+
+}]);
