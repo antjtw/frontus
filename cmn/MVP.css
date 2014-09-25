@@ -5275,6 +5275,7 @@ div.imgsig > div.signature-box {
 
 grant-wizard-nav > div {
     display: inline-block;
+    line-height: 30px;
 }
 
 grant-wizard-nav > div:first-of-type {
@@ -5287,5 +5288,18 @@ grant-wizard-nav > div:last-of-type {
 
 grant-wizard-nav > div > ul > li {
     float: left;
-    padding: 0 15px;
+    padding: 7px 15px;
+}
+
+grant-wizard-nav > div > ul > li a, grant-wizard-nav > div > ul > li span {
+    color: #A6A6A6;
+}
+
+grant-wizard-nav > div > ul > li > [data-icon]:before {
+    font-size: 24px;
+    line-height: 18px;
+}
+
+grant-wizard-nav a.active {
+    color: #1d2c3c;
 }
