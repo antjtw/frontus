@@ -5318,6 +5318,7 @@ grant-wizard-nav a.active {
 
 .wizard-tile .select2-container {
     width: 320px;
+    margin-top: 10px;
 }
 
 .wizard-tile h2 {
@@ -5325,6 +5326,7 @@ grant-wizard-nav a.active {
     display: inline-block;
     font-size: 20px;
     font-family:'FS Elliot Web Light', sans-serif !important;
+    vertical-align: top;
 }
 
 .option-bar {
@@ -5354,4 +5356,8 @@ grant-wizard-nav a.active {
     width: -moz-calc(100% - 255px);
     width: -webkit-calc(100% - 255px);
     width: calc(100% - 255px);
+}
+
+.wizard-tile .wizard-right > p {
+    margin: 15px 0;
 }
