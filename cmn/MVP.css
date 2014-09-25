@@ -5271,6 +5271,10 @@ div.imgsig > div.signature-box {
     width: 315px;
 }
 
+.container.grey-background {
+    background-color: #F1F1F1;
+}
+
 /* The Wizard Grant */
 
 grant-wizard-nav > div {
@@ -5315,9 +5319,13 @@ grant-wizard-nav a.active {
     width: 250px;
     display: inline-block;
     font-size: 20px;
-    font-family:'FS Elliot Web Light', sans-serif;
+    font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
-.container.grey-background {
-    background-color: #F1F1F1;
+.option-bar {
+    width: 250px;
+}
+
+.option-bar > div:not(:first-child) > span {
+    display: block;
 }
