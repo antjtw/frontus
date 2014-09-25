@@ -5374,8 +5374,27 @@ grant-wizard-nav a.active {
     width: 224px;
 }
 
+.wizard-linking > li > div {
+    margin: 20px 40px 20px 0;
+    overflow: visible;
+}
+
 .wizard-linking > li > div > div {
     display: inline-block;
+}
+
+.wizard-linking > li > div > div.wizard-doc {
+    display: inline-block;
+    vertical-align: middle;
+    color: #1d2c3c;
+    width: 120px;
+    line-height: 32px;
+}
+
+.wizard-selects {
+    width: 30px;
+    height: 32px;
+    padding: 0 10px;
 }
 
 grant-doc-prep .name-table {
