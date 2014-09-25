@@ -8,7 +8,8 @@ app.controller('chooseGrantIssue',
 app.controller('docsGrantIssue',
     ["$scope", "captable", "grants", function($scope, captable, grants) {
 
-        $scope.state = {evidenceQuery: ""};
+        $scope.state = {evidenceQuery: "",
+                        originalOnly: true};
         $scope.issue = grants.issue;
         $scope.selected = { // need an object to bind through ng-if
             issue: ""
