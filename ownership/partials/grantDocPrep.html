@@ -1,58 +1,65 @@
-<div ng-repeat="doc in doc_arr" class="docPrep">
-    <div class="docPrepRow header">
-        <span>
-            <span data-icon="&#xe009;" class="status"></span>
-            <span>{{doc.docname}}</span>
-            <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" class="info" tooltip="Signature Requested"></span>
-            <span data-icon="&#xe60E;" ng-show="doc.issue" class="info" tooltip="Linked to {{doc.issue}}"></span>
-            <span data-icon="&#xe612;" ng-show="!doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
-        </span>
-        <span ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
-            {{annot.type_info.display}}&nbsp;
-            <span ng-if="annot.required" data-icon="&#xe603;" class="info lower-icon" tooltip="{{annot.type_info.display}} is required"></span>
-        </span>
-    </div>
-    <div ng-repeat="email in emails" class="docPrepRow" ng-class="{warningheight: already_shared[doc.doc_id][email]}">
-        <span>
-            <span class="status">
-                <span class="good" ng-if="doc.preparedFor[email].is_prepared && !doc.hasInvalidAnnotation(email)" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
-                <span class="bad" data-icon="&#xe612;" ng-show="doc.hasInvalidAnnotation(email)" tooltip-placement="right" tooltip="Some fields for this user are invalid"></span>
-            </span>
-            <span class="name">
-                {{getName(email)}} <a ng-click="removeRecipient(email)" data-icon="&#xe00f;"></a>
-            </span>
-            <span class="warning" ng-if="already_shared[doc.doc_id][email]">
-                <span>{{getName(email)}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
-                <span><a ng-click="removeRecipient(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
-            </span>
-        </span>
-        <span ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
-              ng-class="{required: annot.isInvalid(email)}">
-            <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
-                   placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
-                   ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
-            <input ng-if="annot.type_info.typename == 'date'"
-                   bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
-                   placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
-                   ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
-            <select ng-if="annot.type_info.typename == 'enum'" ui-select2
-                    placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
-                    ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
-                <option></option>
-                <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
-            </select>
-        </span>
-    </div>
-    <div class="docPrepRow">
-        <span>
-            <span class="status">
-            </span>
-            <span class="name">
-                <input ui-select2="recipientSelectOptions" ng-model="obj.newRecipient">
-            </span>
-        </span>
-        <span>
-        </span>
-    </div>
-
+<div class="name-table">
+    <table>
+        <tr ng-repeat="email in emails">
+            <td>
+                <span class="status">
+                    <span class="good" ng-if="doc.preparedFor[email].is_prepared && !doc.hasInvalidAnnotation(email)" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
+                    <span class="bad" data-icon="&#xe612;" ng-show="doc.hasInvalidAnnotation(email)" tooltip-placement="right" tooltip="Some fields for this user are invalid"></span>
+                </span>
+                <span class="name">
+                    {{getName(email)}} <a ng-click="removeRecipient(email)" data-icon="&#xe00f;"></a>
+                </span>
+                <span class="warning" ng-if="already_shared[doc.doc_id][email]">
+                    <span>{{getName(email)}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
+                    <span><a ng-click="removeRecipient(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
+                </span>
+            </td>
+        </tr>
+    </table>
 </div>
+<div class="doc-table">
+    <table>
+        <tr>
+            <td ng-repeat="doc in doc_arr">
+                <table>
+                    <tr>
+                        <td colspan=0>
+                            <span data-icon="&#xe009;" class="status"></span>
+                            <span>{{doc.docname}}</span>
+                            <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" class="info" tooltip="Signature Requested"></span>
+                            <span data-icon="&#xe60E;" ng-show="doc.issue" class="info" tooltip="Linked to {{doc.issue}}"></span>
+                            <span data-icon="&#xe612;" ng-show="!doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
+                            {{annot.type_info.display}}&nbsp;
+                            <span ng-if="annot.required" data-icon="&#xe603;" class="info lower-icon" tooltip="{{annot.type_info.display}} is required"></span>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="email in emails">
+                        <td ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
+                            ng-class="{required: annot.isInvalid(email)}">
+                        <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
+                               placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                               ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                        <input ng-if="annot.type_info.typename == 'date'"
+                               bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
+                               placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                               ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                        <select ng-if="annot.type_info.typename == 'enum'" ui-select2
+                                placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                                ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                            <option></option>
+                            <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</div>
+<span class="name">
+    <input ui-select2="recipientSelectOptions" ng-model="obj.newRecipient">
+</span>

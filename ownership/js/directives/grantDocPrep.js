@@ -42,7 +42,7 @@ app.directive('grantDocPrep', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantDocPrep.html',
-        controller: ["$scope", "grants", "Documents", "Investor", function($scope, grants, Documents, Investor) {
+        controller: ["$scope", "grants", "Documents", "Investor", "navState", function($scope, grants, Documents, Investor, navState) {
             initDocInfo($scope, grants);
             $scope.doc_arr = [];
             $scope.$watchCollection('docs', function(docs) {
@@ -84,6 +84,14 @@ app.directive('grantDocPrep', [function() {
             $scope.removeRecipient = function(id) {
                 return grants.docsshare.removeRecipient(id);
             };
+
+            $scope.bulkPrepable = function(annotation) {
+                if (!annotation.forRole(navState.role) || annotation.whattype == "ImgSignature" || annotation.type == "highlight") {
+                    return false;
+                } else {
+                    return true;
+                }
+            };
         }]
     };
 }]);
@@ -97,14 +105,14 @@ app.directive('grantDocReview', [function() {
         controller: ["$scope", "grants", function($scope, grants) {
             initDocInfo($scope, grants);
             $scope.selectedEmail = "";
-            
+
             $scope.showDocs = function(email) {
                 if ($scope.selectedEmail == email)
                     $scope.selectedEmail = "";
                 else
                     $scope.selectedEmail = email;
             };
-            
+
             $scope.docsVisible = function(email) {
                 return $scope.selectedEmail == email;
             };
