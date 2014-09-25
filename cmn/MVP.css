@@ -5059,7 +5059,7 @@ textarea.email-text {
 }
 
 .table-border{
-   border-bottom: 1px solid rgb(241, 241, 241); 
+   border-bottom: 1px solid rgb(241, 241, 241);
 }
 
 .filter-selector.dropdown-list.big {
@@ -5382,4 +5382,14 @@ grant-wizard-nav a.active {
     display: inline-block;
     vertical-align: middle;
     color: #1d2c3c;
+}
+
+grant-doc-prep .name-table {
+    width: 10%;
+    float: left;
+}
+
+grant-doc-prep .doc-table {
+    width: 90%;
+    overflow-x: auto;
 }
