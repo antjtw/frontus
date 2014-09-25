@@ -206,6 +206,9 @@ docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocSh
     this.removeShareItem = function(doc) {
         return ds.removeShareItem(doc);
     };
+    this.clearPrepCache = function(doc) {
+        return ds.clearPrepCache(doc);
+    };
     this.docsReadyToShare = function() {
         return ds.docsReadyToShare();
     };
