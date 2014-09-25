@@ -234,8 +234,8 @@ service.service('Investor', ['SWBrijj', 'navState', '$q', '$window', function(SW
         });
 
         this.getName = function(identifier) {
-            if (this.names[identifier]) {
-                return this.names[identifier];
+            if (inv_service.names[identifier]) {
+                return inv_service.names[identifier];
             } else {
                 return identifier;
             }

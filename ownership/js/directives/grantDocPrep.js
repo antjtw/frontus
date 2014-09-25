@@ -42,7 +42,7 @@ app.directive('grantDocPrep', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantDocPrep.html',
-        controller: ["$scope", "grants", "Documents", function($scope, grants, Documents) {
+        controller: ["$scope", "grants", "Documents", "Investor", function($scope, grants, Documents, Investor) {
             initDocInfo($scope, grants);
             $scope.doc_arr = [];
             $scope.$watchCollection('docs', function(docs) {
@@ -52,8 +52,37 @@ app.directive('grantDocPrep', [function() {
                     $scope.doc_arr.push(doc);
                 });
             });
+
+            function filterInvestors(investorList, emails) {
+                return investorList.filter(function(val, idx, arr) {
+                    return ! emails.some(function(emval, eidx, earr) {
+                        return val.id == emval;
+                    });
+                });
+            }
+
             $scope.recipientSelectOptions = {
-                data: [{id: 1, text: "Hello"}, {id: 2, text: "world"}]
+                data: function() {
+                    return {
+                        'results': filterInvestors(Investor.investors, grants.docsshare.emails)
+                    };
+                },
+                placeholder: 'Add Recipients',
+                createSearchChoice: Investor.createSearchChoiceMultiple,
+            };
+            $scope.obj = {};
+            $scope.obj.newRecipient = "";
+            $scope.$watch('obj.newRecipient', function(recip) {
+                if (recip && typeof(recip) != "string") {
+                    grants.docsshare.addRecipient(recip.id);
+                    $scope.obj.newRecipient = null;
+                }
+            });
+            $scope.getName = function(id) {
+                return Investor.getName(id);
+            };
+            $scope.removeRecipient = function(id) {
+                return grants.docsshare.removeRecipient(id);
             };
         }]
     };

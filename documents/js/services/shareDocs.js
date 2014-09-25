@@ -54,7 +54,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
             this.checkPreparedLists([item], this.emails);
             return this.documents;
         },
-        addEmail: function(email) {
+        addRecipient: function(email) {
             var sdref = this;
             if (email.length > 0 && this.emails.indexOf(email) == -1) {
                 this.emails.push(email);
@@ -70,7 +70,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
                 }
             }
         },
-        removeEmail: function(email) {
+        removeRecipient: function(email) {
             var idx = this.emails.indexOf(email);
             if (idx != -1) {
                 this.emails.splice(idx, 1);
@@ -198,10 +198,10 @@ docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocSh
         return ds.upsertShareItem(doc);
     };
     this.addEmail = function(email) {
-        return ds.addEmail(email);
+        return ds.addRecipient(email);
     };
     this.removeEmail = function(email) {
-        return ds.removeEmail(email);
+        return ds.removeRecipient(email);
     };
     this.removeShareItem = function(doc) {
         return ds.removeShareItem(doc);
