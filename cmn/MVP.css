@@ -5395,6 +5395,10 @@ grant-wizard-nav a.active {
     line-height: 32px;
 }
 
+.wizard-linking a {
+    color: #3397da;
+}
+
 .wizard-selects {
     width: 30px;
     height: 32px;
