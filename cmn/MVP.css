@@ -5401,6 +5401,15 @@ grant-wizard-nav a.active {
     padding: 0 10px;
 }
 
+.wizard-tile td.status-toggle {
+    min-width: 27px;
+    max-width: 27px;
+}
+
+.wizard-tile .preview-docs {
+    background-color: #F1F1F1;
+}
+
 grant-doc-prep .name-table {
     width: 250px;
     float: left;
