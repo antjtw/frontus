@@ -25,7 +25,7 @@ app.controller('docsGrantIssue',
         });
 
         $scope.handleDrop = function(item, bin) {
-            $scope.issue[0].issue.addSpecificEvidence(parseInt(item), String(bin), String(bin));
+            $scope.issue[0].addSpecificEvidence(parseInt(item), String(bin), String(bin));
         };
 }]);
 
