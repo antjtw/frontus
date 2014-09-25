@@ -1,36 +1,43 @@
-<table class="status-table investor evidence">
-    <tbody>
-        <tr>
-            <th class="left">
-                <span>
-                    Name
-                </span>
-            </th>
-        </tr>
-    </tbody>
-    <tbody ng-repeat="email in emails">
-        <tr class="empty-row"/>
-        <tr class="version">
-            <td class="status-toggle"
-                ng-click="showDocs(email)">
-                <div ng-if="viewState.hideSharebar">
-                    <span class="toggle-icon" ng-hide="docsVisible(email)" data-icon="&#xe017;" aria-hidden="true"></span>
-                    <span class="toggle-icon" ng-show="docsVisible(email)" data-icon="&#xe01c;" aria-hidden="true"></span>
-                </div>
-            </td>
-            <td>
-                {{email}}
-            </td>
-        </tr>
-        <tr ng-if="docsVisible(email)" ng-repeat="doc in docs">
-            <td>
-                {{doc.docname}}
-            </td>
-            <td>
-                <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email) + "&prepare=true"}}' class="pull-right">
-                    <span>View / Edit</span>
-                </a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="wizard-tile">
+    <h2>
+        Review option grants
+    </h2>
+    <div class="wizard-right">
+        <p>When you're ready, press send. Each recipient will receive an email inviting them to view their option grant documents.</p>
+    </div>
+    <table class="status-table investor evidence">
+        <tbody>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Options Issued</th>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="email in emails">
+            <tr class="empty-row"/>
+            <tr class="version">
+                <td class="status-toggle" ng-click="showDocs(email)">
+                    <div>
+                        <span class="toggle-icon" ng-hide="docsVisible(email)" data-icon="&#xe017;" aria-hidden="true"></span>
+                        <span class="toggle-icon" ng-show="docsVisible(email)" data-icon="&#xe01c;" aria-hidden="true"></span>
+                    </div>
+                </td>
+                <td>
+                    {{email}}
+                </td>
+                <td></td>
+            </tr>
+            <tr class="preview-docs" ng-if="docsVisible(email)" ng-repeat="doc in docs">
+                <td></td>
+                <td>
+                    {{doc.docname}}
+                </td>
+                <td>
+                    <a href='{{"/app/documents/company-view?doc=" + doc.doc_id + "&investorid=" + encodeURIComponent(email) + "&prepare=true"}}' class="pull-right">
+                        <span>View / Edit</span>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
