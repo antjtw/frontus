@@ -1232,8 +1232,11 @@ own.directive('evidenceTable', [function() {
                             result += 1;
                         }
                     });
-                    return !$scope.state.evidenceQuery ||
-                        truthiness == result;
+                    var libFilt = true;
+                    if ($scope.state.originalOnly)
+                        libFilt = !obj.investor;
+                    return (!$scope.state.evidenceQuery ||
+                        truthiness == result) && libFilt;
                 };
                 $scope.toggleShown = function(obj) {
                     if (obj.shown === undefined) {
