@@ -6,8 +6,8 @@
         <span>Option Pool Details</span>
         <meter cur="issue[0].totalUnits()" tot="issue[0].totalAuthorized()"></meter>
         <div ng-if="issue[0].totalAuthorized() > 0">
-            <span>{{issue[0].totalAuthorized()}} options authorized</span>
-            <span>{{issue[0].numUnissued()}} available</span>
+            <span>{{issue[0].totalAuthorized()  | formatAmount:'units'}} options authorized</span>
+            <span>{{issue[0].numUnissued()  | formatAmount:'units'}} available</span>
         </div>
         <div ng-if="!(issue[0].totalAuthorized() > 0)">
             <span>0 options authorized</span>
