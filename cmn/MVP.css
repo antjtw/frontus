@@ -5373,3 +5373,7 @@ grant-wizard-nav a.active {
 .wizard-tile .drop-selector .standard .dropdown-menu {
     width: 224px;
 }
+
+.wizard-linking > li > div > div {
+    display: inline-block;
+}
