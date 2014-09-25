@@ -5303,3 +5303,21 @@ grant-wizard-nav > div > ul > li > [data-icon]:before {
 grant-wizard-nav a.active {
     color: #1d2c3c;
 }
+
+.wizard-tile {
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    margin: 20px 20px 0 20px;
+    padding: 20px;
+}
+
+.wizard-tile h2 {
+    width: 250px;
+    display: inline-block;
+    font-size: 20px;
+    font-family:'FS Elliot Web Light', sans-serif;
+}
+
+.container.grey-background {
+    background-color: #F1F1F1;
+}
