@@ -115,7 +115,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                     .then(function(results) {
                         // reset the existing cap table
                         angular.forEach(results[0], function(doc) {
-                            if (doc.type) {
+                            if (doc.type && doc.issue == security.transactions[0].transaction) {
                                 security.docs[doc.type] = doc;
                             }
                         });
