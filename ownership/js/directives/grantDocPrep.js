@@ -67,6 +67,18 @@ app.directive('grantDocReview', [function() {
         templateUrl: '/ownership/partials/grantDocReview.html',
         controller: ["$scope", "grants", function($scope, grants) {
             initDocInfo($scope, grants);
+            $scope.selectedEmail = "";
+            
+            $scope.showDocs = function(email) {
+                if ($scope.selectedEmail == email)
+                    $scope.selectedEmail = "";
+                else
+                    $scope.selectedEmail = email;
+            };
+            
+            $scope.docsVisible = function(email) {
+                return $scope.selectedEmail == email;
+            };
         }]
     };
 }]);
