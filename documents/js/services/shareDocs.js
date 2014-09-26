@@ -79,10 +79,15 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
             }
         },
         removeShareItem: function(item) {
-            this.documents = this.documents.filter(function(el) {
-                return !(item.doc_id==el.doc_id &&
-                         item.template_id==el.template_id);
+            var found;
+            this.documents.forEach(function(doc, idx, arr) {
+                if (item.doc_id == doc.doc_id) {
+                    found = idx;
+                }
             });
+            if (found) {
+                this.documents.splice(found, 1);
+            }
         },
         docsReadyToShare: function() {
             if (this.documents.length===0 || this.emails.length === 0) {

@@ -132,7 +132,7 @@ app.directive('grantDocReview', [function() {
             $scope.getName = function(id) {
                 return Investor.getName(id);
             };
-            
+
             $scope.getOptionsIssued = function(email) {
                 return grants.getOptionsIssued(email);
             };

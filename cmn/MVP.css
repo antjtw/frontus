@@ -5409,7 +5409,7 @@ grant-wizard-nav a.active {
     box-sizing: border-box;
     background-color: #FFFFFF;
     margin: 20px 20px 0 20px;
-    padding: 20px;
+    padding: 20px 20px 40px 20px;
     overflow: auto;
 }
 
@@ -5460,7 +5460,7 @@ grant-wizard-nav a.active {
 }
 
 .wizard-tile .wizard-right > p {
-    margin: 15px 0;
+    margin: 15px 0 40px 0;
 }
 
 .wizard-tile .standard .dropdown-toggle {
@@ -5474,6 +5474,10 @@ grant-wizard-nav a.active {
 .wizard-linking > li > div {
     margin: 20px 40px 20px 0;
     overflow: visible;
+}
+
+.wizard-linking > li:last-of-type > div {
+    margin-bottom: 0;
 }
 
 .wizard-linking > li > div > div {
@@ -5490,6 +5494,7 @@ grant-wizard-nav a.active {
     color: #1d2c3c;
     width: 120px;
     line-height: 32px;
+    margin-left: 5px;
 }
 
 .wizard-linking a {
@@ -5602,6 +5607,7 @@ grant-wizard-nav a.active {
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
+    margin-left: 15px;
 }
 
 .documentUploadFileInputs.fileinputs div.fakefile {
