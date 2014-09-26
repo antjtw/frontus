@@ -29,9 +29,9 @@
             <accordion-heading>
                 <span>To-do list</span>
             </accordion-heading>
-            <div class="fields-progress">
+            <div class="fields-progress prepare-fields">
                 <span ng-if="doc.numFieldsComplete() != doc.numFieldsRequired()" ng-class="{'fakeobj': true}">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} added to document</span>
-                <span ng-if="doc.numFieldsComplete() == doc.numFieldsRequired()">Document is ready for recipients!</span>
+                <span ng-if="doc.numFieldsComplete() == doc.numFieldsRequired()">Document prepared</span>
                 <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
             </div>
             <div class="bottom-padded">
@@ -40,11 +40,11 @@
                     Unlink
                     </span>
                 </span>
-                <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required">
+                <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required || optionField(field)">
                     <span><span data-icon="&#xe052;" ng-show="doc.hasAnnotationType(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
                     <span>{{field.display}}</span>
-                    <span ng-show="doc.hasOtherPartyAnnotation(field.name)"> (Recipient Completes)</span>
-                    <span ng-show="!doc.hasOtherPartyAnnotation(field.name) && doc.hasAnnotationType(field.name) && !doc.hasFilledAnnotation(field.name)"> (Specific to Recipient)</span>
+                    <!--<span ng-show="doc.hasOtherPartyAnnotation(field.name)"> (Recipient Completes)</span>-->
+                    <!--<span ng-show="!doc.hasOtherPartyAnnotation(field.name) && doc.hasAnnotationType(field.name) && !doc.hasFilledAnnotation(field.name)"> (Specific to Recipient)</span> -->
                 </div>
             </div>
         </accordion-group>
