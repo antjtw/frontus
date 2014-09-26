@@ -2,6 +2,8 @@
 
 var docs = angular.module('docServices');
 
+var prepCache = {}; // cache is the same for all objects
+
 docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, Investor, $q) {
     var DocShare = function() {
         // this.emails is really a list of user_ids, not emails
@@ -9,7 +11,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
         this.documents = [];
         this.message = "";
 
-        this.prepCache = {}; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
+        this.prepCache = prepCache; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
     };
     DocShare.prototype = {
         save: function(name) {
