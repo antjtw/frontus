@@ -6,22 +6,47 @@
     </div>
 </div>
 <div ng-show="doc.issue">
-    <div class="bottom-padded">
-        <span>Fields necessary to add a cap table entry into {{doc.issue}}. <span ng-show="doc.numFieldsComplete() == 0" class='back-button' ng-click="doc.unsetTransaction();">
-            Unlink
-        </span>
-        </span>
-        <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required">
-            <span><span data-icon="&#xe052;" ng-show="doc.hasAnnotationType(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
-            <span>{{field.display}}</span>
-            <span ng-show="doc.hasOtherPartyAnnotation(field.name)"> (Recipient Completes)</span>
-            <span ng-show="!doc.hasOtherPartyAnnotation(field.name) && doc.hasAnnotationType(field.name) && !doc.hasFilledAnnotation(field.name)"> (Specific to Recipient)</span>
-        </div>
-    </div>
-    <div class="fields-progress">
-        <div>Progress</div>
-        <span ng-if="doc.numFieldsComplete() != doc.numFieldsRequired()" ng-class="{'fakeobj': true}">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} added to document</span>
-        <span ng-if="doc.numFieldsComplete() == doc.numFieldsRequired()">Document is ready for recipients!</span>
-        <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
-    </div>
+    <accordion class="lessmargin transaction-accordion" close-others="true">
+        <accordion-group ng-switch on="currentTab">
+            <accordion-heading>
+                <span>How to create annotations</span>
+            </accordion-heading>
+            <div class="tutorial">
+                <h6>
+                    How to Share Documents
+                </h6>
+                <div>
+                    <img src="/img/gif/issuer-modal.gif">
+                </div>
+                <div class="gif-text">
+                    <p>
+                        Draw fields to mark where information can be entered. Fill out all your own fields prior to sending. The recipient will see everything but your signature, which is hidden until you approve their information.
+                    </p>
+                </div>
+            </div>
+        </accordion-group>
+        <accordion-group ng-switch on="currentTab">
+            <accordion-heading>
+                <span>To-do list</span>
+            </accordion-heading>
+            <div class="fields-progress prepare-fields">
+                <span ng-if="doc.numFieldsComplete() != doc.numFieldsRequired()" ng-class="{'fakeobj': true}">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} added to document</span>
+                <span ng-if="doc.numFieldsComplete() == doc.numFieldsRequired()">Document prepared</span>
+                <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
+            </div>
+            <div class="bottom-padded">
+                <span>Fields necessary to add a cap table entry into {{doc.issue}}.
+                    <span ng-show="doc.numFieldsComplete() == 0" class='back-button' ng-click="doc.unsetTransaction();">
+                    Unlink
+                    </span>
+                </span>
+                <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required || optionField(field)">
+                    <span><span data-icon="&#xe052;" ng-show="doc.hasAnnotationType(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
+                    <span>{{field.display}}</span>
+                    <!--<span ng-show="doc.hasOtherPartyAnnotation(field.name)"> (Recipient Completes)</span>-->
+                    <!--<span ng-show="!doc.hasOtherPartyAnnotation(field.name) && doc.hasAnnotationType(field.name) && !doc.hasFilledAnnotation(field.name)"> (Specific to Recipient)</span> -->
+                </div>
+            </div>
+        </accordion-group>
+    </accordion>
 </div>

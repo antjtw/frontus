@@ -34,7 +34,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
         $window.onkeydown = function(evt) {
             // TODO: evt.which is read-only ("TypeError: setting a property that has only a getter")
-            var ev = evt.which || e.keyCode;
+            var ev = evt.which || evt.keyCode;
             // Need the extra if so that the page change doesn't occur if you are currently focused into a sticky
             if (document.activeElement.tagName.toLowerCase() != 'textarea' ) {
                 $scope.$apply(function() {
@@ -405,7 +405,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
             $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
         };
-        
+
         $scope.sigOptions = { open: false,
                                 failureCallback: uploadFail,
                                 successCallback: uploadSuccess,

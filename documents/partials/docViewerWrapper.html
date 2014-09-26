@@ -94,10 +94,10 @@
                 <tabset>
                     <tab active="infotab" heading="Information">
                         <div class="docinfo">
-                            <div class="docname" ng-if="doc.docname">
+                            <div class="docname" ng-class="{'prepareDocname' : prepareable()}" ng-if="doc.docname">
                                 <span>{{doc.docname}}</span>
                             </div>
-                            <div class="inforow" ng-if="doc.tags.length > 0">
+                            <div class="inforow" ng-if="doc.tags.length > 0 && !prepareable()">
                                 <span class="activity-icon tags-icon"></span>
                                 <span class="tags">
                                     <span ng-repeat="t in doc.tags">{{t}}</span>

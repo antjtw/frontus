@@ -2,6 +2,8 @@
 
 var docs = angular.module('docServices');
 
+var prepCache = {}; // cache is the same for all objects
+
 docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, Investor, $q) {
     var DocShare = function() {
         // this.emails is really a list of user_ids, not emails
@@ -9,7 +11,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
         this.documents = [];
         this.message = "";
 
-        this.prepCache = {}; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
+        this.prepCache = prepCache; // of the form {doc_id: {investor: bool, investor: bool}, doc_id {investor: bool...}...}
     };
     DocShare.prototype = {
         save: function(name) {
@@ -181,6 +183,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
 }]);
 
 docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocShareFactory) {
+    // TODO: ShareDocs is now a kindof unnecessary wrapper around a DocsShare object. Should eliminate it.
     // Session storage
     var ds = new DocShareFactory();
     $window.addEventListener('beforeunload', function(event) {
@@ -211,6 +214,9 @@ docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocSh
     };
     this.docsReadyToShare = function() {
         return ds.docsReadyToShare();
+    };
+    this.shareDocuments = function() {
+        return ds.shareDocuments();
     };
 
     ds.checkAllPrepared(); // initialize cache
