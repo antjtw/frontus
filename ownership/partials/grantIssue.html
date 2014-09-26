@@ -1,5 +1,5 @@
 <div class="wizard-tile">
-    <h2>Issue options from <span ng-if="!choose">{{issue[0].name}}</span></h2>
+    <h2 ng-class="{'nochoose': !choose}">Issue options from <span ng-if="!choose">{{issue[0].name}}</span></h2>
     <input ng-if="choose" ui-select2="issueSelectOptions" ng-model="selected.issue">
     <div class="pull-right option-bar" ng-if="issue[0]">
         <span>Option Pool Details</span>
