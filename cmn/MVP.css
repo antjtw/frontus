@@ -209,6 +209,7 @@ input {
 }
 a:hover {
     text-decoration: none;
+    color: #666666;
 }
 p strong {
     font-family:'FS Elliot Web Light', sans-serif;
