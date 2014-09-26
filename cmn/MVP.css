@@ -5566,6 +5566,23 @@ grant-wizard-nav a.active {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.wizard-add {
+    display: inline-block;
+    margin: -2px 0 0 0;
+}
+
+.wizard-tile .wizard-add .select2-container {
+    margin: 0;
+    width: 252px;
+}
+
+.wizard-tile .wizard-add .select2-container .select2-choice {
+    border-radius: 0;
+    border-color: #F1F1F1;
+    height: 40px;
+    line-height: 40px;
+}
+
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
@@ -5591,8 +5608,12 @@ grant-doc-prep .name-table td {
 grant-doc-prep .name-table td:first-of-type {
     border-top: 1px solid #F1F1F1;
 }
+grant-doc-prep .name-table td:first-of-type {
+    border-bottom: none;
+}
 grant-doc-prep .name-table td .name {
     float: left;
+    padding-left: 5px;
 }
 grant-doc-prep .name-table td a {
     cursor: pointer;

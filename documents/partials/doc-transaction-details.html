@@ -31,11 +31,6 @@
                 <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
             </div>
             <div class="bottom-padded">
-                <!--<span>Only the fields you add will be added to each grant transaction.
-                    <span ng-show="doc.numFieldsComplete() == 0" class='back-button' ng-click="doc.unsetTransaction();">
-                    Unlink
-                    </span>
-                </span> -->
                 <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required || optionField(field)">
                     <span><span data-icon="&#xe052;" ng-show="doc.hasAnnotationType(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
                     <span>{{field.display}}</span>
