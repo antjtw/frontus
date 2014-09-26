@@ -26,7 +26,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             }
         });
     });
-    
+
     var x, y, z;
 
     // if the issue object changes, set issue_name
@@ -37,7 +37,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             issue_name = new_issue[0].name;
         }
     });
-    
+
     $rootScope.$watch(function() {
         if (grantsref.issue[0] && grantsref.issue[0].getDocs().grant)
             return grantsref.issue[0].getDocs().grant.doc_id;
@@ -51,13 +51,13 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
                 y();
             if (z)
                 z();
-            var y = $rootScope.$watchCollection(function() {
+            y = $rootScope.$watchCollection(function() {
                 return doc.preparedFor;
             }, function() {
                 grantsref.updateUnitsFromDocs();
                 y();
             });
-            var z = $rootScope.$watchCollection(function() {
+            z = $rootScope.$watchCollection(function() {
                 return doc.annotations.length;
             }, function(v) {
                 if (v)
@@ -74,10 +74,10 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             grantsref.unitsFromDocs = 0;
         }
     });
-    
+
     var defaultUnits = 0;
     var unitsOverrides = {};
-    
+
     this.getOptionsIssued = function(email) {
         if (unitsOverrides[email])
             return unitsOverrides[email];

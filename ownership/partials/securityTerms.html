@@ -51,6 +51,25 @@
                             </li>
                         </ul>
                     </ul>
+                    <ul class="dropdown-list drop-selector" ng-if="pickIssue(key)">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{issue[0].transactions[0].attrs[key]}}
+                                <span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a ng-click="setIt(issue[0].transactions[0], true, undo, key, '')">
+                                    </a>
+                                </li>
+                                <li ng-repeat="i in securities | selectablesecurities:issue[0].transactions[0]">
+                                    <a ng-click="setIt(issue[0].transactions[0], true, undo, key, i.name)">
+                                        {{i.name}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
 
                     <input id="effective_date{{::issue[0].transactions[0].$$hashKey}}"
                            ng-if="useDate(key)"
