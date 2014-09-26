@@ -55,6 +55,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
                 return doc.preparedFor;
             }, function() {
                 grantsref.updateUnitsFromDocs();
+                grantsref.setReady();
                 y();
             });
             z = $rootScope.$watchCollection(function() {
@@ -63,6 +64,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
                 if (v)
                 {
                     grantsref.updateUnitsFromDocs();
+                    grantsref.setReady();
                     z();
                 }
             });
@@ -72,9 +74,15 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             defaultUnits = 0;
             unitsOverrides = {};
             grantsref.unitsFromDocs = 0;
+            grantsref.setReady();
         }
     });
-
+    
+    this.setReady = function() {
+        grantsref.setChooseReady();
+        grantsref.setPeopleReady();
+    }
+    
     var defaultUnits = 0;
     var unitsOverrides = {};
 
@@ -125,5 +133,53 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
     this.setIssue = function(issue) {
         this.issue.splice(0);
         this.issue.push(issue);
+    };
+    
+    
+    this.chooseReady = false;
+    
+    this.setChooseReady = function() {
+        if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant)
+        {
+            grantsref.chooseReady = false;
+            return;
+        }
+        var document = Documents.getOriginal(grantsref.issue[0].getDocs().grant.doc_id);
+        if (document) {
+            grantsref.chooseReady = document.validTransaction();
+        } else {
+            grantsref.chooseReady = false;
+        }
+    };
+    
+    this.peopleReady = false;
+    
+    this.setPeopleReady = function() {
+        if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant)
+            return grantsref.peopleReady = false;
+        var document = Documents.getOriginal(grantsref.issue[0].getDocs().grant.doc_id);
+        if (!document || !document.validTransaction())
+            return grantsref.peopleReady = false;
+        
+        for (var e in grantsref.docsshare.emails)
+        {
+            if (document.hasInvalidAnnotation(grantsref.docsshare.emails[e]))
+                return grantsref.peopleReady = false;
+        }
+        
+        for (var a in document.annotations)
+        {
+            if (document.annotations[a].required)
+            {
+                if (!document.annotations[a].isInvalid())
+                    continue;
+                for (var e in grantsref.docsshare.emails)
+                {
+                    if (document.annotations[a].isInvalid(grantsref.docsshare.emails[e]))
+                        return grantsref.peopleReady = false;
+                }
+            }
+        }
+        grantsref.peopleReady = true;
     };
 }]);
