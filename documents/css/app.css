@@ -2230,6 +2230,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 
 .fields-progress.prepare-fields {
     border-top: none;
+    padding-bottom: 0;
 }
 
 .fields-progress > div {

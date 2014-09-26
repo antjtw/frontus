@@ -26,8 +26,8 @@
                 <span>To-do list</span>
             </accordion-heading>
             <div class="fields-progress prepare-fields">
-                <span ng-if="doc.numFieldsComplete() != doc.numFieldsRequired()" ng-class="{'fakeobj': true}">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} added to document</span>
-                <span ng-if="doc.numFieldsComplete() == doc.numFieldsRequired()">Document prepared</span>
+                <span ng-if="doc.numFieldsComplete() != doc.numFieldsRequired()" ng-class="{'fakeobj': true}">{{doc.numFieldsComplete()}}/{{doc.numFieldsRequired()}} required fields added to document</span>
+                <span ng-if="doc.numFieldsComplete() == doc.numFieldsRequired()">All required fields added</span>
                 <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
             </div>
             <div class="bottom-padded">
