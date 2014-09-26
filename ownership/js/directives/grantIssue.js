@@ -20,7 +20,6 @@ app.directive('grantIssue', [function() {
                 createSearchChoice: function(new_name) {
                     var sec = captable.nullSecurity();
                     sec.name = new_name;
-                    console.log(sec);
                     return {
                         id: new_name,
                         text: new_name,
@@ -28,7 +27,7 @@ app.directive('grantIssue', [function() {
                     };
                 }
             };
-            
+
             $scope.unitsFromDocs = function() {
                 return grants.unitsFromDocs;
             };

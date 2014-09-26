@@ -73,6 +73,6 @@
         </div>
     </div>
     <span class="name">
-        <input ui-select2="recipientSelectOptions" ng-model="obj.newRecipient">
+        <input ui-select2="recipientSelectOptions" ng-model="newRecipient" ng-change="addShareEmail(newRecipient); newRecipient=''">
     </span>
 </div>
