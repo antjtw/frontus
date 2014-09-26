@@ -1314,7 +1314,7 @@ own.directive('securityTerms', [function() {
                 $scope.attrs = attributes.getAttrs();
 
                 function fixKeys(keys) {
-                    var skip = ['security', 'pariwith', 'optundersecurity'];
+                    var skip = ['security', 'pariwith', 'optundersecurity', 'vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
                     for (var i = 0; i < keys.length; i++)
                     {
                         if (skip.indexOf(keys[i]) != -1)
@@ -1589,8 +1589,8 @@ own.directive('linkedDocuments', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/linkedDocuments.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants",
-            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants) {
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, Documents) {
 
                 $scope.issue = grants.issue;
                 $scope.selected = { // need an object to bind through ng-if
@@ -1606,6 +1606,20 @@ own.directive('linkedDocuments', [function() {
                         };
                     }
                 });
+
+                $scope.isPrepared = function(doc_id) {
+                    if (doc_id) {
+                        var document = Documents.getOriginal(doc_id);
+                        if (document) {
+                            return document.validTransaction();
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+
+                }
             }
         ]
     };

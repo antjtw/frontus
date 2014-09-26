@@ -1,7 +1,6 @@
 <div class="wizard-tile">
-    <h2>Issue options from</h2>
+    <h2>Issue options from <span ng-if="!choose">{{issue[0].name}}</span></h2>
     <input ng-if="choose" ui-select2="issueSelectOptions" ng-model="selected.issue">
-    <span ng-if="!choose">{{issue[0].name}}</span>
     <div class="pull-right option-bar" ng-if="issue[0]">
         <span>Option Pool Details</span>
         <meter cur="issue[0].totalUnits()" tot="issue[0].totalAuthorized()"></meter>
