@@ -2069,7 +2069,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     function loadEligibleEvidence() {
         SWBrijj.tblm('ownership.my_company_eligible_evidence')
         .then(function(data) {
-            eligible_evidence.splice(0, eligible_evidence.length);
             angular.forEach(data, function(x) {
                 if (x.tags) { x.tags = JSON.parse(x.tags); }
                 eligible_evidence.push(x);
@@ -2084,9 +2083,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         }).except(logError);
     }
     if (role() == 'issuer') { loadEligibleEvidence(); }
-    this.refreshEligibleEvidence = function() {
-        if (role() == 'issuer') { loadEligibleEvidence(); }
-    };
     function setTransactionEmail(tran) {
         angular.forEach(captable.investors, function (row) {
             if ((row.name == tran.investor) && row.email) {
