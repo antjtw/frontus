@@ -100,9 +100,14 @@ app.directive('grantDocPrep', [function() {
                     return true;
                 }
             };
+            
+            $scope.updateReady = function() {
+                grants.setReady();
+            };
 
             $scope.updateUnitsFromDocs = function() {
                 grants.updateUnitsFromDocs();
+                $scope.updateReady();
             };
         }]
     };

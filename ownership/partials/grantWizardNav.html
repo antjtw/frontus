@@ -5,9 +5,9 @@
     <ul>
         <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/issue') != -1}" href="/app/ownership/grants/issue">Choose Security</a></li>
         <li><span data-icon="&#xe033;"aria-hidden="true"></span></li>
-        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/people') != -1}" href="/app/ownership/grants/people">Add People</a></li>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/people') != -1}" ng-href="{{peopleLink()}}">Add People</a></li>
         <li><span data-icon="&#xe033;"aria-hidden="true"></span></li>
-        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/review') != -1}" href="/app/ownership/grants/review">Review</a></li>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/review') != -1}" ng-href="{{reviewLink()}}">Review</a></li>
     </ul>
 </div>
 
