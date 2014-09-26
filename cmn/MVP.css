@@ -5564,7 +5564,7 @@ grant-wizard-nav a.active {
 
 .wizard-add {
     display: inline-block;
-    margin: 0;
+    margin: -2px 0 0 0;
 }
 
 .wizard-tile .wizard-add .select2-container {
@@ -5604,8 +5604,12 @@ grant-doc-prep .name-table td {
 grant-doc-prep .name-table td:first-of-type {
     border-top: 1px solid #F1F1F1;
 }
+grant-doc-prep .name-table td:first-of-type {
+    border-bottom: none;
+}
 grant-doc-prep .name-table td .name {
     float: left;
+    padding-left: 5px;
 }
 grant-doc-prep .name-table td a {
     cursor: pointer;
