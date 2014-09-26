@@ -45,6 +45,10 @@ app.directive('grantIssue', [function() {
                             });
                         }
                     });
+                    if ($scope.issueSelectOptions.data.length == 1)
+                    {
+                        $scope.selected.issue = $scope.issueSelectOptions.data[0];
+                    }
                 }
             });
 
