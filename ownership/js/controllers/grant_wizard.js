@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('chooseGrantIssue',
-    ["$scope", function($scope){
-
+    ["$scope", "grants", function($scope, grants){
+        $scope.issue = grants.issue;
 }]);
 
 app.controller('docsGrantIssue',
