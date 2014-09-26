@@ -209,6 +209,7 @@ input {
 }
 a:hover {
     text-decoration: none;
+    color: #666666;
 }
 p strong {
     font-family:'FS Elliot Web Light', sans-serif;
@@ -5562,6 +5563,38 @@ grant-wizard-nav a.active {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.wizard-display-name {
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.wizard-add {
+    display: inline-block;
+    margin: -2px 0 0 0;
+}
+
+.wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
+    text-align: left;
+    padding-left: 0;
+}
+
+.wizard-tile .wizard-add .select2-container {
+    margin: 0;
+    width: 252px;
+}
+
+.wizard-tile .wizard-add .select2-container .select2-choice {
+    border-radius: 0;
+    border-color: #F1F1F1;
+    height: 40px;
+    line-height: 40px;
+}
+
+.wizard-tile .wizard-add .select2-container .select2-choice .select2-arrow {
+    top: 5px;
+    right: 2px;
+}
+
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
@@ -5576,7 +5609,7 @@ grant-doc-prep .name-table {
     width: 250px;
     float: left;
     white-space: nowrap;
-    margin-top: 63px;
+    margin-top: 71px;
 }
 grant-doc-prep .name-table td {
     height: 40px;
@@ -5587,8 +5620,12 @@ grant-doc-prep .name-table td {
 grant-doc-prep .name-table td:first-of-type {
     border-top: 1px solid #F1F1F1;
 }
+grant-doc-prep .name-table td:first-of-type {
+    border-bottom: none;
+}
 grant-doc-prep .name-table td .name {
     float: left;
+    padding-left: 5px;
 }
 grant-doc-prep .name-table td a {
     cursor: pointer;
@@ -5605,9 +5642,17 @@ grant-doc-prep .sub-doc-table tr:first-child {
     background-color: #F1F1F1;
 }
 
+grant-doc-prep .sub-doc-table tr:first-child > th {
+    padding: 5px;
+}
+
 grant-doc-prep .sub-doc-table tr:not(:first-child) {
     height: 40px;
     border-bottom: 1px solid #F1F1F1;
+}
+
+grant-doc-prep .sub-doc-table tr:not(:first-child) td {
+    padding-left: 5px;
 }
 
 grant-doc-prep .doc-table th {
