@@ -5405,7 +5405,7 @@ grant-wizard-nav a.active {
     box-sizing: border-box;
     background-color: #FFFFFF;
     margin: 20px 20px 0 20px;
-    padding: 20px;
+    padding: 20px 20px 40px 20px;
     overflow: auto;
 }
 
@@ -5424,6 +5424,10 @@ grant-wizard-nav a.active {
     font-size: 20px;
     font-family:'FS Elliot Web Light', sans-serif !important;
     vertical-align: top;
+}
+
+.wizard-tile h2.nochoose {
+    width: 500px;
 }
 
 .option-bar {
@@ -5456,7 +5460,7 @@ grant-wizard-nav a.active {
 }
 
 .wizard-tile .wizard-right > p {
-    margin: 15px 0;
+    margin: 15px 0 40px 0;
 }
 
 .wizard-tile .standard .dropdown-toggle {
@@ -5470,6 +5474,10 @@ grant-wizard-nav a.active {
 .wizard-linking > li > div {
     margin: 20px 40px 20px 0;
     overflow: visible;
+}
+
+.wizard-linking > li:last-of-type > div {
+    margin-bottom: 0;
 }
 
 .wizard-linking > li > div > div {
@@ -5486,6 +5494,7 @@ grant-wizard-nav a.active {
     color: #1d2c3c;
     width: 120px;
     line-height: 32px;
+    margin-left: 5px;
 }
 
 .wizard-linking a {
@@ -5571,16 +5580,28 @@ grant-wizard-nav a.active {
 .wizard-add {
     display: inline-block;
     margin: -2px 0 0 0;
+    width: 100%;
+}
+
+.wizard-add > div:last-of-type {
+    border: 1px solid #F1F1F1;
+    border-left: 0;
+    height: 40px;
+    width: calc(100% - 253px);
+    display: inline-block;
+    margin-top: 0;
 }
 
 .wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
     text-align: left;
     padding-left: 0;
+    font-size: 14px;
 }
 
 .wizard-tile .wizard-add .select2-container {
     margin: 0;
     width: 252px;
+    vertical-align: top;
 }
 
 .wizard-tile .wizard-add .select2-container .select2-choice {
@@ -5598,6 +5619,7 @@ grant-wizard-nav a.active {
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
+    margin-left: 15px;
 }
 
 .documentUploadFileInputs.fileinputs div.fakefile {
@@ -5638,17 +5660,27 @@ grant-doc-prep .doc-table {
     white-space: nowrap;
 }
 
+grant-doc-prep .doc-table > table {
+    width: 100%;
+}
+
 grant-doc-prep .sub-doc-table tr:first-child {
     background-color: #F1F1F1;
 }
 
 grant-doc-prep .sub-doc-table tr:first-child > th {
     padding: 5px;
+    min-width: 100px;
+    font-size: 12px;
 }
 
 grant-doc-prep .sub-doc-table tr:not(:first-child) {
     height: 40px;
     border-bottom: 1px solid #F1F1F1;
+}
+
+grant-doc-prep .sub-doc-table tr:last-child {
+    border-bottom: none;
 }
 
 grant-doc-prep .sub-doc-table tr:not(:first-child) td {
@@ -5662,6 +5694,7 @@ grant-doc-prep .doc-table th {
 grant-doc-prep table.sub-doc-table {
     border-left: 1px solid #F1F1F1;
     border-right: 1px solid #F1F1F1;
+    width: 100%;
 }
 
 grant-doc-prep .doc-table table > tr > td {

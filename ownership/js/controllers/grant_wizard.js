@@ -5,14 +5,7 @@ app.controller('chooseGrantIssue',
         $scope.issue = grants.issue;
         
         $scope.ready = function() {
-            if (!$scope.issue[0] || !$scope.issue[0].getDocs().grant)
-                return false;
-            var document = Documents.getOriginal($scope.issue[0].getDocs().grant.doc_id);
-            if (document) {
-                return document.validTransaction();
-            } else {
-                return false;
-            }
+            return grants.chooseReady;
         };
 }]);
 
@@ -33,32 +26,7 @@ app.controller('peopleGrantIssue',
         $scope.issue = grants.issue;
         
         $scope.ready = function() {
-            if (!$scope.issue[0] || !$scope.issue[0].getDocs().grant)
-                return false;
-            var document = Documents.getOriginal($scope.issue[0].getDocs().grant.doc_id);
-            if (!document || !document.validTransaction())
-                return false;
-            
-            for (var e in grants.docsshare.emails)
-            {
-                if (document.hasInvalidAnnotation(grants.docsshare.emails[e]))
-                    return false;
-            }
-            
-            for (var a in document.annotations)
-            {
-                if (document.annotations[a].required)
-                {
-                    if (!document.annotations[a].isInvalid())
-                        continue;
-                    for (var e in grants.docsshare.emails)
-                    {
-                        if (document.annotations[a].isInvalid(grants.docsshare.emails[e]))
-                            return false;
-                    }
-                }
-            }
-            return true;
+            return grants.peopleReady;
         };
 }]);
 

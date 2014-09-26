@@ -1579,9 +1579,23 @@ own.directive('grantWizardNav', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantWizardNav.html',
-        controller: ["$scope", "$rootScope", "navState",
-            function($scope, $rootScope, navState) {
+        controller: ["$scope", "$rootScope", "navState", "grants",
+            function($scope, $rootScope, navState, grants) {
                 $scope.path = navState.path;
+                
+                $scope.peopleLink = function() {
+                    if (grants.chooseReady)
+                        return "/app/ownership/grants/people";
+                    return "/app/ownership/grants/issue";
+                };
+                
+                $scope.reviewLink = function() {
+                    if (grants.peopleReady)
+                        return "/app/ownership/grants/review";
+                    if (!grants.chooseReady)
+                        return "/app/ownership/grants/issue";
+                    return "/app/ownership/grants/people";
+                };
             }
         ]
     };
