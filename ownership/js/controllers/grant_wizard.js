@@ -18,8 +18,7 @@ app.controller('docsGrantIssue',
 }]);
 
 app.controller('peopleGrantIssue',
-    ["$scope", "grants", function($scope, grants){
-        //grants.updateUnitsFromDocs();
+    ["$scope", function($scope){
 
 }]);
 
