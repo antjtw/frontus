@@ -35,20 +35,21 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         }
     });
     
-    this.unitsFromDocs = function() {
+    this.unitsFromDocs = 0;
+    
+    this.updateUnitsFromDocs = function() {
         var tmp = grantsref.issue[0].getDocs()['grant'];
         if (!tmp)
-            return 0;
+            return;
         var doc = Documents.getOriginal(tmp.doc_id);
         doc.getPreparedFor(grantsref.docsshare.emails);
-        console.log(doc);
         
         var annot = doc.annotations.filter(function(annot) {
             return annot.whattype == "units";
         });
         
         if (annot.length != 1)
-            return 0; //?!?!?!?
+            return; //?!?!?!?
         
         var units = 0;
         
@@ -56,18 +57,18 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         
         if (annot[0].val)
         {
-            common = String.parseFloat(annot[0].val);
+            common = parseFloat(annot[0].val);
             units += common * grantsref.docsshare.emails.length;
         }
         
-        angular.foreach(doc.preparedFor, function(investor) {
+        angular.forEach(doc.preparedFor, function(investor) {
             if (investor.overrides[annot[0].id])
             {
-                units += String.parseFloat(investor.overrides[annot[0].id]) - common;
+                units += parseFloat(investor.overrides[annot[0].id]) - common;
             }
         });
         
-        return units;
+        grantsref.unitsFromDocs = units;
     };
 
     this.setIssue = function(issue) {
