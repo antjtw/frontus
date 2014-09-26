@@ -1589,29 +1589,15 @@ own.directive('linkedDocuments', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/linkedDocuments.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents", "SWBrijj", "$timeout",
-            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, Documents, SWBrijj, $timeout) {
-
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents", "SWBrijj", "$timeout", "$location",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, Documents, SWBrijj, $timeout, $location) {
                 $scope.issue = grants.issue;
-                $scope.selected = { // need an object to bind through ng-if
-                    issue: ""
-                };
-
-                $scope.$watchCollection('issue', function(new_issue) {
-                    if (new_issue && new_issue[0]) {
-                        $scope.selected.issue = {
-                            id: new_issue[0].name,
-                            text: new_issue[0].name,
-                            issue: new_issue[0]
-                        };
-                    }
-                });
 
                 $scope.isPrepared = function(doc_id) {
                     if (doc_id) {
-                        var document = Documents.getOriginal(doc_id);
-                        if (document) {
-                            return document.validTransaction();
+                        var doc = Documents.getOriginal(doc_id);
+                        if (doc) {
+                            return doc.validTransaction();
                         } else {
                             return false;
                         }
@@ -1620,7 +1606,6 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
-
 
                 var mimetypes = ["application/pdf", // .pdf
                         // microsoft office
@@ -1643,7 +1628,7 @@ own.directive('linkedDocuments', [function() {
                     $scope.$apply(function() {
                         $scope.files = [];
                         $scope.fileError = "";
-                        if (element.files.length == 0)
+                        if (element.files.length === 0)
                             return;
                         if (element.files.length > 1)
                         {
@@ -1745,8 +1730,13 @@ own.directive('linkedDocuments', [function() {
                             $timeout(function(){$scope.checkReady(bin);}, 2000);
                         }
                     }).except(function(data) {
-                        console.log(data);
+                        console.error(data);
                     });
+                };
+
+                $scope.prepareDoc = function(doc_id) {
+                    // only used in weird cases where <a> won't quite work right
+                    $location.url('/app/documents/company-view?doc=' + doc_id + '&prepare=true');
                 };
             }
         ]
