@@ -5645,6 +5645,10 @@ grant-doc-prep .doc-table {
     white-space: nowrap;
 }
 
+grant-doc-prep .doc-table > table {
+    width: 100%;
+}
+
 grant-doc-prep .sub-doc-table tr:first-child {
     background-color: #F1F1F1;
 }
@@ -5669,6 +5673,7 @@ grant-doc-prep .doc-table th {
 grant-doc-prep table.sub-doc-table {
     border-left: 1px solid #F1F1F1;
     border-right: 1px solid #F1F1F1;
+    width: 100%;
 }
 
 grant-doc-prep .doc-table table > tr > td {
