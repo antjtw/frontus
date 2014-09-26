@@ -40,6 +40,16 @@
                                 </button>
                             </div>
                         </a>
+                        <div class="documentUploadFileInputs">
+                            <input multiple type="file" class='file'
+                                accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                onchange="angular.element(this).scope().setFiles(this, 'plan');"/>
+                            <div class="documentUpload fakefile">
+                                <div class="standard-button green">
+                                    <button class="btn">Upload</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="wizard-selects pull-right">
 
@@ -82,6 +92,16 @@
                                 </button>
                             </div>
                         </a>
+                        <div class="documentUploadFileInputs">
+                            <input multiple type="file" class='file'
+                                accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                onchange="angular.element(this).scope().setFiles(this, 'grant');"/>
+                            <div class="documentUpload fakefile">
+                                <div class="standard-button green">
+                                    <button class="btn">Upload</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>

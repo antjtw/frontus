@@ -48,9 +48,12 @@
                             <tr ng-repeat="email in emails">
                                 <td ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
                                     ng-class="{required: annot.isInvalid(email)}">
-                                    <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
+                                    <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype != 'units'"
                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
                                            ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                                    <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype == 'units'"
+                                           placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email); updateUnitsFromDocs();">
                                     <input ng-if="annot.type_info.typename == 'date'"
                                            bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"

@@ -51,6 +51,7 @@ app.directive('grantDocPrep', [function() {
                     doc.getPreparedFor(grants.docsshare.emails); // fetch preparation information (if needed)
                     $scope.doc_arr.push(doc);
                 });
+                grants.updateUnitsFromDocs();
             });
 
             function filterInvestors(investorList, emails) {
@@ -76,6 +77,7 @@ app.directive('grantDocPrep', [function() {
                 if (recip && typeof(recip) != "string") {
                     grants.docsshare.addRecipient(recip.id);
                     $scope.obj.newRecipient = null;
+                    grants.updateUnitsFromDocs();
                 }
             });
             $scope.getName = function(id) {
@@ -92,6 +94,10 @@ app.directive('grantDocPrep', [function() {
                     return true;
                 }
             };
+            
+            $scope.updateUnitsFromDocs = function() {
+                grants.updateUnitsFromDocs();
+            };
         }]
     };
 }]);
@@ -102,7 +108,7 @@ app.directive('grantDocReview', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantDocReview.html',
-        controller: ["$scope", "grants", function($scope, grants) {
+        controller: ["$scope", "grants", "Investor", function($scope, grants, Investor) {
             initDocInfo($scope, grants);
             $scope.selectedEmail = "";
 
@@ -115,6 +121,10 @@ app.directive('grantDocReview', [function() {
 
             $scope.docsVisible = function(email) {
                 return $scope.selectedEmail == email;
+            };
+
+            $scope.getName = function(id) {
+                return Investor.getName(id);
             };
         }]
     };

@@ -1,5 +1,5 @@
 <div ng-show="path.indexOf('/app/ownership/grants/docs') != -1">
-    <a href="/app/ownership/grants/issue">Back</a>
+    <a href="/app/ownership/grants/issue"><span data-icon="&#xe032;"aria-hidden="true"></span>Back</a>
 </div>
 <div ng-show="path.indexOf('/app/ownership/grants/docs') == -1">
     <ul>
@@ -12,5 +12,5 @@
 </div>
 
 <div>
-    <span ng-click="$root.leave(['/grants/'])">Save & Exit</span>
+    <span ng-click="$root.leave(['/grants/', '/documents/company-view'])">Save & Exit</span>
 </div>

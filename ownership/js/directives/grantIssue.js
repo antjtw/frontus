@@ -28,6 +28,10 @@ app.directive('grantIssue', [function() {
                     };
                 }
             };
+            
+            $scope.unitsFromDocs = function() {
+                return grants.unitsFromDocs;
+            };
 
             $scope.$watchCollection('issues', function(issues) {
                 // set up the select box

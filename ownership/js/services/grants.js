@@ -2,8 +2,8 @@
 
 var ownership = angular.module('ownerServices');
 
-ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBrijj', 'DocShareFactory',
-function(captable, $window, $rootScope, SWBrijj, DocShareFactory) {
+ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBrijj', 'DocShareFactory', 'Documents',
+function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
     var grantsref = this;
     var issue_name;
     this.docsshare = new DocShareFactory();
@@ -34,6 +34,43 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory) {
             issue_name = new_issue[0].name;
         }
     });
+
+    this.unitsFromDocs = 0;
+
+    this.updateUnitsFromDocs = function() {
+        if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant) {
+            return;
+        }
+        var tmp = grantsref.issue[0].getDocs().grant;
+        var doc = Documents.getOriginal(tmp.doc_id);
+        doc.getPreparedFor(grantsref.docsshare.emails);
+
+        var annot = doc.annotations.filter(function(annot) {
+            return annot.whattype == "units";
+        });
+
+        if (annot.length != 1) {
+            return; // document not properly prepared
+        }
+
+        var units = 0;
+        var common = 0;
+
+        if (annot[0].val)
+        {
+            common = parseFloat(annot[0].val);
+            units += common * grantsref.docsshare.emails.length;
+        }
+
+        this.docsshare.emails.forEach(function(investor) {
+            if (doc.preparedFor[investor] && doc.preparedFor[investor].overrides[annot[0].id])
+            {
+                units += parseFloat(doc.preparedFor[investor].overrides[annot[0].id]) - common;
+            }
+        });
+
+        grantsref.unitsFromDocs = units;
+    };
 
     this.setIssue = function(issue) {
         this.issue.splice(0);
