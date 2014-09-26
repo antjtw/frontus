@@ -1,4 +1,4 @@
-<accordion ng-class="{'lessmargin': (trans.length == 1)}" class="transaction-accordion" close-others="true">
+<accordion ng-class="{'lessmargin': (trans.length == 1)}" class="transaction-accordion-list" close-others="true">
     <accordion-group is-open="tran.active" is-disabled="singleTransaction(trans);"
                      ng-repeat="tran in trans | orderBy:'date' track by $index" ng-switch on="currentTab">
         <accordion-heading>

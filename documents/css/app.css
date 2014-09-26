@@ -2061,6 +2061,10 @@ help-tab > div > p > span {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.docinfo .docname.prepareDocname {
+    border-bottom: none;
+}
+
 .docinfo .investor-views {
     margin-top: 10px;
     margin-left: 35px;
@@ -2250,65 +2254,65 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 
 /* Transaction Directive */
 
-.transaction-accordion.lessmargin .delete-link.blue-link {
+.transaction-accordion-list.lessmargin .delete-link.blue-link {
     margin-left: 5px;
 }
 
-.transaction-accordion .accordion-heading {
+.transaction-accordion-list .accordion-heading {
     padding: 0;
 }
 
-.transaction-accordion .accordion-heading .accordion-toggle {
+.transaction-accordion-list .accordion-heading .accordion-toggle {
     padding: 11px 12px;
 }
 
-.transaction-accordion .accordion-heading > a > span:not(:last-of-type),
-.transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
+.transaction-accordion-list .accordion-heading > a > span:not(:last-of-type),
+.transaction-accordion-list .accordion-heading > a:hover > span:not(:last-of-type) {
     vertical-align: 90%;
     color: #1E2D3D;
 }
 
-.transaction-accordion.lessmargin .capGuide,
-.transaction-accordion.lessmargin .linkedDocuments,
-.transaction-accordion.lessmargin .btn-group {
+.transaction-accordion-list.lessmargin .capGuide,
+.transaction-accordion-list.lessmargin .linkedDocuments,
+.transaction-accordion-list.lessmargin .btn-group {
     padding-left: 0;
 }
-.transaction-accordion .btn-group,
-.transaction-accordion .linkedDocuments {
+.transaction-accordion-list .btn-group,
+.transaction-accordion-list .linkedDocuments {
     padding-left: 20px;
 }
 
-.transaction-accordion .accordion-heading > a > span:last-of-type {
+.transaction-accordion-list .accordion-heading > a > span:last-of-type {
     color: #1E2D3D;
     font-family:'FS Elliot Web Light', sans-serif !important;
     display: inline-block;
 }
 
-.transaction-accordion .accordion-heading > a > span:last-of-type > span:first-of-type {
+.transaction-accordion-list .accordion-heading > a > span:last-of-type > span:first-of-type {
     font-size: 20px;
     display: block;
 }
 
-.transaction-accordion .accordion-heading > a > span:last-of-type > span:last-of-type {
+.transaction-accordion-list .accordion-heading > a > span:last-of-type > span:last-of-type {
     color: #8D8D8D;
     font-size: 12px;
 }
 
-.transaction-accordion .accordion-group {
+.transaction-accordion-list .accordion-group {
     border-bottom: none;
 }
 
-.transaction-accordion .accordion-inner {
+.transaction-accordion-list .accordion-inner {
     border-top: none;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-.transaction-accordion .capGuide.global {
+.transaction-accordion-list .capGuide.global {
     margin-top: 0;
 }
 
-.transaction-accordion .accordion {
+.transaction-accordion-list .accordion {
     margin-top: 20px;
 }
 
