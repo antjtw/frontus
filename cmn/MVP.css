@@ -5553,6 +5553,15 @@ grant-wizard-nav a.active {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.wizard-guide {
+    margin: 20px;
+}
+
+.wizard-guide h4 {
+    font-size: 16px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
