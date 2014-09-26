@@ -9,12 +9,9 @@
     <accordion class="lessmargin transaction-accordion" close-others="true">
         <accordion-group ng-switch on="currentTab">
             <accordion-heading>
-                <span>How to create annotations</span>
+                <span>How to create grant templates</span>
             </accordion-heading>
             <div class="tutorial">
-                <h6>
-                    How to Share Documents
-                </h6>
                 <div>
                     <img src="/img/gif/issuer-modal.gif">
                 </div>
@@ -35,7 +32,7 @@
                 <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
             </div>
             <div class="bottom-padded">
-                <span>Fields necessary to add a cap table entry into {{doc.issue}}.
+                <span>Fields that will tie to the cap table entry into {{doc.issue}}.
                     <span ng-show="doc.numFieldsComplete() == 0" class='back-button' ng-click="doc.unsetTransaction();">
                     Unlink
                     </span>
