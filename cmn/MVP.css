@@ -5586,11 +5586,10 @@ grant-wizard-nav a.active {
 .wizard-add > div:last-of-type {
     border: 1px solid #F1F1F1;
     border-left: 0;
-    border-top: 0;
-    height: 43px;
+    height: 40px;
     width: calc(100% - 253px);
     display: inline-block;
-    margin-top: -2px;
+    margin-top: 0;
 }
 
 .wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
@@ -5678,6 +5677,10 @@ grant-doc-prep .sub-doc-table tr:first-child > th {
 grant-doc-prep .sub-doc-table tr:not(:first-child) {
     height: 40px;
     border-bottom: 1px solid #F1F1F1;
+}
+
+grant-doc-prep .sub-doc-table tr:last-child {
+    border-bottom: none;
 }
 
 grant-doc-prep .sub-doc-table tr:not(:first-child) td {
