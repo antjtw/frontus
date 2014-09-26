@@ -21,10 +21,7 @@ app.directive('internalRightRail', function() {
                     $scope.windowCallback();
 
                 }
-                // if($sco)
             };
-
-    
 
             var aboveBottomHeight = 0;
 
@@ -41,8 +38,9 @@ app.directive('internalRightRail', function() {
                 } else {
                     aboveBottomHeight = height;
                 }
-                if (document.querySelector("internal-right-rail .tab-content")) {
-                    document.querySelector("internal-right-rail .tab-content").style.bottom = aboveBottomHeight + "px";
+                var nodes = document.querySelectorAll("internal-right-rail .tab-content");
+                for (var i = 0; i < nodes.length; i++) {
+                    nodes[i].style.bottom = aboveBottomHeight + "px";
                 }
             });
         }]
