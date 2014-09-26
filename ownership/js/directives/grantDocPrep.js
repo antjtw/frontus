@@ -51,6 +51,7 @@ app.directive('grantDocPrep', [function() {
                     doc.getPreparedFor(grants.docsshare.emails); // fetch preparation information (if needed)
                     $scope.doc_arr.push(doc);
                 });
+                grants.updateUnitsFromDocs();
             });
 
             function filterInvestors(investorList, emails) {
@@ -76,6 +77,7 @@ app.directive('grantDocPrep', [function() {
                 if (recip && typeof(recip) != "string") {
                     grants.docsshare.addRecipient(recip.id);
                     $scope.obj.newRecipient = null;
+                    grants.updateUnitsFromDocs();
                 }
             });
             $scope.getName = function(id) {
@@ -91,6 +93,10 @@ app.directive('grantDocPrep', [function() {
                 } else {
                     return true;
                 }
+            };
+            
+            $scope.updateUnitsFromDocs = function() {
+                grants.updateUnitsFromDocs();
             };
         }]
     };

@@ -63,7 +63,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         }
 
         this.docsshare.emails.forEach(function(investor) {
-            if (doc.preparedFor[investor].overrides[annot[0].id])
+            if (doc.preparedFor[investor] && doc.preparedFor[investor].overrides[annot[0].id])
             {
                 units += parseFloat(doc.preparedFor[investor].overrides[annot[0].id]) - common;
             }
