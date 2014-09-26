@@ -131,6 +131,7 @@ app.controller('docsGrantIssue',
                                 }
                             });*/
                             $scope.handleDrop(doc.doc_id, bin);
+                            captable.refreshEligibleEvidence();
                         }
                     }
                 });
