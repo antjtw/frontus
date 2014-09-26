@@ -5598,7 +5598,7 @@ grant-doc-prep .name-table {
     width: 250px;
     float: left;
     white-space: nowrap;
-    margin-top: 63px;
+    margin-top: 71px;
 }
 grant-doc-prep .name-table td {
     height: 40px;
@@ -5629,6 +5629,10 @@ grant-doc-prep .doc-table {
 
 grant-doc-prep .sub-doc-table tr:first-child {
     background-color: #F1F1F1;
+}
+
+grant-doc-prep .sub-doc-table tr:first-child > th {
+    padding: 5px;
 }
 
 grant-doc-prep .sub-doc-table tr:not(:first-child) {
