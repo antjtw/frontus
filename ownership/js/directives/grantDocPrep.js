@@ -94,7 +94,7 @@ app.directive('grantDocPrep', [function() {
                     return true;
                 }
             };
-            
+
             $scope.updateUnitsFromDocs = function() {
                 grants.updateUnitsFromDocs();
             };
@@ -126,6 +126,8 @@ app.directive('grantDocReview', [function() {
             $scope.getName = function(id) {
                 return Investor.getName(id);
             };
+
+            $scope.encodeURIComponent = encodeURIComponent;
         }]
     };
 }]);
