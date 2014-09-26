@@ -5568,8 +5568,12 @@ grant-wizard-nav a.active {
 }
 
 .wizard-guide h4 {
-    font-size: 16px;
-    font-family:'FS Elliot Web Light', sans-serif !important;
+    font-size: 14px;
+    color: #1E2D3D;
+}
+
+.wizard-guide > div > p:first-of-type {
+    margin-bottom: 40px;
 }
 
 .wizard-display-name {
