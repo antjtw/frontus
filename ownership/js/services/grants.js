@@ -34,40 +34,41 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             issue_name = new_issue[0].name;
         }
     });
-    
+
     this.unitsFromDocs = 0;
-    
+
     this.updateUnitsFromDocs = function() {
-        var tmp = grantsref.issue[0].getDocs()['grant'];
-        if (!tmp)
+        if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant) {
             return;
+        }
+        var tmp = grantsref.issue[0].getDocs().grant;
         var doc = Documents.getOriginal(tmp.doc_id);
         doc.getPreparedFor(grantsref.docsshare.emails);
-        
+
         var annot = doc.annotations.filter(function(annot) {
             return annot.whattype == "units";
         });
-        
-        if (annot.length != 1)
-            return; //?!?!?!?
-        
+
+        if (annot.length != 1) {
+            return; // document not properly prepared
+        }
+
         var units = 0;
-        
         var common = 0;
-        
+
         if (annot[0].val)
         {
             common = parseFloat(annot[0].val);
             units += common * grantsref.docsshare.emails.length;
         }
-        
-        angular.forEach(doc.preparedFor, function(investor) {
-            if (investor.overrides[annot[0].id])
+
+        this.docsshare.emails.forEach(function(investor) {
+            if (doc.preparedFor[investor].overrides[annot[0].id])
             {
-                units += parseFloat(investor.overrides[annot[0].id]) - common;
+                units += parseFloat(doc.preparedFor[investor].overrides[annot[0].id]) - common;
             }
         });
-        
+
         grantsref.unitsFromDocs = units;
     };
 

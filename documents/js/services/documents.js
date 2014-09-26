@@ -3,7 +3,7 @@
 var docs = angular.module('docServices');
 
 // TODO: should really have a document factory
-docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs) {
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", "navState", function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs, navState) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
     var transaction_attributes_callbacks = [];
@@ -79,7 +79,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             }
         });
     }
-    if ($rootScope.navState.role == 'issuer') {
+    if (navState.role == 'issuer') {
         updateAvailableSignatures();
     }
     function updateAnnotationTypes(issue_type, transaction_type, type_list, annotation_list) {

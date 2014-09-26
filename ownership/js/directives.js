@@ -1565,7 +1565,7 @@ own.directive('droppable', function() {
                 false
             );
         }
-    }
+    };
 });
 
 own.directive('grantWizardNav', [function() {
@@ -1619,7 +1619,7 @@ own.directive('linkedDocuments', [function() {
                         return false;
                     }
 
-                }
+                };
             }
         ]
     };

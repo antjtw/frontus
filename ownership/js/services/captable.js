@@ -108,20 +108,23 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             return this.numUnissued(asof, false) + this.totalUnits(asof, false);
         },
         getDocs: function() {
+            if (role() != 'issuer') {
+                return {};
+            }
             if (!this.evidenceloading) {
                 this.evidenceloading = true;
                 var security = this;
-                $q.all([loadSpecificEvidence()])
-                    .then(function(results) {
-                        // reset the existing cap table
-                        angular.forEach(results[0], function(doc) {
+                SWBrijj.tblm('ownership.my_issue_documents')
+                    .then(function(evidence) {
+                        evidence.forEach(function(doc) {
                             if (doc.type && doc.issue == security.transactions[0].transaction) {
                                 security.docs[doc.type] = doc;
                             }
                         });
                         security.evidenceloaded = true;
                         return security.docs;
-                    }, logError);
+                    }).except(logError);
+                return this.docs;
             } else {
                 return this.docs;
             }
@@ -284,19 +287,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     };
 
     /* Data Gathering Functions */
-
-    function loadSpecificEvidence() {
-        var promise = $q.defer();
-        if (role() == 'issuer') {
-            SWBrijj.tblm('ownership.my_issue_documents')
-                .then(function(evidence) {
-                    promise.resolve(evidence);
-                }).except(logError);
-        } else {
-            promise.resolve([]);
-        }
-        return promise.promise;
-    }
 
     function loadEvidence() {
         var promise = $q.defer();
