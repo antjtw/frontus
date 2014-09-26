@@ -5576,6 +5576,17 @@ grant-wizard-nav a.active {
 .wizard-add {
     display: inline-block;
     margin: -2px 0 0 0;
+    width: 100%;
+}
+
+.wizard-add > div:last-of-type {
+    border: 1px solid #F1F1F1;
+    border-left: 0;
+    border-top: 0;
+    height: 43px;
+    width: calc(100% - 253px);
+    display: inline-block;
+    margin-top: -2px;
 }
 
 .wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
@@ -5587,6 +5598,7 @@ grant-wizard-nav a.active {
 .wizard-tile .wizard-add .select2-container {
     margin: 0;
     width: 252px;
+    vertical-align: top;
 }
 
 .wizard-tile .wizard-add .select2-container .select2-choice {
@@ -5655,6 +5667,8 @@ grant-doc-prep .sub-doc-table tr:first-child {
 
 grant-doc-prep .sub-doc-table tr:first-child > th {
     padding: 5px;
+    min-width: 100px;
+    font-size: 12px;
 }
 
 grant-doc-prep .sub-doc-table tr:not(:first-child) {
