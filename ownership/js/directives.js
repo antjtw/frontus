@@ -1313,6 +1313,8 @@ own.directive('securityTerms', [function() {
 
                 $scope.attrs = attributes.getAttrs();
 
+                $scope.securities = captable.getCapTable().securities;
+
                 function fixKeys(keys) {
                     var skip = ['security', 'security_type', 'vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
                     for (var i = 0; i < keys.length; i++)
@@ -1464,6 +1466,9 @@ own.directive('securityTerms', [function() {
                 };
                 $scope.useDate = function(key) {
                     return inputType(key) == 'date';
+                };
+                $scope.pickIssue = function(key) {
+                    return inputType(key) == "security";
                 };
 
             }

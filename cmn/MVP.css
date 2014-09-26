@@ -209,6 +209,7 @@ input {
 }
 a:hover {
     text-decoration: none;
+    color: #666666;
 }
 p strong {
     font-family:'FS Elliot Web Light', sans-serif;
@@ -5404,7 +5405,7 @@ grant-wizard-nav a.active {
     box-sizing: border-box;
     background-color: #FFFFFF;
     margin: 20px 20px 0 20px;
-    padding: 20px;
+    padding: 20px 20px 40px 20px;
     overflow: auto;
 }
 
@@ -5455,7 +5456,7 @@ grant-wizard-nav a.active {
 }
 
 .wizard-tile .wizard-right > p {
-    margin: 15px 0;
+    margin: 15px 0 40px 0;
 }
 
 .wizard-tile .standard .dropdown-toggle {
@@ -5469,6 +5470,10 @@ grant-wizard-nav a.active {
 .wizard-linking > li > div {
     margin: 20px 40px 20px 0;
     overflow: visible;
+}
+
+.wizard-linking > li:last-of-type > div {
+    margin-bottom: 0;
 }
 
 .wizard-linking > li > div > div {
@@ -5485,6 +5490,7 @@ grant-wizard-nav a.active {
     color: #1d2c3c;
     width: 120px;
     line-height: 32px;
+    margin-left: 5px;
 }
 
 .wizard-linking a {
@@ -5553,9 +5559,51 @@ grant-wizard-nav a.active {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.wizard-guide {
+    margin: 20px;
+}
+
+.wizard-guide h4 {
+    font-size: 16px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.wizard-display-name {
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.wizard-add {
+    display: inline-block;
+    margin: -2px 0 0 0;
+}
+
+.wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
+    text-align: left;
+    padding-left: 0;
+}
+
+.wizard-tile .wizard-add .select2-container {
+    margin: 0;
+    width: 252px;
+}
+
+.wizard-tile .wizard-add .select2-container .select2-choice {
+    border-radius: 0;
+    border-color: #F1F1F1;
+    height: 40px;
+    line-height: 40px;
+}
+
+.wizard-tile .wizard-add .select2-container .select2-choice .select2-arrow {
+    top: 5px;
+    right: 2px;
+}
+
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
+    margin-left: 15px;
 }
 
 .documentUploadFileInputs.fileinputs div.fakefile {
@@ -5567,7 +5615,7 @@ grant-doc-prep .name-table {
     width: 250px;
     float: left;
     white-space: nowrap;
-    margin-top: 63px;
+    margin-top: 71px;
 }
 grant-doc-prep .name-table td {
     height: 40px;
@@ -5578,8 +5626,12 @@ grant-doc-prep .name-table td {
 grant-doc-prep .name-table td:first-of-type {
     border-top: 1px solid #F1F1F1;
 }
+grant-doc-prep .name-table td:first-of-type {
+    border-bottom: none;
+}
 grant-doc-prep .name-table td .name {
     float: left;
+    padding-left: 5px;
 }
 grant-doc-prep .name-table td a {
     cursor: pointer;
@@ -5596,9 +5648,17 @@ grant-doc-prep .sub-doc-table tr:first-child {
     background-color: #F1F1F1;
 }
 
+grant-doc-prep .sub-doc-table tr:first-child > th {
+    padding: 5px;
+}
+
 grant-doc-prep .sub-doc-table tr:not(:first-child) {
     height: 40px;
     border-bottom: 1px solid #F1F1F1;
+}
+
+grant-doc-prep .sub-doc-table tr:not(:first-child) td {
+    padding-left: 5px;
 }
 
 grant-doc-prep .doc-table th {
