@@ -1314,7 +1314,7 @@ own.directive('securityTerms', [function() {
                 $scope.attrs = attributes.getAttrs();
 
                 function fixKeys(keys) {
-                    var skip = ['security', 'pariwith', 'optundersecurity', 'vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
+                    var skip = ['security', 'security_type', 'vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
                     for (var i = 0; i < keys.length; i++)
                     {
                         if (skip.indexOf(keys[i]) != -1)
@@ -1620,8 +1620,8 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
-                
-                
+
+
                 var mimetypes = ["application/pdf", // .pdf
                         // microsoft office
                         "application/msword", // .doc
@@ -1662,7 +1662,7 @@ own.directive('linkedDocuments', [function() {
                         }
                     });
                 };
-                
+
                 $scope.uploadFile = function(files, bin) {
                     $scope.$on("upload:load", function(evt, arg) {
                         void(evt);
@@ -1716,7 +1716,7 @@ own.directive('linkedDocuments', [function() {
                         $scope.files = [];
                     });
                 };
-                
+
                 $scope.checkReady = function(bin) {
                     // Cap at 10 then say error
                     var incrementer = 0;
