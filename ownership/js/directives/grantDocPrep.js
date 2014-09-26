@@ -84,7 +84,8 @@ app.directive('grantDocPrep', [function() {
                 return Investor.getName(id);
             };
             $scope.removeRecipient = function(id) {
-                return grants.docsshare.removeRecipient(id);
+                grants.docsshare.removeRecipient(id);
+                grants.updateUnitsFromDocs();
             };
 
             $scope.bulkPrepable = function(annotation) {
