@@ -18,16 +18,6 @@
                     <div droppable drop="handleDrop" bin="bin" id="plan">
                         Option Plan
                     </div>
-                    <div class="documentUploadFileInputs">
-                        <input multiple type="file" class='file'
-                            accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
-                            onchange="angular.element(this).scope().setFiles(this, 'plan');"/>
-                        <div class="documentUpload fakefile">
-                            <div class="standard-button green">
-                                <button class="btn">Upload</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="wizard-selected-doc" ng-if="issue[0].getDocs().grant.docname">
@@ -38,16 +28,6 @@
                 <div ng-if="!issue[0].getDocs().grant.docname" class="wizard-drop-zone linkedDocuments drop-zone">
                     <div droppable drop="handleDrop" bin="bin" id="grant">
                         Option Agreement
-                    </div>
-                    <div class="documentUploadFileInputs">
-                        <input multiple type="file" class='file'
-                            accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
-                            onchange="angular.element(this).scope().setFiles(this, 'grant');"/>
-                        <div class="documentUpload fakefile">
-                            <div class="standard-button green">
-                                <button class="btn">Upload</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="wizard-done-linking">
