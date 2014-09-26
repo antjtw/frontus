@@ -381,6 +381,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             // defaultList is a list to use if there's no preps yet.
             if (!this.preparedFor) {
                 this.preparedFor = {};
+                this.preparedForLoading = true;
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
                         investor_prep.overrides = {};
@@ -394,9 +395,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         investor_prep.display = Investor.getDisplay(investor_prep.investor);
                         doc.preparedFor[investor_prep.investor] = investor_prep;
                     });
+                    doc.preparedForLoading = false;
                     mergeDefaultList(defaultList);
                 });
-            } else {
+            } else if (!this.preparedForLoading) {
                 mergeDefaultList(defaultList);
             }
             return this.preparedFor;
