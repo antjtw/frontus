@@ -181,6 +181,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
 }]);
 
 docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocShareFactory) {
+    // TODO: ShareDocs is now a kindof unnecessary wrapper around a DocsShare object. Should eliminate it.
     // Session storage
     var ds = new DocShareFactory();
     $window.addEventListener('beforeunload', function(event) {
@@ -211,6 +212,9 @@ docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocSh
     };
     this.docsReadyToShare = function() {
         return ds.docsReadyToShare();
+    };
+    this.shareDocuments = function() {
+        return ds.shareDocuments();
     };
 
     ds.checkAllPrepared(); // initialize cache
