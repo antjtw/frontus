@@ -69,7 +69,7 @@
                                 <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li ng-click="prepareDoc(issue[0].getDocs().plan.doc_id)"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().grant.doc_id}}&prepare=true">Prepare</a></li>
+                                    <li ng-click="prepareDoc(issue[0].getDocs().grant.doc_id)"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().grant.doc_id}}&prepare=true">Prepare</a></li>
                                     <li ng-click="issue[0].removeDoc(issue[0].getDocs().grant)"><a>Unlink</a></li>
                                 </ul>
                             </li>
