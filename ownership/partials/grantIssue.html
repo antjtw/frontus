@@ -7,7 +7,7 @@
         <div ng-if="issue[0].totalAuthorized() > 0">
             <span>{{issue[0].totalAuthorized()  | formatAmount:'units'}} options authorized</span>
             <span>{{issue[0].numUnissued()  | formatAmount:'units'}} available</span>
-            <span>{{unitsFromDocs()}} to add</span>
+            <span ng-show="unitsFromDocs() > 0">{{unitsFromDocs() | formatAmount:'units'}} options in draft</span>
         </div>
         <div ng-if="!(issue[0].totalAuthorized() > 0)">
             <span>0 options authorized</span>

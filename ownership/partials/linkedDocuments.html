@@ -11,6 +11,7 @@
                     </div>
                     <div class="wizard-doc">Plan</div>
                     <div ng-if="issue[0].getDocs().plan.docname"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().plan.doc_id}}&prepare=true">{{issue[0].getDocs().plan.docname}}</a></div>
+                    <div ng-if="!issue[0].getDocs().plan.docname && uploading['plan']"><a>Processing . . . </a></div>
                     <div class="wizard-selects pull-right">
                         <ul ng-if="issue[0].getDocs().plan.docname" class="dropdown-list">
                             <li class="dropdown standard menu-drop">
@@ -18,7 +19,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li ng-click="prepareDoc(issue[0].getDocs().plan.doc_id)"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().plan.doc_id}}&prepare=true">Prepare</a></li>
-                                    <li ng-click="issue[0].removeDoc(issue[0].getDocs().plan)"><a>Delete</a></li>
+                                    <li ng-click="issue[0].removeDoc(issue[0].getDocs().plan)"><a>Unlink</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -32,7 +33,17 @@
                             </div>
                         </a>
                     </div>
-                    <div class="pull-right" ng-if="!issue[0].getDocs().plan.docname">
+                    <div class="documentUploadFileInputs fileinputs pull-right" ng-if="!issue[0].getDocs().plan.docname && !uploading['plan']">
+                        <input multiple type="file" class='file'
+                               accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                               onchange="angular.element(this).scope().setFiles(this, 'plan');"/>
+                        <div class="documentUpload fakefile">
+                            <div class="standard-button gray">
+                                <button class="btn">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" ng-if="!issue[0].getDocs().plan.docname && !uploading['plan']">
                         <a href="/app/ownership/grants/docs">
                             <div class="standard-button pull-right gray">
                                 <button class="btn">
@@ -40,16 +51,6 @@
                                 </button>
                             </div>
                         </a>
-                        <div class="documentUploadFileInputs">
-                            <input multiple type="file" class='file'
-                                accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
-                                onchange="angular.element(this).scope().setFiles(this, 'plan');"/>
-                            <div class="documentUpload fakefile">
-                                <div class="standard-button green">
-                                    <button class="btn">Upload</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="wizard-selects pull-right">
 
@@ -63,6 +64,7 @@
                     </div>
                     <div class="wizard-doc">Agreement</div>
                     <div ng-if="issue[0].getDocs().grant.docname"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().grant.doc_id}}&prepare=true">{{issue[0].getDocs().grant.docname}}</a></div>
+                    <div ng-if="!issue[0].getDocs().grant.docname && uploading['grant']"><a>Processing . . .</a></div>
                     <div class="wizard-selects pull-right">
                         <ul ng-if="issue[0].getDocs().grant.docname" class="dropdown-list">
                             <li class="dropdown standard menu-drop">
@@ -70,7 +72,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li ng-click="prepareDoc(issue[0].getDocs().grant.doc_id)"><a ng-href="/app/documents/company-view?doc={{issue[0].getDocs().grant.doc_id}}&prepare=true">Prepare</a></li>
-                                    <li ng-click="issue[0].removeDoc(issue[0].getDocs().grant)"><a>Delete</a></li>
+                                    <li ng-click="issue[0].removeDoc(issue[0].getDocs().grant)"><a>Unlink</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -84,6 +86,16 @@
                             </div>
                         </a>
                     </div>
+                    <div ng-if="!issue[0].getDocs().grant.docname && !uploading['grant']" class="documentUploadFileInputs fileinputs pull-right">
+                        <input multiple type="file" class='file'
+                               accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                               onchange="angular.element(this).scope().setFiles(this, 'grant');"/>
+                        <div class="documentUpload fakefile">
+                            <div class="standard-button gray">
+                                <button class="btn">Upload</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="pull-right" ng-if="!issue[0].getDocs().grant.docname">
                         <a href="/app/ownership/grants/docs">
                             <div class="standard-button pull-right gray">
@@ -92,16 +104,6 @@
                                 </button>
                             </div>
                         </a>
-                        <div class="documentUploadFileInputs">
-                            <input multiple type="file" class='file'
-                                accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
-                                onchange="angular.element(this).scope().setFiles(this, 'grant');"/>
-                            <div class="documentUpload fakefile">
-                                <div class="standard-button green">
-                                    <button class="btn">Upload</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </li>

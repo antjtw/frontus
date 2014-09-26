@@ -7,7 +7,7 @@
             <grant-issue choose="true"></grant-issue>
             <security-terms save="true" ng-if="issue[0]"></security-terms>
             <linked-documents ng-if="issue[0]"></linked-documents>
-            <a class="wizard-next" href="/app/ownership/grants/people">
+            <a class="wizard-next" href="/app/ownership/grants/people" ng-if="ready();">
                 <div class="standard-button">
                     <button class="btn">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
                 </div>
