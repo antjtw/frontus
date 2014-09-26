@@ -79,8 +79,8 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
     var unitsOverrides = {};
     
     this.getOptionsIssued = function(email) {
-        if (units[email])
-            return units[email];
+        if (unitsOverrides[email])
+            return unitsOverrides[email];
         return defaultUnits;
     };
 
