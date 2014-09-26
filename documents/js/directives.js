@@ -274,6 +274,14 @@ app.directive('docTransactionDetails', function() {
                     $scope.selectedIssue = defaultSelectObj;
                 }
             });
+
+            var optionFields = ['vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
+            $scope.optionField = function(field) {
+                if (optionFields.indexOf(field.name) != -1) {
+                    return true;
+                }
+                return false;
+            };
         }],
     };
 });

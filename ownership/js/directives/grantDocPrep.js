@@ -71,20 +71,26 @@ app.directive('grantDocPrep', [function() {
                 placeholder: 'Add Recipients',
                 createSearchChoice: Investor.createSearchChoiceMultiple,
             };
-            $scope.obj = {};
-            $scope.obj.newRecipient = "";
-            $scope.$watch('obj.newRecipient', function(recip) {
-                if (recip && typeof(recip) != "string") {
-                    grants.docsshare.addRecipient(recip.id);
-                    $scope.obj.newRecipient = null;
-                    grants.updateUnitsFromDocs();
+            $scope.addShareEmail = function(email_input) {
+                // this gets triggered multiple times with multiple types when the data changes
+                if (typeof(email_input) === "string") {
+                    email_input.split(/[\,, ]/).forEach(function(email) {
+                        email = email.trim();
+                        if (email.length < 3) {
+                            // can't be an email, probably gibberish
+                            return;
+                        }
+                        grants.docsshare.addRecipient(email);
+                        grants.updateUnitsFromDocs();
+                    });
                 }
-            });
+            };
             $scope.getName = function(id) {
                 return Investor.getName(id);
             };
             $scope.removeRecipient = function(id) {
-                return grants.docsshare.removeRecipient(id);
+                grants.docsshare.removeRecipient(id);
+                grants.updateUnitsFromDocs();
             };
 
             $scope.bulkPrepable = function(annotation) {
@@ -125,6 +131,10 @@ app.directive('grantDocReview', [function() {
 
             $scope.getName = function(id) {
                 return Investor.getName(id);
+            };
+            
+            $scope.getOptionsIssued = function(email) {
+                return grants.getOptionsIssued(email);
             };
 
             $scope.encodeURIComponent = encodeURIComponent;
