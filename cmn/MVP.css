@@ -5580,6 +5580,11 @@ grant-wizard-nav a.active {
     line-height: 40px;
 }
 
+.wizard-tile .wizard-add .select2-container .select2-choice .select2-arrow {
+    top: 5px;
+    right: 2px;
+}
+
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
