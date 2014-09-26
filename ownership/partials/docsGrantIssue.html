@@ -9,27 +9,23 @@
             <div ng-style="viewportheight">
                 <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
 
-                <div class="wizard-selected-doc" ng-if="issue[0].getDocs().plan.docname">
-                    <span>Option Plan</span>
-                    <a>{{issue[0].getDocs().plan.docname}}</a>
-                    <span ng-click="issue[0].removeDoc(issue[0].getDocs().plan)" data-icon="&#xe00f;" aria-hidden="true"></span>
-                </div>
-                <div ng-if="!issue[0].getDocs().plan.docname" class="wizard-drop-zone linkedDocuments drop-zone">
-                    <div droppable drop="handleDrop" bin="bin" id="plan">
-                        Option Plan
+                <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
+                    <div class="wizard-selected-doc" ng-if="doc.docname">
+                        <span ng-if="type == 'plan'">Option Plan</span>
+                        <span ng-if="type == 'grant'">Option Agreement</span>
+                        <span ng-if="type == 'exercise'">Exercise Agreement</span>
+                        <a>{{doc.docname}}</a>
+                        <span ng-click="issue[0].removeDoc(doc)" data-icon="&#xe00f;" aria-hidden="true"></span>
+                    </div>
+                    <div ng-if="!doc.docname" class="wizard-drop-zone linkedDocuments drop-zone">
+                        <div droppable drop="handleDrop" bin="bin" id="{{type}}">
+                            <span ng-if="type == 'plan'">Option Plan</span>
+                            <span ng-if="type == 'grant'">Option Agreement</span>
+                            <span ng-if="type == 'exercise'">Exercise Agreement</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="wizard-selected-doc" ng-if="issue[0].getDocs().grant.docname">
-                    <span>Option Agreement</span>
-                    <a>{{issue[0].getDocs().grant.docname}}</a>
-                    <span ng-click="issue[0].removeDoc(issue[0].getDocs().grant)" data-icon="&#xe00f;" aria-hidden="true"></span>
-                </div>
-                <div ng-if="!issue[0].getDocs().grant.docname" class="wizard-drop-zone linkedDocuments drop-zone">
-                    <div droppable drop="handleDrop" bin="bin" id="grant">
-                        Option Agreement
-                    </div>
-                </div>
                 <div class="wizard-done-linking">
                     <a href="/app/ownership/grants/issue">
                         <div class="standard-button pull-right">

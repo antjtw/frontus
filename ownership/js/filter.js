@@ -487,11 +487,11 @@ ownership.filter('utcdate', function() {
     return function(input, format) {
         if (input) {
             if (typeof input == "string") {
-                return input
+                return input;
             } else {
                 return new Date(input.getUTCFullYear(), input.getUTCMonth(), input.getUTCDate()).toString(format);
             }
         }
-        return input
+        return input;
     };
 });
