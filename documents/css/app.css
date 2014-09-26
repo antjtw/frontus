@@ -2192,6 +2192,10 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     text-transform: capitalize;
 }
 
+.required-fields > span:last-of-type {
+    float: right;
+}
+
 .required-fields.field-completed > span {
     color: rgb(141, 141, 141);
     -webkit-animation: completerequired 1s; /* Safari 4+ */
