@@ -3581,11 +3581,11 @@ button.icon-button:hover {
     border: none;
 }
 /* Styling file uploads with fake overlay */
-.modal div.fileinputs {
+.modal div.fileinputs, div.fileinputs {
     position: relative;
     height: 50px;
 }
-.modal div.fakefile {
+.modal div.fakefile, div.fakefile  {
     position: absolute;
     top: 0;
     left: 0;
@@ -3593,11 +3593,11 @@ button.icon-button:hover {
     line-height: 50px;
     margin-left: 20px;
 }
-.modal div.fakefile > div {
+.modal div.fakefile > div, div.fakefile > div {
     display: inline-block;
     margin-left: 5px;
 }
-.modal div.fakefile > span {
+.modal div.fakefile > span, div.fakefile > span {
     display: inline-block;
     width: 160px;
     height: 32px;
@@ -3605,7 +3605,7 @@ button.icon-button:hover {
     line-height: 32px;
     border: 1px solid rgb(227, 227, 227);
 }
-.modal input.file {
+.modal input.file, input.file {
     position: relative;
     text-align: right;
     opacity: 0;
@@ -5479,6 +5479,10 @@ grant-wizard-nav a.active {
     display: inline-block;
 }
 
+.wizard-linking > li > div > div:first-of-type > span {
+    vertical-align: -10%;
+}
+
 .wizard-linking > li > div > div.wizard-doc {
     display: inline-block;
     vertical-align: middle;
@@ -5551,6 +5555,25 @@ grant-wizard-nav a.active {
     height: 40px;
     font-size: 20px;
     font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.wizard-guide {
+    margin: 20px;
+}
+
+.wizard-guide h4 {
+    font-size: 16px;
+    font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.documentUploadFileInputs.fileinputs {
+    height: 32px;
+    width: 130px;
+}
+
+.documentUploadFileInputs.fileinputs div.fakefile {
+    line-height: 30px;
+    margin-left: 0;
 }
 
 grant-doc-prep .name-table {
