@@ -2061,6 +2061,10 @@ help-tab > div > p > span {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.docinfo .docname.prepareDocname {
+    border-bottom: none;
+}
+
 .docinfo .investor-views {
     margin-top: 10px;
     margin-left: 35px;
