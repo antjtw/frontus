@@ -5585,6 +5585,7 @@ grant-wizard-nav a.active {
 .wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
     text-align: left;
     padding-left: 0;
+    font-size: 14px;
 }
 
 .wizard-tile .wizard-add .select2-container {
