@@ -1606,6 +1606,8 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
+                
+                $scope.uploading = {};
 
                 var mimetypes = ["application/pdf", // .pdf
                         // microsoft office
@@ -1644,6 +1646,7 @@ own.directive('linkedDocuments', [function() {
                         }
                         if ($scope.files.length > 0) {
                             $scope.uploadFile($scope.files, bin);
+                            $scope.uploading[bin] = true;
                         }
                     });
                 };
@@ -1699,6 +1702,7 @@ own.directive('linkedDocuments', [function() {
                     }).except(function(x) {
                         $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
                         $scope.files = [];
+                        $scope.uploading[bin] = false;
                     });
                 };
 
@@ -1722,6 +1726,7 @@ own.directive('linkedDocuments', [function() {
                                         }
                                     });*/
                                     $scope.issue[0].addSpecificEvidence(parseInt(doc.doc_id), String(bin), String(bin));
+                                    $scope.uploading[bin] = false;
                                 }
                             }
                         });
