@@ -5577,6 +5577,11 @@ grant-wizard-nav a.active {
     margin: -2px 0 0 0;
 }
 
+.wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
+    text-align: left;
+    padding-left: 0;
+}
+
 .wizard-tile .wizard-add .select2-container {
     margin: 0;
     width: 252px;
