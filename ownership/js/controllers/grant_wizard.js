@@ -1,8 +1,19 @@
 'use strict';
 
 app.controller('chooseGrantIssue',
-    ["$scope", "grants", function($scope, grants){
+    ["$scope", "grants", "Documents", function($scope, grants, Documents){
         $scope.issue = grants.issue;
+        
+        $scope.ready = function() {
+            if (!$scope.issue[0] || !$scope.issue[0].getDocs().grant)
+                return false;
+            var document = Documents.getOriginal($scope.issue[0].getDocs().grant.doc_id);
+            if (document) {
+                return document.validTransaction();
+            } else {
+                return false;
+            }
+        };
 }]);
 
 app.controller('docsGrantIssue',
@@ -18,8 +29,37 @@ app.controller('docsGrantIssue',
 }]);
 
 app.controller('peopleGrantIssue',
-    ["$scope", function($scope){
-
+    ["$scope", "grants", "Documents", function($scope, grants, Documents){
+        $scope.issue = grants.issue;
+        
+        $scope.ready = function() {
+            if (!$scope.issue[0] || !$scope.issue[0].getDocs().grant)
+                return false;
+            var document = Documents.getOriginal($scope.issue[0].getDocs().grant.doc_id);
+            if (!document || !document.validTransaction())
+                return false;
+            
+            for (var e in grants.docsshare.emails)
+            {
+                if (document.hasInvalidAnnotation(grants.docsshare.emails[e]))
+                    return false;
+            }
+            
+            for (var a in document.annotations)
+            {
+                if (document.annotations[a].required)
+                {
+                    if (!document.annotations[a].isInvalid())
+                        continue;
+                    for (var e in grants.docsshare.emails)
+                    {
+                        if (document.annotations[a].isInvalid(grants.docsshare.emails[e]))
+                            return false;
+                    }
+                }
+            }
+            return true;
+        };
 }]);
 
 app.controller('reviewGrantIssue',
