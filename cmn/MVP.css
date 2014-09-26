@@ -5562,6 +5562,23 @@ grant-wizard-nav a.active {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.wizard-add {
+    display: inline-block;
+    margin: 0;
+}
+
+.wizard-tile .wizard-add .select2-container {
+    margin: 0;
+    width: 252px;
+}
+
+.wizard-tile .wizard-add .select2-container .select2-choice {
+    border-radius: 0;
+    border-color: #F1F1F1;
+    height: 40px;
+    line-height: 40px;
+}
+
 .documentUploadFileInputs.fileinputs {
     height: 32px;
     width: 130px;
