@@ -67,7 +67,7 @@ app.controller('reviewGrantIssue',
         $scope.send = function() {
             grants.docsshare.shareDocuments().then(function(res) {
                 $rootScope.$emit("notification:success", "Options granted!");
-                $location.path('/app/company/home'); // TODO: redirect to the grants page, once that page shows in-flight documents (not in the transaction table yet)
+                $location.path('/app/home/company'); // TODO: redirect to the grants page, once that page shows in-flight documents (not in the transaction table yet)
             }).catch(function(err) {
                 if (err === "Not all documents prepared for all people") {
                     $rootScope.$emit("notification:fail", "Sorry, we couldn't understand some of the document data. Please re-prepare them and recheck the data.");
