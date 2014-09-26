@@ -7,12 +7,12 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.nextAnnotationType = 'text';
 
         $scope.setTab = function() {
-            if ($scope.actionNeeded() || $scope.prepareable()) {
-                $scope.annottab = "true";
-                $scope.infotab = "false";
+            if ($scope.doc.annotations.length > 0 && ($scope.actionNeeded() || $scope.prepareable())) {
+                $scope.annottab = true;
+                $scope.infotab = false;
             } else {
-                $scope.infotab = "true";
-                $scope.annottab = "false";
+                $scope.infotab = true;
+                $scope.annottab = false;
             }
         };
 
