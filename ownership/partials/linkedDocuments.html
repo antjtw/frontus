@@ -96,7 +96,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" ng-if="!issue[0].getDocs().grant.docname">
+                    <div class="pull-right" ng-if="!issue[0].getDocs().grant.docname && !uploading['grant']">
                         <a href="/app/ownership/grants/docs">
                             <div class="standard-button pull-right gray">
                                 <button class="btn">
