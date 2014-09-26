@@ -6,7 +6,7 @@
         <div ng-repeat="pair in keys" ng-if="issue.length > 0">
             <div class="row-fluid">
                 <div ng-repeat="key in pair" class="span4">
-                    <span>{{displayName(key)}}</span><br>
+                    <span class="wizard-display-name">{{displayName(key)}}</span><br>
 
                     <input ng-if="useTextField(key)"
                            ui-event="{blur: 'saveIt(issue[0].transactions[0], true)'}"

@@ -5563,6 +5563,11 @@ grant-wizard-nav a.active {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
+.wizard-display-name {
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
 .wizard-add {
     display: inline-block;
     margin: -2px 0 0 0;
