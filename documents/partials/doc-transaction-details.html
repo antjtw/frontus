@@ -31,7 +31,7 @@
                 <meter cur="doc.numFieldsComplete()" tot="doc.numFieldsRequired()"></meter>
             </div>
             <div class="bottom-padded">
-                <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types" ng-show="field.required || optionField(field)">
+                <div class="required-fields" ng-class="{'field-completed': (doc.hasAnnotationType(field.name))}" ng-repeat="field in doc.annotation_types | orderBy:'-required'" ng-show="field.required || optionField(field)">
                     <span><span data-icon="&#xe052;" ng-show="doc.hasAnnotationType(field.name) || doc.hasOtherPartyAnnotation(field.name)"></span></span>
                     <span>{{field.display}}</span>
                     <span ng-show="field.required">(Required)</span>
