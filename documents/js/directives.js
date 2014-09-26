@@ -277,7 +277,6 @@ app.directive('docTransactionDetails', function() {
 
             var optionFields = ['vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
             $scope.optionField = function(field) {
-                console.log($scope.selectedIssue);
                 if (optionFields.indexOf(field.name) != -1) {
                     return true;
                 }
