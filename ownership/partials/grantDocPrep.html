@@ -42,7 +42,6 @@
                             <tr>
                                 <td ng-repeat="annot in annots">
                                     {{annot.type_info.display}}&nbsp;
-                                    <span ng-if="annot.required" data-icon="&#xe603;" class="info lower-icon" tooltip="{{annot.type_info.display}} is required"></span>
                                 </td>
                             </tr>
                             <tr ng-repeat="email in emails">

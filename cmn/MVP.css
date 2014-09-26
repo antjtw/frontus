@@ -5636,6 +5636,10 @@ grant-doc-prep .sub-doc-table tr:not(:first-child) {
     border-bottom: 1px solid #F1F1F1;
 }
 
+grant-doc-prep .sub-doc-table tr:not(:first-child) td {
+    padding-left: 5px;
+}
+
 grant-doc-prep .doc-table th {
     text-align: left;
 }
