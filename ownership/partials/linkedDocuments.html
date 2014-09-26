@@ -86,15 +86,6 @@
                             </div>
                         </a>
                     </div>
-                    <div class="pull-right" ng-if="!issue[0].getDocs().grant.docname && !uploading['grant']">
-                        <a href="/app/ownership/grants/docs">
-                            <div class="standard-button pull-right gray">
-                                <button class="btn">
-                                    Pick from Library
-                                </button>
-                            </div>
-                        </a>
-                    </div>
                     <div ng-if="!issue[0].getDocs().grant.docname && !uploading['grant']" class="documentUploadFileInputs fileinputs pull-right">
                         <input multiple type="file" class='file'
                                accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
@@ -104,6 +95,15 @@
                                 <button class="btn">Upload</button>
                             </div>
                         </div>
+                    </div>
+                    <div class="pull-right" ng-if="!issue[0].getDocs().grant.docname">
+                        <a href="/app/ownership/grants/docs">
+                            <div class="standard-button pull-right gray">
+                                <button class="btn">
+                                    Pick from Library
+                                </button>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </li>

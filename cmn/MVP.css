@@ -5475,6 +5475,10 @@ grant-wizard-nav a.active {
     display: inline-block;
 }
 
+.wizard-linking > li > div > div:first-of-type > span {
+    vertical-align: -10%;
+}
+
 .wizard-linking > li > div > div.wizard-doc {
     display: inline-block;
     vertical-align: middle;
