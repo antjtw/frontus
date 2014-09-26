@@ -102,7 +102,7 @@ app.directive('grantDocReview', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantDocReview.html',
-        controller: ["$scope", "grants", function($scope, grants) {
+        controller: ["$scope", "grants", "Investor", function($scope, grants, Investor) {
             initDocInfo($scope, grants);
             $scope.selectedEmail = "";
 
@@ -115,6 +115,10 @@ app.directive('grantDocReview', [function() {
 
             $scope.docsVisible = function(email) {
                 return $scope.selectedEmail == email;
+            };
+
+            $scope.getName = function(id) {
+                return Investor.getName(id);
             };
         }]
     };
