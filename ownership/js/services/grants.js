@@ -6,6 +6,7 @@ ownership.service('grants', ['captable', '$window', '$rootScope', 'SWBrijj', 'Do
 function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
     var grantsref = this;
     var issue_name;
+    var doc = {};
     this.docsshare = new DocShareFactory();
     $window.addEventListener('beforeunload', function(event) {
         sessionStorage.setItem('grants-issueName', issue_name);
@@ -25,6 +26,8 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             }
         });
     });
+    
+    var x, y, z;
 
     // if the issue object changes, set issue_name
     $rootScope.$watchCollection(function() {
@@ -34,16 +37,63 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             issue_name = new_issue[0].name;
         }
     });
+    
+    $rootScope.$watch(function() {
+        if (grantsref.issue[0] && grantsref.issue[0].getDocs().grant)
+            return grantsref.issue[0].getDocs().grant.doc_id;
+        return 0;
+    }, function(new_doc) {
+        if (new_doc)
+        {
+            doc = Documents.getOriginal(new_doc);
+            doc.getPreparedFor(grantsref.docsshare.emails);
+            if (y)
+                y();
+            if (z)
+                z();
+            var y = $rootScope.$watchCollection(function() {
+                return doc.preparedFor;
+            }, function() {
+                grantsref.updateUnitsFromDocs();
+                y();
+            });
+            var z = $rootScope.$watchCollection(function() {
+                return doc.annotations.length;
+            }, function(v) {
+                if (v)
+                {
+                    grantsref.updateUnitsFromDocs();
+                    z();
+                }
+            });
+        }
+        else
+        {
+            defaultUnits = 0;
+            unitsOverrides = {};
+            grantsref.unitsFromDocs = 0;
+        }
+    });
+    
+    var defaultUnits = 0;
+    var unitsOverrides = {};
+    
+    this.getOptionsIssued = function(email) {
+        if (units[email])
+            return units[email];
+        return defaultUnits;
+    };
 
     this.unitsFromDocs = 0;
 
     this.updateUnitsFromDocs = function() {
-        if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant) {
+        if (!doc.annotations || doc.annotations.length == 0)
+        {
+            defaultUnits = 0;
+            unitsOverrides = {};
+            grantsref.unitsFromDocs = 0;
             return;
         }
-        var tmp = grantsref.issue[0].getDocs().grant;
-        var doc = Documents.getOriginal(tmp.doc_id);
-        doc.getPreparedFor(grantsref.docsshare.emails);
 
         var annot = doc.annotations.filter(function(annot) {
             return annot.whattype == "units";
@@ -54,18 +104,18 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         }
 
         var units = 0;
-        var common = 0;
 
         if (annot[0].val)
         {
-            common = parseFloat(annot[0].val);
-            units += common * grantsref.docsshare.emails.length;
+            defaultUnits = parseFloat(annot[0].val);
+            units += defaultUnits * grantsref.docsshare.emails.length;
         }
 
-        this.docsshare.emails.forEach(function(investor) {
+        grantsref.docsshare.emails.forEach(function(investor) {
             if (doc.preparedFor[investor] && doc.preparedFor[investor].overrides[annot[0].id])
             {
-                units += parseFloat(doc.preparedFor[investor].overrides[annot[0].id]) - common;
+                units += parseFloat(doc.preparedFor[investor].overrides[annot[0].id]) - defaultUnits;
+                unitsOverrides[investor] = parseFloat(doc.preparedFor[investor].overrides[annot[0].id]);
             }
         });
 
