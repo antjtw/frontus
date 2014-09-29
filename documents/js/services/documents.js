@@ -352,7 +352,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         validTransaction: function() {
             if (this.annotations.some(function(annot) {
-                return ((annot.whattype == 'ImgSignature') && (annot.isInvalid()));
+                return (annot.forRole('issuer') && (annot.whattype == 'ImgSignature') && (annot.isInvalid()));
             })) {
                 return false;
             }
