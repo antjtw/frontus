@@ -87,7 +87,7 @@
             </td>
             <td colspan="1">
                 <span class="right">
-                    {{item.amount | currency}}
+                    {{item.amount/100 | currency}}
                 </span>
             </td>
         </tr>
@@ -102,25 +102,25 @@
                 <div class="fakefloat">
                     <span>Subtotal</span>
                     <span class="right">
-                        {{invoice.subtotal | currency}}
+                        {{invoice.subtotal/100 | currency}}
                     </span>
                 </div>
                 <div class="fakefloat">
                     <span>Discount</span>
                     <span class="right">
-                        {{invoice.discount || 0 | currency}}
+                        {{invoice.discount/100 || 0 | currency}}
                     </span>
                 </div>
                 <div class="fakefloat">
                     <span>Due</span>
                     <span class="right">
-                        {{invoice.amount_due | currency}}
+                        {{invoice.amount_due/100 | currency}}
                     </span>
                 </div>
                 <div class="fakefloat">
                     <span>Paid</span>
                     <span class="right">
-                        {{amountPaid() | currency}}
+                        {{amountPaid()/100 | currency}}
                     </span>
                 </div>
             </td>
