@@ -122,6 +122,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         // using a setter to prevent select2 from reformatting the whattype to it's prefered format...
         if (typeof(val) == "string") {
             $scope.annot.whattype = val;
+            if (val == "ImgSignature" && $scope.annot.forRole(navState.role) && !User.signaturePresent)
+            {
+                $scope.sigModalUp();
+            }
         }
         return $scope.annot.whattype;
     }
@@ -394,6 +398,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.annot.whosign = value;
         $scope.annot.val = "";
         setDefaultText();
+        if ($scope.annot.whattype == "ImgSignature" && $scope.annot.forRole(navState.role) && !User.signaturePresent)
+        {
+            $scope.sigModalUp();
+        }
     };
 
     $scope.addLineBreaks = function($event) {
