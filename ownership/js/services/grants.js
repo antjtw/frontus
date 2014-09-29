@@ -132,7 +132,8 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
 
     this.setIssue = function(issue) {
         this.issue.splice(0);
-        this.issue.push(issue);
+        if (issue)
+            this.issue.push(issue);
     };
     
     
