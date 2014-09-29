@@ -5630,6 +5630,7 @@ grant-wizard-nav a.active {
     height: 32px;
     width: 130px;
     margin-left: 15px;
+    margin-right: 5px;
 }
 
 .documentUploadFileInputs.fileinputs div.fakefile {
