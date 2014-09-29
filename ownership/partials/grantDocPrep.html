@@ -30,19 +30,17 @@
         <div class="doc-table">
             <table>
                 <tr>
-                    <td ng-repeat="doc in doc_arr">
-                        <table class="sub-doc-table"
-                               ng-if="annots = (doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']); annots.length > 0">
+                    <td ng-repeat="doc in doc_arr" ng-if="annots = (doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']); annots.length > 0">
+                        <table class="sub-doc-table">
                             <tr>
-                                <th colspan=0>
-                                    <span data-icon="&#xe009;" class="status"></span>
+                                <th colspan='{{annots.length}}'>
                                     <span>{{doc.docname}}</span>
                                     <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" class="info" tooltip="Signature Requested"></span>
                                     <span data-icon="&#xe612;" ng-show="!doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
                                 </th>
                             </tr>
                             <tr>
-                                <td ng-repeat="annot in annots">
+                                <td class="annotation-headers" ng-repeat="annot in annots">
                                     {{annot.type_info.display}}&nbsp;
                                 </td>
                             </tr>
@@ -71,7 +69,7 @@
                     </td>
                 </tr>
                 <tr class="wizard-footer-row">
-                    <td></td>
+                    <td colspan='{{doc_arr.length}}'></td>
                 </tr>
             </table>
         </div>
