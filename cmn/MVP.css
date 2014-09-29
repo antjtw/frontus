@@ -5583,17 +5583,7 @@ grant-wizard-nav a.active {
 
 .wizard-add {
     display: inline-block;
-    margin: -2px 0 0 0;
     width: 100%;
-}
-
-.wizard-add > div:last-of-type {
-    border: 1px solid #F1F1F1;
-    border-left: 0;
-    height: 40px;
-    width: calc(100% - 253px);
-    display: inline-block;
-    margin-top: 0;
 }
 
 .wizard-tile .status-table.investor.evidence > tbody > tr > td:last-child {
@@ -5611,8 +5601,15 @@ grant-wizard-nav a.active {
 .wizard-tile .wizard-add .select2-container .select2-choice {
     border-radius: 0;
     border-color: #F1F1F1;
-    height: 40px;
-    line-height: 40px;
+    height: 39px;
+    line-height: 39px;
+    border-top: none;
+}
+
+.wizard-tile .wizard-add.emptyadd .select2-container .select2-choice {
+    height: 39px;
+    border-top: 1px solid #F1F1F1;
+    margin-top: 1px;
 }
 
 .wizard-tile .wizard-add .select2-container .select2-choice .select2-arrow {
@@ -5646,9 +5643,7 @@ grant-doc-prep .name-table td {
 grant-doc-prep .name-table td:first-of-type {
     border-top: 1px solid #F1F1F1;
 }
-grant-doc-prep .name-table td:first-of-type {
-    border-bottom: none;
-}
+
 grant-doc-prep .name-table td .name {
     float: left;
     padding-left: 5px;
@@ -5656,6 +5651,10 @@ grant-doc-prep .name-table td .name {
 grant-doc-prep .name-table td a {
     cursor: pointer;
     float: right;
+}
+
+grant-doc-prep .name-table tr:last-of-type td {
+    height: 41px;
 }
 
 grant-doc-prep .doc-table {
@@ -5744,4 +5743,10 @@ grant-doc-prep .doc-table td.required input:-ms-input-placeholder {
 grant-doc-prep .doc-table td.required .select2-default .select2-chosen { /* no placeholder */
     color: #eb6f1c;
     opacity: 0.6;
+}
+
+grant-doc-prep tr.wizard-footer-row {
+    border-bottom: 1px solid #F1F1F1;
+    border-top: 1px solid #F1F1F1;
+    height: 40px;
 }
