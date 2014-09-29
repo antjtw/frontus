@@ -10,6 +10,11 @@
         <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/review') != -1}" ng-href="{{reviewLink()}}">Review</a></li>
     </ul>
 </div>
+<div ng-hide="path.indexOf('/app/ownership/grants/docs') == -1">
+    <div class="pull-left"> <span>Search</span>
+        <input type="text" class="search-box" ng-model="state.evidenceQuery">
+    </div>
+</div>
 
 <div>
     <span ng-click="$root.leave(['/grants/', '/documents/company-view'])">Save & Exit</span>
