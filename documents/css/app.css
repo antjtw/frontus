@@ -2188,7 +2188,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 
 .required-fields > span {
     display: inline-block;
-    color: #E74C3C;
+    color: rgb(141, 141, 141);
     text-transform: capitalize;
 }
 
@@ -2197,7 +2197,6 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields.field-completed > span {
-    color: rgb(141, 141, 141);
     -webkit-animation: completerequired 1s; /* Safari 4+ */
     -moz-animation:    completerequired 1s; /* Fx 5+ */
     -o-animation:      completerequired 1s; /* Opera 12+ */
