@@ -157,8 +157,12 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
     this.setPeopleReady = function() {
         if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant)
             return grantsref.peopleReady = false;
+            
         var document = Documents.getOriginal(grantsref.issue[0].getDocs().grant.doc_id);
         if (!document || !document.validTransaction())
+            return grantsref.peopleReady = false;
+        
+        if (!grantsref.docsshare.emails || !grantsref.docsshare.emails.length)
             return grantsref.peopleReady = false;
         
         for (var e in grantsref.docsshare.emails)
@@ -169,7 +173,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         
         for (var a in document.annotations)
         {
-            if (document.annotations[a].required)
+            if (document.annotations[a].type_info.required && document.annotations[a].whosign == "Issuer")
             {
                 if (!document.annotations[a].isInvalid())
                     continue;
@@ -180,6 +184,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
                 }
             }
         }
+        
         grantsref.peopleReady = true;
     };
 }]);
