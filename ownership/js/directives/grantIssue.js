@@ -16,13 +16,13 @@ app.directive('grantIssue', [function() {
 
             $scope.issueSelectOptions = {
                 data: [],
-                placeholder: "Pick an option security",
+                placeholder: "Pick or create an option security",
                 createSearchChoice: function(new_name) {
                     var sec = captable.nullSecurity();
                     sec.name = new_name;
                     return {
                         id: new_name,
-                        text: new_name,
+                        text: "Create new security: " + new_name,
                         issue: sec
                     };
                 }
@@ -49,6 +49,8 @@ app.directive('grantIssue', [function() {
                     {
                         $scope.selected.issue = $scope.issueSelectOptions.data[0];
                     }
+                    $scope.issueSelectOptions.data.push({id: "",
+                                                    text: "Type to create a new security"});
                 }
             });
 
