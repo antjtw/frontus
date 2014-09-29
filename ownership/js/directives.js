@@ -1761,6 +1761,14 @@ own.directive('linkedDocuments', [function() {
                     // only used in weird cases where <a> won't quite work right
                     $location.url('/app/documents/company-view?doc=' + doc_id + '&prepare=true');
                 };
+
+                $scope.errorTooltip = function(doc) {
+                    if (!doc) {
+                        return "No document attached"
+                    } else {
+                        return "Document needs preparing"
+                    }
+                }
             }
         ]
     };
