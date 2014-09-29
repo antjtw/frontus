@@ -713,7 +713,7 @@ navm.controller('NavCtrl',
                     if (!$rootScope.billing) {$rootScope.billing = {};}
                     $rootScope.billing.freetrial = payments.format_trial(resp);
                     $rootScope.billing.invoices = resp.data.filter(function(el) {
-                        return el.amount_due>0;
+                        return el.amount>0;
                     }) || [];
                     if ($rootScope.billing.currentPlan!=="000") {
                         $scope.load_upcoming_invoice();
