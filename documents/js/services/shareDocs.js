@@ -57,6 +57,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
             return this.documents;
         },
         addRecipient: function(email) {
+            var promise = $q.defer();
             var sdref = this;
             if (email.length > 0 && this.emails.indexOf(email) == -1) {
                 this.emails.push(email);
@@ -64,13 +65,33 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
                 if (!Investor.displays[email]) {
                     // this isn't an email we recognize off hand
                     Investor.getInvestorId(email).then(function(user_id) {
-                        if (user_id != email) {
-                            sdref.removeEmail(email);
-                            sdref.addEmail(user_id); // recurses, but with the right info this time
+                        if (user_id === null) {
+                            // user not found, assume user_id is email for now;
+                            user_id = email;
                         }
+                        if (user_id != email) {
+                            // the system is telling us to use a different user_id for this email
+                            sdref.removeEmail(email);
+                            sdref.addEmail(user_id).then(function(uid) {
+                                promise.resolve(uid);
+                            }, function(uid) {
+                                promise.reject(uid);
+                            }); // recurses, but with the right info this time
+                        } else {
+                            // we didn't recognize it, but this email is fine
+                            promise.resolve(user_id);
+                        }
+                    }, function(err) {
+                        promise.reject(err);
                     });
+                } else {
+                    promise.resolve(email);
                 }
+            } else {
+                // bad email
+                promise.reject(email);
             }
+            return promise.promise;
         },
         removeRecipient: function(email) {
             var idx = this.emails.indexOf(email);
