@@ -1577,6 +1577,7 @@ own.directive('grantWizardNav', [function() {
     return {
         restrict: 'EA',
         scope: {
+            state: '='
         },
         templateUrl: '/ownership/partials/grantWizardNav.html',
         controller: ["$scope", "$rootScope", "navState", "grants",
