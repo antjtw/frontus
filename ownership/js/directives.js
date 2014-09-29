@@ -1375,7 +1375,10 @@ own.directive('securityTerms', [function() {
                     $scope.saveIt(tran, cell, errorFunc);
                 };
 
-                $scope.saveIt = function(tran, cell, errorFunc) {
+                $scope.saveIt = function(tran, cell, errorFunc, key) {
+                    if (key && $scope.useNumberField(key)) {
+                        tran.attrs[key] = String(tran.attrs[key]).replace(/,/g , "");
+                    }
                     if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
                     {
                         captable.saveTransaction(tran, cell, errorFunc);

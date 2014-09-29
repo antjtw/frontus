@@ -13,9 +13,8 @@
                            type="text"
                            ng-model="issue[0].transactions[0].attrs[key]">
                     <input ng-if="useNumberField(key)"
-                           ui-event="{blur: 'saveIt(issue[0].transactions[0], true)'}"
+                           ui-event="{blur: 'saveIt(issue[0].transactions[0], true, true, key)'}"
                            type="text"
-                           float
                            ng-model="issue[0].transactions[0].attrs[key]">
                     <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
                         <li class="dropdown standard">
