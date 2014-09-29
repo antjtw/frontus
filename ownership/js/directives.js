@@ -1588,15 +1588,15 @@ own.directive('grantWizardNav', [function() {
                 $scope.path = navState.path;
                 
                 $scope.peopleLink = function() {
-                    if (grants.isChooseReady)
+                    if (grants.isChooseReady())
                         return "/app/ownership/grants/people";
                     return "/app/ownership/grants/issue";
                 };
                 
                 $scope.reviewLink = function() {
-                    if (grants.isPeopleReady)
+                    if (grants.isPeopleReady())
                         return "/app/ownership/grants/review";
-                    if (!grants.isChooseReady)
+                    if (!grants.isChooseReady())
                         return "/app/ownership/grants/issue";
                     return "/app/ownership/grants/people";
                 };
