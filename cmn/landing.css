@@ -20,25 +20,7 @@ h3 {
     height: 100vh;
     position: relative;
 
-    /* Safari 4, Chrome 1-9, iOS 3.2-4.3, Android 2.1-3.0 */
-    background-image:
-        -webkit-gradient(linear, from(#C6EEE5), to(#FFFFFF));
-
-    /* Safari 5.1, iOS 5.0-6.1, Chrome 10-25, Android 4.0-4.3 */
-    background-image:
-        -webkit-linear-gradient(#C6EEE5, #FFFFFF);
-
-    /* Firefox 3.6 - 15 */
-    background-image:
-        -moz-linear-gradient(#C6EEE5, #FFFFFF);
-
-    /* Opera 11.1 - 12 */
-    background-image:
-        -o-linear-gradient(#C6EEE5, #FFFFFF);
-
-    /* Opera 15+, Chrome 25+, IE 10+, Firefox 16+, Safari 6.1+, iOS 7+, Android 4.4+ */
-    background-image:
-        linear-gradient(#C6EEE5, #FFFFFF);
+    background-color: #1E2D3D;
 }
 
 .nav-icon {
@@ -189,6 +171,10 @@ h2.key-header {
     margin-top: 120px;
 }
 
+h2.key-header.slogan {
+    color: #F1F1F1;
+}
+
 h3.key-sub-header {
     max-width: 800px;
     margin: 10px auto 0 auto;
@@ -205,6 +191,7 @@ h2.key-header.old-page {
 
 .home-banner h3.key-sub-header {
     max-width: 600px;
+    color: #F1F1F1;
 }
 
 .home-banner .headline-image {
@@ -220,15 +207,50 @@ h2.key-header.old-page {
 
 .home-banner .bottom-icons > li {
     float: left;
-    width: -moz-calc(25% - 1px);
-    width: -webkit-calc(25% - 1px);
-    width: calc(25% - 1px);
-    border-top: 1px solid #C6C6C6;
-    border-bottom: 1px solid #C6C6C6;
-    border-right: 1px solid #C6C6C6;
+    width: 33.333333333333%;
     display: inline-block;
-    height: 135px;
     cursor: pointer;
+    position: relative;
+}
+
+.home-banner .bottom-icons > li > div:first-of-type {
+    margin-top: 100%;
+}
+
+.home-banner .bottom-icons > li > div:last-of-type {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.home-banner .bottom-icons > li > div:last-of-type {
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.home-banner .bottom-icons > li > div:last-of-type > span {
+    text-align: center;
+    font-size: 32px;
+    font-family: 'FS Elliot Web Light', sans-serif !important;
+    display: inline-block;
+    line-height: 34px;
+    color: #F1F1F1;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.home-banner .bottom-icons > li:nth-child(1) > div:last-of-type {
+    background-image:url('../img/stock/piggy-big.jpg');
+}
+
+.home-banner .bottom-icons > li:nth-child(2) > div:last-of-type {
+    background-image:url('../img/stock/money-jar-big.jpg');
+}
+
+.home-banner .bottom-icons > li:nth-child(3) > div:last-of-type {
+    background-image:url('../img/stock/employee-big.jpg');
 }
 
 .home-banner .bottom-icons > li > span:first-child {
@@ -451,14 +473,30 @@ h2.key-header.old-page {
         font-size: 18px;
     }
 
+    .home-banner {
+        height: auto;
+    }
+
+    .home-banner .bottom-icons {
+        overflow: auto;
+    }
+
     .home-banner .bottom-icons > li {
-        width: -moz-calc(50% - 1px);
-        width: -webkit-calc(50% - 1px);
-        width: calc(50% - 1px);
+        width: 100%;
     }
 
     .section-icon-trio {
         margin: 40px auto 0 auto;
+    }
+
+    .home-banner .bottom-icons {
+        position: relative;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .home-image-section {
+        margin-top: 40px;
     }
 
 
