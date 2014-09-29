@@ -159,17 +159,9 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant)
             return grantsref.peopleReady = false;
         
-        var doc_id = grantsref.issue[0].getDocs().grant.doc_id;
-        
         if (!grantsref.docsshare.emails || !grantsref.docsshare.emails.length)
             return grantsref.peopleReady = false;
         
-        for (var e in grantsref.docsshare.emails)
-        {
-            if (!grantsref.docsshare.prepCache[doc_id][e])
-                return grantsref.peopleReady = false;
-        }
-        
-        grantsref.peopleReady = true;
+        return grantsref.docsshare.allPreparedCache();
     };
 }]);
