@@ -55,7 +55,6 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
                 return doc.preparedFor;
             }, function() {
                 grantsref.updateUnitsFromDocs();
-                grantsref.setReady();
                 y();
             });
             z = $rootScope.$watchCollection(function() {
@@ -64,7 +63,6 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
                 if (v)
                 {
                     grantsref.updateUnitsFromDocs();
-                    grantsref.setReady();
                     z();
                 }
             });
@@ -74,15 +72,9 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
             defaultUnits = 0;
             unitsOverrides = {};
             grantsref.unitsFromDocs = 0;
-            grantsref.setReady();
         }
     });
-    
-    this.setReady = function() {
-        grantsref.setChooseReady();
-        grantsref.setPeopleReady();
-    }
-    
+
     var defaultUnits = 0;
     var unitsOverrides = {};
 
@@ -120,10 +112,11 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         }
 
         grantsref.docsshare.emails.forEach(function(investor) {
-            if (doc.preparedFor[investor] && doc.preparedFor[investor].overrides[annot[0].id])
-            {
+            if (doc.preparedFor[investor] && doc.preparedFor[investor].overrides[annot[0].id]) {
                 units += parseFloat(doc.preparedFor[investor].overrides[annot[0].id]) - defaultUnits;
                 unitsOverrides[investor] = parseFloat(doc.preparedFor[investor].overrides[annot[0].id]);
+            } else {
+                delete unitsOverrides[investor];
             }
         });
 
@@ -135,33 +128,29 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         if (issue)
             this.issue.push(issue);
     };
-    
-    
-    this.chooseReady = false;
-    
-    this.setChooseReady = function() {
+
+
+    this.isChooseReady = function() {
         if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant)
         {
-            grantsref.chooseReady = false;
-            return;
+            return false;
         }
         var document = Documents.getOriginal(grantsref.issue[0].getDocs().grant.doc_id);
         if (document) {
-            grantsref.chooseReady = document.validTransaction();
+            return document.validTransaction();
         } else {
-            grantsref.chooseReady = false;
+            return false;
         }
     };
-    
-    this.peopleReady = false;
-    
-    this.setPeopleReady = function() {
+
+
+    this.isPeopleReady = function() {
         if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant)
-            return grantsref.peopleReady = false;
-        
+            return false;
+
         if (!grantsref.docsshare.emails || !grantsref.docsshare.emails.length)
-            return grantsref.peopleReady = false;
-        
-        grantsref.peopleReady = grantsref.docsshare.allPreparedCache();
+            return false;
+
+        return grantsref.docsshare.allPreparedCache();
     };
 }]);

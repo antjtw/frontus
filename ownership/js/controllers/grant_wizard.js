@@ -5,7 +5,7 @@ app.controller('chooseGrantIssue',
         $scope.issue = grants.issue;
         
         $scope.ready = function() {
-            return grants.chooseReady;
+            return grants.isChooseReady();
         };
 }]);
 
@@ -26,7 +26,7 @@ app.controller('peopleGrantIssue',
         $scope.issue = grants.issue;
         
         $scope.ready = function() {
-            return grants.peopleReady;
+            return grants.isPeopleReady();
         };
 }]);
 

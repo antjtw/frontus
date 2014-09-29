@@ -1,7 +1,7 @@
 <div class="wizard-tile wizard-flow">
     <h2>Linked Documents</h2>
     <div class="wizard-right">
-        <p>These documents will be shared with each option grant recipient. The option agreement must be prepared as a template, so it can be re-used for each option grant.</p>
+        <p>These documents will be shared with each option grant recipient. The option agreement<br>must be prepared as a template, so it can be re-used for each option grant.</p>
         <ul class="wizard-linking">
             <li>
                 <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
@@ -28,7 +28,7 @@
                                 <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li ng-click="prepareDoc(doc.doc_id)"><a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">Prepare</a></li>
+                                    <li ng-click="prepareDoc(doc.doc_id)"><a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">Add Annotations</a></li>
                                     <li ng-click="issue[0].removeDoc(doc)"><a>Unlink</a></li>
                                 </ul>
                             </li>

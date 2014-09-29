@@ -2561,7 +2561,6 @@ div.profile-link > span:first-of-type {
 
 .unlink-transaction {
     font-size: 12px;
-    cursor: pointer;
     color: #1E2D3D;
     display: inline-block;
     margin-left: 50px;

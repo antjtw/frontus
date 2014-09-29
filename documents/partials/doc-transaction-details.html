@@ -1,4 +1,4 @@
-<div class="bottom-padded" ng-hide="doc.issue">
+<div class="bottom-padded" ng-hide="true">
     <div>
     <span>Do you want to link this document with a Cap Table transaction?</span>
     <input ui-select2="select2Options" ng-model="selectedIssue">
@@ -7,7 +7,7 @@
 </div>
 <div ng-show="doc.issue">
     <accordion class="lessmargin transaction-accordion" close-others="true">
-        <accordion-group is-open="true" ng-switch on="currentTab">
+        <accordion-group ng-switch on="currentTab">
             <accordion-heading>
                 <span>How to create grant templates</span>
             </accordion-heading>
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </accordion-group>
-        <accordion-group ng-switch on="currentTab">
+        <accordion-group is-open="true" ng-switch on="currentTab">
             <accordion-heading>
                 <span>To-do list</span>
             </accordion-heading>
@@ -37,7 +37,8 @@
                     <span ng-show="field.required">(Required)</span>
                 </div>
             </div>
-            <span ng-show="doc.numFieldsComplete() == 0" class='unlink-transaction' ng-click="doc.unsetTransaction();">Unlink document from transaction</span>
+            <span class='unlink-transaction'>If signatures are required, add them now. Your company signature will be hidden until the document is signed by your recipient, and affixed on your approval.</span>
+            <span ng-show="false" class='unlink-transaction' ng-click="doc.unsetTransaction();">Unlink document from transaction</span>
         </accordion-group>
     </accordion>
 </div>
