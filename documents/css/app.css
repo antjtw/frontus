@@ -2558,3 +2558,12 @@ div.profile-link > span:first-of-type {
 .document-list {
     padding-bottom: 20px;
 }
+
+.unlink-transaction {
+    font-size: 12px;
+    cursor: pointer;
+    color: #1E2D3D;
+    display: inline-block;
+    margin-left: 50px;
+    margin-bottom: 10px;
+}

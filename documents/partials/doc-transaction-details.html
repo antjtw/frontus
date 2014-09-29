@@ -37,6 +37,7 @@
                     <span ng-show="field.required">(Required)</span>
                 </div>
             </div>
+            <span ng-show="doc.numFieldsComplete() == 0" class='unlink-transaction' ng-click="doc.unsetTransaction();">Unlink document from transaction</span>
         </accordion-group>
     </accordion>
 </div>

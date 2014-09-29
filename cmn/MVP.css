@@ -5517,8 +5517,9 @@ grant-wizard-nav a.active {
 }
 
 .wizard-tile td.status-toggle {
-    min-width: 27px;
-    max-width: 27px;
+    min-width: 40px;
+    max-width: 40px;
+    width: 40px;
 }
 
 .wizard-tile .preview-docs {
