@@ -698,9 +698,8 @@ navm.controller('NavCtrl',
             });
         };
         $rootScope.nextInvoice = function() {
-            if ($rootScope.billing && $rootScope.billing.next_invoice_received) {
-                return $rootScope.billing.invoices &&
-                    $rootScope.billing.invoices[$rootScope.billing.invoices.length-1];
+            if ($rootScope.billing && $rootScope.billing.next_invoice) {
+                return $rootScope.billing.next_invoice;
             } else {
                 return false;
             }
@@ -727,10 +726,7 @@ navm.controller('NavCtrl',
             .then(function(x) {
                 if (x && x.length>0 && x != "invalid request") {
                     var resp = JSON.parse(x);
-                    if (!$rootScope.billing.next_invoice_received) {
-                        //$rootScope.billing.invoices.push(resp);
-                        $rootScope.billing.next_invoice_received = true;
-                    }
+                    $rootScope.billing.next_invoice = resp;
                 } else {
                 }
             });
