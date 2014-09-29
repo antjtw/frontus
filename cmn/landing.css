@@ -473,6 +473,14 @@ h2.key-header.old-page {
         font-size: 18px;
     }
 
+    .home-banner {
+        height: auto;
+    }
+
+    .home-banner .bottom-icons {
+        overflow: auto;
+    }
+
     .home-banner .bottom-icons > li {
         width: 100%;
     }
@@ -485,6 +493,10 @@ h2.key-header.old-page {
         position: relative;
         margin-top: 30px;
         margin-bottom: 30px;
+    }
+
+    .home-image-section {
+        margin-top: 40px;
     }
 
 
