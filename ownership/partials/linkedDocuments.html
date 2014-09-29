@@ -1,7 +1,7 @@
 <div class="wizard-tile wizard-flow">
     <h2>Linked Documents</h2>
     <div class="wizard-right">
-        <p>Each document will be shared with option grant recipient. The option agreement must be prepared as a template to be re-used for each recipient.</p>
+        <p>These documents will be shared with each option grant recipient. The option agreement must be prepared as a template, so it can be re-used for each option grant.</p>
         <ul class="wizard-linking">
             <li>
                 <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
@@ -44,9 +44,21 @@
                         </a>
                     </div>
                     <div class="documentUploadFileInputs fileinputs pull-right" ng-if="!doc.docname && !uploading[type]">
-                        <input multiple type="file" class='file'
-                               accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
-                               onchange="angular.element(this).scope().setFiles(this, type);"/>
+                        <div ng-if="type == 'plan'">
+                            <input multiple type="file" class='file'
+                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                   onchange="angular.element(this).scope().setFiles(this, 'plan');"/>
+                        </div>
+                        <div ng-if="type == 'grant'">
+                            <input multiple type="file" class='file'
+                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                   onchange="angular.element(this).scope().setFiles(this, 'grant');"/>
+                        </div>
+                        <div ng-if="type == 'exercise'">
+                            <input multiple type="file" class='file'
+                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                   onchange="angular.element(this).scope().setFiles(this, 'exercise');"/>
+                        </div>
                         <div class="documentUpload fakefile">
                             <div class="standard-button gray">
                                 <button class="btn">Upload</button>
