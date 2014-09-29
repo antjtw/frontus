@@ -351,6 +351,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         validTransaction: function() {
+            if (this.annotations.some(function(annot) {
+                return ((annot.whattype == 'ImgSignature') && (annot.isInvalid()));
+            })) {
+                return false;
+            }
             if (!this.issue) {
                 // no issue == no transaction == valid
                 return true;
