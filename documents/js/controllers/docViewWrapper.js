@@ -7,7 +7,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.nextAnnotationType = 'text';
 
         $scope.setTab = function() {
-            if ($scope.doc.annotations.length > 0 && ($scope.actionNeeded() || $scope.prepareable() || navState.role == 'investor')) {
+            if ($scope.doc.annotations.length > 0 && ($scope.actionNeeded() || $scope.prepareable())) {
                 $scope.annottab = true;
                 $scope.infotab = false;
             } else {
