@@ -13,7 +13,7 @@
                     <div class="wizard-selected-doc" ng-if="doc.docname">
                         <span ng-if="type == 'plan'">Option Plan</span>
                         <span ng-if="type == 'grant'">Option Agreement</span>
-                        <span ng-if="type == 'exercise'">Exercise Agreement</span>
+                        <span ng-if="type == 'exercise'">Notice of Exercise</span>
                         <a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">{{doc.docname}}</a>
                         <span ng-click="issue[0].removeDoc(doc)" data-icon="&#xe00f;" aria-hidden="true"></span>
                     </div>
@@ -21,7 +21,7 @@
                         <div droppable drop="handleDrop" bin="bin" id="{{type}}">
                             <span ng-if="type == 'plan'">Option Plan</span>
                             <span ng-if="type == 'grant'">Option Agreement</span>
-                            <span ng-if="type == 'exercise'">Exercise Agreement</span>
+                            <span ng-if="type == 'exercise'">Notice of Exercise</span>
                         </div>
                     </div>
                 </div>
