@@ -4976,6 +4976,11 @@ li.event.roles > div > ul {
     color: #3498DB;
 }
 
+.noGroups.margin-top {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
 .linkedDocuments .noGroups{
     padding-right: 20px;
 }

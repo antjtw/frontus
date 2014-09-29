@@ -51,7 +51,7 @@ service.service('payments', function(SWBrijj, $filter, $rootScope) {
                                " off";
         }
         if (discount.end) {
-            formatted_coupon += ' until ' + formatDate(discount['end']);
+            formatted_coupon += ' until ' + formatDate(discount.end);
         }
         return formatted_coupon;
     };
@@ -256,7 +256,8 @@ service.service('Investor', ['SWBrijj', 'navState', '$q', '$window', function(SW
             var p = $q.defer();
             SWBrijj.procm('account.get_user_from_email', email).then(function(data) {
                 if (data.length === 0 || data[0].user_id === null) {
-                    p.reject();
+                    // user not found
+                    p.resolve(null);
                 } else {
                     inv_service.names[data[0].user_id] = data[0].name;
                     p.resolve(data[0].user_id);
