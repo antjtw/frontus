@@ -1,7 +1,7 @@
 <div class="wizard-tile wizard-flow">
     <h2>Linked Documents</h2>
     <div class="wizard-right">
-        <p>In order to issue options, you will need to upload a few documents for your employees to complete. </p>
+        <p>Each document will be shared with option grant recipient. The option agreement must be prepared as a template to be re-used for each recipient.</p>
         <ul class="wizard-linking">
             <li>
                 <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
@@ -13,13 +13,13 @@
                               aria-hidden="true"></span>
                         <span tooltip-placement="top"
                               tooltip="{{errorTooltip(doc)}}"
-                              ng-show="!doc.docname || !isPrepared(doc.doc_id)"
+                              ng-show="(!doc.docname || !isPrepared(doc.doc_id)) && type != 'exercise'"
                               data-icon="&#xe612;"
                               aria-hidden="true"></span>
                     </div>
                     <div class="wizard-doc" ng-if="type == 'plan'">Plan</div>
                     <div class="wizard-doc" ng-if="type == 'grant'">Agreement</div>
-                    <div class="wizard-doc" ng-if="type == 'exercise'">Exercise</div>
+                    <div class="wizard-doc" ng-class="{'noicon': !doc.docname}" ng-if="type == 'exercise'">Exercise</div>
                     <div ng-if="doc.docname"><a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">{{doc.docname}}</a></div>
                     <div ng-if="!doc.docname && uploading[type]"><a>Processing . . . </a></div>
                     <div class="wizard-selects pull-right">

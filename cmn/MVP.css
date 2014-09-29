@@ -5502,6 +5502,10 @@ grant-wizard-nav a.active {
     margin-left: 5px;
 }
 
+.wizard-linking > li > div > div.wizard-doc.noicon {
+    margin-left: 20px;
+}
+
 .wizard-linking a {
     color: #3397da;
 }
