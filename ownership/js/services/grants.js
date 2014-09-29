@@ -173,7 +173,7 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         
         for (var a in document.annotations)
         {
-            if (document.annotations[a].type_info.required && document.annotations[a].whosign == "Issuer")
+            if ((document.annotations[a].type_info.required || document.annotations[a].required) && document.annotations[a].whosign == "Issuer")
             {
                 if (!document.annotations[a].isInvalid())
                     continue;
