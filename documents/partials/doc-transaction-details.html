@@ -1,4 +1,4 @@
-<div class="bottom-padded" ng-hide="doc.issue">
+<div class="bottom-padded" ng-hide="true">
     <div>
     <span>Do you want to link this document with a Cap Table transaction?</span>
     <input ui-select2="select2Options" ng-model="selectedIssue">
@@ -37,7 +37,7 @@
                     <span ng-show="field.required">(Required)</span>
                 </div>
             </div>
-            <span ng-show="doc.numFieldsComplete() == 0" class='unlink-transaction' ng-click="doc.unsetTransaction();">Unlink document from transaction</span>
+            <span ng-show="false" class='unlink-transaction' ng-click="doc.unsetTransaction();">Unlink document from transaction</span>
         </accordion-group>
     </accordion>
 </div>
