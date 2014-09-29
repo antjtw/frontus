@@ -53,7 +53,6 @@ app.directive('grantDocPrep', [function() {
                     $scope.doc_arr.push(doc);
                 });
                 grants.updateUnitsFromDocs();
-                grants.setReady();
             });
 
             function filterInvestors(investorList, emails) {
@@ -91,7 +90,6 @@ app.directive('grantDocPrep', [function() {
                                 }
                             });
                             grants.updateUnitsFromDocs();
-                            grants.setReady();
                         });
                     });
                 }
@@ -102,7 +100,6 @@ app.directive('grantDocPrep', [function() {
             $scope.removeRecipient = function(id) {
                 grants.docsshare.removeRecipient(id);
                 grants.updateUnitsFromDocs();
-                grants.setReady();
             };
 
             $scope.bulkPrepable = function(annotation) {
@@ -113,13 +110,8 @@ app.directive('grantDocPrep', [function() {
                 }
             };
 
-            $scope.updateReady = function() {
-                grants.setReady();
-            };
-
             $scope.updateUnitsFromDocs = function() {
                 grants.updateUnitsFromDocs();
-                $scope.updateReady();
             };
         }]
     };
