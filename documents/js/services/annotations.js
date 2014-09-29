@@ -209,13 +209,13 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             return false;
         },
         isEmpty: function(user) {
+            var val = this.getValWithOverride(user);
             if (this.whattype == "ImgSignature") {
-                if (value == "" || value == "Personal")
+                if (val === "" || val == "Personal")
                     return !User.signaturePresent;
                 return !this.type_info.labels || val === undefined || val === null || val.length === 0;
             } else {
                 // all others (assume a base text type)
-                var val = this.getValWithOverride(user);
                 return (val === undefined || val === null || val.length === 0);
             }
         },
@@ -232,7 +232,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             } else {
                 if (this.whattype == "ImgSignature")
                 {
-                    if (value == "" || value == "Personal")
+                    if (value === "" || value == "Personal")
                         return User.signaturePresent;
                     return this.type_info.labels && (this.type_info.labels.indexOf(value) != -1);
                 }
