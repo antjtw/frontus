@@ -54,7 +54,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
         this.type = "text";
         this.val = '';
         this.fontsize = 12;
-        this.whosign = "Investor";
+        this.whosign = "Issuer";
         this.whattype = "Text";
         this.required = true;
         this.id = generateAnnotationId();
