@@ -543,13 +543,13 @@ div.fixednav{
     top: 0px;
     width: 100%;
     height: 30px;
-    background-color: rgb(30, 45, 61);
+    background-color: #1E2D3D;
     -webkit-transition: top 0.2s ease-in-out;
     -moz-transition: top 0.2s ease-in-out;
     -o-transition: top 0.2s ease-in-out;
     transition: top 0.2s ease-in-out;
-    background-color: rgba(255,255,255, 1);
-    border-bottom: 1px solid #C6C6C6;
+    border-bottom: 1px solid #34495E;
+    border-top: 1px solid #34495E;
 }
 
 .external-subnav > div.centered-menu {
@@ -583,24 +583,23 @@ div.fixednav{
     text-transform: uppercase;
     font-family: 'FS Elliot Web Bold', sans-serif;
     font-size: 12px;
-    color: #A5A5A5;
+    color: #C6C6C6;
 }
 
 .external-subnav > div.centered-menu ul li > a:hover {
-    color: #666666;
+    color: #A6A6A6;
 }
 
 .external-subnav > div.centered-menu ul li > a.active {
-    color: #1d2c3c;
+    color: #F1F1F1;
 }
 
 .scrolleddown.external-subnav {
-    top: 41px;
+    top: 40px;
 }
 
 .navBarLoggedOut .topnav {
-    background-color: rgba(255,255,255, 1);
-    border-bottom: 1px solid #C6C6C6;
+    background-color: #1E2D3D;
     -webkit-transition: height 0.2s ease-in-out;
     -moz-transition: height 0.2s ease-in-out;
     -o-transition: height 0.2s ease-in-out;
@@ -711,7 +710,7 @@ ul.nav-logo > li > a > img {
 .topnav .nav > li.login-link > a {
     text-transform: uppercase;
     font-size: 14px;
-    color: #A5A5A5;
+    color: #C6C6C6;
     font-family: 'FS Elliot Web Bold', sans-serif;
     letter-spacing: 0.1em;
     width: 100px;
@@ -720,7 +719,7 @@ ul.nav-logo > li > a > img {
 
 .topnav .nav.nav-item > li.login-link > a:hover {
     background-color: transparent;
-    color: #666666;
+    color: #A6A6A6;
 }
 
 .topnav .content-pages {
@@ -761,13 +760,13 @@ ul.nav-logo > li > a > img {
     margin-right: 0;
     text-transform: uppercase;
     font-size: 14px;
-    color: #A5A5A5;
+    color: #C6C6C6;
     font-family: 'FS Elliot Web Bold', sans-serif;
     letter-spacing: 0.1em;
 }
 
 .topnav .content-pages .nav > li > a.active {
-    color: #1d2c3c;
+    color: #F1F1F1;
 }
 
 .scrolleddown .topnav .content-pages .nav > li > a {
@@ -775,7 +774,7 @@ ul.nav-logo > li > a > img {
 }
 
 .topnav .content-pages .nav > li > a:hover {
-   color: #666666;
+   color: #A6A6A6;
 }
 
 .topnav .nav.nav-logo > li > a {
