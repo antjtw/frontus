@@ -251,12 +251,14 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             captable.cells.splice(0);
             captable.grantCells.splice(0);
             captable.attributes.splice(0);
-
             results[0].forEach(function(ledger_entry) {
                 captable.ledger_entries.push(ledger_entry);
             });
             results[1].forEach(function(raw_transaction) {
-                captable.transactions.push(parseTransaction(raw_transaction));
+                var tmp = parseTransaction(raw_transaction);
+                if (!tmp.attrs || !tmp.kind)
+                    return;
+                captable.transactions.push(tmp);
             });
             results[2].forEach(function(raw_name) {
                 captable.investors.push(rowFromName(raw_name));
@@ -2215,7 +2217,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         {
             return true;
         }
-        if (!transaction.attrs.security_type)
+        if (!transaction.attrs || !transaction.attrs.security_type)
         {
             return false;
         }
