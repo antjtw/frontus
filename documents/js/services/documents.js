@@ -3,7 +3,8 @@
 var docs = angular.module('docServices');
 
 // TODO: should really have a document factory
-docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", "navState", function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs, navState) {
+docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Investor", "ShareDocs", "navState", "$timeout",
+                           function(Annotations, SWBrijj, $q, $rootScope, Investor, ShareDocs, navState, $timeout) {
     // transaction_attributes is needed to set the annotation types for this document
     var transaction_attributes = null;
     var transaction_attributes_callbacks = [];
@@ -468,28 +469,30 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         savePreparation: function(investor) {
-            var notes = [];
-            angular.forEach(this.annotations, function(note) {
-                if (note.whosign == "Issuer" && this.preparedFor && this.preparedFor[investor]) {
-                    // don't save the override if it's empty or equal to the base value
-                    if (this.preparedFor[investor].overrides[note.id] &&
-                        this.preparedFor[investor].overrides[note.id] !== "" &&
-                        this.preparedFor[investor].overrides[note.id] != note.val) {
-                        notes.push({id: note.id, val: this.preparedFor[investor].overrides[note.id]});
-                    }
-                }
-            }, this);
             var doc = this;
-            SWBrijj.procm('document.update_preparation', this.doc_id, investor, JSON.stringify(notes)).then(function(result) {
-                // data stored, got back is_prepared, so update preparedFor with that and the overrides
-                doc.preparedFor[investor].is_prepared = result[0].update_preparation;
-                if (!ShareDocs.prepCache[doc.doc_id]) {
-                    ShareDocs.prepCache[doc.doc_id] = {};
-                }
-                ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
-            }).except(function(error) {
-                $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
-            });
+            $timeout(function() {
+                var notes = [];
+                doc.annotations.forEach(function(note) {
+                    if (note.whosign == "Issuer" && doc.preparedFor && doc.preparedFor[investor]) {
+                        // don't save the override if it's empty or equal to the base value
+                        if (doc.preparedFor[investor].overrides[note.id] &&
+                            doc.preparedFor[investor].overrides[note.id] !== "" &&
+                            doc.preparedFor[investor].overrides[note.id] != note.val) {
+                                notes.push({id: note.id, val: doc.preparedFor[investor].overrides[note.id]});
+                        }
+                    }
+                });
+                SWBrijj.procm('document.update_preparation', doc.doc_id, investor, JSON.stringify(notes)).then(function(result) {
+                    // data stored, got back is_prepared, so update preparedFor with that and the overrides
+                    doc.preparedFor[investor].is_prepared = result[0].update_preparation;
+                    if (!ShareDocs.prepCache[doc.doc_id]) {
+                        ShareDocs.prepCache[doc.doc_id] = {};
+                    }
+                    ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
+                }).except(function(error) {
+                    $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+                });
+            }, 100); // TODO: 100 ms seems like enough time to let bs-datepicker actually change the data. Figure out why it doesn't just work without this
         }
     };
 

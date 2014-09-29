@@ -42,7 +42,8 @@ app.directive('grantDocPrep', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantDocPrep.html',
-        controller: ["$scope", "grants", "Documents", "Investor", "navState", function($scope, grants, Documents, Investor, navState) {
+        controller: ["$scope", "grants", "Documents", "Investor", "navState", "$rootScope",
+                     function($scope, grants, Documents, Investor, navState, $rootScope) {
             initDocInfo($scope, grants);
             $scope.doc_arr = [];
             $scope.$watchCollection('docs', function(docs) {
