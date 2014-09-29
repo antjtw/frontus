@@ -132,6 +132,9 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         removeDoc: function(doc) {
             var security = this;
             return SWBrijj.procm('ownership.remove_issue_document', this.transactions[0].transaction, doc.doc_id, doc.type, doc.label).then(function(x) {
+                if (doc.type == "grant") {
+                    SWBrijj.update("document.my_company_library", {issue: null, transaction_type: null}, {doc_id: doc.doc_id});
+                }
                 delete security.docs[doc.type];
             }).except(logError);
         },

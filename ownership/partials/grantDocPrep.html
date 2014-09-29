@@ -49,7 +49,7 @@
                                     ng-class="{required: annot.isInvalid(email)}">
                                     <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype != 'units'"
                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
-                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email); updateReady();">
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email);">
                                     <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype == 'units'"
                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
                                            ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email); updateUnitsFromDocs();">
