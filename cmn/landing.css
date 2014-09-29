@@ -16,7 +16,7 @@ h3 {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding-top: 80px;
+    padding-top: 140px;
     height: 100vh;
     position: relative;
 
@@ -214,7 +214,7 @@ h2.key-header.old-page {
 }
 
 .home-banner .bottom-icons > li > div:first-of-type {
-    margin-top: 100%;
+    margin-top: 71.6%;
 }
 
 .home-banner .bottom-icons > li > div:last-of-type {
@@ -238,19 +238,19 @@ h2.key-header.old-page {
     line-height: 34px;
     color: #F1F1F1;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .home-banner .bottom-icons > li:nth-child(1) > div:last-of-type {
-    background-image:url('../img/stock/piggy-big.jpg');
+    background-image:url('../img/stock/piggy.jpg');
 }
 
 .home-banner .bottom-icons > li:nth-child(2) > div:last-of-type {
-    background-image:url('../img/stock/money-jar-big.jpg');
+    background-image:url('../img/stock/money-jar.jpg');
 }
 
 .home-banner .bottom-icons > li:nth-child(3) > div:last-of-type {
-    background-image:url('../img/stock/employee-big.jpg');
+    background-image:url('../img/stock/employee.jpg');
 }
 
 .home-banner .bottom-icons > li > span:first-child {
