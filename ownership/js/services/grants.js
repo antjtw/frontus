@@ -162,6 +162,6 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
         if (!grantsref.docsshare.emails || !grantsref.docsshare.emails.length)
             return grantsref.peopleReady = false;
         
-        return grantsref.docsshare.allPreparedCache();
+        grantsref.peopleReady = grantsref.docsshare.allPreparedCache();
     };
 }]);
