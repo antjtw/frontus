@@ -5646,7 +5646,7 @@ grant-doc-prep .name-table {
     width: 250px;
     float: left;
     white-space: nowrap;
-    margin-top: 71px;
+    margin-top: 69px;
 }
 grant-doc-prep .name-table td {
     height: 40px;
@@ -5704,14 +5704,21 @@ grant-doc-prep .sub-doc-table tr:not(:first-child) td {
     padding-left: 5px;
 }
 
+grant-doc-prep .sub-doc-table .annotation-headers {
+    text-transform: capitalize;
+}
+
 grant-doc-prep .doc-table th {
     text-align: left;
 }
 
 grant-doc-prep table.sub-doc-table {
-    border-left: 1px solid #F1F1F1;
     border-right: 1px solid #F1F1F1;
     width: 100%;
+}
+
+grant-doc-prep table.sub-doc-table:first-of-type {
+    border-left: 1px solid #F1F1F1;
 }
 
 grant-doc-prep .doc-table table > tr > td {
