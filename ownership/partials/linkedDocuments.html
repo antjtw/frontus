@@ -6,8 +6,16 @@
             <li>
                 <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
                     <div>
-                        <span ng-show="doc.docname && isPrepared(doc.doc_id)" data-icon="&#xe052;" aria-hidden="true"></span>
-                        <span ng-show="!doc.docname || !isPrepared(doc.doc_id)" data-icon="&#xe612;" aria-hidden="true"></span>
+                        <span tooltip-placement="top"
+                              tooltip="Document ready to share"
+                              ng-show="doc.docname && isPrepared(doc.doc_id)"
+                              data-icon="&#xe052;"
+                              aria-hidden="true"></span>
+                        <span tooltip-placement="top"
+                              tooltip="{{errorTooltip(doc)}}"
+                              ng-show="!doc.docname || !isPrepared(doc.doc_id)"
+                              data-icon="&#xe612;"
+                              aria-hidden="true"></span>
                     </div>
                     <div class="wizard-doc" ng-if="type == 'plan'">Plan</div>
                     <div class="wizard-doc" ng-if="type == 'grant'">Agreement</div>
