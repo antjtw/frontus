@@ -80,8 +80,16 @@ app.directive('grantDocPrep', [function() {
                             // can't be an email, probably gibberish
                             return;
                         }
-                        grants.docsshare.addRecipient(email);
-                        grants.updateUnitsFromDocs();
+                        grants.docsshare.addRecipient(email).then(function(uid) {
+                            // docsshare has resolved the email to a user_id for us
+                            $scope.doc_arr.forEach(function(doc) {
+                                // TODO: docsshare.addRecipient should probably do this, but it doesn't have actual Document objects
+                                if (!doc.preparedFor[uid]) {
+                                    doc.addPreparedFor(uid);
+                                }
+                            });
+                            grants.updateUnitsFromDocs();
+                        });
                     });
                 }
             };
@@ -100,7 +108,7 @@ app.directive('grantDocPrep', [function() {
                     return true;
                 }
             };
-            
+
             $scope.updateReady = function() {
                 grants.setReady();
             };
