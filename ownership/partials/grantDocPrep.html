@@ -23,6 +23,9 @@
                     </td>
                 </tr>
             </table>
+            <span ng-class="{'emptyadd': emails.length == 0}" class="wizard-add">
+                <input ui-select2="recipientSelectOptions" ng-model="newRecipient" ng-change="addShareEmail(newRecipient); newRecipient=''">
+            </span>
         </div>
         <div class="doc-table">
             <table>
@@ -68,11 +71,10 @@
                         </table>
                     </td>
                 </tr>
+                <tr class="wizard-footer-row">
+                    <td></td>
+                </tr>
             </table>
         </div>
     </div>
-    <span class="wizard-add">
-        <input ui-select2="recipientSelectOptions" ng-model="newRecipient" ng-change="addShareEmail(newRecipient); newRecipient=''">
-        <div></div>
-    </span>
 </div>
