@@ -329,24 +329,34 @@ app.controller('CompContactCtrl',
                         $scope.$emit("notification:fail",
                             "Oops, please reactivate your subscription before making other updates.");
                     }
-                    $rootScope.billing.payment_token = response.id;
+                    $scope.ccModalClose();
+                    $scope.$emit("notification:success", "Processing new credit card");
                     if ($rootScope.billing.customer_id) {
-                        payments.update_payment($rootScope.billing.payment_token)
-                            .then(function(x) {
-                                if (x[1][0] !== 1) {
+                        SWBrijj.stripe(['set_new_card', $rootScope.billing.customer_id, response.id, response.card.id]).then(function(cus){
+                            var cus2 = JSON.parse(cus);
+                            $rootScope.billing.payment_token = cus2.default_card;
+                            payments.update_payment($rootScope.billing.payment_token)
+                                .then(function(x) {
+                                    if (x[1][0] !== 1) {
+                                        $scope.$emit("notification:fail",
+                                            "Oops, something went wrong. Please try again.");
+                                    } else {
+                                        cus2.cards.data.forEach(function(card) {
+                                            if (card.id == cus2.default_card)
+                                                $rootScope.billing.current_card = card;
+                                        });
+                                        $scope.$emit("notification:success",
+                                            "Credit card updated");
+                                    }
+                                }).except(function(err) {
+                                    console.log(err);
                                     $scope.$emit("notification:fail",
-                                        "Oops, something went wrong. Please try again.");
-                                } else {
-                                    $scope.$emit("notification:success",
-                                        "Processing new credit card");
-                                    $scope.ccModalClose();
-                                }
-                            }).except(function(err) {
-                                console.log(err);
-                            });
+                                            "Oops, something went wrong. Please try again.");
+                                });
+                        });
                     } else {
-                        $scope.$emit("notification:success",
-                            "Credit Card Verified");
+                        $scope.$emit("notification:fail",
+                            "Oops, something went wrong. Please refresh and try again.");
                         $scope.ccModalClose();
                     }
                 }

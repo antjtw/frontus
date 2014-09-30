@@ -3,7 +3,7 @@
 app.controller('chooseGrantIssue',
     ["$scope", "grants", "Documents", function($scope, grants, Documents){
         $scope.issue = grants.issue;
-        
+
         $scope.ready = function() {
             return grants.isChooseReady();
         };
@@ -24,7 +24,7 @@ app.controller('docsGrantIssue',
 app.controller('peopleGrantIssue',
     ["$scope", "grants", "Documents", function($scope, grants, Documents){
         $scope.issue = grants.issue;
-        
+
         $scope.ready = function() {
             return grants.isPeopleReady();
         };
@@ -32,9 +32,15 @@ app.controller('peopleGrantIssue',
 
 app.controller('reviewGrantIssue',
     ["$scope", "grants", "$rootScope", "$location", function($scope, grants, $rootScope, $location){
+        $scope.processing = false;
         $scope.send = function() {
+            if ($scope.processing) {
+                return;
+            }
+            $scope.processing = true;
             grants.docsshare.shareDocuments().then(function(res) {
                 $rootScope.$emit("notification:success", "Option grants sent!");
+                $scope.processing = false;
                 $location.path('/app/home/company'); // TODO: redirect to the grants page, once that page shows in-flight documents (not in the transaction table yet)
             }).catch(function(err) {
                 if (err === "Not all documents prepared for all people") {
@@ -42,6 +48,7 @@ app.controller('reviewGrantIssue',
                 } else {
                     $rootScope.$emit("notification:fail", "Oops, something went wrong.");
                 }
+                $scope.processing = false;
             });
         };
 }]);
