@@ -973,11 +973,9 @@ m.directive('investorTile', function(){
                 angular.forEach($scope.allTransactions, function(tran) {
                     tran[calculate.primaryMeasure(tran.attrs.security_type)] = 0;
                     angular.forEach($scope.cti.ledger_entries, function(ledger) {
-                        if (tran.transaction == ledger.transaction) {
+                        if (tran.transaction == ledger.transaction && ledger.investor) {
                             if (calculate.isNumber(ledger.credit)) {
-                                console.log(parseFloat(ledger.credit));
                                 tran[calculate.primaryMeasure(tran.attrs.security_type)] += parseFloat(ledger.credit);
-                                console.log(tran[calculate.primaryMeasure(tran.attrs.security_type)]);
                             }
                             if (calculate.isNumber(ledger.debit)) {
                                 tran[calculate.primaryMeasure(tran.attrs.security_type)] -= parseFloat(ledger.debit);
