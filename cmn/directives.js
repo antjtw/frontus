@@ -965,6 +965,7 @@ m.directive('investorTile', function(){
                     });
 
                 });
+                console.log($scope.allTransactions);
                 return($scope.allTransactions);
             };
 
