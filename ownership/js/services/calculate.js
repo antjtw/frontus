@@ -376,7 +376,7 @@ ownership.service('calculate', function () {
     };
     this.cleannumber = function(potentialnumber) {
         if (potentialnumber) {
-            var finalnumber = String(potentialnumber).replace(/\,/g,'');
+            var finalnumber = String(potentialnumber).trim().replace(/\,/g,'');
             finalnumber = String(finalnumber).replace(/\$/g , '');
             return finalnumber;
         }
