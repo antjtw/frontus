@@ -2296,7 +2296,8 @@ span.tour-icon.issue-cog + .tooltip {
 }
 
 .cellDetails > .detailsHeader {
-    height: 70px;
+    min-height: 70px;
+    height: initial;
 }
 .detailsHeader {
     height: 100px;
