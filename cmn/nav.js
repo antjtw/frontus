@@ -671,7 +671,10 @@ navm.controller('NavCtrl',
                                 $rootScope.billing.discount =
                                     payments.format_discount(rsp.discount);
                             }
-                            $rootScope.billing.current_card = rsp.cards.data[0];
+                            rsp.cards.data.forEach(function(card) {
+                                if (card.id == rsp.default_card)
+                                    $rootScope.billing.current_card = card;
+                            });
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
                             }
