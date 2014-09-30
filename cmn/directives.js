@@ -971,6 +971,7 @@ m.directive('investorTile', function(){
 
             $scope.getTotalInvested = function(){
                 angular.forEach($scope.allTransactions, function(tran) {
+                    console.log(tran[calculate.primaryMeasure(tran.attrs.security_type)]);
                     tran[calculate.primaryMeasure(tran.attrs.security_type)] = 0;
                     angular.forEach($scope.cti.ledger_entries, function(ledger) {
                         if (tran.transaction == ledger.transaction) {
