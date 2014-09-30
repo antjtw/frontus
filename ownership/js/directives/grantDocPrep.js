@@ -69,7 +69,7 @@ app.directive('grantDocPrep', [function() {
                         'results': filterInvestors(Investor.investors, grants.docsshare.emails)
                     };
                 },
-                placeholder: 'Add Recipients',
+                placeholder: 'Add Recipient Emails',
                 createSearchChoice: Investor.createSearchChoiceMultiple,
             };
             $scope.addShareEmail = function(email_input) {
