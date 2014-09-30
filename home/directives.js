@@ -390,6 +390,11 @@ app.directive('companyOwnershipTile', [function() {
                 $scope.ct = captable.getCapTable();
 
                 $scope.graphdata = [];
+                $scope.loaded = false;
+                captable.captableLoaded().then(function() {
+                    $scope.loaded = true;
+                });
+
 
                 $scope.$watch('ct.securities', function(newval, oldval) {
                     if (newval.length > 0) {
@@ -419,8 +424,6 @@ app.directive('companyOwnershipTile', [function() {
                         maxPercent += percent;
                     });
                 };
-
-                $scope.generateSecurityGraph();
             }
         ],
     };
