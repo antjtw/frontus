@@ -118,9 +118,11 @@ app.directive('grantDocPrep', [function() {
                 $event.preventDefault();
                 var pastedValues = $event.originalEvent.clipboardData.getData('text/plain');
                 var splitValues = pastedValues.split('\n');
-                if (["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1) {
-                    for (var i = 0; i < splitValues.length; i ++) {
+                for (var i = 0; i < splitValues.length; i ++) {
+                    if (["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1) {
                         splitValues[i] = calculate.cleannumber(splitValues[i]);
+                    } else if (["date"].indexOf(annot.type_info.typename) != -1) {
+                        splitValues[i] = calculate.cleandatestr(splitValues[i]);
                     }
                 }
                 // TODO: clean data (numbers -> number format, dates -> date format, etc)

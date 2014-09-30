@@ -281,7 +281,7 @@ ownership.service('calculate', function () {
     var currencydictionary = {'EUR': '€', 'GBP': '£', 'USD': '$'};
 
     this.currencysymbol = function(settings) {
-        return settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$'
+        return settings && currencydictionary[settings.currency] ? currencydictionary[settings.currency] : '$';
     };
 
     this.formatMoneyAmount = function (amount, settings) {
@@ -329,7 +329,6 @@ ownership.service('calculate', function () {
             }
             var finalDate = angular.copy(tran.effective_date).addMonths(length);
             var convertDate = tran.convert_date ? tran.convert_date : new Date.today();
-            console.log("dates", convertDate, cycleDate);
             while (Date.compare(convertDate, cycleDate) > -1 && Date.compare(finalDate.addDays(1), cycleDate) > -1) {
                 amount = parseFloat(amount) + ((parseFloat(tran.attrs.interestrate)/100) * parseFloat(amount));
                 if (x < 1) {
@@ -380,6 +379,19 @@ ownership.service('calculate', function () {
             var finalnumber = String(potentialnumber).replace(/\,/g,'');
             finalnumber = String(finalnumber).replace(/\$/g , '');
             return finalnumber;
+        }
+    };
+    this.cleandatestr = function(potentialdate) {
+        // mostly concerned with turning "9/1/2014" into "09/01/2014" (zero padding)
+        if (potentialdate) {
+            var splitdate = potentialdate.trim().split("/");
+            if (splitdate[0].length < 2) {
+                splitdate[0] = "0" + splitdate[0];
+            }
+            if (splitdate[1].length < 2) {
+                splitdate[1] = "0" + splitdate[1];
+            }
+            return splitdate.join("/");
         }
     };
     function isNumber(val) {
