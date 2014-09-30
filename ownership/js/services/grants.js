@@ -131,13 +131,13 @@ function(captable, $window, $rootScope, SWBrijj, DocShareFactory, Documents) {
 
 
     this.isChooseReady = function() {
-        if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant)
+        if (!grantsref.issue[0] || !grantsref.issue[0].getDocs().grant || !grantsref.issue[0].getDocs().plan)
         {
             return false;
         }
-        var document = Documents.getOriginal(grantsref.issue[0].getDocs().grant.doc_id);
-        if (document) {
-            return document.validTransaction();
+        var doc = Documents.getOriginal(grantsref.issue[0].getDocs().grant.doc_id);
+        if (doc) {
+            return doc.validTransaction();
         } else {
             return false;
         }

@@ -244,7 +244,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 loadAttributes(),
                 loadEvidence(),
                 loadActivity(),
-                loadLogins()])
+                loadLogins(),
+                attributes.waitForLoad()])
         .then(function(results) {
             // reset the existing cap table
             captable.investors.splice(0);
@@ -724,7 +725,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var invs = $filter('getInvestorAttributes')();
         // Security identifying attributes
         var secs = $filter('getSecurityAttributes')();
-
         var trans = captable.transactions.filter(
             function(tran) {
                 // Some transactions do not carry underlier data,

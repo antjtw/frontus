@@ -342,7 +342,7 @@ own.directive('securityDetails', [function() {
 
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
-                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.doc_id+'&page=1');
                     } else if (ev.original !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
@@ -661,7 +661,7 @@ own.directive('cellDetails', [function() {
 
                 $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
-                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.doc_id+'&page=1');
                     } else if (ev.original !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
@@ -1282,7 +1282,7 @@ own.directive('transactionLog', [function() {
 
                   $scope.viewEvidence = function(ev) {
                     if (ev.doc_id !== null) {
-                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.investor+'&page=1');
+                        $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.doc_id+'&page=1');
                     } else if (ev.original !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
@@ -1585,13 +1585,13 @@ own.directive('grantWizardNav', [function() {
         controller: ["$scope", "$rootScope", "navState", "grants",
             function($scope, $rootScope, navState, grants) {
                 $scope.path = navState.path;
-                
+
                 $scope.peopleLink = function() {
                     if (grants.isChooseReady())
                         return "/app/ownership/grants/people";
                     return "/app/ownership/grants/issue";
                 };
-                
+
                 $scope.reviewLink = function() {
                     if (grants.isPeopleReady())
                         return "/app/ownership/grants/review";
@@ -1628,7 +1628,7 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
-                
+
                 $scope.uploading = {};
 
                 var mimetypes = ["application/pdf", // .pdf
