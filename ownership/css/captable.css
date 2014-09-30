@@ -285,7 +285,6 @@ div.last-saved {
 
 .tableView.captable.viewcaptable {
     background: white;
-    table-layout: auto;
 }
 
 .longRow td {
