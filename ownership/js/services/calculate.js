@@ -382,7 +382,7 @@ ownership.service('calculate', function () {
         }
     };
     this.cleandatestr = function(potentialdate) {
-        // mostly concerned with turning "9/1/2014" into "09/01/2014" (zero padding)
+        // mostly concerned with turning "9/1/14" into "09/01/2014" (zero padding)
         if (potentialdate) {
             var splitdate = potentialdate.trim().split("/");
             if (splitdate[0].length < 2) {
@@ -390,6 +390,9 @@ ownership.service('calculate', function () {
             }
             if (splitdate[1].length < 2) {
                 splitdate[1] = "0" + splitdate[1];
+            }
+            if (splitdate[2].length == 2) {
+                splitdate[2] = "20" + splitdate[2];
             }
             return splitdate.join("/");
         }
