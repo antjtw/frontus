@@ -265,7 +265,7 @@ own.directive('editableCaptableCell', [function() {
                 // TODO working except for if there are already transactions in the cells
                 $scope.numberPaste = function(ev, row, sec, type) {
                     var pastedvalues = ev.originalEvent.clipboardData.getData('text/plain');
-                    var splitvalues = pastedvalues.split("\n");
+                    var splitvalues = pastedvalues.split(/[\n|\r]+/);
                     var startindex = -1;
                     angular.forEach($scope.ct.investors, function(investor) {
                         if (investor.name == row) {

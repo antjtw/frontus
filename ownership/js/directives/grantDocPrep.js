@@ -69,7 +69,7 @@ app.directive('grantDocPrep', [function() {
                         'results': filterInvestors(Investor.investors, grants.docsshare.emails)
                     };
                 },
-                placeholder: 'Add Recipients',
+                placeholder: 'Add Recipient Emails',
                 createSearchChoice: Investor.createSearchChoiceMultiple,
             };
             $scope.addShareEmail = function(email_input) {
@@ -117,13 +117,14 @@ app.directive('grantDocPrep', [function() {
             $scope.doPaste = function($event, doc, pastedEmail, annot) {
                 $event.preventDefault();
                 var pastedValues = $event.originalEvent.clipboardData.getData('text/plain');
-                var splitValues = pastedValues.split('\n');
-                if (["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1) {
-                    for (var i = 0; i < splitValues.length; i ++) {
+                var splitValues = pastedValues.split(/[\n|\r]+/);
+                for (var i = 0; i < splitValues.length; i ++) {
+                    if (["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1) {
                         splitValues[i] = calculate.cleannumber(splitValues[i]);
+                    } else if (["date"].indexOf(annot.type_info.typename) != -1) {
+                        splitValues[i] = calculate.cleandatestr(splitValues[i]);
                     }
                 }
-                // TODO: clean data (numbers -> number format, dates -> date format, etc)
                 var found = false;
                 $scope.emails.forEach(function(email) {
                     if (splitValues.length > 0 && (found || email === pastedEmail)) {
