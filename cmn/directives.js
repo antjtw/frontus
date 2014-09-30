@@ -958,7 +958,6 @@ m.directive('investorTile', function(){
                             var newtran = angular.copy(trans);
                             delete newtran.attrs.physical;
                             delete newtran.attrs.investor;
-                            delete newtran.attrs.units;
                             $scope.allTransactions.push(newtran);
                         }
                     });
