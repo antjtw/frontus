@@ -956,7 +956,7 @@ m.directive('investorTile', function(){
                     angular.forEach(cap.transactions, function(trans){
                         if(trans.attrs.investor == name) {
                             var newtran = angular.copy(trans);
-                            newtran.units = angular.copy(newtran.attrs.units);
+                            newtran.units = angular.copy(trans.attrs.units);
                             delete newtran.attrs.physical;
                             delete newtran.attrs.investor;
                             delete newtran.attrs.units;
