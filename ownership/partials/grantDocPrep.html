@@ -49,14 +49,14 @@
                                     ng-class="{required: annot.isInvalid(email)}">
                                     <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype != 'units'"
                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
-                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email);">
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email);" ng-paste="doPaste($event, doc, email, annot);">
                                     <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype == 'units'"
                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
-                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email); updateUnitsFromDocs();">
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email); updateUnitsFromDocs();" ng-paste="doPaste($event, doc, email, annot); updateUnitsFromDocs();">
                                     <input ng-if="annot.type_info.typename == 'date'"
                                            bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
-                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)" ng-paste="doPaste($event, doc, email, annot);">
                                     <select ng-if="annot.type_info.typename == 'enum'" ui-select2
                                             placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
                                             ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">

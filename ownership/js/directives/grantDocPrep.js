@@ -42,8 +42,8 @@ app.directive('grantDocPrep', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantDocPrep.html',
-        controller: ["$scope", "grants", "Documents", "Investor", "navState", "$rootScope",
-                     function($scope, grants, Documents, Investor, navState, $rootScope) {
+        controller: ["$scope", "grants", "Documents", "Investor", "navState", "$rootScope", "calculate",
+                     function($scope, grants, Documents, Investor, navState, $rootScope, calculate) {
             initDocInfo($scope, grants);
             $scope.doc_arr = [];
             $scope.$watchCollection('docs', function(docs) {
@@ -69,7 +69,7 @@ app.directive('grantDocPrep', [function() {
                         'results': filterInvestors(Investor.investors, grants.docsshare.emails)
                     };
                 },
-                placeholder: 'Add Recipients',
+                placeholder: 'Add Recipient Emails',
                 createSearchChoice: Investor.createSearchChoiceMultiple,
             };
             $scope.addShareEmail = function(email_input) {
@@ -112,6 +112,27 @@ app.directive('grantDocPrep', [function() {
 
             $scope.updateUnitsFromDocs = function() {
                 grants.updateUnitsFromDocs();
+            };
+
+            $scope.doPaste = function($event, doc, pastedEmail, annot) {
+                $event.preventDefault();
+                var pastedValues = $event.originalEvent.clipboardData.getData('text/plain');
+                var splitValues = pastedValues.split(/[\n|\r]+/);
+                for (var i = 0; i < splitValues.length; i ++) {
+                    if (["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1) {
+                        splitValues[i] = calculate.cleannumber(splitValues[i]);
+                    } else if (["date"].indexOf(annot.type_info.typename) != -1) {
+                        splitValues[i] = calculate.cleandatestr(splitValues[i]);
+                    }
+                }
+                var found = false;
+                $scope.emails.forEach(function(email) {
+                    if (splitValues.length > 0 && (found || email === pastedEmail)) {
+                        found = true;
+                        doc.preparedFor[email].overrides[annot.id] = splitValues.shift();
+                        doc.savePreparation(email);
+                    }
+                });
             };
         }]
     };

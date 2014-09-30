@@ -379,7 +379,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             function (data) {
                 if (annot.val === '')
                 {
-                    annot.val = data;
+                    annot.val = data.trim();
                 }
             }).except(function (x) {console.log(x);});
     };
