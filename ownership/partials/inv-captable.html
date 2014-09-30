@@ -226,7 +226,7 @@
 <internal-right-rail toggle-side="sideToggle">
     <div ng-switch on="sideBar" 
          class="capright"
-         ng-style="viewportheightnobar">
+         ng-style="viewportheight">
         <span ng-switch-when="1">
             <security-details sec="selectedSecurity"></security-details>
         </span>
@@ -239,9 +239,6 @@
             <div class="headsection row-fluid">
                 <h1>{{selectedInvestor.name}}</h1>
             </div>
-            <span class="capGuide">
-                <p>{{selectedInvestor.email}}</p>
-            </span>
         </span>
         <span ng-switch-default class="capGuide railpadding">
             <h1 class="right-bar-header">

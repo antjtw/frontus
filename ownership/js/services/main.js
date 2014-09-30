@@ -11,11 +11,15 @@ function(SWBrijj, $q, $filter, displayCopy) {
     /* Special identifies attributes used to tie data
      * to investors and securities.
      */
+    var p = $q.defer();
     var special = {investor: [], security: []};
     var loaded = false;
     this.getAttrs = function() { return attrs; };
     this.getSpecialAttrs = function() { return special; };
     this.isLoaded = function() { return loaded; };
+    this.waitForLoad = function() {
+        return p.promise;
+    };
     loadAttributes().then(handleAttrs);
     function handleAttrs(data) {
         special.investor = [];
@@ -51,6 +55,7 @@ function(SWBrijj, $q, $filter, displayCopy) {
                  }
             }
         });
+        p.resolve();
         loaded = true;
     }
     function loadAttributes() {
