@@ -3,7 +3,7 @@
 		<h2>Understand Your Ownership</h2>
 	</div>
 	<div class="body-box">
-		<div ng-show="(totalIssued != undefined) && totalIssued == 0">
+		<div ng-show="loaded && totalIssued == 0">
 			<div class="new-box">
 				<div>
 					<h2>Setting up your cap table
@@ -23,7 +23,7 @@
 				</div>
 			</div>
 		</div>
-		<div ng-show="totalIssued != 0">
+		<div ng-show="loaded && totalIssued != 0">
             <div class="ownership-tile-details detail-row cf">
                 <div class="graph-container cf">
                     <div ng-repeat="gd in graphdata | limitTo: 3" ng-if="gd[1][0].percent != 0" class="graph">

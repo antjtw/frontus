@@ -964,6 +964,7 @@ m.directive('investorTile', function(){
                     });
 
                 });
+                console.log($scope.allTransactions);
                 return($scope.allTransactions);
             };
 
@@ -972,7 +973,7 @@ m.directive('investorTile', function(){
                 angular.forEach($scope.allTransactions, function(tran) {
                     tran[calculate.primaryMeasure(tran.attrs.security_type)] = 0;
                     angular.forEach($scope.cti.ledger_entries, function(ledger) {
-                        if (tran.transaction == ledger.transaction) {
+                        if (tran.transaction == ledger.transaction && ledger.investor) {
                             if (calculate.isNumber(ledger.credit)) {
                                 tran[calculate.primaryMeasure(tran.attrs.security_type)] += parseFloat(ledger.credit);
                             }

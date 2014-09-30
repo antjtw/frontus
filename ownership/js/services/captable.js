@@ -236,6 +236,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
     var captable = new CapTable();
     this.getCapTable = function() { return captable; };
     var loadInProgress = false;
+    var p = $q.defer();
     function loadCapTable() {
         loadInProgress = true;
         $q.all([loadLedger(),
@@ -244,7 +245,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 loadAttributes(),
                 loadEvidence(),
                 loadActivity(),
-                loadLogins()])
+                loadLogins(),
+                attributes.waitForLoad()])
         .then(function(results) {
             // reset the existing cap table
             captable.investors.splice(0);
@@ -280,6 +282,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             sortSecurities(captable.securities);
             sortInvestors(captable.investors);
             updateDays();
+            p.resolve();
         }, logError).finally(function() {
             loadInProgress = false;
         });
@@ -289,6 +292,10 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         if (!loadInProgress) {
             loadCapTable();
         }
+    };
+
+    this.captableLoaded = function() {
+        return p.promise;
     };
 
     /* Data Gathering Functions */
@@ -724,7 +731,6 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         var invs = $filter('getInvestorAttributes')();
         // Security identifying attributes
         var secs = $filter('getSecurityAttributes')();
-
         var trans = captable.transactions.filter(
             function(tran) {
                 // Some transactions do not carry underlier data,
