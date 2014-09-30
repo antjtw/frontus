@@ -956,7 +956,6 @@ m.directive('investorTile', function(){
                     angular.forEach(cap.transactions, function(trans){
                         if(trans.attrs.investor == name) {
                             var newtran = angular.copy(trans);
-                            newtran.units = angular.copy(trans.attrs.units);
                             delete newtran.attrs.physical;
                             delete newtran.attrs.investor;
                             delete newtran.attrs.units;
@@ -975,6 +974,7 @@ m.directive('investorTile', function(){
                     tran[calculate.primaryMeasure(tran.attrs.security_type)] = 0;
                     angular.forEach($scope.cti.ledger_entries, function(ledger) {
                         if (tran.transaction == ledger.transaction) {
+                            console.log(ledger.transaction);
                             if (calculate.isNumber(ledger.credit)) {
                                 tran[calculate.primaryMeasure(tran.attrs.security_type)] += parseFloat(ledger.credit);
                             }
