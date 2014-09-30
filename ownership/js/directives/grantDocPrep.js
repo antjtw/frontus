@@ -42,8 +42,8 @@ app.directive('grantDocPrep', [function() {
         scope: {
         },
         templateUrl: '/ownership/partials/grantDocPrep.html',
-        controller: ["$scope", "grants", "Documents", "Investor", "navState", "$rootScope",
-                     function($scope, grants, Documents, Investor, navState, $rootScope) {
+        controller: ["$scope", "grants", "Documents", "Investor", "navState", "$rootScope", "calculate",
+                     function($scope, grants, Documents, Investor, navState, $rootScope, calculate) {
             initDocInfo($scope, grants);
             $scope.doc_arr = [];
             $scope.$watchCollection('docs', function(docs) {
@@ -112,6 +112,26 @@ app.directive('grantDocPrep', [function() {
 
             $scope.updateUnitsFromDocs = function() {
                 grants.updateUnitsFromDocs();
+            };
+
+            $scope.doPaste = function($event, doc, pastedEmail, annot) {
+                $event.preventDefault();
+                var pastedValues = $event.originalEvent.clipboardData.getData('text/plain');
+                var splitValues = pastedValues.split('\n');
+                if (["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1) {
+                    for (var i = 0; i < splitValues.length; i ++) {
+                        splitValues[i] = calculate.cleannumber(splitValues[i]);
+                    }
+                }
+                // TODO: clean data (numbers -> number format, dates -> date format, etc)
+                var found = false;
+                $scope.emails.forEach(function(email) {
+                    if (splitValues.length > 0 && (found || email === pastedEmail)) {
+                        found = true;
+                        doc.preparedFor[email].overrides[annot.id] = splitValues.shift();
+                        doc.savePreparation(email);
+                    }
+                });
             };
         }]
     };
