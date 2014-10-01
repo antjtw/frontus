@@ -4,7 +4,11 @@
     </subnav>
     <div class="row-fluid">
         <div ng-style="viewportheight">
-            <grant-issue choose="true"></grant-issue>
+            <div class="wizard-tile">
+                <h2><span>Issue options from</span></h2>
+                <input ui-select2="issueSelectOptions" ng-model="selected.issue">
+            </div>
+
             <linked-documents ng-if="issue[0]"></linked-documents>
             <a class="wizard-next" href="/app/ownership/grants/people">
                 <div class="standard-button">
