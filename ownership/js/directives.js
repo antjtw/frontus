@@ -1713,25 +1713,6 @@ own.directive('linkedDocuments', [function() {
                     var upxhr = SWBrijj.uploadFile(fd);
                     upxhr.then(function(x) {
                         $scope.uploadprogress = x;
-                        /*for (var i = 0; i < files.length; i++) {
-                            var newdocument = {
-                                uploaded_by: $rootScope.person.user_id,
-                                iss_annotations: null,
-                                company: $rootScope.navState.company,
-                                doc_id: x[i],
-                                template_id: null,
-                                annotations: null,
-                                docname: files[i].name,
-                                version_count: 0,
-                                complete_count: 0,
-                                archive_complete_count: 0,
-                                archive_count: 0,
-                                statusRatio: 0,
-                                uploading: true,
-                                type: "doc"
-                            };
-                            $scope.documents.push(newdocument);
-                        }*/
                         $timeout(function(){$scope.checkReady(bin);}, 2000);
 
                     }).except(function(x) {
@@ -1751,15 +1732,6 @@ own.directive('linkedDocuments', [function() {
                                 if (doc.pages != null)
                                 {
                                     $scope.uploadprogress.splice(index, 1);
-                                    /*angular.forEach($scope.documents, function(document) {
-                                        //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
-                                        if (document.doc_id == doc.upload_id) {
-                                            document.doc_id = doc.doc_id;
-                                            document.uploading = false;
-                                            document.pages = doc.pages;
-                                            $rootScope.billing.usage.documents_total+=1;
-                                        }
-                                    });*/
                                     $scope.issue[0].addSpecificEvidence(parseInt(doc.doc_id), String(bin), String(bin));
                                     $scope.uploading[bin] = false;
                                 }
