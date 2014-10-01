@@ -95,6 +95,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         this.docs = {};
         this.evidenceloaded = false;
     };
+    var transaction_doc_types = ["grant", "issue certificate"];
     Security.prototype = {
         numUnissued: function(asof, vesting) {
             return captableref.numUnissued(this, asof, vesting);
@@ -132,7 +133,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         removeDoc: function(doc) {
             var security = this;
             return SWBrijj.procm('ownership.remove_issue_document', this.transactions[0].transaction, doc.doc_id, doc.type, doc.label).then(function(x) {
-                if (doc.type == "grant") {
+                if (transaction_doc_types.indexOf(doc.type) !== -1) {
                     SWBrijj.update("document.my_company_library", {issue: null, transaction_type: null}, {doc_id: doc.doc_id});
                 }
                 delete security.docs[doc.type];
@@ -142,8 +143,8 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
             var security = this;
             return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction, doc_id, type, label).then(function(x) {
                 security.docs[type] = {'doc_id': doc_id, 'type': type, 'docname': x[0].add_issue_document};
-                if (type == "grant") {
-                    SWBrijj.update("document.my_company_library", {issue: security.name, "transaction_type": "grant"}, {doc_id: doc_id});
+                if (transaction_doc_types.indexOf(type) !== -1) {
+                    SWBrijj.update("document.my_company_library", {issue: security.name, "transaction_type": type}, {doc_id: doc_id});
                 }
             }).except(logError);
         }
