@@ -559,7 +559,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion.lessmargin .delete-link.blue-link {
-    margin-left: 5px;
+    margin-left: 20px;
 }
 
 .delete-link.blue-link.grant-link {
@@ -571,7 +571,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 }
 
 .transaction-accordion .accordion-heading .accordion-toggle {
-    padding: 11px 12px;
+    padding: 5px 12px;
+    line-height: 30px;
 }
 
 .transaction-accordion .accordion-heading > a > span:not(:last-of-type),
@@ -584,6 +585,11 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 .transaction-accordion.lessmargin .linkedDocuments,
 .transaction-accordion.lessmargin .btn-group {
     padding-left: 0;
+    margin-left: 20px;
+}
+
+.transaction-accordion .accordion {
+    background-color: #F1F1F1;
 }
 .transaction-accordion .btn-group,
 .transaction-accordion .linkedDocuments {
@@ -592,6 +598,8 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .transaction-accordion .accordion-heading > a > span:last-of-type {
     color: #1E2D3D;
+    margin-left: 10px;
+    line-height: 30px;
 }
 
 .transaction-accordion .accordion-group {
@@ -610,6 +618,7 @@ td.tranViewSelected, td.tranViewSelected.hoverable:hover, th.tranViewSelected, t
 
 .transaction-accordion .accordion {
     margin-top: 20px;
+    border-top: none;
 }
 
 
