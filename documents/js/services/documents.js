@@ -18,6 +18,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var action = issue.actions[action_type];
                 for (field_key in action.fields)
                 {
+                    if (action_type != "issue certificate") {
+                        if (['physical', 'security', 'security_type', 'investor'].indexOf(field_key) !== -1) {
+                            delete action.fields[field_key];
+                            continue;
+                        }
+                    } // TODO: filter certificate transaction for "issue certificate" ?
                     var field = action.fields[field_key];
                     var lbls = JSON.parse(field.labels);
                     // Set up enums
@@ -63,7 +69,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
     function updateAvailableSignatures()
     {
         SWBrijj.tblm('account.my_company_signatures', ['label']).then(function(data) {
-            if (data.length == 0)
+            if (data.length === 0)
                 return;
             for (var t in variableDefaultTypes)
             {
@@ -101,7 +107,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var f = fields[field];
                 tmp_array.push({name: f.name, display: f.display_name, required: f.required, typename: f.typname, labels: f.labels});
             }
-            if (tmp_array.length > 0) {
+            if (tmp_array.length > 0 && transaction_type != "issue certificate") {
                 // only add effective date if we're definitely in a transaction
                 var display = "Effective Date";
                 if ((issue_type == "Equity Common"    && transaction_type == "grant") ||
