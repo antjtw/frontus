@@ -25,6 +25,21 @@ app.controller('docsGrantIssue',
             });
         });
 
+        $scope.flow = $routeParams.flow;
+
+        if ($scope.flow == 'grant') {
+            $scope.doclist = ['plan', 'grant', 'exercise'];
+        } else if ($scope.flow == 'certificate') {
+            $scope.doclist = ['certificate'];
+        }
+
+        $scope.backurl = function() {
+            if ($scope.flow == 'certificate') {
+                return '/app/ownership/certificate/create';
+            }
+            return '/app/ownership/grants/issue';
+        };
+
         $scope.handleDrop = function(item, bin) {
             $scope.issue[0].addSpecificEvidence(parseInt(item), String(bin), String(bin));
         };

@@ -1583,14 +1583,21 @@ own.directive('grantWizardNav', [function() {
             state: '='
         },
         templateUrl: '/ownership/partials/grantWizardNav.html',
-        controller: ["$scope", "$rootScope", "navState", "grants",
-            function($scope, $rootScope, navState, grants) {
+        controller: ["$scope", "$rootScope", "navState", "grants", "$routeParams",
+            function($scope, $rootScope, navState, grants, $routeParams) {
                 $scope.path = navState.path;
 
                 $scope.peopleLink = function() {
                     if (grants.isChooseReady())
                         return "/app/ownership/grants/people";
                     return "/app/ownership/grants/issue";
+                };
+
+                $scope.backurl = function() {
+                    if ($routeParams.flow == 'certificate') {
+                        return '/app/ownership/certificate/create';
+                    }
+                    return '/app/ownership/grants/issue';
                 };
 
                 $scope.reviewLink = function() {
@@ -1611,7 +1618,7 @@ own.directive('linkedDocuments', [function() {
         restrict: 'EA',
         scope: {
             issue: '=',
-            type: '@'
+            coretype: '@'
         },
         templateUrl: '/ownership/partials/linkedDocuments.html',
         controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents", "SWBrijj", "$timeout", "$location",
@@ -1630,9 +1637,9 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
-                if ($scope.type == 'grant') {
+                if ($scope.coretype == 'grant') {
                     $scope.doclist = ['plan', 'grant', 'exercise'];
-                } else if ($scope.type == 'certificate') {
+                } else if ($scope.coretype == 'certificate') {
                     $scope.doclist = ['certificate'];
                 }
                 $scope.uploading = {};

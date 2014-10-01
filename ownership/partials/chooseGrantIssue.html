@@ -6,7 +6,7 @@
         <div ng-style="viewportheight">
             <grant-issue choose="true"></grant-issue>
             <security-terms save="true" ng-if="issue[0]"></security-terms>
-            <linked-documents type='grant' issue='issue' ng-if="issue[0]"></linked-documents>
+            <linked-documents coretype='grant' issue='issue' ng-if="issue[0]"></linked-documents>
             <a class="wizard-next" href="/app/ownership/grants/people">
                 <div class="standard-button">
                     <button class="btn" ng-disabled="!ready()">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
