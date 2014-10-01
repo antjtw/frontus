@@ -151,6 +151,7 @@ navm.controller('NavCtrl',
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
         $window.addEventListener('beforeunload', function(event) {
+            $rootScope.pageHistory.splice(0, $rootScope.pageHistory.length - 50); // truncate array to last 50 elements
             sessionStorage.setItem('rootScope-pageHistory', angular.toJson($rootScope.pageHistory));
         });
         $rootScope.pageHistory = angular.fromJson(sessionStorage.getItem('rootScope-pageHistory'));
