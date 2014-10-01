@@ -14,7 +14,7 @@
                         <span ng-if="type == 'plan'">Option Plan</span>
                         <span ng-if="type == 'grant'">Option Agreement</span>
                         <span ng-if="type == 'exercise'">Notice of Exercise</span>
-                        <span ng-if="type == 'certificate'">Certificate Template</span>
+                        <span ng-if="type == 'issue certificate'">Certificate Template</span>
                         <a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">{{doc.docname}}</a>
                         <span ng-click="issue[0].removeDoc(doc)" data-icon="&#xe00f;" aria-hidden="true"></span>
                     </div>
@@ -23,7 +23,7 @@
                             <span ng-if="type == 'plan'">Option Plan</span>
                             <span ng-if="type == 'grant'">Option Agreement</span>
                             <span ng-if="type == 'exercise'">Notice of Exercise</span>
-                            <span ng-if="type == 'certificate'">Certificate Template</span>
+                            <span ng-if="type == 'issue certificate'">Certificate Template</span>
                         </div>
                     </div>
                 </div>

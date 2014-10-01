@@ -19,7 +19,7 @@
                     </div>
                     <div class="wizard-doc" ng-if="type == 'plan'">Option Plan</div>
                     <div class="wizard-doc" ng-if="type == 'grant'">Option Agreement</div>
-                    <div class="wizard-doc" ng-if="type == 'certificate'">Certificate Template</div>
+                    <div class="wizard-doc" ng-if="type == 'issue certificate'">Certificate Template</div>
                     <div class="wizard-doc" ng-class="{'noicon': !doc.docname}" ng-if="type == 'exercise'">Notice of Exercise</div>
                     <div ng-if="doc.docname"><a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">{{doc.docname}}</a></div>
                     <div ng-if="!doc.docname && uploading[type]"><a>Processing . . . </a></div>

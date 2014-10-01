@@ -30,7 +30,7 @@ app.controller('docsGrantIssue',
         if ($scope.flow == 'grant') {
             $scope.doclist = ['plan', 'grant', 'exercise'];
         } else if ($scope.flow == 'certificate') {
-            $scope.doclist = ['certificate'];
+            $scope.doclist = ['issue certificate'];
         }
 
         $scope.backurl = function() {

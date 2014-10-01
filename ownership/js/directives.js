@@ -1640,7 +1640,7 @@ own.directive('linkedDocuments', [function() {
                 if ($scope.coretype == 'grant') {
                     $scope.doclist = ['plan', 'grant', 'exercise'];
                 } else if ($scope.coretype == 'certificate') {
-                    $scope.doclist = ['certificate'];
+                    $scope.doclist = ['issue certificate'];
                 }
                 $scope.uploading = {};
 
