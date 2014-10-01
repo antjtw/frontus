@@ -1610,12 +1610,12 @@ own.directive('linkedDocuments', [function() {
     return {
         restrict: 'EA',
         scope: {
+            issue: '=',
             type: '@'
         },
         templateUrl: '/ownership/partials/linkedDocuments.html',
         controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents", "SWBrijj", "$timeout", "$location",
             function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, Documents, SWBrijj, $timeout, $location) {
-                $scope.issue = grants.issue;
 
                 $scope.isPrepared = function(doc_id) {
                     if (doc_id) {

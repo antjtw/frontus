@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="pull-right" ng-if="!doc.docname && !uploading[type]">
-                        <a href="/app/ownership/grants/docs">
+                        <a ng-href="/app/ownership/grants/docs?issue={{issue[0].name}}">
                             <div class="standard-button pull-right gray">
                                 <button class="btn">
                                     Pick from Library
