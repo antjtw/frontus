@@ -5,7 +5,7 @@
     <div class="row-fluid">
         <div ng-style="viewportheight">
             <grant-issue choose="true"></grant-issue>
-            <linked-documents ng-if="issue[0]"></linked-documents>
+            <linked-documents type='certificate' ng-if="issue[0]"></linked-documents>
             <a class="wizard-next" href="/app/ownership/grants/people">
                 <div class="standard-button">
                     <button class="btn" ng-disabled="!ready()">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>

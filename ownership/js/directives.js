@@ -1610,6 +1610,7 @@ own.directive('linkedDocuments', [function() {
     return {
         restrict: 'EA',
         scope: {
+            type: '@'
         },
         templateUrl: '/ownership/partials/linkedDocuments.html',
         controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents", "SWBrijj", "$timeout", "$location",
@@ -1629,7 +1630,11 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
-
+                if ($scope.type == 'grant') {
+                    $scope.doclist = ['plan', 'grant', 'exercise'];
+                } else if ($scope.type == 'certificate') {
+                    $scope.doclist = ['certificate'];
+                }
                 $scope.uploading = {};
 
                 var mimetypes = ["application/pdf", // .pdf
