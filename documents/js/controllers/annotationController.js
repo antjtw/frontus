@@ -250,6 +250,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.$apply(function() {
             var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
             var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
+            if ($scope.annot.type == "qrcode")
+            {
+                dx = dy = Math.max(dx, dy, 111);
+            }
             $scope.annot.position.size.height = dy;
             $scope.annot.position.size.width = dx;
             return false;
