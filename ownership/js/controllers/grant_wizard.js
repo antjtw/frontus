@@ -10,11 +10,20 @@ app.controller('chooseGrantIssue',
 }]);
 
 app.controller('docsGrantIssue',
-    ["$scope", "captable", "grants", function($scope, captable, grants) {
+    ["$scope", "$rootScope", "captable", "grants", "$routeParams", function($scope, $rootScope, captable, grants, $routeParams) {
 
         $scope.state = {evidenceQuery: "",
                         originalOnly: true};
-        $scope.issue = grants.issue;
+
+        $rootScope.$watchCollection(function() {
+            return captable.getCapTable().securities;
+        }, function(securities) {
+            securities.some(function(sec) {
+                if (sec.name == $routeParams.issue) {
+                    $scope.issue = [sec];
+                }
+            });
+        });
 
         $scope.handleDrop = function(item, bin) {
             $scope.issue[0].addSpecificEvidence(parseInt(item), String(bin), String(bin));

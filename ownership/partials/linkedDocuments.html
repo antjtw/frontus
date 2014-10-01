@@ -4,7 +4,7 @@
         <p>These documents will be shared with each option grant recipient. The option agreement<br>must be prepared as a template, so it can be re-used for each option grant.</p>
         <ul class="wizard-linking">
             <li>
-                <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
+                <div ng-repeat="type in doclist" ng-if="(doc=issue[0].getDocs()[type]) || true">
                     <div>
                         <span tooltip-placement="top"
                               tooltip="Document ready to share"
@@ -19,6 +19,7 @@
                     </div>
                     <div class="wizard-doc" ng-if="type == 'plan'">Option Plan</div>
                     <div class="wizard-doc" ng-if="type == 'grant'">Option Agreement</div>
+                    <div class="wizard-doc" ng-if="type == 'certificate'">Certificate Template</div>
                     <div class="wizard-doc" ng-class="{'noicon': !doc.docname}" ng-if="type == 'exercise'">Notice of Exercise</div>
                     <div ng-if="doc.docname"><a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">{{doc.docname}}</a></div>
                     <div ng-if="!doc.docname && uploading[type]"><a>Processing . . . </a></div>
@@ -66,7 +67,7 @@
                         </div>
                     </div>
                     <div class="pull-right" ng-if="!doc.docname && !uploading[type]">
-                        <a href="/app/ownership/grants/docs">
+                        <a ng-href="/app/ownership/grants/docs?issue={{issue[0].name}}">
                             <div class="standard-button pull-right gray">
                                 <button class="btn">
                                     Pick from Library

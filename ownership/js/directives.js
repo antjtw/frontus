@@ -1610,11 +1610,12 @@ own.directive('linkedDocuments', [function() {
     return {
         restrict: 'EA',
         scope: {
+            issue: '=',
+            type: '@'
         },
         templateUrl: '/ownership/partials/linkedDocuments.html',
         controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents", "SWBrijj", "$timeout", "$location",
             function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, Documents, SWBrijj, $timeout, $location) {
-                $scope.issue = grants.issue;
 
                 $scope.isPrepared = function(doc_id) {
                     if (doc_id) {
@@ -1629,7 +1630,11 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
-
+                if ($scope.type == 'grant') {
+                    $scope.doclist = ['plan', 'grant', 'exercise'];
+                } else if ($scope.type == 'certificate') {
+                    $scope.doclist = ['certificate'];
+                }
                 $scope.uploading = {};
 
                 var mimetypes = ["application/pdf", // .pdf
