@@ -1700,7 +1700,9 @@ own.directive('linkedDocuments', [function() {
                     for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
                     var upxhr = SWBrijj.uploadFile(fd);
                     upxhr.then(function(x) {
-                        $scope.uploadprogress = x;
+                        if (!$scope.uploadprogress)
+                            $scope.uploadprogress = [];
+                        $scope.uploadprogress.push(x[0]);
                         /*for (var i = 0; i < files.length; i++) {
                             var newdocument = {
                                 uploaded_by: $rootScope.person.user_id,
@@ -1720,7 +1722,7 @@ own.directive('linkedDocuments', [function() {
                             };
                             $scope.documents.push(newdocument);
                         }*/
-                        $timeout(function(){$scope.checkReady(bin);}, 2000);
+                        $timeout(function(){$scope.checkReady(bin, x[0]);}, 2000);
 
                     }).except(function(x) {
                         $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
@@ -1729,11 +1731,13 @@ own.directive('linkedDocuments', [function() {
                     });
                 };
 
-                $scope.checkReady = function(bin) {
+                $scope.checkReady = function(bin, doc_id) {
                     // Cap at 10 then say error
                     var incrementer = 0;
                     SWBrijj.tblm('document.my_company_library', ['upload_id', 'doc_id', 'pages']).then(function(data) {
                         angular.forEach(data, function(doc) {
+                            if (doc.upload_id != doc_id)
+                                return;
                             var index = $scope.uploadprogress.indexOf(doc.upload_id);
                             if (index != -1) {
                                 if (doc.pages != null)
@@ -1753,9 +1757,9 @@ own.directive('linkedDocuments', [function() {
                                 }
                             }
                         });
-                        if ($scope.uploadprogress.length !== 0 && incrementer < 30) {
+                        if ($scope.uploadprogress.indexOf(doc_id) !== -1 && incrementer < 30) {
                             incrementer += 1;
-                            $timeout(function(){$scope.checkReady(bin);}, 2000);
+                            $timeout(function(){$scope.checkReady(bin, doc_id);}, 2000);
                         }
                     }).except(function(data) {
                         console.error(data);
