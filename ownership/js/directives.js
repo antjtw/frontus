@@ -695,8 +695,8 @@ own.directive('editableCellDetails', [function() {
                 undo: '=undo',
                 windowToggle: '='},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter",
-            function($scope, $rootScope, attributes, captable, calculate, $filter) {
+        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter", "Documents", "$location",
+            function($scope, $rootScope, attributes, captable, calculate, $filter, Documents, $location) {
 
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
@@ -719,6 +719,22 @@ own.directive('editableCellDetails', [function() {
                 $scope.makeNewTran = function(kind, tran) {
                     if (kind == "convert") {
                         $scope.convertSharesUp(tran);
+                    } else if (kind == "issue certificate") {
+                        $scope.templateExists = false;
+                        angular.forEach($scope.ct.securities, function(security) {
+                            if (tran.attrs.security == security.name) {
+                                var ctemplate = security.getDocs()['issue certificate'];
+                                if (ctemplate) {
+                                    if (Documents.getOriginal(ctemplate.doc_id).validTransaction()) {
+
+                                    } else {
+                                        $location.url('/app/ownership/certificate/create?issue=' + security.name);
+                                    }
+                                } else {
+                                    $location.url('/app/ownership/certificate/create?issue=' + security.name);
+                                }
+                            }
+                        });
                     } else {
                         $scope.newTran = captable.newTransaction(
                             $scope.cell.security,
