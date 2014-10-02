@@ -56,6 +56,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         {name: "investorPostalcode", display: "Zip code"},
         {name: "investorEmail", display: "Email"},
         {name: "signatureDate", display: "Date"},
+        {name: "qrcode", display: "QR Code"},
     ];
     var variableDefaultTypes = [
         {name: "ImgSignature", display: "Signature Image"}

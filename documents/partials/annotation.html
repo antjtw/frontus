@@ -33,10 +33,10 @@
         </fieldset>
         <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && !annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'qrcode')">
             <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode()) && (boxHover || active.annotation == annot)">
-                <img ng-style="annotationSizeImageStyle" src="/photo/user?id=ike"></img>
+                <img ng-style="annotationSizeImageStyle" ng-mousedown="$event.stopPropagation(); openBox();" src="/photo/user?id=ike"></img>
             </div>
         </fieldset>
-        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot && !prepareFor && annot.type != 'qrcode'">
+        <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot && !prepareFor">
             <ul>
                 <li>
                     <ul>
