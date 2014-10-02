@@ -187,7 +187,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             return classes;
         },
         createSearchChoice: function(text) {
-            return {id: text, text: text};
+            if ($scope.doc.transaction_type != "issue certificate") {
+                return {id: text, text: text};
+            }
         },
     };
 

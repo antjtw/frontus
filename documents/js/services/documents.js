@@ -97,7 +97,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var viable_actions = transaction_attributes[issue_type].actions;
                 fields = viable_actions[transaction_type].fields;
             }
-            type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
+            if (transaction_type != "issue certificate") {
+                type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
+            } else {
+                type_list.splice(0); // no default annotation types for certificates
+            }
             for (var t in variableDefaultTypes)
             {
                 type_list.push(variableDefaultTypes[t]);
