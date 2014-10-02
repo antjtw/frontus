@@ -381,6 +381,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         getPreparedFor: function(defaultList) {
             var doc = this;
+            if (doc.transaction_type === "issue certificate") {
+                return [];
+            }
             function mergeDefaultList(defaultList){
                 if (defaultList) {
                     var origLength = doc.preparedFor.length;
@@ -446,6 +449,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             }
             var doc = this;
             var hash = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: false, overrides: {}};
+            if (doc.transaction_type === "issue certificate") {
+                return hash;
+            }
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
                 SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
                     hash.is_prepared = data[0].is_prepared_person;
@@ -463,6 +469,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             return hash;
         },
         updatePreparedFor: function(old_investor, new_investor) {
+            if (doc.transaction_type === "issue certificate") {
+                return;
+            }
             var doc = this;
             SWBrijj.update('document.my_personal_preparations', {investor: new_investor}, {doc_id: this.doc_id, investor: old_investor}).then(function(result){
                 doc.preparedFor[new_investor] = doc.preparedFor[old_investor];
@@ -475,6 +484,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         deletePreparedFor: function(old_investor) {
+            if (doc.transaction_type === "issue certificate") {
+                return;
+            }
             var doc = this;
             SWBrijj.delete_one('document.my_personal_preparations', {doc_id: this.doc_id, investor: old_investor}).then(function(result) {
                 delete doc.preparedFor[old_investor];
@@ -484,6 +496,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         savePreparation: function(investor) {
+            if (doc.transaction_type === "issue certificate") {
+                return;
+            }
             var doc = this;
             $timeout(function() {
                 var notes = [];
