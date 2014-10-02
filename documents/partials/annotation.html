@@ -1,5 +1,5 @@
 <div ng-class="{'redrequired':annot.required && annot.type == 'text', 'greenrequired':annot.filled(navState.role, prepareFor), 'signature': annot.whattype == 'Signature', 'imagesignature': annot.whattype == 'ImgSignature', 'processing':signatureprocessing, 'otherperson': !annot.forRole(navState.role)}" class="sticky row-fluid draggable" ng-style="annotationCoordsStyle">
-    <span class="dragger" ng-if="annot.type == 'text' || annot.type == 'qrcode'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
+    <span class="dragger" ng-if="annot.type == 'text'" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="mousedown($event);">
         <span><span data-icon="&#xe11a;"></span></span>
     </span>
     <span class="close-button" ng-show="isAnnotable && investorFixed() && !doc.countersignable(navState.role)" ng-mousedown="$event.stopPropagation();"  ng-click="closeMe(); $event.stopPropagation()">
@@ -14,8 +14,9 @@
                           ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum' || certificateDisable(annot)"
                           ng-keyup="addLineBreaks($event)" ng-model="current.val" style="resize:none"
                           class="row-fluid" ng-style="annotationSizeStyle"
-                          ng-hide="(annot.whattype == 'ImgSignature') && annot.forRole(navState.role)"/>
+                          ng-hide="(annot.whattype == 'document_id') ||((annot.whattype == 'ImgSignature') && annot.forRole(navState.role))"/>
                 <img ng-style="annotationSizeImageStyle" ng-show="(annot.whattype == 'ImgSignature') && annot.forRole(navState.role)" src="{{signatureURL(annot)}}"></img>
+                <img ng-style="annotationSizeQRStyle" ng-show="annot.whattype == 'document_id'" src="/photo/user?id=ike"></img>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">
                 <select class="height-force" ui-select2 ng-model="current.val" ng-style="annotationSizeStyle" placeholder="{{current.placeholder}}">
@@ -29,11 +30,6 @@
         </fieldset>
         <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && !annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'highlight')">
             <div ng-class="{'roundedcorners': navState.role=='investor'}" ng-trim="false" style="resize:none" ng-mousedown="$event.stopPropagation(); openBox();" class="row-fluid" ng-style="annotationHighlightStyle">
-            </div>
-        </fieldset>
-        <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && !annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'qrcode')">
-            <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode()) && (boxHover || active.annotation == annot)">
-                <img ng-style="annotationSizeImageStyle" ng-mousedown="$event.stopPropagation(); openBox();" src="/photo/user?id=ike"></img>
             </div>
         </fieldset>
         <span class="sticky-menu" ng-mousedown="$event.stopPropagation();" ng-if="navState.role == 'issuer' && getme && active.annotation == annot && !prepareFor">

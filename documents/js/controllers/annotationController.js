@@ -113,13 +113,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                 $scope.annot.val = ""; // clear out value since the type changed
                 setDefaultText();
             }
-            if (newval == "qrcode")
-            {
-                $scope.annot.type = "qrcode";
-                $scope.annot.val = "qrcode";
-            }
-            if (oldval == "qrcode" && newval != "qrcode")
-                $scope.annot.type = "text";
         }
         // update type information
         $scope.annot.updateTypeInfo($scope.doc.annotation_types);
@@ -259,10 +252,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.$apply(function() {
             var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
             var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
-            if ($scope.annot.type == "qrcode")
-            {
-                dx = dy = Math.max(dx, dy, 111);
-            }
             $scope.annot.position.size.height = dy;
             $scope.annot.position.size.width = dx;
             return false;
@@ -473,6 +462,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
             $scope.annotationSizeImageStyle["max-width"] = (new_size.width - 14) + "px";
             $scope.annotationSizeImageStyle["max-height"] = (new_size.height - 10) + "px";
+            $scope.annotationSizeQRStyle["max-width"] = Math.max((new_size.width - 14), 111) + "px";
+            $scope.annotationSizeQRStyle["max-height"] = Math.max((new_size.height - 10), 111) + "px";
             $scope.annotationHighlightStyle.width = (new_size.width) + "px";
             $scope.annotationHighlightStyle.height = (new_size.height) + "px";
         }

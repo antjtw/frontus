@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('createCertificate',
-    ["$scope", "Documents", "captable", function($scope, Documents, captable){
+    ["$scope", "Documents", "captable", "$routeParams", function($scope, Documents, captable, $routeParams){
         $scope.issue = [];
         /// issue picker
         // Get the company's Issues
@@ -40,5 +40,9 @@ app.controller('createCertificate',
                 $scope.issue[0] = new_issue.issue;
             }
         });
+
+        if ($routeParams.issue) {
+            $scope.selected.issue = $routeParams.issue;
+        }
         /// end issue picker logic
 }]);

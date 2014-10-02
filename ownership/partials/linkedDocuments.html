@@ -60,6 +60,11 @@
                                    accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
                                    onchange="angular.element(this).scope().setFiles(this, 'exercise');"/>
                         </div>
+                        <div ng-if="type == 'issue certificate'">
+                            <input multiple type="file" class='file'
+                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                   onchange="angular.element(this).scope().setFiles(this, 'issue certificate');"/>
+                        </div>
                         <div class="documentUpload fakefile">
                             <div class="standard-button gray">
                                 <button class="btn">Upload</button>
