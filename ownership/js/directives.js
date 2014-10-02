@@ -723,16 +723,20 @@ own.directive('editableCellDetails', [function() {
                         $scope.templateExists = false;
                         angular.forEach($scope.ct.securities, function(security) {
                             if (tran.attrs.security == security.name) {
-                                var ctemplate = security.getDocs()['issue certificate'];
-                                if (ctemplate) {
-                                    if (Documents.getOriginal(ctemplate.doc_id).validTransaction()) {
-                                        //Put link to certificate preview here.
+                                security.getDocsPromise().then(function(docs) {
+                                    if (docs['issue certificate']) {
+                                        Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
+                                            if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
+                                                //Put link to certificate preview here.
+                                                console.log("would goto preview");
+                                            } else {
+                                                $location.url('/app/ownership/certificate/create?issue=' + security.name);
+                                            }
+                                        });
                                     } else {
                                         $location.url('/app/ownership/certificate/create?issue=' + security.name);
                                     }
-                                } else {
-                                    $location.url('/app/ownership/certificate/create?issue=' + security.name);
-                                }
+                                });
                             }
                         });
                     } else {

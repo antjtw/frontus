@@ -556,13 +556,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         return oldDoc;
     };
 
+    var getOriginalPromise = $q.defer();
     this.getOriginal = function(doc_id) {
         if (!docs[doc_id]) {
             var docServ = this;
             SWBrijj.tblm("document.my_company_library", "doc_id", doc_id).then(function(data) {
                 docServ.setDoc(doc_id, data);
+                getOriginalPromise.resolve();
             });
         }
         return this.getDoc(doc_id);
     };
+    this.returnOriginalwithPromise = function(doc_id) {
+        this.getOriginal(doc_id);
+        return getOriginalPromise.promise;
+    }
 }]);

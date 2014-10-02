@@ -94,6 +94,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         this.attrs = {};
         this.docs = {};
         this.evidenceloaded = false;
+        this.p = $q.defer();
     };
     var transaction_doc_types = ["grant", "issue certificate"];
     Security.prototype = {
@@ -123,12 +124,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             }
                         });
                         security.evidenceloaded = true;
+                        security.p.resolve(security.docs);
                         return security.docs;
                     }).except(logError);
                 return this.docs;
             } else {
                 return this.docs;
             }
+        },
+        getDocsPromise: function() {
+            this.getDocs();
+            return this.p.promise;
         },
         removeDoc: function(doc) {
             var security = this;
