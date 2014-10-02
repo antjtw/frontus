@@ -42,6 +42,25 @@ app.controller('createCertificate',
                     $scope.selected.issue = $scope.issueSelectOptions.data[0];
                 }
             }
+            $scope.docs = [];
+            $scope.ready = function() {
+                if ($scope.issue[0]) {
+                    $scope.issue[0].getDocsPromise().then(function(docs) {
+                        $scope.docs = docs
+                        if (docs['issue certificate']) {
+                            Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
+                                if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            });
+                        } else {
+                            return false
+                        }
+                    });
+                }
+            }
         });
 
         $scope.$watch('selected.issue', function(new_issue, old_issue) {
