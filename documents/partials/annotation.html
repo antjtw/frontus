@@ -41,7 +41,7 @@
                         <input class="annotation-dropdown" ui-select2="select2TypeOptions" ng-model="annot.whattypesetter" ng-model-options="{getterSetter: true}" placeholder="{{annot.whattype}}">
                     </ul>
                 </li>
-                <li ng-if="annot.type == 'text'">
+                <li ng-if="annot.type == 'text' && doc.transaction_type != 'issue certificate'">
                     <ul>
                         <li>
                             <span>To be completed by</span>

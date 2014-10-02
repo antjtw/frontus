@@ -98,11 +98,11 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.current.val = "";
         }
     });
-    
+
     $scope.signatureURL = function(annot) {
         if (annot.whattype != "ImgSignature" || !annot.forRole(navState.role))
             return "";
-        if (!annot.val || annot.val.length == 0 || annot.val == "Personal")
+        if (!annot.val || annot.val.length === 0 || annot.val == "Personal")
             return "/photo/user?id=signature:";
         return '/photo/user?id=company_signature:' + annot.val;
     };
@@ -128,7 +128,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         }
         return $scope.annot.whattype;
-    }
+    };
     function annotationOrderComp(typeA, typeB) {
         // type "Text" always takes priority
         if (typeA.id == "Text") {
@@ -189,7 +189,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         createSearchChoice: function(text) {
             return {id: text, text: text};
         },
-    }
+    };
 
     $scope.unusedType = function(type) {
         // only want to filter transaction types that are already in used
