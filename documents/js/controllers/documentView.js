@@ -287,13 +287,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              });
                          });
                      });
-                     SWBrijj.tblm('ownership.certificates', 'from_transaction', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
+                     SWBrijj.tblm('ownership.company_certificates', 'from_transaction', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
                          annot_promise.then(function(annots) {
-                             console.log("setting certificate details");
-                             console.log(certificate_deets);
                              annots.forEach(function(annot) {
                                  if (annot.whattype == "certificate_id") {
-                                     prep.overrides[annot.id] = 'S-asdf';
+                                     prep.overrides[annot.id] = 'S-' + certificate_deets.sequence;
                                  }
                              });
                              // TODO: restrictions / par value?
