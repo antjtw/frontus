@@ -726,7 +726,7 @@ own.directive('editableCellDetails', [function() {
                                 var ctemplate = security.getDocs()['issue certificate'];
                                 if (ctemplate) {
                                     if (Documents.getOriginal(ctemplate.doc_id).validTransaction()) {
-
+                                        //Put link to certificate preview here.
                                     } else {
                                         $location.url('/app/ownership/certificate/create?issue=' + security.name);
                                     }
