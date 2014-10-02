@@ -1,7 +1,7 @@
 'use strict';
 
 app.controller('createCertificate',
-    ["$scope", "Documents", "captable", "$routeParams", function($scope, Documents, captable, $routeParams){
+    ["$scope", "Documents", "captable", "$routeParams", "$location", function($scope, Documents, captable, $routeParams, $location){
         $scope.issue = [];
         /// issue picker
         // Get the company's Issues
@@ -26,6 +26,13 @@ app.controller('createCertificate',
                             text: issue.name,
                             issue: issue
                         });
+                        if ($routeParams.issue && $routeParams.issue == issue.name) {
+                            $scope.selected.issue = {
+                                id: issue.name,
+                                text: issue.name,
+                                issue: issue
+                            };
+                        }
                     }
                 });
                 if ($scope.issueSelectOptions.data.length == 1)
@@ -38,11 +45,8 @@ app.controller('createCertificate',
         $scope.$watch('selected.issue', function(new_issue, old_issue) {
             if (new_issue && typeof(new_issue) !== "string" && (!$scope.issue || new_issue.text !== $scope.issue.name)) {
                 $scope.issue[0] = new_issue.issue;
+                $location.search('issue', new_issue.issue.name).replace();
             }
         });
-
-        if ($routeParams.issue) {
-            $scope.selected.issue = $routeParams.issue;
-        }
         /// end issue picker logic
 }]);
