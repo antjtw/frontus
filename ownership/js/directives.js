@@ -730,11 +730,11 @@ own.directive('editableCellDetails', [function() {
                                                 //Put link to certificate preview here.
                                                 console.log("would goto preview");
                                             } else {
-                                                $location.url('/app/ownership/certificate/create?issue=' + security.name);
+                                                $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name));
                                             }
                                         });
                                     } else {
-                                        $location.url('/app/ownership/certificate/create?issue=' + security.name);
+                                        $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name));
                                     }
                                 });
                             }
@@ -1615,7 +1615,7 @@ own.directive('grantWizardNav', [function() {
 
                 $scope.backurl = function() {
                     if ($routeParams.flow == 'certificate') {
-                        return '/app/ownership/certificate/create';
+                        return '/app/ownership/certificate/create?issue=' + $routeParams.issue;
                     }
                     return '/app/ownership/grants/issue';
                 };
