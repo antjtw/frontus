@@ -341,7 +341,10 @@ own.directive('securityDetails', [function() {
                 };
 
                 $scope.viewEvidence = function(ev) {
-                    if (ev.doc_id !== null) {
+                    if (ev.label) {
+                        $location.url('/app/documents/company-view?doc='+ev.doc_id+'&page=1');
+                    }
+                    else if (ev.doc_id !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.doc_id+'&page=1');
                     } else if (ev.original !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
@@ -392,7 +395,10 @@ own.directive('editableSecurityDetails', [function() {
                 };
 
                 $scope.viewEvidence = function(ev) {
-                    if (ev.doc_id !== null) {
+                    if (ev.label) {
+                        $scope.viewme = ['issuer', ev.doc_id];
+                    }
+                    else if (ev.doc_id !== null) {
                         $scope.viewme = ['investor', ev.doc_id];
                     } else if (ev.original !== null) {
                         $scope.viewme = ['issuer', ev.original];
