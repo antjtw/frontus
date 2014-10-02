@@ -9,6 +9,12 @@
             </div>
 
             <linked-documents coretype='certificate' issue='issue' ng-if="issue[0]"></linked-documents>
+
+            <a class="wizard-next" ng-href="{{nextURL}}">
+                <div class="standard-button">
+                    <button class="btn" ng-disabled="!ready()"><span ng-show="!transaction">Done</span><span ng-show="transaction">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></span></button>
+                </div>
+            </a>
         </div>
     </div>
 </div>

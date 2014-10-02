@@ -15,6 +15,8 @@ app.controller('createCertificate',
             placeholder: "Pick an equity",
         };
 
+        $scope.transaction = $routeParams.transaction;
+
         $scope.$watchCollection('issues', function(issues) {
             // set up the select box
             if (issues) {
@@ -46,6 +48,15 @@ app.controller('createCertificate',
             if (new_issue && typeof(new_issue) !== "string" && (!$scope.issue || new_issue.text !== $scope.issue.name)) {
                 $scope.issue[0] = new_issue.issue;
                 $location.search('issue', new_issue.issue.name).replace();
+                if ($scope.transaction) {
+                    $scope.issue[0].getDocsPromise().then(function(docs) {
+                        if (docs['issue certificate']) {
+                            $scope.nextURL = '/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + $scope.transaction;
+                        } else {
+                            $scope.nextURL = '/app/ownership/company-captable'
+                        }
+                    });
+                }
             }
         });
         /// end issue picker logic
