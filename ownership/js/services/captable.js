@@ -148,7 +148,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         addSpecificEvidence: function(doc_id, type, label) {
             var security = this;
             return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction, doc_id, type, label).then(function(x) {
-                security.docs[type] = {'doc_id': doc_id, 'type': type, 'docname': x[0].add_issue_document};
+                security.docs[type] = {'doc_id': doc_id, 'type': type, 'label': label, 'docname': x[0].add_issue_document};
                 if (transaction_doc_types.indexOf(type) !== -1) {
                     SWBrijj.update("document.my_company_library", {issue: security.name, "transaction_type": type}, {doc_id: doc_id});
                 }

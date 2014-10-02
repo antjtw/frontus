@@ -425,7 +425,11 @@ own.directive('editableSecurityDetails', [function() {
                         }
                     });
                     if (doc) {
-                        captable.toggleForEvidence(doc);
+                        if (bin != 'bin') {
+                            $scope.sec.addSpecificEvidence(parseInt(item), String(bin), String(bin));
+                        } else {
+                            captable.toggleForEvidence(doc);
+                        }
                     }
                 };
 

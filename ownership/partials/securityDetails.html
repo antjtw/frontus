@@ -49,6 +49,19 @@
             </div>
             <div ng-if="tran.evidence_data.length>0"
                  class="linkedDocuments viewOnly">
+                <div class="specifics" ng-repeat="doc in sec.getDocs()">
+                    <ul class="pull-left">
+                        <li>
+                            {{doc.label}}
+                        </li>
+                        <li>
+                            <span ng-click="viewEvidence(doc)">
+                                {{doc.docname}}
+                            </span>
+                        </li>
+
+                    </ul>
+                </div>
                 <div ng-repeat="doc in tran.evidence_data" class="row-fluid">
                     <ul class="pull-left">
                         <li>
