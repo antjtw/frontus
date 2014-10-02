@@ -113,6 +113,13 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                 $scope.annot.val = ""; // clear out value since the type changed
                 setDefaultText();
             }
+            if (newval == "qrcode")
+            {
+                $scope.annot.type = "qrcode";
+                $scope.annot.val = "qrcode";
+            }
+            if (oldval == "qrcode" && newval != "qrcode")
+                $scope.annot.type = "text";
         }
         // update type information
         $scope.annot.updateTypeInfo($scope.doc.annotation_types);
@@ -252,6 +259,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.$apply(function() {
             var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
             var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
+            if ($scope.annot.type == "qrcode")
+            {
+                dx = dy = Math.max(dx, dy, 111);
+            }
             $scope.annot.position.size.height = dy;
             $scope.annot.position.size.width = dx;
             return false;
@@ -424,6 +435,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
     $scope.annotationSizeImageStyle = {};
+    $scope.annotationSizeQRStyle = {};
+    $scope.annotationSizeQRStyle['min-height'] = '111 px';
+    $scope.annotationSizeQRStyle['min-width'] = '111 px';
     $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
     $scope.enumBoxMode = function() {
