@@ -11,7 +11,7 @@
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
                           placeholder="{{current.placeholder}}"
-                          ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum'"
+                          ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type_info.typename == 'enum' || certificateDisable(annot)"
                           ng-keyup="addLineBreaks($event)" ng-model="current.val" style="resize:none"
                           class="row-fluid" ng-style="annotationSizeStyle"
                           ng-hide="(annot.whattype == 'document_id') ||((annot.whattype == 'ImgSignature') && annot.forRole(navState.role))"/>
