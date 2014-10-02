@@ -745,11 +745,11 @@ own.directive('editableCellDetails', [function() {
                                             if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
                                                 $location.url('/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + tran.transaction);
                                             } else {
-                                                $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name));
+                                                $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name)  + '&transaction=' + tran.transaction);
                                             }
                                         });
                                     } else {
-                                        $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name));
+                                        $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name)  + '&transaction=' + tran.transaction);
                                     }
                                 });
                             }
