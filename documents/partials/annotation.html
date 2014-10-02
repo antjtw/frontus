@@ -86,7 +86,7 @@
                         </li>
                     </ul>
                 </li>
-                <li ng-if="annot.type == 'text'">
+                <li ng-if="annot.type == 'text' && doc.transaction_type != 'issue certificate'">
                     <ul class="required-row">
                         <li>
                             <button ng-class="{'selected':annot.required}" ng-click="annot.required = !annot.required" class="check-box-button" ng-disabled="annot.type_info.required"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
