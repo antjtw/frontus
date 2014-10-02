@@ -25,7 +25,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
             this.message = angular.fromJson(sessionStorage.getItem(name + '-message'));
             sessionStorage.removeItem(name + '-emails');
             sessionStorage.removeItem(name + '-documents');
-            sessionStorage.removeItem(name + '-messages');
+            sessionStorage.removeItem(name + '-message');
             if (this.emails === null) {
                 this.emails = [];
             }
@@ -106,7 +106,7 @@ docs.factory('DocShareFactory', ["SWBrijj", "Investor", "$q", function(SWBrijj, 
                     found = idx;
                 }
             });
-            if (found) {
+            if (found !== undefined) {
                 this.documents.splice(found, 1);
             }
         },
@@ -212,6 +212,7 @@ docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocSh
     // TODO: ShareDocs is now a kindof unnecessary wrapper around a DocsShare object. Should eliminate it.
     // Session storage
     var ds = new DocShareFactory();
+    this.ds = ds;
     $window.addEventListener('beforeunload', function(event) {
         ds.save('shareDocs');
     });
@@ -220,7 +221,6 @@ docs.service('ShareDocs', ["$window", "DocShareFactory", function($window, DocSh
 
     this.emails = ds.emails;
     this.documents = ds.documents;
-    this.message = ds.message;
     this.prepCache = ds.prepCache;
 
     this.upsertShareItem = function(doc) {
