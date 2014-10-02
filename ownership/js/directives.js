@@ -348,6 +348,8 @@ own.directive('securityDetails', [function() {
                     }
                 };
 
+
+
                 $scope.loaddirective();
 
                 $scope.$watch('sec', function(newval, oldval) {
@@ -727,8 +729,7 @@ own.directive('editableCellDetails', [function() {
                                     if (docs['issue certificate']) {
                                         Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
                                             if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
-                                                //Put link to certificate preview here.
-                                                console.log("would goto preview");
+                                                $location.url('/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&investorid=' + encodeURIComponent(tran.attrs.investor) + '&transaction=' + tran.transaction);
                                             } else {
                                                 $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name));
                                             }
