@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs', 'Investor', '$q',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs, Investor, $q) {
         $scope.cachebuster = Math.random();
         $scope.annots = [];
         $scope.signatureprocessing = false;
@@ -251,6 +251,55 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                  $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
 
                  $scope.annots = Annotations.getDocAnnotations($scope.doc);
+                 if ($scope.doc.transaction_type === "issue certificate") {
+                     // if we're issuing a certificate, we can assume we have prepareFor which is a transaction
+                     var annot_p = $q.defer();
+                     var annot_promise = annot_p.promise;
+                     var annot_watch_cancel = $scope.$watchCollection('annots', function(annots) {
+                         if (annots.length > 0) {
+                             annot_watch_cancel();
+                             annot_p.resolve($scope.annots);
+                         }
+                     });
+                     // need to add a preparedFor entry, as that's all faked
+                     var prep = $scope.doc.addPreparedFor($scope.prepareFor);
+                     annot_promise.then(function(annots) {
+                         annots.forEach(function(annot) {
+                             if (annot.whattype == "document_id") {
+                                 prep.overrides[annot.id] = "I'm a QR Code!";
+                             }
+                         });
+                     });
+                     SWBrijj.tblm('_ownership.my_company_draft_transactions', 'transaction', parseInt($scope.prepareFor, 10)).then(function (transaction_deets) {
+                         annot_promise.then(function(annots) {
+                             var attrs = JSON.parse(transaction_deets.attrs);
+                             annots.forEach(function(annot) {
+                                 if (annot.whattype == "grant_date") {
+                                     prep.overrides[annot.id] = transaction_deets.effective_date;
+                                 } else if (annot.whattype == "units") {
+                                     prep.overrides[annot.id] = attrs.units;
+                                 } else if (annot.whattype == "security") {
+                                     prep.overrides[annot.id] = attrs.security;
+                                 } else if (annot.whattype == "investor") {
+                                     // TODO: look up cap table name
+                                     prep.overrides[annot.id] = attrs.investor;
+                                 }
+                             });
+                         });
+                     });
+                     SWBrijj.tblm('ownership.certificates', 'from_transaction', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
+                         annot_promise.then(function(annots) {
+                             console.log("setting certificate details");
+                             console.log(certificate_deets);
+                             annots.forEach(function(annot) {
+                                 if (annot.whattype == "certificate_id") {
+                                     prep.overrides[annot.id] = 'S-asdf';
+                                 }
+                             });
+                             // TODO: restrictions / par value?
+                         });
+                     });
+                 }
              }).except(function(err) {
                  $scope.$parent.leave();
              });

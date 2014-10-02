@@ -381,9 +381,6 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         getPreparedFor: function(defaultList) {
             var doc = this;
-            if (doc.transaction_type === "issue certificate") {
-                return [];
-            }
             function mergeDefaultList(defaultList){
                 if (defaultList) {
                     var origLength = doc.preparedFor.length;
@@ -401,6 +398,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             if (!this.preparedFor) {
                 this.preparedFor = {};
                 this.preparedForLoading = true;
+                if (doc.transaction_type === "issue certificate") {
+                    return this.preparedFor;
+                }
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
                         investor_prep.overrides = {};
@@ -450,6 +450,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             var doc = this;
             var hash = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: false, overrides: {}};
             if (doc.transaction_type === "issue certificate") {
+                doc.preparedFor[investor] = hash;
                 return hash;
             }
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
@@ -497,6 +498,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         },
         savePreparation: function(investor) {
             if (doc.transaction_type === "issue certificate") {
+                // TODO: save override data in ownership.certificates?
                 return;
             }
             var doc = this;
