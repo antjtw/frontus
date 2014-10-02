@@ -424,6 +424,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
     $scope.annotationSizeImageStyle = {};
+    $scope.annotationSizeQRStyle = {};
+    $scope.annotationSizeQRStyle['min-height'] = '111 px';
+    $scope.annotationSizeQRStyle['min-width'] = '111 px';
     $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
     $scope.enumBoxMode = function() {
@@ -459,6 +462,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
             $scope.annotationSizeImageStyle["max-width"] = (new_size.width - 14) + "px";
             $scope.annotationSizeImageStyle["max-height"] = (new_size.height - 10) + "px";
+            $scope.annotationSizeQRStyle["max-width"] = Math.max((new_size.width - 14), 111) + "px";
+            $scope.annotationSizeQRStyle["max-height"] = Math.max((new_size.height - 10), 111) + "px";
             $scope.annotationHighlightStyle.width = (new_size.width) + "px";
             $scope.annotationHighlightStyle.height = (new_size.height) + "px";
         }
