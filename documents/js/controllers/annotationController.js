@@ -557,9 +557,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.certificateDisable = function(annot) {
         if ($scope.doc.transaction_type == 'issue certificate') {
-            if (annot.type_info.required !== true) {
-                console.log(annot.type_info);
-            }
             return (annot.type_info.required === true);
         } else {
             return false;
