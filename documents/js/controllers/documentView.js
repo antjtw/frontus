@@ -266,7 +266,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                      annot_promise.then(function(annots) {
                          annots.forEach(function(annot) {
                              if (annot.whattype == "document_id") {
-                                 prep.overrides[annot.id] = "I'm a QR Code!";
+                                 prep.overrides[annot.id] = "-1";
                              }
                          });
                      });
@@ -287,11 +287,11 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                              });
                          });
                      });
-                     SWBrijj.tblm('ownership.company_certificates', 'from_transaction', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
+                     SWBrijj.procm('ownership.get_or_generate_certificate_record', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
                          annot_promise.then(function(annots) {
                              annots.forEach(function(annot) {
                                  if (annot.whattype == "certificate_id") {
-                                     prep.overrides[annot.id] = 'S-' + certificate_deets.sequence;
+                                     prep.overrides[annot.id] = 'S-' + certificate_deets[0].sequence;
                                  }
                              });
                              // TODO: restrictions / par value?
