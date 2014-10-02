@@ -432,7 +432,11 @@ own.directive('editableSecurityDetails', [function() {
                     });
                     if (doc) {
                         if (bin != 'bin') {
-                            $scope.sec.addSpecificEvidence(parseInt(item), String(bin), String(bin));
+                            if (!doc.investor) {
+                                $scope.sec.addSpecificEvidence(parseInt(item), String(bin), String(bin));
+                            } else {
+                                $scope.$emit("notification:fail", "This type of document must be an original");
+                            }
                         } else {
                             captable.toggleForEvidence(doc);
                         }
@@ -739,7 +743,7 @@ own.directive('editableCellDetails', [function() {
                                     if (docs['issue certificate']) {
                                         Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
                                             if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
-                                                $location.url('/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&investorid=' + encodeURIComponent(tran.attrs.investor) + '&transaction=' + tran.transaction);
+                                                $location.url('/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + tran.transaction);
                                             } else {
                                                 $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name));
                                             }
