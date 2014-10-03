@@ -456,9 +456,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     "",
                     "22 November 2113"
                     ).then(function(data) {
-                        console.log(data);
+                        $scope.$emit("notification:success", "Void request rejected");
+                        $rootScope.leave(["/ownership/grants/", '/ownership/certificate/', '/documents/company-view']);
                     }).except(function(err) {
                         console.error(err);
+                        $scope.emit("notification:fail", "Oops, we were unable to issue this certificate.");
                 });
         };
 
