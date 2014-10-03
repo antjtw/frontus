@@ -98,11 +98,11 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.current.val = "";
         }
     });
-    
+
     $scope.signatureURL = function(annot) {
         if (annot.whattype != "ImgSignature" || !annot.forRole(navState.role))
             return "";
-        if (!annot.val || annot.val.length == 0 || annot.val == "Personal")
+        if (!annot.val || annot.val.length === 0 || annot.val == "Personal")
             return "/photo/user?id=signature:";
         return '/photo/user?id=company_signature:' + annot.val;
     };
@@ -113,13 +113,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                 $scope.annot.val = ""; // clear out value since the type changed
                 setDefaultText();
             }
-            if (newval == "qrcode")
-            {
-                $scope.annot.type = "qrcode";
-                $scope.annot.val = "qrcode";
-            }
-            if (oldval == "qrcode" && newval != "qrcode")
-                $scope.annot.type = "text";
         }
         // update type information
         $scope.annot.updateTypeInfo($scope.doc.annotation_types);
@@ -135,7 +128,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         }
         return $scope.annot.whattype;
-    }
+    };
     function annotationOrderComp(typeA, typeB) {
         // type "Text" always takes priority
         if (typeA.id == "Text") {
@@ -194,9 +187,11 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             return classes;
         },
         createSearchChoice: function(text) {
-            return {id: text, text: text};
+            if ($scope.doc.transaction_type != "issue certificate") {
+                return {id: text, text: text};
+            }
         },
-    }
+    };
 
     $scope.unusedType = function(type) {
         // only want to filter transaction types that are already in used
@@ -257,10 +252,6 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.$apply(function() {
             var dx = $event.clientX - $scope.initialMouseX + document.documentElement.scrollLeft - $scope.initialScrollX;
             var dy = $event.clientY - $scope.initialMouseY + document.documentElement.scrollTop - $scope.initialScrollY;
-            if ($scope.annot.type == "qrcode")
-            {
-                dx = dy = Math.max(dx, dy, 111);
-            }
             $scope.annot.position.size.height = dy;
             $scope.annot.position.size.width = dx;
             return false;
@@ -471,6 +462,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
             $scope.annotationSizeImageStyle["max-width"] = (new_size.width - 14) + "px";
             $scope.annotationSizeImageStyle["max-height"] = (new_size.height - 10) + "px";
+            $scope.annotationSizeQRStyle["max-width"] = Math.max((new_size.width - 14), 111) + "px";
+            $scope.annotationSizeQRStyle["max-height"] = Math.max((new_size.height - 10), 111) + "px";
             $scope.annotationHighlightStyle.width = (new_size.width) + "px";
             $scope.annotationHighlightStyle.height = (new_size.height) + "px";
         }
@@ -561,6 +554,14 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         });
     }
+
+    $scope.certificateDisable = function(annot) {
+        if ($scope.doc.transaction_type == 'issue certificate') {
+            return (annot.type_info.required === true);
+        } else {
+            return false;
+        }
+    };
 }
 
 annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "$timeout", "navState", "SWBrijj", "User"];

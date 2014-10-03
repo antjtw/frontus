@@ -140,6 +140,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 delete z.investor;
                 $location.search(z);
                 $scope.prepareFor = $routeParams.investorid; // investor id, if we're doing an investor specific preparation
+                if ($routeParams.transaction) {
+                    $scope.prepareFor = $routeParams.transaction;
+                }
                 $scope.initDocView();
 
                 $scope.checkProcessing();

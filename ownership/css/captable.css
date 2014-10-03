@@ -2544,6 +2544,26 @@ span.tour-icon.issue-cog + .tooltip {
     margin-bottom: 20px;
 }
 
+.linkedDocuments.specified-docs {
+    overflow: auto;
+}
+
+.linkedDocuments.specified-docs ul > li:first-of-type, .linkedDocuments .specifics ul > li:first-of-type {
+    color: #1d2c3c;
+    text-transform: capitalize;
+}
+
+.linkedDocuments.specified-docs ul > li:last-of-type > span, .linkedDocuments .specifics ul > li:last-of-type > span {
+    color: #3498DB;
+    font-size: 14px !important;
+    cursor: pointer;
+    width: 220px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .drop-zone > div {
     padding-left: 20px;
     padding-right: 30px;
