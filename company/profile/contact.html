@@ -3,7 +3,7 @@
 <div class="row-fluid">
 <div style="margin-left: 0;" class="span12 statusBlock">
     <div class="row-fluid">
-        <div class="subnav-controls">
+        <div class="subnav-controls wideequalspace">
             <div>
                 <div class="pull-left">{{navState.name}}</div>
                 <div class="pull-right" ng-show="nextInvoice().period_end">
@@ -76,7 +76,6 @@
                                 </a>
                                 <ul ng-hide="toggleView();" class="dropdown-menu">
                                     <li ng-click="startOauth('dropbox')">Relink Dropbox</li>
-                                    <li ng-click="exportCaptableToDropbox()">Export Captable</li>
                                     <li ng-click="exportAllToDropbox()">Export Documents</li>
                                 </ul>
                             </li>
@@ -99,7 +98,14 @@
                     </div>
                     <div class="pull-left">
                         <span>******{{billing.current_card.last4}}</span>
-                        <span style="padding-left:60px">{{billing.discount}}</span>
+                        <span ng-if="billing.discount"
+                              style="padding-left:60px">
+                            {{billing.discount}}
+                        </span>
+                        <span ng-if="billing.freetrial"
+                              style="padding-left:30px">
+                            {{billing.freetrial}}
+                        </span>
                     </div>
                     <div class="pull-right pointer">
                                             <span data-icon="&#xe00e;" aria-hidden="true" ng-click="ccModalOpen()">
@@ -193,27 +199,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <div class="pull-left">
-                        Direct Messages (monthly)
-                                            <span class="tooltip-icon"
-                                                  data-icon="&#xe044;"
-                                                  aria-hidden="true"
-                                                  data-placement="top"
-                                                  bs-tooltip="usagetips.direct_messages_monthly">
-                                            </span>
-                    </div>
-                    <div class="pull-right">
-                        <div>
-                            <meter cur="billing.usage.direct_messages_monthly" tot="billing.usage.direct_messages_monthly_limit"></meter>
-                        </div>
-                    </div>
-                    <div class="pull-right">
-                        <div> <span>{{billing.usage.direct_messages_monthly || 0}} / {{billing.usage.direct_messages_monthly_limit || 0}}</span>
 
-                        </div>
-                    </div>
-                </div>
                 <div class="row-fluid">
                     <div class="pull-left"
                          ng-if="billing.currentPlan
@@ -273,6 +259,29 @@
                             </a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="span4">
+    <div class="row-fluid">
+        <div class="front info-box">
+            <div class="head-box">
+                <h2>Company Signatures</h2>
+            </div>
+            <div class="body-box">
+                <div class='signature-image ind-sig' ng-repeat="sig in companySignatures">
+                     <h2 class="signature-label">{{sig.label}}</h2>
+                    <div class="pointer">
+                        <span data-icon="&#xe00e;" aria-hidden="true" ng-click="sigModalUpUpdate(sig.label, sig.url);"></span>
+                    </div>
+                    <div>
+                        <img ng-src="{{sig.url}}">
+                    </div>
+                </div>
+                <div class="signature-button standard-button">
+                    <button ng-click="sigModalUpNew();" class="btn">Add Signature</button>
                 </div>
             </div>
         </div>
@@ -599,5 +608,4 @@
         </div>
     </div>
 </div>
-<div class="minimumGap"></div>
-<div class="push"></div>
+<signature-modal options="sigOptions"></signature-modal>

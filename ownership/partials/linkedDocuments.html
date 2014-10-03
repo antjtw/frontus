@@ -1,0 +1,84 @@
+<div class="wizard-tile wizard-flow">
+    <h2>Linked Documents</h2>
+    <div class="wizard-right">
+        <p>These documents will be shared with each option grant recipient. The option agreement<br>must be prepared as a template, so it can be re-used for each option grant.</p>
+        <ul class="wizard-linking">
+            <li>
+                <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
+                    <div>
+                        <span tooltip-placement="top"
+                              tooltip="Document ready to share"
+                              ng-show="doc.docname && isPrepared(doc.doc_id)"
+                              data-icon="&#xe052;"
+                              aria-hidden="true"></span>
+                        <span tooltip-placement="top"
+                              tooltip="{{errorTooltip(doc)}}"
+                              ng-show="(!doc.docname || !isPrepared(doc.doc_id)) && type != 'exercise'"
+                              data-icon="&#xe612;"
+                              aria-hidden="true"></span>
+                    </div>
+                    <div class="wizard-doc" ng-if="type == 'plan'">Option Plan</div>
+                    <div class="wizard-doc" ng-if="type == 'grant'">Option Agreement</div>
+                    <div class="wizard-doc" ng-class="{'noicon': !doc.docname}" ng-if="type == 'exercise'">Notice of Exercise</div>
+                    <div ng-if="doc.docname"><a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">{{doc.docname}}</a></div>
+                    <div ng-if="!doc.docname && uploading[type]"><a>Processing . . . </a></div>
+                    <div class="wizard-selects pull-right">
+                        <ul ng-if="doc.docname" class="dropdown-list">
+                            <li class="dropdown standard menu-drop">
+                                <a class="dropdown-toggle"> <span data-icon="&#xe011;" aria-hidden="true"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-click="prepareDoc(doc.doc_id)"><a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">Add Annotations</a></li>
+                                    <li ng-click="issue[0].removeDoc(doc)"><a>Unlink</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-right" ng-if="doc.docname && !isPrepared(doc.doc_id)">
+                        <a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">
+                            <div class="standard-button pull-right">
+                                <button class="btn">
+                                    Prepare
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="documentUploadFileInputs fileinputs pull-right" ng-if="!doc.docname && !uploading[type]">
+                        <div ng-if="type == 'plan'">
+                            <input multiple type="file" class='file'
+                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                   onchange="angular.element(this).scope().setFiles(this, 'plan');"/>
+                        </div>
+                        <div ng-if="type == 'grant'">
+                            <input multiple type="file" class='file'
+                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                   onchange="angular.element(this).scope().setFiles(this, 'grant');"/>
+                        </div>
+                        <div ng-if="type == 'exercise'">
+                            <input multiple type="file" class='file'
+                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.odt,.odp,.odi,.png,.tiff,.jpg,.txt,.rdf"
+                                   onchange="angular.element(this).scope().setFiles(this, 'exercise');"/>
+                        </div>
+                        <div class="documentUpload fakefile">
+                            <div class="standard-button gray">
+                                <button class="btn">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right" ng-if="!doc.docname && !uploading[type]">
+                        <a href="/app/ownership/grants/docs">
+                            <div class="standard-button pull-right gray">
+                                <button class="btn">
+                                    Pick from Library
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="wizard-selects pull-right">
+
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

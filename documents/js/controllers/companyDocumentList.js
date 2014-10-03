@@ -3,13 +3,10 @@
 app.controller('CompanyDocumentListController',
     ['$scope', '$timeout', '$modal', '$window', '$location',
         '$routeParams', '$rootScope', '$route', 'SWBrijj', 'navState',
-        'basics', '$http',
+        'basics', '$http', 'ShareDocs', 'Investor',
         function($scope, $timeout, $modal, $window, $location,
                  $routeParams, $rootScope, $route, SWBrijj, navState,
-                 basics, $http) {
-            $scope.docShareState = {
-                doclist:[],
-            };
+                 basics, $http, ShareDocs, Investor) {
             $scope.state = {
                 hideSharebar: true,
                 maxRatio: 1000,
@@ -47,46 +44,9 @@ app.controller('CompanyDocumentListController',
                 $rootScope.errorMessage = msg;
             });
 
-            /* this investor list is used by the sharing email list drop-down */
-            $scope.vInvestors = [];
-            SWBrijj.tblm('global.investor_list', ['email', 'name']).then(function(data) {
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].name) {
-                        $scope.vInvestors.push(data[i].name + "  (" + data[i].email +")");
-                    }
-                    else {
-                        $scope.vInvestors.push("(" +data[i].email+")");
-                    }
-                }
-            });
             if ($rootScope.person) {
                 $rootScope.$broadcast("profile_loaded");
             }
-
-            $scope.saveShareState = function(clear) {
-                if (clear) {
-                    sessionStorage.removeItem("sharewave");
-                    sessionStorage.setItem("sharewave",
-                        angular.toJson(emptyShareState()));
-                } else  {
-                    if (!$scope.docShareState) {
-                        $scope.docShareState = emptyShareState();
-                    }
-                    //$scope.docShareState.emails = $scope.multipeople;
-                    $scope.docShareState.message = $scope.messageText;
-                    sessionStorage.setItem("sharewave",
-                        angular.toJson($scope.docShareState));
-                }
-            };
-
-            $scope.$on('$locationChangeStart', function (event, next, current) {
-                $scope.saveShareState();
-            });
-            window.onbeforeunload = function() {
-                if (document.location.href.indexOf('documents/company-list') != -1) {
-                    $scope.saveShareState();
-                }
-            };
 
             function loadTags() {
                 SWBrijj.tblm('document.my_company_tags').then(function(x) {
@@ -199,11 +159,24 @@ app.controller('CompanyDocumentListController',
 
             $scope.modals.documentUploadOpen = function() {
                 $scope.files = [];
+                $scope.uploadType = null;
+                $scope.uploadDocid = null;
                 $scope.documentUploadModal = true;
             };
 
             $scope.modals.documentUploadClose = function() {
                 $scope.documentUploadModal = false;
+            };
+
+            $scope.modals.signedUploadOpen = function(docid) {
+                $scope.files = [];
+                $scope.uploadType = 'signed';
+                $scope.uploadDocid = docid;
+                $scope.signedUploadModal = true;
+            };
+
+            $scope.modals.signedUploadClose = function() {
+                $scope.signedUploadModal = false;
             };
 
             $scope.wideopts = {
@@ -266,11 +239,43 @@ app.controller('CompanyDocumentListController',
                         }
                     }
                     if ($scope.files.length > 0) {
-                        $scope.uploadFile($scope.files);
+                        $scope.uploadFile($scope.files, $scope.uploadType, $scope.uploadDocid);
                     }
                     $scope.modals.documentUploadClose();
                 });
             };
+
+            $scope.checkSignedUploaded = function() {
+                SWBrijj.tblm('document.my_counterparty_library', ['doc_id', 'when_signature_provided', 'signed_uploaded', 'signed_upload_attempted']).then(function(data) {
+                    angular.forEach(data, function(doc) {
+                        if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
+                        {
+                            var ind = $scope.modals.uploadedSignedDocs.indexOf(doc.doc_id);
+                            if (ind > -1)
+                            {
+                                if (doc.when_signature_provided)
+                                {
+                                    $scope.modals.uploadedSignedDocs.splice(ind, 1);
+                                    //update row TODO: find a way to refresh row without refreshing page
+                                    $route.reload();
+                                }
+                                else if (!doc.signed_uploaded)
+                                {
+                                    $scope.modals.uploadedSignedDocs.splice(ind, 1);
+                                    //notify failure
+                                    $scope.$emit("notification:fail", "Signed copy rejected. Did it have the same number of pages as the original?");
+                                }
+                            }
+                        }
+                    });
+                    if ($scope.modals.uploadedSignedDocs.length > 0)
+                    {
+                        $timeout($scope.checkSignedUploaded, 2000);
+                    }
+                }).except(function(data) {
+                    console.log(data);
+                });
+            }
 
             $scope.checkUploaded = function() {
                 SWBrijj.tblm('document.my_company_library', ['doc_id', 'pages']).then(function(data) {
@@ -298,7 +303,7 @@ app.controller('CompanyDocumentListController',
                 }).except(function(data) {
                     console.log(data);
                 });
-            }
+            };
 
             $scope.checkReady = function() {
                 // Cap at 10 then say error
@@ -331,7 +336,7 @@ app.controller('CompanyDocumentListController',
                 });
             };
 
-            $scope.uploadFile = function(files) {
+            $scope.uploadFile = function(files, type, docid) {
                 $scope.$on("upload:progress", function(evt, arg) {
                     $scope.loadProgress = 100 * (arg.loaded / arg.total);
                     $scope.showProgress = true;
@@ -342,7 +347,14 @@ app.controller('CompanyDocumentListController',
                     $rootScope.showProgress = false;
                     $rootScope.showProcessing = true;
                     $scope.modals.documentUploadClose();
-                    $scope.$emit("notification:success", "Success! We're preparing your file.");
+                    if (type == "signed")
+                    {
+                        $scope.$emit("notification:success", "Uploading signed version . . .");
+                    }
+                    else
+                    {
+                        $scope.$emit("notification:success", "Success! We're preparing your file.");
+                    }
                 });
                 $scope.$on(
                     "upload:error", function(evt, arg) {
@@ -364,32 +376,62 @@ app.controller('CompanyDocumentListController',
                     _kmq.push(['record', 'doc uploader']);
                     analytics.track('doc uploader');
                 }
-                Intercom('update', {company : {"documents":$scope.documents.length+1}});
-                for (var i = 0; i < files.length; i++) fd.append("uploadedFile", files[i]);
-                var upxhr = SWBrijj.uploadFile(fd);
+                if (type == null)
+                {
+                    Intercom('update', {company : {"documents":$scope.documents.length+1}});
+                }
+                for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
+                var upxhr;
+                if (type == "signed")
+                {
+                    if (fd.length > 1)
+                    {
+                        //throw error. Multiple docs doesn't make sense
+                        $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
+                        return;
+                    }
+                    upxhr = SWBrijj.uploadSigned(fd);
+                }
+                else
+                {
+                    upxhr = SWBrijj.uploadFile(fd);
+                }
                 upxhr.then(function(x) {
                     $scope.uploadprogress = x;
-                    for (var i = 0; i < files.length; i++) {
-                        var newdocument = {
-                            uploaded_by: $rootScope.person.email,
-                            iss_annotations: null,
-                            company: $rootScope.navState.company,
-                            doc_id: x[i],
-                            template_id: null,
-                            annotations: null,
-                            docname: files[i].name,
-                            version_count: 0,
-                            complete_count: 0,
-                            archive_complete_count: 0,
-                            archive_count: 0,
-                            statusRatio: 0,
-                            uploading: true,
-                            type: "doc"
-                        };
-                        $scope.documents.push(newdocument);
+                    if (type == "signed")
+                    {
+                        SWBrijj.uploadSetType(x[0], type, docid).then(function() {
+                            $scope.modals.uploadedSignedDocs.push(docid);
+                            $timeout($scope.checkSignedUploaded, 2000);
+                        }).except(function(x) {
+                            console.log(x);
+                        });
+                        $scope.modals.signedUploadClose();
                     }
-                    $timeout($scope.checkReady, 2000);
-                    $scope.modals.documentUploadClose();
+                    else
+                    {
+                        for (var i = 0; i < files.length; i++) {
+                            var newdocument = {
+                                uploaded_by: $rootScope.person.user_id,
+                                iss_annotations: null,
+                                company: $rootScope.navState.company,
+                                doc_id: x[i],
+                                template_id: null,
+                                annotations: null,
+                                docname: files[i].name,
+                                version_count: 0,
+                                complete_count: 0,
+                                archive_complete_count: 0,
+                                archive_count: 0,
+                                statusRatio: 0,
+                                uploading: true,
+                                type: "doc"
+                            };
+                            $scope.documents.push(newdocument);
+                        }
+                        $timeout($scope.checkReady, 2000);
+                        $scope.modals.documentUploadClose();
+                    }
 
                 }).except(function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
@@ -430,53 +472,16 @@ app.controller('CompanyDocumentListController',
                 $location.url("/app/documents/company-view?doc=" + docid + "&page=1");
             };
 
-            $scope.modals.upsertShareItem = function(item, list) {
-                // TODO: why does this make a copy of the list and return that?
-                var updated = false;
-                var listcopy = angular.copy(list);
-                angular.forEach(listcopy, function(el) {
-                    if (el.doc_id == item.doc_id ||
-                        (!el.doc_id && !item.doc_id &&
-                            el.template_id==item.template_id)) {
-                        el.signature_flow = item.signature_flow;
-                        updated = true;
-                    }
-                });
-                if (!updated) {
-                    var obj = {
-                        "doc_id": item.doc_id,
-                        "template_id": item.template_id,
-                        "signature_flow": item.signature_flow
-                    };
-                    listcopy.push(obj);
-                }
-                return listcopy;
-            };
-            $scope.modals.removeShareItem = function(item, list) {
-                return list.filter(function(el) {
-                    return !(item.doc_id==el.doc_id &&
-                             item.template_id==el.template_id);
-                });
-            };
-            $scope.modals.updateShareType = function(doc, tp) {
-                if (doc.template_id && tp > 0) {
-                    tp = 1;
-                }
-                doc.signature_flow = tp;
-                $scope.docShareState.doclist = $scope.modals.upsertShareItem(doc, $scope.docShareState.doclist);
-            };
             $scope.toggleSide = function () {
-                var s = $location.search();
                 if (!$scope.state.hideSharebar) {
-                    s={};
                     $scope.state.hideSharebar = true;
                     $scope.restoreViewState();
+                    $location.search('share', null).replace();
                 } else {
-                    s.share=true;
                     $scope.saveAndClearViewState();
                     $scope.state.hideSharebar = false;
+                    $location.search('share', true).replace();
                 }
-                $location.search(s);
             };
             $scope.saveAndClearViewState = function() {
                 $scope.viewState = {
@@ -530,19 +535,6 @@ app.controller('CompanyDocumentListController',
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
             };
-
-            $scope.fakePlaceholder = function() {
-                if ($scope.messageText == "Add an optional message...") {
-                    $scope.messageText = "";
-                }
-            };
-
-
-            //Email
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-            //My parentheses format
-            var regExp = /\(([^)]+)\)/;
 
             // TODO: all of these modals should be separate directives
 
@@ -643,14 +635,15 @@ app.controller('CompanyDocumentListController',
             };
 
             $scope.reallyDeleteDoc = function(doc) {
+                ShareDocs.removeShareItem(doc);
                 SWBrijj.procm("document.delete_document", doc.doc_id).then(function(data) {
                     void(data);
                     $rootScope.billing.usage.documents_total -= 1;
                     $scope.$emit("notification:success", doc.docname + " deleted.");
                     $scope.documents.splice($scope.documents.indexOf(doc), 1);
                 }).except(function(x) {
-                        $scope.$emit("notification:fail", x);
-                    });
+                    $scope.$emit("notification:fail", x);
+                });
             };
 
 
@@ -667,9 +660,9 @@ app.controller('CompanyDocumentListController',
                     // TODO: determine if doc.doc was archived, if so, decrement doc.doc.archive_complete_count
                     //doc.doc.complete_count -= 1; // current db logic counts documents in void requested status as complete ...
                 }).except(function(x) {
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
-                        console.log(x);
-                    });
+                    $scope.$emit("notification:fail", "Oops, something went wrong.");
+                    console.log(x);
+                });
             };
 
             $scope.modals.voidDocOpen = function(doc) {
@@ -700,129 +693,6 @@ app.controller('CompanyDocumentListController',
                 }).except(function(x) {
                         $scope.$emit("notification:fail", "Oops, something went wrong.");
                         console.log(x);
-                    });
-            };
-
-            // Multisharing modal functions
-
-            var docsharestateCOPY = angular.copy($scope.docShareState);
-            $scope.checkmany = function(people, docs, compare) {
-                var old_failed = true;
-                var offender = "";
-                if (compare) {
-                    old_failed = $scope.checkmany(docsharestateCOPY.emails, docsharestateCOPY.doclist, false);
-                }
-                var anybad = false;
-                var investors = [];
-                var docids = [];
-                angular.forEach(docs, function(doc) {
-                    docids.push(doc.doc_id);
-                });
-                angular.forEach($scope.documents, function(doc) {
-                    if (docids.indexOf(doc.doc_id)!==-1) {
-                        angular.forEach(doc.versions, function(version) {
-                            if (!doc.when_retracted) {
-                                investors.push(version.investor);
-                            }
-                        });
-                    }
-                });
-                var regExp = /\(([^)]+)\)/;
-                angular.forEach(people, function(person) {
-                    if (person.length != 1) {
-                        var email;
-                        var matches = regExp.exec(person);
-                        if (matches === null) {
-                            matches = ["", person];
-                        }
-                        email = matches[1];
-                        if (!re.test(email)) {
-                            anybad = true;
-                        }
-                        if (investors.indexOf(person)!==-1) {
-                            anybad = true;
-                        }
-                    }
-                });
-                if (people && people.length === 0) {
-                    anybad = true;
-                }
-                if (compare) {
-                    docsharestateCOPY = angular.copy($scope.docShareState);
-                    if (anybad && !old_failed && people.length > 0 && docs) {
-                        $scope.$emit("notification:fail", "Oops, recipients have already received these documents.");
-                    }
-                }
-                return anybad;
-            };
-            $scope.docsReadyToShare = function(docs) {
-                if (!docs || docs.length===0) {
-                    return false;
-                }
-                var count = 0;
-                angular.forEach($scope.documents, function(doc) {
-                    if (doc.forShare) {
-                        count += 1;
-                    }
-                });
-                if (count !== docs.length) {
-                    return false;
-                }
-                var res = true;
-                angular.forEach(docs, function(doc) {
-                    // FIXME 'doc' is not the full doc, doesn't have is_prepared.
-                    // get the full doc and check that
-                    if (doc.signature_flow < 0) {
-                        res = false;
-                    }
-                });
-                return res;
-            };
-
-            $scope.select2Options = {
-                'multiple': true,
-                'simple_tags': true,
-                'tags': $scope.vInvestors,
-                'tokenSeparators': [",", " "],
-                'placeholder': 'Enter email address & press enter'
-            };
-
-            $scope.shareDocuments = function(docsToShare, emails, message) {
-                $scope.processing = true;
-                if (message == "Add an optional message...") {
-                    message = null;
-                }
-                var tosee = "";
-                var regExp = /\(([^)]+)\)/;
-                angular.forEach($scope.docShareState.emails, function(person) {
-                    var matches = regExp.exec(person);
-                    if (matches === null) {
-                        matches = ["", person];
-                    }
-                    tosee += "," +  matches[1];
-                });
-                tosee = tosee === "" ? "!!!" : tosee;
-                angular.forEach(docsToShare, function(doc) {
-                    if (doc.signature_flow === undefined || doc.signature_flow === null) {
-                        doc.signature_flow = 0;
-                    }
-                });
-                SWBrijj.document_multishare(
-                        tosee.substring(1).toLowerCase(),
-                        JSON.stringify(docsToShare),
-                        message,
-                        "22 November 2113"
-                    ).then(function(data) {
-                        void(data);
-                        $scope.saveShareState(true);
-                        $scope.$emit("notification:success", "Documents shared");
-                        $location.search({});
-                        $route.reload();
-                        $scope.processing=false;
-                    }).except(function(err) {
-                        $scope.processing=false;
-                        console.log(err);
-                        $scope.$emit("notification:fail", "Oops, something went wrong.");
                     });
             };
 
@@ -921,10 +791,13 @@ app.controller('CompanyDocumentListController',
                         if (typeVars.doTags && s.tags !== null) {
                             s.tags = JSON.parse(s.tags);
                         }
+                        if (typeVars.doTags && s.preps !== null) {
+                            s.preps = JSON.parse(s.preps);
+                        }
                         s.type = typeVars.type;
                         s.statusRatio = s.status_ratio;
 
-                        if (s.pages == null)
+                        if (typeVars.doTags && s.pages == null)
                         {
                             stillUploading = true;
                         }
@@ -993,101 +866,60 @@ app.controller('CompanyDocumentListController',
             $scope.$watch('state.maxRatio', stateChangeTrigger);
             $scope.$watch('state.show_archived', stateChangeTrigger);
 
-            // Smart docs
-            SWBrijj.tblm('smartdoc.document_view').then(function(data) {
-                angular.forEach(data, function(template) {
-                    var doc = {
-                        "docname": template.template_name,
-                        "uploaded_by": null,
-                        "company": null,
-                        "doc_id": null,
-                        "template_id": template.template_id,
-                        "last_updated": null,
-                        "annotations": null,
-                        "versions": null,
-                        "is_prepared": template.is_prepared,
-                        "version_count": 0,
-                        "complete_count": 0,
-                        "archive_count": 0,
-                        "archive_complete_count": 0,
-                        "type": "doc",
-                        "last_event_time": null,
-                    };
-                    // add to each list of documents
-                    loadState.document.docname.forwardList.push(doc);
-                    loadState.document.docname.reverseList.push(doc);
-                    loadState.document.statusRatio.forwardList.push(doc);
-                    loadState.document.statusRatio.reverseList.push(doc);
+            // Sharing stuff that should be move to a directive
+            $scope.ShareDocs = ShareDocs;
+            function filterInvestors(investorList, emails) {
+                return investorList.filter(function(val, idx, arr) {
+                    return ! emails.some(function(emval, eidx, earr) {
+                        return val.id == emval;
+                    });
                 });
-            }).except(function(x) {
-            });
-
-            // fully load all the documents in the weird case where we're in the middle of sharing / preparing a document
-            function fullyLoadDocuments(callback) {
-                if (loadState.document.fullyLoaded) {
-                    callback();
-                    return;
-                }
-                $scope.loaddocs();
-                window.setTimeout(function() {fullyLoadDocuments(callback);}, 250);
-                return 4;
             }
 
-            function getShareState() {
-                var st = angular.copy(angular.fromJson(sessionStorage.getItem("sharewave")));
-                sessionStorage.removeItem("sharewave");
-                if (!st || st==[] || st.length===0 || !st.doclist) {
-                    $scope.docShareState = emptyShareState();
-                } else {
-                    $scope.docShareState = st;
-                }
-            }
-            function emptyShareState() {
-                return {doclist: [], emails: [], message: ""};
-            }
-            function loadPrepareState() {
-                var st1 = angular.fromJson(sessionStorage.getItem("docPrepareState"));
-                sessionStorage.removeItem("docPrepareState");
-                if (st1) {
-                    fullyLoadDocuments(function() {
-                        angular.forEach($scope.documents, function(doc) {
-                            if (st1.template_id===doc.template_id || st1.doc_id===doc.doc_id) {
-                                if (doc.is_prepared) {
-                                    $scope.modals.updateShareType(doc, 2);
-                                    $scope.$emit("notification:success",
-                                        "Success! Document prepared for signature.");
-                                } else {
-                                    $scope.modals.updateShareType(doc, -1);
-                                    $scope.$emit("notification:fail",
-                                        "Oops, the document is not ready for signature. Please try again.");
-                                }
+            //Email
+            var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            $scope.sharingSelect2Options = {
+                data: function() {
+                    return {
+                        'results': filterInvestors(Investor.investors, ShareDocs.emails)
+                    };
+                },
+                placeholder: 'Add Recipients',
+                createSearchChoice: Investor.createSearchChoiceMultiple,
+            };
+            $scope.badEmails = [];
+            $scope.addShareEmail = function(email_input) {
+                // this gets triggered multiple times with multiple types when the data changes
+                if (typeof(email_input) === "string") {
+                    email_input.split(/[\,, ]/).forEach(function(email) {
+                        email = email.trim();
+                        if (email.length < 3) {
+                            // can't be an email, probably gibberish
+                            return;
+                        }
+                        if (emailRegExp.test(email)) {
+                            ShareDocs.addEmail(email);
+                        } else {
+                            // doesn't look like an email, warn the user
+                            if ($scope.badEmails.indexOf(email) === -1) {
+                                $scope.badEmails.push(email);
                             }
-                        });
-                        $scope.finishedLoading = true;
+                        }
                     });
                 }
-                return st1;
-            }
-            function initShareState() {
-                getShareState();
-                loadPrepareState();
-                if ($scope.docShareState.doclist && $scope.docShareState.doclist.length > 0) {
-                    fullyLoadDocuments(function() {
-                        // TODO: rewrite to not depend on having a fully loaded $scope.documents
-                        angular.forEach($scope.documents, function(doc) {
-                            angular.forEach($scope.docShareState.doclist, function(docToShare) {
-                                if (doc.doc_id && doc.doc_id==docToShare.doc_id || (doc.template_id && doc.template_id==docToShare.template_id)) {
-                                    doc.forShare = true;
-                                    doc.signature_flow = docToShare.signature_flow;
-                                }
-                            });
-                        });
-                    });
+            };
+            $scope.removeShareEmail = function(email) {
+                ShareDocs.removeEmail(email);
+            };
+            $scope.getInvestorDisplay = function(email) {
+                if (Investor.names[email]) {
+                    return Investor.names[email];
+                } else {
+                    return email;
                 }
-                $scope.messageText = $scope.docShareState.message;
-                $scope.multipeople = $scope.docShareState.emails;
-            }
+            };
 
-            initShareState();
+            $scope.encodeURIComponent = encodeURIComponent;
         }
     ]);

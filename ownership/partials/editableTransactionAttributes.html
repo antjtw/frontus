@@ -1,0 +1,161 @@
+<div class="capGuide top10">
+    <div class='rightTitle'>
+        <span>Date</span>
+        <input id="effective_date{{::data.$$hashKey}}"
+               ng-model="data.effective_date"
+               ng-change="saveItDate(data, true, undo, $event, 'effective_date')"
+               data-date-format={{settings.lowercasedate}}
+               date-type="string"
+               type="text"
+               bs-datepicker>
+    </div>
+    <div ng-show="filterRepurchasable(key, repurchasing)" ng-repeat="key in keys"
+         class="rightTitle"
+         ng-class="{double: inputType(key)!='text_field'}">
+        <span ng-class="{'locked-security': key=='security_type'}"
+            ng-if="(!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))">
+            {{displayName(key)}}
+        </span>
+        <input ng-if="useTextField(key)"
+               ui-event="{blur: 'saveIt(data, true, undo)'}"
+               type="text"
+               ng-model="data.attrs[key]">
+        <input ng-if="useNumberField(key)"
+               ui-event="{blur: 'saveIt(data, true, undo)'}"
+               type="text"
+               float
+               ng-model="data.attrs[key]">
+        <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
+            <li class="dropdown standard">
+            <a class="dropdown-toggle">
+                {{data.attrs[key]}}
+                <span class="invisible-drop">'</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].labels">
+                    <a ng-click="setIt(data, true, undo, key, i)">
+                        {{i}}
+                    </a>
+                </li>
+            </ul>
+        </ul>
+        <ul class="dropdown-list drop-selector" ng-if="useBool(key)">
+            <li class="dropdown standard">
+            <a class="dropdown-toggle">
+                <span ng-if="data.attrs[key] == true">Yes</span>
+                <span ng-if="data.attrs[key] == false">No</span>
+                <span class="invisible-drop">'</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click="setIt(data, true, undo, key, true)">
+                        Yes
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="setIt(data, true, undo, key, false)">
+                        No
+                    </a>
+                </li>
+            </ul>
+        </ul>
+        <ul class="dropdown-list drop-selector" ng-if="pickInvestor(key)">
+            <li class="dropdown standard">
+            <a class="dropdown-toggle">
+                {{data.attrs[key]}}
+                <span class="invisible-drop">'</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li ng-repeat="i in getInvestors()">
+                    <a ng-click="setIt(data, true, undo, key, i)">
+                        {{i}}
+                    </a>
+                </li>
+            </ul>
+        </ul>
+        <ul class="dropdown-list drop-selector" ng-if="pickIssue(key)">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle">
+                    {{data.attrs[key]}}
+                    <span class="invisible-drop">'</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="setIt(data, true, undo, key, '')">
+                        </a>
+                    </li>
+                    <li ng-repeat="i in securities | selectablesecurities:data">
+                        <a ng-click="setIt(data, true, undo, key, i.name)">
+                            {{i.name}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <span ng-if="pickMulti(key)" ng-hide="(!data.attrs[key] || data.attrs[key].length == 0) && (getValidPariSecurities(data, key).length == 0)">
+            <span class="locked-security" ng-repeat="sec in data.attrs[key]">
+                {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(data, true, undo, key, sec)" class="action" tooltip="remove"></a>
+            </span>
+        </span>
+        <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
+            <li class="dropdown standard">
+                <a class="dropdown-toggle">
+                    <span class="invisible-drop">'</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="i in getValidPariSecurities(data, key)">
+                        <a ng-click="setIt(data, true, undo, key, i.name)">
+                            {{i.name}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <span ng-if="description(key) &&
+              (!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))"
+              class="tooltip-icon"
+              data-icon="&#xe044;"
+              aria-hidden="true"
+              tooltip-placement="top"
+              tooltip="{{description(key)}}">
+        </span>
+    </div>
+    <div ng-show="isEquity(data)">
+        <div ng-show="keys.length > 0 && data.kind == 'grant' || data.kind == 'issue security'" class="attributes-checkbox">
+            <button ng-class="{'selected':repurchasing}" ng-click="toggleRepurchasing(data, true, undo);" ng-model="repurchasing" class="check-box-button"><span data-icon="&#xe023;" aria-hidden="true"></span></button>
+            <span>Enable Repurchasing</span>
+        </div>
+
+        <div ng-if="repurchasing && !filterRepurchasable(key, repurchasing)" ng-repeat="key in keys"
+             class="rightTitle"
+             ng-class="{double: inputType(key)!='text_field'}">
+            <span ng-class="{'locked-security': key=='security_type'}"
+                  ng-if="(!pickMulti(key) || (getValidDropdownSecurities(data).length > 0 || data.attrs[key]))">
+                {{displayName(key)}}
+            </span>
+            <input ng-if="useTextField(key)"
+                   ui-event="{blur: 'saveIt(data, true, undo)'}"
+                   type="text"
+                   ng-model="data.attrs[key]">
+            <input ng-if="useNumberField(key)"
+                   ui-event="{blur: 'saveIt(data, true, undo)'}"
+                   type="text"
+                   float
+                   ng-model="data.attrs[key]">
+            <ul class="dropdown-list drop-selector" ng-if="useDropdown(key)">
+                <li class="dropdown standard">
+                    <a class="dropdown-toggle">
+                        {{data.attrs[key]}}
+                        <span class="invisible-drop">'</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="i in attrs[data.attrs.security_type][data.kind][key].labels">
+                            <a ng-click="setIt(data, true, undo, key, i)">
+                                {{i}}
+                            </a>
+                        </li>
+                    </ul>
+            </ul>
+        </div>
+    </div>
+</div>

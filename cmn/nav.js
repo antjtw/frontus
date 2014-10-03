@@ -150,16 +150,46 @@ navm.controller('NavCtrl',
         navState.path = document.location.pathname;
         $scope.navState = navState;
         // Within a given angular app, if the path (controller) changes, record the old page.
+        $window.addEventListener('beforeunload', function(event) {
+            $rootScope.pageHistory.splice(0, $rootScope.pageHistory.length - 50); // truncate array to last 50 elements
+            sessionStorage.setItem('rootScope-pageHistory', angular.toJson($rootScope.pageHistory));
+        });
+        $rootScope.pageHistory = angular.fromJson(sessionStorage.getItem('rootScope-pageHistory'));
+        if (!$rootScope.pageHistory) {
+            $rootScope.pageHistory = [];
+        }
         $scope.$on('$locationChangeStart', function(evt, newURL, oldURL) {
-            if (newURL.indexOf(document.location.pathname)==-1) {
-                if (document.location.pathname.indexOf("/login/") != -1 || document.location.pathname.indexOf("view") != -1) {
-                    $rootScope.lastPage = "/app/documents/";
-                } else {
-                    $rootScope.lastPage = document.location.pathname;
-                    $rootScope.lastFullPage = document.location.href;
-                }
+            if (document.location.pathname.indexOf("/register/") === -1 &&
+                document.location.pathname.indexOf("/login/") === -1) {
+                $rootScope.pageHistory.push({pathname: document.location.pathname, search: document.location.search, hash: document.location.hash});
             }
         });
+        $rootScope.leave = function(blacklist, default_url) {
+            if (blacklist == undefined) {
+                blacklist = ["-view"];
+            }
+            if (default_url == undefined) {
+                if (navState.role == "investor") {
+                    default_url = '/app/documents/investor-list';
+                } else {
+                    default_url = '/app/documents/company-list';
+                }
+            }
+            function leave(blacklist, default_url, history) {
+                if (!history || history.length === 0) {
+                    return $location.url(default_url);
+                }
+                url = history.pop();
+                if (blacklist.some(function(bad_pattern) {
+                    return url.pathname.indexOf(bad_pattern) !== -1;
+                })) {
+                    return leave(blacklist, default_url, history);
+                } else {
+                    return $location.url(url.pathname + url.search + url.hash);
+                }
+            }
+            return leave(blacklist, default_url, $rootScope.pageHistory);
+        };
         $scope.noNav = singleBarPages.indexOf(navState.path) > -1;
         $scope.isCollapsed = true;
         $scope.isRegisterCollapsed = true;
@@ -308,6 +338,12 @@ navm.controller('NavCtrl',
                 navState.role = thiscmp.role;
                 navState.name = thiscmp.name;
                 navState.reasons = $scope.initReasons(thiscmp.reasons);
+                if (navState.reasons.own)
+                {
+                    SWBrijj.procm('ownership.return_status').then(function (x) {
+                        navState.level = x[0].return_status;
+                    });
+                }
                 // We should take this out I think but need to double check this
                 //$route.reload();
             } else {
@@ -338,12 +374,13 @@ navm.controller('NavCtrl',
 
         SWBrijj.tblm('account.my_company_settings').then(function (x) {
             $rootScope.settings = x[0];
-            $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yy' : 'dd/MM/yy';
+            $rootScope.settings.shortdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MM/dd/yyyy' : 'dd/MM/yyyy';
             $rootScope.settings.longdate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd' : 'dd MMMM';
             $rootScope.settings.fulldate = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y' : 'dd MMMM y';
             $rootScope.settings.dateandtime = $scope.settings.dateformat == 'MM/dd/yyyy' ? 'MMMM  dd y, h:mm a' : 'dd MMMM y, h:mm a';
             $rootScope.settings.lowercasedate = $scope.settings.dateformat.toLowerCase();
             $rootScope.settings.domain = window.location.host;
+            $scope.$broadcast("settings_loaded");
         });
 
         SWBrijj.tblm('account.profile').then(function(x) {
@@ -351,7 +388,7 @@ navm.controller('NavCtrl',
             if ($rootScope.navState.role == "issuer") {
                 Intercom('update', {'name' : $rootScope.person.name});
             }
-            $rootScope.userURL = '/photo/user?id=' + x[0].email;
+            $rootScope.userURL = '/photo/user?id=' + x[0].user_id;
             $scope.$broadcast("profile_loaded");
         });
 
@@ -567,31 +604,6 @@ navm.controller('NavCtrl',
             return notifications;
         };
 
-        var idleTime = 0;
-
-        function timerIncrement() {
-            if ($rootScope.navState.userid) {
-                idleTime = idleTime + 1;
-            }
-            if (idleTime > 28) { // 1 minutes
-                sessionStorage.clear();
-                document.location.href = "/login/logout?timeout";
-            }
-        }
-
-        $(document).ready(function () {
-            //Increment the idle time counter every minute.
-            var idleInterval = setInterval(timerIncrement, 60000); // 1 minute
-
-            //Zero the idle timer on mouse movement.
-            $(this).mousemove(function (e) {
-                idleTime = 0;
-            });
-            $(this).keypress(function (e) {
-                idleTime = 0;
-            });
-        });
-
         $scope.pricingregister = function(args) {
             document.location.href = "/register/company-onestep?" + args;
         };
@@ -657,13 +669,19 @@ navm.controller('NavCtrl',
                         if (x && x.length>0 && x!="invalid request") {
                             var rsp = JSON.parse(x);
                             if (rsp.discount) {
-                                $rootScope.billing.discount = 
+                                $rootScope.billing.discount =
                                     payments.format_discount(rsp.discount);
                             }
-                            $rootScope.billing.current_card = rsp.cards.data[0];
+                            rsp.cards.data.forEach(function(card) {
+                                if (card.id == rsp.default_card)
+                                    $rootScope.billing.current_card = card;
+                            });
                             if (rsp.subscriptions.count>0) {
                                 $rootScope.billing.current_period_end = rsp.subscriptions.data[0].current_period_end;
                             }
+                            /* If actual invoices.length == 0
+                             *
+                             */
                             $rootScope.billingLoaded = true;
                             $rootScope.$broadcast('billingLoaded');
                         } else {
@@ -684,9 +702,8 @@ navm.controller('NavCtrl',
             });
         };
         $rootScope.nextInvoice = function() {
-            if ($rootScope.billing && $rootScope.billing.next_invoice_received) {
-                return $rootScope.billing.invoices &&
-                    $rootScope.billing.invoices[$rootScope.billing.invoices.length-1];
+            if ($rootScope.billing && $rootScope.billing.next_invoice) {
+                return $rootScope.billing.next_invoice;
             } else {
                 return false;
             }
@@ -697,8 +714,9 @@ navm.controller('NavCtrl',
                 if (x && x.length>0 && x!="invalid request") {
                     var resp = JSON.parse(x);
                     if (!$rootScope.billing) {$rootScope.billing = {};}
+                    $rootScope.billing.freetrial = payments.format_trial(resp);
                     $rootScope.billing.invoices = resp.data.filter(function(el) {
-                        return el.amount>0;
+                        return el.amount_due>0;
                     }) || [];
                     if ($rootScope.billing.currentPlan!=="000") {
                         $scope.load_upcoming_invoice();
@@ -712,10 +730,7 @@ navm.controller('NavCtrl',
             .then(function(x) {
                 if (x && x.length>0 && x != "invalid request") {
                     var resp = JSON.parse(x);
-                    if (!$rootScope.billing.next_invoice_received) {
-                        //$rootScope.billing.invoices.push(resp);
-                        $rootScope.billing.next_invoice_received = true;
-                    }
+                    $rootScope.billing.next_invoice = resp;
                 } else {
                 }
             });
@@ -779,7 +794,7 @@ navm.controller('NavCtrl',
 
         $scope.$watch('windowheight', function() {
             if ($rootScope.companyIsZombie()) {
-                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'auto'};
+                $scope.viewportheight = {'height': String($window.innerHeight - 150) + "px", 'overflow-y': 'hidden'};
                 $scope.viewportheightnobar = {'height': String($window.innerHeight - 90) + "px", 'overflow-y': 'auto'};
                 $scope.viewportactivity = {'height': String($window.innerHeight - 191) + "px", 'overflow-y': 'auto'};
             } else {

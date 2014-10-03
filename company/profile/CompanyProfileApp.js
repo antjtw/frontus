@@ -4,11 +4,18 @@ app.controller('CompContactCtrl',
         'payments', '$route', '$filter', '$location', '$http',
         function($scope, $rootScope, SWBrijj, navState, $routeParams,
                  payments, $route, $filter, $location, $http) {
-            if (navState.role === 'investor') {
-                document.location.href = "/app/home";
+            if (navState.role == 'investor') {
+                $location.url("/app/home");
                 return;
             }
-            $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+            $scope.statelist = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+                                'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina',
+                                'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+                                'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia',
+                                'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
             $scope.currencies = ['United States Dollars (USD)', 'Pound Sterling (GBP)', 'Euro (EUR)'];
             $scope.dateformats = ['MM/DD/YYYY', 'DD/MM/YYYY'];
             $scope.address1 = function() {
@@ -135,27 +142,93 @@ app.controller('CompContactCtrl',
                 $scope.cnamekey = $scope.cname;
                 $scope.companykey = $scope.company;
                 $scope.dateformat = ($scope.dateformat == 'MM/dd/yyyy') ? 'MM/DD/YYYY' : 'DD/MM/YYYY';
-                $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+                var randnum = Math.random();
+                $scope.photoURL = '/photo/user?id=company:' + $scope.company + '&dontcache=' + randnum;
                 angular.forEach($scope.currencies, function(c) {
                     if (c.indexOf($scope.currency) !== -1) {
                         $scope.longcurrency = c;
                     }
                 });
             }).except(initFail);
+            
+            $scope.companySignatures = [];
+            
+            SWBrijj.tblm('account.my_company_signatures', ['label']).then(function(x) {
+                var randnum = Math.random();
+                for (var i in x)
+                {
+                    var a = {};
+                    a.label = x[i].label;
+                    a.url = '/photo/user?id=company_signature:' + x[i].label + '&dontcache=' + randnum;
+                    $scope.companySignatures.push(a);
+                }
+            });
+            
+            $scope.uploadSuccessNew = function(label) {
+                var randnum = Math.random();
+                var a = {};
+                a.label = label;
+                a.url = '/photo/user?id=company_signature:' + label + '&dontcache=' + randnum;
+                $scope.companySignatures.push(a);
+                $scope.$emit("notification:success", "Signature uploaded");
+            };
+            
+            $scope.uploadSuccessUpdate = function(label) {
+                var randnum = Math.random();
+                for (var i in $scope.companySignatures)
+                {
+                    if ($scope.companySignatures[i].label == label)
+                        $scope.companySignatures[i].url = '/photo/user?id=company_signature:' + label + '&dontcache=' + randnum;
+                }
+                $scope.$emit("notification:success", "Signature uploaded");
+            };
+
+            $scope.uploadFail = function() {
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            };
+            
+            
+            $scope.sigOptions = { open: false,
+                                failureCallback: $scope.uploadFail };
+
+            $scope.sigModalUpNew = function () {
+                $scope.sigOptions.labelrequired = true;
+                $scope.sigOptions.type = 'new company signature';
+                $scope.sigOptions.successCallback = $scope.uploadSuccessNew;
+                $scope.sigOptions.sigURL = "";
+                $scope.sigOptions.label = "";
+                $scope.sigOptions.open = true;
+            };
+            
+            $scope.sigModalUpUpdate = function (label, url) {
+                $scope.sigOptions.labelrequired = false;
+                $scope.sigOptions.label = label;
+                $scope.sigOptions.type = 'update company signature';
+                $scope.sigOptions.sigURL = url;
+                $scope.sigOptions.successCallback = $scope.uploadSuccessUpdate;
+                $scope.sigOptions.open = true;
+            };
+
+            $scope.sigclose = function () {
+                //$scope.signatureModal = false;
+                //$scope.scribblemode = false;
+                $scope.sigOptions.open = false;
+            };
 
 
             $scope.uploadFile = function() {
                 $scope.photoURL = "/img/image-loader-140.gif";
+                var randnum = Math.random();
                 var fd = new FormData();
                 for (var i = 0; i < $scope.files.length; i++) fd.append("uploadedFile", $scope.files[i]);
                 SWBrijj.uploadLogo(fd).then(function(x) {
                     void(x);
-                    $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+                    $scope.photoURL = '/photo/user?id=company:' + $scope.company + '&dontcache=' + randnum;
                     $scope.$emit("notification:success", "Company logo successfully updated");
                 }).except(function(x) {
                         void(x);
                         $scope.$emit("notification:fail", "Company logo change was unsuccessful, please try again.");
-                        $scope.photoURL = '/photo/user?id=company:' + $scope.company;
+                        $scope.photoURL = '/photo/user?id=company:' + $scope.company + '&dontcache=' + randnum;
                     });
             };
 
@@ -256,24 +329,34 @@ app.controller('CompContactCtrl',
                         $scope.$emit("notification:fail",
                             "Oops, please reactivate your subscription before making other updates.");
                     }
-                    $rootScope.billing.payment_token = response.id;
+                    $scope.ccModalClose();
+                    $scope.$emit("notification:success", "Processing new credit card");
                     if ($rootScope.billing.customer_id) {
-                        payments.update_payment($rootScope.billing.payment_token)
-                            .then(function(x) {
-                                if (x[1][0] !== 1) {
+                        SWBrijj.stripe(['set_new_card', $rootScope.billing.customer_id, response.id, response.card.id]).then(function(cus){
+                            var cus2 = JSON.parse(cus);
+                            $rootScope.billing.payment_token = cus2.default_card;
+                            payments.update_payment($rootScope.billing.payment_token)
+                                .then(function(x) {
+                                    if (x[1][0] !== 1) {
+                                        $scope.$emit("notification:fail",
+                                            "Oops, something went wrong. Please try again.");
+                                    } else {
+                                        cus2.cards.data.forEach(function(card) {
+                                            if (card.id == cus2.default_card)
+                                                $rootScope.billing.current_card = card;
+                                        });
+                                        $scope.$emit("notification:success",
+                                            "Credit card updated");
+                                    }
+                                }).except(function(err) {
+                                    console.log(err);
                                     $scope.$emit("notification:fail",
-                                        "Oops, something went wrong. Please try again.");
-                                } else {
-                                    $scope.$emit("notification:success",
-                                        "Processing new credit card");
-                                    $scope.ccModalClose();
-                                }
-                            }).except(function(err) {
-                                console.log(err);
-                            });
+                                            "Oops, something went wrong. Please try again.");
+                                });
+                        });
                     } else {
-                        $scope.$emit("notification:success",
-                            "Credit Card Verified");
+                        $scope.$emit("notification:fail",
+                            "Oops, something went wrong. Please refresh and try again.");
                         $scope.ccModalClose();
                     }
                 }
@@ -361,7 +444,7 @@ app.controller('CompContactCtrl',
                     $scope.response = x;
                 });
             };
-            
+
             $scope.exportAllToDropbox = function() {
                 SWBrijj.run_process(["document_dropbox_export_all"]).then(function(x) {
                     $scope.$emit("notification:success", "Successfully Exported to Dropbox");
@@ -371,7 +454,7 @@ app.controller('CompContactCtrl',
                 });
                 $scope.$emit("notification:success", "Starting Export . . .");
             };
-            
+
             $scope.exportCaptableToDropbox = function() {
                 SWBrijj.run_process(["document_dropbox_export_captable"]).then(function(x) {
                     $scope.$emit("notification:success", "Successfully Exported to Dropbox");
@@ -381,7 +464,13 @@ app.controller('CompContactCtrl',
                 });
                 $scope.$emit("notification:success", "Starting Export . . .");
             };
-            
+
+            $scope.downloadCsv = function() {
+                SWBrijj.procd($rootScope.navState.name + '_captable.csv', 'text/csv', 'ownership.export_captable').then(function(x) {
+                    document.location.href = x;
+                });
+            };
+
             $rootScope.$on('billingLoaded', function(x) {
                 $scope.openModalsFromURL();
             });
@@ -395,7 +484,7 @@ app.controller('InvoiceCtrl',
                  $routeParams, $location, navState) {
 
             if (!$routeParams.id) $location.url('/app/company/profile');
-            if (navState.role == 'investor') $location.url('/home');
+            if (navState.role == 'investor') $location.url('/app/home');
 
             payments.my_data().then(function(x) {
                 payments.get_invoices(x[0].customer_id, 100).then(function(x) {
@@ -456,51 +545,35 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     function($scope, $rootScope, SWBrijj, navState, $route, $location) {
 
         if (navState.role == 'investor') {
-            document.location.href = "/home";
+            $location.url("/app/home");
             return;
         }
         $scope.sidebarPage = null;
-        // $scope.hideRail = false;
-
         $scope.filterParam = {};
         $scope.oldRoles = [];
-        
 
-
-        angular.element('body').click(function(x) {
-            if (angular.element(x.target).is('i') || angular.element(x.target).is('popover')) {
-                x.preventDefault();
-                return;
-            }
-            hidePopover();
-        });
 
         $scope.isParam = function(person){
             if($scope.filterParam.param == person.role){
-                return person.role
+                return person.role;
             }
-            else if($scope.filterParam.param == undefined){
-                return person
+            else if($scope.filterParam.param === undefined){
+                return person;
             }
-            else if(person.groupsArray != undefined && person.groupsArray.indexOf($scope.filterParam.param) > -1){
+            else if(person.groupsArray !== undefined && person.groupsArray.indexOf($scope.filterParam.param) > -1){
                 return person.groups;
             }
-        }
+        };
 
 
         $scope.createPeople = function(){
+            // TODO: remove references to email where possible
+            // TODO: migrate to the investor service
             SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(x) {
                 $scope.people = x;
                 SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(admins) {
                     angular.forEach(admins, function(admin) {
                         angular.forEach($scope.people, function(person) {
-                            if (person.name) {
-                                person.selector = person.name + "  (" + person.email +")";
-                            }
-                            else {
-                                person.selector = "(" + person.email+")";
-                            }
-
                             if (person.email == admin.email) {
                                 person.role = "issuer";
                             }
@@ -509,7 +582,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                             }
                         });
                     });
-                    SWBrijj.tblm('account.profile', ['email']).then(function(me) {
+                    SWBrijj.tblm('account.profile', ['user_id']).then(function(me) {
                         angular.forEach($scope.people, function(person) {
                             if (person.email == me[0].email)
                                 person.hideLock = true;
@@ -520,9 +593,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                         });
                         $scope.setLastLogins();
                         $scope.setGroups();
-                        // $scope.setGroups();
-                        // $scope.resetFilter();
                     });
+                    $scope.setLastLogins();
+                    $scope.setGroups();
                     $scope.sort = 'name';
                 });
                 $scope.allPeople = $scope.people;
@@ -531,46 +604,41 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         };
         $scope.createPeople();
 
-
-
         $scope.resetFilter = function(){
             $scope.filterParam.param = undefined;
-        }
+        };
         $scope.allGroups = function(){
             SWBrijj.tblm('account.my_user_groups', ['json_array_elements']).then(function(data){
                 $scope.myGroups = data;
-                console.log($scope.myGroups);
             });
         };
 
         $scope.setGroups = function(){
             SWBrijj.tblm('account.my_user_role', ["email", "groups"]).then(function(data){
                 var groups = data;
+                console.log(data);
+                console.log("hellloooo")
                 angular.forEach($scope.people, function(person){
                     angular.forEach(groups, function(group){
                         if(group.email == person.email && group.groups !== null){
-                            // person.groups = JSON.parse(group.groups).sort().join(", ");
-                            console.log(JSON.parse(group.groups));
                             var gr = JSON.parse(group.groups);
                             var grSorted = gr.sort(function(a, b){
-                                if (a.toLowerCase() > b.toLowerCase()) return 1; 
-                                 else if (a.toLowerCase() < b.toLowerCase()) return -1; 
-                                else return 0
+                                if (a.toLowerCase() > b.toLowerCase()) return 1;
+                                else if (a.toLowerCase() < b.toLowerCase()) return -1;
+                                else return 0;
                             });
-                            console.log(grSorted);
                             person.groups = grSorted.join(", ");
                             person.groupsArray = JSON.parse(group.groups);
-                        };
+                        }
                     });
-                    
+
                 });
             });
-        }
+        };
 
 
 
         $scope.setLastLogins = function() {
-            console.log($scope.people)
             SWBrijj.tblm("global.user_tracker").then(function(logins) {
                 angular.forEach($scope.people, function(person) {
                     angular.forEach(logins, function(login) {
@@ -594,7 +662,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
         };
 
-        
+
         $scope.gotoPerson = function(person) {
             if (!person.lastlogin) return;
             var link;
@@ -608,7 +676,7 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             // $scope.createPeople();
             $scope.setLastLogins();
             $scope.resetFilter();
-        }
+        };
         $scope.loadPage();
 
         // Admin Modal Functions
@@ -624,12 +692,11 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.sortRolesForAdd = function(people){
             angular.forEach(people, function(ind){
                 if(ind.email === $scope.navState.userid){
-                   console.log("you must stay where you are")
                 }
                 else if(ind.email !== $scope.navState.userid && $scope.oldRoles.indexOf(ind.role)=== -1){
-                    $scope.oldRoles.push(ind.role)
-                };
-                
+                    $scope.oldRoles.push(ind.role);
+                }
+
             });
         };
 
@@ -639,12 +706,12 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 $scope.addOrRemove = $scope.oldRoles[0];
             }
             else{
-                $scope.addOrRemove = ""
+                $scope.addOrRemove = "";
             }
             $scope.oldRoles = [];
         };
 
-       
+
 
         $scope.adminModalClose = function() {
             $scope.closeMsg = 'I was closed at: ' + new Date();
@@ -655,16 +722,16 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
         $scope.removeAdminModalOpen = function(ppl) {
             $scope.selectedToRevokes = [];
             angular.forEach(ppl, function(ind){
-                if(ind.email !== $scope.navState.userid && $scope.selectedToRevokes.indexOf(ind.email)== -1){ 
+                if(ind.email !== $scope.navState.userid && $scope.selectedToRevokes.indexOf(ind.email)== -1){
                     $scope.selectedToRevokes.push(ind.email);
                 }
                 else if($scope.navState.userid==ind.email){
-                    console.log("error!")
-                };
-                
+                    console.log("error!");
+                }
+
             });
             $scope.removeAdminModal = true;
-        
+
         };
 
 
@@ -676,14 +743,14 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.removeAdminModalCancel = function(){
             $scope.removeAdminModal = false;
-        }
+        };
 
         $scope.addAdminModalOpen = function(person) {
             $scope.selectedToAdds = [];
             angular.forEach(person, function(ind){
                 if(ind.email !== $scope.navState.userid){
                     $scope.selectedToAdds.push(ind.email);
-                };
+                }
             });
             $scope.addAdminModal = true;
 
@@ -699,9 +766,9 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.addAdminModalCancel = function(){
             $scope.addAdminModal = false;
-           
-        }
-        
+
+        };
+
         //want the email directive to bind to this property in the controller
         $scope.personIs = function(person){
             if($scope.sidebarPage=='email'){
@@ -709,30 +776,26 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             }
             else {
                 return $scope.groupPeople.indexOf(person) != -1;
-            };
-            
+            }
+
         };
-
-
 
         $scope.clearRecipient = function(){
             while($scope.messageData.recipients.length > 0) {
                 $scope.messageData.recipients.pop();
-            };
+            }
         };
-      
+
         // add person to dropdown on people page
         $scope.selectPerson = function(person){
             if($scope.sidebarPage == 'email'){
                 if ($scope.messageData.recipients.indexOf(person.email)=== -1){
-                 $scope.messageData.recipients.push(person.email);
-                 
-                 }
+                    $scope.messageData.recipients.push(person.email);
 
-                else {
-                    var toDelete = $scope.messageData.recipients.indexOf(person.email)
+                } else {
+                    var toDelete = $scope.messageData.recipients.indexOf(person.email);
                     $scope.messageData.recipients.splice(toDelete, 1);
-                 };   
+                }
                 return $scope.messageData.recipients;
             }
             else {
@@ -740,16 +803,16 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                     $scope.groupPeople.push(person);
                 }
                 else {
-                    var toDelete = $scope.groupPeople.indexOf(person)
+                    var toDelete = $scope.groupPeople.indexOf(person);
                     $scope.groupPeople.splice(toDelete, 1);
-                };
-            };
-            
+                }
+            }
+
         };
-        
+
         $scope.messageData = {};
         $scope.messageData.recipients = [];
-        $scope.groupPeople = []
+        $scope.groupPeople = [];
 
 
         $scope.narrowopts = {
@@ -775,30 +838,28 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             });
             $scope.createPeople();
             // $scope.oldRoles = [];
-            
+
         };
 
         $scope.clearArray = function(array){
-                while(array.length > 0){
-                    array.pop();
-                }
+            while(array.length > 0){
+                array.pop();
             }
+        };
 
         $scope.add_admin = function() {
             angular.forEach($scope.selectedToAdds, function(elem){
                  SWBrijj.proc('account.create_admin', elem.toLowerCase()).then(function(x) {
-                    void(x);
                     $rootScope.billing.usage.admins_total += 1;
                     $scope.$emit("notification:success", "Admin Added");
                 }).except(function(x) {
-                    void(x);
                     $scope.$emit("notification:fail", "Something went wrong, please try again later.");
                 });
-            }); 
+            });
         $scope.createPeople();
         };
 
-   
+
 
         // email sidebar
         $scope.toggleSide = function(button) {
@@ -808,13 +869,13 @@ app.controller('PeopleCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             else if(button){
                 $scope.sidebarPage = button;
             }
-            else if(button == undefined){
+            else if(button === undefined){
                 $scope.sidebarPage = false;
             }
             else {
                 $scope.sidebarPage = button;
                 // opens sidebar with email
-            };
+            }
         };
         
         SWBrijj.tblm("config.configuration", ["value"], "name", "elizamail").then(
@@ -835,7 +896,8 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
     function($scope, $rootScope, $location, $routeParams, SWBrijj, navState) {
 
         if (navState.role == 'investor') {
-            document.location.href = "/home";
+            console.log("here", navState);
+            $location.url("/app/home");
             return;
         }
 
@@ -844,7 +906,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
 
         SWBrijj.tblm('account.user', ['email']).then(function(x) { // Redirect to My Profile if viewing yourself
             if (x[0].email == userId)
-                document.location.href = "/account/profile";
+                $location.url("/app/account/profile");
         });
 
         SWBrijj.tblm('global.user_list', 'email', userId).then(function(x) {
@@ -898,7 +960,7 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
         };
 
         $scope.getCompanyAccess = function() {
-            SWBrijj.tblmm('ownership.company_access', ['email', 'level'], 'email', userId).then(function(access) {
+            SWBrijj.tblmm('ownership.all_company_access', ['email', 'level'], 'email', userId).then(function(access) {
                 if (access[0]) {
                     $scope.level = access[0].level;
                 } else {
@@ -941,10 +1003,10 @@ app.controller('ViewerCtrl', ['$scope', '$rootScope', '$location', '$routeParams
             $scope.docOrder = ($scope.docOrder == field) ? '-' + field : field;
         };
         $scope.viewInvestorCopy = function(version) {
-            document.location.href = ("/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
+            $location.url("/app/documents/company-view?doc=" + version.original + "&page=1" + "&investor=" + version.doc_id);
         };
         $scope.viewVersionStatus = function(version) {
-            document.location.href = "/documents/company-status?doc=" + version.original;
+            $location.url("/app/documents/company-status?doc=" + version.original);
         };
 
         $scope.activityOrder = function(card) {
@@ -1041,7 +1103,8 @@ app.filter('interval', function() {
 
 app.filter('billingPlans', function() {
     return function(plan) {
-        switch (plan) {
+        if (!plan) plan = "";
+        switch (plan.substring(0,3)) {
             case '000':
                 return "Cancel Subscription";
             case '001':
@@ -1059,7 +1122,8 @@ app.filter('billingPlans', function() {
 });
 app.filter('billingPlansNameOnly', function() {
     return function(plan) {
-        switch (plan) {
+        if (!plan) plan = "";
+        switch (plan.substring(0,3)) {
             case '000':
                 return "Cancel Subscription";
             case '001':
@@ -1073,18 +1137,6 @@ app.filter('billingPlansNameOnly', function() {
             default:
                 return "Unknown Plan";
         }
-    };
-});
-app.filter('fileLength', function() {
-    return function(word) {
-        if (word) {
-            if (word.length > 25) {
-                return word.substring(0, 24) + "..";
-            } else {
-                return word;
-            }
-        }
-        return word;
     };
 });
 

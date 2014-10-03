@@ -1,0 +1,205 @@
+<link type="text/css" rel="stylesheet" href="/lib/select2/select2.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link href="/lib/introjs/introjs.css" rel="stylesheet">
+<div class="maincontent">
+    <div class="container dynamic-page">
+        <subnav>
+            <!-- edit mode not currently supported
+            <div class="box-button pull-right"
+                 ng-show="ct.securities.length !== 0"
+                 ng-class="{'disabledme': companyIsZombie()}"
+                 ng-click="companyIsZombie() || editViewToggle();"
+                 data-placement="bottom"
+                 bs-tooltip="zombiemessage">
+                <ul>
+                    <li>
+                        <span ng-show="togglename() == 'View'"
+                              data-icon="&#xe001;"
+                              aria-hidden="true">
+                        </span>
+                        <span ng-show="togglename() == 'Edit'"
+                              data-icon="&#xe00e;"
+                              aria-hidden="true">
+                        </span>
+                    </li>
+                    <li>
+                        <span>{{togglename()}}</span>
+                    </li>
+                </ul>
+            </div>
+            -->
+        </subnav>
+
+        <div class="row-fluid leftTabWindow">
+            <div ng-style="viewportheight"
+                 class="span8 docLibrary leftBlock"
+                 ng-class="{leftFullTableBlock: sideToggle,
+                            widthtransition25: oldSafari()}">
+                <table class="tableView bodyText grant-table"
+                       ng-show="ct.securities.length===0 && done">
+                    <tbody class="empty-table">
+                    <tr>
+                        <td>
+                            <div>
+                                Welcome!
+                                <a href="/app/ownership/company-captable"
+                                   class="link">
+                                    Create an options security
+                                </a> on your capitalization table to manage
+                                your grants
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row-fluid">
+                    <!-- TABLE VIEW BY:: SECURITY -->
+                    <table class="tableView bodyText grant-table"
+                           ng-class="{'viewmode': viewMode}"
+                           ng-show="ct.securities.length!==0">
+                        <tr class="column-label">
+                            <th></th>
+                            <th class="row-fluid">
+                                <span class="span6">Security</span>
+                                <span class="span6">Date</span>
+                            </th>
+                            <th ng-repeat="col in captable.grantColumns">
+                                {{col.name}}
+                            </th>
+                        </tr>
+                        <tbody ng-repeat="sec in captable.grantSecurities()">
+                        <!-- SECURITY SUMMARY ROWS -->
+                        <tr class="status-row">
+                            <td class="status-toggle pointer"
+                                ng-class="{'status-toggle-on': sec==shown}"
+                                ng-click="opendetails(sec)">
+                                <span ng-hide="sec==shown || !sec.transactions"
+                                      data-icon="&#xe017;" aria-hidden="true">
+                                </span>
+                                <span ng-show="sec==shown && sec.transactions"
+                                      data-icon="&#xe01c;" aria-hidden="true">
+                                </span>
+                            </td>
+                            <td ng-class="{selectablerow: viewMode,
+                                           fieldSelected: selectedSecurity==sec}"
+                                ng-click="selectSecurity(sec.name)"
+                                class="hoverable row-fluid">
+                                <!--
+                                <input ng-show="!viewMode"
+                                       placeholder="Add new security"
+                                       ui-event="{focus: 'selectSecurity(sec)',
+                                                  blur: 'saveIssue(sec, \'issue\')'}"
+                                       ng-model="sec.name">
+                                -->
+                                <span ng-show="viewMode" class="span6">
+                                    {{sec.name}}
+                                </span>
+                                <span ng-show="viewMode" class="span6">
+                                    {{sec.effective_date | utcdate:settings.shortdate}}
+                                </span>
+                            </td>
+                            <td ng-repeat="col in captable.grantColumns">
+                                {{captable.grantSubtotal(col.name, sec.name)
+                                | formatAmount:'units'}}
+                            </td>
+                        </tr>
+                        <!-- VIEW ONLY INVESTOR ROWS -->
+                        <!-- TODO dispaly row for each investor with ledger entries for the security -->
+                        <tr class="transaction-rows"
+                            ng-if="sec==shown && viewMode && (captable.netCreditFor(row.transaction, row.attrs.investor) > 0)"
+                            ng-repeat="row in captable.grantRowInfoFor(sec.name) | orderBy : row.attrs.investor">
+                            <td class="viewField"></td>
+                            <td class="row-fluid">
+                                <span class="span6">{{limitLength(row.attrs.investor, 25)}}</span>
+                                <span class="span6">{{row.effective_date | utcdate:settings.shortdate}}</span>
+                            </td>
+                            <td ng-repeat="col in captable.grantColumns"
+                                ng-class="{fieldSelected: selectedCell.roots[0] == row &&
+                                                          selectedCell.kind == col.name,
+                                hoverable: calculate.isNumber(captable.grantCellFor(row.transaction, col.name).u)}"
+                                ng-click="selectCell(row.transaction, col.name)">
+                                <captable-cell inv="row.attrs.investor" sec="sec.name"
+                                data="captable.grantCellFor(row.transaction, col.name)">
+                                </captable-cell>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tr class="total-row">
+                            <td>Total</td>
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr class='tablefooter'>
+                            <td></td>
+                            <td></td>
+                            <td ng-repeat="col in captable.grantColumns">
+                                <input disabled
+                                       value="{{captable.grantSubtotal(col.name)
+                                              | formatAmount:'units'}}">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <internal-right-rail toggle-side="sideToggle">
+                <div ng-switch on="selectedThing()"
+                     class="span4 capright"
+                     ng-style="viewportheight">
+                    <span ng-switch-when="selectedCell"
+                          ng-switch on="selectedCell.kind">
+                        <div ng-switch-when="granted">
+                            <cell-details cell="selectedCell"
+                                      currenttab="currentTab"></cell-details>
+                        </div>
+                        <div ng-switch-when="vested">
+                            <cell-summary cell="selectedCell">
+                            </cell-summary>
+                        </div>
+                        <div ng-switch-when="forfeited">
+                            <cell-summary ng-if="viewMode" cell="selectedCell">
+                            </cell-summary>
+                            <editable-cell-details ng-if="!viewMode" cell="selectedCell">
+                            </editable-cell-details>
+                        </div>
+                        <div ng-switch-when="exercised">
+                            <cell-summary ng-if="viewMode" cell="selectedCell">
+                            </cell-summary>
+                            <editable-cell-details ng-if="!viewMode" cell="selectedCell">
+                            </editable-cell-details>
+                        </div>
+                    </span>
+                    <span ng-switch-when="selectedInvestor">
+                    </span>
+                    <span ng-switch-when="selectedSecurity">
+                        <security-details ng-if="viewMode"
+                                          sec="selectedSecurity">
+                        </security-details>
+                        <editable-security-details ng-if="!viewMode"
+                                                   sec="selectedSecurity">
+                        </editable-security-details>
+                    </span>
+                    <span ng-switch-default class="capGuide padded-cap">
+                        <span class="in-brief">
+                            <div class="headsection row-fluid
+                                        tabbed company-info">
+                                <h1>
+                                    <img ng-src="{{ navState.company && '/photo/user?id=company:'+navState.company || '' }}">
+                                    {{navState.name}}
+                                </h1>
+                            </div>
+                            <div class="summary-bar">
+                                <div ng-show="captable.numGrantholders()"
+                                     class="belowTitle">
+                                    <img src="/img/activity/people.png">
+                                    <div>
+                                        <span>{{captable.numGrantholders()}}</span>
+                                        <span>Option Holders</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </span>
+                </div>
+            </internal-right-rail>
+        </div>
+    </div>
+</div>

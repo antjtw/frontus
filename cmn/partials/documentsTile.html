@@ -1,0 +1,36 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link type="text/css" rel="stylesheet" href="/home/company.css">
+
+<div>
+    <div class="front info-box">
+        <div ng-show="docsummary.num > 0" class="head-box">
+            <h2>Document Management</h2>
+
+        </div>
+        <div ng-hide="docsummary.num > 0" class="head-box">
+            <h2>Document Management</h2>
+        </div>
+        <div class="body-box">
+            <div>
+                <div class="detail-row row-fluid">
+                    <div class="span15">
+                        <div>
+                            <img src='/img/onboardingicons/dayone/doc-upload.png'>
+                            <h2><span>{{docsummary.num}}</span> Documents</h2>
+                        </div>
+                        <div>
+                            <img src='/img/onboardingicons/dayone/doc-sign.png'>
+                            <h2><span>{{docsummary.sig + docsummary.waiting}}</span> Waiting for Action</h2>
+                        </div>
+                    </div>
+                    <div ng-show="docsummary.num > 0" class="view-button" id="view-button1">
+                        <div class="small-standard-button standard-button gray">
+                            <button style="float: right; margin-bottom: 20px; margin-right: 20px;" id='a_home_doc_inv_front' class="btn" ng-click="gotopage('/app/documents/investor-list')">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

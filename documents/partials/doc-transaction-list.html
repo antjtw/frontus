@@ -1,4 +1,4 @@
-<accordion ng-class="{'lessmargin': (trans.length == 1)}" class="transaction-accordion" close-others="true">
+<accordion ng-class="{'lessmargin': (trans.length == 1)}" class="transaction-accordion-list" close-others="true">
     <accordion-group is-open="tran.active" is-disabled="singleTransaction(trans);"
                      ng-repeat="tran in trans | orderBy:'date' track by $index" ng-switch on="currentTab">
         <accordion-heading>
@@ -21,7 +21,7 @@
             </div>
 
             <!-- Equity Tab -->
-            <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Equity');">
+            <div class="capGuide cap-overflow" ng-show="tran.type == 'Equity'">
 
                 <p ng-show="tran.ppshare" class="belowTitle"><span ng-bind="formatDollarAmount(tran.ppshare)"></span><span tooltip-placement="right" tooltip="The price at which each share was purchased" class="forTooltip">Share Price</span></p>
 
@@ -35,7 +35,7 @@
 
             </div>
             <!-- Option Tab -->
-            <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Option');">
+            <div class="capGuide cap-overflow" ng-show="tran.type == 'Option'">
 
                 <p ng-show="tran.optundersec" class="belowTitle"><span ng-bind="tran.optundersec"></span><span tooltip-placement="right" tooltip="The security each granted share will convert to upon exercise" class="forTooltip">Underlying Security</span></p>
 
@@ -57,7 +57,7 @@
 
             </div>
             <!-- Debt Tab -->
-            <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Debt');">
+            <div class="capGuide cap-overflow" ng-show="tran.type == 'Debt'">
 
                 <p ng-show="tran.interestrate" class="belowTitle"><span>{{tran.interestrate}}% {{tran.interestratefreq}}</span><span tooltip-placement="right" tooltip="The rate that interest accrues on this debt" class="forTooltip">Interest Rate</span></p>
 
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Safe Tab -->
-            <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Safe');">
+            <div class="capGuide cap-overflow" ng-show="tran.type == 'Safe'">
 
                 <p ng-show="tran.valcap" class="belowTitle"><span ng-bind="formatDollarAmount(tran.valcap)"></span><span tooltip-placement="right" tooltip="The maximum pre-money valuation at which the safe converts to equity" class="forTooltip">Valuation Cap</span></p>
 
@@ -78,7 +78,7 @@
             </div>
 
             <!-- Warrant Tab -->
-            <div class="capGuide cap-overflow" ng-show="trantype(tran.type, 'Warrant');">
+            <div class="capGuide cap-overflow" ng-show="tran.type == 'Warrant'">
 
                 <p ng-show="tran.term" class="belowTitle"><span ng-bind="tran.term"></span><span tooltip-placement="right" class="forTooltip" tooltip="The term of the warrant before expiration">Term (months)</span></p>
 

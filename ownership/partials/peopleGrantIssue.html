@@ -1,0 +1,16 @@
+<div class="grey-background container dynamic-page">
+    <subnav>
+        <grant-wizard-nav></grant-wizard-nav>
+    </subnav>
+    <div class="row-fluid">
+        <div class="leftTabWindow" ng-style="viewportheight">
+            <grant-issue></grant-issue>
+            <grant-doc-prep></grant-doc-prep>
+            <a class="wizard-next" href="/app/ownership/grants/review">
+                <div class="standard-button">
+                    <button class="btn" ng-disabled="!ready()">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

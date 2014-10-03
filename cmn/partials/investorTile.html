@@ -1,0 +1,43 @@
+<link type="text/css" rel="stylesheet" href="/documents/css/app.css">
+<link type="text/css" rel="stylesheet" href="/ownership/css/captable.css">
+<link type="text/css" rel="stylesheet" href="/home/company.css">
+
+
+<div ng-repeat="allTransaction in allTransactions | orderBy:'date': true">
+    <div>
+        <div class="front info-box" style="overflow: auto">
+            <div class="head-box">
+                <h2>{{allTransaction.effective_date | date:shortdate}} Ownership</h2>
+            </div>
+
+            <div class="cardHeadline">
+                <div ng-if="allTransaction.units > 0">
+                    <div>{{allTransaction.units | formatAmount:'units'}}</div>
+                    <span>Total Shares</span>
+                </div>
+                <div ng-if="allTransaction.amount > 0">
+                    <div>{{allTransaction.amount|formatAmount:'amount'}}</div>
+                    <span>Total Invested</span>
+                </div>
+            </div>
+            <div class="investor-tile-own">
+                <ul>
+                    <li ng-repeat="(key, value) in allTransaction.attrs">
+                        <div>
+                            <div>
+                                {{value | formatAmount:key}}
+                            </div>
+                            <div>
+                                {{displayAttr(key)}}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+  

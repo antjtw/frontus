@@ -14,30 +14,6 @@ h2.large-h2 {
     font-family:'FS Elliot Web Light', sans-serif !important;
 }
 
-.smart-doc-list {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.smart-doc-list > ul > li {
-    border: 1px solid #E3E3E3;
-    overflow: visible;
-    height: 60px;
-}
-
-.smart-doc-list > ul > li >ul >li{
-    display: inline-block;
-    float: left;
-    line-height: 60px;
-    color: #666666;
-    margin-left: 10px;
-}
-
-.smart-doc-list > ul > li >ul >li:last-of-type {
-    float: right;
-    margin-right: 10px;
-}
-
 .thisone {
     color: #1ABC96;
 }
@@ -147,7 +123,6 @@ table.docLibrary > tbody > tr:first-child > td {
 
 .status-table.doc-status > tbody > tr > td.tooltip-date, .status-table.doc-status > tbody > tr > th  {
     text-align: center;
-//    width: 60px;
 }
 
 .status-table.doc-status > tbody:first-child > tr > th:first-child {
@@ -626,17 +601,56 @@ div.progress-bar {
 /* Select2 Styling */
 
 textarea.email-text {
-    width: 270px;
+    width: 296px;
 }
+.prepare-right {
+    padding: 20px;
+}
+
+.shareForm .standard-button .btn {
+    /* TODO: remove once MVP.css is updated to 14px; */
+    font-size: 14px;
+    width: 150px;
+}
+
 .shareForm {
     padding-top: 40px;
+    padding-bottom: 20px;
 }
 .shareForm .my-loading-spinner-container > div {
     left: 50%;
     height: 60px;
 }
 .shareForm > .sharepeople-input {
-    padding-bottom: 40px;
+    padding-bottom: 10px;
+}
+.shareForm .investor-name span[data-icon] {
+    color: #C7C7C7;
+}
+
+.shareForm ul.recipients span[data-icon].remove-icon {
+    cursor: pointer;
+    margin-left: 5px;
+}
+.shareForm ul.recipients > li {
+    margin-bottom: 6px;
+    color: rgb(30, 45, 61);
+}
+
+.shareForm ul.recipients > li .investor-name .investor-name-display {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 25px);
+}
+
+.shareForm ul.bad.recipients > li .investor-name .investor-name-display {
+    color: #E74C3C;
+}
+
+.shareForm > textarea {
+    margin-top: 20px;
 }
 .sharepeople-input .select2-container {
     width: 100%;
@@ -644,11 +658,22 @@ textarea.email-text {
 }
 .shareForm > .controls {
     padding-top: 20px;
+    overflow: auto;
 }
 .shareForm > .controls span {
     line-height: 32px;
     padding-right: 60px;
     color: #3498DB;
+}
+
+.shareForm > .controls .back.btn {
+    background-color: #8d8d8d;
+    width: auto;
+}
+
+.shareForm .standard-button .btn span[data-icon]:before {
+    vertical-align: baseline;
+    vertical-align: -10%;
 }
 
 /* doclist specific CSS for the captable style sliding right panel (sharebar) */
@@ -946,6 +971,17 @@ input[type='text']:disabled, textarea:disabled {
     margin: 1px 1px 1px 1px;
 }
 
+.evenWiderModal .documentUploadText {
+    text-align: left;
+    width: 450px;
+    padding: 0px 0px 0px 0px;
+    margin: 1px 1px 1px 1px;
+}
+
+.evenWiderModal .container {
+    padding: 15px 0px;
+}
+
 .modalText .documentUploadText {
     padding-top: 0px;
     margin: 1px 1px 1px 1px;
@@ -1039,6 +1075,22 @@ input[type='text']:disabled, textarea:disabled {
     left: 50px;
 }
 
+.evenWiderModal div.documentUpload.fakefile{
+    position: absolute;
+    top: 15px;
+    left: 50px;
+}
+
+input.file {
+    position: relative;
+    text-align: right;
+    opacity: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
 .twoPieceModal .documentUpload input.file {
     float: left;
     width: 135px;
@@ -1047,6 +1099,19 @@ input[type='text']:disabled, textarea:disabled {
 }
 
 .twoPieceModal div.modalText.documentUploadFileInputs {
+    display: inline-block;
+    padding-left: 50px;
+    padding-top: 20px;
+}
+
+.evenWiderModal .documentUpload input.file {
+    float: left;
+    width: 135px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.evenWiderModal div.modalText.documentUploadFileInputs {
     display: inline-block;
     padding-left: 50px;
     padding-top: 20px;
@@ -1554,7 +1619,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .draggable.greenrequired div > textarea {
-    border: 1px solid #1ABC96;
+    border: 1px solid rgb(141, 141, 141);
 }
 
 .draggable.otherperson div > textarea {
@@ -1604,7 +1669,7 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 }
 
 .sticky.greenrequired .dragger {
-    background-color: #1ABC96;
+    background-color: rgb(141, 141, 141);
 }
 
 .sticky.otherperson .dragger {
@@ -1739,7 +1804,9 @@ doc-viewer, internal-right-rail, internal-right-rail > div {
 .dropdown-required.select2-result > div.select2-result-label {
     color: #E74C3C;
 }
-
+.dropdown-required.select2-result > div.select2-result-label:after {
+    content: " (Required)";
+}
 
 div.textarea-container {
     line-height: 0;
@@ -1770,7 +1837,7 @@ div.imgsig > div {
 }
 
 div.imgsig > div:first-child {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 div.imgsig > div > img {
@@ -1792,7 +1859,7 @@ div.imgsig > div > img {
 }
 
 .scribblewindow {
-    border: #1ABC96 solid 1px;
+    border: rgb(141, 141, 141) solid 1px;
 }
 
 .scribblewindow > canvas {
@@ -1822,6 +1889,10 @@ div.imgsig > div > img {
     background-color: #E74C3C;
 }
 
+annotation-list div.annotation-pages:first-child {
+    margin-top: 20px;
+}
+
 annotation-list div.annotation-pages:last-child {
     margin-bottom: 20px;
 }
@@ -1838,6 +1909,18 @@ annotation-list h6 {
     cursor: pointer;
 }
 
+annotation-list .tutorial {
+    padding-top: 20px;
+}
+
+annotation-list .tutorial h6 {
+    cursor: auto;
+}
+
+annotation-list .tutorial .gif-text {
+    padding-top: 10px;
+}
+
 annotation-list [data-icon]:before {
     padding-right: 2px;
 }
@@ -1848,14 +1931,6 @@ annotation-list .annotmark {
     margin-left: 25px;
     cursor: pointer;
     text-transform: capitalize;
-}
-
-annotation-list .textIcon {
-    data-icon: &#xe60d;
-}
-
-annotation-list .annotmark.mine.complete.highlightIcon {
-    data-icon: &#xe60f;
 }
 
 annotation-list .annotmark:hover, annotation-list .annotmark.active {
@@ -1871,11 +1946,11 @@ annotation-list .annotmark.mine:hover, annotation-list .annotmark.mine.active {
 }
 
 annotation-list .annotmark.mine.complete {
-    color: #1ABC96;
+    color: rgb(141, 141, 141);
 }
 
 annotation-list .annotmark.mine.complete:hover, annotation-list .annotmark.mine.complete.active {
-    color: #15A085;
+    color: #666;
 }
 
 annotation-list .annotmark.mine.incomplete {
@@ -1886,9 +1961,16 @@ annotation-list .annotmark.mine.incomplete:hover, annotation-list .annotmark.min
     color: #C44032;
 }
 
+annotation-list .annotmark > span {
+    float: right;
+    margin-right: 20px;
+    vertical-align: -10%;
+}
+
 help-tab > div {
-    margin-top: 20px;
-    margin-left: 20px;
+    margin: 0 20px 80px 20px;
+    border-top: 1px solid #C6C6C6;
+    padding-top: 20px;
 }
 
 help-tab > div > p {
@@ -1908,7 +1990,7 @@ help-tab > div > p > span {
 
 .docinfo .inforow {
     padding: 10px 0;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
 }
 
 .docinfo .inforow .info {
@@ -1947,14 +2029,40 @@ help-tab > div > p > span {
     vertical-align: top;
 }
 
+.docinfo .inforow .info input.file {
+    height: 32px;
+}
+
+.docinfo .inforow .info .fileInputContainer {
+    padding-top: 10px;
+    height: 30px;
+    width: 76px;
+}
+
+.docinfo .inforow .info .fileInputContainer .fakefile {
+    position: relative;
+    top: -32px;
+    left: 0px;
+}
+
+.standard-button .verydarkgray > button {
+    background-color: #C7C7C7;
+    width: 70px;
+    font-size: 14px;
+}
+
 .docinfo .docname {
     line-height: 24px;
     font-size: 20px;
     color: #1d2c3c;
     margin-top: 30px;
     padding-bottom: 30px;
-    border-bottom: 1px solid #E3E3E3;
+    border-bottom: 1px solid #C6C6C6;
     font-family:'FS Elliot Web Light', sans-serif !important;
+}
+
+.docinfo .docname.prepareDocname {
+    border-bottom: none;
 }
 
 .docinfo .investor-views {
@@ -2006,7 +2114,7 @@ doc-transaction-details > div > div > span {
 }
 
 doc-transaction-details > div > div > button {
-    width: 68px;
+    width: 64px;
     height: 30px;
     background-color: #19bb95;
     border: none;
@@ -2030,8 +2138,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2039,8 +2150,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2048,8 +2162,11 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
+    }
+    100% {
+        color: rgb(141, 141, 141);
     }
 }
 
@@ -2057,19 +2174,29 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     0% {
         color: #E74C3C;
     }
-    100% {
+    50% {
         color: #19bc96;
     }
+    100% {
+        color: rgb(141, 141, 141);
+    }
+}
+
+.required-fields {
+    margin-bottom: 5px;
 }
 
 .required-fields > span {
     display: inline-block;
-    color: #E74C3C;
+    color: rgb(141, 141, 141);
     text-transform: capitalize;
 }
 
+.required-fields > span:last-of-type {
+    float: right;
+}
+
 .required-fields.field-completed > span {
-    color: #19bc96;
     -webkit-animation: completerequired 1s; /* Safari 4+ */
     -moz-animation:    completerequired 1s; /* Fx 5+ */
     -o-animation:      completerequired 1s; /* Opera 12+ */
@@ -2082,7 +2209,7 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .required-fields > span:first-of-type > span {
-    color: #19bc96;
+    color: rgb(141, 141, 141);
     vertical-align: -14%;
     font-size: 20px;
     -webkit-animation: completerequired 1s; /* Safari 4+ */
@@ -2095,15 +2222,33 @@ doc-transaction-details > div > div > span > span.back-button:hover {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: #1d2c3c;
-    padding: 20px;
+    padding: 20px 0;
+    margin: 0 20px;
+    border-top: 1px solid #c6c6c6;
+}
+
+.fields-progress.prepare-fields {
+    border-top: none;
+    padding-bottom: 0;
+}
+
+.fields-progress > div {
+    color: #1d2c3c;
+    margin-bottom: 10px;
 }
 
 .fields-progress > span {
-    color: #FFFFFF;
-    font-size: 14px;
-    margin-bottom: 5px;
-    font-family:'FS Elliot Web Light', sans-serif !important;
+    font-size: 12px;
+    margin-bottom: 0;
+    color: #666666;
+}
+
+.fields-progress .meter {
+    background-color: #e3e3e3;
+}
+
+.fields-progress .meter > span {
+    background-color: #1abc96;
 }
 
 
@@ -2116,70 +2261,70 @@ doc-transaction-details > div > div > span > span.back-button:hover {
 }
 
 .redrequired.greenrequired .select2-container .select2-choice, .redrequired.greenrequired input, .greenrequired .select2-container .select2-choice, .greenrequired input  {
-    border-color: #1ABC96;
+    border-color: rgb(141, 141, 141);
 }
 
 /* Transaction Directive */
 
-.transaction-accordion.lessmargin .delete-link.blue-link {
+.transaction-accordion-list.lessmargin .delete-link.blue-link {
     margin-left: 5px;
 }
 
-.transaction-accordion .accordion-heading {
+.transaction-accordion-list .accordion-heading {
     padding: 0;
 }
 
-.transaction-accordion .accordion-heading .accordion-toggle {
+.transaction-accordion-list .accordion-heading .accordion-toggle {
     padding: 11px 12px;
 }
 
-.transaction-accordion .accordion-heading > a > span:not(:last-of-type),
-.transaction-accordion .accordion-heading > a:hover > span:not(:last-of-type) {
+.transaction-accordion-list .accordion-heading > a > span:not(:last-of-type),
+.transaction-accordion-list .accordion-heading > a:hover > span:not(:last-of-type) {
     vertical-align: 90%;
     color: #1E2D3D;
 }
 
-.transaction-accordion.lessmargin .capGuide,
-.transaction-accordion.lessmargin .linkedDocuments,
-.transaction-accordion.lessmargin .btn-group {
+.transaction-accordion-list.lessmargin .capGuide,
+.transaction-accordion-list.lessmargin .linkedDocuments,
+.transaction-accordion-list.lessmargin .btn-group {
     padding-left: 0;
 }
-.transaction-accordion .btn-group,
-.transaction-accordion .linkedDocuments {
+.transaction-accordion-list .btn-group,
+.transaction-accordion-list .linkedDocuments {
     padding-left: 20px;
 }
 
-.transaction-accordion .accordion-heading > a > span:last-of-type {
+.transaction-accordion-list .accordion-heading > a > span:last-of-type {
     color: #1E2D3D;
     font-family:'FS Elliot Web Light', sans-serif !important;
     display: inline-block;
 }
 
-.transaction-accordion .accordion-heading > a > span:last-of-type > span:first-of-type {
+.transaction-accordion-list .accordion-heading > a > span:last-of-type > span:first-of-type {
     font-size: 20px;
     display: block;
 }
 
-.transaction-accordion .accordion-heading > a > span:last-of-type > span:last-of-type {
+.transaction-accordion-list .accordion-heading > a > span:last-of-type > span:last-of-type {
     color: #8D8D8D;
     font-size: 12px;
 }
 
-.transaction-accordion .accordion-group {
+.transaction-accordion-list .accordion-group {
     border-bottom: none;
 }
 
-.transaction-accordion .accordion-inner {
+.transaction-accordion-list .accordion-inner {
     border-top: none;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-.transaction-accordion .capGuide.global {
+.transaction-accordion-list .capGuide.global {
     margin-top: 0;
 }
 
-.transaction-accordion .accordion {
+.transaction-accordion-list .accordion {
     margin-top: 20px;
 }
 
@@ -2237,4 +2382,187 @@ div.profile-link > span {
 
 div.profile-link > span:first-of-type {
     vertical-align: -16%;
+}
+
+/* Document Preparation Screen */
+
+.docPrepTop {
+    margin: 40px 0 60px 50px;
+}
+
+.docPrepTop h2 {
+    text-transform: uppercase;
+    line-height: 20px;
+    margin: 0;
+}
+
+.docPrep {
+    display: table;
+    margin: 0 40px 80px 40px;
+    min-width: calc(100% - 80px);
+}
+
+.docPrep a {
+    cursor: pointer;
+}
+
+.docPrepRow {
+    width: 100%;
+    min-height: 40px;
+    display: table-row;
+}
+
+.docPrepRow .bad {
+    color: #eb6f1c;
+}
+
+.docPrepRow .good {
+    color: #1abc96;
+}
+
+.docPrepRow.header .btn {
+    color: #FFFFFF;
+    background-color: #3498DB;
+}
+
+.docPrepRow.header .btn.complete {
+    background-color: #c7c7c7;
+}
+
+.docPrepRow a.complete {
+    color: #8d8d8d;
+}
+
+.docPrepRow.header {
+    color: #33485d;
+}
+
+.docPrepRow.header [tooltip] {
+    vertical-align: -5%;
+}
+
+.docPrepRow.header > span > span.info {
+    color: #a6a6a6;
+}
+
+.docPrepRow > span {
+    display: table-cell;
+    border-bottom: 1px solid #c3c3c3;
+    min-height: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
+
+.docPrepRow .name {
+    color: #666666;
+}
+
+.docPrepRow > span:first-child > span {
+    padding-left: 5px;
+}
+
+.docPrepRow > span:first-child > .status {
+    width: 18px;
+    display: inline-block;
+    vertical-align: -5%;
+}
+
+.docPrepRow > span:first-child > span.warning {
+    display: block;
+    padding-left: 31px;
+    width: calc(100% - 31px);
+    white-space: normal;
+    padding-top: 4px;
+}
+
+.docPrepRow > span:first-child > span.warning > span:last-child{
+    display: inline-block;
+}
+
+/* inputs */
+
+.docPrepRow > span:first-child ~ span input, .docPrepRow > span:first-child ~ span .select2-container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    border-radius: 0;
+    border: 1px solid #fff;
+    margin: 0;
+}
+
+.docPrepRow > span:first-child ~ span.required input,
+.docPrepRow > span:first-child ~ span .ng-invalid,
+.docPrepRow > span:first-child ~ span.required .select2-chosen {
+    /* moz colors the placeholder automatically based on input color */
+    color: #eb6f1c;
+}
+
+.docPrepRow > span:first-child ~ span.required input::placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required input::-webkit-input-placeholder,
+.docPrepRow > span:first-child ~ span .ng-invalid::-webkit-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span .ng-invalid:-ms-input-placeholder,
+.docPrepRow > span:first-child ~ span.required input:-ms-input-placeholder {
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+.docPrepRow > span:first-child ~ span.required .select2-default .select2-chosen { /* no placeholder */
+    color: #eb6f1c;
+    opacity: 0.6;
+}
+
+.docPrepRow.warningheight > span,
+.docPrepRow.warningheight > span:first-child ~ span input,
+.docPrepRow.warningHeight > span:first-child ~ span .select2-choice {
+    /* the browser will make the td's as high as they need, but won't adjust percentage based widths inside */
+    height: 120px;
+}
+
+.docPrepRow > span:first-child ~ span input:focus, .docPrepRow > span:first-child ~ span .select2-container:focus {
+    border: 1px solid #666666 !important; /* !important to override .ng-invalid in MVP.css */
+    background-color: #e3e3e3;
+}
+
+.docPrepRow .select2-container .select2-choice {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding-left: 0;
+    border-radius: 0;
+    border: 0;
+}
+
+.docPrepRow .select2-container .select2-choice .select2-arrow {
+    display: none;
+}
+
+.docPrepRow > span:first-child {
+    min-width: 400px;
+    width: 400px;
+}
+
+.docPrepRow > span:first-child ~ span{
+    min-width: 150px;
+}
+
+.docPrepRow a {
+    color: #3397da;
+}
+
+.document-list {
+    padding-bottom: 20px;
+}
+
+.unlink-transaction {
+    font-size: 12px;
+    color: #1E2D3D;
+    display: inline-block;
+    margin-left: 50px;
+    margin-bottom: 10px;
 }

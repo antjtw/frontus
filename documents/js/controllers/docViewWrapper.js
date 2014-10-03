@@ -1,18 +1,18 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', 'User', '$q', 'basics',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, User, $q, basics) {
+        'navState', 'Annotations', 'Documents', '$q', 'basics', 'ShareDocs',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics, ShareDocs) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
         $scope.setTab = function() {
-            if ($scope.actionNeeded() || $scope.prepareable()) {
-                $scope.annottab = "true";
-                $scope.infotab = "false";
+            if ($scope.doc.annotations.length > 0 && ($scope.actionNeeded() || $scope.prepareable())) {
+                $scope.annottab = true;
+                $scope.infotab = false;
             } else {
-                $scope.infotab = "true";
-                $scope.annottab = "false";
+                $scope.infotab = true;
+                $scope.annottab = false;
             }
         };
 
@@ -109,10 +109,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             $scope.invq = false;
 
             $scope.prepare = ($routeParams.prepare==='true') ? true : false;
-            $scope.counterparty = !! $scope.urlInves;
+            var counterparty = !! $scope.urlInves;
 
             $scope.pageQueryString = function() {
-                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + $scope.counterparty;
+                return "id=" + $scope.docId + "&investor=" + $scope.invq + "&counterparty=" + counterparty;
             };
 
             $scope.getVersion = function(doc) {
@@ -120,66 +120,47 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                  * @type {number} */
                 /** @name doc#signature_deadline
                  * @type {Date} */
-
-                 SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
-                        $scope.docviews = data;
-                        /* Should not be required
-                        angular.forEach($scope.docviews, function(view) {
-                            view.max = view.max.addMinutes(-view.max.getTimezoneOffset())
-                        });
-                        */
-                    }).except(function(x) {
-                     console.log(x);
-                 });
+                SWBrijj.tblmm("document.my_counterparty_page_views", "doc_id", doc.doc_id).then(function(data) {
+                    $scope.docviews = data;
+                    $scope.docviews.minimum = Math.min.apply(null,
+                        Object.keys(data).map(function(e) {
+                            return data[e]['max'];
+                        }));
+                }).except(function(x) {
+                    console.log(x);
+                });
                 $scope.docId = doc.doc_id;
-                $scope.library = "document.my_counterparty_library";
-                $scope.pages = "document.my_counterparty_codex";
                 $scope.initDocView();
             };
 
             $scope.getOriginal = function() {
-                $scope.counterparty = false;
+                counterparty = false;
                 $scope.docId = $scope.docKey;
-                $scope.library = "document.my_company_library";
-                $scope.pages = "document.my_company_codex";
                 var z = $location.search();
-                delete z['investor'];
+                delete z.investor;
                 $location.search(z);
+                $scope.prepareFor = $routeParams.investorid; // investor id, if we're doing an investor specific preparation
                 $scope.initDocView();
 
                 $scope.checkProcessing();
             };
 
             $scope.getData = function() {
-                var flag = !isNaN(parseInt($scope.urlInves));
-                if ($scope.docKey || flag) {
-                    var field = "original";
-                    var tempdocid = $scope.docKey;
-                    if (flag) {
-                        field = "doc_id";
-                        tempdocid = parseInt($scope.urlInves);
-                    }
-                    if ($scope.counterparty) {
+                if ($scope.docKey) {
+                    var field = "doc_id";
+                    var tempdocid = parseInt($scope.urlInves);
+                    if (counterparty) {
                         SWBrijj.tblmm("document.my_counterparty_library", field, tempdocid).then(function(data) {
-                            if (flag) {
-                                SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[0].doc_id).then(function(data) {
-                                    $scope.doctrans = data;
-                                });
+                            SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[0].doc_id).then(function(data) {
+                                $scope.doctrans = data;
+                            });
+                            SWBrijj.tblmm("document.my_company_doc_sendgrid_opens", "doc_id", data[0].doc_id).then(function(event) {
+                                if (event && event[0]) {
+                                    $scope.sendgrid = {'when_email_opened' : event[0].opened};
+                                }
                                 $scope.getVersion(data[0]);
                                 return;
-                            }
-                            else {
-                                // probably unused at this point
-                                for (var i = 0; i < data.length; i++) {
-                                    if (data[i].investor == $scope.urlInves) {
-                                        SWBrijj.tblmm("ownership.doc_evidence", "doc_id", data[i].doc_id).then(function(data) {
-                                            $scope.doctrans = data;
-                                        });
-                                        $scope.getVersion(data[i]);
-                                        return;
-                                    }
-                                }
-                            }
+                            });
                         });
                     } else {
                         SWBrijj.tblmm("ownership.doc_evidence", "doc_id", tempdocid).then(function(data) {
@@ -207,6 +188,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                             return;
                         }
                         $scope.document = data;
+                        if ($scope.document.signature_flow == "0") {
+                            $scope.toggleSide = true;
+                        }
                         if (data.signature_flow == 1 && !data.when_signed) {
                             document.location.href = "/documents/investor-view?template=" + data.template_id + "&subid=" + data.doc_id;
                         }
@@ -293,7 +277,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             else
             {
                 SWBrijj.procm("document.approve_processing", $scope.docId).then(function(data)
-                {;}).except(function(data)
+                {}).except(function(data)
                 {
                     console.log(data);
                 });
@@ -328,34 +312,22 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             $scope.nextAnnotationType = type;
         };
 
-        $scope.leave = function() {
-            // TODO: save notes / smartdoc data
-            if ($rootScope.lastPage
-                && ($rootScope.lastPage.indexOf("/register/") === -1)
-                && ($rootScope.lastPage.indexOf("/login/") === -1)
-                && ($rootScope.lastPage.indexOf("-view") === -1)) {
-		if (document.location.href.indexOf("share=true") !== -1) {
-                    sessionStorage.setItem("docPrepareState",
-					   angular.toJson({template_id: $scope.templateId,
-							   doc_id: $scope.docId}));
-                    $rootScope.lastPage = $rootScope.lastPage + "?share";
-                }
-                if ($rootScope.lastPage.indexOf("company-status") !== -1) {
-                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docId;
-                }
-                $location.url($rootScope.lastPage);
-            } else if ($scope.invq) {
-                $location.url('/documents/investor-list');
-            } else {
-                $location.url('/documents/company-list');
+        var checkUploadTimeout;
+
+        $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+            void(oldUrl);
+            // don't save note data if I'm being redirected to log in
+            if (checkUploadTimeout)
+            {
+                $timeout.cancel(checkUploadTimeout);
             }
-        };
+        });
 
         $scope.signDocument = function() {
             return $scope.doc.sign().then(
                 function(data) {
                     $scope.$emit("notification:success", "Document signed");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -404,11 +376,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.countersign().then(
                 function(data) {
                     if ($scope.doc.issue) {
-                        $scope.$emit("notification:success", "Document approved & cap table entry added");
+                        $scope.$emit("notification:success", "Document approved & transaction in process");
                     } else {
                         $scope.$emit("notification:success", "Document approved");
                     }
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -420,7 +392,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.finalize().then(
                 function(data) {
                     $scope.$emit("notification:success", "Document approved");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -431,7 +403,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.rejectSignature(msg).then(
                 function(data) {
                     $scope.$emit("notification:success", "Document signature rejected.");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(x) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -443,7 +415,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.void().then(
                 function(data) {
                     $scope.$emit("notification:success", "Void request accepted and document voided");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -455,7 +427,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             return $scope.doc.rejectVoid(msg).then(
                 function(data) {
                     $scope.$emit("notification:success", "Void request rejected");
-                    $scope.leave();
+                    $rootScope.leave();
                 },
                 function(fail) {
                     $scope.$emit("notification:fail", "Oops, something went wrong.");
@@ -477,32 +449,12 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
 
         $scope.unfilledAnnotation = function() {
             return $scope.doc.annotations.some(function(annot) {
-                return (annot.required && annot.forRole(navState.role) && !annot.filled(User.signaturePresent, navState.role));
+                return (annot.forRole(navState.role) && annot.isInvalid(navState.role));
             });
-        };
-
-        $scope.numAnnotations = function() {
-            var num = 0;
-            angular.forEach($scope.doc.annotations, function(annot) {
-                num += annot.required && annot.forRole(navState.role) ? 1 : 0;
-            });
-            return num
-        };
-
-        $scope.numAnnotationsComplete = function() {
-            var num = 0;
-            angular.forEach($scope.doc.annotations, function(annot) {
-                num += annot.required && annot.forRole(navState.role) && annot.filled(User.signaturePresent, navState.role) ? 1 : 0;
-            });
-            return num
         };
 
         $scope.drawTime = function() {
             return $scope.doc && ($scope.doc.annotable(navState.role) || ($scope.doc && $scope.prepare)) && ((!$scope.doc.when_shared && navState.role == "issuer") || (!$scope.doc.when_signed && navState.role == "investor"));
-        };
-
-        $scope.docCompleted = function() {
-            console.log(doc);
         };
 
         $scope.downloadOriginalPdf = function() {
@@ -514,12 +466,12 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.exportVersionPdf = function() {
             $scope.$emit("notification:success", "Export in progress.");
             var truthiness = navState.role == "investor" ? false : true;
-            SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, truthiness, !$scope.versionIsComplete($scope.doc)).then(function(url) {
+            SWBrijj.genInvestorPdf('sharewave-'+$scope.doc.doc_id+'-'+$scope.doc.investor+'.pdf', 'application/pdf', $scope.doc.doc_id, truthiness, !$scope.versionIsFinalized($scope.doc)).then(function(url) {
                 document.location.href = url;
             }).except(function(x) {
-                    console.log(x);
-                    $scope.$emit("notification:fail", "Oops, something went wrong.");
-                });
+                console.log(x);
+                $scope.$emit("notification:fail", "Oops, something went wrong.");
+            });
         };
 
         $scope.downloadPDF = function() {
@@ -530,6 +482,11 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             }
         };
 
+        $scope.versionIsFinalized = function(version) {
+            return basics.isCompleteSigned(version)
+                || basics.isCompleteVoided(version);
+        };
+
         $scope.versionIsComplete = function(version) {
             return basics.isCompleteSigned(version)
                 || basics.isCompleteViewed(version)
@@ -538,7 +495,110 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.completeDoc = function() {
-            return $scope.versionIsComplete($scope.doc) || !$scope.doc.investor
+            return $scope.versionIsComplete($scope.doc) || !$scope.doc.investor;
+        };
+
+        $scope.goToPreparation = function() {
+            $location.url('/app/documents/prepare?doc=' + $scope.doc.doc_id);
+        };
+
+
+        var mimetypes = ["application/pdf", // .pdf
+            // microsoft office
+            "application/msword", // .doc
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+            "application/vnd.ms-powerpoint", // .ppt
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
+            // open office
+            "application/vnd.oasis.opendocument.text", // .odt
+            "application/vnd.oasis.opendocument.presentation", // .odp
+            "application/vnd.oasis.opendocument.image", // .odi
+            "image/png", // .png
+            "image/tiff", // .tiff
+            "image/jpeg", // .jpg
+            "text/plain", // .txt
+            "application/rtf" // .rtf
+        ];
+        $scope.setSignedFiles = function(element) {
+            // called from outside of angular, so $apply it
+            $scope.$apply(function() {
+                $scope.files = [];
+                $scope.fileError = "";
+                for (var i = 0; i < element.files.length; i++) {
+                    if (element.files[i].size > 20000000) {
+                        $scope.fileError = "Please choose a smaller file";
+                    } else if (mimetypes.indexOf(element.files[i].type) == -1) {
+                        $scope.$emit("notification:fail", "Sorry, this file type is not supported.");
+                    } else {
+                        $scope.files.push(element.files[i]);
+                    }
+                }
+                if ($scope.files.length > 0) {
+                    $scope.uploadSigned($scope.files);
+                }
+            });
+        };
+
+        $scope.checkSignedUploaded = function () {
+            SWBrijj.tblm('document.my_counterparty_library', ['when_signature_provided', 'signed_uploaded', 'signed_upload_attempted'], 'doc_id', $scope.doc.doc_id).then(function(doc) {
+                if ($scope.uploadprogress.indexOf(doc.signed_upload_attempted) > -1)
+                {
+                    if (doc.when_signature_provided)
+                    {
+                        $scope.doc.when_signed = doc.when_signature_provided;
+                        $scope.doc.when_signature_provided = doc.when_signature_provided;
+                        $scope.$broadcast('initDocView', $scope.docId, $scope.invq, $scope.library, $scope.pageQueryString() + "&newlysigned=true", $scope.pages);
+                        $scope.uploading = false;
+                        return;
+                    }
+                    else if (!doc.signed_uploaded)
+                    {
+                        $scope.$emit("notification:fail", "Signed copy rejected. Did it have the same number of pages as the original?");
+                        $scope.uploading = false;
+                        return;
+                    }
+                }
+                checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
+            }).except(function(data) {
+                console.log(data);
+            });
+        };
+
+        $scope.uploadSigned = function(files) {
+            var fd = new FormData();
+            if (window.location.hostname == "www.sharewave.com" || window.location.hostname == " wave.com") {
+                _kmq.push(['record', 'doc uploader']);
+                analytics.track('doc uploader');
+            }
+            for (var i = 0; i < files.length; i++) {fd.append("uploadedFile", files[i]);}
+            if (fd.length > 1)
+            {
+                //throw error. Multiple docs doesn't make sense
+                $scope.$emit("notification:fail", "Cannot upload multiple signed copies for a single investor");
+                return;
+            }
+            var upxhr = SWBrijj.uploadSigned(fd);
+            $scope.uploading = true;
+            upxhr.then(function(x) {
+                $scope.uploadprogress = x;
+
+                SWBrijj.uploadSetType(x[0], "signed", $scope.doc.doc_id).then(function() {
+                    checkUploadTimeout = $timeout($scope.checkSignedUploaded, 2000);
+                    $scope.$emit("notification:success", "Uploading signed version . . .");
+                    $scope.files = [];
+                }).except(function(x) {
+                    console.log(x);
+                });
+            }).except(function(x) {
+                $scope.$emit("notification:fail", "Oops, something went wrong. Please try again.");
+                $scope.files = [];
+                $scope.uploading = false;
+            });
+        };
+
+        $scope.shareThisDoc = function() {
+            ShareDocs.upsertShareItem($scope.doc);
+            $location.url("/app/documents/company-list?share");
         };
 
         $scope.getData();

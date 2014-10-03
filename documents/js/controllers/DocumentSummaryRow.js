@@ -1,6 +1,6 @@
 'use strict';
 
-function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location) {
+function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $location, ShareDocs) {
     $scope.versionOrder = 'statusRank';
 
     // load the versions
@@ -37,8 +37,6 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         $scope.loadVersions();
     }
 
-
-
     $scope.versionsVisible = function(doc) {
         var total = doc.version_count;
         if ($scope.viewState.maxRatio != 1000) {
@@ -60,7 +58,7 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.formatDocStatusRatio = function(doc) {
         var uploadState = (doc.pages >= 1) ? "Uploaded": "Uploading . . .";
-        if (doc.version_count == 0) return (doc.template_id == null ? uploadState : "Pre-loaded");
+        if (doc.version_count === 0) return (doc.template_id === null ? uploadState : "Pre-loaded");
 
         var show_archived = $scope.viewState.show_archived;
 
@@ -87,16 +85,17 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             || version.when_retracted;
     };
 
-    $scope.toggleForShare = function(doc) {
+    $scope.forShare = function() {
+        return ShareDocs.documents.some(function(d){
+            return d.doc_id == $scope.doc.doc_id;
+        });
+    };
+    $scope.toggleForShare = function() {
         // $scope.docShareState = [{doc_id: ###, signature_flow: #}, ..]
-        if (!doc.forShare) {
-            $scope.docShareState.doclist
-                = $scope.modals.upsertShareItem(doc, $scope.docShareState.doclist);
-            doc.forShare = true;
+        if (!$scope.forShare()) {
+            ShareDocs.upsertShareItem($scope.doc);
         } else {
-            $scope.docShareState.doclist
-                = $scope.modals.removeShareItem(doc, $scope.docShareState.doclist);
-            doc.forShare = false;
+            ShareDocs.removeShareItem($scope.doc);
         }
     };
 
@@ -115,39 +114,18 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
             return summary.docname;
         } else if (summary.type == "investor") {
             return summary.name || summary.email;
-        };
-    };
-
-
-
-    $scope.getShareType = function(doc) {
-        if (!doc) {return 0;}
-        if (!doc.signature_flow && !doc.template_id) {
-            doc.signature_flow = 0;
-        } else if (!doc.signature_flow && doc.template_id) {
-            doc.signature_flow = -1;
-        }
-        return doc.signature_flow;
-    };
-    $scope.formatShareType = function(tp) {
-        if (!tp || tp === 0) {
-            return 'View Only';
-        } else if (tp < 0) {
-            return 'Prepare for Signature';
-        } else if (tp > 0) {
-            return 'Request Signature';
         }
     };
 
     $scope.titleClick = function() {
-        if ($scope.doc.uploading) {
+        if (!(!$scope.doc.uploaded_by || $scope.doc.pages > 0)) {
             return;
         }
         if ($scope.doc.type != 'doc') {
             return;
         }
         if (!$scope.viewState.hideSharebar) {
-            $scope.prepareDocument($scope.doc);
+            $scope.toggleForShare();
         } else {
             if ($scope.doc.doc_id) { // can only view templates
                 $scope.viewOriginal($scope.doc);
@@ -157,27 +135,13 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
 
     $scope.showtooltip = function(doc){
         if(doc.length > 50 && doc.indexOf(' ') >= 0){
-            return doc
+            return doc;
         }
-    }
+    };
 
     // dropdown list functions
     $scope.viewProfile = function(investor) {
         document.location.href = "/app/company/profile/view?id=" + investor.email;
-    };
-
-    $scope.viewStatus = function(doc) {
-        if (doc.doc_id) {
-            $location.url("/app/documents/company-status?doc=" + doc.doc_id);
-        }
-    };
-
-    $scope.prepareDocument = function(doc) {
-        if (doc.template_id) {
-            $location.url("/app/documents/company-view?template=" + doc.template_id + "&share=true");
-        } else {
-            $location.url("/app/documents/company-view?doc=" + doc.doc_id + "&page=1&prepare=true&share=true");
-        }
     };
 
     $scope.viewTemplate = function(doc) {
@@ -194,4 +158,4 @@ function DocumentSummaryRowController($scope, $rootScope, SWBrijj, basics, $loca
         });
     };
 }
-DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location'];
+DocumentSummaryRowController.$inject = ['$scope', '$rootScope', 'SWBrijj', 'basics', '$location', 'ShareDocs'];

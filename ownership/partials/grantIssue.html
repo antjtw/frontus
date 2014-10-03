@@ -1,0 +1,16 @@
+<div class="wizard-tile">
+    <h2 ng-class="{'nochoose': !choose}"><span ng-if="choose">Issue options from</span><span ng-if="!choose">{{issue[0].name}}</span></h2>
+    <input ng-if="choose" ui-select2="issueSelectOptions" ng-model="selected.issue">
+    <div class="pull-right option-bar" ng-if="issue[0]">
+        <span>Option Pool Details</span>
+        <meter cur="issue[0].totalUnits()" tot="issue[0].totalAuthorized()"></meter>
+        <div ng-if="issue[0].totalAuthorized() > 0">
+            <span>{{issue[0].totalAuthorized()  | formatAmount:'units'}} options authorized</span>
+            <span>{{issue[0].numUnissued()  | formatAmount:'units'}} available</span>
+            <span ng-show="unitsFromDocs() > 0">{{unitsFromDocs() | formatAmount:'units'}} options in draft</span>
+        </div>
+        <div ng-if="!(issue[0].totalAuthorized() > 0)">
+            <span>0 options authorized</span>
+        </div>
+    </div>
+</div>

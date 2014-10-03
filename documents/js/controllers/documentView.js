@@ -1,7 +1,8 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs) {
+        $scope.cachebuster = Math.random();
         $scope.annots = [];
         $scope.signatureprocessing = false;
 
@@ -33,7 +34,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
         $window.onkeydown = function(evt) {
             // TODO: evt.which is read-only ("TypeError: setting a property that has only a getter")
-            var ev = evt.which || e.keyCode;
+            var ev = evt.which || evt.keyCode;
             // Need the extra if so that the page change doesn't occur if you are currently focused into a sticky
             if (document.activeElement.tagName.toLowerCase() != 'textarea' ) {
                 $scope.$apply(function() {
@@ -66,28 +67,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                     return attributes.state;
                 }
             }
-        };
-
-        var regExp = /\(([^)]+)\)/;
-        $scope.template_share = function(email, attributes, message, sign, deadline) {
-            $scope.processing = true;
-            var shareto = "";
-
-            angular.forEach(email, function(person) {
-                var matches = regExp.exec(person);
-                if (matches === null) {
-                    matches = ["", person];
-                }
-                shareto += "," +  matches[1];
-            });
-
-            SWBrijj.smartdoc_share_template($scope.templateKey, JSON.stringify(attributes), shareto.substring(1).toLowerCase(), message, sign, deadline).then(function(docid) {
-                $scope.$emit("notification:success", "Successfully shared document");
-                $location.path('/company-list').search({});
-            }).except(function(err) {
-                $scope.processing = false;
-                console.log(err);
-            });
         };
 
         $scope.$on('initTemplateView', function(event, templateId, subId) {
@@ -166,7 +145,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             $scope.investor_attributes.investorState = angular.copy($rootScope.person.state);
                             $scope.investor_attributes.investorAddress = angular.copy($rootScope.person.street);
                             $scope.investor_attributes.investorPhone = angular.copy($rootScope.person.phone);
-                            $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);
+                            $scope.investor_attributes.investorEmail = angular.copy($rootScope.person.email);//might be wrong but doesn't matter because we don't support smartdocs now
                             $scope.investor_attributes.signatureDate = moment(Date.today()).format($rootScope.settings.lowercasedate.toUpperCase());
 
                             //Sort through all the !!! and make the appropriate replacement
@@ -217,7 +196,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         });
 
-        $scope.pageScroll = 0;
         $scope.isAnnotable = true;
 
         $scope.signatureURL = '/photo/user?id=signature:';
@@ -236,142 +214,22 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
 
         $scope.pageImageUrl = function() {
             if ($scope.pageQueryString && $scope.doc && $scope.doc.currentPage) {
-                return "/photo/docpg?" + $scope.pageQueryString + "&page=" + $scope.doc.currentPage;
+                return "/photo/docpg?" + $scope.pageQueryString + "&page=" + $scope.doc.currentPage + "&dontcache=" + $scope.cachebuster;
             } else {
                 return '';
             }
         };
 
         function uploadSuccess() {
-            var rand = Math.random();
-            $scope.signatureURL = '/photo/user?id=signature:&dontcache=' + rand;
-            $scope.signatureprocessing = false;
-            $scope.progressVisible = false;
             User.signaturePresent = true;
-            var elements = document.getElementsByClassName('draggable imagesignature mysignature');
-            angular.forEach(elements, function(element) {
-                element = element.querySelector("textarea");
-                element.style.backgroundImage = 'url(/photo/user?id=signature:&dontcache' + rand + ')';
-            });
             $scope.$emit("notification:success", "Signature uploaded");
-            $scope.scribblemode = false;
         }
 
         function uploadFail() {
             void(0);
-            $scope.progressVisible = false;
-            $scope.signatureprocessing = false;
-            $scope.signatureURL = '/photo/user?id=signature:';
             $scope.$emit("notification:fail", "Oops, something went wrong.");
             // console.log(x);
         }
-
-        $scope.uploadSignatureNow = function() {
-            if ($scope.files || $scope.scribblemode) {
-                $scope.signatureURL = "/img/image-loader-140.gif";
-                $scope.signatureprocessing = true;
-                $scope.progressVisible = true;
-                var fd;
-                if ($scope.scribblemode) {
-                    var canvas = document.getElementById("scribbleboard");
-                    fd = canvas.toDataURL();
-                    $scope.signatureModal = false;
-                    SWBrijj.uploadSignatureString(fd).then(function(x) {
-                        uploadSuccess();
-                    }).except(function(x) {
-                            $scope.uploadFail();
-                        });
-                }
-                else {
-                    fd = new FormData();
-                    for (var i = 0; i < $scope.files.length; i++) {
-                        fd.append("uploadedFile", $scope.files[i]);
-                    }
-                    $scope.signatureModal = false;
-                    SWBrijj.uploadSignatureImage(fd).then(function(x) {
-                        uploadSuccess();
-                    }).except(function(x) {
-                        $scope.uploadFail();
-                    });
-                }
-            }
-            else {
-                $scope.signatureModal = false;
-            }
-
-        };
-
-        $scope.createNewSignature = function() {
-            $scope.scribblemode = true;
-
-            var canvas = document.getElementById("scribbleboard");
-
-            var ctx = canvas.getContext('2d');
-            canvas.height = 180;
-            canvas.width = 330;
-            console.log(ctx);
-            console.log(canvas);
-            ctx.lineCap = 'round';
-            ctx.color = "blue";
-            ctx.lineWidth = 2;
-            ctx.fillStyle = "white";
-            // ctx.setAlpha(0);
-            ctx.fillRect(0, 0, 200, 200);
-            // ctx.setAlpha(0.5);
-
-            canvas.addEventListener('mousedown', function(e) {
-                canvas.down = true;
-                var offs = getCanvasOffset(e);
-                canvas.X = offs[0];
-                canvas.Y = offs[1];
-            }, false);
-
-            canvas.addEventListener('mouseover', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.addEventListener('mouseout', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.addEventListener('mouseup', function(e) {
-                void(e);
-                canvas.down = false;
-            });
-
-            canvas.strokes = [];
-
-            canvas.addEventListener('mousemove', function(e) {
-                if (canvas.down) {
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.X, canvas.Y);
-                    var offs = getCanvasOffset(e);
-                    ctx.lineTo(offs[0], offs[1]);
-                    canvas.strokes.push([canvas.color, canvas.X, canvas.Y, offs[0], offs[1]]);
-                    ctx.stroke();
-                    canvas.X = offs[0];
-                    canvas.Y = offs[1];
-                }
-            }, true);
-        };
-
-        $scope.setFiles = function(element) {
-            $scope.files = [];
-            for (var i = 0; i < element.files.length; i++) {
-                $scope.files.push(element.files[i]);
-
-                var oFReader = new FileReader();
-                oFReader.readAsDataURL($scope.files[0]);
-
-                oFReader.onload = function (oFREvent) {
-                    document.getElementById("signaturevisual").src = oFREvent.target.result;
-                };
-                $scope.scribblemode = false;
-                $scope.$apply();
-            }
-        };
 
         function loadAnnotations() {
             /** @name SWBrijj#tblm
@@ -382,97 +240,27 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
                  if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
                      // don't load annotations twice
+                     console.error("loading document twice");
                      return;
                  }
                  $scope.lib = data;
                  // TODO: migrate all uses of $scope.lib to $scope.doc
                  $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
+                 $scope.doc.getPreparedFor(); // don't need the results here, just for it to exist for the annotations
                  $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
-                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || ($scope.lib && $scope.prepare); // requires $scope.lib
+                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
 
-                 // TODO: move all of this to the Documents and Annotations services
-                 if ($scope.lib.annotations) {
-                     // restoreNotes
-                     var annots = [];
-                     // TODO: should probably load all annotations into $scope.annots, and only display as relevant (probably already works)
-                     if ($scope.doc.countersignable($rootScope.navState.role) && $scope.lib.iss_annotations) {
-                         // if we're receiving this back from the recipient, only show my annotations (all others stamped?)
-                         var temp_annots = JSON.parse($scope.lib.iss_annotations);
-                         temp_annots.forEach(function(annot) {
-                             // TODO: we're creating an Annotation object and destroying it for no good reason
-                             var tmp = Annotations.createBlankAnnotation().parseFromJson(annot, $scope.doc.annotation_types);
-                             if (tmp.isCountersign()) {
-                                 annots.push(annot);
-                             }
-                         });
-                     } else {
-                         if ($scope.drawTime()) { // if it's not drawTime or counterSigntime, then there should be no annotations anywhere
-                             annots = JSON.parse($scope.lib.annotations);
-                             if (data.iss_annotations) {
-                                 annots = annots.concat(JSON.parse(data.iss_annotations));
-                             }
-                         }
-                     }
-                     $scope.annots = Annotations.setDocAnnotations($scope.docId, annots, $scope.doc.annotation_types);
-                     var sticky;
-                     for (var i = 0; i < annots.length; i++) {
-                         var annot = annots[i];
-                     }
-                 } else {
-                     // ensure annotations are linked to the service even if we didn't fetch any
-                     $scope.annots = Annotations.getDocAnnotations($scope.docId);
-                 }
+                 $scope.annots = Annotations.getDocAnnotations($scope.doc);
              }).except(function(err) {
-                 $scope.leave();
+                 $scope.$parent.leave();
              });
         }
-
 
         $window.addEventListener('beforeunload', function(event) {
             void(event);
             if (document.location.href.indexOf('-view') != -1) {
-                var ndx_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
-                var ndx_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
-                /** @name $scope#lib#annotations
-                 * @type {[Object]}
-                 */
-                /*
-                 if ((!$scope.lib) || ndx == $scope.lib.annotations || !$scope.isAnnotable){
-                 console.log("OH NO!!!");
-                 return; // no changes
-                 }
-                 */
-
-                /** @name SWBrijj#_sync
-                 * @function
-                 * @param {string}
-                 * @param {string}
-                 * @param {string}
-                 * @param {...}
-                 */
-                // This is a synchronous save
-                /** @name $scope#lib#original
-                 * @type {int} */
-                if (!$scope.template_original && !$scope.templateId && $scope.lib && $scope.isAnnotable && !$scope.doc.countersignable($rootScope.navState.role)) {
-                    var res = SWBrijj._sync('SWBrijj', 'saveNoteData', [$scope.docId, $scope.invq, !$scope.lib.original, ndx_inv, ndx_iss]);
-                    if (!res) alert('failed to save annotations');
-                }
-                // TODO: should call saveSmartdocData
-                if ($scope.template_original && $scope.prepareable($scope.lib)) {
-                    var res2 = SWBrijj._sync('SWBrijj', 'proc',
-                        ["account.company_attribute_update",
-                            "name",
-                            $scope.used_attributes.companyName
-                        ]
-                    );
-                    var res3 = SWBrijj._sync('SWBrijj', 'proc',
-                        ["account.company_attribute_update",
-                            "state",
-                            $scope.used_attributes.companyState
-                        ]
-                    );
-                    if (!res2 || !res3) alert('failed to save annotations');
-                }
+                $scope.saveNoteData();
+                $scope.saveSmartdocData();
             }
 
         });
@@ -487,36 +275,12 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.saveSmartdocData();
         });
 
-        $scope.$on('event:leave', $scope.leave);
-
-        $scope.leave = function() {
-            if ($rootScope.lastPage &&
-                ($rootScope.lastPage.indexOf("/register/") === -1) &&
-                ($rootScope.lastPage.indexOf("/login/") === -1) &&
-                ($rootScope.lastPage.indexOf("-view") === -1)) {
-                if (document.location.href.indexOf("share=true") !== -1) {
-                    sessionStorage.setItem("docPrepareState",
-                            angular.toJson({template_id: $scope.templateId,
-                                            doc_id: $scope.docId}));
-                    $rootScope.lastPage = $rootScope.lastPage + "?share";
-                }
-                if ($rootScope.lastPage.indexOf("company-status") !== -1) {
-                    $rootScope.lastPage = $rootScope.lastPage + "?doc=" + $scope.docKey;
-                }
-                $location.url($rootScope.lastPage);
-            } else if ($scope.invq) {
-                $location.url('/app/documents/investor-list');
-            } else {
-                $location.url('/app/documents/company-list');
-            }
-        };
-
         $scope.$watch('doc.currentPage', function(page) {
             if (page) {
                 var s = $location.search();
                 s.page = page;
-                $location.search(s);
-                scroll(0,0);
+                $location.search(s).replace();
+                $('doc-viewer').scrollTop(0);
                 refreshDocImage();
                 $scope.active.annotation = null; // new page shouldn't have any annotations open
             }
@@ -535,8 +299,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
         };
 
         $scope.newnewBox = function(event) {
-            if ($scope.isAnnotable && (!$scope.lib.when_shared && $rootScope.navState.role == "issuer") || (!$scope.lib.when_signed && $scope.lib.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
-                var a = Annotations.createBlankAnnotation();
+            if ($scope.isAnnotable && (!$scope.doc.when_shared && $rootScope.navState.role == "issuer") || (!$scope.doc.when_signed && $scope.doc.signature_flow > 0 &&  $rootScope.navState.role == "investor")) {
+                var a = Annotations.createBlankAnnotation($scope.doc);
                 a.page = $scope.doc.currentPage;
                 a.position.docPanel = $scope.dp;
                 a.position.size.width = 0;
@@ -556,15 +320,6 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.active.annotation = a;
             }
         };
-
-        /*
-        function newBoxX(annot) {
-            bb.addEventListener('mousemove', function(e) {
-                if (e.which !== 0) {
-                    boundBoxByPage(bb); // TODO?
-                }
-            });
-        }*/
 
         $scope.prepareable = function(doc) {
             return ($scope.prepare && !$scope.invq && doc && !doc.signature_flow && !$scope.template_original) || ($scope.template_original);
@@ -607,16 +362,21 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             }
         };
         $scope.saveNoteData = function(clicked) {
-            var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
-            var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
             if ($scope.lib === undefined) {
                 // This happens when "saveNoteData" is called by $locationChange event on the target doc -- which is the wrong one
                 // possibly no document loaded?
                 return;
             }
+            if ($scope.$parent.prepareFor) {
+                $scope.doc.savePreparation($scope.$parent.prepareFor);
+            }
             if (!$scope.isAnnotable) return;
             if ($scope.html) {
                 // template ...
+                return;
+            }
+            if ($scope.doc.when_signed) {
+                // If there's a signature, no edits can be made
                 return;
             }
 
@@ -627,9 +387,15 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {boolean}
              * @param {json}
              */
-            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.lib.original, nd_inv, nd_iss).then(function(data) {
+            var nd_inv = JSON.stringify(Annotations.getInvestorNotesForUpload($scope.docId));
+            var nd_iss = JSON.stringify(Annotations.getIssuerNotesForUpload($scope.docId));
+            SWBrijj.saveNoteData($scope.docId, $scope.invq, !$scope.doc.original, nd_inv, nd_iss).then(function(data) {
                 void(data);
-                if (clicked) $scope.$emit("notification:success", "Saved annotations");
+                if (clicked) {
+                    $scope.$emit("notification:success", "Saved annotations");
+                }
+                $scope.doc.clearPreparedForCache();
+                ShareDocs.clearPrepCache($scope.docId);
             });
         };
 
@@ -640,13 +406,19 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
             $scope.investor_attributes[attribute] = value == "true" ? "false": "true";
         };
 
+        $scope.sigOptions = { open: false,
+                                failureCallback: uploadFail,
+                                successCallback: uploadSuccess,
+                                labelrequired: false,
+                                label: null,
+                                type: '' };
+
         $scope.sigModalUp = function () {
-            $scope.signatureModal = true;
+            $scope.sigOptions.open = true;
         };
 
         $scope.sigclose = function () {
-            $scope.signatureModal = false;
-            $scope.scribblemode = false;
+            $scope.sigOptions.open = false;
         };
 
         $scope.removeannot = function(annotation) {

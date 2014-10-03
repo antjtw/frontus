@@ -29,8 +29,9 @@
 }
 
 #login > fieldset > .field > span {
-    text-transform: uppercase;
-    font-size: 10px;
+    font-size: 12px;
+    line-height: 16px;
+    font-family: 'FS Elliot Web Light', sans-serif;
 }
 
 
@@ -263,4 +264,10 @@ h2.browser {
     margin-bottom: 40px;
     text-align: left;
     font-size: 16px;
+}
+
+.free-trial-text {
+    margin-top: -5px;
+    text-align: left;
+    color: #34495E;
 }

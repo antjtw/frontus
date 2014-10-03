@@ -1,0 +1,31 @@
+<div class="capGuide cap-overflow global cellDetails">
+    <div class="cellSummary">
+        <div ng-switch on="cell.kind">
+            <ul ng-switch-when="vested">
+                <li>Vested Information</li>
+                <li>Auto-calculated from vesting schedule</li>
+            </ul>
+            <ul ng-switch-when="forfeited">
+                <li>Forfeit Information</li>
+            </ul>
+            <ul ng-switch-when="exercised">
+                <li>Exercise Information</li>
+            </ul>
+        </div>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Units</th>
+            </tr>
+            <tr ng-repeat="e in grouped_entries" ng-if="cell.kind != 'forfeited'">
+                <td>{{e.effective_date | utcdate:settings.shortdate}}</td>
+                <td ng-if="cell.kind != 'exercised'">{{e.credit - e.debit | formatAmount:'units'}}</td>
+                <td ng-if="cell.kind == 'exercised'">{{e.debit - e.credit | formatAmount:'units'}}</td>
+            </tr>
+            <tr ng-repeat="e in cell.transactions" ng-if="cell.kind == 'forfeited'">
+                <td>{{e.effective_date | utcdate:settings.shortdate}}</td>
+                <td>{{e.attrs.units  | formatAmount:'units'}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

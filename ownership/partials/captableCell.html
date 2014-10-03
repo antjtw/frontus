@@ -1,0 +1,9 @@
+<span class="captablepair-box">
+    <div class="output clickable">
+        {{units() | formatAmount:'units'}}
+    </div>
+    <div ng-if="t=='cap'"
+         class="output second clickable">
+        {{amount() | formatAmount:'amount'}}
+    </div>
+</span>

@@ -1,0 +1,228 @@
+
+<div class="compose_message">
+
+    <div>
+        <div>
+            <div class="message_elem">
+                <div class="message_headline" ng-if="groupMessage">To</div>
+                <div class="message_headline" ng-if="!groupMessage">BCC</div>
+                <div class="message_input">
+                    <select ui-select2 multiple ng-model='message.recipients' placeholder="Enter a person or group from your Sharewave contacts" style="width: 100%;">
+                        <option ng-repeat="myContact in myContacts" value="{{myContact.id}}">{{myContact.name}}</option>
+                    </select>
+                </div>
+            </div>
+        <div>
+
+
+        <div>
+            <div class="message_elem">
+                <div class="message_headline" style="visibility:hidden">Group</div>
+                <div class="message_input">
+                    <button class="check-box-button group" ng-class="{'selected': groupMessage}" ng-click="selectGroupMessage()">
+                    <span data-icon="&#xe023;" aria-hidden="true"></span>
+                    </button>
+                    <span class="group-message-text">Send group message, every message is reply all</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="message_elem">
+            <div class="message_headline">Subject</div>
+            <div class="message_input">
+                <input type="text" ng-model ="message.subject" class="msgsubject" style="padding-right: 0px; width: calc(100% - 5px);">
+            </div>
+        </div>
+
+        <div class="message_info">
+            <div class="message_headline" style="margin-top: 4px;"> Message</div>
+            <div class="message_input" style="width: calc(76% + 5px);">
+                <div text-angular ng-model="message.text" ta-toolbar="[['h1', 'h2', 'h3', 'p', 'bold', 'italics', 'underline', 'ul', 'ol', 'justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'insertLink']]"></div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+<div class="preview-message"
+    ng-click= "previewModalOpen(message)"
+    ng-hide="!readyToPreview(message)">
+    Preview Message
+</div>
+
+<div class="msgButtons">
+    <div class = "standard-button" tooltip="{{zombiemessage()}}">
+        <button class="btn" style="font-size: 14px"
+            ng-class="{'disabledButton': companyIsZombie() || !readyToSend(message) || clicked}"
+            ng-click="!companyIsZombie() && readyToSend(message) &&  !clicked && send(message)">
+            Send
+        </button>
+    </div>
+</div>
+
+<div class="msgButtons left">
+    <div class = "standard-button white">
+        <button class="btn"
+            ng-click="resetMessage()">
+            Cancel
+        </button>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<div modal="previewModal" close="previewModalClose()" options="{dialogClass: 'modal preview-modal'}">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0; padding: 0;background-color: #F1F1F1;;height: 100% !important;width: 100% !important;">
+        <tr>
+            <span class="close" data-icon="&#xe00f;" ng-click="previewModalClose()"></span>
+            <td align="center" valign="top" id="bodyCell" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 20px;border-top: 0;height: 100% !important;width: 100% !important;">
+                <!-- BEGIN TEMPLATE // -->
+                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border: 0;">
+                    <tr>
+                        <td align="center" valign="top" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                            <!-- BEGIN PREHEADER // -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templatePreheader" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #F1F1F1;;border-top: 0;border-bottom: 0;">
+                                <tr>
+                                    <td valign="top" class="preheaderContainer" style="padding-top: 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></td>
+                                </tr>
+                            </table>
+                            <!-- // END PREHEADER -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                            <!-- BEGIN HEADER // -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #F1F1F1;;border-top: 0;border-bottom: 1px none;">
+                                <tr>
+                                    <td valign="top" class="headerContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                        <tbody class="mcnImageBlockOuter">
+                                        <tr>
+                                            <td valign="top" style="padding: 0px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" class="mcnImageBlockInner">
+                                                <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                    <tbody><tr>
+                                                        <td class="mcnImageContent" valign="top" style="padding-right: 0px;padding-left: 0px;padding-top: 0;padding-bottom: 0;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+
+
+                                                            <img align="left" alt="Sharewave Logo" src="/img/email/logo.png" width="122" style="max-width: 122px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;" class="mcnImage">
+
+
+                                                        </td>
+                                                    </tr>
+                                                    </tbody></table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                        <tbody class="mcnDividerBlockOuter">
+                                        <tr>
+                                            <td class="mcnDividerBlockInner" style="padding: 20px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                <table class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                    <tbody><tr>
+                                                        <td style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                            <span></span>
+                                                        </td>
+                                                    </tr></tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table></td>
+                                </tr>
+                            </table>
+                            <!-- // END HEADER -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                            <!-- BEGIN BODY // -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #FFFFFF;border-top: 0;border-bottom: 0;">
+                                <tr>
+                                    <td valign="top" class="bodyContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                        <tbody class="mcnTextBlockOuter">
+                                        <tr>
+                                            <td valign="top" class="mcnTextBlockInner" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                    <tbody><tr>
+                                                        <td valign="top" class="mcnTextContent" style="padding: 20px 40px;color: #696A6C;font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 14px;font-weight: normal;line-height: 150%;text-align: left;border-collapse: collapse;mso-table-lspace: 0pt; mso-table-rspace: 0pt; ">
+                                                            <p style="color: #34495E;font-size: 24px;font-family: 'Helvetica Neue''Helvetica', Arial, sans-serif; margin-bottom:10px; font-weight:200 ">Message from {{sendername}}</p>
+                                                            <div>
+                                                                {{company}} is using Sharewave to organize and share company information with you.
+                                                            </div>
+                                                            <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:40px; margin-bottom:20px; border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div >
+                                                            <div ng-bind-html="messagetext" class="msgText"></div>
+                                                            <div>&nbsp;</div>
+                                                            <div class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: solid;border-top-color: #E3E3E3;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"></div>
+                                                            <div>&nbsp;</div>
+
+                                                            <div><span style="font-family:arial,helvetica neue,helvetica,sans-serif; "><p style="color: #3498db;font-weight: normal;text-decoration: none;word-wrap: break-word !important;letter-spacing:0.125em; font-size: 11px;">VISIT SHAREWAVE <b></b></p></span></div>
+                                                            <div>&nbsp;</div>
+                                                            <div>Replies to this message will go {{replyto}}</div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <tr>
+                        <td align="center" valign="top" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                            <!-- BEGIN FOOTER // -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateFooter" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #F1F1F1;border-top: 0;border-bottom: 0;">
+                                <tr>
+                                    <td valign="top" class="footerContainer" style="padding-bottom: 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                        <tbody class="mcnDividerBlockOuter">
+                                        <tr>
+                                            <td class="mcnDividerBlockInner" style="padding: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                <table class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                    <tbody><tr>
+                                                        <td style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                            <span></span>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                        <tbody class="mcnTextBlockOuter">
+                                        <tr>
+                                            <td valign="top" class="mcnTextBlockInner" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                                    <tbody><tr>
+                                                        <td valign="top" class="mcnTextContent" style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 11px;line-height: 125%; text-align: left;">
+                                                            <div style="text-align: center;">
+                                                                <span style="color:#a6a6a6;"><span style="font-family:arial,helvetica neue,helvetica,sans-serif; font-size: 11px;">Sharewave LLC, 2095 Broadway, Floor 5, New York, NY 10023</span></span></div>
+                                                            <div style="text-align: center;">
+                                                                &nbsp;</div>
+                                                            <div style="text-align: center;">
+                                                                <span style="color:#a6a6a6;"><span style="font-family:arial,helvetica neue,helvetica,sans-serif; font-size: 11px;"><a href="#" style="color: #a6a6a6;font-weight: normal; font-size:11px;text-decoration: none;word-wrap: break-word !important;">About</a>&nbsp;  &#8226; &nbsp;<a href="#" title="Blog" style="color: #a6a6a6;font-weight: normal;text-decoration: none;word-wrap: break-word !important; font-size: 11px;">Blog</a>&nbsp; &#8226; &nbsp;<a href="#"  title="Twitter" style="color: #a6a6a6;font-weight: normal; font-size: 11px; text-decoration: none;word-wrap: break-word !important;">Twitter</a></span></span></div>
+                                                            <br>
+                                                            <br>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </tr>
+</div>

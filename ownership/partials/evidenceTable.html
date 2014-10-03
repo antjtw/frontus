@@ -1,0 +1,34 @@
+<table class="status-table investor evidence">
+    <tbody>
+        <tr>
+            <th class="left">
+                <span>
+                    Document Name
+                </span>
+            </th>
+            <th>
+                Recipient
+            </th>
+            <th class="left">Tags</th>
+        </tr>
+    </tbody>
+    <tbody ng-repeat="invdoc in eligible_evidence | filter:evidenceFilter | orderBy:evidenceOrder">
+        <tr class="empty-row"/>
+        <tr draggable item="item" id='{{invdoc.doc_id || invdoc.original}}' class="version"
+            class="version">
+            <td>
+                {{invdoc.docname}}
+            </td>
+            <td>
+                {{invdoc.name || invdoc.investor}}
+            </td>
+            <td>
+                <span class="tag"
+                      ng-repeat="tag in invdoc.tags"
+                      ng-click="state.evidenceQuery = tag">
+                    {{tag + (($last && ' ') || ', ')}}
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>

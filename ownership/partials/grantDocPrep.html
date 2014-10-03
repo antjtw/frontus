@@ -1,0 +1,77 @@
+<div class="wizard-tile">
+    <h2>Add People</h2>
+    <div class="wizard-right">
+        <p>Add your recipients and their details, which will be inserted into the document. Have lots of data? Just copy and paste.</p>
+    </div>
+    <div>
+        <div class="name-table">
+            <table>
+                <tr ng-repeat="email in emails">
+                    <td>
+                        <span class="status">
+                            <span class="good" ng-if="doc.preparedFor[email].is_prepared && !doc.hasInvalidAnnotation(email)" data-icon="&#xe052;" tooltip-placement="right" tooltip="Document is ready to share."></span>
+                            <span class="bad" data-icon="&#xe612;" ng-show="doc.hasInvalidAnnotation(email)" tooltip-placement="right" tooltip="Some fields for this user are invalid"></span>
+                        </span>
+                        <span class="name">
+                            {{getName(email)}}
+                        </span>
+                        <a ng-click="removeRecipient(email)" data-icon="&#xe00f;"></a>
+                        <span class="warning" ng-if="already_shared[doc.doc_id][email]">
+                            <span>{{getName(email)}} received a copy of this document on {{already_shared[doc.doc_id][email].when_shared.toDateString()}}. Would you like to remove this recipient?</span>
+                            <span><a ng-click="removeRecipient(email)">Remove Recipient</a> | <a ng-click="already_shared[doc.doc_id][email] = undefined;">Clear Notification</a></span>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            <span ng-class="{'emptyadd': emails.length == 0}" class="wizard-add">
+                <input ui-select2="recipientSelectOptions" ng-model="newRecipient" ng-change="addShareEmail(newRecipient); newRecipient=''">
+            </span>
+        </div>
+        <div class="doc-table">
+            <table>
+                <tr>
+                    <td ng-repeat="doc in doc_arr" ng-if="annots = (doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']); annots.length > 0">
+                        <table class="sub-doc-table">
+                            <tr>
+                                <th colspan='{{annots.length}}'>
+                                    <span>{{doc.docname}}</span>
+                                    <span data-icon="&#xe00D;" ng-show="doc.hasSignatureAnnotations()" class="info" tooltip="Signature Requested"></span>
+                                    <span data-icon="&#xe612;" ng-show="!doc.validTransaction()" class="bad" tooltip="Required fields for transaction are missing"></span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="annotation-headers" ng-repeat="annot in annots">
+                                    {{annot.type_info.display}}&nbsp;
+                                </td>
+                            </tr>
+                            <tr ng-repeat="email in emails">
+                                <td ng-repeat="annot in annots"
+                                    ng-class="{required: annot.isInvalid(email)}">
+                                    <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype != 'units'"
+                                           placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email);" ng-paste="doPaste($event, doc, email, annot);">
+                                    <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum' && annot.whattype == 'units'"
+                                           placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email); updateUnitsFromDocs();" ng-paste="doPaste($event, doc, email, annot); updateUnitsFromDocs();">
+                                    <input ng-if="annot.type_info.typename == 'date'"
+                                           bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
+                                           placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                                           ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)" ng-paste="doPaste($event, doc, email, annot);">
+                                    <select ng-if="annot.type_info.typename == 'enum'" ui-select2
+                                            placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                                            ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                                        <option></option>
+                                        <option ng-repeat="label in annot.type_info.labels" value="{{label}}">{{label}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="wizard-footer-row">
+                    <td colspan='{{doc_arr.length}}'></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

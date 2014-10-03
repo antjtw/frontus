@@ -1,6 +1,6 @@
 'use strict';
 
-function annotationController($scope, $rootScope, $element, $document, Annotations, User, $timeout, navState, SWBrijj) {
+function annotationController($scope, $rootScope, $element, $document, Annotations, $timeout, navState, SWBrijj, User) {
     $scope.navState = navState; // TODO: UI is very dependant on navState
     $scope.transaction_types_mapping = $rootScope.transaction_types_mapping;
     function applyLineBreaks(oTextarea) {
@@ -80,7 +80,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             strNewValue = strNewValue.split("\n", max).join("\n");
         }
         oTextarea.value = strNewValue;
-        $scope.annot.val = strNewValue;
+        $scope.current.val = strNewValue;
         oTextarea.setAttribute("wrap", "hard");
         return oTextarea.value.replace(new RegExp("\\n", "g"), "<br />");
     }
@@ -92,12 +92,20 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return false;
     };
 
-    $scope.$watch('annot.val', function(newValue, oldValue) {
+    $scope.$watch('current.val', function(newValue, oldValue) {
         // prevent issuers from filling in the investor values
         if (!$scope.annot.forRole(navState.role)) {
-            $scope.annot.val = "";
+            $scope.current.val = "";
         }
     });
+    
+    $scope.signatureURL = function(annot) {
+        if (annot.whattype != "ImgSignature" || !annot.forRole(navState.role))
+            return "";
+        if (!annot.val || annot.val.length == 0 || annot.val == "Personal")
+            return "/photo/user?id=signature:";
+        return '/photo/user?id=company_signature:' + annot.val;
+    };
 
     $scope.$watch('annot.whattype', function(newval, oldval) {
         if (newval != oldval) { // don't run this on the first $watch call
@@ -109,6 +117,79 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         // update type information
         $scope.annot.updateTypeInfo($scope.doc.annotation_types);
     });
+
+    $scope.annot.whattypesetter = function(val) {
+        // using a setter to prevent select2 from reformatting the whattype to it's prefered format...
+        if (typeof(val) == "string") {
+            $scope.annot.whattype = val;
+            if (val == "ImgSignature" && $scope.annot.forRole(navState.role) && !User.signaturePresent)
+            {
+                $scope.sigModalUp();
+            }
+        }
+        return $scope.annot.whattype;
+    }
+    function annotationOrderComp(typeA, typeB) {
+        // type "Text" always takes priority
+        if (typeA.id == "Text") {
+            return -1;
+        }
+        if (typeB.id == "Text") {
+            return 1;
+        }
+        // required == true should be higher than required == false, should be higher than required == undefined
+        // this keeps transaction types at the top
+        // otherwise, sort by alpha on type.text
+        if (typeA.required === true) {
+            if (typeB.required === true) {
+                return typeA.text.localeCompare(typeB.text);
+            } else {
+                return -1;
+            }
+        }
+        if (typeA.required === false) {
+            if (typeB.required === true) {
+                return 1;
+            } else if (typeB.required === false) {
+                return typeA.text.localeCompare(typeB.text);
+            } else {
+                return -1;
+            }
+        }
+        if (typeA.required === undefined) {
+            if (typeB.required !== undefined) {
+                return 1;
+            } else {
+                return typeA.text.localeCompare(typeB.text);
+            }
+        }
+    }
+    $scope.select2TypeOptions = {
+        data: function() {
+            var res = [];
+            $scope.doc.annotation_types.forEach(function(type) {
+                if ($scope.unusedType(type)) {
+                    res.push({id: type.name, text: type.display, required: type.required});
+                }
+            });
+            return {results: res};
+        },
+        sortResults: function(data, container, query) {
+            return data.sort(annotationOrderComp);
+        },
+        formatResultCssClass: function(type) {
+            var classes = "annotation-dropdown-item";
+            if (type.required === true) {
+                classes += " dropdown-required";
+            } else if (type.required === false) {
+                classes += " dropdown-suggested";
+            }
+            return classes;
+        },
+        createSearchChoice: function(text) {
+            return {id: text, text: text};
+        },
+    }
 
     $scope.unusedType = function(type) {
         // only want to filter transaction types that are already in used
@@ -226,10 +307,18 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         var dprt = dpr.top - dp.offsetTop; // top of document itself
         $scope.startX = ev.clientX - dprl + 5; // mouse start positions relative to the box/pad
         var bb = $element[0].querySelector("textarea");
+        if (!bb)
+        {
+            bb = $element[0].querySelector("img");
+        }
         $scope.startY = ev.clientY - dprt; // TODO can we get 6 dynamically?
         if (bb.style.height)
         {
             $scope.startY = $scope.startY - (parseInt(bb.style.height)/2);
+        }
+        else if (bb.height)
+        {
+            $scope.startY = $scope.startY - (parseInt(bb.height)/2);
         }
         $scope.initialMouseX = ev.clientX;
         $scope.initialMouseY = ev.clientY;
@@ -290,7 +379,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         if ($scope.annot.whattype == "ImgSignature" &&
             ($scope.annot.forRole(navState.role) && !$scope.doc.countersignable(navState.role))) {
             $scope.signaturestyle = {height: 180, width: 330 };
-            $scope.sigModalUp();
+            if (!User.signaturePresent)
+                $scope.sigModalUp();
         }
     };
 
@@ -308,6 +398,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         $scope.annot.whosign = value;
         $scope.annot.val = "";
         setDefaultText();
+        if ($scope.annot.whattype == "ImgSignature" && $scope.annot.forRole(navState.role) && !User.signaturePresent)
+        {
+            $scope.sigModalUp();
+        }
     };
 
     $scope.addLineBreaks = function($event) {
@@ -327,6 +421,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
+    $scope.annotationSizeImageStyle = {};
     $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
     $scope.enumBoxMode = function() {
@@ -335,7 +430,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'enum' &&
                $scope.annot.forRole(navState.role)&&
-               navState.role == 'investor';
+               (navState.role == 'investor' ||
+                $scope.prepareFor);
     };
 
     $scope.dateBoxMode = function() {
@@ -344,7 +440,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         return $scope.annot.type_info &&
                $scope.annot.type_info.typename == 'date' &&
                $scope.annot.forRole(navState.role) &&
-               navState.role == 'investor';
+               (navState.role == 'investor' ||
+                $scope.prepareFor);
     };
 
     $scope.$watch('annot.position.coords', function(new_coords) {
@@ -356,16 +453,12 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
 
     $scope.$watch('annot.position.size', function(new_size) {
         if (new_size) {
-            if ($scope.annot.type == 'text')
-            {
-                $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
-                $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
-            }
-            else if ($scope.annot.type == 'highlight')
-            {
-                $scope.annotationHighlightStyle.width = (new_size.width) + "px";
-                $scope.annotationHighlightStyle.height = (new_size.height) + "px";
-            }
+            $scope.annotationSizeStyle.width = (new_size.width - 14) + "px";
+            $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
+            $scope.annotationSizeImageStyle["max-width"] = (new_size.width - 14) + "px";
+            $scope.annotationSizeImageStyle["max-height"] = (new_size.height - 10) + "px";
+            $scope.annotationHighlightStyle.width = (new_size.width) + "px";
+            $scope.annotationHighlightStyle.height = (new_size.height) + "px";
         }
     }, true);
 
@@ -392,7 +485,68 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         delete $scope.annot.focus;
     });
 
-    $scope.user = User;
+    // create variables we can bind to for placeholder and value
+    // depending on whether we're using the annotation proper, or an override value
+    // TODO: look at using a getter/setter on custom.val to cut down on the number of watches
+    $scope.current = {};
+    $scope.$watch('annot.type_info.display', function(display) {
+        if ((!$scope.prepareFor) || ($scope.annot.val.length === 0)) {
+            $scope.current.placeholder = display;
+        }
+    });
+    if ($scope.prepareFor) {
+        $scope.$watch('annot.val', function(val) {
+            if (val.length > 0) {
+                $scope.current.placeholder = val;
+            } else {
+                $scope.current.placeholder = $scope.annot.type_info.display;
+            }
+        });
+        $scope.$watch(function() {
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                return $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id];
+            } else {
+                return "";
+            }
+        }, function(override) {
+            $scope.current.val = override;
+        });
+        $scope.$watch('current.val', function(val, old_val) {
+            if (val == old_val) {
+                // don't run the first time
+                return;
+            }
+            // check for overrides value existance, then assign to it if it's not equal
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                if (val != $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id]) {
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = val;
+                }
+            } else {
+                if (!$scope.doc.preparedFor) {
+                    $scope.doc.getPreparedFor();
+                }
+                if (!$scope.doc.preparedFor[$scope.prepareFor]) {
+                    var hash = $scope.doc.addPreparedFor($scope.prepareFor);
+                    hash.overrides[$scope.annot.id] = val;
+                } else {
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = val;
+                }
+            }
+        });
+    } else {
+        $scope.$watch('annot.val', function(val) {
+            if ($scope.current.val != val) {
+                $scope.current.val = val;
+            }
+        });
+        $scope.$watch('current.val', function(val) {
+            if ($scope.annot.val != val) {
+                $scope.annot.val = val;
+            }
+        });
+    }
 }
 
-annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "User", "$timeout", "navState", "SWBrijj"];
+annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "$timeout", "navState", "SWBrijj", "User"];

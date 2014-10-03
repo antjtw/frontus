@@ -1,0 +1,59 @@
+<div class="tranlogtabs" ng-if="tran">
+    <tabset ng-class="{'tabBorder': windowToggle}"
+            ng-style="viewportheight">
+        <tab heading="Information">
+            <div class="capGuide cap-overflow global cellDetails">
+                <div ng-if="tran.kind != 'issue security'" class="detailsHeader">
+                    <div ng-show="tran.attrs.investor">{{tran.attrs.investor}}</div>
+                    <div ng-show="tran.attrs.investor">Investor</div>
+                </div>
+                <div ng-if="tran.kind == 'issue security'" class="detailsHeader">
+                    <div>{{tran.attrs.security}}</div>
+                    <div>{{tran.effective_date | utcdate:settings.shortdate}}</div>
+                    <p ng-show="tran.attrs.security_type" class="belowTitle">
+                        <span ng-bind="tran.attrs.security_type"></span>
+                        <span>Security Type</span>
+                    </p>
+                </div>
+                <div class="darkgray faux-tabs" ng-class="{single: !hasDocuments(tran)}" >
+                    <button ng-click="switchCapTab('details');"
+                            ng-class="{on: currentTab=='details'}">
+                            <span>
+                                <span data-icon="&#xe611;" aria-hidden="true"></span>
+                                Details
+                            </span>
+                    </button><button
+                        ng-click="switchCapTab('documents');"
+                        ng-class="{on: currentTab=='documents'}"
+                        ng-if="hasDocuments(tran)">
+                            <span>
+                                <span data-icon="&#xe009;" aria-hidden="true"></span>
+                                Documents
+                            </span>
+                </button>
+                </div>
+                <div ng-if="currentTab == 'details'">
+                    <transaction-attributes data="tran"></transaction-attributes>
+                </div>
+                <div ng-if="currentTab == 'documents'">
+                    <div class="linkedDocuments">
+                        <div ng-repeat="doc in tran.evidence_data" class="row-fluid my-trans-docs">
+                            <ul class="pull-left" bs-tooltip="doc.docname">
+                                <li>
+                                        <span ng-click="viewEvidence(doc)" >
+                                            {{doc.docname}}
+                                        </span>
+                                </li>
+                                <li ng-if="doc.name||doc.investor">
+                                        <span>
+                                            {{doc.name || doc.investor}}'s version
+                                        </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+</div>

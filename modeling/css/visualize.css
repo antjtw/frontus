@@ -2,10 +2,6 @@
     background-color: #F1F1F1;
 }
 
-.container.grey-background {
-    background-color: #F1F1F1;
-}
-
 .modeling-block {
     width: -moz-calc(100% - 40px);
     width: -webkit-calc(100% - 40px);

@@ -10,7 +10,7 @@
             <span class="toggle-icon" ng-show="versionsVisible(doc) && doc.shown && doc.version_count > 0" data-icon="&#xe01c;" aria-hidden="true"></span>
         </div>
         <div ng-if="!viewState.hideSharebar">
-            <button class="check-box-button" ng-class="{selected:doc.forShare}" ng-click="toggleForShare(doc);">
+            <button class="check-box-button" ng-class="{selected:forShare()}" ng-click="toggleForShare();">
                 <span data-icon="&#xe023;" aria-hidden="true"></span>
             </button>
         </div>
@@ -35,7 +35,7 @@
         <div ng-if="!docIsComplete(doc)" class="circle" ng-class="{gray:doc.version_count == 0, yellow:doc.version_count > 0}"></div>
     </td>
     <td ng-show="viewState.hideSharebar" class="shareholder-column status-column issuer pointer"
-        ng-click="!(!doc.uploaded_by || doc.pages > 0) || viewStatus(doc)">
+        ng-click="titleClick()">
         <ul>
             <li>{{formatDocStatusRatio(doc)}}</li>
         </ul>
@@ -60,29 +60,6 @@
         </ul>
     </td>
     <td ng-if="doc.type == 'doc'">
-        <div ng-if="!viewState.hideSharebar && doc.forShare">
-            <ul class="dropdown-list drop-selector">
-                <li class="dropdown standard"> <a class="dropdown-toggle" data-toggle="Dropdown" href="#">
-                        {{ formatShareType(getShareType(doc)) }}
-                    </a>
-
-                    <ul class="dropdown-menu">
-                        <li ng-show="!doc.template_id"> <a class="button" ng-click="modals.updateShareType(doc,0);">View Only</a>
-
-                        </li>
-                        <li ng-show="doc.is_prepared"> <a class="button" ng-click="modals.updateShareType(doc,2);">Request Signature</a>
-
-                        </li>
-                        <li ng-show="!doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Prepare for Signature</a>
-
-                        </li>
-                        <li ng-show="doc.is_prepared"> <a class="button" ng-click="prepareDocument(doc);">Re-prepare</a>
-
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
         <div ng-if="viewState.hideSharebar">
             <ul ng-show="(doc.doc_id || (doc.version_count == 0 && !doc.uploaded_by)) && (!doc.uploaded_by || doc.pages > 0)" class="dropdown-list">
                 <li class="dropdown standard menu-drop">
@@ -95,8 +72,6 @@
                         <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.updateTitleOpen(doc)">Rename</li>
                         <li ng-show="doc.doc_id" ng-click="modals.updateTagsOpen(doc)">Edit Tags</li>
                         <li ng-show="doc.version_count == 0 && doc.uploaded_by" ng-click="modals.deleteDocOpen(doc)">Delete</li>
-                        <li ng-show="!doc.is_prepared && !companyIsZombie()" ng-click="prepareDocument(doc);">Prepare for Signature</li>
-                        <li ng-show="doc.is_prepared && !companyIsZombie()" ng-click="prepareDocument(doc);">Re-prepare for Signature</li>
                     </ul>
                 </li>
             </ul>

@@ -24,7 +24,7 @@
 </td>
 <td class="shareholder-column status-column pointer" ng-click="viewInvestorCopy(version)">
     <ul>
-        <li ng-class="{'red':version.sendgrid_event=='bounce' && !version.when_retracted}">{{shortVersionStatus(version)}} 
+        <li ng-class="{'red':version.sendgrid_event=='bounce' && !version.when_retracted}">{{shortVersionStatus(version)}}
         <span ng-show="viewState.show_archived && version.archived"> & archived</span>
         </li>
 <td colspan="2">
@@ -36,7 +36,7 @@
 
     </div>
     <div ng-if="version.sendgrid_event=='bounce' && !version.when_retracted" class="standard-button small-standard-button doc-share-button" style="margin-right: -1px">
-        
+
           <input ui-select2="select2Options" ng-model="emailList.email" style="min-width:230px; max-width: 500px; overflow-x:auto; overflow-y:hidden; max-height: 40px"></input>
 
           <button ng-click="docRecipients(version, emailList.email)" ng-disabled="buttondisabled" class="btn reshare"> Reshare</button>
@@ -50,6 +50,7 @@
             </a>
             <ul ng-hide="toggleView();" class="dropdown-menu">
                 <li ng-show="!versionIsComplete(version)" ng-click="modals.retractVersionOpen(version)">Retract</li>
+                <li ng-show="!versionIsComplete(version) && !version.when_signed && !version.issue && version.signature_flow > 0" ng-click="modals.signedUploadOpen(version.doc_id)">Upload Signed Version</li>
                 <li ng-show="!versionIsComplete(version) && version.signature_flow>0 && !version.template_id"
                     ng-click="switchSignatureFlow(version, 0)">
                     Switch to View Only

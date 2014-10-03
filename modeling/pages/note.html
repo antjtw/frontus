@@ -31,7 +31,7 @@
                                     <a ng-click="selectNote('Custom Note')">Custom Note</a>
                                 </li>
                                 <li ng-repeat="tran in debttrans">
-                                    <a ng-click="selectNote(tran)">{{tran.investor}}'s {{tran.issue}}</a>
+                                    <a ng-click="selectNote(tran)">{{tran.attrs.investor}}'s {{tran.attrs.security}}</a>
                                 </li>
                             </ul>
                         </li>

@@ -1,0 +1,21 @@
+<div ng-show="path.indexOf('/app/ownership/grants/docs') != -1">
+    <a href="/app/ownership/grants/issue"><span data-icon="&#xe032;"aria-hidden="true"></span>Back</a>
+</div>
+<div ng-show="path.indexOf('/app/ownership/grants/docs') == -1">
+    <ul>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/issue') != -1}" href="/app/ownership/grants/issue">Choose Security</a></li>
+        <li><span data-icon="&#xe033;"aria-hidden="true"></span></li>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/people') != -1}" ng-href="{{peopleLink()}}">Add People</a></li>
+        <li><span data-icon="&#xe033;"aria-hidden="true"></span></li>
+        <li><a ng-class="{'active': path.indexOf('/app/ownership/grants/review') != -1}" ng-href="{{reviewLink()}}">Review</a></li>
+    </ul>
+</div>
+<div ng-hide="path.indexOf('/app/ownership/grants/docs') == -1">
+    <div class="pull-left"> <span>Search</span>
+        <input type="text" class="search-box" ng-model="state.evidenceQuery">
+    </div>
+</div>
+
+<div>
+    <span ng-click="$root.leave(['/grants/', '/documents/company-view'])">Save & Exit</span>
+</div>
