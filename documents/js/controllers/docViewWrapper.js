@@ -450,13 +450,8 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     certificatedocument[0].security = $scope.doc.preparedFor[$scope.prepareFor].overrides[note.id];
                 }
             });
-            var emailto = $scope.doc.row.email;
-            if (typeof(inv) != "string") {
-                emailto = $scope.doc.row.email.id;
-            }
-            console.log(emailto);
             SWBrijj.document_multishare(
-                    emailto.toLowerCase(),
+                    $scope.doc.row.email.id.toLowerCase(),
                     JSON.stringify(certificatedocument),
                     "",
                     "22 November 2113"

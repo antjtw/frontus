@@ -271,6 +271,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                             $scope.doc.row = row;
                             if (row.email) {
                                 $scope.doc.emaillocked = true;
+                                $scope.doc.row.email = {id: $scope.doc.row.email};
                             }
                         });
                         $scope.doc.transaction = transaction_deets;
