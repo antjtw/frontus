@@ -94,6 +94,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         this.attrs = {};
         this.docs = {};
         this.evidenceloaded = false;
+        this.p = $q.defer();
     };
     var transaction_doc_types = ["grant", "issue certificate"];
     Security.prototype = {
@@ -123,12 +124,17 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                             }
                         });
                         security.evidenceloaded = true;
+                        security.p.resolve(security.docs);
                         return security.docs;
                     }).except(logError);
                 return this.docs;
             } else {
                 return this.docs;
             }
+        },
+        getDocsPromise: function() {
+            this.getDocs();
+            return this.p.promise;
         },
         removeDoc: function(doc) {
             var security = this;
@@ -142,7 +148,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
         addSpecificEvidence: function(doc_id, type, label) {
             var security = this;
             return SWBrijj.procm('ownership.add_issue_document', this.transactions[0].transaction, doc_id, type, label).then(function(x) {
-                security.docs[type] = {'doc_id': doc_id, 'type': type, 'docname': x[0].add_issue_document};
+                security.docs[type] = {'doc_id': doc_id, 'type': type, 'label': label, 'docname': x[0].add_issue_document};
                 if (transaction_doc_types.indexOf(type) !== -1) {
                     SWBrijj.update("document.my_company_library", {issue: security.name, "transaction_type": type}, {doc_id: doc_id});
                 }

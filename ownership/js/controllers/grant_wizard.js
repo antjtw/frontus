@@ -35,7 +35,7 @@ app.controller('docsGrantIssue',
 
         $scope.backurl = function() {
             if ($scope.flow == 'certificate') {
-                return '/app/ownership/certificate/create';
+                return '/app/ownership/certificate/create?issue=' + $routeParams.issue;
             }
             return '/app/ownership/grants/issue';
         };

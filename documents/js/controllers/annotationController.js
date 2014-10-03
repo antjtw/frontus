@@ -554,6 +554,14 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         });
     }
+
+    $scope.certificateDisable = function(annot) {
+        if ($scope.doc.transaction_type == 'issue certificate') {
+            return (annot.type_info.required === true);
+        } else {
+            return false;
+        }
+    };
 }
 
 annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "$timeout", "navState", "SWBrijj", "User"];

@@ -1023,14 +1023,35 @@ li.selectedtab, li.selectedtab > a, li.selectedtab > a:hover {
     vertical-align: middle;
     white-space: normal;
     height: 32px;
+    width: 100%;
+}
+
+.subnav-controls.doclist-controls > div:first-child, .subnav-controls.twentyspace > div:first-child {
+    margin-left: 20px;
+    width: -moz-calc(100% - 20px);
+    width: -webkit-calc(100% - 20px);
+    width: calc(100% - 20px);
+}
+
+.subnav-controls.peoplelist-controls > div:first-child, .subnav-controls.fortyspace > div:first-child {
     margin-left: 40px;
     width: -moz-calc(100% - 40px);
     width: -webkit-calc(100% - 40px);
     width: calc(100% - 40px);
 }
-.captable-controls.subnav-controls > div:first-child {
-    margin-left: 0;
+
+.subnav-controls.equalspace > div:first-child {
+    width: -moz-calc(100% - 40px);
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
 }
+
+.subnav-controls.wideequalspace > div:first-child {
+    width: -moz-calc(100% - 80px);
+    width: -webkit-calc(100% - 80px);
+    width: calc(100% - 80px);
+}
+
 .subnav-controls > div > div:not(.tooltip) {
     position: relative;
 }
@@ -5496,7 +5517,7 @@ grant-wizard-nav a.active {
     display: inline-block;
     vertical-align: middle;
     color: #1d2c3c;
-    width: 130px;
+    width: 150px;
     line-height: 32px;
     margin-left: 5px;
 }
