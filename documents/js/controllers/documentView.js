@@ -263,38 +263,42 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                      });
                      // need to add a preparedFor entry, as that's all faked
                      var prep = $scope.doc.addPreparedFor($scope.prepareFor);
-                     annot_promise.then(function(annots) {
-                         annots.forEach(function(annot) {
-                             if (annot.whattype == "document_id") {
-                                 prep.overrides[annot.id] = "-1";
-                             }
-                         });
-                     });
+                     var tran_p = $q.defer();
                      SWBrijj.tblm('_ownership.my_company_draft_transactions', 'transaction', parseInt($scope.prepareFor, 10)).then(function (transaction_deets) {
-                         annot_promise.then(function(annots) {
-                             var attrs = JSON.parse(transaction_deets.attrs);
-                             annots.forEach(function(annot) {
-                                 if (annot.whattype == "grant_date") {
-                                     prep.overrides[annot.id] = transaction_deets.effective_date;
-                                 } else if (annot.whattype == "units") {
-                                     prep.overrides[annot.id] = attrs.units;
-                                 } else if (annot.whattype == "security") {
-                                     prep.overrides[annot.id] = attrs.security;
-                                 } else if (annot.whattype == "investor") {
-                                     // TODO: look up cap table name
-                                     prep.overrides[annot.id] = attrs.investor;
-                                 }
-                             });
-                         });
+                         tran_p.resolve(transaction_deets);
                      });
                      SWBrijj.procm('ownership.get_or_generate_certificate_record', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
                          annot_promise.then(function(annots) {
+                             if (certificate_deets[0].annotation_overrides) {
+                                 // copy existing overrides
+                                 var overrides = JSON.parse(certificate_deets[0].annotation_overrides);
+                                 overrides.forEach(function(ovr) {
+                                     prep.overrides[ovr.id] = ovr.val;
+                                 });
+                             }
                              annots.forEach(function(annot) {
-                                 if (annot.whattype == "certificate_id") {
+                                 // set up fixed transaction details (or re-set up)
+                                 if (annot.whattype == "document_id") {
+                                     prep.overrides[annot.id] = "-1";
+                                 } else if (annot.whattype == "certificate_id") {
                                      prep.overrides[annot.id] = 'S-' + certificate_deets[0].sequence;
                                  }
                              });
-                             // TODO: restrictions / par value?
+                             tran_p.promise.then(function(transaction_deets) {
+                                var attrs = JSON.parse(transaction_deets.attrs);
+                                annots.forEach(function(annot) {
+                                    if (annot.whattype == "grant_date") {
+                                        prep.overrides[annot.id] = transaction_deets.effective_date;
+                                    } else if (annot.whattype == "units") {
+                                        prep.overrides[annot.id] = attrs.units;
+                                    } else if (annot.whattype == "security") {
+                                        prep.overrides[annot.id] = attrs.security;
+                                    } else if (annot.whattype == "investor") {
+                                        // TODO: look up cap table name
+                                        prep.overrides[annot.id] = attrs.investor;
+                                    }
+                                });
+                             });
                          });
                      });
                  }

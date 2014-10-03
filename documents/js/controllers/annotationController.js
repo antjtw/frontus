@@ -541,6 +541,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                     $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = val;
                 }
             }
+            $scope.doc.savePreparation($scope.prepareFor);
         });
     } else {
         $scope.$watch('annot.val', function(val) {
