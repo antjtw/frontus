@@ -103,7 +103,7 @@
                                     <span ng-repeat="t in doc.tags">{{t}}</span>
                                 </span>
                             </div>
-                            <div class="inforow" ng-if="prepareFor">
+                            <div class="inforow" ng-if="prepareFor && !(doc.transaction_type == 'issue certificate')">
                                 <span class="activity-icon people-icon"></span>
                                 <span class="info"><span>{{prepareFor}}</span><span>Preparing for</span></span>
                             </div>
@@ -222,7 +222,8 @@
                         <meter cur="doc.numAnnotationsComplete(navState.role, prepareFor)" tot="doc.numAnnotations(navState.role)"></meter>
                     </div>
                     <div ng-if="prepareable()" class="sides-padded bottom-padded">When you've finished adding annotations select the green button below to return to the prepare screen.</div>
-                    <div ng-if="prepareable() || prepareFor" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></button></div>
+                    <div ng-if="(prepareable() || prepareFor) && !(doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
+                    <div ng-if="(prepareable() || prepareFor) && (doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="">Issue <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
                 </div>
             </internal-right-rail>
         </div>
