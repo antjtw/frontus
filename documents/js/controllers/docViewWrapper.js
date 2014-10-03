@@ -438,6 +438,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             );
         };
 
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         $scope.issueCertificate = function() {
             var certificatedocument = [{}];
             certificatedocument[0].doc_id = $scope.doc.doc_id;
@@ -450,7 +451,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 }
             });
             SWBrijj.document_multishare(
-                    $scope.doc.row.email,
+                    $scope.doc.row.email.toLowerCase(),
                     JSON.stringify($scope.certificatedocument),
                     "",
                     "22 November 2113"
@@ -459,6 +460,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                     }).except(function(err) {
                         console.error(err);
                 });
+        };
+
+        $scope.formCheck = function() {
+            return $scope.doc.row.email && $scope.doc.row.email.length > 0 && emailRegExp.test($scope.doc.row.email);
         };
 
         $scope.prepareable = function() {
