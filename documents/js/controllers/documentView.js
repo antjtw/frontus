@@ -285,6 +285,13 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                      prep.overrides[annot.id] = attrs.investor;
                                  }
                              });
+                             SWBrijj.tblm('ownership.company_row_names', 'name', attrs.investor).then(function (row) {
+                                 if (row.email) {
+                                     $scope.doc.row = row;
+                                     $scope.doc.emaillocked = true;
+                                 }
+                             });
+                             $scope.doc.transaction = transaction_deets;
                          });
                      });
                      SWBrijj.procm('ownership.get_or_generate_certificate_record', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {

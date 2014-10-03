@@ -216,14 +216,18 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
                     </div>
-                    <div ng-if="(invq && doc.signable()) || prepareFor" class="fields-progress">
+                    <div ng-if="((invq && doc.signable()) || prepareFor) && !(doc.transaction_type == 'issue certificate')" class="fields-progress">
                         <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) != doc.numAnnotations(navState.role)">{{doc.numAnnotationsComplete(navState.role, prepareFor)}}/{{doc.numAnnotations(navState.role)}} Complete</span>
                         <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) == doc.numAnnotations(navState.role)">Document is ready!</span>
                         <meter cur="doc.numAnnotationsComplete(navState.role, prepareFor)" tot="doc.numAnnotations(navState.role)"></meter>
                     </div>
                     <div ng-if="prepareable()" class="sides-padded bottom-padded">When you've finished adding annotations select the green button below to return to the prepare screen.</div>
                     <div ng-if="(prepareable() || prepareFor) && !(doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
-                    <div ng-if="(prepareable() || prepareFor) && (doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="">Issue <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
+                    <div>
+                        <p>Issuing to {{doc.row.name}}</p>
+                        <input ng-disabled='doc.emaillocked' ng-model='doc.row.email'>
+                    </div>
+                    <div ng-if="(prepareable() || prepareFor) && (doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="issueCertificate()">Issue <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
                 </div>
             </internal-right-rail>
         </div>
