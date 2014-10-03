@@ -235,7 +235,7 @@
                     </div>
                     <div ng-if="prepareable()" class="sides-padded bottom-padded">When you've finished adding annotations select the green button below to return to the prepare screen.</div>
                     <div ng-if="(prepareable() || prepareFor) && !(doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
-                    <div ng-if="(prepareable() || prepareFor) && (doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="issueCertificate()">Issue <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
+                    <div ng-if="(prepareable() || prepareFor) && (doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button ng-disabled="!formCheck()" class="btn" ng-click="issueCertificate()">Issue <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
                 </div>
             </internal-right-rail>
         </div>

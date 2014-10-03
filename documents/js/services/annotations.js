@@ -286,7 +286,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
     }
 
     var doc_annotations = {};
-
     this.getDocAnnotations = function(doc) {
         // need doc since annotations can only exist within a document context
         if (!doc_annotations[doc.doc_id]) {
