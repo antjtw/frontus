@@ -42,7 +42,7 @@ app.controller('DocumentPrepareController',
             $scope.processing = true;
             ShareDocs.shareDocuments().then(function(result) {
                 if ($scope.doc_arr.some(function(doc) {
-                    return doc.issue && !doc.hasSignatureAnnotations() && !doc.hasInvestorAnnotations();
+                    return doc.issue && !doc.hasInvestorAnnotations();
                 })) {
                     $rootScope.$emit("notification:success", "Documents shared & transactions generating");
                 } else {
