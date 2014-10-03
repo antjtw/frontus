@@ -266,6 +266,14 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                      var tran_p = $q.defer();
                      SWBrijj.tblm('_ownership.my_company_draft_transactions', 'transaction', parseInt($scope.prepareFor, 10)).then(function (transaction_deets) {
                          tran_p.resolve(transaction_deets);
+                         var attrs = JSON.parse(transaction_deets.attrs);
+                         SWBrijj.tblm('ownership.company_row_names', 'name', attrs.investor).then(function (row) {
+                             if (row.email) {
+                                 $scope.doc.row = row;
+                                 $scope.doc.emaillocked = true;
+                             }
+                         });
+                         $scope.doc.transaction = transaction_deets;
                      });
                      SWBrijj.procm('ownership.get_or_generate_certificate_record', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
                          annot_promise.then(function(annots) {
