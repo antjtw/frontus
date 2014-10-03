@@ -463,7 +463,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.formCheck = function() {
-            return $scope.doc.row.email && $scope.doc.row.email.length > 0 && emailRegExp.test($scope.doc.row.email);
+            return $scope.doc.row && $scope.doc.row.email.length > 0 && emailRegExp.test($scope.doc.row.email);
         };
 
         $scope.prepareable = function() {
