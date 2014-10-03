@@ -286,8 +286,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                  }
                              });
                              SWBrijj.tblm('ownership.company_row_names', 'name', attrs.investor).then(function (row) {
+                                 $scope.doc.row = row;
                                  if (row.email) {
-                                     $scope.doc.row = row;
                                      $scope.doc.emaillocked = true;
                                  }
                              });

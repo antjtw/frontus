@@ -2566,3 +2566,17 @@ div.profile-link > span:first-of-type {
     margin-left: 50px;
     margin-bottom: 10px;
 }
+
+.inforow.email-input {
+
+}
+
+.inforow.email-input > span:first-of-type {
+    font-size: 12px;
+    line-height: 12px;
+    display: block;
+}
+
+.inforow.email-input > span:last-of-type > input {
+
+}

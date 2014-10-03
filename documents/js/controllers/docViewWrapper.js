@@ -439,6 +439,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.issueCertificate = function() {
+            console.log($scope.doc);
             $scope.certificatedocument = [{}];
             $scope.certificatedocument[0].doc_id = $scope.doc.doc_id;
             SWBrijj.document_multishare(

@@ -181,6 +181,18 @@
                                 <span class="info" ng-if="navState.role == 'issuer'"><span>Void accepted by {{doc.name}}</span><span>{{doc.when_void_requested  | date:settings.dateandtime}}</span></span>
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.dateandtime}}</span></span>
                             </div>
+                            <div class="inforow" ng-if="prepareFor && (doc.transaction_type == 'issue certificate')">
+                                <span class="activity-icon doc-share-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>{{doc.row.name}}</span><span>Shareholder issuing to </span></span>
+                            </div>
+                            <div class="inforow" ng-if="prepareFor && (doc.transaction_type == 'issue certificate') && doc.emaillocked">
+                                <span class="activity-icon received-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>{{doc.row.email}}</span><span>Email address</span></span>
+                            </div>
+                            <div class="inforow email-input" ng-if="prepareFor && (doc.transaction_type == 'issue certificate') && !doc.emaillocked">
+                                <span>Email to</span>
+                                <span><input ng-model='doc.row.email'></span>
+                            </div>
                         </div>
                         <div ng-if="prepareable()">
                             <doc-transaction-details doc="doc"></doc-transaction-details>
@@ -223,10 +235,6 @@
                     </div>
                     <div ng-if="prepareable()" class="sides-padded bottom-padded">When you've finished adding annotations select the green button below to return to the prepare screen.</div>
                     <div ng-if="(prepareable() || prepareFor) && !(doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
-                    <div>
-                        <p>Issuing to {{doc.row.name}}</p>
-                        <input ng-disabled='doc.emaillocked' ng-model='doc.row.email'>
-                    </div>
                     <div ng-if="(prepareable() || prepareFor) && (doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="issueCertificate()">Issue <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
                 </div>
             </internal-right-rail>
