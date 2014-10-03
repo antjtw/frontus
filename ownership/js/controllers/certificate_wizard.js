@@ -42,23 +42,16 @@ app.controller('createCertificate',
                     $scope.selected.issue = $scope.issueSelectOptions.data[0];
                 }
             }
-            $scope.docs = [];
-            $scope.ready = function() {
-                if ($scope.issue[0]) {
-                    $scope.issue[0].getDocsPromise().then(function(docs) {
-                        $scope.docs = docs
-                        if (docs['issue certificate']) {
-                            Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
-                                if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
-                                    return true
-                                } else {
-                                    return false
-                                }
-                            });
-                        } else {
-                            return false
-                        }
-                    });
+            $scope.certificateReady = function() {
+                if ($scope.issue && $scope.issue[0] && $scope.issue[0].getDocs() && $scope.issue[0].getDocs()['issue certificate']) {
+                    var doc = Documents.getOriginal($scope.issue[0].getDocs()['issue certificate'].doc_id);
+                    if (doc) {
+                        return doc.validTransaction();
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false
                 }
             }
         });
@@ -72,9 +65,11 @@ app.controller('createCertificate',
                         if (docs['issue certificate']) {
                             $scope.nextURL = '/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + $scope.transaction;
                         } else {
-                            $scope.nextURL = '/app/ownership/company-captable'
+                            $scope.nextURL = '/app/ownership/company-captable';
                         }
                     });
+                } else {
+                    $scope.nextURL = '/app/ownership/company-captable';
                 }
             }
         });

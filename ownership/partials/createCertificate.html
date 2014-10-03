@@ -4,7 +4,7 @@
     <div class="row-fluid">
         <div ng-style="viewportheight">
             <div class="wizard-tile">
-                <h2><span>Issue options from</span></h2>
+                <h2><span>Create certificate for</span></h2>
                 <input ui-select2="issueSelectOptions" ng-model="selected.issue">
             </div>
 
@@ -12,7 +12,7 @@
 
             <a class="wizard-next" ng-href="{{nextURL}}">
                 <div class="standard-button">
-                    <button class="btn" ng-disabled="!ready()"><span ng-show="!transaction">Done</span><span ng-show="transaction">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></span></button>
+                    <button class="btn" ng-disabled="!certificateReady()"><span ng-show="!transaction">Done</span><span ng-show="transaction">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></span></button>
                 </div>
             </a>
         </div>
