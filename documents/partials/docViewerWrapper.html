@@ -185,10 +185,6 @@
                                 <span class="activity-icon doc-share-icon"></span>
                                 <span class="info" ng-if="navState.role == 'issuer'"><span>{{doc.row.name}}</span><span>Shareholder issuing to </span></span>
                             </div>
-                            <div class="inforow" ng-if="prepareFor && (doc.transaction_type == 'issue certificate') && doc.emaillocked">
-                                <span class="activity-icon received-icon"></span>
-                                <span class="info" ng-if="navState.role == 'issuer'"><span>{{doc.row.email}}</span><span>Email address</span></span>
-                            </div>
                             <div class="inforow email-input" ng-if="prepareFor && (doc.transaction_type == 'issue certificate') && !doc.emaillocked">
                                 <span>Email to</span>
                                 <span><input ng-model='doc.row.email'></span>
