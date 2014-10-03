@@ -1,7 +1,7 @@
 'use strict';
 
-app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs', 'Investor', '$q',
-    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs, Investor, $q) {
+app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$location', '$routeParams', '$window', 'SWBrijj', 'Annotations', 'Documents', 'User', 'ShareDocs', 'Investor', '$q', '$filter',
+    function($scope, $rootScope, $compile, $location, $routeParams, $window, SWBrijj, Annotations, Documents, User, ShareDocs, Investor, $q, $filter) {
         $scope.cachebuster = Math.random();
         $scope.annots = [];
         $scope.signatureprocessing = false;
@@ -285,7 +285,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                 });
                             }
                             annots.forEach(function(annot) {
-                                // set up fixed transaction details (or re-set up)
+                                // set up fixed transaction details (or re-set up) (everything needs to be strings)
                                 if (annot.whattype == "document_id") {
                                     prep.overrides[annot.id] = "-1";
                                 } else if (annot.whattype == "certificate_id") {
@@ -296,9 +296,9 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                 var attrs = JSON.parse(transaction_deets.attrs);
                                 annots.forEach(function(annot) {
                                     if (annot.whattype == "grant_date") {
-                                        prep.overrides[annot.id] = transaction_deets.effective_date;
+                                        prep.overrides[annot.id] = $filter('utcdate')(transaction_deets.effective_date, $rootScope.settings.lowercasedate);
                                     } else if (annot.whattype == "units") {
-                                        prep.overrides[annot.id] = attrs.units;
+                                        prep.overrides[annot.id] = attrs.units.toString();
                                     } else if (annot.whattype == "security") {
                                         prep.overrides[annot.id] = attrs.security;
                                     } else if (annot.whattype == "investor") {
