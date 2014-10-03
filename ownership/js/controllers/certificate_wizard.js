@@ -51,9 +51,9 @@ app.controller('createCertificate',
                         return false;
                     }
                 } else {
-                    return false
+                    return false;
                 }
-            }
+            };
         });
 
         $scope.$watch('selected.issue', function(new_issue, old_issue) {
@@ -63,7 +63,7 @@ app.controller('createCertificate',
                 if ($scope.transaction) {
                     $scope.issue[0].getDocsPromise().then(function(docs) {
                         if (docs['issue certificate']) {
-                            $scope.nextURL = '/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + $scope.transaction;
+                            $scope.nextURL = '/app/documents/company-view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + $scope.transaction;
                         } else {
                             $scope.nextURL = '/app/ownership/company-captable';
                         }
