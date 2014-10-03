@@ -54,6 +54,7 @@ app.controller('DocumentPrepareController',
                     $rootScope.$emit("notification:fail", "Please confirm all documents being shared are prepared for all recipients.");
                 } else {
                     $rootScope.$emit("notification:fail", "Oops, something went wrong.");
+                    $location.url("/app/documents/company-list");
                 }
             }).finally(function(result) {
                 $scope.processing = false;
