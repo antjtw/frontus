@@ -270,6 +270,7 @@ service.service('Investor', ['SWBrijj', 'navState', '$q', '$window', function(SW
         };
 
         this.createInvestorObject = function(id) {
+            id = id.toLowerCase();
             var investorObject = {id: id, text: inv_service.getDisplayText(id), name: inv_service.getName(id)};
             if (!this.displays[id]) { // if we don't know this id ...
                 SWBrijj.procm('account.get_user_from_email', id).then(function(data) {
