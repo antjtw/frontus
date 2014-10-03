@@ -187,7 +187,9 @@
                             </div>
                             <div class="inforow email-input" ng-if="prepareFor && (doc.transaction_type == 'issue certificate') && !doc.emaillocked">
                                 <span>Email to</span>
-                                <span><input ng-model='doc.row.email'></span>
+                                <span>
+                                    <input ng-model="doc.row.email" ng-change="updateSendRow(doc.row.email);" ui-select2="rowSelect2Options">
+                                </span>
                             </div>
                         </div>
                         <div ng-if="prepareable()">
