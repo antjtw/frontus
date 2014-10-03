@@ -439,18 +439,18 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.issueCertificate = function() {
-            console.log($scope.doc.row.email);
-            console.log($scope.doc.doc_id);
-            /*SWBrijj.document_multishare(
-                    $scope.emailField,
-                    JSON.stringify($scope.doc),
-                    sdref.message,
+            $scope.certificatedocument = [{}];
+            $scope.certificatedocument[0].doc_id = $scope.doc.doc_id;
+            SWBrijj.document_multishare(
+                    $scope.doc.row.email,
+                    JSON.stringify($scope.certificatedocument),
+                    "",
                     "22 November 2113"
-                ).then(function(data) {
-                    console.log(data);
-                }).except(function(err) {
-                    console.error(err);
-                });*/
+                    ).then(function(data) {
+                        console.log(data);
+                    }).except(function(err) {
+                        console.error(err);
+                });
         };
 
         $scope.prepareable = function() {
