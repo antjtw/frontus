@@ -1,7 +1,8 @@
 <div class="wizard-tile wizard-flow">
     <h2>Linked Documents</h2>
     <div class="wizard-right">
-        <p>These documents will be shared with each option grant recipient. The option agreement<br>must be prepared as a template, so it can be re-used for each option grant.</p>
+        <p ng-if="coretype == 'grant'">These documents will be shared with each option grant recipient. The option agreement<br>must be prepared as a template, so it can be re-used for each option grant.</p>
+        <p ng-if="coretype == 'certificate'">Upload your company certificate, and prepare it as a template so that transaction information is used on issuance to shareholders.</p>
         <ul class="wizard-linking">
             <li>
                 <div ng-repeat="type in doclist" ng-if="(doc=issue[0].getDocs()[type]) || true">

@@ -438,6 +438,34 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             );
         };
 
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        $scope.issueCertificate = function() {
+            var certificatedocument = [{}];
+            certificatedocument[0].doc_id = $scope.doc.doc_id;
+            $scope.doc.annotations.forEach(function(note) {
+                if (note.whattype == "certificate_id") {
+                    certificatedocument[0].sequence = parseInt($scope.doc.preparedFor[$scope.prepareFor].overrides[note.id].substring(2)); // parse the "S-" off the front
+                }
+                if (note.whattype == "security") {
+                    certificatedocument[0].security = $scope.doc.preparedFor[$scope.prepareFor].overrides[note.id];
+                }
+            });
+            SWBrijj.document_multishare(
+                    $scope.doc.row.email.toLowerCase(),
+                    JSON.stringify(certificatedocument),
+                    "",
+                    "22 November 2113"
+                    ).then(function(data) {
+                        console.log(data);
+                    }).except(function(err) {
+                        console.error(err);
+                });
+        };
+
+        $scope.formCheck = function() {
+            return $scope.doc.row && $scope.doc.row.email.length > 0 && emailRegExp.test($scope.doc.row.email);
+        };
+
         $scope.prepareable = function() {
             return ($scope.prepare && !$scope.invq && $scope.doc && !$scope.doc.signature_flow && !$scope.templateKey) || ($scope.templateKey);
         };

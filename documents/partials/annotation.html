@@ -15,7 +15,7 @@
                           ng-keyup="addLineBreaks($event)" ng-model="current.val" style="resize:none"
                           class="row-fluid" ng-style="annotationSizeStyle"
                           ng-hide="(annot.whattype == 'document_id') ||((annot.whattype == 'ImgSignature') && annot.forRole(navState.role))"/>
-                <img ng-style="annotationSizeImageStyle" ng-show="(annot.whattype == 'ImgSignature') && annot.forRole(navState.role)" src="{{signatureURL(annot)}}"></img>
+                <img ng-style="annotationSizeImageStyle" ng-show="(annot.whattype == 'ImgSignature') && annot.forRole(navState.role)" ng-src="{{signatureURL(annot)}}"></img>
                 <img ng-style="annotationSizeQRStyle" ng-show="annot.whattype == 'document_id'" src="/photo/user?id=ike"></img>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">

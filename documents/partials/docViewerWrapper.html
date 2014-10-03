@@ -75,7 +75,7 @@
         <div class="modalText">
             <div class="row-fluid">
                 <div class="span6">
-                    <img src="{{invq? '/img/gif/investor-modal.gif' : '/img/gif/issuer-modal.gif'}}">
+                    <img ng-src="{{invq? '/img/gif/investor-modal.gif' : '/img/gif/issuer-modal.gif'}}">
                 </div>
                 <div class="span5 gif-text">
                     <p>
@@ -103,7 +103,7 @@
                                     <span ng-repeat="t in doc.tags">{{t}}</span>
                                 </span>
                             </div>
-                            <div class="inforow" ng-if="prepareFor">
+                            <div class="inforow" ng-if="prepareFor && !(doc.transaction_type == 'issue certificate')">
                                 <span class="activity-icon people-icon"></span>
                                 <span class="info"><span>{{prepareFor}}</span><span>Preparing for</span></span>
                             </div>
@@ -181,6 +181,14 @@
                                 <span class="info" ng-if="navState.role == 'issuer'"><span>Void accepted by {{doc.name}}</span><span>{{doc.when_void_requested  | date:settings.dateandtime}}</span></span>
                                 <span class="info" ng-if="navState.role == 'investor'"><span>Void accepted</span><span>{{doc.when_signed  | date:settings.dateandtime}}</span></span>
                             </div>
+                            <div class="inforow" ng-if="prepareFor && (doc.transaction_type == 'issue certificate')">
+                                <span class="activity-icon doc-share-icon"></span>
+                                <span class="info" ng-if="navState.role == 'issuer'"><span>{{doc.row.name}}</span><span>Shareholder issuing to </span></span>
+                            </div>
+                            <div class="inforow email-input" ng-if="prepareFor && (doc.transaction_type == 'issue certificate') && !doc.emaillocked">
+                                <span>Email to</span>
+                                <span><input ng-model='doc.row.email'></span>
+                            </div>
                         </div>
                         <div ng-if="prepareable()">
                             <doc-transaction-details doc="doc"></doc-transaction-details>
@@ -216,13 +224,14 @@
                             By clicking "Sign", you are creating a legally binding contract between the other party and yourself, or the entity you are authorized to represent. This action is irreversible.
                         </doc-action>
                     </div>
-                    <div ng-if="(invq && doc.signable()) || prepareFor" class="fields-progress">
+                    <div ng-if="((invq && doc.signable()) || prepareFor) && !(doc.transaction_type == 'issue certificate')" class="fields-progress">
                         <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) != doc.numAnnotations(navState.role)">{{doc.numAnnotationsComplete(navState.role, prepareFor)}}/{{doc.numAnnotations(navState.role)}} Complete</span>
                         <span ng-show="doc.numAnnotationsComplete(navState.role, prepareFor) == doc.numAnnotations(navState.role)">Document is ready!</span>
                         <meter cur="doc.numAnnotationsComplete(navState.role, prepareFor)" tot="doc.numAnnotations(navState.role)"></meter>
                     </div>
                     <div ng-if="prepareable()" class="sides-padded bottom-padded">When you've finished adding annotations select the green button below to return to the prepare screen.</div>
-                    <div ng-if="prepareable() || prepareFor" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></button></div>
+                    <div ng-if="(prepareable() || prepareFor) && !(doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button class="btn" ng-click="leave()">Finished <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
+                    <div ng-if="(prepareable() || prepareFor) && (doc.transaction_type == 'issue certificate')" class="standard-button pull-left sides-padded bottom-padded"><button ng-disabled="!formCheck()" class="btn" ng-click="issueCertificate()">Issue <span class="lower-icon" data-icon="&#xe016;"></span></button></div>
                 </div>
             </internal-right-rail>
         </div>

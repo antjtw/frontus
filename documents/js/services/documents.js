@@ -497,10 +497,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         savePreparation: function(investor) {
-            if (doc.transaction_type === "issue certificate") {
-                // TODO: save override data in ownership.certificates?
-                return;
-            }
+            var p = $q.defer();
             var doc = this;
             $timeout(function() {
                 var notes = [];
@@ -514,17 +511,40 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         }
                     }
                 });
-                SWBrijj.procm('document.update_preparation', doc.doc_id, investor, JSON.stringify(notes)).then(function(result) {
-                    // data stored, got back is_prepared, so update preparedFor with that and the overrides
-                    doc.preparedFor[investor].is_prepared = result[0].update_preparation;
-                    if (!ShareDocs.prepCache[doc.doc_id]) {
-                        ShareDocs.prepCache[doc.doc_id] = {};
-                    }
-                    ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
-                }).except(function(error) {
-                    $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
-                });
+                if (doc.transaction_type === "issue certificate") {
+                    // need to retrieve issue transaction and sequence number from the doc to save the overrides
+                    var issue_name;
+                    var sequence_num;
+                    doc.annotations.forEach(function(note) {
+                        if (note.whattype == "certificate_id") {
+                            sequence_num = parseInt(doc.preparedFor[investor].overrides[note.id].substring(2)); // parse the "S-" off the front
+                        }
+                        if (note.whattype == "security") {
+                            issue_name = doc.preparedFor[investor].overrides[note.id];
+                        }
+                    });
+                    SWBrijj.procm('ownership.update_certificate_preparation', issue_name, sequence_num, JSON.stringify(notes)).then(function(result) {
+                        p.resolve();
+                    }).except(function(error) {
+                        $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+                        p.reject(error);
+                    });
+                } else {
+                    SWBrijj.procm('document.update_preparation', doc.doc_id, investor, JSON.stringify(notes)).then(function(result) {
+                        // data stored, got back is_prepared, so update preparedFor with that and the overrides
+                        doc.preparedFor[investor].is_prepared = result[0].update_preparation;
+                        if (!ShareDocs.prepCache[doc.doc_id]) {
+                            ShareDocs.prepCache[doc.doc_id] = {};
+                        }
+                        ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
+                        p.resolve();
+                    }).except(function(error) {
+                        $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+                        p.reject(error);
+                    });
+                }
             }, 100); // TODO: 100 ms seems like enough time to let bs-datepicker actually change the data. Figure out why it doesn't just work without this
+            return p.promise;
         }
     };
 

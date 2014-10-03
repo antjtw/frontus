@@ -742,7 +742,7 @@ own.directive('editableCellDetails', [function() {
                                     if (docs['issue certificate']) {
                                         Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
                                             if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
-                                                $location.url('/app/documents/company_view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + tran.transaction);
+                                                $location.url('/app/documents/company-view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + tran.transaction);
                                             } else {
                                                 $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name)  + '&transaction=' + tran.transaction);
                                             }
@@ -1810,11 +1810,11 @@ own.directive('linkedDocuments', [function() {
 
                 $scope.errorTooltip = function(doc) {
                     if (!doc) {
-                        return "No document attached"
+                        return "No document attached";
                     } else {
-                        return "Document needs preparing"
+                        return "Document needs preparing";
                     }
-                }
+                };
             }
         ]
     };
