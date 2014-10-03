@@ -439,9 +439,16 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.issueCertificate = function() {
-            console.log($scope.doc);
-            $scope.certificatedocument = [{}];
-            $scope.certificatedocument[0].doc_id = $scope.doc.doc_id;
+            var certificatedocument = [{}];
+            certificatedocument[0].doc_id = $scope.doc.doc_id;
+            doc.annotations.forEach(function(note) {
+                if (note.whattype == "certificate_id") {
+                    certificatedocument[0].sequence = parseInt(doc.preparedFor[investor].overrides[note.id].substring(2)); // parse the "S-" off the front
+                }
+                if (note.whattype == "security") {
+                    certificatedocument[0].security = doc.preparedFor[investor].overrides[note.id];
+                }
+            });
             SWBrijj.document_multishare(
                     $scope.doc.row.email,
                     JSON.stringify($scope.certificatedocument),

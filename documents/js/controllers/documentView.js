@@ -237,77 +237,82 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
              * @param {string}
              * @param {...}
              */
-             SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
-                 if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
-                     // don't load annotations twice
-                     console.error("loading document twice");
-                     return;
-                 }
-                 $scope.lib = data;
-                 // TODO: migrate all uses of $scope.lib to $scope.doc
-                 $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
-                 $scope.doc.getPreparedFor(); // don't need the results here, just for it to exist for the annotations
-                 $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
-                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
+            SWBrijj.tblm($scope.library, "doc_id", $scope.docId).then(function(data) {
+                if ($scope.lib && $scope.lib.annotations && $scope.lib.annotations.length > 0) {
+                    // don't load annotations twice
+                    console.error("loading document twice");
+                    return;
+                }
+                $scope.lib = data;
+                // TODO: migrate all uses of $scope.lib to $scope.doc
+                $scope.doc = Documents.setDoc($scope.docId, data); // save the doc so others can see it
+                $scope.doc.getPreparedFor(); // don't need the results here, just for it to exist for the annotations
+                $scope.doc.name = $scope.doc.name ? $scope.doc.name : $scope.doc.investor;
+                $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
 
-                 $scope.annots = Annotations.getDocAnnotations($scope.doc);
-                 if ($scope.doc.transaction_type === "issue certificate") {
-                     // if we're issuing a certificate, we can assume we have prepareFor which is a transaction
-                     var annot_p = $q.defer();
-                     var annot_promise = annot_p.promise;
-                     var annot_watch_cancel = $scope.$watchCollection('annots', function(annots) {
-                         if (annots.length > 0) {
-                             annot_watch_cancel();
-                             annot_p.resolve($scope.annots);
-                         }
-                     });
-                     // need to add a preparedFor entry, as that's all faked
-                     var prep = $scope.doc.addPreparedFor($scope.prepareFor);
-                     annot_promise.then(function(annots) {
-                         annots.forEach(function(annot) {
-                             if (annot.whattype == "document_id") {
-                                 prep.overrides[annot.id] = "-1";
-                             }
-                         });
-                     });
-                     SWBrijj.tblm('_ownership.my_company_draft_transactions', 'transaction', parseInt($scope.prepareFor, 10)).then(function (transaction_deets) {
-                         annot_promise.then(function(annots) {
-                             var attrs = JSON.parse(transaction_deets.attrs);
-                             annots.forEach(function(annot) {
-                                 if (annot.whattype == "grant_date") {
-                                     prep.overrides[annot.id] = transaction_deets.effective_date;
-                                 } else if (annot.whattype == "units") {
-                                     prep.overrides[annot.id] = attrs.units;
-                                 } else if (annot.whattype == "security") {
-                                     prep.overrides[annot.id] = attrs.security;
-                                 } else if (annot.whattype == "investor") {
-                                     // TODO: look up cap table name
-                                     prep.overrides[annot.id] = attrs.investor;
-                                 }
-                             });
-                             SWBrijj.tblm('ownership.company_row_names', 'name', attrs.investor).then(function (row) {
-                                 $scope.doc.row = row;
-                                 if (row.email) {
-                                     $scope.doc.emaillocked = true;
-                                 }
-                             });
-                             $scope.doc.transaction = transaction_deets;
-                         });
-                     });
-                     SWBrijj.procm('ownership.get_or_generate_certificate_record', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
-                         annot_promise.then(function(annots) {
-                             annots.forEach(function(annot) {
-                                 if (annot.whattype == "certificate_id") {
-                                     prep.overrides[annot.id] = 'S-' + certificate_deets[0].sequence;
-                                 }
-                             });
-                             // TODO: restrictions / par value?
-                         });
-                     });
-                 }
-             }).except(function(err) {
-                 $scope.$parent.leave();
-             });
+                $scope.annots = Annotations.getDocAnnotations($scope.doc);
+                if ($scope.doc.transaction_type === "issue certificate") {
+                    // if we're issuing a certificate, we can assume we have prepareFor which is a transaction
+                    var annot_p = $q.defer();
+                    var annot_promise = annot_p.promise;
+                    var annot_watch_cancel = $scope.$watchCollection('annots', function(annots) {
+                        if (annots.length > 0) {
+                            annot_watch_cancel();
+                            annot_p.resolve($scope.annots);
+                        }
+                    });
+                    // need to add a preparedFor entry, as that's all faked
+                    var prep = $scope.doc.addPreparedFor($scope.prepareFor);
+                    var tran_p = $q.defer();
+                    SWBrijj.tblm('_ownership.my_company_draft_transactions', 'transaction', parseInt($scope.prepareFor, 10)).then(function (transaction_deets) {
+                        tran_p.resolve(transaction_deets);
+                        var attrs = JSON.parse(transaction_deets.attrs);
+                        SWBrijj.tblm('ownership.company_row_names', 'name', attrs.investor).then(function (row) {
+                            $scope.doc.row = row;
+                            if (row.email) {
+                                $scope.doc.emaillocked = true;
+                            }
+                        });
+                        $scope.doc.transaction = transaction_deets;
+                    });
+                    SWBrijj.procm('ownership.get_or_generate_certificate_record', parseInt($scope.prepareFor, 10)).then(function (certificate_deets) {
+                        annot_promise.then(function(annots) {
+                            if (certificate_deets[0].annotation_overrides) {
+                                // copy existing overrides
+                                var overrides = JSON.parse(certificate_deets[0].annotation_overrides);
+                                overrides.forEach(function(ovr) {
+                                    prep.overrides[ovr.id] = ovr.val;
+                                });
+                            }
+                            annots.forEach(function(annot) {
+                                // set up fixed transaction details (or re-set up)
+                                if (annot.whattype == "document_id") {
+                                    prep.overrides[annot.id] = "-1";
+                                } else if (annot.whattype == "certificate_id") {
+                                    prep.overrides[annot.id] = 'S-' + certificate_deets[0].sequence;
+                                }
+                            });
+                            tran_p.promise.then(function(transaction_deets) {
+                                var attrs = JSON.parse(transaction_deets.attrs);
+                                annots.forEach(function(annot) {
+                                    if (annot.whattype == "grant_date") {
+                                        prep.overrides[annot.id] = transaction_deets.effective_date;
+                                    } else if (annot.whattype == "units") {
+                                        prep.overrides[annot.id] = attrs.units;
+                                    } else if (annot.whattype == "security") {
+                                        prep.overrides[annot.id] = attrs.security;
+                                    } else if (annot.whattype == "investor") {
+                                        // TODO: look up cap table name
+                                        prep.overrides[annot.id] = attrs.investor;
+                                    }
+                                });
+                            });
+                        });
+                    });
+                }
+            }).except(function(err) {
+                $scope.$parent.leave();
+            });
         }
 
         $window.addEventListener('beforeunload', function(event) {
