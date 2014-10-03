@@ -584,7 +584,7 @@ tr.threadMembers, tr.forTooltip {
 }
 
 .reset-this.mimic-email {
-    padding: 20px 40px;
+    padding: 20px 40px 20px 0;
     color: #696a6c;
     font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
     font-size: 14px;
