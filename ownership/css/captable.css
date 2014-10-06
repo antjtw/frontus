@@ -1140,8 +1140,10 @@ textarea {
     background-color: #F1F1F1;
 }
 
-.tableView.grant-table tr > td.fieldSelected {
-    background-color: #C7C7C7;
+.tableView.grant-table tr > td.fieldSelected, .tableView.grant-table.viewmode tr.transaction-rows > td.fieldSelected.hoverable:hover, .tableView.grant-table tr.status-row > td.fieldSelected.hoverable:hover {
+    background-color: #8D8D8D;
+    color: #F1F1F1;
+    -webkit-text-fill-color: #F1F1F1;
 }
 
 .tableView.grant-table tr.transaction-rows > td:first-child {
