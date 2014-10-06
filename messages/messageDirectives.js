@@ -361,6 +361,8 @@ mod.directive('threadPeople', function(){
                 }
                 $location.url(link);
             };
+            
+            $scope.isIssuer = navState.role == 'issuer';
         }]
     };
 });

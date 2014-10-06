@@ -5,7 +5,7 @@
         <div style="display: inline-block; vertical-align: middle; padding-left: 10px">
             <div class="emailName">{{msgPerson.namex}}</div>
             <div ng-if="!msgPerson.namex" class="emailName personEmail">{{msgPerson.email}}</div>
-            <div ng-if="msgPerson.login !== undefined" ng-click="goToPerson(msgPerson)" class="go-to go-to-profile"><span data-icon="&#xe001;"aria-hidden="true"></span><span>Go to full profile</span></div>
+            <div ng-if="isIssuer && msgPerson.login !== undefined" ng-click="goToPerson(msgPerson)" class="go-to go-to-profile"><span data-icon="&#xe001;"aria-hidden="true"></span><span>Go to full profile</span></div>
 
         </div>
     </div>
