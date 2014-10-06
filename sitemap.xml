@@ -2,18 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-  <url> 
-    <loc>https://www.sharewave.com</loc>
-    <video:video>     
-      <video:player_loc allow_embed="yes">https://www.youtube.com/watch?v=wsJ_chk1IrY</video:player_loc>
-      <video:thumbnail_loc>https://s3.amazonaws.com/sharewave/www/images/animation-still.png</video:thumbnail_loc>
-      <video:title>Sharewave: Feed your investors</video:title>  
-      <video:description>a beautifully simple way to organzie, visualize, and communicate with investors</video:description>
-    </video:video>
-  </url>
   <url><loc>https://www.sharewave.com/team</loc></url>
   <url><loc>https://www.sharewave.com/careers</loc></url>
   <url><loc>https://www.sharewave.com/press</loc></url>
   <url><loc>https://www.sharewave.com/privacy</loc></url>
+  <url><loc>https://www.sharewave.com/features/</loc></url>
+  <url><loc>https://www.sharewave.com/pricing/</loc></url>
   <url><loc>http://blog.sharewave.com</loc></url>
 </urlset>
