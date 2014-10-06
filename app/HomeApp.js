@@ -91,6 +91,10 @@ app.config(function($routeProvider, $locationProvider){
             controller: 'reviewGrantIssue',
             templateUrl: '/ownership/partials/reviewGrantIssue.html'
         }).
+        when('/app/ownership/security/create', {
+            controller: 'createSecurity',
+            templateUrl: '/ownership/partials/createSecurity.html'
+        }).
         when('/app/documents/company-list', {
             templateUrl: '/documents/partials/companyList.html',
             controller: 'CompanyDocumentListController',
