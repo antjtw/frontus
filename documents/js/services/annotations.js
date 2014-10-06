@@ -3,7 +3,8 @@
 var docs = angular.module('docServices');
 
 // TODO: should really have an annotation factory
-docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', '$filter', function(SWBrijj, $rootScope, navState, User, $filter) {
+docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', 'calculate',
+    function(SWBrijj, $rootScope, navState, User, calculate) {
     // data structure contents
     // aa -> [annot0...annotn-1]
     // [i] annoti -> [position, type, value, style]
@@ -296,6 +297,17 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', '$filt
             } else if (this.type == 'date') {
                 // TODO: support more than the default format
                 return moment(raw_val).utc().format(this.format);
+            } else if (this.type == "number") {
+                console.log(this.type);
+                console.log(this.format);
+                console.log(raw_val);
+                if (this.format.id == "numeric") {
+                    return raw_val.toString();
+                } else if (this.format.id == "text") {
+                    return calculate.numToWords(raw_val);
+                } else if (this.format.id == "both") {
+                    return calculate.numToWords(raw_val) + " (" + raw_val.toString() + ")";
+                }
             } else {
                 return raw_val;
             }

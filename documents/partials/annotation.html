@@ -73,7 +73,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="content-section" ng-if="(annot.type_info.typename == 'date' || annot.type == 'date' || annot.type_info.typename == 'enum' || annot.type == 'highlight') && annot.forRole(navState.role)">
+                <li class="content-section" ng-if="(annot.type_info.typename == 'date' || annot.type == 'date' || annot.type == 'number' || annot.type_info.typename == 'enum' || annot.type == 'highlight') && annot.forRole(navState.role)">
                     <ul>
                         <li>
                             <span>Contents <span ng-if='["int8", "int4", "float8"].indexOf(annot.type_info.typename) != -1'>(Digits only)</span>
@@ -89,6 +89,9 @@
                         <li ng-if="annot.type == 'date'">
                             <input type="text" ng-model="current.raw_val" bs-datepicker date-format="{{$root.settings.lowercasedate}}">
                         </li>
+                        <li ng-if="annot.type == 'number'">
+                            <input type="text" ng-model="current.raw_val" integer>
+                        </li>
                         <li ng-if="annot.type_info.typename == 'enum'">
                             <select ui-select2 ng-model="current.val" placeholder="{{current.placeholder}}">
                                 <option></option>
@@ -97,13 +100,13 @@
                         </li>
                     </ul>
                 </li>
-                <li class="content-section" ng-if="annot.type == 'date'">
+                <li class="content-section" ng-if="annot.type == 'date' || annot.type == 'number'">
                     <ul>
                         <li>
                             <span>Format</span>
                         </li>
                         <li>
-                            <input type="text" ng-model="annot.format">
+                            <input ui-select2="select2FormatOptions[annot.type]" ng-model="annot.format">
                         </li>
                     </ul>
                 </li>

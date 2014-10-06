@@ -198,7 +198,24 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         },
     };
     $scope.select2TypeOptions = {
-        data: [{id: "text", text: "Text"}, {id: "date", text: "Date"}],
+        data: [{id: "text", text: "Text"},
+               {id: "date", text: "Date"},
+               {id: "number", text: "Number"}],
+    };
+    $scope.select2FormatOptions = {
+        date: {
+            data: [{id: "MM/DD/YYYY", text: moment().format("MM/DD/YYYY")},
+                   {id: "DD/MM/YYYY", text: moment().format("DD/MM/YYYY")},
+                   {id: "dddd, MMM. D YYYY", text: moment().format("dddd, MMM. D YYYY")}],
+            createSearchChoice: function(text) {
+                return {id: text, text: moment().format(text)}
+            }
+        },
+        number: {
+            data: [{id: "numeric", text: "24"},
+                   {id: "text", text: "twenty four"},
+                   {id: "both", text: "twenty four (24)"}]
+        }
     };
 
     $scope.unusedType = function(type) {
