@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', '$q', 'basics', 'ShareDocs',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics, ShareDocs) {
+        'navState', 'Annotations', 'Documents', '$q', 'basics', 'ShareDocs', 'Investor',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics, ShareDocs, Investor) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -451,7 +451,7 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 }
             });
             SWBrijj.document_multishare(
-                    $scope.doc.row.email.toLowerCase(),
+                    $scope.doc.row.email.id.toLowerCase(),
                     JSON.stringify(certificatedocument),
                     "",
                     "22 November 2113"
@@ -464,8 +464,26 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 });
         };
 
+        $scope.rowSelect2Options = {
+            data: function() {
+                return {
+                    results: Investor.investors
+                };
+            },
+            createSearchChoice: Investor.createSearchChoice,
+            placeholder: 'Pick name or type email'
+        };
+
+        $scope.updateSendRow = function(inv) {
+            console.log(inv);
+            if (typeof(inv) === "string") {
+                // select2-ui sets string and then object, generate the object from the string
+                $scope.doc.row.email = Investor.createInvestorObject(inv);
+            }
+        };
+
         $scope.formCheck = function() {
-            return $scope.doc.row && $scope.doc.row.email.length > 0 && emailRegExp.test($scope.doc.row.email);
+            return $scope.doc.row && $scope.doc.row.email && $scope.doc.row.email.id.length > 0 && emailRegExp.test($scope.doc.row.email.id);
         };
 
         $scope.prepareable = function() {
