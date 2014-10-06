@@ -297,7 +297,7 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                                 var attrs = JSON.parse(transaction_deets.attrs);
                                 annots.forEach(function(annot) {
                                     if (annot.whattype == "grant_date") {
-                                        prep.overrides[annot.id] = $filter('utcdate')(transaction_deets.effective_date, $rootScope.settings.lowercasedate);
+                                        prep.overrides[annot.id] = $filter('utcdate')(transaction_deets.effective_date, $rootScope.settings.shortdate);
                                     } else if (annot.whattype == "units") {
                                         prep.overrides[annot.id] = attrs.units.toString();
                                     } else if (annot.whattype == "security") {
