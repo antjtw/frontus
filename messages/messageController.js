@@ -92,14 +92,14 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
 
         $scope.getPeopleNames = function(){
             var promise = $q.defer();
-            SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+            SWBrijj.tblm('mail.my_thread_members', ['user_id', 'name']).then(function(data){
                 $scope.myPeople = data;
                 $scope.peopleDict = {};
                 angular.forEach($scope.myPeople, function(person){
-                    if (person.email == navState.userid)
-                        $scope.peopleDict[person.email] = "me";
+                    if (person.user_id == navState.userid)
+                        $scope.peopleDict[person.user_id] = "me";
                     else
-                        $scope.peopleDict[person.email] = person.name;
+                        $scope.peopleDict[person.user_id] = person.name;
                 });
                 promise.resolve($scope.peopleDict);
             });
