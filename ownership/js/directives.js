@@ -739,6 +739,7 @@ own.directive('editableCellDetails', [function() {
                         angular.forEach($scope.ct.securities, function(security) {
                             if (tran.attrs.security == security.name) {
                                 security.getDocsPromise().then(function(docs) {
+                                    console.log(docs);
                                     if (docs['issue certificate']) {
                                         Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
                                             if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {

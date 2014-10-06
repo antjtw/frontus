@@ -475,7 +475,6 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         };
 
         $scope.updateSendRow = function(inv) {
-            console.log(inv);
             if (typeof(inv) === "string") {
                 // select2-ui sets string and then object, generate the object from the string
                 $scope.doc.row.email = Investor.createInvestorObject(inv);
