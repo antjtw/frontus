@@ -131,11 +131,13 @@ app.controller('ContactCtrl',
         };
 
         $scope.attributeUpdate = function(attribute, value) {
-            SWBrijj.procm("smartdoc.update_investor_attributes", attribute, value).then(function(x) {
-                $scope.investor_attributes[attribute][0] = value;
-                $scope.$emit("notification:success", "Profile successfully updated");
-            }).except(function(err) {
-            });
+            if ($scope.profilecheck[attribute] != value && value !== undefined) {
+                SWBrijj.procm("smartdoc.update_investor_attributes", attribute, value).then(function(x) {
+                    $scope.investor_attributes[attribute][0] = value;
+                    $scope.$emit("notification:success", "Profile successfully updated");
+                }).except(function(err) {
+                });
+            };
         };
 
         $scope.profileopts = {
