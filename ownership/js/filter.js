@@ -39,7 +39,6 @@ ownership.filter('grantSelect', function () {
 ownership.filter('shareList', function () {
     return function (rows) {
         var returnrows = [];
-        console.log(rows);
         angular.forEach(rows, function (row) {
             if (row.email === null) {
                 returnrows.push(row);

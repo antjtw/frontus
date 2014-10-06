@@ -286,9 +286,6 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
     }
 
     var doc_annotations = {};
-
-    // TODO: take doc_id, and some sort of status thing (original / version. Countersign mode or not) and fetch everything from the appropriate library
-    // Filter based on current mode (countersign), and create a separate hash with appropriate overrides
     this.getDocAnnotations = function(doc) {
         // need doc since annotations can only exist within a document context
         if (!doc_annotations[doc.doc_id]) {

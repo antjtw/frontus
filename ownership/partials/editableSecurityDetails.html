@@ -77,9 +77,27 @@
             </span>
         </div>
         <div class="capTab" ng-switch-when="documents">
+            <div class="linkedDocuments specified-docs">
+                <div ng-repeat="doc in sec.getDocs()">
+                    <ul class="pull-left">
+                        <li>
+                            {{doc.label}}
+                        </li>
+                        <li>
+                            <span ng-click="viewEvidence(doc)">
+                                {{doc.docname}}
+                            </span>
+                        </li>
+
+                    </ul>
+                    <span class="pull-right" data-icon="&#xe00f;"
+                          ng-click="sec.removeDoc(doc)">
+                    </span>
+                </div>
+            </div>
             <div ng-if="tran.evidence_data.length==0 && windowToggle == false || tran.evidence_data == null && windowToggle == false"
                  class="linkedDocuments">
-                    <div class="noGroups"  ng-click="editEvidence(tran)">
+                <div class="noGroups"  ng-click="editEvidence(tran)">
                     Connect documents that support this transaction by clicking the link below.<br/>
                     <span>Add Documents</span>
                     <span data-icon="&#xe016;" aria-hidden="true"></span>
@@ -87,8 +105,23 @@
                 </div>
 
             </div>
-            <div ng-if="tran.evidence_data.length == 0 && windowToggle == true">
+            <div ng-if="tran.evidence_data.length == 0 && sec.getDocs().length == 0 && windowToggle == true">
                 <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
+            </div>
+            <div ng-if="windowToggle == true" class="linkedDocuments drop-zone">
+                <div ng-if="!sec.getDocs()['plan']" droppable drop="handleDrop" bin="bin" id="plan">
+                    <span>Security Plan</span>
+                </div>
+            </div>
+            <div ng-if="windowToggle == true && sec.attrs.security_type == 'Option'" class="linkedDocuments drop-zone">
+                <div ng-if="!sec.getDocs()['grant']" droppable drop="handleDrop" bin="bin" id="grant">
+                    <span>Option Agreement</span>
+                </div>
+            </div>
+            <div ng-if="windowToggle == true " class="linkedDocuments drop-zone">
+                <div ng-if="!sec.getDocs()['issue certificate']" droppable drop="handleDrop" bin="bin" id="issue certificate">
+                    <span>Certificate Template</span>
+                </div>
             </div>
             <div ng-if="tran.evidence_data.length>0"
                  class="linkedDocuments">
@@ -125,7 +158,7 @@
             </span>
             <div ng-if="windowToggle == true" class="linkedDocuments drop-zone">
                 <div droppable drop="handleDrop" bin="bin" id="bin">
-                    Drop documents here.
+                    Drop other documents here.
                 </div>
             </div>
             <div ng-if="windowToggle == true"

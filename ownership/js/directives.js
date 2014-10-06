@@ -341,12 +341,17 @@ own.directive('securityDetails', [function() {
                 };
 
                 $scope.viewEvidence = function(ev) {
-                    if (ev.doc_id !== null) {
+                    if (ev.label) {
+                        $location.url('/app/documents/company-view?doc='+ev.doc_id+'&page=1');
+                    }
+                    else if (ev.doc_id !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&investor='+ev.doc_id+'&page=1');
                     } else if (ev.original !== null) {
                         $location.url('/app/documents/company-view?doc='+ev.original+'&page=1');
                     }
                 };
+
+
 
                 $scope.loaddirective();
 
@@ -390,7 +395,10 @@ own.directive('editableSecurityDetails', [function() {
                 };
 
                 $scope.viewEvidence = function(ev) {
-                    if (ev.doc_id !== null) {
+                    if (ev.label) {
+                        $scope.viewme = ['issuer', ev.doc_id];
+                    }
+                    else if (ev.doc_id !== null) {
                         $scope.viewme = ['investor', ev.doc_id];
                     } else if (ev.original !== null) {
                         $scope.viewme = ['issuer', ev.original];
@@ -423,7 +431,15 @@ own.directive('editableSecurityDetails', [function() {
                         }
                     });
                     if (doc) {
-                        captable.toggleForEvidence(doc);
+                        if (bin != 'bin') {
+                            if (!doc.investor) {
+                                $scope.sec.addSpecificEvidence(parseInt(item), String(bin), String(bin));
+                            } else {
+                                $scope.$emit("notification:fail", "This type of document must be an original");
+                            }
+                        } else {
+                            captable.toggleForEvidence(doc);
+                        }
                     }
                 };
 
@@ -695,8 +711,8 @@ own.directive('editableCellDetails', [function() {
                 undo: '=undo',
                 windowToggle: '='},
         templateUrl: '/ownership/partials/editableCellDetails.html',
-        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter",
-            function($scope, $rootScope, attributes, captable, calculate, $filter) {
+        controller: ["$scope", "$rootScope", "attributes", "captable", "calculate", "$filter", "Documents", "$location",
+            function($scope, $rootScope, attributes, captable, calculate, $filter, Documents, $location) {
 
                 $scope.settings = $rootScope.settings;
                 $scope.attrs = attributes.getAttrs();
@@ -719,6 +735,26 @@ own.directive('editableCellDetails', [function() {
                 $scope.makeNewTran = function(kind, tran) {
                     if (kind == "convert") {
                         $scope.convertSharesUp(tran);
+                    } else if (kind == "issue certificate") {
+                        $scope.templateExists = false;
+                        angular.forEach($scope.ct.securities, function(security) {
+                            if (tran.attrs.security == security.name) {
+                                security.getDocsPromise().then(function(docs) {
+                                    console.log(docs);
+                                    if (docs['issue certificate']) {
+                                        Documents.returnOriginalwithPromise(docs['issue certificate'].doc_id).then(function() {
+                                            if (Documents.getOriginal(docs['issue certificate'].doc_id).validTransaction()) {
+                                                $location.url('/app/documents/company-view?doc= ' + docs['issue certificate'].doc_id + '&transaction=' + tran.transaction);
+                                            } else {
+                                                $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name)  + '&transaction=' + tran.transaction);
+                                            }
+                                        });
+                                    } else {
+                                        $location.url('/app/ownership/certificate/create?issue=' + encodeURIComponent(security.name)  + '&transaction=' + tran.transaction);
+                                    }
+                                });
+                            }
+                        });
                     } else {
                         $scope.newTran = captable.newTransaction(
                             $scope.cell.security,
@@ -1583,14 +1619,21 @@ own.directive('grantWizardNav', [function() {
             state: '='
         },
         templateUrl: '/ownership/partials/grantWizardNav.html',
-        controller: ["$scope", "$rootScope", "navState", "grants",
-            function($scope, $rootScope, navState, grants) {
+        controller: ["$scope", "$rootScope", "navState", "grants", "$routeParams",
+            function($scope, $rootScope, navState, grants, $routeParams) {
                 $scope.path = navState.path;
 
                 $scope.peopleLink = function() {
                     if (grants.isChooseReady())
                         return "/app/ownership/grants/people";
                     return "/app/ownership/grants/issue";
+                };
+
+                $scope.backurl = function() {
+                    if ($routeParams.flow == 'certificate') {
+                        return '/app/ownership/certificate/create?issue=' + $routeParams.issue;
+                    }
+                    return '/app/ownership/grants/issue';
                 };
 
                 $scope.reviewLink = function() {
@@ -1610,11 +1653,12 @@ own.directive('linkedDocuments', [function() {
     return {
         restrict: 'EA',
         scope: {
+            issue: '=',
+            coretype: '@'
         },
         templateUrl: '/ownership/partials/linkedDocuments.html',
         controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "Documents", "SWBrijj", "$timeout", "$location",
             function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, Documents, SWBrijj, $timeout, $location) {
-                $scope.issue = grants.issue;
 
                 $scope.isPrepared = function(doc_id) {
                     if (doc_id) {
@@ -1629,7 +1673,11 @@ own.directive('linkedDocuments', [function() {
                     }
 
                 };
-
+                if ($scope.coretype == 'grant') {
+                    $scope.doclist = ['plan', 'grant', 'exercise'];
+                } else if ($scope.coretype == 'certificate') {
+                    $scope.doclist = ['issue certificate'];
+                }
                 $scope.uploading = {};
 
                 var mimetypes = ["application/pdf", // .pdf
@@ -1743,15 +1791,6 @@ own.directive('linkedDocuments', [function() {
                                 if (doc.pages != null)
                                 {
                                     $scope.uploadprogress.splice(index, 1);
-                                    /*angular.forEach($scope.documents, function(document) {
-                                        //In theory this match might get the wrong document, but (and please feel free to do the math) it's very, very unlikely...
-                                        if (document.doc_id == doc.upload_id) {
-                                            document.doc_id = doc.doc_id;
-                                            document.uploading = false;
-                                            document.pages = doc.pages;
-                                            $rootScope.billing.usage.documents_total+=1;
-                                        }
-                                    });*/
                                     $scope.issue[0].addSpecificEvidence(parseInt(doc.doc_id), String(bin), String(bin));
                                     $scope.uploading[bin] = false;
                                 }
@@ -1773,11 +1812,11 @@ own.directive('linkedDocuments', [function() {
 
                 $scope.errorTooltip = function(doc) {
                     if (!doc) {
-                        return "No document attached"
+                        return "No document attached";
                     } else {
-                        return "Document needs preparing"
+                        return "Document needs preparing";
                     }
-                }
+                };
             }
         ]
     };
