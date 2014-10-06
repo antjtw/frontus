@@ -18,18 +18,19 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
     var peopleDict = {};
 
     function start() {
-        SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(info){
+        SWBrijj.tblm('mail.my_thread_members', ['user_id', 'name']).then(function(info){
+            console.log("members", info);
             allUsers.splice(0, allUsers.length);
             allPeople.splice(0, allPeople.length);
             allEmails.splice(0, allEmails.length);
             angular.forEach(info, function(inf){
                 allUsers.push(inf);
                 allPeople.push(inf);
-                allEmails.push(inf.email);
-                if (inf.email == navState.userid)
-                    peopleDict[inf.email] = "me";
+                allEmails.push(inf.user_id);
+                if (inf.user_id == navState.userid)
+                    peopleDict[inf.user_id] = "me";
                 else
-                    peopleDict[inf.email] = inf.name;
+                    peopleDict[inf.user_id] = inf.name;
             });
             //All of the messages and threads rely on allPeople, so fill in that
             //array and then call a function to start filling all msg arrays.
