@@ -3,9 +3,26 @@
     </subnav>
     <div class="row-fluid">
         <div ng-style="viewportheight">
-            <div class="wizard-tile">
+            <div class="wizard-tile wizard-flow">
                 <h2><span>Create a security</span></h2>
+                <span>Name</span>
                 <input ng-model="issue.name">
+                <span>Security Type</span>
+                <ul class="dropdown-list drop-selector">
+                    <li class="dropdown standard">
+                        <a class="dropdown-toggle">
+                            {{issue.type}}
+                            <span class="invisible-drop">'</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="key in 'security_type' | attributeTypes">
+                                <a ng-click="setNewType(key)">
+                                    {{key}}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
 
             <security-terms save="true" ng-if="issue[0]"></security-terms>
