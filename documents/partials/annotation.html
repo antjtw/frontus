@@ -16,7 +16,7 @@
                           class="row-fluid" ng-style="annotationSizeStyle"
                           ng-hide="(annot.whattype == 'document_id') ||((annot.whattype == 'ImgSignature') && annot.forRole(navState.role))"/>
                 <img ng-style="annotationSizeImageStyle" ng-show="(annot.whattype == 'ImgSignature') && annot.forRole(navState.role)" ng-src="{{signatureURL(annot)}}"></img>
-                <img ng-style="annotationSizeQRStyle" ng-show="annot.whattype == 'document_id'" src="/photo/user?id=ike"></img>
+                <img ng-style="annotationSizeQRStyle" ng-show="annot.whattype == 'document_id'" src="/img/qrcode.png"></img>
             </div>
             <div ng-if="enumBoxMode()" ng-show="boxHover || active.annotation == annot">
                 <select class="height-force" ui-select2 ng-model="current.val" ng-style="annotationSizeStyle" placeholder="{{current.placeholder}}">
