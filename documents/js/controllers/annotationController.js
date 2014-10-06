@@ -98,7 +98,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.current.val = "";
         }
     });
-    
+
     $scope.signatureURL = function(annot) {
         if (annot.whattype != "ImgSignature" || !annot.forRole(navState.role))
             return "";
@@ -128,7 +128,14 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         }
         return $scope.annot.whattype;
-    }
+    };
+    $scope.annot.typesetter = function(val) {
+        // using a setter to prevent select2 from reformatting the whattype to it's prefered format...
+        if (typeof(val) == "string") {
+            $scope.annot.type = val;
+        }
+        return $scope.annot.type;
+    };
     function annotationOrderComp(typeA, typeB) {
         // type "Text" always takes priority
         if (typeA.id == "Text") {
@@ -164,7 +171,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         }
     }
-    $scope.select2TypeOptions = {
+    $scope.select2NameOptions = {
         data: function() {
             var res = [];
             $scope.doc.annotation_types.forEach(function(type) {
@@ -189,7 +196,10 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         createSearchChoice: function(text) {
             return {id: text, text: text};
         },
-    }
+    };
+    $scope.select2TypeOptions = {
+        data: [{id: "text", text: "Text"}, {id: "date", text: "Date"}],
+    };
 
     $scope.unusedType = function(type) {
         // only want to filter transaction types that are already in used
@@ -437,10 +447,11 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.dateBoxMode = function() {
         // whether the main annotation box should be a datepicker
         // note that issuers see it in the blue popup, so it's always false for them
-        return $scope.annot.type_info &&
+        return ($scope.annot.type == 'date' || // date in the type field
+               ($scope.annot.type_info &&
                $scope.annot.type_info.typename == 'date' &&
-               $scope.annot.forRole(navState.role) &&
-               (navState.role == 'investor' ||
+               $scope.annot.forRole(navState.role))) && // OR date in the typename (effective date)
+               (navState.role == 'investor' || // AND we're in an editable mode
                 $scope.prepareFor);
     };
 
@@ -536,14 +547,34 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         });
     } else {
-        $scope.$watch('annot.val', function(val) {
+        $scope.$watch('annot.val', function(val, old_val) {
             if ($scope.current.val != val) {
                 $scope.current.val = val;
             }
         });
-        $scope.$watch('current.val', function(val) {
-            if ($scope.annot.val != val) {
-                $scope.annot.val = val;
+        $scope.$watch('current.val', function(val, old_val) {
+            if (val != old_val) {
+                if ($scope.annot.val != val) {
+                    $scope.annot.val = val;
+                }
+            }
+        });
+        $scope.$watch('current.raw_val', function(val, old_val) {
+            if (val != old_val) {
+                if ($scope.annot.raw_val != val) {
+                    $scope.annot.raw_val = val;
+                }
+            }
+        });
+        $scope.$watch('annot.raw_val', function(val, old_val) {
+            if ($scope.current.raw_val != val) {
+                $scope.current.raw_val = val;
+            }
+            $scope.annot.val = $scope.annot.format_val(val);
+        });
+        $scope.$watch('annot.format', function(new_format, old_format) {
+            if (new_format != old_format) {
+                $scope.annot.val = $scope.annot.format_val($scope.annot.raw_val);
             }
         });
     }

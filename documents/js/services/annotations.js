@@ -3,7 +3,7 @@
 var docs = angular.module('docServices');
 
 // TODO: should really have an annotation factory
-docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', function(SWBrijj, $rootScope, navState, User) {
+docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', '$filter', function(SWBrijj, $rootScope, navState, User, $filter) {
     // data structure contents
     // aa -> [annot0...annotn-1]
     // [i] annoti -> [position, type, value, style]
@@ -28,13 +28,13 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
     //
     // [i][0][4] 1201 (usually) dp.clientHeight (docpanel height)
     //
-    // [i][1] type -> check or text or canvas (only text seems usable now)
+    // [i][1] type -> text or date (future support planned for numbers and images)
     //
-    // [i][2] value -> n/a or string or series of lines ([_, x0, y0, x1, y1])
+    // [i][2] value -> n/a or string
     //
     // [i][3] style -> font size -- anything else?
     //
-    // [i][4] other -> investorfixed, whosign, whattype, required, and id
+    // [i][4] other -> investorfixed, whosign, whattype, required, id, format (date format, number format), and raw_val (unformatted val)
 
     var Annotation = function(doc) {
         this.position = {
@@ -55,7 +55,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
         this.val = '';
         this.fontsize = 12;
         this.whosign = "Issuer";
-        this.whattype = "Text";
+        this.whattype = "";
         this.required = true;
         this.id = generateAnnotationId();
         this.type_info = {
@@ -63,6 +63,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             display: "Text"
         };
         this.pristine = false;
+        this.raw_val = null;
 
         var annot = this;
         $rootScope.$watch(function() {
@@ -109,6 +110,7 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             };
             this.type = json[1];
             this.val = json[2][0];
+            // TODO convert old string type dates to actual dates
             this.fontsize = json[3][0];
             this.investorfixed = json[4].investorfixed;
             this.whosign = json[4].whosign;
@@ -117,6 +119,17 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             this.id = json[4].id;
             if (!this.id) {
                 this.id = generateAnnotationId();
+            }
+            this.format = json[4].format;
+            this.raw_val = json[4].raw_val;
+            // set raw_val = val, preferring raw_val
+            if (this.raw_val) {
+                if (this.type === "date") {
+                    this.raw_val = new Date(this.raw_val);
+                }
+                this.val = this.format_val(this.raw_val);
+            } else {
+                this.raw_val = this.val;
             }
             this.updateTypeInfo(annotation_types);
             return this;
@@ -142,6 +155,8 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
                 whosign: this.whosign,
                 whattype: this.whattype,
                 required: this.required,
+                format: this.format,
+                raw_val: this.raw_val,
                 id: this.id
             });
             return json;
@@ -272,6 +287,17 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', functi
             }
             if (this.type_info.required) {
                 this.required = true;
+            }
+        },
+        format_val: function(raw_val) {
+            // converts regular values to strings
+            if (raw_val === null || raw_val === undefined || raw_val === "") {
+                return "";
+            } else if (this.type == 'date') {
+                // TODO: support more than the default format
+                return moment(raw_val).utc().format(this.format);
+            } else {
+                return raw_val;
             }
         },
     };
