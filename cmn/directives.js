@@ -1076,7 +1076,7 @@ m.directive('float', function() {
         link: function(scope, elem, attr, ctrl) {
             // ctrl is ngModel controller
             ctrl.$parsers.unshift(function(val) {
-                var ret = parseFloat(val);
+                var ret = parseFloat(val.replace(",", ""));
                 if (isNaN(ret)) {
                     ret = undefined;
                 }
