@@ -99,6 +99,7 @@ ul.personal-information > li > ul > li > div.standard-button.small-standard-butt
 
 .span4.ind-pics > div > .standard-button.small-standard-button.gray{
     padding-top: 10px;
+    border: none;
 }
 
 .span4.ind-pics > div > .standard-button.small-standard-button.gray > button{
