@@ -326,6 +326,12 @@ app.controller('ContactCtrl',
             dialogClass: 'helpModal modal'
         };
 
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        $scope.emailCheck = function(email) {
+            return !(email && emailRegExp.test(email));
+        };
+
         $scope.addEmail = function(email) {
             if (!email) {
                 return;

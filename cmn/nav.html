@@ -171,8 +171,6 @@
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/people'); navhover=false" ng-class="{activepage: (navState.path.indexOf('/company/profile/people') != -1 || navState.path.indexOf('/company/profile/view') != -1 || navState.path.indexOf('/account/profile') != -1) && !navhover}"><span class="nav-icon people-icon"></span>People
         </li>
 
-        <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/messages'); navhover=false" ng-class="{activepage: navState.path.indexOf('/messages') != -1 && !navhover}"> <span class="nav-icon message-icon"></span>Messages</li>
-
         <li ng-show="navState.reasons.rol" ng-click="gotoPage('/app/company/profile/'); navhover=false" ng-class="{activepage: navState.path.indexOf('/company/profile/') != -1 && navState.path.indexOf('people') == -1 && navState.path.indexOf('view') == -1 && !navhover}"><span class="nav-icon settings-icon"></span>Settings
         </li>
 
@@ -184,6 +182,8 @@
         </li>
         <li ng-show="navState.reasons.doc" ng-click="gotoPage('/app/documents/investor-list'); navhover=false" ng-class="{activepage: navState.path.indexOf('/documents/investor-list') != -1 && !navhover}"><span class="nav-icon documents-icon"></span>Documents
         </li>
+
+        <li ng-click="gotoPage('/app/messages'); navhover=false" ng-class="{activepage: navState.path.indexOf('/messages') != -1 && !navhover}"> <span class="nav-icon message-icon"></span>Messages</li>
 
         <li class="add-second-company" ng-show="companies.length == 1" ng-click="gotoPage('/app/new-company'); navhover=false"><span class="nav-icon add-company-icon"></span>+ Company
         </li>

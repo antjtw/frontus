@@ -2498,6 +2498,9 @@ span.tour-icon.issue-cog + .tooltip {
 
 .tran-list > li > ul > li.longli {
     width: 20%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tranlogtabs .capGuide > p {
