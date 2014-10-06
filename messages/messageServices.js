@@ -134,6 +134,10 @@ service.service('Message', ['SWBrijj', 'navState', '$q', function(SWBrijj, navSt
         return allEmails;
     };
     
+    this.getPeopleDict = function(){
+        return peopleDict;
+    };
+    
     this.refresh = function(){
         start();
     };
