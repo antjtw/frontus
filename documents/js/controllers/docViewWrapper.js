@@ -651,6 +651,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             $location.url("/app/documents/company-list?share");
         };
 
+        $scope.returntoCreate = function() {
+            $location.url("/app/ownership/certificate/create?issue=" + encodeURIComponent($scope.doc.issue) +  "&transaction=" + $scope.doc.transaction.transaction);
+        };
+
         $scope.getData();
     }
 ]);

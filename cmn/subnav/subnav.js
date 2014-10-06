@@ -9,7 +9,7 @@ app.directive('subnav', function() {
         replace: true,
         templateUrl: '/cmn/subnav/subnav.html',
         controller: ['$scope', 'navState', function($scope, navState) {
-            if (navState.path.indexOf('/messages') != -1) {
+            if (navState.path.indexOf('/messages') != -1 || navState.path.indexOf('/account/profile') != -1) {
                 $scope.forty = true;
             } else if (navState.path.indexOf('documents/company-view') != -1 || navState.path.indexOf('/ownership/company-trans') != -1) {
                 $scope.twenty = true;

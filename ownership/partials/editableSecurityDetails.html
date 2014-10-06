@@ -15,7 +15,7 @@
                      ng-repeat="tran in sec.transactions track by $index"
                     ng-switch on="currentTab">
         <accordion-heading>
-            <span ng-click="editEvidence()">
+            <span ng-click="editEvidence(); switchCapTab('details');">
                 {{tran.effective_date | utcdate:settings.shortdate}} {{tran.kind}}
             </span>
         </accordion-heading>

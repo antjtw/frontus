@@ -61,7 +61,7 @@
                         <li>
                             <ul>
                                 <li>Country</li>
-                                <li><input type="text" maxlength="2" ui-event="{blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
+                                <li><input type="text" maxlength="2" ui-event="{focus : 'profileCheck(\'investorCountry\', investor_attributes.investorCountry[0])', blur:'attributeUpdate(\'investorCountry\', investor_attributes.investorCountry[0])'}" ng-model="investor_attributes.investorCountry[0]"></li>
                             </ul>
                         </li>
                         <li>
@@ -203,6 +203,7 @@
             </fieldset>
         </form>
     </div>
+</div>
 </div>
 
 <signature-modal options="sigOptions"></signature-modal>
