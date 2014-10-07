@@ -16,6 +16,7 @@ app.controller('createSecurity',
                 $scope.issue[0].transactions[0].attrs.security = $scope.rawissue.name;
                 $scope.issue[0].transactions[0].attrs.security_type = $scope.rawissue.type;
                 $scope.issue[0].transactions[0].effective_date = new Date.today();
+                captable.addSecurity($scope.issue[0]);
             }
             $scope.step = newstep
         };
