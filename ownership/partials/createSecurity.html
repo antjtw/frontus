@@ -6,17 +6,17 @@
             <div class="wizard-tile wizard-flow">
                 <h2><span>Create a security</span></h2>
                 <span>Name</span>
-                <input ng-model="issue.name">
+                <input ng-model="rawissue.name">
                 <span>Security Type</span>
                 <ul class="dropdown-list drop-selector">
                     <li class="dropdown standard">
                         <a class="dropdown-toggle">
-                            {{issue.type}}
+                            {{rawissue.type}}
                             <span class="invisible-drop">'</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li ng-repeat="key in 'security_type' | attributeTypes">
-                                <a ng-click="setNewType(key)">
+                                <a ng-click="setType(key)">
                                     {{key}}
                                 </a>
                             </li>
@@ -25,9 +25,27 @@
                 </ul>
             </div>
 
-            <security-terms save="true" ng-if="issue[0]"></security-terms>
+            <a ng-show="step == 1" class="wizard-next">
+                <div class="standard-button">
+                    <button class="btn" ng-click="changeStep(2)">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
+                </div>
+            </a>
 
-            <linked-documents coretype='security' issue='issue' ng-if="issue[0]"></linked-documents>
+            <security-terms save="true" issue='issue' ng-if="issue[0] && step >= 2"></security-terms>
+
+            <a ng-show="step == 2" class="wizard-next">
+                <div class="standard-button">
+                    <button class="btn" ng-click="changeStep(3)">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
+                </div>
+            </a>
+
+            <linked-documents coretype='security' issue='issue' ng-if="issue[0] && step >= 3"></linked-documents>
+
+            <a ng-show="step == 3" class="wizard-next">
+                <div class="standard-button">
+                    <button class="btn">Done <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
+                </div>
+            </a>
         </div>
     </div>
 </div>

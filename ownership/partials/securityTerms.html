@@ -70,7 +70,20 @@
                             </ul>
                         </li>
                     </ul>
-
+                    <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                <span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="i in getValidPariSecurities(data, key)">
+                                    <a ng-click="setIt(data, true, undo, key, i.name)">
+                                        {{i.name}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                     <input id="effective_date{{::issue[0].transactions[0].$$hashKey}}"
                            ng-if="useDate(key)"
                            ng-model="issue[0].transactions[0].effective_date"
