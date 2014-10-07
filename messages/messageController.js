@@ -79,17 +79,6 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
     function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams, $q) {
         $scope.threadId = parseInt($routeParams.thread);
 
-        $scope.myInvestors=[];
-        $scope.isInvestor = function(){
-            SWBrijj.tblm('account.company_issuers', ['email', 'name']).then(function(data){
-                var myInvestors = data;
-                angular.forEach(myInvestors, function(inv){
-                    $scope.myInvestors.push(inv.email);
-                });
-                return $scope.myInvestors;
-            });
-        };
-
         $scope.getPeopleNames = function(){
             var promise = $q.defer();
             SWBrijj.tblm('mail.my_thread_members', ['user_id', 'name']).then(function(data){
@@ -171,14 +160,8 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
                 if(sender == navState.userid){
                     return '/photo/user?id=' + sender;
                 }
-                else if(sender !== navState.userid && $scope.myInvestors.indexOf(sender) > - 1){
-                    return '/photo/user?id=issuer:' + sender;
-                }
-                else if(sender !== navState.userid && $scope.myInvestors.indexOf(sender) === - 1){
-                     return '/photo/user?id=investor:' + sender;
-                }
-                else{
-                    return '/img/ike.png';
+                else {
+                    return '/photo/user?id=thread_profile:' + sender;
                 }
             };
 
