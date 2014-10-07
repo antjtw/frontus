@@ -27,7 +27,7 @@
 
             <a ng-show="step == 1" class="wizard-next">
                 <div class="standard-button">
-                    <button class="btn" ng-click="changeStep(2)">Create <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
+                    <button class="btn" ng-disabled="!(rawissue.type && rawissue.type.length > 0 && rawissue.name && rawissue.name.length > 0)" ng-click="changeStep(2)">Create <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
                 </div>
             </a>
 

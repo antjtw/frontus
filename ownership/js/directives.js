@@ -1342,13 +1342,14 @@ own.directive('securityTerms', [function() {
             issue: '='
         },
         templateUrl: '/ownership/partials/securityTerms.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "$timeout", "$filter",
-            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, $timeout, $filter) {
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "$timeout", "$filter", "navState",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, $timeout, $filter, navState) {
                 $scope.tips = displayCopy.captabletips;
 
                 $scope.attrs = attributes.getAttrs();
 
                 $scope.securities = captable.getCapTable().securities;
+                $scope.path = navState.path;
 
                 function fixKeys(keys) {
                     var skip = ['security', 'security_type', 'vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];

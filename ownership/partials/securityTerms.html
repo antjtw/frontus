@@ -1,7 +1,7 @@
 <div class="wizard-tile wizard-flow">
     <h2>Security Details</h2>
     <div class="wizard-right">
-        <p>Add terms and rights for this security, which will be visible to each option grant recipient.
+        <p>Add terms and rights for this security<span ng-show="path.indexOf('/ownership/grants') != -1">, which will be visible to each option grant recipient.</span>
         </p>
         <div ng-repeat="pair in keys" ng-if="issue.length > 0">
             <div class="row-fluid">
