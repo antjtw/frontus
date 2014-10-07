@@ -271,7 +271,7 @@ mod.directive('threadInformation', function(){
 
 mod.directive('threadPeople', function(){
     return {
-        scope: {threads: "=", investors: "="},
+        scope: {threads: "="},
         restrict: 'E',
         templateUrl: '/messages/partials/threadPeople.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'navState', '$q', '$location',
@@ -282,14 +282,8 @@ mod.directive('threadPeople', function(){
                 if(sender == navState.userid){
                     return '/photo/user?id=' + sender;
                 }
-                else if(sender !== navState.userid && $scope.investors.indexOf(sender) > - 1){
-                    return '/photo/user?id=issuer:' + sender;
-                }
-                else if(sender !== navState.userid && $scope.investors.indexOf(sender) === - 1){
-                     return '/photo/user?id=investor:' + sender;
-                }
-                else{
-                    return '/img/ike.png';
+                else {
+                    return '/photo/user?id=thread_profile:' + sender;
                 }
             };
 
