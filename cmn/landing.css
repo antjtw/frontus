@@ -403,6 +403,7 @@ h2.key-header.old-page {
 
     .section-icon-trio > ul > li > span:nth-child(1) {
         display: inline-block;
+        float: left;
     }
 
     .section-icon-trio > ul > li > span:nth-child(2) {

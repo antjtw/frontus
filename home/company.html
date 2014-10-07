@@ -13,7 +13,7 @@
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock:(!sidebarPage) && hideRail, widthtransition25:oldSafari()}" class="span8 recipeintInfo statusBlock leftBlock">
             <div class="span12 company-page">
                 <company-ownership-tile></company-ownership-tile>
-				<div class="front info-box">
+				<div style="margin-bottom: 20px;" class="front info-box">
 					<div class="head-box">
 						<h2>Document Management</h2>
 					</div>
@@ -80,7 +80,7 @@
 								<span>{{company.address}}</span>
 							</div>
 							<div>
-								<span>{{company.city}}<span ng-show="company.city && (company.state || company.zipcode)">, </span>{{company.state}}<span> </span>{{company.zipcode}}
+								<span>{{company.city}}<span ng-show="company.city && (company.state || company.zipcode)">, </span>{{company.state}}<span> </span>{{company.zipcode}}</span>
 							</div>
 						</div>
                     </div>

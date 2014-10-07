@@ -96,7 +96,7 @@
                                 <li>Alternate Email</li>
                                 <li>
                                     <input type="text" ng-model="newEmail" class="notVerified">
-                                    <div class="add-button standard-button small-standard-button" ng-click="addEmail(newEmail)"><button class="btn">Add</button></div>
+                                    <div class="add-button standard-button small-standard-button" ng-click="addEmail(newEmail)"><button ng-disabled="emailCheck(newEmail)" class="btn">Add</button></div>
                                 </li>
                             </ul>
                         </li>
