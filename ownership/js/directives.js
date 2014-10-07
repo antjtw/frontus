@@ -1410,6 +1410,24 @@ own.directive('securityTerms', [function() {
                     $scope.saveIt(tran, cell, errorFunc);
                 };
 
+                $scope.removeIt = function(tran, cell, errorFunc, k, v) {
+                    if (inputType(k) == "array_text") {
+                        var ix = tran.attrs[k].indexOf(v);
+                        if (ix >= 0) {
+                            tran.attrs[k].splice(ix, 1);
+                        }
+                        if (tran.attrs[k].length === 0) {
+                            delete tran.attrs[k];
+                        }
+                    } else {
+                        delete tran.attrs[k];
+                    }
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
+                };
+
                 $scope.saveIt = function(tran, cell, errorFunc, key) {
                     if (key && $scope.useNumberField(key)) {
                         tran.attrs[key] = String(tran.attrs[key]).replace(/,/g , "");

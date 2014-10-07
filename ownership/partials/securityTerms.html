@@ -70,14 +70,19 @@
                             </ul>
                         </li>
                     </ul>
-                    <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(data, key).length > 0)">
+                    <span ng-if="pickMulti(key)" ng-hide="(!issue[0].transactions[0].attrs[key] || issue[0].transactions[0].attrs[key].length == 0) && (getValidPariSecurities(issue[0].transactions[0], key).length == 0)">
+                        <span class="locked-security" ng-repeat="sec in issue[0].transactions[0].attrs[key]">
+                            {{sec}} <a data-icon="&#xe01b;" ng-click="removeIt(issue[0].transactions[0], true, undo, key, sec)" class="action" tooltip="remove"></a>
+                        </span>
+                    </span>
+                    <ul class="dropdown-list drop-selector" ng-if="pickMulti(key) && (getValidPariSecurities(issue[0].transactions[0], key).length > 0)">
                         <li class="dropdown standard">
                             <a class="dropdown-toggle">
                                 <span class="invisible-drop">'</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li ng-repeat="i in getValidPariSecurities(data, key)">
-                                    <a ng-click="setIt(data, true, undo, key, i.name)">
+                                <li ng-repeat="i in getValidPariSecurities(issue[0].transactions[0], key)">
+                                    <a ng-click="setIt(issue[0].transactions[0], true, undo, key, i.name)">
                                         {{i.name}}
                                     </a>
                                 </li>
