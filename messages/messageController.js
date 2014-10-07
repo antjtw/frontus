@@ -75,8 +75,8 @@ app.controller('MsgCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$rout
     }
 ]);
 
-app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams', '$q',
-    function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams, $q) {
+app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$route', '$location', '$routeParams', '$q', 'Message',
+    function($scope, $rootScope, SWBrijj, navState, $route, $location, $routeParams, $q, Message) {
         $scope.threadId = parseInt($routeParams.thread);
 
         $scope.getPeopleNames = function(){
@@ -146,6 +146,7 @@ app.controller('threadCtrl', ['$scope', '$rootScope', 'SWBrijj', 'navState', '$r
             ).then(function(x) {
                 void(x);
                 $location.url('/app/messages/');
+                Message.refresh();
                 $scope.clicked = false;
             }).except(function(err) {
                 void(err);
