@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html data-ng-app="HomeApp">
 <head>
-    <!--{{/i/head_css.inc}}-->
-    <!--{{/i/head_js.inc}}-->
+    <!--#include virtual="/i/head_css.inc"-->
+    <!--#include virtual="/i/head_js.inc"-->
     <link rel="stylesheet" href="/lib/font-awesome-4.1.0/css/font-awesome.min.css">
     <script src="/lib/textangular/textAngular-sanitize.min.js"></script>
     <script src="/lib/textangular/textAngular.min.js"></script>
@@ -77,6 +77,6 @@
     <navbar></navbar>
     <div class="coreEdit" ng-class="{'extrapadding': billingLoaded == true && companyIsZombie()}" data-ng-view=""></div>
 </div>
-<!--{{/i/foot_js.inc}}-->
+<!--#include virtual="/i/foot_js.inc"-->
 </body>
 </html>
