@@ -5813,17 +5813,29 @@ grant-doc-prep tr.wizard-footer-row {
 
 .create-security-row {
     display: inline-block;
-    margin-top: 5px;
+    margin-top: -10px;
 }
 
 .create-security-row input {
     border-radius: 3px;
-    height: 26px;
+    height: 28px;
     padding-left: 5px;
 }
 
-.create-security-row > span {
-    margin-right: 5px;
-    margin-left: 10px;
+.create-security-row > div {
+    display: inline-block;
+    margin-right: 20px;
+    vertical-align: top;
+    margin-top: -10px;
+}
+
+.create-security-row > div > span {
+    display: block;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.create-security-row input:disabled {
+   background-color: #E3E3E3;
 }
 
