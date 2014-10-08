@@ -133,6 +133,14 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', 'calcu
                 this.raw_val = this.val;
             }
             this.updateTypeInfo(annotation_types);
+            // one time conversion from old date format to new date format, if needed
+            if ((this.whattype == "effective_date" || this.type_info.typename == 'date') && this.type == "text") {
+                console.log($rootScope.settings);
+                console.log(moment(this.val, $rootScope.settings.shortdate).utc());
+                // this.raw_val = moment(this.val, $rootScope.settings.shortdate).utc();
+                // this.format = $rootScope.settings.shortdate
+                // this.type = "date";
+            }
             return this;
         },
         toJson: function() {

@@ -479,6 +479,11 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                 $scope.prepareFor);
     };
 
+    $scope.numberBoxMode = function() {
+        return ($scope.annot.type == 'number' &&
+                (navState.role == 'number' || $scope.prepareFor));
+    };
+
     $scope.$watch('annot.position.coords', function(new_coords) {
         if (new_coords) {
             $scope.annotationCoordsStyle.top = Math.max(0, new_coords.y) + "px";
@@ -549,6 +554,16 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         }, function(override) {
             $scope.current.val = override;
         });
+        $scope.$watch(function() {
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                return $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id];
+            } else {
+                return "";
+            }
+        }, function(override) {
+            $scope.current.raw_val = override;
+        });
         $scope.$watch('current.val', function(val, old_val) {
             if (val == old_val) {
                 // don't run the first time
@@ -573,6 +588,34 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
             $scope.doc.savePreparation($scope.prepareFor);
         });
+        $scope.$watch('current.raw_val', function(raw_val, old_raw_val) {
+            if (raw_val == old_raw_val) {
+                // don't run the first time
+                return;
+            }
+            // check for overrides value existance, then assign to it if it's not equal
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                if (raw_val != $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id]) {
+                    $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id] = raw_val;
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = $scope.annot.format_val(raw_val);
+                }
+            } else {
+                if (!$scope.doc.preparedFor) {
+                    $scope.doc.getPreparedFor();
+                }
+                if (!$scope.doc.preparedFor[$scope.prepareFor]) {
+                    var hash = $scope.doc.addPreparedFor($scope.prepareFor);
+                    hash.raw_overrides[$scope.annot.id] = raw_val;
+                    hash.overrides[$scope.annot.id] = $scope.annot.format_val(raw_val);
+                } else {
+                    $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id] = raw_val;
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = $scope.annot.format_val(raw_val);
+                }
+            }
+            $scope.doc.savePreparation($scope.prepareFor);
+        });
+
     } else {
         $scope.$watch('annot.val', function(val, old_val) {
             if ($scope.current.val != val) {

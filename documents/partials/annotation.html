@@ -7,11 +7,11 @@
     </span>
     <div>
         <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type != 'highlight')" ng-click="openBox() && $event.stopPropagation();" ng-mousedown="$event.stopPropagation();" ng-mouseenter="boxHover = true" ng-mouseleave="boxHover = false">
-            <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode()) && (boxHover || active.annotation == annot)">
+            <div class="textarea-container" ng-hide="(enumBoxMode() || dateBoxMode() || numberBoxMode()) && (boxHover || active.annotation == annot)">
                 <textarea wrap="hard" ng-class="{'roundedcorners': navState.role=='investor'}"
                           ng-trim="false" ng-disabled="doc.countersignable(navState.role)"
                           placeholder="{{current.placeholder}}"
-                          ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type == 'date' || annot.type_info.typename == 'enum' || certificateDisable(annot)"
+                          ng-readonly="!annot.forRole(navState.role) || annot.type_info.typename == 'date' || annot.type == 'date' || annot.type == 'number' || annot.type_info.typename == 'enum' || certificateDisable(annot)"
                           ng-keyup="addLineBreaks($event)" ng-model="current.val" style="resize:none"
                           class="row-fluid" ng-style="annotationSizeStyle"
                           ng-hide="(annot.whattype == 'document_id') ||((annot.whattype == 'ImgSignature') && annot.forRole(navState.role))"/>
@@ -25,7 +25,10 @@
                 </select>
             </div>
             <div ng-if="dateBoxMode()" ng-show="boxHover || active.annotation == annot">
-                <input type="text" ng-model="current.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)" placeholder="{{current.placeholder}}">
+                <input type="text" ng-model="current.raw_val" bs-datepicker date-format="{{$root.settings.lowercasedate}}" ng-style="annotationSizeStyle" ng-click="setDatepickerCurrent($event)" placeholder="{{current.placeholder}}">
+            </div>
+            <div ng-if="numberBoxMode()" ng-show="boxHover || active.annotation == annot">
+                <input type="text" ng-model="current.raw_val" integer ng-style="annotationSizeStyle" placeholder="{{current.placeholder}}">
             </div>
         </fieldset>
         <fieldset ng-if="(doc.when_signed && !doc.when_countersigned && !annot.isCountersign()) || ((!doc.when_signed || doc.when_countersigned) && annot.type == 'highlight')">
