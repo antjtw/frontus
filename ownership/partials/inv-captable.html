@@ -66,6 +66,21 @@
                             <span>Unvested options</span>
                         </div>
                     </li>
+                    <li ng-click="ctFilter.unissued = !ctFilter.unissued"
+                        onclick="event.stopPropagation();"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: ctFilter.unissued}">
+                                <span data-icon="&#xe023;"
+                                      aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>Unissued</span>
+                        </div>
+                    </li>
                     <li ng-repeat="t in securityTypeDropdown(true)"
                         ng-click="toggleSecurityType(t)"
                         onclick="event.stopPropagation();"
@@ -147,7 +162,7 @@
     </tr>
     </tbody>
     <!-- Unissued Rows -->
-    <tr class="unissued-rows"
+    <tr class="unissued-rows" ng-if="editMode || ctFilter.unissued"
         ng-repeat="sec in captable.securitiesWithUnissuedUnits()
                                | filter:securityFilter
                                | filter:dateSecurityFilter">
@@ -211,7 +226,7 @@
                         <span class="captablepair-box">
                             <div ng-class="{'editview': editMode}"
                                  class="output footer">
-                                {{securityTotalUnits(one) + numUnissued(one)
+                                {{securityTotalUnits(one) + (editMode || ctFilter.unissued)*numUnissued(one)
                                 | formatAmount:'units'}}
                             </div>
                             <div ng-class="{'editview': editMode}"

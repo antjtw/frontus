@@ -548,7 +548,7 @@
             </tr>
             </tbody>
             <!-- Unissued Rows -->
-            <tr class="unissued-rows" ng-if="ctFilter.unissued"
+            <tr class="unissued-rows" ng-if="editMode || ctFilter.unissued"
                 ng-repeat="sec in captable.securitiesWithUnissuedUnits()
                            | filter:securityFilter
                            | filter:dateSecurityFilter">
