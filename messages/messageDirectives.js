@@ -271,7 +271,7 @@ mod.directive('threadInformation', function(){
 
 mod.directive('threadPeople', function(){
     return {
-        scope: {threads: "=", investors: "="},
+        scope: {threads: "="},
         restrict: 'E',
         templateUrl: '/messages/partials/threadPeople.html',
         controller: ['$scope', '$rootScope', 'SWBrijj', '$route', 'navState', '$q', '$location',
@@ -282,14 +282,8 @@ mod.directive('threadPeople', function(){
                 if(sender == navState.userid){
                     return '/photo/user?id=' + sender;
                 }
-                else if(sender !== navState.userid && $scope.investors.indexOf(sender) > - 1){
-                    return '/photo/user?id=issuer:' + sender;
-                }
-                else if(sender !== navState.userid && $scope.investors.indexOf(sender) === - 1){
-                     return '/photo/user?id=investor:' + sender;
-                }
-                else{
-                    return '/img/ike.png';
+                else {
+                    return '/photo/user?id=thread_profile:' + sender;
                 }
             };
 
@@ -315,23 +309,23 @@ mod.directive('threadPeople', function(){
 
             $scope.msgPeople = [];
             $scope.getNames = function(array){
-                SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                SWBrijj.tblm('mail.my_thread_members', ['user_id', 'name']).then(function(data){
                     $scope.setLastLogins().then(function(){
                         var names = data;
                         for(var i = 0; i < array.length; i ++){
                             angular.forEach(names, function(ind){
-                             if(array[i]== ind.email && ind.name !== null){
-                                    $scope.msgPeople.push(new PersonName(ind.name, ind.email));
+                             if(array[i]== ind.user_id && ind.name !== null){
+                                    $scope.msgPeople.push(new PersonName(ind.name, ind.user_id));
                                 }
-                                else if(array[i]== ind.email && ind.name=== null){
-                                    $scope.msgPeople.push(new PersonName(ind.email, ind.email));
+                                else if(array[i]== ind.user_id && ind.name=== null){
+                                    $scope.msgPeople.push(new PersonName(ind.user_id, ind.user_id));
                                 }
 
                             });
                         }
                         angular.forEach($scope.myLogins, function(lg){
                             angular.forEach($scope.msgPeople, function(person){
-                                if(person.email == lg.email){
+                                if(person.user_id == lg.email){
                                     person.login = lg.logintime;
                                 }
                             });
@@ -343,11 +337,19 @@ mod.directive('threadPeople', function(){
 
             $scope.setLastLogins = function() {
                 var promise = $q.defer();
-                SWBrijj.tblm("global.user_tracker").then(function(logins) {
-                    $scope.myLogins = logins;
-                    promise.resolve($scope.myLogins);
+                if ($scope.isIssuer)
+                {
+                    SWBrijj.tblm("global.user_tracker").then(function(logins) {
+                        $scope.myLogins = logins;
+                        promise.resolve($scope.myLogins);
 
-                });
+                    });
+                }
+                else
+                {
+                    $scope.myLogins = [];
+                    promise.resolve($scope.myLogins);
+                }
                 return promise.promise;
             };
 
@@ -361,6 +363,8 @@ mod.directive('threadPeople', function(){
                 }
                 $location.url(link);
             };
+            
+            $scope.isIssuer = navState.role == 'issuer';
         }]
     };
 });
