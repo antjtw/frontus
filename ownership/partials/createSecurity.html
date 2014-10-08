@@ -35,15 +35,9 @@
 
             <security-terms save="true" issue='issue' ng-if="issue[0] && step >= 2"></security-terms>
 
+            <linked-documents coretype='security' issue='issue' ng-if="issue[0] && step >= 2"></linked-documents>
+
             <a ng-show="step == 2" class="wizard-next">
-                <div class="standard-button">
-                    <button class="btn" ng-click="changeStep(3)">Next <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
-                </div>
-            </a>
-
-            <linked-documents coretype='security' issue='issue' ng-if="issue[0] && step >= 3"></linked-documents>
-
-            <a ng-show="step == 3" class="wizard-next">
                 <div class="standard-button">
                     <button class="btn">Done <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
                 </div>
