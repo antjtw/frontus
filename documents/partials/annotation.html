@@ -45,7 +45,7 @@
                         <input class="annotation-dropdown" ui-select2="select2NameOptions" ng-model="annot.whattypesetter" ng-model-options="{getterSetter: true}" placeholder="{{annot.whattype}}">
                     </ul>
                 </li>
-                <li>
+                <li ng-if="!annot.type_info.typename">
                     <ul>
                         <li>
                             <span>Annotation Type</span>
