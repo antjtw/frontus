@@ -251,8 +251,8 @@ app.controller('DocumentViewController', ['$scope', '$rootScope', '$compile', '$
                 $scope.isAnnotable = $scope.doc.annotable($rootScope.navState.role) || $scope.prepare; // requires $scope.lib
 
                 $scope.annots = Annotations.getDocAnnotations($scope.doc);
-                if ($scope.doc.transaction_type === "issue certificate") {
-                    // if we're issuing a certificate, we can assume we have prepareFor which is a transaction
+                if ($scope.doc.transaction_type === "issue certificate" && $scope.prepareFor) {
+                    // if we're issuing a certificate, we can assume prepareFor is a transaction
                     var annot_p = $q.defer();
                     var annot_promise = annot_p.promise;
                     var annot_watch_cancel = $scope.$watchCollection('annots', function(annots) {
