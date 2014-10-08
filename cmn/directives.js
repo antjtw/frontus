@@ -325,19 +325,19 @@ m.directive('messageSide', function(){
             height: '='},
         restrict: 'E',
         templateUrl: '/cmn/partials/messageSide.html',
-        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout',
+        controller: ['$scope', '$rootScope', 'SWBrijj', '$route', '$routeParams', '$location', '$timeout', 'navState',
 
-        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout) {
+        function($scope, $rootScope, SWBrijj, $route, $routeParams, $location, $timeout, navState) {
 
             $scope.getPeople = function(){
-                SWBrijj.tblm('global.user_list', ['email', 'name']).then(function(data){
+                SWBrijj.tblm('mail.my_thread_members', ['user_id', 'name']).then(function(data){
                     $scope.people = data;
                     var array = [];
                     var obj = {};
                     angular.forEach($scope.people, function(info){
-                        array.push(obj[info.email] = info.name);
+                        array.push(obj[info.user_id] = info.name);
                         if(info.name === ""){
-                            array.push(obj[info.email]= null);
+                            array.push(obj[info.user_id]= null);
                         }
                     });
                     $scope.peopleDict = obj;
@@ -382,16 +382,23 @@ m.directive('messageSide', function(){
             $scope.gotoPerson = function(person) {
                 if (!person.lastlogin) return;
                 var link;
-                link = (person.name ? ((navState.userid != person.email) ? '/app/company/profile/view?id=' + person.email : '/app/account/profile/') : '');
+                link = (person.name ? ((navState.userid != person.user_id) ? '/app/company/profile/view?id=' + person.user_id : '/app/account/profile/') : '');
                 if (link) {
                 $location.url(link);
                 }
             };
 
             $scope.getLogins = function(){
-                SWBrijj.tblm('global.user_tracker').then(function(data){
-                    $scope.logins = data;
-                });
+                if (navState.role == 'issuer')
+                {
+                    SWBrijj.tblm('global.user_tracker').then(function(data){
+                        $scope.logins = data;
+                    });
+                }
+                else
+                {
+                    $scope.logins = [];
+                }
             };
             $scope.getLogins();
 
@@ -517,7 +524,7 @@ m.directive('messageSide', function(){
                     $scope.hasLink = false;
                 }
                 else{
-                    var link = '/app/company/profile/view?id=' + encodeURIComponent(person.email);
+                    var link = '/app/company/profile/view?id=' + encodeURIComponent(person.user_id);
                     $location.url(link);
                 }
 
@@ -1076,7 +1083,7 @@ m.directive('float', function() {
         link: function(scope, elem, attr, ctrl) {
             // ctrl is ngModel controller
             ctrl.$parsers.unshift(function(val) {
-                var ret = parseFloat(val);
+                var ret = parseFloat(val.replace(",", ""));
                 if (isNaN(ret)) {
                     ret = undefined;
                 }

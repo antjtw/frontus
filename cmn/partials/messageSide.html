@@ -24,7 +24,7 @@
                                         <ul ng-class="{'testing':showRecipients}">
                                             <ul ng-show="showRecipients">
                                                 <li  ng-repeat="foo in message_datum.foo track by $index">
-                                                    <span class="recipients" ng-click="gotoPerson(foo)" ng-class="{'blue-link': foo.login}">{{foo.personName}}</span>
+                                                    <span class="recipients">{{foo.personName}}</span>
 
                                                     <div class="recipients details" ng-if="foo.event !=='opened'">Message {{foo.event}}</div>
                                                     <div class="recipients details" ng-if="foo.event === 'opened'">Opened on {{foo.timestamp | date:'shortDate'}}</div>

@@ -7,6 +7,5 @@ var app = angular.module('careers', ['ngRoute', 'ui.bootstrap', 'nav', 'brijj', 
 });
 
 app.controller('AccordionCtrl',['$scope', function($scope) {
-  $scope.oneAtATime = true;
+  $scope.oneAtATime = false;
 }]);
-

@@ -1,8 +1,8 @@
 'use strict';
 
 app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$route', '$rootScope', '$timeout', '$location', 'SWBrijj',
-        'navState', 'Annotations', 'Documents', '$q', 'basics', 'ShareDocs',
-    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics, ShareDocs) {
+        'navState', 'Annotations', 'Documents', '$q', 'basics', 'ShareDocs', 'Investor',
+    function($scope, $routeParams, $route, $rootScope, $timeout, $location, SWBrijj, navState, Annotations, Documents, $q, basics, ShareDocs, Investor) {
         $scope.investor_attributes = {}; // need investor attributes to be defined in this scope so we can save them
         $scope.nextAnnotationType = 'text';
 
@@ -140,6 +140,9 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
                 delete z.investor;
                 $location.search(z);
                 $scope.prepareFor = $routeParams.investorid; // investor id, if we're doing an investor specific preparation
+                if ($routeParams.transaction) {
+                    $scope.prepareFor = $routeParams.transaction;
+                }
                 $scope.initDocView();
 
                 $scope.checkProcessing();
@@ -435,6 +438,53 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
             );
         };
 
+        var emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        $scope.issueCertificate = function() {
+            var certificatedocument = [{}];
+            certificatedocument[0].doc_id = $scope.doc.doc_id;
+            $scope.doc.annotations.forEach(function(note) {
+                if (note.whattype == "certificate_id") {
+                    certificatedocument[0].sequence = parseInt($scope.doc.preparedFor[$scope.prepareFor].overrides[note.id].substring(2)); // parse the "S-" off the front
+                }
+                if (note.whattype == "security") {
+                    certificatedocument[0].security = $scope.doc.preparedFor[$scope.prepareFor].overrides[note.id];
+                }
+            });
+            SWBrijj.document_multishare(
+                    $scope.doc.row.email.id.toLowerCase(),
+                    JSON.stringify(certificatedocument),
+                    "",
+                    "22 November 2113"
+                    ).then(function(data) {
+                        $scope.$emit("notification:success", "Certificates issued.");
+                        $rootScope.leave(["/ownership/grants/", '/ownership/certificate/', '/documents/company-view']);
+                    }).except(function(err) {
+                        console.error(err);
+                        $scope.emit("notification:fail", "Oops, we were unable to issue this certificate.");
+                });
+        };
+
+        $scope.rowSelect2Options = {
+            data: function() {
+                return {
+                    results: Investor.investors
+                };
+            },
+            createSearchChoice: Investor.createSearchChoice,
+            placeholder: 'Pick name or type email'
+        };
+
+        $scope.updateSendRow = function(inv) {
+            if (typeof(inv) === "string") {
+                // select2-ui sets string and then object, generate the object from the string
+                $scope.doc.row.email = Investor.createInvestorObject(inv);
+            }
+        };
+
+        $scope.formCheck = function() {
+            return $scope.doc.row && $scope.doc.row.email && $scope.doc.row.email.id.length > 0 && emailRegExp.test($scope.doc.row.email.id);
+        };
+
         $scope.prepareable = function() {
             return ($scope.prepare && !$scope.invq && $scope.doc && !$scope.doc.signature_flow && !$scope.templateKey) || ($scope.templateKey);
         };
@@ -599,6 +649,10 @@ app.controller('DocumentViewWrapperController', ['$scope', '$routeParams', '$rou
         $scope.shareThisDoc = function() {
             ShareDocs.upsertShareItem($scope.doc);
             $location.url("/app/documents/company-list?share");
+        };
+
+        $scope.returntoCreate = function() {
+            $location.url("/app/ownership/certificate/create?issue=" + encodeURIComponent($scope.doc.issue) +  "&transaction=" + $scope.doc.transaction.transaction);
         };
 
         $scope.getData();

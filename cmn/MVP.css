@@ -2122,6 +2122,13 @@ li.no-activity {
     line-height: 18px;
 }
 
+li.capped-name {
+    width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 .status-table > tbody > tr > td.shareholder-column > ul > li:first-child.red{
     color: #E74C3C;
@@ -5051,9 +5058,10 @@ textarea.email-text {
 }
 
 .emailName{
-    padding-top: 5px;
     color: #666;
     font-size: 14px;
+    line-height: 50px;
+    margin-bottom: 10px;
 }
 
 .replyPic{
@@ -5517,7 +5525,7 @@ grant-wizard-nav a.active {
     display: inline-block;
     vertical-align: middle;
     color: #1d2c3c;
-    width: 130px;
+    width: 150px;
     line-height: 32px;
     margin-left: 5px;
 }

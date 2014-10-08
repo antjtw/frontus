@@ -18,6 +18,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var action = issue.actions[action_type];
                 for (field_key in action.fields)
                 {
+                    if (action_type != "issue certificate") {
+                        if (['physical', 'security', 'security_type', 'investor'].indexOf(field_key) !== -1) {
+                            delete action.fields[field_key];
+                            continue;
+                        }
+                    } // TODO: filter certificate transaction for "issue certificate" ?
                     var field = action.fields[field_key];
                     var lbls = JSON.parse(field.labels);
                     // Set up enums
@@ -63,7 +69,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
     function updateAvailableSignatures()
     {
         SWBrijj.tblm('account.my_company_signatures', ['label']).then(function(data) {
-            if (data.length == 0)
+            if (data.length === 0)
                 return;
             for (var t in variableDefaultTypes)
             {
@@ -91,7 +97,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var viable_actions = transaction_attributes[issue_type].actions;
                 fields = viable_actions[transaction_type].fields;
             }
-            type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
+            if (transaction_type != "issue certificate") {
+                type_list.splice(defaultTypes.length, type_list.length); // remove anything past the defaultTypes
+            } else {
+                type_list.splice(0); // no default annotation types for certificates
+            }
             for (var t in variableDefaultTypes)
             {
                 type_list.push(variableDefaultTypes[t]);
@@ -101,7 +111,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 var f = fields[field];
                 tmp_array.push({name: f.name, display: f.display_name, required: f.required, typename: f.typname, labels: f.labels});
             }
-            if (tmp_array.length > 0) {
+            if (tmp_array.length > 0 && transaction_type != "issue certificate") {
                 // only add effective date if we're definitely in a transaction
                 var display = "Effective Date";
                 if ((issue_type == "Equity Common"    && transaction_type == "grant") ||
@@ -388,6 +398,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             if (!this.preparedFor) {
                 this.preparedFor = {};
                 this.preparedForLoading = true;
+                if (doc.transaction_type === "issue certificate") {
+                    return this.preparedFor;
+                }
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
                         investor_prep.overrides = {};
@@ -436,6 +449,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             }
             var doc = this;
             var hash = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: false, overrides: {}};
+            if (doc.transaction_type === "issue certificate") {
+                doc.preparedFor[investor] = hash;
+                return hash;
+            }
             SWBrijj.insert('document.my_personal_preparations', {doc_id: this.doc_id, investor: investor}).then(function(result) {
                 SWBrijj.procm('document.is_prepared_person', doc.doc_id, investor).then(function(data) {
                     hash.is_prepared = data[0].is_prepared_person;
@@ -453,6 +470,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             return hash;
         },
         updatePreparedFor: function(old_investor, new_investor) {
+            if (doc.transaction_type === "issue certificate") {
+                return;
+            }
             var doc = this;
             SWBrijj.update('document.my_personal_preparations', {investor: new_investor}, {doc_id: this.doc_id, investor: old_investor}).then(function(result){
                 doc.preparedFor[new_investor] = doc.preparedFor[old_investor];
@@ -465,6 +485,9 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         deletePreparedFor: function(old_investor) {
+            if (doc.transaction_type === "issue certificate") {
+                return;
+            }
             var doc = this;
             SWBrijj.delete_one('document.my_personal_preparations', {doc_id: this.doc_id, investor: old_investor}).then(function(result) {
                 delete doc.preparedFor[old_investor];
@@ -474,6 +497,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
             });
         },
         savePreparation: function(investor) {
+            var p = $q.defer();
             var doc = this;
             $timeout(function() {
                 var notes = [];
@@ -487,17 +511,40 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                         }
                     }
                 });
-                SWBrijj.procm('document.update_preparation', doc.doc_id, investor, JSON.stringify(notes)).then(function(result) {
-                    // data stored, got back is_prepared, so update preparedFor with that and the overrides
-                    doc.preparedFor[investor].is_prepared = result[0].update_preparation;
-                    if (!ShareDocs.prepCache[doc.doc_id]) {
-                        ShareDocs.prepCache[doc.doc_id] = {};
-                    }
-                    ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
-                }).except(function(error) {
-                    $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
-                });
+                if (doc.transaction_type === "issue certificate") {
+                    // need to retrieve issue transaction and sequence number from the doc to save the overrides
+                    var issue_name;
+                    var sequence_num;
+                    doc.annotations.forEach(function(note) {
+                        if (note.whattype == "certificate_id") {
+                            sequence_num = parseInt(doc.preparedFor[investor].overrides[note.id].substring(2)); // parse the "S-" off the front
+                        }
+                        if (note.whattype == "security") {
+                            issue_name = doc.preparedFor[investor].overrides[note.id];
+                        }
+                    });
+                    SWBrijj.procm('ownership.update_certificate_preparation', issue_name, sequence_num, JSON.stringify(notes)).then(function(result) {
+                        p.resolve();
+                    }).except(function(error) {
+                        $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+                        p.reject(error);
+                    });
+                } else {
+                    SWBrijj.procm('document.update_preparation', doc.doc_id, investor, JSON.stringify(notes)).then(function(result) {
+                        // data stored, got back is_prepared, so update preparedFor with that and the overrides
+                        doc.preparedFor[investor].is_prepared = result[0].update_preparation;
+                        if (!ShareDocs.prepCache[doc.doc_id]) {
+                            ShareDocs.prepCache[doc.doc_id] = {};
+                        }
+                        ShareDocs.prepCache[doc.doc_id][investor] = result[0].update_preparation; // clear the cache in ShareDocs
+                        p.resolve();
+                    }).except(function(error) {
+                        $rootScope.$emit("notification:fail", "Oops, something went wrong while saving");
+                        p.reject(error);
+                    });
+                }
             }, 100); // TODO: 100 ms seems like enough time to let bs-datepicker actually change the data. Figure out why it doesn't just work without this
+            return p.promise;
         }
     };
 
@@ -546,13 +593,19 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         return oldDoc;
     };
 
+    var getOriginalPromise = $q.defer();
     this.getOriginal = function(doc_id) {
         if (!docs[doc_id]) {
             var docServ = this;
             SWBrijj.tblm("document.my_company_library", "doc_id", doc_id).then(function(data) {
                 docServ.setDoc(doc_id, data);
+                getOriginalPromise.resolve();
             });
         }
         return this.getDoc(doc_id);
     };
+    this.returnOriginalwithPromise = function(doc_id) {
+        this.getOriginal(doc_id);
+        return getOriginalPromise.promise;
+    }
 }]);

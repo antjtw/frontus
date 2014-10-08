@@ -102,7 +102,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.signatureURL = function(annot) {
         if (annot.whattype != "ImgSignature" || !annot.forRole(navState.role))
             return "";
-        if (!annot.val || annot.val.length == 0 || annot.val == "Personal")
+        if (!annot.val || annot.val.length === 0 || annot.val == "Personal")
             return "/photo/user?id=signature:";
         return '/photo/user?id=company_signature:' + annot.val;
     };
@@ -136,6 +136,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         }
         return $scope.annot.type;
     };
+
     function annotationOrderComp(typeA, typeB) {
         // type "Text" always takes priority
         if (typeA.id == "Text") {
@@ -194,9 +195,12 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             return classes;
         },
         createSearchChoice: function(text) {
-            return {id: text, text: text};
+            if ($scope.doc.transaction_type != "issue certificate") {
+                return {id: text, text: text};
+            }
         },
     };
+
     $scope.select2TypeOptions = {
         data: [{id: "text", text: "Text"},
                {id: "date", text: "Date"},
@@ -449,6 +453,9 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.annotationCoordsStyle = {};
     $scope.annotationSizeStyle = {};
     $scope.annotationSizeImageStyle = {};
+    $scope.annotationSizeQRStyle = {};
+    $scope.annotationSizeQRStyle['min-height'] = '111 px';
+    $scope.annotationSizeQRStyle['min-width'] = '111 px';
     $scope.annotationHighlightStyle = {'background': "rgba(255, 255, 0, 0.5)"};
 
     $scope.enumBoxMode = function() {
@@ -485,6 +492,8 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.annotationSizeStyle.height = (new_size.height - 10) + "px";
             $scope.annotationSizeImageStyle["max-width"] = (new_size.width - 14) + "px";
             $scope.annotationSizeImageStyle["max-height"] = (new_size.height - 10) + "px";
+            $scope.annotationSizeQRStyle["max-width"] = Math.max((new_size.width - 14), 111) + "px";
+            $scope.annotationSizeQRStyle["max-height"] = Math.max((new_size.height - 10), 111) + "px";
             $scope.annotationHighlightStyle.width = (new_size.width) + "px";
             $scope.annotationHighlightStyle.height = (new_size.height) + "px";
         }
@@ -562,6 +571,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                     $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = val;
                 }
             }
+            $scope.doc.savePreparation($scope.prepareFor);
         });
     } else {
         $scope.$watch('annot.val', function(val, old_val) {
@@ -595,6 +605,14 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         });
     }
+
+    $scope.certificateDisable = function(annot) {
+        if ($scope.doc.transaction_type == 'issue certificate') {
+            return (annot.type_info.required === true);
+        } else {
+            return false;
+        }
+    };
 }
 
 annotationController.$inject = ["$scope", "$rootScope", "$element", "$document", "Annotations", "$timeout", "navState", "SWBrijj", "User"];

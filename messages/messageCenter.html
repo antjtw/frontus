@@ -8,6 +8,7 @@
 
         <div class="box-button pull-right"
              ng-click="companyIsZombie() || gotoCompose()"
+             ng-if="navState.role=='issuer'"
              tooltip-placement="bottom" tooltip="{{zombiemessage}}">
             <ul>
                 <li> <span data-icon="&#xe028;" aria-hidden="true"></span>
@@ -20,8 +21,11 @@
 
     <div class="row-fluid leftTabWindow" ng-style="viewportheight">
         <div ng-show="allThreads == undefined || allThreads.length == 0" class="noElements">
-            <div class="toFill">
+            <div class="toFill" ng-show="navState.role=='issuer'">
                 You haven't sent or received any messages yet. Click compose to start sending!
+            </div>
+            <div class="toFill" ng-show="navState.role!='issuer'">
+                You haven't received any messages yet.
             </div>
         </div>
         <div ng-style="viewportheight" ng-class="{leftFullTableBlock: hideRail, widthtransition25:oldSafari()}" class="span8 recipientInfo statusBlock leftBlock" ng-if="allThreads.length > 0">

@@ -9,11 +9,12 @@
             <div ng-style="viewportheight">
                 <p class="drag-help">Drag and drop documents from the right to attach them to this security</p>
 
-                <div ng-repeat="type in ['plan', 'grant', 'exercise']" ng-if="(doc=issue[0].getDocs()[type]) || true">
+                <div ng-repeat="type in doclist" ng-if="(doc=issue[0].getDocs()[type]) || true">
                     <div class="wizard-selected-doc" ng-if="doc.docname">
                         <span ng-if="type == 'plan'">Option Plan</span>
                         <span ng-if="type == 'grant'">Option Agreement</span>
                         <span ng-if="type == 'exercise'">Notice of Exercise</span>
+                        <span ng-if="type == 'issue certificate'">Certificate Template</span>
                         <a ng-href="/app/documents/company-view?doc={{doc.doc_id}}&prepare=true">{{doc.docname}}</a>
                         <span ng-click="issue[0].removeDoc(doc)" data-icon="&#xe00f;" aria-hidden="true"></span>
                     </div>
@@ -22,12 +23,13 @@
                             <span ng-if="type == 'plan'">Option Plan</span>
                             <span ng-if="type == 'grant'">Option Agreement</span>
                             <span ng-if="type == 'exercise'">Notice of Exercise</span>
+                            <span ng-if="type == 'issue certificate'">Certificate Template</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="wizard-done-linking">
-                    <a href="/app/ownership/grants/issue">
+                    <a ng-click="leave()">
                         <div class="standard-button pull-right">
                             <button class="btn">
                                 Done Linking
