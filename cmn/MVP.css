@@ -5051,9 +5051,10 @@ textarea.email-text {
 }
 
 .emailName{
-    padding-top: 5px;
     color: #666;
     font-size: 14px;
+    line-height: 50px;
+    margin-bottom: 10px;
 }
 
 .replyPic{
