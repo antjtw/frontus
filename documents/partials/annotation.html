@@ -87,9 +87,6 @@
                                 <textarea id="highlightContents" wrap="hard" class="highlightContents" ng-trim="false" ng-model="current.val"/>
                             </div>
                         </li>
-                        <li ng-if="annot.type_info.typename == 'date'">
-                            <input type="text" ng-model="current.val" bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}">
-                        </li>
                         <li ng-if="annot.type == 'date'">
                             <input type="text" ng-model="current.raw_val" bs-datepicker date-format="{{$root.settings.lowercasedate}}">
                         </li>

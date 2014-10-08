@@ -521,8 +521,10 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                             if (doc.preparedFor[investor].raw_overrides[note.id] &&
                                 doc.preparedFor[investor].raw_overrides[note.id] !== "" &&
                                 doc.preparedFor[investor].raw_overrides[note.id] != note.raw_val) {
+                                // update the formatted val (if it hasn't already been updated)
+                                doc.preparedFor[investor].overrides[note.id] = note.format_val(doc.preparedFor[investor].raw_overrides[note.id]);
                                 notes.push({id: note.id,
-                                    val: note.format_val(doc.preparedFor[investor].raw_overrides[note.id]),
+                                    val: doc.preparedFor[investor].overrides[note.id],
                                     raw_val: doc.preparedFor[investor].raw_overrides[note.id],
                                     type: note.type});
                             }
@@ -531,11 +533,13 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                             if (doc.preparedFor[investor].overrides[note.id] &&
                                 doc.preparedFor[investor].overrides[note.id] !== "" &&
                                 doc.preparedFor[investor].overrides[note.id] != note.val) {
-                                // raw val == formatted val
+                                // raw val == val
+                                doc.preparedFor[investor].raw_overrides[note.id] = doc.preparedFor[investor].overrides[note.id];
                                 notes.push({id: note.id,
                                     val: doc.preparedFor[investor].overrides[note.id],
-                                    raw_val: doc.preparedFor[investor].overrides[note.id],
+                                    raw_val: doc.preparedFor[investor].raw_overrides[note.id],
                                     type: note.type});
+
                             }
                         }
                     }

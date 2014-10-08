@@ -129,7 +129,11 @@ app.directive('grantDocPrep', [function() {
                 $scope.emails.forEach(function(email) {
                     if (splitValues.length > 0 && (found || email === pastedEmail)) {
                         found = true;
-                        doc.preparedFor[email].overrides[annot.id] = splitValues.shift();
+                        if (annot.type == 'date' || annot.type == 'number') {
+                            doc.preparedFor[email].raw_overrides[annot.id] = splitValues.shift();
+                        } else {
+                            doc.preparedFor[email].overrides[annot.id] = splitValues.shift();
+                        }
                         doc.savePreparation(email);
                     }
                 });
