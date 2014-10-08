@@ -48,7 +48,7 @@
                         </span>
                         <span ng-if="!state.bulkPrep"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right" ng-class="{complete: doc.hasAnnotations() && doc.validTransaction()}">{{doc.hasAnnotations() ? "Edit" : "Add"}} Annotations</a></span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
-                            {{annot.type_info.display}}&nbsp;
+                            {{annot.type_info.display.trim() !== "" ? annot.type_info.display : "no name"}}&nbsp;
                             <span ng-if="annot.required" data-icon="&#xe603;" class="info lower-icon" tooltip="{{annot.type_info.display}} is required"></span>
                         </span>
                     </div>
