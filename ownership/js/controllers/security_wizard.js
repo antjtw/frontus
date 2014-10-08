@@ -41,5 +41,9 @@ app.controller('createSecurity',
             }
             $location.url('/app/ownership/company-captable');
         };
+
+        $scope.done = function() {
+            $location.url('/app/ownership/company-captable');
+        }
     }]);
 
