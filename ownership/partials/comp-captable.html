@@ -205,14 +205,18 @@
                     <a class="dropdown-toggle" ng-click="checkDateRange();"
                         data-toggle="dropdown" href="#">
                         <span ng-if="(ctFilter.date | utcdate:settings.shortdate) != daterange.today">
-                            Viewing {{ctFilter.date | utcdate:settings.shortdate}}
+                            Viewing {{ctFilter.date | utcdate:settings.shortdateshortyear}}
                         </span>
                         <span ng-if="(ctFilter.date | utcdate:settings.shortdate) == daterange.today">
                             Viewing Today
                         </span>
                     </a>
                     <ul class="dropdown-menu history-box" ng-click="$event.stopPropagation()">
-                        <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()">
+                        <input class="text" ng-model="daterange.fakeDate" ng-change="updateDateInput()"
+                            data-date-format={{settings.lowercasedate}}
+                            date-type="string"
+                            type="text"
+                            bs-datepicker>
                         <span ng-click="setToday();" class="blue-link">set to today</span>
                         <input class="range"
                                style='{{daterange.coloredbar}}'
