@@ -14,7 +14,7 @@
                             <ul>
                                 <li>
                                     <span>
-                                        Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': 'one shareholder', 'other': '{} shareholders'}"></ng-pluralize>
+                                        Message sent on {{message_datum.time | date:'shortDate'}} to <ng-pluralize count="message_datum.tox.length" when="{'1': message_datum.foo[0].personName, 'other': '{} people'}"></ng-pluralize>
                                     </span><br/>
                                     
                                     <div>
