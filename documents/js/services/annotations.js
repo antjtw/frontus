@@ -293,6 +293,30 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', 'calcu
             })[0];
             if (!this.type_info) {
                 this.type_info = {name: this.whattype, display: this.whattype}; // TODO: probably need better defaults
+                if (["signatureDate"].indexOf(this.whattype) != -1) {
+                    this.type = "date";
+                    this.type_info.typename = "date";
+                } else if (["Signature", "investorName", "investorStreet", "investorState", "investorPostalcode", "investorEmail"].indexOf(this.whattype) != -1) {
+                    this.type = "text";
+                    this.type_info.typename = "text";
+                } else if (["Text"].indexOf(this.whattype) != -1 ) {
+                    this.type = "number";
+                    this.type_info.typename = "number";
+                }
+            }
+            if (["int8", "int4", "number"].indexOf(this.type_info.typename) != -1) {
+                // "number" doesn't support floats at the moment
+                this.type = "number";
+                if (!this.format || this.format === "") {
+                    this.format = "numeric";
+                }
+            } else if (["date"].indexOf(this.type_info.typename) != -1) {
+                this.type = "date";
+                if (!this.format || this.format === "") {
+                    this.format = $rootScope.settings.shortDate;
+                }
+            } else if (["text"].indexOf(this.type_info.typename) != -1) { // TODO: make this the fall through / default?
+                this.type = "text";
             }
             if (this.type_info.required) {
                 this.required = true;

@@ -54,14 +54,14 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
         }
     });
     var defaultTypes = [
-        {name: "Text", display: "Text"},
-        {name: "Signature", display: "Signature Text"},
-        {name: "investorName", display: "Name"},
-        {name: "investorStreet", display: "Address"},
-        {name: "investorState", display: "State"},
-        {name: "investorPostalcode", display: "Zip code"},
-        {name: "investorEmail", display: "Email"},
-        {name: "signatureDate", display: "Date"},
+        {name: "Text", display: "Text", typename: "text"},
+        {name: "Signature", display: "Signature Text", typename: "text"},
+        {name: "investorName", display: "Name", typename: "text"},
+        {name: "investorStreet", display: "Address", typename: "text"},
+        {name: "investorState", display: "State", typename: "text"},
+        {name: "investorPostalcode", display: "Zip code", typename: "text"},
+        {name: "investorEmail", display: "Email", typename: "text"},
+        {name: "signatureDate", display: "Date", typename: "date"},
     ];
     var variableDefaultTypes = [
         {name: "ImgSignature", display: "Signature Image"}
