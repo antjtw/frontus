@@ -409,7 +409,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                             var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
                             annotation_overrides.forEach(function(override) {
                                 investor_prep.overrides[override.id] = override.val;
-                                investor_prep.raw_overrides[override.id] = override.raw_val;
+                                if (override.type == 'date') {
+                                    investor_prep.raw_overrides[override.id] = new Date(override.raw_val);
+                                } else {
+                                    investor_prep.raw_overrides[override.id] = override.raw_val;
+                                }
                             });
                         }
                         // add id and text fields to make select2 happy
@@ -437,7 +441,11 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                             var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
                             annotation_overrides.forEach(function(override) {
                                 investor_prep.overrides[override.id] = override.val;
-                                investor_prep.raw_overrides[override.id] = override.raw_val;
+                                if (override.type == 'date') {
+                                    investor_prep.raw_overrides[override.id] = new Date(override.raw_val);
+                                } else {
+                                    investor_prep.raw_overrides[override.id] = override.raw_val;
+                                }
                             });
                         }
                         // add id and text fields to make select2 happy
@@ -515,7 +523,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                                 doc.preparedFor[investor].raw_overrides[note.id] != note.raw_val) {
                                 notes.push({id: note.id,
                                     val: note.format_val(doc.preparedFor[investor].raw_overrides[note.id]),
-                                    raw_val: doc.preparedFor[investor].raw_overrides[note.id]});
+                                    raw_val: doc.preparedFor[investor].raw_overrides[note.id],
+                                    type: note.type});
                             }
                         } else {
                             // prefer formatted val
@@ -525,7 +534,8 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                                 // raw val == formatted val
                                 notes.push({id: note.id,
                                     val: doc.preparedFor[investor].overrides[note.id],
-                                    raw_val: doc.preparedFor[investor].overrides[note.id]});
+                                    raw_val: doc.preparedFor[investor].overrides[note.id],
+                                    type: note.type});
                             }
                         }
                     }
