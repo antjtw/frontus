@@ -108,6 +108,7 @@ function($scope, $parse, SWBrijj, calculate, $filter,
 
     $scope.ctFilter = {date: new Date(),
         vesting: true,
+        unissued: true,
         security_types: ['Show All']};
     $scope.$watch('ctFilter', function(newVal, oldVal) {
         switch (selectedThing()) {
@@ -343,7 +344,8 @@ function($scope, $parse, SWBrijj, calculate, $filter,
             row.name,
             ($scope.editMode ? false : $scope.filteredSecurityNames()),
             ($scope.editMode ? false : $scope.ctFilter.date),
-            ($scope.editMode ? true : $scope.ctFilter.vesting));
+            ($scope.editMode ? true : $scope.ctFilter.vesting),
+            ($scope.editMode ? false : !$scope.ctFilter.unissued));
     };
     $scope.numUnissued = function(sec) {
         return captable.numUnissued(sec,
@@ -359,7 +361,8 @@ function($scope, $parse, SWBrijj, calculate, $filter,
         return captable.totalOwnershipUnits(x,
             ($scope.editMode ? false : $scope.filteredSecurityNames()),
             ($scope.editMode ? false : $scope.ctFilter.date),
-            ($scope.editMode ? true : $scope.ctFilter.vesting));
+            ($scope.editMode ? true : $scope.ctFilter.vesting),
+            ($scope.editMode ? false : !$scope.ctFilter.unissued));
     };
     $scope.securityTotalUnits = function(sec) {
         return captable.securityTotalUnits(sec,
