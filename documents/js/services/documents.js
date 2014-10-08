@@ -404,10 +404,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 SWBrijj.tblmm('document.my_personal_preparations_view', 'doc_id', doc.doc_id).then(function(data) {
                     data.forEach(function(investor_prep) {
                         investor_prep.overrides = {};
+                        investor_prep.raw_overrides = {};
                         if (investor_prep.annotation_overrides) {
                             var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
                             annotation_overrides.forEach(function(override) {
                                 investor_prep.overrides[override.id] = override.val;
+                                investor_prep.raw_overrides[override.id] = override.raw_val;
                             });
                         }
                         // add id and text fields to make select2 happy
@@ -430,10 +432,12 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                     doc.preparedFor = {};
                     data.forEach(function(investor_prep) {
                         investor_prep.overrides = {};
+                        investor_prep.raw_overrides = {};
                         if (investor_prep.annotation_overrides) {
                             var annotation_overrides = JSON.parse(investor_prep.annotation_overrides);
                             annotation_overrides.forEach(function(override) {
                                 investor_prep.overrides[override.id] = override.val;
+                                investor_prep.raw_overrides[override.id] = override.raw_val;
                             });
                         }
                         // add id and text fields to make select2 happy
@@ -448,7 +452,7 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 return;
             }
             var doc = this;
-            var hash = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: false, overrides: {}};
+            var hash = {display: Investor.getDisplay(investor), investor: investor, doc_id: doc.doc_id, is_prepared: false, overrides: {}, raw_overrides: {}};
             if (doc.transaction_type === "issue certificate") {
                 doc.preparedFor[investor] = hash;
                 return hash;
@@ -504,10 +508,25 @@ docs.service('Documents', ["Annotations", "SWBrijj", "$q", "$rootScope", "Invest
                 doc.annotations.forEach(function(note) {
                     if (note.whosign == "Issuer" && doc.preparedFor && doc.preparedFor[investor]) {
                         // don't save the override if it's empty or equal to the base value
-                        if (doc.preparedFor[investor].overrides[note.id] &&
-                            doc.preparedFor[investor].overrides[note.id] !== "" &&
-                            doc.preparedFor[investor].overrides[note.id] != note.val) {
-                                notes.push({id: note.id, val: doc.preparedFor[investor].overrides[note.id]});
+                        if (note.type == 'date' || note.type == 'number') {
+                            // prefer raw_val
+                            if (doc.preparedFor[investor].raw_overrides[note.id] &&
+                                doc.preparedFor[investor].raw_overrides[note.id] !== "" &&
+                                doc.preparedFor[investor].raw_overrides[note.id] != note.raw_val) {
+                                notes.push({id: note.id,
+                                    val: note.format_val(doc.preparedFor[investor].raw_overrides[note.id]),
+                                    raw_val: doc.preparedFor[investor].raw_overrides[note.id]});
+                            }
+                        } else {
+                            // prefer formatted val
+                            if (doc.preparedFor[investor].overrides[note.id] &&
+                                doc.preparedFor[investor].overrides[note.id] !== "" &&
+                                doc.preparedFor[investor].overrides[note.id] != note.val) {
+                                // raw val == formatted val
+                                notes.push({id: note.id,
+                                    val: doc.preparedFor[investor].overrides[note.id],
+                                    raw_val: doc.preparedFor[investor].overrides[note.id]});
+                            }
                         }
                     }
                 });
