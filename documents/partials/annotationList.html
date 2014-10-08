@@ -3,9 +3,9 @@
     <div ng-repeat="annotation in doc.annotations | filter: {page: page.page} : true | orderBy: 'position.coords.y'">
         <div data-icon="&#xe60d;" class="annotmark"
          ng-class="{mine: annotation.forRole(navState.role), complete: annotation.filled(navState.role, prepareFor), incomplete: (annotation.required && !annotation.filled(navState.role, prepareFor)), active: annotation == active.annotation}"
-         ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type == 'text')"
+         ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type != 'highlight')"
          ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
-            {{annotation.type_info.display}}
+            {{annotation.type_info.display.trim() !== "" ? annotation.type_info.display : "no name"}}
             <span ng-show="!annotation.forRole(navState.role)" data-icon="&#xe610;" aria-hidden="true"></span>
             <span ng-show="annotation.forRole(navState.role) && annotation.filled(navState.role, prepareFor)" data-icon="&#xe052;" aria-hidden="true"></span>
         </div>
@@ -13,7 +13,7 @@
          ng-class="{mine: annotation.forRole(navState.role), complete: annotation.filled(navState.role), incomplete: (annotation.required && !annotation.filled(navState.role)), active: annotation == active.annotation}"
          ng-if="(page_visible[page.page] == undefined || page_visible[page.page])&&(annotation.type == 'highlight')"
          ng-click="(doc.currentPage = page.page) && (annotation.focus = true)">
-            {{annotation.type_info.display}}
+            {{annotation.type_info.display.trim() !== "" ? annotation.type_info.display : "no name"}}
             <span ng-show="!annotation.forRole(navState.role)" data-icon="&#xe610;" aria-hidden="true"></span>
             <span ng-show="annotation.forRole(navState.role) && annotation.filled(navState.role)" data-icon="&#xe052;" aria-hidden="true"></span>
         </div>

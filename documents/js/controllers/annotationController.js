@@ -129,6 +129,14 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         }
         return $scope.annot.whattype;
     };
+    $scope.annot.typesetter = function(val) {
+        // using a setter to prevent select2 from reformatting the whattype to it's prefered format...
+        if (typeof(val) == "string") {
+            $scope.annot.type = val;
+        }
+        return $scope.annot.type;
+    };
+
     function annotationOrderComp(typeA, typeB) {
         // type "Text" always takes priority
         if (typeA.id == "Text") {
@@ -164,7 +172,7 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
         }
     }
-    $scope.select2TypeOptions = {
+    $scope.select2NameOptions = {
         data: function() {
             var res = [];
             $scope.doc.annotation_types.forEach(function(type) {
@@ -191,6 +199,27 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
                 return {id: text, text: text};
             }
         },
+    };
+
+    $scope.select2TypeOptions = {
+        data: [{id: "text", text: "Text"},
+               {id: "date", text: "Date"},
+               {id: "number", text: "Number"}],
+    };
+    $scope.select2FormatOptions = {
+        date: {
+            data: [{id: "MM/DD/YYYY", text: moment().format("MM/DD/YYYY")},
+                   {id: "DD/MM/YYYY", text: moment().format("DD/MM/YYYY")},
+                   {id: "dddd, MMM. D YYYY", text: moment().format("dddd, MMM. D YYYY")}],
+            createSearchChoice: function(text) {
+                return {id: text, text: moment().format(text)}
+            }
+        },
+        number: {
+            data: [{id: "numeric", text: "24"},
+                   {id: "text", text: "twenty four"},
+                   {id: "both", text: "twenty four (24)"}]
+        }
     };
 
     $scope.unusedType = function(type) {
@@ -442,11 +471,17 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
     $scope.dateBoxMode = function() {
         // whether the main annotation box should be a datepicker
         // note that issuers see it in the blue popup, so it's always false for them
-        return $scope.annot.type_info &&
+        return ($scope.annot.type == 'date' || // date in the type field
+               ($scope.annot.type_info &&
                $scope.annot.type_info.typename == 'date' &&
-               $scope.annot.forRole(navState.role) &&
-               (navState.role == 'investor' ||
+               $scope.annot.forRole(navState.role))) && // OR date in the typename (effective date)
+               (navState.role == 'investor' || // AND we're in an editable mode
                 $scope.prepareFor);
+    };
+
+    $scope.numberBoxMode = function() {
+        return ($scope.annot.type == 'number' &&
+                (navState.role == 'number' || $scope.prepareFor));
     };
 
     $scope.$watch('annot.position.coords', function(new_coords) {
@@ -519,6 +554,16 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
         }, function(override) {
             $scope.current.val = override;
         });
+        $scope.$watch(function() {
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                return $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id];
+            } else {
+                return "";
+            }
+        }, function(override) {
+            $scope.current.raw_val = override;
+        });
         $scope.$watch('current.val', function(val, old_val) {
             if (val == old_val) {
                 // don't run the first time
@@ -543,15 +588,69 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             }
             $scope.doc.savePreparation($scope.prepareFor);
         });
+        $scope.$watch('current.raw_val', function(raw_val, old_raw_val) {
+            if (raw_val == old_raw_val) {
+                // don't run the first time
+                return;
+            }
+            // check for overrides value existance, then assign to it if it's not equal
+            if ($scope.doc.preparedFor &&
+                $scope.doc.preparedFor[$scope.prepareFor]) {
+                if (raw_val != $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id]) {
+                    $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id] = raw_val;
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = $scope.annot.format_val(raw_val);
+                }
+            } else {
+                if (!$scope.doc.preparedFor) {
+                    $scope.doc.getPreparedFor();
+                }
+                if (!$scope.doc.preparedFor[$scope.prepareFor]) {
+                    var hash = $scope.doc.addPreparedFor($scope.prepareFor);
+                    hash.raw_overrides[$scope.annot.id] = raw_val;
+                    hash.overrides[$scope.annot.id] = $scope.annot.format_val(raw_val);
+                } else {
+                    $scope.doc.preparedFor[$scope.prepareFor].raw_overrides[$scope.annot.id] = raw_val;
+                    $scope.doc.preparedFor[$scope.prepareFor].overrides[$scope.annot.id] = $scope.annot.format_val(raw_val);
+                }
+            }
+            $scope.doc.savePreparation($scope.prepareFor);
+        });
+
     } else {
-        $scope.$watch('annot.val', function(val) {
+        $scope.$watch('annot.val', function(val, old_val) {
             if ($scope.current.val != val) {
                 $scope.current.val = val;
             }
         });
-        $scope.$watch('current.val', function(val) {
-            if ($scope.annot.val != val) {
-                $scope.annot.val = val;
+        $scope.$watch('current.val', function(val, old_val) {
+            if (val != old_val) {
+                if ($scope.annot.val != val) {
+                    $scope.annot.val = val;
+                }
+            }
+        });
+        $scope.$watch('current.raw_val', function(val, old_val) {
+            if (val != old_val) {
+                if ($scope.annot.raw_val != val) {
+                    $scope.annot.raw_val = val;
+                }
+            }
+        });
+        $scope.$watch('annot.raw_val', function(val, old_val) {
+            if ($scope.current.raw_val != val) {
+                $scope.current.raw_val = val;
+            }
+            $scope.annot.val = $scope.annot.format_val(val);
+        });
+        $scope.$watch('annot.format', function(new_format, old_format) {
+            if (typeof(new_format) == "object" && new_format) {
+                // select2 sends us an object. Force it back to string
+                $scope.annot.format = new_format.id;
+            } else if (new_format === null && old_format !== null) {
+                // if select2 doesn't have an object to send us, it sends null... how nice
+                $scope.annot.format = old_format;
+            } else if (new_format && new_format != old_format) {
+                $scope.annot.val = $scope.annot.format_val($scope.annot.raw_val);
             }
         });
     }

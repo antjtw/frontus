@@ -348,7 +348,6 @@ ownership.service('calculate', function () {
         if (convertTran.method == "Valuation") {
             var discount = !isNaN(parseFloat(convertTran.tran.attrs.discount)) ? (parseFloat(convertTran.tran.attrs.discount)/100) : 0;
             var regularppshare = parseFloat(convertTran.toissue.ppshare) * (1-discount);
-            console.log("conversion", discount, regularppshare);
             if (!isNaN(parseFloat(convertTran.toissue.premoney)) && !isNaN(parseFloat(convertTran.tran.attrs.valcap))) {
                 var premoneypercent = (1-(parseFloat(convertTran.tran.attrs.valcap) / parseFloat(convertTran.toissue.premoney)));
                 convertTran.newtran.prevalcappercentage = String(premoneypercent*100);
@@ -449,11 +448,11 @@ ownership.service('calculate', function () {
         var yyyy = today.getFullYear();
 
         if(dd<10) {
-            dd='0'+dd
+            dd='0'+dd;
         }
 
         if(mm<10) {
-            mm='0'+mm
+            mm='0'+mm;
         }
 
         if (dateformat[0] == "M") {
@@ -462,20 +461,21 @@ ownership.service('calculate', function () {
             today = dd+'/'+mm+'/'+yyyy;
         }
 
-        return today
+        return today;
     };
 
     this.castDateString = function(date, dateformat) {
+        // TODO: moment(date).utc().format(dateformat) should work?
         var dd = date.getUTCDate();
         var mm = date.getUTCMonth()+1; //January is 0!
         var yyyy = date.getUTCFullYear();
 
         if(dd<10) {
-            dd='0'+dd
+            dd='0'+dd;
         }
 
         if(mm<10) {
-            mm='0'+mm
+            mm='0'+mm;
         }
 
         var today;
@@ -485,11 +485,51 @@ ownership.service('calculate', function () {
             today = dd+'/'+mm+'/'+yyyy;
         }
 
-        return today
+        return today;
     };
 
     this.isDate = function(date) {
         return ((new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) ));
     };
 
+    var ones=['','one','two','three','four','five','six','seven','eight','nine'];
+    var tens=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+    var teens=['ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+    function convert_millions(num){
+        if (num>=1000000){
+            return convert_millions(Math.floor(num/1000000))+" million "+convert_thousands(num%1000000);
+        } else {
+            return convert_thousands(num);
+        }
+    }
+    function convert_thousands(num){
+        if (num>=1000){
+            return convert_hundreds(Math.floor(num/1000))+" thousand "+convert_hundreds(num%1000);
+        } else {
+            return convert_hundreds(num);
+        }
+    }
+    function convert_hundreds(num){
+        if (num>99){
+            return ones[Math.floor(num/100)]+" hundred "+convert_tens(num%100);
+        } else {
+            return convert_tens(num);
+        }
+    }
+    function convert_tens(num){
+        if (num<10) {
+            return ones[num];
+        } else if (num>=10 && num<20) {
+            return teens[num-10];
+        } else {
+            return tens[Math.floor(num/10)]+" "+ones[num%10];
+        }
+    }
+    this.numToWords = function(num) {
+        if (num === 0) {
+            return "zero";
+        } else {
+            return convert_millions(num);
+        }
+    };
 });

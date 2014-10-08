@@ -48,7 +48,7 @@
                         </span>
                         <span ng-if="!state.bulkPrep"><a href="/app/documents/company-view?doc={{doc.doc_id}}&page=1&prepare=true" class="btn pull-right" ng-class="{complete: doc.hasAnnotations() && doc.validTransaction()}">{{doc.hasAnnotations() ? "Edit" : "Add"}} Annotations</a></span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']">
-                            {{annot.type_info.display}}&nbsp;
+                            {{annot.type_info.display.trim() !== "" ? annot.type_info.display : "no name"}}&nbsp;
                             <span ng-if="annot.required" data-icon="&#xe603;" class="info lower-icon" tooltip="{{annot.type_info.display}} is required"></span>
                         </span>
                     </div>
@@ -74,13 +74,20 @@
                         </span>
                         <span ng-if="state.bulkPrep" ng-repeat="annot in doc.annotations | filter:bulkPrepable | orderBy:['page', 'position.coords.y', 'position.coords.x']"
                               ng-class="{required: annot.isInvalid(email)}">
-                            <input ng-if="annot.type_info.typename != 'date' && annot.type_info.typename != 'enum'"
+                            <input ng-if="annot.type_info.typename != 'date' && annot.type != 'date' && annot.type != 'number' && annot.type_info.typename != 'enum'"
                                    placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
                                    ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
                             <input ng-if="annot.type_info.typename == 'date'"
                                    bs-datepicker date-type="string" date-format="{{$root.settings.lowercasedate}}"
                                    placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
                                    ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                            <input ng-if="annot.type == 'date'"
+                                   bs-datepicker date-format="{{$root.settings.lowercasedate}}"
+                                   placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
+                                   ng-model=doc.preparedFor[email].raw_overrides[annot.id] ng-blur="doc.savePreparation(email)">
+                            <input ng-if="annot.type == 'number'" integer
+                                   placeholder="{{annot.raw_val? annot.raw_val : (annot.required ? 'required' : '')}}"
+                                   ng-model=doc.preparedFor[email].raw_overrides[annot.id] ng-blur="doc.savePreparation(email)">
                             <select ng-if="annot.type_info.typename == 'enum'" ui-select2
                                     placeholder="{{annot.val? annot.val : (annot.required ? 'required' : '')}}"
                                     ng-model=doc.preparedFor[email].overrides[annot.id] ng-blur="doc.savePreparation(email)">
