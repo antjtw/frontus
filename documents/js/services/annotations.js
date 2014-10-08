@@ -298,15 +298,12 @@ docs.service('Annotations', ['SWBrijj', '$rootScope', 'navState', 'User', 'calcu
                 // TODO: support more than the default format
                 return moment(raw_val).utc().format(this.format);
             } else if (this.type == "number") {
-                console.log(this.type);
-                console.log(this.format);
-                console.log(raw_val);
-                if (this.format.id == "numeric") {
-                    return raw_val.toString();
-                } else if (this.format.id == "text") {
+                if (this.format == "numeric") {
+                    return raw_val.toLocaleString();
+                } else if (this.format == "text") {
                     return calculate.numToWords(raw_val);
-                } else if (this.format.id == "both") {
-                    return calculate.numToWords(raw_val) + " (" + raw_val.toString() + ")";
+                } else if (this.format == "both") {
+                    return calculate.numToWords(raw_val) + " (" + raw_val.toLocaleString() + ")";
                 }
             } else {
                 return raw_val;

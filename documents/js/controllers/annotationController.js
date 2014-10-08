@@ -600,7 +600,13 @@ function annotationController($scope, $rootScope, $element, $document, Annotatio
             $scope.annot.val = $scope.annot.format_val(val);
         });
         $scope.$watch('annot.format', function(new_format, old_format) {
-            if (new_format != old_format) {
+            if (typeof(new_format) == "object" && new_format) {
+                // select2 sends us an object. Force it back to string
+                $scope.annot.format = new_format.id;
+            } else if (new_format === null && old_format !== null) {
+                // if select2 doesn't have an object to send us, it sends null... how nice
+                $scope.annot.format = old_format;
+            } else if (new_format && new_format != old_format) {
                 $scope.annot.val = $scope.annot.format_val($scope.annot.raw_val);
             }
         });
