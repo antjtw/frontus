@@ -6,24 +6,29 @@
             <div class="wizard-tile wizard-flow even-wizard">
                 <h2><span>Create a security</span></h2>
                 <div class="create-security-row">
-                    <span>Name</span>
-                    <input ng-model="rawissue.name">
-                    <span>Security Type</span>
-                    <ul class="dropdown-list drop-selector">
-                        <li class="dropdown standard">
-                            <a class="dropdown-toggle">
-                                {{rawissue.type}}
-                                <span class="invisible-drop">'</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li ng-repeat="key in 'security_type' | attributeTypes">
-                                    <a ng-click="setType(key)">
-                                        {{key}}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <div>
+                        <span>Name</span>
+                        <input ng-disabled="step > 1" ng-model="rawissue.name">
+                    </div>
+                    <div>
+                        <span>Security Type</span>
+                        <input ng-show="step > 1" ng-disabled="step > 1" ng-model="rawissue.type">
+                        <ul ng-show="step == 1" class="dropdown-list drop-selector">
+                            <li class="dropdown standard">
+                                <a class="dropdown-toggle">
+                                    {{rawissue.type}}
+                                    <span class="invisible-drop">'</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="key in 'security_type' | attributeTypes">
+                                        <a ng-click="setType(key)">
+                                            {{key}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
