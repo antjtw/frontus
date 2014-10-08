@@ -136,17 +136,14 @@
             <li ng-class="{activecompany: navState.path.indexOf('/ownership/company-captable') != -1}">
                 <span ng-click="gotoPage('/app/ownership/company-captable'); navhover=false">Cap Table</span>
             </li>
-            <li ng-class="{activecompany: navState.path.indexOf('/ownership/company-grants') != -1}">
-                <span ng-click="gotoPage('/app/ownership/company-grants'); navhover=false">Grants Table</span>
-            </li>
             <li ng-class="{activecompany: navState.path.indexOf('/ownership/company-trans') != -1}">
-                <span ng-click="gotoPage('/app/ownership/company-trans'); navhover=false">Transaction Log</span>
-            </li>
-            <li ng-class="{activecompany: navState.path.indexOf('/ownership/grants') != -1}">
-                <span ng-click="gotoPage('/app/ownership/grants/issue'); navhover=false">Issue Options</span>
+                <span ng-click="gotoPage('/app/ownership/company-trans'); navhover=false">Ledger</span>
             </li>
             <li ng-class="{activecompany: navState.path.indexOf('/ownership/security/create') != -1}">
                 <span ng-click="gotoPage('/app/ownership/security/create'); navhover=false">Create Security</span>
+            </li>
+            <li ng-class="{activecompany: navState.path.indexOf('/ownership/grants') != -1}">
+                <span ng-click="gotoPage('/app/ownership/grants/issue'); navhover=false">Grant Options</span>
             </li>
         </ul>
     </span>
