@@ -1450,13 +1450,15 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 "Oops, something went wrong.");
         });
     };
-    this.deleteSecurity = function(sec) {
+    this.deleteSecurity = function(sec, donotnotify) {
         SWBrijj.procm('_ownership.delete_security', sec.name)
         .then(function(x) {
             var res = x[0].delete_security;
             if (res > 0) {
-                $rootScope.$emit("notification:success",
-                    "Security deleted");
+                if (!donotnotify) {
+                    $rootScope.$emit("notification:success",
+                        "Security deleted");
+                }
                 $rootScope.$broadcast("deleteSecurity");
 
                 var idx = captable.securities.indexOf(sec);

@@ -298,31 +298,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     };
 
     $scope.createNewSec = function() {
-        $scope.addSecurityModal = true;
-        $scope.newTranName = "";
-        $scope.newTranType = "";
-        $scope.newTranDate = calculate.makeDateString($rootScope.settings.shortdate);
-        $scope.newthing = null;
-        $scope.selectedCell = $scope.selectedInvestor = null;
-        History.forget($scope, 'selectedSecurity');
-        History.watch('selectedSecurity', $scope);
-    };
-
-    $scope.addSecurityModalClose = function () {
-        $scope.addSecurityModal = false;
-    };
-
-    $scope.modalAddSecurity = function() {
-        $scope.newthing = captable.newSecurity();
-        $scope.newthing.transactions[0].attrs.security = $scope.newTranName;
-        $scope.newthing.transactions[0].attrs.security_type = $scope.newTranType;
-        $scope.newthing.transactions[0].effective_date = $scope.newTranDate;
-        captable.addSecurity($scope.newthing);
-        $scope.selectedCell = $scope.selectedInvestor = null;
-        History.forget($scope, 'selectedSecurity');
-        $scope.selectedSecurity = $scope.newthing;
-        History.watch('selectedSecurity', $scope);
-        displaySecurityDetails();
+        $location.url('/app/ownership/security/create');
     };
 
     $scope.setNewType = function(key) {
