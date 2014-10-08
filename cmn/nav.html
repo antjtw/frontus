@@ -145,6 +145,9 @@
             <li ng-class="{activecompany: navState.path.indexOf('/ownership/grants') != -1}">
                 <span ng-click="gotoPage('/app/ownership/grants/issue'); navhover=false">Issue Options</span>
             </li>
+            <li ng-class="{activecompany: navState.path.indexOf('/ownership/security/create') != -1}">
+                <span ng-click="gotoPage('/app/ownership/security/create'); navhover=false">Create Security</span>
+            </li>
         </ul>
     </span>
 </div>

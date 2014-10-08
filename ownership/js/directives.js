@@ -1337,18 +1337,18 @@ own.directive('securityTerms', [function() {
     return {
         restrict: 'EA',
         scope: {
-            save: '='
+            save: '=',
+            issue: '='
         },
         templateUrl: '/ownership/partials/securityTerms.html',
-        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "$timeout",
-            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, $timeout) {
+        controller: ["$scope", "$rootScope", "displayCopy", "attributes", "captable", "calculate", "grants", "$timeout", "$filter", "navState",
+            function($scope, $rootScope, displayCopy, attributes, captable, calculate, grants, $timeout, $filter, navState) {
                 $scope.tips = displayCopy.captabletips;
-
-                $scope.issue = grants.issue;
 
                 $scope.attrs = attributes.getAttrs();
 
                 $scope.securities = captable.getCapTable().securities;
+                $scope.path = navState.path;
 
                 function fixKeys(keys) {
                     var skip = ['security', 'security_type', 'vestcliff', 'vestingbegins', 'terms', 'vestfreq', 'price'];
@@ -1366,7 +1366,7 @@ own.directive('securityTerms', [function() {
 
                 function getKeys() {
                     $scope.keys = [];
-                    var att = fixKeys(Object.keys($scope.attrs.Option['issue security']));
+                    var att = fixKeys(Object.keys($scope.attrs[$scope.issue[0].transactions[0].attrs.security_type]['issue security']));
                     for (var i = 0; i < att.length; i += 2)
                     {
                         var tmp = [];
@@ -1408,6 +1408,24 @@ own.directive('securityTerms', [function() {
                         }
                     }
                     $scope.saveIt(tran, cell, errorFunc);
+                };
+
+                $scope.removeIt = function(tran, cell, errorFunc, k, v) {
+                    if (inputType(k) == "array_text") {
+                        var ix = tran.attrs[k].indexOf(v);
+                        if (ix >= 0) {
+                            tran.attrs[k].splice(ix, 1);
+                        }
+                        if (tran.attrs[k].length === 0) {
+                            delete tran.attrs[k];
+                        }
+                    } else {
+                        delete tran.attrs[k];
+                    }
+                    if ($scope.save  && !(tran.kind == "issue security" && tran.attrs.security.length === 0))
+                    {
+                        captable.saveTransaction(tran, cell, errorFunc);
+                    }
                 };
 
                 $scope.saveIt = function(tran, cell, errorFunc, key) {
@@ -1507,6 +1525,22 @@ own.directive('securityTerms', [function() {
                 };
                 $scope.pickIssue = function(key) {
                     return inputType(key) == "security";
+                };
+                $scope.pickMulti = function(key) {
+                    return inputType(key) == "array_text";
+                };
+
+                var dropdowncalctime = Date.parse('1970');
+                var selectablesecurities;
+                $scope.getValidDropdownSecurities = function(data) {
+                    if (Date.now() - dropdowncalctime > 500) { // debounce
+                        dropdowncalctime = Date.now();
+                        selectablesecurities = $filter('selectablesecurities')($scope.securities, data);
+                    }
+                    return selectablesecurities;
+                };
+                $scope.getValidPariSecurities = function(data, key) {
+                    return $filter('usedsecurities')($scope.getValidDropdownSecurities(data), data.attrs[key]);
                 };
 
             }
@@ -1676,6 +1710,8 @@ own.directive('linkedDocuments', [function() {
                     $scope.doclist = ['plan', 'grant', 'exercise'];
                 } else if ($scope.coretype == 'certificate') {
                     $scope.doclist = ['issue certificate'];
+                } else if ($scope.coretype == 'security') {
+                    $scope.doclist = ['plan', 'issue certificate'];
                 }
                 $scope.uploading = {};
 

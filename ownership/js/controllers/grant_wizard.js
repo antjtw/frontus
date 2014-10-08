@@ -31,6 +31,8 @@ app.controller('docsGrantIssue',
             $scope.doclist = ['plan', 'grant', 'exercise'];
         } else if ($scope.flow == 'certificate') {
             $scope.doclist = ['issue certificate'];
+        } else if ($scope.flow = 'security') {
+            $scope.doclist = ['plan', 'issue certificate'];
         }
 
         $scope.backurl = function() {

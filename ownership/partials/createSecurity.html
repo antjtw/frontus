@@ -1,0 +1,53 @@
+<div class="grey-background container dynamic-page">
+    <subnav>
+    </subnav>
+    <div class="row-fluid">
+        <div ng-style="viewportheight">
+            <div class="wizard-tile wizard-flow even-wizard">
+                <h2><span>Create a security</span></h2>
+                <div class="create-security-row">
+                    <span>Name</span>
+                    <input ng-model="rawissue.name">
+                    <span>Security Type</span>
+                    <ul class="dropdown-list drop-selector">
+                        <li class="dropdown standard">
+                            <a class="dropdown-toggle">
+                                {{rawissue.type}}
+                                <span class="invisible-drop">'</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="key in 'security_type' | attributeTypes">
+                                    <a ng-click="setType(key)">
+                                        {{key}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <a ng-show="step == 1" class="wizard-next">
+                <div class="standard-button">
+                    <button class="btn" ng-disabled="!(rawissue.type && rawissue.type.length > 0 && rawissue.name && rawissue.name.length > 0)" ng-click="changeStep(2)">Create <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
+                </div>
+            </a>
+
+            <security-terms save="true" issue='issue' ng-if="issue[0] && step >= 2"></security-terms>
+
+            <linked-documents coretype='security' issue='issue' ng-if="issue[0] && step >= 2"></linked-documents>
+
+            <a ng-show="step == 2" class="wizard-next">
+                <div class="standard-button">
+                    <button class="btn">Done <span class="toggle-icon" data-icon="&#xe016;" aria-hidden="true"></span></button>
+                </div>
+            </a>
+
+            <a class="wizard-next wizard-cancel">
+                <div class="standard-button gray">
+                    <button class="btn" ng-click="cancel()">Cancel</button>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
