@@ -613,7 +613,7 @@
                     <span class="captablepair-box">
                         <div ng-class="{'editview': editMode}"
                              class="output footer">
-                            {{securityTotalUnits(one) + numUnissued(one)
+                            {{securityTotalUnits(one) + (editMode || ctFilter.unissued)*numUnissued(one)
                             | formatAmount:'units'}}
                         </div>
                         <div ng-class="{'editview': editMode}"

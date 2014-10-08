@@ -1064,7 +1064,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
         return captable.totalOwnershipUnits(x,
             ($scope.editMode ? false : $scope.filteredSecurityNames()),
             ($scope.editMode ? false : $scope.ctFilter.date),
-            ($scope.editMode ? true : $scope.ctFilter.vesting));
+            ($scope.editMode ? true : $scope.ctFilter.vesting),
+            ($scope.editMode ? false : !$scope.ctFilter.unissued));
     };
     $scope.securityTotalUnits = function(sec) {
         return captable.securityTotalUnits(sec,
