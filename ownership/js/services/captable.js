@@ -1802,7 +1802,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
      * Sum all ledger entries associated with warrants
      * and convertible debt.
      */
-    function totalOwnershipUnits(dilution, securities, asof, vesting) {
+    function totalOwnershipUnits(dilution, securities, asof, vesting, issuedOnly) {
         if (!dilution) dilution = 1;
         if (!securities) securities = false;
         var entry_filter;
@@ -1910,11 +1910,18 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 "implement dilution scenarios involving conversion");
             return totalOwnershipUnits(1);
         }
-        var res = sum_ledger(captable.ledger_entries.filter(entry_filter));
+        var entries = captable.ledger_entries
+        if (issuedOnly)
+        {
+            entries = captable.ledger_entries.filter(function (entry) {
+                return (entry.investor);
+            });
+        }
+        var res = sum_ledger(entries.filter(entry_filter));
         return res;
     }
     this.totalOwnershipUnits = totalOwnershipUnits;
-    function investorOwnershipPercentage(inv, securities, asof, vesting) {
+    function investorOwnershipPercentage(inv, securities, asof, vesting, issuedOnly) {
         if (!securities) securities = false;
         var red;
         if (asof)
@@ -1933,7 +1940,7 @@ function($rootScope, navState, calculate, SWBrijj, $q, attributes, History, $fil
                 (typeof(securities) == "boolean" ? true :
                     securities.indexOf(el.security) != -1); })
             .reduce(red, 0);
-        var res = x / totalOwnershipUnits(1, securities, asof, vesting) * 100;
+        var res = x / totalOwnershipUnits(1, securities, asof, vesting, issuedOnly) * 100;
         return res != Infinity ? res : 0;
     }
     this.investorOwnershipPercentage = investorOwnershipPercentage;

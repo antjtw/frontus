@@ -258,6 +258,21 @@
                             <span>Unvested options</span>
                         </div>
                     </li>
+                    <li ng-click="ctFilter.unissued = !ctFilter.unissued"
+                        onclick="event.stopPropagation();"
+                        class="row-fluid">
+                        <div class="pull-left span3">
+                            <button class="check-box-button"
+                                    ng-class="{selected: ctFilter.unissued}">
+                                <span data-icon="&#xe023;"
+                                      aria-hidden="true">
+                                </span>
+                            </button>
+                        </div>
+                        <div class="pull-left span9">
+                            <span>Unissued</span>
+                        </div>
+                    </li>
                     <li ng-repeat="t in securityTypeDropdown(true)"
                         ng-click="toggleSecurityType(t)"
                         onclick="event.stopPropagation();"
@@ -533,7 +548,7 @@
             </tr>
             </tbody>
             <!-- Unissued Rows -->
-            <tr class="unissued-rows"
+            <tr class="unissued-rows" ng-if="ctFilter.unissued"
                 ng-repeat="sec in captable.securitiesWithUnissuedUnits()
                            | filter:securityFilter
                            | filter:dateSecurityFilter">

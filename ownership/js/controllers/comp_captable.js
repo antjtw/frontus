@@ -30,6 +30,7 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
     $scope.state = {evidenceQuery: ""};
     $scope.ctFilter = {date: new Date(),
                        vesting: true,
+                       unissued: true,
                        security_types: ['Show All']};
     $scope.$watch('ctFilter', function(newVal, oldVal) {
         switch (selectedThing()) {
@@ -1046,7 +1047,8 @@ function($scope, $rootScope, $location, $parse, $filter, SWBrijj,
             row.name,
             ($scope.editMode ? false : $scope.filteredSecurityNames()),
             ($scope.editMode ? false : $scope.ctFilter.date),
-            ($scope.editMode ? true : $scope.ctFilter.vesting));
+            ($scope.editMode ? true : $scope.ctFilter.vesting),
+            ($scope.editMode ? false : !$scope.ctFilter.unissued));
     };
     $scope.numUnissued = function(sec) {
         return captable.numUnissued(sec,
